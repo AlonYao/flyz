@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 上岸计划app 第三方id信息 -->
+
+    <!-- 微信 -->
+    <string name="weixin_appid">wxebb1a6869a90c15f</string>
+    <string name="weixin_secret">c35db4494a534c7d6a9a26a0c7416424</string>
+
+    <!-- 友盟 -->
+    <string name="umeng_appkey">54abaffcfd98c509a00000fe</string>
+
+    <!-- TalkingData -->
+    <string name="talkingdata_appid">81FEB0A34608D63C43DED2D2C79412C4</string>
+
+    <!-- 渠道号 -->
+    <string name="market">sina</string>
+
+    <!-- Parse -->
+    <string name="parse_applicationid">8IULWVEehYDDIDw5mVBjThogh5Ok2U72FwYgYQKe</string>
+    <string name="parse_clientkey">5DCyk4LSJxB8eLiiuGFkazugPJjuZXc87PHl231C</string>
+
+    <!-- 听云 -->
+    <string name="tingyun_appkey">474d4d92b1e44075bdc28a1124f8cc58</string>
+
+</resources>

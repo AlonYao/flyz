@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    tools:context="com.appublisher.dailyplan.model.login.activity.LoginActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <!-- 用户名 -->
+    <EditText
+        style="@style/Login_EditText"
+        android:inputType="textEmailAddress"
+        android:id="@+id/login_username"
+        android:textColor="@color/login_white"
+        android:hint="@string/login_edittext_username"
+        android:layout_marginTop="15dp" />
+
+    <!-- 密码 -->
+    <EditText
+        style="@style/Login_EditText"
+        android:inputType="textPassword"
+        android:id="@+id/login_password"
+        android:textColor="@color/login_white"
+        android:hint="@string/login_edittext_password"
+        android:layout_marginTop="20dp" />
+
+    <!-- 登录按钮 -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_btn"
+        android:layout_marginTop="20dp"
+        android:text="@string/login_button_login"
+        android:textColor="@color/login_white"
+        android:background="@drawable/login_button_login"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- 图片"or" -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/login_or"
+        tools:ignore="ContentDescription" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+        <!-- 注册按钮 -->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_register"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/login_button_register"
+            android:textColor="@color/login_white"
+            android:text="@string/login_button_register" />
+
+        <!-- 忘记密码 -->
+        <TextView
+            android:id="@+id/login_forgetpwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/login_edittext_username"
+            android:textSize="15sp"
+            android:text="@string/login_forgetpwd"
+            android:layout_below="@id/login_register"
+            android:layout_alignRight="@id/login_register"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+
+    <!-- "绑定以下社交账号" -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/login_binding"
+        tools:ignore="ContentDescription" />
+
+    <!-- 第三方登录Button -->
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_gravity="center_horizontal" >
+
+        <!--微博-->
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_weibo"
+            android:src="@drawable/login_weibo"
+            android:background="@color/login_transparency"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_weixin"
+            android:src="@drawable/login_weixin"
+            android:background="@color/login_transparency"
+            android:layout_marginLeft="40dp"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+    </TableRow>
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context="com.appublisher.dailyplan.model.login.activity.NicknameChangeActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <EditText
+        style="@style/Login_EditText"
+        android:id="@+id/nickname_change_et"
+        android:layout_marginTop="30dp"
+        android:hint="@string/userinfo_nickname_change" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nickname_change_btn"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/login_white"
+        android:text="@string/login_setpwd_submit"
+        android:background="@drawable/login_button_login"/>
+</LinearLayout>

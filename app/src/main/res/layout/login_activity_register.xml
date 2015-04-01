@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context="com.appublisher.dailyplan.model.login.activity.RegisterActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <!-- 手机号 -->
+    <EditText
+        style="@style/Login_EditText"
+        android:id="@+id/register_phone_edittext"
+        android:textColor="@color/login_white"
+        android:hint="@string/login_register_phone"
+        android:layout_marginTop="30dp"
+        android:inputType="phone" />
+
+    <!-- 发送验证码 -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/register_getsmscode_btn"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/login_white"
+        android:text="@string/login_register_smscode_btn"
+        android:background="@drawable/login_button_login"/>
+
+    <!-- 验证码输入框 -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/register_smscode_rl">
+            <!-- 验证码输入框 -->
+            <EditText
+                style="@style/Login_EditText"
+                android:id="@+id/register_smscode_edittext"
+                android:inputType="number"
+                android:textColor="@color/login_white"
+                android:hint="@string/login_register_smscode_edittext" />
+            <!-- 验证码提交按钮 -->
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_smscode_btn"
+                android:src="@drawable/login_smscode"
+                android:layout_centerVertical="true"
+                android:layout_alignRight="@id/register_smscode_edittext"
+                android:layout_marginRight="15dp"
+                android:background="@color/login_transparency"
+                tools:ignore="ContentDescription,RtlHardcoded" />
+        </RelativeLayout>
+
+        <!-- 收不到验证码 -->
+        <TextView
+            android:id="@+id/register_cannotget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_smscode_rl"
+            android:layout_alignRight="@+id/register_smscode_rl"
+            android:layout_marginTop="20dp"
+            android:text="@string/login_register_unablereceive"
+            android:textColor="@color/login_edittext_username"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+
+</LinearLayout>

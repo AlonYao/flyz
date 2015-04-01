@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 登录注册模块 color资源-->
+    <color name="login_edittext_username">#7c7e7d</color>
+    <color name="login_white">#dcdcdf</color>
+    <color name="login_transparency">#00ffffff</color>
+    <color name="login_bg">#1f2229</color>
+</resources>

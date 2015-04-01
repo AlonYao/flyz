@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.appublisher.quizbank" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Activity -->
+        <!-- 登录注册模块Activity -->
+        <activity
+            android:name=".model.login.activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.NicknameChangeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_nickname_change"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.PwdChangeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_pwd_change"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_register"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.SetpwdActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_setpwd"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.UserInfoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_user_info"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.CannotGetSmsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_cannot_get_sms"
+            android:screenOrientation="portrait" >
+        </activity>
+    </application>
+
+</manifest>

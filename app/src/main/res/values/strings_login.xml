@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 登录注册模块 string资源 -->
+    <string name="login_edittext_username">手机号/邮箱</string>
+    <string name="login_edittext_password">密码</string>
+    <string name="login_button_login">登录</string>
+    <string name="login_button_register">注册</string>
+    <string name="login_forgetpwd"><u>忘记密码</u></string>
+    <string name="login_error_username">邮箱或手机号不正确，请重新输入</string>
+    <string name="login_error_password">密码不正确，请重新输入</string>
+    <string name="login_register_phone">填写手机号</string>
+    <string name="login_register_smscode_btn">获取验证码</string>
+    <string name="login_register_smscode_edittext">请输入短信验证码</string>
+    <string name="login_register_unablereceive"><u>收不到验证码</u></string>
+    <string name="login_setpwd_edittext">输入密码</string>
+    <string name="login_setpwd_submit">确认</string>
+    <string name="login_guest">跳过</string>
+
+    <!-- 用户信息模块 string资源 -->
+    <string name="userinfo_nickname">昵称：</string>
+    <string name="userinfo_phonenum">手机号：</string>
+    <string name="userinfo_password">密码：******</string>
+    <string name="userinfo_nickname_change">新昵称</string>
+    <string name="userinfo_password_change_pre">旧密码</string>
+    <string name="userinfo_password_change_new">新密码</string>
+    <string name="userinfo_binding">已绑定</string>
+    <string name="userinfo_unbinding">未绑定</string>
+
+</resources>

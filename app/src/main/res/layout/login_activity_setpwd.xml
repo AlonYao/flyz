@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context="com.appublisher.dailyplan.model.login.activity.SetpwdActivity">
+
+    <include layout="@layout/toolbar"/>
+    
+    <!-- 输入密码 -->
+    <EditText
+        style="@style/Login_EditText"
+        android:id="@+id/setpwd_et"
+        android:inputType="textPassword"
+        android:textColor="@color/login_white"
+        android:layout_marginTop="30dp"
+        android:hint="@string/login_setpwd_edittext"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setpwd_btn"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/login_white"
+        android:background="@drawable/login_button_login"
+        android:text="@string/login_setpwd_submit"/>
+</LinearLayout>

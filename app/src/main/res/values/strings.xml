@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">QuizBank</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- 侧边栏 -->
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
+    <string name="drawer_homepage">首页</string>
+    <string name="drawer_wholepage">整卷练习</string>
+    <string name="drawer_wrong">错题本</string>
+    <string name="drawer_store">收藏夹</string>
+    <string name="drawer_record">学习记录</string>
+    <string name="drawer_setting">设置</string>
+
+    <!-- 首页 -->
+    <string name="homepage_gufen">估分</string>
+
+    <!-- Activity -->
+    <!-- 登录注册Activity -->
+    <string name="title_activity_login">登录</string>
+    <string name="title_activity_nickname_change">昵称修改</string>
+    <string name="title_activity_pwd_change">密码修改</string>
+    <string name="title_activity_register">手机号注册</string>
+    <string name="title_activity_setpwd">设置密码</string>
+    <string name="title_activity_user_info">个人信息</string>
+    <string name="title_activity_cannot_get_sms">收不到验证码</string>
+</resources>
