@@ -44,8 +44,6 @@
                     <TextView
                         style="@style/SettingTV"
                         android:text="@string/setting_studentid"/>
-                    <CheckBox
-                        style="@style/SettingCheckBox" />
                 </RelativeLayout>
 
                 <View

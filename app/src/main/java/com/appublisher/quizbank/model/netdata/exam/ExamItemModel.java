@@ -5,19 +5,11 @@ package com.appublisher.quizbank.model.netdata.exam;
  */
 public class ExamItemModel {
 
-    int exam_id;
     String name;
-    String code;
-    String date;
+    int exam_id;
     boolean is_official;
-
-    public int getExam_id() {
-        return exam_id;
-    }
-
-    public void setExam_id(int exam_id) {
-        this.exam_id = exam_id;
-    }
+    String shortening;
+    String exam_date;
 
     public String getName() {
         return name;
@@ -27,20 +19,12 @@ public class ExamItemModel {
         this.name = name;
     }
 
-    public String getCode() {
-        return code;
+    public int getExam_id() {
+        return exam_id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+    public void setExam_id(int exam_id) {
+        this.exam_id = exam_id;
     }
 
     public boolean isIs_official() {
@@ -49,5 +33,21 @@ public class ExamItemModel {
 
     public void setIs_official(boolean is_official) {
         this.is_official = is_official;
+    }
+
+    public String getShortening() {
+        return shortening;
+    }
+
+    public void setShortening(String shortening) {
+        this.shortening = shortening;
+    }
+
+    public String getExam_date() {
+        return exam_date;
+    }
+
+    public void setExam_date(String exam_date) {
+        this.exam_date = exam_date;
     }
 }

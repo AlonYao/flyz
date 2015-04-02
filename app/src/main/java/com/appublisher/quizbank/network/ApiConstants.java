@@ -6,7 +6,7 @@ public interface ApiConstants {
 	// 服务器切换：dev为测试服务器，api为正式服务器
     public static final String base = "dev";
 
-	public static final String baseUrl = "http://" + base + ".spark.appublisher.com/";
+	public static final String baseUrl = "http://api." + base + ".appublisher.com/";
 
     public static final String baseUrlImg = "http://img.edu.appublisher.com/";
 
