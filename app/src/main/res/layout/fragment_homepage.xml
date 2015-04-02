@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,15 +32,12 @@
                     <!-- 头像 -->
                     <com.makeramen.roundedimageview.RoundedImageView
                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:src="@drawable/login_avatar"
                         android:scaleType="fitCenter"
-                        app:riv_corner_radius="43dip"
-                        app:riv_border_width="6dip"
-                        app:riv_border_color="@color/white_translucence"
-                        app:riv_mutate_background="true"
-                        app:riv_tile_mode="repeat"
+                        app:riv_border_width="5dp"
+                        app:riv_border_color="#74BFA4"
                         app:riv_oval="true" />
 
                     <!-- 估分 -->
@@ -68,24 +66,110 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="22dp"
-                        android:paddingTop="20dp"
-                        android:orientation="vertical">
-
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:textColor="@color/white_translucence"
+                                android:text="@string/homepage_paiming"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="43sp"
+                                android:text="90"/>
+                        </LinearLayout>
+                        <!-- 百分号 -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/homepage_gufen"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/homepage_gufen"/>
+                            android:layout_gravity="bottom"
+                            android:paddingBottom="8dp"
+                            android:textColor="@android:color/white"
+                            android:textSize="22sp"
+                            android:text="@string/homepage_percent"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <!-- 考试日期 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="距离新疆公务员考试还有10天"
+                    android:textSize="17sp"
+                    android:textColor="@android:color/white"/>
             </LinearLayout>
 
-            <!-- 列表 -->
+            <!-- 今日模考 -->
+            <RelativeLayout
+                style="@style/HomePageListRL"
+                android:layout_marginTop="27dp">
+                <LinearLayout
+                    android:id="@+id/homepage_todayexam_ll"
+                    style="@style/HomePageListLL"
+                    android:paddingLeft="40dp"
+                    tools:ignore="RtlSymmetry">
+                    <TextView
+                        style="@style/HomePageListTV"
+                        android:textSize="17sp"
+                        android:text="今日模考"/>
+                    <TextView
+                        style="@style/HomePageListTV"
+                        android:text="已有1000人参加"/>
+                </LinearLayout>
+
+                <ImageView
+                    style="@style/HomePageListIV"
+                    android:layout_alignRight="@id/homepage_todayexam_ll"
+                    android:src="@drawable/homepage_history"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <!-- 推荐专项 -->
+            <RelativeLayout
+                style="@style/HomePageListRL"
+                android:layout_marginTop="46dp">
+                <LinearLayout
+                    android:id="@+id/homepage_special_ll"
+                    style="@style/HomePageListLL"
+                    android:paddingLeft="40dp"
+                    tools:ignore="RtlSymmetry">
+                    <TextView
+                        style="@style/HomePageListTV"
+                        android:textSize="17sp"
+                        android:text="推荐专项"/>
+                    <TextView
+                        style="@style/HomePageListTV"
+                        android:text="牛吃草"/>
+                </LinearLayout>
+
+                <ImageView
+                    style="@style/HomePageListIV"
+                    android:layout_alignRight="@id/homepage_special_ll"
+                    android:src="@drawable/homepage_special"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <!-- 快速练习 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="46dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="40dp"
+                android:textSize="17sp"
+                android:text="快速练习"
+                android:background="@drawable/homepage_item_bg"
+                tools:ignore="RtlSymmetry" />
         </LinearLayout>
     </ScrollView>
 

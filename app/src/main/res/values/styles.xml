@@ -28,4 +28,31 @@
         <item name="color">@android:color/white</item>
     </style>
 
+    <!-- 首页列表样式 -->
+    <style name="HomePageListRL">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="HomePageListLL">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/homepage_item_bg</item>
+    </style>
+
+    <style name="HomePageListTV">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/homepage_todayexam</item>
+    </style>
+
+    <style name="HomePageListIV">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">12dp</item>
+    </style>
+
 </resources>

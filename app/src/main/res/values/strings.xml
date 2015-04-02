@@ -16,6 +16,8 @@
 
     <!-- 首页 -->
     <string name="homepage_gufen">估分</string>
+    <string name="homepage_paiming">排名</string>
+    <string name="homepage_percent">%</string>
 
     <!-- Activity -->
     <!-- 登录注册Activity -->

@@ -9,7 +9,7 @@
     <include layout="@layout/toolbar"/>
 
     <!-- 头像 -->
-    <com.appublisher.dailyplan.customui.CircleImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/userinfo_avatar"
         android:layout_gravity="center_horizontal"
@@ -17,10 +17,11 @@
         android:layout_marginBottom="35dp"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        app:border_width="1dp"
-        app:border_color="#979AA4"
         android:src="@drawable/login_avatar"
-        android:scaleType="centerCrop"/>
+        android:scaleType="fitCenter"
+        app:riv_border_width="1dp"
+        app:riv_border_color="#979AA4"
+        app:riv_oval="true" />
 
     <LinearLayout
         android:layout_width="wrap_content"
