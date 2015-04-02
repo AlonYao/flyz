@@ -1,13 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/common_bg">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="设置"/>
+        android:paddingTop="15dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <!-- 账号设置 -->
+                <RelativeLayout
+                    android:id="@+id/setting_account"
+                    style="@style/SettingRL">
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_account"/>
+                    <ImageView
+                        style="@style/SettingArrow"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+
+                <View
+                    style="@style/SettingLine"/>
+
+                <!-- 我的学号 -->
+                <RelativeLayout
+                    style="@style/SettingRL">
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_studentid"/>
+                    <CheckBox
+                        style="@style/SettingCheckBox" />
+                </RelativeLayout>
+
+                <View
+                    style="@style/SettingLine"/>
+
+                <!-- 我的考试 -->
+                <RelativeLayout
+                    style="@style/SettingRL">
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_myexam"/>
+                    <TextView
+                        style="@style/SettingTV"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="18dp"
+                        android:text="辽宁省考"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <!-- 学习提醒 -->
+                <RelativeLayout
+                    style="@style/SettingRL">
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_push"/>
+                    <CheckBox
+                        style="@style/SettingCheckBox" />
+                </RelativeLayout>
+
+                <View
+                    style="@style/SettingLine"/>
+
+                <!-- 系统通知 -->
+                <RelativeLayout
+                    style="@style/SettingRL">
+                    <TextView
+                        android:id="@+id/setting_notice_tv"
+                        style="@style/SettingTV"
+                        android:text="@string/setting_notice"/>
+                    <ImageView
+                        style="@style/SettingArrow"
+                        tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/setting_notice_tv"
+                        android:src="@drawable/setting_notice"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <!-- 意见反馈 -->
+                <RelativeLayout
+                    style="@style/SettingRL">
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_feedback"/>
+                    <ImageView
+                        style="@style/SettingArrow"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+
+                <View
+                    style="@style/SettingLine"/>
+
+                <!-- 常见问题 -->
+                <RelativeLayout
+                    style="@style/SettingRL">
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_qa"/>
+                    <ImageView
+                        style="@style/SettingArrow"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

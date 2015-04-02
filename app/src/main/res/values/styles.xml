@@ -55,4 +55,42 @@
         <item name="android:layout_marginRight">12dp</item>
     </style>
 
+    <!-- 设置页面样式 -->
+    <style name="SettingRL">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="SettingTV">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/setting_text</item>
+    </style>
+
+    <style name="SettingArrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:src">@drawable/setting_arrow</item>
+    </style>
+
+    <style name="SettingLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:background">@color/setting_line</item>
+    </style>
+
+    <style name="SettingCheckBox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:button">@drawable/setting_selector</item>
+    </style>
+
 </resources>

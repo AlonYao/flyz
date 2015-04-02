@@ -8,7 +8,7 @@
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
     <string name="drawer_homepage">首页</string>
-    <string name="drawer_wholepage">整卷练习</string>
+    <string name="drawer_wholepage">真题演练</string>
     <string name="drawer_wrong">错题本</string>
     <string name="drawer_store">收藏夹</string>
     <string name="drawer_record">学习记录</string>
@@ -18,6 +18,15 @@
     <string name="homepage_gufen">估分</string>
     <string name="homepage_paiming">排名</string>
     <string name="homepage_percent">%</string>
+
+    <!-- 设置 -->
+    <string name="setting_account">账号设置</string>
+    <string name="setting_studentid">我的学号</string>
+    <string name="setting_myexam">我的考试</string>
+    <string name="setting_push">学习提醒</string>
+    <string name="setting_notice">系统通知</string>
+    <string name="setting_feedback">意见反馈</string>
+    <string name="setting_qa">常见问题</string>
 
     <!-- Activity -->
     <!-- 登录注册Activity -->
