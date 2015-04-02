@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <TextView
+        android:id="@+id/exam_item_tv"
+        style="@style/SettingTV"
+        android:layout_marginLeft="36dp"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:id="@+id/exam_item_iv"
+        style="@style/SettingArrow"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="36dp"
+        android:visibility="gone"
+        android:src="@drawable/exam_item_select"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/exam_item_line"
+        style="@style/SettingLine"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

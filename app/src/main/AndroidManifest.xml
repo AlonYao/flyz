@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.appublisher.quizbank" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".QuizBankApp"
         android:allowBackup="true"
@@ -79,6 +81,12 @@
             android:name=".model.login.activity.CannotGetSmsActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_cannot_get_sms"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.ExamChangeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_exam_change"
             android:screenOrientation="portrait" >
         </activity>
     </application>

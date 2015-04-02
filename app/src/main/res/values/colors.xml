@@ -4,7 +4,11 @@
     <color name="drawer_text">#506183</color>
     <color name="toolbar_bg">#37AF7E</color>
     <color name="white_translucence">#80FFFFFF</color>
+
     <color name="homepage_todayexam">#506183</color>
+
     <color name="setting_text">#262B2D</color>
     <color name="setting_line">#D8D8D8</color>
+
+    <color name="exam_change_button">#3AAB7E</color>
 </resources>

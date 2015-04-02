@@ -2,7 +2,7 @@
     <string name="app_name">QuizBank</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="common_confirm">确认</string>
 
     <!-- 侧边栏 -->
     <string name="drawer_open">drawer_open</string>
@@ -37,4 +37,5 @@
     <string name="title_activity_setpwd">设置密码</string>
     <string name="title_activity_user_info">个人信息</string>
     <string name="title_activity_cannot_get_sms">收不到验证码</string>
+    <string name="title_activity_exam_change">考试项目</string>
 </resources>

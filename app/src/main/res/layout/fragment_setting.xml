@@ -53,6 +53,7 @@
 
                 <!-- 我的考试 -->
                 <RelativeLayout
+                    android:id="@+id/setting_myexam"
                     style="@style/SettingRL">
                     <TextView
                         style="@style/SettingTV"
