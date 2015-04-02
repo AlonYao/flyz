@@ -58,15 +58,11 @@
 
             <ListView
                 android:id="@+id/exam_change_lv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
-                android:background="@android:color/white"
-                android:clipToPadding="false"
-                android:layout_marginBottom="50dp"
-                android:scrollbars="none"
+                style="@style/CommonListView"
                 android:divider="@null"
-                android:overScrollMode="never">
+                android:background="@android:color/white"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="50dp">
             </ListView>
         </LinearLayout>
     </LinearLayout>

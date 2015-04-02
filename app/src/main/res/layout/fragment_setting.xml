@@ -88,6 +88,7 @@
 
                 <!-- 系统通知 -->
                 <RelativeLayout
+                    android:id="@+id/setting_notice"
                     style="@style/SettingRL">
                     <TextView
                         android:id="@+id/setting_notice_tv"

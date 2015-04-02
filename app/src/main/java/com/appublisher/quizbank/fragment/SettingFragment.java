@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ExamChangeActivity;
+import com.appublisher.quizbank.activity.SystemNoticeActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.parse.ParsePush;
 
@@ -40,6 +41,7 @@ public class SettingFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         RelativeLayout rlAccount = (RelativeLayout) view.findViewById(R.id.setting_account);
         RelativeLayout rlMyExam = (RelativeLayout) view.findViewById(R.id.setting_myexam);
+        RelativeLayout rlNotice = (RelativeLayout) view.findViewById(R.id.setting_notice);
         CheckBox cbPush = (CheckBox) view.findViewById(R.id.setting_push_cb);
 
         // 账号设置
@@ -83,6 +85,15 @@ public class SettingFragment extends Fragment{
                     editor.putBoolean("isPushOpen", false);
                 }
                 editor.commit();
+            }
+        });
+
+        // 系统通知
+        rlNotice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, SystemNoticeActivity.class);
+                startActivity(intent);
             }
         });
 
