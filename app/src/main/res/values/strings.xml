@@ -38,6 +38,5 @@
     <string name="title_activity_user_info">个人信息</string>
     <string name="title_activity_cannot_get_sms">收不到验证码</string>
     <string name="title_activity_exam_change">考试项目</string>
-    <string name="title_activity_system_notice">SystemNoticeActivity</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_system_notice">系统通知</string>
 </resources>
