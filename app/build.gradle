@@ -32,4 +32,5 @@ dependencies {
     //noinspection GradleDynamicVersion
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.makeramen:roundedimageview:2.0.1'
+    compile 'com.umeng:fb:5.1.0'
 }

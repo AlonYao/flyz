@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".QuizBankApp"
@@ -41,6 +45,16 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
+
+        <!-- 友盟反馈 -->
+        <activity android:name="com.umeng.fb.ConversationActivity" />
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="YOUR_APP_KEY" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Channel ID" />
 
         <!-- Activity -->
         <!-- 登录注册模块Activity -->
@@ -95,6 +109,10 @@
         <activity
             android:name=".activity.SystemNoticeActivity"
             android:label="@string/title_activity_system_notice" >
+        </activity>
+        <activity
+            android:name=".activity.QaActivity"
+            android:label="@string/title_activity_qa" >
         </activity>
     </application>
 

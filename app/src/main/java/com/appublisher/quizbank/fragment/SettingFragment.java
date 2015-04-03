@@ -17,9 +17,11 @@ import android.widget.RelativeLayout;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ExamChangeActivity;
+import com.appublisher.quizbank.activity.QaActivity;
 import com.appublisher.quizbank.activity.SystemNoticeActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.parse.ParsePush;
+import com.umeng.fb.FeedbackAgent;
 
 /**
  * 设置
@@ -42,6 +44,8 @@ public class SettingFragment extends Fragment{
         RelativeLayout rlAccount = (RelativeLayout) view.findViewById(R.id.setting_account);
         RelativeLayout rlMyExam = (RelativeLayout) view.findViewById(R.id.setting_myexam);
         RelativeLayout rlNotice = (RelativeLayout) view.findViewById(R.id.setting_notice);
+        RelativeLayout rlFeedback = (RelativeLayout) view.findViewById(R.id.setting_feedback);
+        RelativeLayout rlQa = (RelativeLayout) view.findViewById(R.id.setting_qa);
         CheckBox cbPush = (CheckBox) view.findViewById(R.id.setting_push_cb);
 
         // 账号设置
@@ -93,6 +97,24 @@ public class SettingFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, SystemNoticeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 用户反馈
+        rlFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedbackAgent agent = new FeedbackAgent(mActivity);
+                agent.startFeedbackActivity();
+            }
+        });
+
+        // 常见问题
+        rlQa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, QaActivity.class);
                 startActivity(intent);
             }
         });

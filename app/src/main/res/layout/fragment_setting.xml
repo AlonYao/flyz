@@ -115,6 +115,7 @@
 
                 <!-- 意见反馈 -->
                 <RelativeLayout
+                    android:id="@+id/setting_feedback"
                     style="@style/SettingRL">
                     <TextView
                         style="@style/SettingTV"
@@ -129,6 +130,7 @@
 
                 <!-- 常见问题 -->
                 <RelativeLayout
+                    android:id="@+id/setting_qa"
                     style="@style/SettingRL">
                     <TextView
                         style="@style/SettingTV"

@@ -10,6 +10,7 @@ import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.tendcloud.tenddata.TCAgent;
+import com.umeng.fb.FeedbackAgent;
 
 /**
  * QuizBankApp
@@ -49,5 +50,9 @@ public class QuizBankApp extends Application{
             String user_id = Globals.sharedPreferences.getString("user_id", "");
             LoginModel.setDatabase(user_id, this);
         }
+
+        // 友盟反馈
+        FeedbackAgent agent = new FeedbackAgent(this);
+        agent.sync();
     }
 }
