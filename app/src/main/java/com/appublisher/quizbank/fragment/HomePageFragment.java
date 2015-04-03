@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 
 /**
@@ -36,6 +38,16 @@ public class HomePageFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // View 初始化
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
+        TextView textView = (TextView) view.findViewById(R.id.homepage_quicktest);
+
+        // 快速练习
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, MeasureActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

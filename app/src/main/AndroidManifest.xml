@@ -114,6 +114,10 @@
             android:name=".activity.QaActivity"
             android:label="@string/title_activity_qa" >
         </activity>
+        <activity
+            android:name=".activity.MeasureActivity"
+            android:label="@string/title_activity_measure" >
+        </activity>
     </application>
 
 </manifest>
