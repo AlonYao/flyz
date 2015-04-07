@@ -3,7 +3,7 @@ package com.appublisher.quizbank.utils;
 import android.util.Log;
 
 public class Logger {
-    private static final String TAG = "DailyPlan";
+    private static final String TAG = "QuizBank";
 
     public static void v(String message) {
         Log.v(TAG, message);

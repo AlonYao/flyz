@@ -29,6 +29,12 @@
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_qa">常见问题</string>
 
+    <!-- 做题 -->
+    <string name="measure_option_a">A</string>
+    <string name="measure_option_b">B</string>
+    <string name="measure_option_c">C</string>
+    <string name="measure_option_d">D</string>
+
     <!-- Activity -->
     <!-- 登录注册Activity -->
     <string name="title_activity_login">登录</string>
@@ -41,6 +47,6 @@
     <string name="title_activity_exam_change">考试项目</string>
     <string name="title_activity_system_notice">系统通知</string>
     <string name="title_activity_qa">常见问题</string>
-    <string name="title_activity_measure">MeasureActivity</string>
+    <string name="title_activity_measure">题目</string>
 
 </resources>
