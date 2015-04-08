@@ -14,6 +14,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:background="@android:color/white">
 
         <LinearLayout
@@ -26,7 +27,7 @@
 
             <!-- 题干 -->
             <LinearLayout
-                android:id="@+id/measuer_question_content"
+                android:id="@+id/measure_question_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
@@ -36,58 +37,74 @@
 
             <!-- 选项 A -->
             <LinearLayout
-                android:id="@+id/measuer_option_a"
+                android:id="@+id/measure_option_a"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
                     style="@style/MeasureOptionCb"
                     android:button="@drawable/measure_option_a_selector"/>
 
-                <TextView
-                    style="@style/MeasureTv"
-                    android:text="前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_a_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 选项 B -->
             <LinearLayout
-                android:id="@+id/measuer_option_b"
+                android:id="@+id/measure_option_b"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
                     style="@style/MeasureOptionCb"
                     android:button="@drawable/measure_option_b_selector"/>
 
-                <TextView
-                    style="@style/MeasureTv"
-                    android:text="前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_b_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 选项 C -->
             <LinearLayout
-                android:id="@+id/measuer_option_c"
+                android:id="@+id/measure_option_c"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
                     style="@style/MeasureOptionCb"
                     android:button="@drawable/measure_option_c_selector"/>
 
-                <TextView
-                    style="@style/MeasureTv"
-                    android:text="前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_c_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 选项 D -->
             <LinearLayout
-                android:id="@+id/measuer_option_d"
+                android:id="@+id/measure_option_d"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
                     style="@style/MeasureOptionCb"
                     android:button="@drawable/measure_option_d_selector"/>
 
-                <TextView
-                    style="@style/MeasureTv"
-                    android:text="前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际前者以客观实际"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_d_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -95,54 +112,138 @@
 
     <!-- 带材料的题目 -->
     <RelativeLayout
-        android:id="@+id/measuer_hasmaterial"
-        android:visibility="gone"
+        android:id="@+id/measure_hasmaterial"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ScrollView
-            android:id="@+id/measuer_top"
+            android:id="@+id/measure_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#98fb98">
+            android:layout_height="200dp"
+            android:background="@color/common_bg">
 
+            <!-- 材料 -->
             <LinearLayout
+                android:id="@+id/measure_material"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="15dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="250dp"
-                    android:text="aldjflajdfkljaldjfklajdfljladfl"/>
             </LinearLayout>
         </ScrollView>
 
         <ScrollView
-            android:id="@+id/measuer_bottom"
-            android:layout_below="@id/measuer_top"
+            android:id="@+id/measure_bottom"
+            android:layout_below="@id/measure_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#dc143c">
+            android:background="@android:color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="15dp"
                 android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="400dp"
-                    android:text="aldjflajdfkljaldjfklajdfljladfl"/>
+
+                <!-- 题干 -->
+                <LinearLayout
+                    android:id="@+id/measure_question_content_m"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="26dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <!-- 选项 A -->
+                <LinearLayout
+                    android:id="@+id/measure_option_a_m"
+                    style="@style/MeasureOptionLL">
+
+                    <CheckBox
+                        style="@style/MeasureOptionCb"
+                        android:button="@drawable/measure_option_a_selector"/>
+
+                    <LinearLayout
+                        android:id="@+id/measure_option_a_container_m"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 选项 B -->
+                <LinearLayout
+                    android:id="@+id/measure_option_b_m"
+                    style="@style/MeasureOptionLL">
+
+                    <CheckBox
+                        style="@style/MeasureOptionCb"
+                        android:button="@drawable/measure_option_b_selector"/>
+
+                    <LinearLayout
+                        android:id="@+id/measure_option_b_container_m"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 选项 C -->
+                <LinearLayout
+                    android:id="@+id/measure_option_c_m"
+                    style="@style/MeasureOptionLL">
+
+                    <CheckBox
+                        style="@style/MeasureOptionCb"
+                        android:button="@drawable/measure_option_c_selector"/>
+
+                    <LinearLayout
+                        android:id="@+id/measure_option_c_container_m"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 选项 D -->
+                <LinearLayout
+                    android:id="@+id/measure_option_d_m"
+                    style="@style/MeasureOptionLL">
+
+                    <CheckBox
+                        style="@style/MeasureOptionCb"
+                        android:button="@drawable/measure_option_d_selector"/>
+
+                    <LinearLayout
+                        android:id="@+id/measure_option_d_container_m"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
         <ImageView
-            android:id="@+id/measuer_iv"
+            android:id="@+id/measure_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@id/measure_bottom"
+            android:paddingTop="10dp"
             android:clickable="true"
-            android:layout_above="@id/measuer_bottom"
-            android:src="@drawable/login_avatar"/>
+            android:src="@drawable/measure_pull"
+            tools:ignore="ContentDescription" />
     </RelativeLayout>
 
 </LinearLayout>
