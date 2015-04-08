@@ -35,6 +35,9 @@
     <string name="measure_option_c">C</string>
     <string name="measure_option_d">D</string>
 
+    <!-- 答题卡 -->
+    <string name="answer_sheet_handin">交卷</string>
+
     <!-- Activity -->
     <!-- 登录注册Activity -->
     <string name="title_activity_login">登录</string>
@@ -48,5 +51,6 @@
     <string name="title_activity_system_notice">系统通知</string>
     <string name="title_activity_qa">常见问题</string>
     <string name="title_activity_measure">题目</string>
+    <string name="title_activity_answer_sheet">AnswerSheetActivity</string>
 
 </resources>

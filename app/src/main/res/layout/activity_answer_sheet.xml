@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.appublisher.quizbank.activity.AnswerSheetActivity">
+
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"/>
+
+    <GridView
+        android:id="@+id/answer_sheet_gv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:numColumns="5"
+        android:gravity="center"
+        android:verticalSpacing="15dp">
+    </GridView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="@color/answer_sheet_btn"
+        android:text="@string/answer_sheet_handin"/>
+
+</RelativeLayout>

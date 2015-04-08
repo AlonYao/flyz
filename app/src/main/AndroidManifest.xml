@@ -109,26 +109,30 @@
         <activity
             android:name=".activity.SystemNoticeActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_system_notice" >
+            android:label="@string/title_activity_system_notice"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.QaActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_qa" >
+            android:label="@string/title_activity_qa"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.MeasureActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_measure" >
+            android:label="@string/title_activity_measure"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activity.ScaleImageActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:label="ScaleImageActivity" >
+            android:label="ScaleImageActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.AnswerSheetActivity"
+            android:label="@string/title_activity_answer_sheet" >
         </activity>
     </application>
 
