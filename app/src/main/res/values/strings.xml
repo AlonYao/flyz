@@ -51,6 +51,6 @@
     <string name="title_activity_system_notice">系统通知</string>
     <string name="title_activity_qa">常见问题</string>
     <string name="title_activity_measure">题目</string>
-    <string name="title_activity_answer_sheet">AnswerSheetActivity</string>
+    <string name="title_activity_answer_sheet">答题卡</string>
 
 </resources>

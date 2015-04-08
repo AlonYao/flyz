@@ -1,33 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ScrollView
-        android:id="@+id/measure_top"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/common_bg">
-
-        <!-- 材料 -->
-        <LinearLayout
-            android:id="@+id/measure_material"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
-            android:paddingTop="15dp"
-            android:orientation="vertical">
-
-        </LinearLayout>
-    </ScrollView>
-
-    <ScrollView
-        android:id="@+id/measure_bottom"
-        android:layout_below="@id/measure_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:background="@android:color/white">
 
         <LinearLayout
@@ -40,8 +20,8 @@
 
             <!-- 题干 -->
             <LinearLayout
-                android:id="@+id/measure_question_content_m"
-                android:layout_width="match_parent"
+                android:id="@+id/measure_question_content"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
                 android:orientation="vertical">
@@ -50,7 +30,7 @@
 
             <!-- 选项 A -->
             <LinearLayout
-                android:id="@+id/measure_option_a_m"
+                android:id="@+id/measure_option_a"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
@@ -59,7 +39,7 @@
                     android:button="@drawable/measure_option_a_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_a_container_m"
+                    android:id="@+id/measure_option_a_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -69,7 +49,7 @@
 
             <!-- 选项 B -->
             <LinearLayout
-                android:id="@+id/measure_option_b_m"
+                android:id="@+id/measure_option_b"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
@@ -78,7 +58,7 @@
                     android:button="@drawable/measure_option_b_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_b_container_m"
+                    android:id="@+id/measure_option_b_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -88,7 +68,7 @@
 
             <!-- 选项 C -->
             <LinearLayout
-                android:id="@+id/measure_option_c_m"
+                android:id="@+id/measure_option_c"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
@@ -97,7 +77,7 @@
                     android:button="@drawable/measure_option_c_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_c_container_m"
+                    android:id="@+id/measure_option_c_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -107,7 +87,7 @@
 
             <!-- 选项 D -->
             <LinearLayout
-                android:id="@+id/measure_option_d_m"
+                android:id="@+id/measure_option_d"
                 style="@style/MeasureOptionLL">
 
                 <CheckBox
@@ -116,23 +96,14 @@
                     android:button="@drawable/measure_option_d_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_d_container_m"
+                    android:id="@+id/measure_option_d_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
-
-    <ImageView
-        android:id="@+id/measure_iv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/measure_bottom"
-        android:paddingTop="10dp"
-        android:clickable="true"
-        android:src="@drawable/measure_pull"
-        tools:ignore="ContentDescription" />
-</RelativeLayout>
+</LinearLayout>

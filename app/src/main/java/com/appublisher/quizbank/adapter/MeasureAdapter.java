@@ -1,17 +1,24 @@
 package com.appublisher.quizbank.adapter;
 
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.utils.Logger;
+
+import java.util.HashMap;
 
 /**
  * 做题模块
@@ -20,9 +27,19 @@ public class MeasureAdapter extends PagerAdapter{
 
     private MeasureActivity mActivity;
     private int mLastY;
+    private SparseBooleanArray mIsItemLoad;
+    private int mCurPosition;
+    private HashMap<String, Object> mUserAnswerMap;
+
+    /** 页面控件 */
+    private CheckBox mCbOptionA;
+    private CheckBox mCbOptionB;
+    private CheckBox mCbOptionC;
+    private CheckBox mCbOptionD;
 
     public MeasureAdapter(MeasureActivity activity) {
         mActivity = activity;
+        mIsItemLoad = new SparseBooleanArray();
     }
 
     @Override
@@ -41,9 +58,32 @@ public class MeasureAdapter extends PagerAdapter{
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        super.setPrimaryItem(container, position, object);
+
+        if (!mIsItemLoad.get(position, false)) {
+            mIsItemLoad.clear();
+            mIsItemLoad.put(position, true);
+
+            // 更新成员变量
+            mCurPosition = position;
+
+            Logger.i(String.valueOf(mCurPosition));
+
+            boolean hasMaterial = true;
+            View view = (View) object;
+
+            mCbOptionA = (CheckBox) view.findViewById(R.id.measure_option_a_cb);
+            mCbOptionB = (CheckBox) view.findViewById(R.id.measure_option_b_cb);
+            mCbOptionC = (CheckBox) view.findViewById(R.id.measure_option_c_cb);
+            mCbOptionD = (CheckBox) view.findViewById(R.id.measure_option_d_cb);
+        }
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, final int position) {
         boolean hasMaterial = true;
-        View view = null;
+        View view;
         if (hasMaterial) {
             view = LayoutInflater.from(mActivity).inflate(
                     R.layout.measure_item_hasmaterial, container, false);
@@ -79,16 +119,16 @@ public class MeasureAdapter extends PagerAdapter{
                          b  Bottom position, relative to parent
                          * */
                         case MotionEvent.ACTION_MOVE:
-                            int dy =(int)event.getRawY() - mLastY;
+                            int dy = (int) event.getRawY() - mLastY;
 
                             int top = v.getTop() + dy;
                             int bottom = v.getBottom() + dy;
 
-                            if(top < 0){
+                            if (top < 0) {
                                 top = 0;
                                 bottom = top + v.getHeight();
                             }
-                            if(bottom > mActivity.mScreenHeight){
+                            if (bottom > mActivity.mScreenHeight) {
                                 bottom = mActivity.mScreenHeight;
                                 top = bottom - v.getHeight();
                             }
@@ -118,11 +158,121 @@ public class MeasureAdapter extends PagerAdapter{
             MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, rich);
             MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, rich);
         } else {
-
+            view = LayoutInflater.from(mActivity).inflate(
+                    R.layout.measure_item_withoutmaterial, container, false);
         }
 
-        container.addView(view);
+        mCbOptionA = (CheckBox) view.findViewById(R.id.measure_option_a_cb);
+        mCbOptionB = (CheckBox) view.findViewById(R.id.measure_option_b_cb);
+        mCbOptionC = (CheckBox) view.findViewById(R.id.measure_option_c_cb);
+        mCbOptionD = (CheckBox) view.findViewById(R.id.measure_option_d_cb);
 
+        // 设置按钮
+        setOption(position);
+
+        mCbOptionA.setOnClickListener(optionClick);
+        mCbOptionB.setOnClickListener(optionClick);
+        mCbOptionC.setOnClickListener(optionClick);
+        mCbOptionD.setOnClickListener(optionClick);
+
+        container.addView(view);
         return view;
+    }
+
+    /**
+     * 选项点击事件
+     */
+    private View.OnClickListener optionClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            resetOption();
+            mUserAnswerMap = mActivity.mUserAnswerList.get(mCurPosition);
+
+            boolean hasAnswer = false;
+
+            if (mUserAnswerMap.containsKey("answer")
+                    && mUserAnswerMap.get("answer") != null
+                    && !mUserAnswerMap.get("answer").equals("")) hasAnswer = true;
+
+            switch (v.getId()) {
+                case R.id.measure_option_a_cb:
+                    mCbOptionA.setChecked(true);
+                    mUserAnswerMap.put("answer", "A");
+
+                    break;
+
+                case R.id.measure_option_b_cb:
+                    mCbOptionB.setChecked(true);
+                    mUserAnswerMap.put("answer", "B");
+
+                    break;
+
+                case R.id.measure_option_c_cb:
+                    mCbOptionC.setChecked(true);
+                    mUserAnswerMap.put("answer", "C");
+
+                    break;
+
+                case R.id.measure_option_d_cb:
+                    mCbOptionD.setChecked(true);
+                    mUserAnswerMap.put("answer", "D");
+
+                    break;
+            }
+
+            mActivity.mUserAnswerList.set(mCurPosition, mUserAnswerMap);
+
+            if (hasAnswer) return;
+
+            if (mCurPosition + 1 < mActivity.mUserAnswerList.size()) {
+                mActivity.mViewPager.setCurrentItem(mCurPosition + 1);
+            } else {
+                Intent intent = new Intent(mActivity, AnswerSheetActivity.class);
+                intent.putExtra("user_answer", mActivity.mUserAnswerList);
+                mActivity.startActivity(intent);
+            }
+        }
+    };
+
+    /**
+     * 重置按钮状态
+     */
+    private void resetOption() {
+        mCbOptionA.setChecked(false);
+        mCbOptionB.setChecked(false);
+        mCbOptionC.setChecked(false);
+        mCbOptionD.setChecked(false);
+    }
+
+    /**
+     * 设置按钮状态
+     */
+    private void setOption(int position) {
+        resetOption();
+        mUserAnswerMap = mActivity.mUserAnswerList.get(position);
+
+        if (!mUserAnswerMap.containsKey("answer")) return;
+
+        String userAnswer = (String) mUserAnswerMap.get("answer");
+
+        if (userAnswer == null) return;
+
+        switch (userAnswer) {
+            case "A":
+                mCbOptionA.setChecked(true);
+                break;
+
+            case "B":
+                mCbOptionB.setChecked(true);
+                break;
+
+            case "C":
+                mCbOptionC.setChecked(true);
+                break;
+
+            case "D":
+                mCbOptionD.setChecked(true);
+                break;
+        }
     }
 }

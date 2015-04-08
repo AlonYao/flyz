@@ -9,8 +9,12 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class AnswerSheetActivity extends ActionBarActivity {
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +26,14 @@ public class AnswerSheetActivity extends ActionBarActivity {
         // View 初始化
         GridView gridView = (GridView) findViewById(R.id.answer_sheet_gv);
 
-        AnswerSheetAdapter answerSheetAdapter = new AnswerSheetAdapter(this);
-        gridView.setAdapter(answerSheetAdapter);
+        // 获取数据
+        ArrayList<HashMap<String, Object>> userAnswerList = (ArrayList<HashMap<String, Object>>)
+                getIntent().getSerializableExtra("user_answer");
+
+        if (userAnswerList != null) {
+            AnswerSheetAdapter answerSheetAdapter = new AnswerSheetAdapter(this, userAnswerList);
+            gridView.setAdapter(answerSheetAdapter);
+        }
     }
 
     @Override
