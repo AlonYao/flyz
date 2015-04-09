@@ -16,9 +16,14 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
+import com.appublisher.quizbank.model.netdata.measure.QuestionsM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,6 +43,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public int mCurPosition;
 
     private Request mRequest;
+    private Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mCurTimestamp = System.currentTimeMillis();
         mCurPosition = 0;
         mRequest = new Request(this, this);
+        mGson = new Gson();
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(toolbar);
@@ -66,6 +73,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         String flag = getIntent().getStringExtra("flag");
         if ("auto_training".equals(flag)) {
+            ProgressDialogManager.showProgressDialog(this);
             mRequest.getAutoTraining();
         }
 
@@ -159,18 +167,44 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mUserAnswerList.set(mCurPosition, userAnswerMap);
     }
 
+    /**
+     * 设置内容
+     * @param autoTrainingResp 快速智能练习回调
+     */
+    private void setContent(AutoTrainingResp autoTrainingResp) {
+        ArrayList<QuestionsM> questions = autoTrainingResp.getQuestions();
+
+        if (questions == null) return;
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        if (response == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
 
+        if ("auto_training".equals(apiName)) {
+            AutoTrainingResp autoTrainingResp = mGson.fromJson(
+                    response.toString(), AutoTrainingResp.class);
+
+            if (autoTrainingResp.getResponse_code() == 1) {
+                setContent(autoTrainingResp);
+            } else {
+                ToastManager.showToast(this, getString(R.string.netdata_error));
+            }
+        }
+
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 }

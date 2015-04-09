@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="common_confirm">确认</string>
+    <string name="netdata_error">数据异常</string>
 
     <!-- 侧边栏 -->
     <string name="drawer_open">drawer_open</string>
