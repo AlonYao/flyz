@@ -15,6 +15,7 @@ public class AlertManager {
 
     public static void pauseAlert(Activity activity) {
         // 小奖励
+
         final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();

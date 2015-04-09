@@ -1,16 +1,19 @@
 package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
@@ -67,7 +70,8 @@ public class MeasureActivity extends ActionBarActivity {
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
 
             }
 
@@ -90,9 +94,19 @@ public class MeasureActivity extends ActionBarActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(R.drawable.measure_icon_pause),
+                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if (item.getTitle().equals("暂停")) {
+            AlertManager.pauseAlert(this);
         }
 
         return super.onOptionsItemSelected(item);
