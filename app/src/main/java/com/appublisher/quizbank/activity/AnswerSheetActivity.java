@@ -1,10 +1,14 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.model.CommonModel;
@@ -33,6 +37,16 @@ public class AnswerSheetActivity extends ActionBarActivity {
         if (userAnswerList != null) {
             AnswerSheetAdapter answerSheetAdapter = new AnswerSheetAdapter(this, userAnswerList);
             gridView.setAdapter(answerSheetAdapter);
+
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
+                    intent.putExtra("position", position);
+                    setResult(ActivitySkipConstants.ANSWER_SHEET_SKIP, intent);
+                    finish();
+                }
+            });
         }
     }
 

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
@@ -27,7 +28,6 @@ public class MeasureAdapter extends PagerAdapter{
     private MeasureActivity mActivity;
     private int mLastY;
     private SparseBooleanArray mIsItemLoad;
-    private int mCurPosition;
     private HashMap<String, Object> mUserAnswerMap;
 
     /** 页面控件 */
@@ -65,8 +65,6 @@ public class MeasureAdapter extends PagerAdapter{
             mIsItemLoad.put(position, true);
 
             // 更新成员变量
-            mCurPosition = position;
-
 //            boolean hasMaterial = true;
             View view = (View) object;
 
@@ -183,7 +181,7 @@ public class MeasureAdapter extends PagerAdapter{
         @Override
         public void onClick(View v) {
             resetOption();
-            mUserAnswerMap = mActivity.mUserAnswerList.get(mCurPosition);
+            mUserAnswerMap = mActivity.mUserAnswerList.get(mActivity.mCurPosition);
 
             boolean hasAnswer = false;
 
@@ -217,16 +215,16 @@ public class MeasureAdapter extends PagerAdapter{
                     break;
             }
 
-            mActivity.mUserAnswerList.set(mCurPosition, mUserAnswerMap);
+            mActivity.mUserAnswerList.set(mActivity.mCurPosition, mUserAnswerMap);
 
             if (hasAnswer) return;
 
-            if (mCurPosition + 1 < mActivity.mUserAnswerList.size()) {
-                mActivity.mViewPager.setCurrentItem(mCurPosition + 1);
+            if (mActivity.mCurPosition + 1 < mActivity.mUserAnswerList.size()) {
+                mActivity.mViewPager.setCurrentItem(mActivity.mCurPosition + 1);
             } else {
                 Intent intent = new Intent(mActivity, AnswerSheetActivity.class);
                 intent.putExtra("user_answer", mActivity.mUserAnswerList);
-                mActivity.startActivity(intent);
+                mActivity.startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
             }
         }
     };

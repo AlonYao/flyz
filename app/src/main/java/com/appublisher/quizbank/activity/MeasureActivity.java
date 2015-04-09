@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -9,12 +10,12 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +29,7 @@ public class MeasureActivity extends ActionBarActivity {
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ViewPager mViewPager;
     public long mCurTimestamp;
-
-    private int mCurPosition;
+    public int mCurPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +89,13 @@ public class MeasureActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-        MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(R.drawable.measure_icon_pause),
-                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
+                R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(
+                R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -101,9 +106,26 @@ public class MeasureActivity extends ActionBarActivity {
         } else if (item.getTitle().equals("暂停")) {
             saveQuestionTime();
             AlertManager.pauseAlert(this);
+        } else if (item.getTitle().equals("答题卡")) {
+            Intent intent = new Intent(this, AnswerSheetActivity.class);
+            intent.putExtra("user_answer", mUserAnswerList);
+            startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 答题卡回调
+        if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SKIP && data != null) {
+            int position = data.getIntExtra("position", 0);
+
+            if (mViewPager == null) return;
+            mViewPager.setCurrentItem(position);
+        }
     }
 
     /**
