@@ -8,12 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
-import com.appublisher.quizbank.model.login.activity.LoginActivity;
 
 /**
  * 首页
@@ -45,6 +43,7 @@ public class HomePageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, MeasureActivity.class);
+                intent.putExtra("flag", "auto_training");
                 startActivity(intent);
             }
         });

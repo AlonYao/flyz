@@ -12,6 +12,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
+import com.appublisher.quizbank.utils.Logger;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
@@ -54,7 +55,7 @@ public class BaseRequest {
     /**
      * 阻塞式请求，异步用于子线程调用
      *
-     * @return
+     * @return 返回值
      */
     protected Object syncRequest(String url, String type) {
         if (type.equals("object")) {
@@ -65,11 +66,8 @@ public class BaseRequest {
             mQueue.add(request);
 
             try {
-                JSONObject response = future.get();
-                return response;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+                return future.get();
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         } else {
@@ -80,11 +78,8 @@ public class BaseRequest {
             mQueue.add(request);
 
             try {
-                JSONArray response = future.get();
-                return response;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+                return future.get();
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
@@ -96,7 +91,7 @@ public class BaseRequest {
     /**
      * 设置监听回调
      *
-     * @param callback
+     * @param callback 回调
      */
     protected void setCallbackListener(RequestCallback callback) {
         this.listener = callback;
@@ -111,79 +106,89 @@ public class BaseRequest {
      * @param type 	请求的数据类型：array | object | plaintext
      */
     protected void asyncRequest(final String url, final String name, String type) {
-        if (type.equals("object")) {
-            JsonObjectRequest request = new JsonObjectRequest(url, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            if(listener != null)
-                                listener.requestCompleted(response, name);
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(listener != null)
-                        listener.requestEndedWithError(error, name);
-                }
-            }){
 
-                @Override
-                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-                    try {
-                        if (encode!=null) {
-                            String jsonString = new String(response.data, encode);
-                            encode = null;
-                            return Response.success(new JSONObject(jsonString),
-                                    HttpHeaderParser.parseCacheHeaders(response));
-                        }
-                    } catch (UnsupportedEncodingException e) {
-                        return Response.error(new VolleyError(e));
-                    } catch (JSONException je) {
-                        return Response.error(new VolleyError(je));
+        Logger.i(url);
+
+        switch (type) {
+            case "object": {
+                JsonObjectRequest request = new JsonObjectRequest(url, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                if (listener != null)
+                                    listener.requestCompleted(response, name);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (listener != null)
+                            listener.requestEndedWithError(error, name);
                     }
+                }) {
 
-                    return super.parseNetworkResponse(response);
-                }
-            };
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            request.setTag(name.isEmpty() ? TAG : name);
-            mQueue.add(request);
+                    @Override
+                    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                        try {
+                            if (encode != null) {
+                                String jsonString = new String(response.data, encode);
+                                encode = null;
+                                return Response.success(new JSONObject(jsonString),
+                                        HttpHeaderParser.parseCacheHeaders(response));
+                            }
+                        } catch (UnsupportedEncodingException e) {
+                            return Response.error(new VolleyError(e));
+                        } catch (JSONException je) {
+                            return Response.error(new VolleyError(je));
+                        }
 
-        } else if (type.equals("array")) {
-            JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    if(listener != null)
-                        listener.requestCompleted(response, name);
-                }
-            }, new Response.ErrorListener() {
+                        return super.parseNetworkResponse(response);
+                    }
+                };
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setTag(name.isEmpty() ? TAG : name);
+                mQueue.add(request);
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(listener != null)
-                        listener.requestEndedWithError(error, name);
-                }
-            });
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            request.setTag(name.isEmpty() ? TAG : name);
-            mQueue.add(request);
+                break;
+            }
+            case "array": {
+                JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        if (listener != null)
+                            listener.requestCompleted(response, name);
+                    }
+                }, new Response.ErrorListener() {
 
-        } else {
-            StringRequest request = new StringRequest(url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (listener != null)
+                            listener.requestEndedWithError(error, name);
+                    }
+                });
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setTag(name.isEmpty() ? TAG : name);
+                mQueue.add(request);
+
+                break;
+            }
+            default: {
+                StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
 //			        	listener.requestCompleted(response, "");
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(listener != null)
-                        listener.requestEndedWithError(error, name);
-                }
-            });
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            request.setTag(name.isEmpty() ? TAG : name);
-            mQueue.add(request);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (listener != null)
+                            listener.requestEndedWithError(error, name);
+                    }
+                });
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setTag(name.isEmpty() ? TAG : name);
+                mQueue.add(request);
+                break;
+            }
         }
 
     }
@@ -198,119 +203,125 @@ public class BaseRequest {
      * @param type		请求的数据类型：array | object | plaintext
      */
     public void postRequest(final String url, final Map<String, String> params, final String name, String type) {
-        if (type.equals("object")) {
-            buildMultipartEntity(params);
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            if(listener != null)
-                                listener.requestCompleted(response, name);
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(listener != null)
-                        listener.requestEndedWithError(error, name);
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType()
-                {
-                    return entity.getContentType().getValue();
-                }
-
-                @Override
-                /**
-                 * Returns the raw POST or PUT body to be sent.
-                 *
-                 * @throws AuthFailureError in the event of auth failure
-                 */
-                public byte[] getBody() {
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    try {
-                        entity.writeTo(bos);
-                    } catch (IOException e) {
-                        VolleyLog.e("IOException writing to ByteArrayOutputStream");
+        switch (type) {
+            case "object": {
+                buildMultipartEntity(params);
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                if (listener != null)
+                                    listener.requestCompleted(response, name);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (listener != null)
+                            listener.requestEndedWithError(error, name);
                     }
-                    return bos.toByteArray();
-                }
+                }) {
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> headers = new HashMap<String, String>();
-                    headers.put("User-agent", "DailyLearn");
-                    return headers;
-                }
-            };
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            request.setTag(name.isEmpty() ? TAG : name);
-            mQueue.add(request);
+                    @Override
+                    public String getBodyContentType() {
+                        return entity.getContentType().getValue();
+                    }
 
-        } else if (type.equals("array")) {
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, url,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            if(listener != null)
-                                listener.requestCompleted(response, name);
+                    @Override
+                    /**
+                     * Returns the raw POST or PUT body to be sent.
+                     *
+                     * @throws com.android.volley.AuthFailureError in the event of auth failure
+                     */
+                    public byte[] getBody() {
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        try {
+                            entity.writeTo(bos);
+                        } catch (IOException e) {
+                            VolleyLog.e("IOException writing to ByteArrayOutputStream");
                         }
-                    }, new Response.ErrorListener() {
+                        return bos.toByteArray();
+                    }
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(listener != null)
-                        listener.requestEndedWithError(error, name);
-                }
-            }) {
-                @Override
-                protected Map<String,String> getParams(){
-                    return params;
-                }
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("User-agent", "DailyLearn");
+                        return headers;
+                    }
+                };
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setTag(name.isEmpty() ? TAG : name);
+                mQueue.add(request);
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type","application/x-www-form-urlencoded");
-                    headers.put("User-agent", "DailyLearn");
-                    return headers;
-                }
-            };
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            request.setTag(name.isEmpty() ? TAG : name);
-            mQueue.add(request);
+                break;
+            }
+            case "array": {
+                JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, url,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                if (listener != null)
+                                    listener.requestCompleted(response, name);
+                            }
+                        }, new Response.ErrorListener() {
 
-        } else {
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (listener != null)
+                            listener.requestEndedWithError(error, name);
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        return params;
+                    }
+
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("Content-Type", "application/x-www-form-urlencoded");
+                        headers.put("User-agent", "DailyLearn");
+                        return headers;
+                    }
+                };
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setTag(name.isEmpty() ? TAG : name);
+                mQueue.add(request);
+
+                break;
+            }
+            default: {
+                StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
 //			        	listener.requestCompleted(response, name);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(listener != null)
-                        listener.requestEndedWithError(error, name);
-                }
-            }){
-                @Override
-                protected Map<String,String> getParams(){
-                    return params;
-                }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (listener != null)
+                            listener.requestEndedWithError(error, name);
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        return params;
+                    }
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type","application/x-www-form-urlencoded");
-                    headers.put("User-agent", "DailyLearn");
-                    return headers;
-                }
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("Content-Type", "application/x-www-form-urlencoded");
+                        headers.put("User-agent", "DailyLearn");
+                        return headers;
+                    }
 
-            };
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            request.setTag(name.isEmpty() ? TAG : name);
-            mQueue.add(request);
+                };
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setTag(name.isEmpty() ? TAG : name);
+                mQueue.add(request);
+                break;
+            }
         }
     }
 
@@ -318,7 +329,7 @@ public class BaseRequest {
     /**
      * 构造数据上传实体
      *
-     * @param params
+     * @param params 实体
      */
     private void buildMultipartEntity(Map<String, String>params) {
 
@@ -340,7 +351,7 @@ public class BaseRequest {
      * Cancels all pending requests by the specified TAG, it is important
      * to specify a TAG so that the pending/ongoing requests can be cancelled.
      *
-     * @param tag
+     * @param tag tag
      */
     protected void cancelPendingRequests(Object tag) {
         if (mQueue != null) {

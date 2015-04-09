@@ -28,13 +28,11 @@ public class ParamBuilder implements ApiConstants {
 
         finalUrl.append(url)
                 .append("?terminal_type=android_phone")
-                .append("&app_type=dailyplan")
+                .append("&app_type=quizbank")
                 .append("&app_version=")
                 .append(Globals.appVersion)
                 .append("&uuid=")
                 .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
-                .append("&guest_id=")
-                .append(Globals.sharedPreferences.getString("guest_id", ""))
                 .append("&user_id=")
                 .append(Globals.sharedPreferences.getString("user_id", ""))
                 .append("&user_token=")
@@ -177,52 +175,6 @@ public class ParamBuilder implements ApiConstants {
         Map<String, String> params = new HashMap<>();
         params.put("old_pswd", old_pswd);
         params.put("new_pswd", new_pswd);
-        return params;
-    }
-
-    /**
-     * 用户完成任务提交时的做题数据参数
-     * @param task_id  任务id
-     * @param data  做题数据
-     * @return  做题数据参数
-     */
-    public static Map<String, String> submitTaskFinish(String task_id, String data) {
-        Map<String, String> params = new HashMap<>();
-        params.put("task_id", task_id);
-        params.put("data", data);
-        return params;
-    }
-
-    /**
-     * 考试项目信息
-     * @param exam_id  考试项目id
-     * @return  考试项目信息
-     */
-    public static Map<String, String> setExam(String exam_id) {
-        Map<String, String> params = new HashMap<>();
-        params.put("exam_id", exam_id);
-        return params;
-    }
-
-    /**
-     * 收藏任务（取消收藏也使用这个方法）
-     * @param task_id  任务id
-     * @return  包含任务id的对象
-     */
-    public static Map<String, String> collectTask(String task_id) {
-        Map<String, String> params = new HashMap<>();
-        params.put("task_id", task_id);
-        return params;
-    }
-
-    /**
-     * 真题错题上报
-     * @param qid 真题id
-     * @return 真题id
-     */
-    public static Map<String, String> reportErrorQuestion(String qid) {
-        Map<String, String> params = new HashMap<>();
-        params.put("qid", qid);
         return params;
     }
 

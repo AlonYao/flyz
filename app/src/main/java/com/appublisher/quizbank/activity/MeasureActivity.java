@@ -10,12 +10,18 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +29,15 @@ import java.util.HashMap;
 /**
  * 做题
  */
-public class MeasureActivity extends ActionBarActivity {
+public class MeasureActivity extends ActionBarActivity implements RequestCallback{
 
     public int mScreenHeight;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ViewPager mViewPager;
     public long mCurTimestamp;
     public int mCurPosition;
+
+    private Request mRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,7 @@ public class MeasureActivity extends ActionBarActivity {
         // 初始化成员变量
         mCurTimestamp = System.currentTimeMillis();
         mCurPosition = 0;
+        mRequest = new Request(this, this);
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(toolbar);
@@ -53,6 +62,12 @@ public class MeasureActivity extends ActionBarActivity {
         // 获取屏幕高度
         DisplayMetrics dm = getResources().getDisplayMetrics();
         mScreenHeight = dm.heightPixels - 50 - toolBarHeight; // 50是状态栏高度
+
+        // 获取数据
+        String flag = getIntent().getStringExtra("flag");
+        if ("auto_training".equals(flag)) {
+            mRequest.getAutoTraining();
+        }
 
         // 初始化用户答案
         int size = 10;
@@ -142,5 +157,20 @@ public class MeasureActivity extends ActionBarActivity {
 
         userAnswerMap.put("duration", duration);
         mUserAnswerList.set(mCurPosition, userAnswerMap);
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+
     }
 }
