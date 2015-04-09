@@ -14,6 +14,7 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +29,6 @@ public class MeasureActivity extends ActionBarActivity {
     public ViewPager mViewPager;
     public long mCurTimestamp;
 
-    private int mDuration;
-    private HashMap<String, Object> mUserAnswerMap;
     private int mCurPosition;
 
     @Override
@@ -111,16 +110,15 @@ public class MeasureActivity extends ActionBarActivity {
      * 保存做题时间
      */
     private void saveQuestionTime() {
-        mDuration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
+        int duration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
         mCurTimestamp = System.currentTimeMillis();
-        mUserAnswerMap = mUserAnswerList.get(mCurPosition);
+        HashMap<String, Object> userAnswerMap = mUserAnswerList.get(mCurPosition);
 
-        if (mUserAnswerMap.containsKey("duration")) {
-            mDuration = mDuration + (int) mUserAnswerMap.get("duration");
-        } else {
-            mUserAnswerMap.put("duration", mDuration);
+        if (userAnswerMap.containsKey("duration")) {
+            duration = duration + (int) userAnswerMap.get("duration");
         }
 
-        mUserAnswerList.set(mCurPosition, mUserAnswerMap);
+        userAnswerMap.put("duration", duration);
+        mUserAnswerList.set(mCurPosition, userAnswerMap);
     }
 }
