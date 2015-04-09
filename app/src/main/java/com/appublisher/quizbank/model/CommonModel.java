@@ -3,6 +3,7 @@ package com.appublisher.quizbank.model;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 
@@ -21,5 +22,15 @@ public class CommonModel {
         activity.getSupportActionBar().setBackgroundDrawable(
                 new ColorDrawable(activity.getResources().getColor(R.color.toolbar_bg)));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * 设置文字长按复制
+     * @param textView textView
+     */
+    public static void setTextLongClickCopy(TextView textView) {
+        if (android.os.Build.VERSION.SDK_INT > 10) {
+            textView.setTextIsSelectable(true);
+        }
     }
 }

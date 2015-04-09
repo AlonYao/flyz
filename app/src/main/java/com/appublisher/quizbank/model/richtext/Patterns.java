@@ -52,8 +52,7 @@ public class Patterns {
 	private static String getImageReg() {
 		StringBuilder builder = new StringBuilder();
 
-		return
-		builder.append("<img=")
+		return builder.append("<img=")
 			   .append(WEBURL_REG)
 			   .append("></img>")
 			   .toString();

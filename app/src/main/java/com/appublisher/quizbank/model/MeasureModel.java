@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.model;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -111,6 +110,7 @@ public class MeasureModel {
                 textView.setClickable(false);
                 flowLayout.addView(textView);
                 textView.setText(segment.text);
+                CommonModel.setTextLongClickCopy(textView);
 
             } else if (MatchInfo.MatchType.Image == segment.type) {
                 ImageView imgView = new ImageView(activity);
