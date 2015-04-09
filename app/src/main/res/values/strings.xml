@@ -38,6 +38,9 @@
     <!-- 答题卡 -->
     <string name="answer_sheet_handin">交卷</string>
 
+    <!-- 暂停Alert -->
+    <string name="alert_pause_btn">继续</string>
+
     <!-- Activity -->
     <!-- 登录注册Activity -->
     <string name="title_activity_login">登录</string>
