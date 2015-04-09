@@ -40,7 +40,7 @@
 
             <!-- 题干 -->
             <LinearLayout
-                android:id="@+id/measure_question_content_m"
+                android:id="@+id/measure_question_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
@@ -59,7 +59,7 @@
                     android:button="@drawable/measure_option_a_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_a_container_m"
+                    android:id="@+id/measure_option_a_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -78,7 +78,7 @@
                     android:button="@drawable/measure_option_b_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_b_container_m"
+                    android:id="@+id/measure_option_b_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -97,7 +97,7 @@
                     android:button="@drawable/measure_option_c_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_c_container_m"
+                    android:id="@+id/measure_option_c_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -116,7 +116,7 @@
                     android:button="@drawable/measure_option_d_selector"/>
 
                 <LinearLayout
-                    android:id="@+id/measure_option_d_container_m"
+                    android:id="@+id/measure_option_d_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

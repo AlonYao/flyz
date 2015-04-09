@@ -77,7 +77,14 @@ public class MeasureAdapter extends PagerAdapter{
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        boolean hasMaterial = true;
+        boolean hasMaterial = false;
+
+        String rich = "把1月和2月的利润代入公式，我们可以得到<img=http://dl.cdn.appublisher.com/" +
+                "yimgs/4/gjkodixmzjizdmz.png></img> ，解得<img=http://dl.cdn.appublisher.com/" +
+                "yimgs/4/wq3mjhjywjhyzzj.png></img>。故1—12月的累积利润为<img=http://dl.cdn." +
+                "appublisher.com/yimgs/4/dg1y2e3mgm0mdq0.png></img> ，平均利润为<img=http://dl." +
+                "cdn.appublisher.com/yimgs/4/2m4mzg3zjjiownk.png></img>。因此，本题答案选择C选项。";
+
         View view;
         if (hasMaterial) {
             view = LayoutInflater.from(mActivity).inflate(
@@ -85,15 +92,10 @@ public class MeasureAdapter extends PagerAdapter{
 
             ImageView ivPull = (ImageView) view.findViewById(R.id.measure_iv);
             LinearLayout llMaterial = (LinearLayout) view.findViewById(R.id.measure_material);
-            LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
-                    R.id.measure_option_a_container_m);
-            LinearLayout llOptionBContainer = (LinearLayout) view.findViewById(
-                    R.id.measure_option_b_container_m);
-            LinearLayout llOptionCContainer = (LinearLayout) view.findViewById(
-                    R.id.measure_option_c_container_m);
-            LinearLayout llOptionDContainer = (LinearLayout) view.findViewById(
-                    R.id.measure_option_d_container_m);
             final ScrollView svTop = (ScrollView) view.findViewById(R.id.measure_top);
+
+            // 材料
+            MeasureModel.addRichTextToContainer(mActivity, llMaterial, rich);
 
             ivPull.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -145,17 +147,31 @@ public class MeasureAdapter extends PagerAdapter{
                 }
             });
 
-            String rich = "把1月和2月的利润代入公式，我们可以得到<img=http://dl.cdn.appublisher.com/yimgs/4/gjkodixmzjizdmz.png></img> ，解得<img=http://dl.cdn.appublisher.com/yimgs/4/wq3mjhjywjhyzzj.png></img>。故1—12月的累积利润为<img=http://dl.cdn.appublisher.com/yimgs/4/dg1y2e3mgm0mdq0.png></img> ，平均利润为<img=http://dl.cdn.appublisher.com/yimgs/4/2m4mzg3zjjiownk.png></img>。因此，本题答案选择C选项。";
-
-            MeasureModel.addRichTextToContainer(mActivity, llMaterial, rich);
-            MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, rich);
-            MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, rich);
-            MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, rich);
-            MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, rich);
         } else {
             view = LayoutInflater.from(mActivity).inflate(
                     R.layout.measure_item_withoutmaterial, container, false);
         }
+
+        // 题干
+        LinearLayout llQuestionContent = (LinearLayout) view.findViewById(
+                R.id.measure_question_content);
+
+        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, rich);
+
+        // 选项
+        LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
+                R.id.measure_option_a_container);
+        LinearLayout llOptionBContainer = (LinearLayout) view.findViewById(
+                R.id.measure_option_b_container);
+        LinearLayout llOptionCContainer = (LinearLayout) view.findViewById(
+                R.id.measure_option_c_container);
+        LinearLayout llOptionDContainer = (LinearLayout) view.findViewById(
+                R.id.measure_option_d_container);
+
+        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, rich);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, rich);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, rich);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, rich);
 
         mCbOptionA = (CheckBox) view.findViewById(R.id.measure_option_a_cb);
         mCbOptionB = (CheckBox) view.findViewById(R.id.measure_option_b_cb);
