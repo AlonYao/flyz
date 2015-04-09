@@ -28,6 +28,7 @@ public class AlertManager {
             @Override
             public void onClick(View v) {
                 activity.mCurTimestamp = System.currentTimeMillis();
+                activity.startTimer();
                 alertDialog.dismiss();
             }
         });

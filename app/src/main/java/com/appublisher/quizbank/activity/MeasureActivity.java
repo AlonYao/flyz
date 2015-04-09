@@ -49,6 +49,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public ViewPager mViewPager;
     public long mCurTimestamp;
     public int mCurPosition;
+    public int mDuration;
 
     private Request mRequest;
     private Gson mGson;
@@ -85,7 +86,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
                         activity.getSupportActionBar().setTitle(time);
 
-                        if (mMins == 1 && mSec == 0) {
+                        if (mMins < 1) {
                             mToolbar.setTitleTextColor(Color.parseColor("#FFCD02"));
                         }
 
@@ -154,9 +155,12 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+
         } else if (item.getTitle().equals("暂停")) {
+            if (mTimer != null) mTimer.cancel();
             saveQuestionTime();
             AlertManager.pauseAlert(this);
+
         } else if (item.getTitle().equals("答题卡")) {
             Intent intent = new Intent(this, AnswerSheetActivity.class);
             intent.putExtra("user_answer", mUserAnswerList);
@@ -236,9 +240,16 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         });
 
         // 倒计时
-        int duration = autoTrainingResp.getDuration();
-        mMins = duration / 60;
-        mSec = duration % 60;
+        mDuration = autoTrainingResp.getDuration();
+        startTimer();
+    }
+
+    /**
+     * 倒计时启动
+     */
+    public void startTimer() {
+        mMins = mDuration / 60;
+        mSec = mDuration % 60;
 
         if (mTimer != null) {
             mTimer.cancel();
@@ -250,6 +261,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             @Override
             public void run() {
                 mSec--;
+                mDuration--;
                 if (mSec < 0) {
                     mMins--;
                     mSec = 59;
