@@ -17,7 +17,7 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
-import com.appublisher.quizbank.model.netdata.measure.QuestionsM;
+import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
@@ -76,37 +76,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             ProgressDialogManager.showProgressDialog(this);
             mRequest.getAutoTraining();
         }
-
-        // 初始化用户答案
-        int size = 10;
-        mUserAnswerList = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            HashMap<String, Object> map = new HashMap<>();
-            mUserAnswerList.add(map);
-        }
-
-        // 设置ViewPager
-        MeasureAdapter measureAdapter = new MeasureAdapter(this);
-        mViewPager.setAdapter(measureAdapter);
-
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                saveQuestionTime();
-                mCurPosition = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     @Override
@@ -172,9 +141,40 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * @param autoTrainingResp 快速智能练习回调
      */
     private void setContent(AutoTrainingResp autoTrainingResp) {
-        ArrayList<QuestionsM> questions = autoTrainingResp.getQuestions();
+        ArrayList<QuestionM> questions = autoTrainingResp.getQuestions();
 
         if (questions == null) return;
+
+        // 初始化用户答案
+        int size = questions.size();
+        mUserAnswerList = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            HashMap<String, Object> map = new HashMap<>();
+            mUserAnswerList.add(map);
+        }
+
+        // 设置ViewPager
+        MeasureAdapter measureAdapter = new MeasureAdapter(this, questions);
+        mViewPager.setAdapter(measureAdapter);
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                saveQuestionTime();
+                mCurPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

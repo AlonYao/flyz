@@ -74,7 +74,10 @@ public class MeasureModel {
      * @param container 富文本控件容器
      * @param rich 富文本
      */
-    public static void addRichTextToContainer(final Activity activity, LinearLayout container, String rich) {
+    public static void addRichTextToContainer(final Activity activity, LinearLayout container,
+                                              String rich) {
+        if (rich == null || rich.length() <= 0) return;
+
         Request request = new Request(activity);
 
         // 通过迭代装饰方式构造解析器

@@ -17,7 +17,10 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+import com.appublisher.quizbank.utils.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -29,6 +32,7 @@ public class MeasureAdapter extends PagerAdapter{
     private int mLastY;
     private SparseBooleanArray mIsItemLoad;
     private HashMap<String, Object> mUserAnswerMap;
+    private ArrayList<QuestionM> mQuestions;
 
     /** 页面控件 */
     private CheckBox mCbOptionA;
@@ -36,14 +40,15 @@ public class MeasureAdapter extends PagerAdapter{
     private CheckBox mCbOptionC;
     private CheckBox mCbOptionD;
 
-    public MeasureAdapter(MeasureActivity activity) {
+    public MeasureAdapter(MeasureActivity activity, ArrayList<QuestionM> questions) {
         mActivity = activity;
         mIsItemLoad = new SparseBooleanArray();
+        mQuestions = questions;
     }
 
     @Override
     public int getCount() {
-        return 10;
+        return mQuestions.size();
     }
 
     @Override
@@ -77,16 +82,22 @@ public class MeasureAdapter extends PagerAdapter{
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        boolean hasMaterial = false;
+        QuestionM question = mQuestions.get(position);
 
-        String rich = "把1月和2月的利润代入公式，我们可以得到<img=http://dl.cdn.appublisher.com/" +
-                "yimgs/4/gjkodixmzjizdmz.png></img> ，解得<img=http://dl.cdn.appublisher.com/" +
-                "yimgs/4/wq3mjhjywjhyzzj.png></img>。故1—12月的累积利润为<img=http://dl.cdn." +
-                "appublisher.com/yimgs/4/dg1y2e3mgm0mdq0.png></img> ，平均利润为<img=http://dl." +
-                "cdn.appublisher.com/yimgs/4/2m4mzg3zjjiownk.png></img>。因此，本题答案选择C选项。";
+        if (question == null) return new View(mActivity);
+
+        // 材料
+        String material = question.getMaterial();
+
+//        String rich = "把1月和2月的利润代入公式，我们可以得到<img=http://dl.cdn.appublisher.com/" +
+//                "yimgs/4/gjkodixmzjizdmz.png></img> ，解得<img=http://dl.cdn.appublisher.com/" +
+//                "yimgs/4/wq3mjhjywjhyzzj.png></img>。故1—12月的累积利润为<img=http://dl.cdn." +
+//                "appublisher.com/yimgs/4/dg1y2e3mgm0mdq0.png></img> ，平均利润为<img=http://dl." +
+//                "cdn.appublisher.com/yimgs/4/2m4mzg3zjjiownk.png></img>。因此，本题答案选择C选项。";
 
         View view;
-        if (hasMaterial) {
+        if (material != null && material.length() > 0) {
+            // 题目带材料
             view = LayoutInflater.from(mActivity).inflate(
                     R.layout.measure_item_hasmaterial, container, false);
 
@@ -95,7 +106,7 @@ public class MeasureAdapter extends PagerAdapter{
             final ScrollView svTop = (ScrollView) view.findViewById(R.id.measure_top);
 
             // 材料
-            MeasureModel.addRichTextToContainer(mActivity, llMaterial, rich);
+            MeasureModel.addRichTextToContainer(mActivity, llMaterial, material);
 
             ivPull.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -148,6 +159,7 @@ public class MeasureAdapter extends PagerAdapter{
             });
 
         } else {
+            // 题目不带材料
             view = LayoutInflater.from(mActivity).inflate(
                     R.layout.measure_item_withoutmaterial, container, false);
         }
@@ -156,7 +168,12 @@ public class MeasureAdapter extends PagerAdapter{
         LinearLayout llQuestionContent = (LinearLayout) view.findViewById(
                 R.id.measure_question_content);
 
-        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, rich);
+        String questionContent = question.getQuestion();
+        String questionPosition = String.valueOf(position + 1)
+                + "/" + String.valueOf(mActivity.mUserAnswerList.size()) + " ";
+        questionContent = questionPosition + (questionContent == null ? "" : questionContent);
+
+        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, questionContent);
 
         // 选项
         LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
@@ -168,10 +185,15 @@ public class MeasureAdapter extends PagerAdapter{
         LinearLayout llOptionDContainer = (LinearLayout) view.findViewById(
                 R.id.measure_option_d_container);
 
-        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, rich);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, rich);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, rich);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, rich);
+        String optionA = question.getOption_a();
+        String optionB = question.getOption_b();
+        String optionC = question.getOption_c();
+        String optionD = question.getOption_d();
+
+        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD);
 
         mCbOptionA = (CheckBox) view.findViewById(R.id.measure_option_a_cb);
         mCbOptionB = (CheckBox) view.findViewById(R.id.measure_option_b_cb);

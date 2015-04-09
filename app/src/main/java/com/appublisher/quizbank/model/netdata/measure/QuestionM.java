@@ -3,7 +3,7 @@ package com.appublisher.quizbank.model.netdata.measure;
 /**
  * 题目数据模型
  */
-public class QuestionsM {
+public class QuestionM {
     int id;
     String material;
     String question;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class AutoTrainingResp {
     int response_code;
     int duration;
-    ArrayList<QuestionsM> questions;
+    ArrayList<QuestionM> questions;
 
     public int getResponse_code() {
         return response_code;
@@ -26,11 +26,11 @@ public class AutoTrainingResp {
         this.duration = duration;
     }
 
-    public ArrayList<QuestionsM> getQuestions() {
+    public ArrayList<QuestionM> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(ArrayList<QuestionsM> questions) {
+    public void setQuestions(ArrayList<QuestionM> questions) {
         this.questions = questions;
     }
 }
