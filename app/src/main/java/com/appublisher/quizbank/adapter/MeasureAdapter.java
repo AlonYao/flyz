@@ -16,7 +16,6 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.MeasureModel;
-import com.appublisher.quizbank.utils.Logger;
 
 import java.util.HashMap;
 
@@ -68,9 +67,7 @@ public class MeasureAdapter extends PagerAdapter{
             // 更新成员变量
             mCurPosition = position;
 
-            Logger.i(String.valueOf(mCurPosition));
-
-            boolean hasMaterial = true;
+//            boolean hasMaterial = true;
             View view = (View) object;
 
             mCbOptionA = (CheckBox) view.findViewById(R.id.measure_option_a_cb);

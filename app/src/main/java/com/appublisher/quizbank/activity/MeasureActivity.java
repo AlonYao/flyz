@@ -14,7 +14,6 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +26,8 @@ public class MeasureActivity extends ActionBarActivity {
     public int mScreenHeight;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ViewPager mViewPager;
+    public long mCurTimestamp;
 
-    private long mCurTimestamp;
     private int mDuration;
     private HashMap<String, Object> mUserAnswerMap;
     private int mCurPosition;
@@ -77,12 +76,7 @@ public class MeasureActivity extends ActionBarActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mDuration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
-                mCurTimestamp = System.currentTimeMillis();
-                mUserAnswerMap = mUserAnswerList.get(mCurPosition);
-                mUserAnswerMap.put("duration", String.valueOf(mDuration));
-                mUserAnswerList.set(mCurPosition, mUserAnswerMap);
-
+                saveQuestionTime();
                 mCurPosition = position;
             }
 
@@ -106,9 +100,27 @@ public class MeasureActivity extends ActionBarActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getTitle().equals("暂停")) {
+            saveQuestionTime();
             AlertManager.pauseAlert(this);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 保存做题时间
+     */
+    private void saveQuestionTime() {
+        mDuration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
+        mCurTimestamp = System.currentTimeMillis();
+        mUserAnswerMap = mUserAnswerList.get(mCurPosition);
+
+        if (mUserAnswerMap.containsKey("duration")) {
+            mDuration = mDuration + (int) mUserAnswerMap.get("duration");
+        } else {
+            mUserAnswerMap.put("duration", mDuration);
+        }
+
+        mUserAnswerList.set(mCurPosition, mUserAnswerMap);
     }
 }
