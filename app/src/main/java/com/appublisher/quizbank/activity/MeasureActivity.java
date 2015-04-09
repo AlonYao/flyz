@@ -1,7 +1,12 @@
 package com.appublisher.quizbank.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -28,8 +33,11 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 做题
@@ -44,6 +52,56 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     private Request mRequest;
     private Gson mGson;
+    private Handler mHandler;
+    private Timer mTimer;
+    private static Toolbar mToolbar;
+    private static int mMins;
+    private static int mSec;
+
+    private static final int TIME_ON = 0;
+    private static final int TIME_OUT = 1;
+
+    private static class MsgHandler extends Handler {
+        private WeakReference<Activity> mActivity;
+
+        public MsgHandler(Activity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @SuppressLint("CommitPrefEdits")
+        @Override
+        public void handleMessage(Message msg) {
+            final MeasureActivity activity = (MeasureActivity) mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case TIME_ON:
+                        String mins = String.valueOf(mMins);
+                        String sec = String.valueOf(mSec);
+
+                        if (mins.length() == 1) mins = "0" + mins;
+                        if (sec.length() == 1) sec = "0" + sec;
+
+                        String time = mins + ":" + sec;
+
+                        activity.getSupportActionBar().setTitle(time);
+
+                        if (mMins == 1 && mSec == 0) {
+                            mToolbar.setTitleTextColor(Color.parseColor("#FFCD02"));
+                        }
+
+                        break;
+
+                    case TIME_OUT:
+                        activity.getSupportActionBar().setTitle("00:00");
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +113,17 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
         // View 初始化
         mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // 初始化成员变量
         mCurTimestamp = System.currentTimeMillis();
         mCurPosition = 0;
         mRequest = new Request(this, this);
         mGson = new Gson();
+        mHandler = new MsgHandler(this);
 
         // 获取ToolBar高度
-        int toolBarHeight = MeasureModel.getViewHeight(toolbar);
+        int toolBarHeight = MeasureModel.getViewHeight(mToolbar);
 
         // 获取屏幕高度
         DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -175,6 +234,35 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
             }
         });
+
+        // 倒计时
+        int duration = autoTrainingResp.getDuration();
+        mMins = duration / 60;
+        mSec = duration % 60;
+
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                mSec--;
+                if (mSec < 0) {
+                    mMins--;
+                    mSec = 59;
+                    mHandler.sendEmptyMessage(TIME_ON);
+                    if (mMins < 0) {
+                        mTimer.cancel();
+                        mHandler.sendEmptyMessage(TIME_OUT);
+                    }
+                } else {
+                    mHandler.sendEmptyMessage(TIME_ON);
+                }
+            }
+        }, 0, 1000);
     }
 
     @Override
@@ -188,7 +276,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             AutoTrainingResp autoTrainingResp = mGson.fromJson(
                     response.toString(), AutoTrainingResp.class);
 
-            if (autoTrainingResp.getResponse_code() == 1) {
+            if (autoTrainingResp != null && autoTrainingResp.getResponse_code() == 1) {
                 setContent(autoTrainingResp);
             } else {
                 ToastManager.showToast(this, getString(R.string.netdata_error));
