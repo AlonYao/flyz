@@ -133,7 +133,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         String flag = getIntent().getStringExtra("flag");
         if ("auto_training".equals(flag)) {
-//            ProgressDialogManager.showProgressDialog(this);
+            ProgressDialogManager.showProgressDialog(this);
             mRequest.getAutoTraining();
         }
     }
