@@ -133,7 +133,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         String flag = getIntent().getStringExtra("flag");
         if ("auto_training".equals(flag)) {
-            ProgressDialogManager.showProgressDialog(this);
+//            ProgressDialogManager.showProgressDialog(this);
             mRequest.getAutoTraining();
         }
     }
@@ -168,6 +168,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             Intent intent = new Intent(this, AnswerSheetActivity.class);
             intent.putExtra("user_answer", mUserAnswerList);
             startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
+
         } else if (item.getTitle().equals("草稿纸")) {
             Intent intent = new Intent(this, ScratchPaperActivity.class);
             startActivity(intent);

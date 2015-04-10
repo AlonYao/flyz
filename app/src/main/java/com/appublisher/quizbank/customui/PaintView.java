@@ -7,11 +7,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.utils.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,10 +31,10 @@ import java.util.Iterator;
  */
 public class PaintView extends View{
 
-    private Canvas mCanvas;
-    private Path mPath;
-    private Paint mBitmapPaint;
-    private Bitmap mBitmap;
+    private Canvas  mCanvas;
+    private Path    mPath;
+    private Paint   mBitmapPaint;
+    private Bitmap  mBitmap;
     private Paint mPaint;
 
     private ArrayList<DrawPath> savePath;
@@ -53,8 +57,8 @@ public class PaintView extends View{
         bitmapHeight = dm.heightPixels - 2 * 45;
 
         initCanvas();
-        savePath = new ArrayList<>();
-        deletePath = new ArrayList<>();
+        savePath = new ArrayList<DrawPath>();
+        deletePath = new ArrayList<DrawPath>();
 
     }
     public PaintView(Context c, AttributeSet attrs) {
@@ -67,8 +71,8 @@ public class PaintView extends View{
         bitmapHeight = dm.heightPixels - 2 * 45;
 
         initCanvas();
-        savePath = new ArrayList<>();
-        deletePath = new ArrayList<>();
+        savePath = new ArrayList<DrawPath>();
+        deletePath = new ArrayList<DrawPath>();
     }
     //初始化画布
     public void initCanvas(){
@@ -76,7 +80,7 @@ public class PaintView extends View{
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(0xFF00FF00);
+        mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -91,10 +95,10 @@ public class PaintView extends View{
                 Bitmap.Config.RGB_565);
         mCanvas = new Canvas(mBitmap);  //所有mCanvas画的东西都被保存在了mBitmap中
 
-        mCanvas.drawColor(Color.WHITE);
+//        mCanvas.drawColor(Color.);
         mPath = new Path();
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-
+        mBitmapPaint.setColor(getResources().getColor(R.color.scratch_paper_bg));
     }
 
 
@@ -131,7 +135,9 @@ public class PaintView extends View{
             savePath.remove(savePath.size() - 1);
 
             //将路径保存列表中的路径重绘在画布上
-            for (DrawPath dp : savePath) {
+            Iterator<DrawPath> iter = savePath.iterator();        //重复保存
+            while (iter.hasNext()) {
+                DrawPath dp = iter.next();
                 mCanvas.drawPath(dp.path, dp.paint);
 
             }
@@ -173,8 +179,8 @@ public class PaintView extends View{
      * */
     public String saveBitmap(){
         //获得系统当前时间，并以该时间作为文件名
-        SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyyMMddHHmmss");
-        Date   curDate   =   new Date(System.currentTimeMillis());//获取当前时间
+        SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyyMMddHHmmss");
+        Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
         String   str   =   formatter.format(curDate);
         String paintPath = "";
         str = str + "paint.png";
@@ -233,7 +239,7 @@ public class PaintView extends View{
     }
 
     @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
 

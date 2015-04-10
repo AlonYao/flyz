@@ -8,9 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.customui.PaintView;
 import com.appublisher.quizbank.model.CommonModel;
 
 public class ScratchPaperActivity extends ActionBarActivity {
+
+    private PaintView mPaintView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,7 @@ public class ScratchPaperActivity extends ActionBarActivity {
 
         // View 初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mPaintView = (PaintView) findViewById(R.id.scratch_paper_paintview);
 
         // 修改Toolbar icon
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);
@@ -49,13 +53,13 @@ public class ScratchPaperActivity extends ActionBarActivity {
             finish();
 
         } else if (item.getTitle().equals("清空")) {
-
+            mPaintView.removeAllPaint();
 
         } else if (item.getTitle().equals("撤销")) {
-
+            mPaintView.undo();
 
         } else if (item.getTitle().equals("恢复")) {
-
+            mPaintView.redo();
 
         }
 
