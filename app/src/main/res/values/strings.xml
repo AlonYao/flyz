@@ -56,5 +56,6 @@
     <string name="title_activity_qa">常见问题</string>
     <string name="title_activity_measure">题目</string>
     <string name="title_activity_answer_sheet">答题卡</string>
+    <string name="title_activity_scratch_paper"> </string>
 
 </resources>

@@ -134,6 +134,11 @@
             android:name=".activity.AnswerSheetActivity"
             android:label="@string/title_activity_answer_sheet" >
         </activity>
+        <activity
+            android:name=".activity.ScratchPaperActivity"
+            android:theme="@style/ActivityTransparent"
+            android:label="@string/title_activity_scratch_paper" >
+        </activity>
     </application>
 
 </manifest>

@@ -142,6 +142,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
 
+        MenuItemCompat.setShowAsAction(menu.add("草稿纸").setIcon(
+                R.drawable.measure_icon_scratch_paper), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
         MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
@@ -165,6 +168,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             Intent intent = new Intent(this, AnswerSheetActivity.class);
             intent.putExtra("user_answer", mUserAnswerList);
             startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
+        } else if (item.getTitle().equals("草稿纸")) {
+            Intent intent = new Intent(this, ScratchPaperActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
