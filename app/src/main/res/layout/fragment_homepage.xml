@@ -5,12 +5,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
-    <include layout="@layout/progressbar"/>
-
     <!-- 正文部分 -->
     <ScrollView
-        android:id="@+id/homepage"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -62,11 +59,12 @@
                             android:textColor="@color/white_translucence"
                             android:text="@string/homepage_gufen"/>
                         <TextView
+                            android:id="@+id/homepage_estimate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
                             android:textSize="43sp"
-                            android:text="90"/>
+                            android:text="@string/homepage_gufen_value"/>
                     </LinearLayout>
 
                     <!-- 排名 -->
@@ -87,11 +85,12 @@
                                 android:textColor="@color/white_translucence"
                                 android:text="@string/homepage_paiming"/>
                             <TextView
+                                android:id="@+id/homepage_ranking"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@android:color/white"
                                 android:textSize="43sp"
-                                android:text="90"/>
+                                android:text="@string/homepage_paiming_value"/>
                         </LinearLayout>
                         <!-- 百分号 -->
                         <TextView
@@ -131,8 +130,9 @@
                         android:textSize="17sp"
                         android:text="@string/homepage_today_exam"/>
                     <TextView
+                        android:id="@+id/homepage_todayexam_tv"
                         style="@style/HomePageListTV"
-                        android:text="已有1000人参加"/>
+                        android:text="@string/homepage_today_exam_value"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -167,8 +167,9 @@
                         android:textSize="17sp"
                         android:text="@string/homepage_special"/>
                     <TextView
+                        android:id="@+id/homepage_special_tv"
                         style="@style/HomePageListTV"
-                        android:text="牛吃草"/>
+                        android:text="@string/homepage_special_value"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -215,5 +216,7 @@
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
     </ScrollView>
+
+    <include layout="@layout/progressbar"/>
 
 </RelativeLayout>
