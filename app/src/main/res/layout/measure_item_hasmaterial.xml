@@ -136,4 +136,11 @@
         android:clickable="true"
         android:src="@drawable/measure_pull"
         tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/measure_bottom"
+        android:scaleType="fitXY"
+        android:src="@drawable/drawer_shadow_h"/>
 </RelativeLayout>
