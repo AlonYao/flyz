@@ -20,7 +20,7 @@ public class CommonModel {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setBackgroundDrawable(
-                new ColorDrawable(activity.getResources().getColor(R.color.toolbar_bg)));
+                activity.getResources().getDrawable(R.drawable.actionbar_bg));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

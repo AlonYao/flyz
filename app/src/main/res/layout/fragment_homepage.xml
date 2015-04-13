@@ -16,14 +16,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- 头像&估分&排名 -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="293dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="30dp"
+                android:paddingTop="15dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/homepage_black_bg"
                 android:orientation="vertical">
 
-                <!-- 头像&估分&排名 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -32,8 +36,8 @@
                     <!-- 头像 -->
                     <com.makeramen.roundedimageview.RoundedImageView
                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
                         android:src="@drawable/login_avatar"
                         android:scaleType="fitCenter"
                         app:riv_border_width="5dp"
@@ -45,6 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="29dp"
+                        android:layout_marginTop="15dp"
                         android:orientation="vertical">
 
                         <TextView
@@ -66,6 +71,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
                         android:orientation="horizontal">
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -101,7 +107,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="27dp"
+                    android:layout_marginTop="15dp"
                     android:layout_gravity="center_horizontal"
                     android:text="距离新疆公务员考试还有10天"
                     android:textSize="17sp"
@@ -120,23 +126,34 @@
                     <TextView
                         style="@style/HomePageListTV"
                         android:textSize="17sp"
-                        android:text="今日模考"/>
+                        android:text="@string/homepage_today_exam"/>
                     <TextView
                         style="@style/HomePageListTV"
                         android:text="已有1000人参加"/>
                 </LinearLayout>
 
-                <ImageView
-                    style="@style/HomePageListIV"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignRight="@id/homepage_todayexam_ll"
-                    android:src="@drawable/homepage_history"
-                    tools:ignore="ContentDescription" />
+                    android:orientation="horizontal">
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/setting_line"/>
+                    <ImageView
+                        android:id="@+id/homepage_history"
+                        style="@style/HomePageListIV"
+                        android:src="@drawable/homepage_history"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
             </RelativeLayout>
 
             <!-- 推荐专项 -->
             <RelativeLayout
                 style="@style/HomePageListRL"
-                android:layout_marginTop="46dp">
+                android:layout_marginTop="15dp">
                 <LinearLayout
                     android:id="@+id/homepage_special_ll"
                     style="@style/HomePageListLL"
@@ -145,31 +162,53 @@
                     <TextView
                         style="@style/HomePageListTV"
                         android:textSize="17sp"
-                        android:text="推荐专项"/>
+                        android:text="@string/homepage_special"/>
                     <TextView
                         style="@style/HomePageListTV"
                         android:text="牛吃草"/>
                 </LinearLayout>
 
-                <ImageView
-                    style="@style/HomePageListIV"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignRight="@id/homepage_special_ll"
-                    android:src="@drawable/homepage_special"
-                    tools:ignore="ContentDescription" />
+                    android:orientation="horizontal">
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/setting_line"/>
+
+                    <ImageView
+                        android:id="@+id/homepage_special"
+                        style="@style/HomePageListIV"
+                        android:src="@drawable/homepage_special"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
             </RelativeLayout>
 
             <!-- 快速练习 -->
             <TextView
                 android:id="@+id/homepage_quicktest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/HomePageAutoTestTv"
+                android:layout_marginTop="15dp"
+                android:text="@string/homepage_autotest"
+                tools:ignore="RtlSymmetry" />
+
+            <View
+                android:layout_width="293dp"
+                android:layout_height="1dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="46dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="40dp"
-                android:textSize="17sp"
-                android:text="快速练习"
-                android:background="@drawable/homepage_item_bg"
+                android:layout_marginTop="21dp"
+                android:layout_marginBottom="21dp"
+                android:background="@color/homepage_line"/>
+
+            <!-- 快速练习 -->
+            <TextView
+                android:id="@+id/homepage_zhiboke"
+                style="@style/HomePageAutoTestTv"
+                android:text="@string/homepage_zhiboke"
+                android:textColor="@android:color/white"
+                android:background="@drawable/homepage_item_bg_hollow"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
     </ScrollView>

@@ -20,6 +20,10 @@
     <string name="homepage_gufen">估分</string>
     <string name="homepage_paiming">排名</string>
     <string name="homepage_percent">%</string>
+    <string name="homepage_autotest">快速智能练习</string>
+    <string name="homepage_special">知识点专项训练</string>
+    <string name="homepage_today_exam">今日模考</string>
+    <string name="homepage_zhiboke">敬请期待</string>
 
     <!-- 设置 -->
     <string name="setting_account">账号设置</string>

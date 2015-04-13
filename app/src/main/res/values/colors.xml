@@ -2,7 +2,6 @@
 <resources>
     <color name="common_bg">#EFEFF4</color>
     <color name="drawer_text">#506183</color>
-    <color name="toolbar_bg">#37AF7E</color>
     <color name="white_translucence">#80FFFFFF</color>
 
     <color name="homepage_todayexam">#506183</color>
@@ -15,4 +14,6 @@
     <color name="answer_sheet_btn">#5EBA94</color>
 
     <color name="scratch_paper_bg">#5B262B2D</color>
+
+    <color name="homepage_line">#8FD9D9D9</color>
 </resources>
