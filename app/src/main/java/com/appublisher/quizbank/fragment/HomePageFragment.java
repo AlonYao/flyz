@@ -16,6 +16,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
+import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperNoteM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
@@ -38,6 +39,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     private TextView mTvRanking;
     private TextView mTvTodayExam;
     private TextView mTvSpecial;
+    private TextView mTvZhiboke;
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,6 +62,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         mTvRanking = (TextView) view.findViewById(R.id.homepage_ranking);
         mTvTodayExam = (TextView) view.findViewById(R.id.homepage_todayexam_tv);
         mTvSpecial = (TextView) view.findViewById(R.id.homepage_special_tv);
+        mTvZhiboke = (TextView) view.findViewById(R.id.homepage_zhiboke);
 
         // 获取&呈现 数据
         if (Globals.homepageResp != null) {
@@ -95,7 +98,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         }
 
         // 估分&排名
-        AssessmentM assessment = homepageData.getAssessmentM();
+        AssessmentM assessment = homepageData.getAssessment();
         if (assessment != null) {
             mTvEstimate.setText(String.valueOf(assessment.getScore()));
             mTvRanking.setText(String.valueOf(assessment.getRank()));
@@ -113,6 +116,21 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             PaperNoteM note = pager.getNote();
             if (note != null) {
                 mTvSpecial.setText(note.getName());
+            }
+        }
+
+        // 直播课
+        LiveCourseM liveCourse = homepageData.getLive_course();
+        if (liveCourse != null && liveCourse.getId() != 0) {
+            mTvZhiboke.setBackgroundResource(R.drawable.homepage_item_bg);
+            mTvZhiboke.setTextColor(getResources().getColor(R.color.homepage_todayexam));
+
+            if (liveCourse.isStarted()) {
+                // 正在上课
+                mTvZhiboke.setText("正在直播：" + liveCourse.getName());
+            } else {
+                // 即将上课
+                mTvZhiboke.setText("即将开始：" + liveCourse.getName());
             }
         }
 

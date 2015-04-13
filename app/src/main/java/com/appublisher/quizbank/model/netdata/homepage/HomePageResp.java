@@ -6,7 +6,7 @@ package com.appublisher.quizbank.model.netdata.homepage;
 public class HomePageResp {
 
     int response_code;
-    AssessmentM assessmentM;
+    AssessmentM assessment;
     PaperM paper;
     LiveCourseM live_course;
 
@@ -26,19 +26,19 @@ public class HomePageResp {
         this.response_code = response_code;
     }
 
-    public AssessmentM getAssessmentM() {
-        return assessmentM;
-    }
-
-    public void setAssessmentM(AssessmentM assessmentM) {
-        this.assessmentM = assessmentM;
-    }
-
     public LiveCourseM getLive_course() {
         return live_course;
     }
 
     public void setLive_course(LiveCourseM live_course) {
         this.live_course = live_course;
+    }
+
+    public AssessmentM getAssessment() {
+        return assessment;
+    }
+
+    public void setAssessment(AssessmentM assessment) {
+        this.assessment = assessment;
     }
 }
