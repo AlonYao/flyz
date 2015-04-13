@@ -70,6 +70,13 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(url, "qa", "array");
     }
 
+    /**
+     * 获取首页数据
+     */
+    public void getEntryData() {
+        asyncRequest(ParamBuilder.finalUrl(getEntryData), "entry_data", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

@@ -22,9 +22,6 @@ public interface ApiConstants {
     // 用户注册---手机号注册
     public static final String userRegister = baseUrl + "common/user_register";
 
-    // 用户注册---guest注册
-    public static final String guestRegister = baseUrl + "common/guest_register";
-
     // 修改个人信息
     public static final String changeUserInfo = baseUrl + "common/user_info_update";
 
@@ -46,8 +43,11 @@ public interface ApiConstants {
     // 忘记密码
     public static final String forgetPwd = baseUrl + "common/reset_password";
 
-    // 快速智能联系
+    // 快速智能练习
     public static final String getAutoTraining = baseUrl + "quizbank/auto_training";
+
+    // 首页数据
+    public static final String getEntryData = baseUrl + "quizbank/get_entry_data";
 
     // 图片相关
 	public static int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存

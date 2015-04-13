@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.model;
 
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
