@@ -6,6 +6,8 @@
     <string name="common_confirm">确认</string>
     <string name="netdata_error">数据异常</string>
     <string name="netdata_overtime">您当前的网络有问题，请检查网络后重试</string>
+    <string name="alert_n">取消</string>
+    <string name="alert_p">确定</string>
 
     <!-- 侧边栏 -->
     <string name="drawer_open">drawer_open</string>
@@ -48,8 +50,11 @@
     <!-- 答题卡 -->
     <string name="answer_sheet_handin">交卷</string>
 
-    <!-- 暂停Alert -->
+    <!-- Alert -->
     <string name="alert_pause_btn">继续</string>
+
+    <string name="alert_savetest_title">提示</string>
+    <string name="alert_savetest_msg">确定要退出练习？退出后未完成的练习会保存在练习历史中</string>
 
     <!-- Activity -->
     <!-- 登录注册Activity -->

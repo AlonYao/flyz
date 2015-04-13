@@ -157,7 +157,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            saveTest();
 
         } else if (item.getTitle().equals("暂停")) {
             if (mTimer != null) mTimer.cancel();
@@ -188,6 +188,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             if (mViewPager == null) return;
             mViewPager.setCurrentItem(position);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveTest();
     }
 
     /**
@@ -282,6 +287,32 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 }
             }
         }, 0, 1000);
+    }
+
+    /**
+     * 是否记录本次练习
+     */
+    private void saveTest() {
+        if (mUserAnswerList == null || mUserAnswerList.size() == 0) {
+            finish();
+            return;
+        }
+
+        boolean isSave = false;
+        int size = mUserAnswerList.size();
+        for (int i = 0; i < size; i++) {
+            HashMap<String, Object> map = mUserAnswerList.get(i);
+            if (map != null && map.containsKey("answer")) {
+                isSave = true;
+                break;
+            }
+        }
+
+        if (isSave) {
+            AlertManager.saveTestAlert(this);
+        } else {
+            finish();
+        }
     }
 
     @Override
