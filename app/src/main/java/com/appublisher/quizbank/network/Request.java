@@ -77,6 +77,15 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getEntryData), "entry_data", "object");
     }
 
+    /**
+     * 专项练习获取题目
+     * @param note_ids 知识点id
+     */
+    public void getNoteQuestions(String note_ids) {
+        asyncRequest(ParamBuilder.finalUrl(getEntryData) + "&note_ids=" + note_ids,
+                "entry_data", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

@@ -49,6 +49,9 @@ public interface ApiConstants {
     // 首页数据
     public static final String getEntryData = baseUrl + "quizbank/get_entry_data";
 
+    // 专项练习获取题目
+    public static final String getNoteQuestions = baseUrl + "quizbank/get_entire_papers";
+
     // 图片相关
 	public static int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	public static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
