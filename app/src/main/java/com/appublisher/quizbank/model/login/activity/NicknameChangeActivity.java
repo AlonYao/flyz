@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.model.login.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -54,7 +53,7 @@ public class NicknameChangeActivity extends ActionBarActivity implements Request
                 if (!mNickname.isEmpty()) {
                     String preNickName = getIntent().getStringExtra("nickname");
                     if (!mNickname.equals(preNickName)) {
-                        ProgressDialogManager.showProgressDialog(NicknameChangeActivity.this);
+                        ProgressDialogManager.showProgressDialog(NicknameChangeActivity.this, false);
                         new Request(NicknameChangeActivity.this, NicknameChangeActivity.this).
                                 changeUserInfo(ParamBuilder.changeUserInfo("nickname", mNickname));
                     }

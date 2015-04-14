@@ -496,7 +496,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
 
         // 将上传信息上传至公司服务器
         if (result.equals("Success")) {
-            ProgressDialogManager.showProgressDialog(this);
+            ProgressDialogManager.showProgressDialog(this, false);
             mRequest.changeUserInfo(ParamBuilder.changeUserInfo("avatar", url));
         } else {
             ToastManager.showToast(this, "上传头像失败");

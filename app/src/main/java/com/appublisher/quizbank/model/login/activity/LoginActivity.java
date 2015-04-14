@@ -4,14 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +23,6 @@ import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
-import com.appublisher.quizbank.model.login.model.netdata.GuestDetaiModel;
-import com.appublisher.quizbank.model.login.model.netdata.GuestInfoModel;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
@@ -151,7 +146,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                 } else {
                     String pwdEncrypt = LoginModel.encrypt(password, "appublisher");
                     if (!pwdEncrypt.isEmpty()) {
-                        ProgressDialogManager.showProgressDialog(LoginActivity.this);
+                        ProgressDialogManager.showProgressDialog(LoginActivity.this, false);
                         mRequest.login(ParamBuilder.loginParams("0", username, "", pwdEncrypt));
                     }
                 }

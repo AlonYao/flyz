@@ -51,10 +51,13 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public int mCurPosition;
     public int mDuration;
 
-    private Request mRequest;
     private Gson mGson;
     private Handler mHandler;
     private Timer mTimer;
+    private String mPaperType;
+    private String mPaperName;
+    private int mPaperId;
+    private boolean mRedo;
     private static Toolbar mToolbar;
     private static int mMins;
     private static int mSec;
@@ -119,7 +122,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 初始化成员变量
         mCurTimestamp = System.currentTimeMillis();
         mCurPosition = 0;
-        mRequest = new Request(this, this);
+        Request request = new Request(this, this);
         mGson = new Gson();
         mHandler = new MsgHandler(this);
 
@@ -131,10 +134,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mScreenHeight = dm.heightPixels - 50 - toolBarHeight; // 50是状态栏高度
 
         // 获取数据
-        String flag = getIntent().getStringExtra("flag");
-        if ("auto_training".equals(flag)) {
-            ProgressDialogManager.showProgressDialog(this);
-            mRequest.getAutoTraining();
+        mPaperType = getIntent().getStringExtra("paper_type");
+        mPaperName = getIntent().getStringExtra("paper_name");
+        if ("auto".equals(mPaperType)) {
+            ProgressDialogManager.showProgressDialog(this, true);
+            request.getAutoTraining();
         }
     }
 
@@ -167,6 +171,10 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         } else if (item.getTitle().equals("答题卡")) {
             Intent intent = new Intent(this, AnswerSheetActivity.class);
             intent.putExtra("user_answer", mUserAnswerList);
+            intent.putExtra("paper_type", mPaperType);
+            intent.putExtra("paper_id", mPaperId);
+            intent.putExtra("redo", mRedo);
+            intent.putExtra("paper_name", mPaperName);
             startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
 
         } else if (item.getTitle().equals("草稿纸")) {
@@ -216,6 +224,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * @param autoTrainingResp 快速智能练习回调
      */
     private void setContent(AutoTrainingResp autoTrainingResp) {
+        mPaperId = autoTrainingResp.getPaper_id();
         ArrayList<QuestionM> questions = autoTrainingResp.getQuestions();
 
         if (questions == null) return;
@@ -225,6 +234,25 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mUserAnswerList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             HashMap<String, Object> map = new HashMap<>();
+
+            QuestionM question = questions.get(i);
+            if (question != null) {
+                map.put("id", question.getId());
+                map.put("right_answer", question.getAnswer());
+                map.put("note_id", question.getNote_id());
+                map.put("category_id", question.getCategory_id());
+                map.put("category_name", question.getCategory_name());
+            } else {
+                map.put("id", 0);
+                map.put("right_answer", "right_answer");
+                map.put("note_id", 0);
+                map.put("category_id", 0);
+                map.put("category_name", "科目");
+            }
+
+            map.put("duration", 0);
+            map.put("answer", "");
+
             mUserAnswerList.add(map);
         }
 
@@ -302,7 +330,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         int size = mUserAnswerList.size();
         for (int i = 0; i < size; i++) {
             HashMap<String, Object> map = mUserAnswerList.get(i);
-            if (map != null && map.containsKey("answer")) {
+            if (map != null && map.containsKey("answer")
+                    && !"".equals(map.get("answer"))) {
                 isSave = true;
                 break;
             }

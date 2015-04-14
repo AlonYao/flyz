@@ -203,6 +203,10 @@ public class BaseRequest {
      * @param type		请求的数据类型：array | object | plaintext
      */
     public void postRequest(final String url, final Map<String, String> params, final String name, String type) {
+
+        Logger.i(url);
+        Logger.i(params.toString());
+
         switch (type) {
             case "object": {
                 buildMultipartEntity(params);

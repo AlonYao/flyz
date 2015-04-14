@@ -16,22 +16,25 @@ public class ProgressDialogManager {
      * 显示ProgressDialog
      * @param context  上下文
      */
-    public static void showProgressDialog(final Context context) {
+    public static void showProgressDialog(final Context context, boolean cancelable) {
         if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
         }
 
         progressDialog = ProgressDialog.show(context, null, "加载中，请稍候......");
-        progressDialog.setCancelable(true);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                progressDialog.dismiss();
-                ((Activity) context).finish();
-            }
-        });
+
+        if (cancelable) {
+            progressDialog.setCancelable(true);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    progressDialog.dismiss();
+                    ((Activity) context).finish();
+                }
+            });
+        }
     }
 
     /**

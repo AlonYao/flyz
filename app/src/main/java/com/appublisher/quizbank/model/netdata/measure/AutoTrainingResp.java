@@ -7,8 +7,17 @@ import java.util.ArrayList;
  */
 public class AutoTrainingResp {
     int response_code;
+    int paper_id;
     int duration;
     ArrayList<QuestionM> questions;
+
+    public int getPaper_id() {
+        return paper_id;
+    }
+
+    public void setPaper_id(int paper_id) {
+        this.paper_id = paper_id;
+    }
 
     public int getResponse_code() {
         return response_code;

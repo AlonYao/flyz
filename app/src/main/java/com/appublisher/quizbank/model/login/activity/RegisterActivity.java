@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.model.login.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -145,7 +144,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                 String smsCode = etSmsCode.getText().toString();
                 mPhoneNum = etPhone.getText().toString();
                 if (!smsCode.isEmpty() && !mPhoneNum.isEmpty()) {
-                    ProgressDialogManager.showProgressDialog(RegisterActivity.this);
+                    ProgressDialogManager.showProgressDialog(RegisterActivity.this, false);
                     mRequest.checkSmsCode(ParamBuilder.checkSmsCodeParams(mPhoneNum, smsCode));
                 } else {
                     ToastManager.showToast(RegisterActivity.this, "手机号或验证码为空");

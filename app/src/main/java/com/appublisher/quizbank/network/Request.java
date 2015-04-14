@@ -180,6 +180,13 @@ public class Request extends BaseRequest implements ApiConstants{
                 new HashMap<String, String>(), "user_logout", "object");
     }
 
+    /**
+     * 提交试卷
+     */
+    public void submitPaper(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(submitPaper), params, "submit_paper", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	图片加载方法代码块	 *

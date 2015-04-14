@@ -77,7 +77,8 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, MeasureActivity.class);
-                intent.putExtra("flag", "auto_training");
+                intent.putExtra("paper_type", "auto");
+                intent.putExtra("paper_name", "快速智能练习");
                 startActivity(intent);
             }
         });

@@ -52,6 +52,9 @@ public interface ApiConstants {
     // 专项练习获取题目
     public static final String getNoteQuestions = baseUrl + "quizbank/get_entire_papers";
 
+    // 提交试卷
+    public static final String submitPaper = baseUrl + "quizbank/submit_paper";
+
     // 图片相关
 	public static int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	public static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

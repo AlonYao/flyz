@@ -15,9 +15,26 @@ public class QuestionM {
     String analysis;
     int note_id;
     String note_name;
-    int category;
+    int category_id;
+    String category_name;
     String source;
     int accuracy;
+
+    public String getCategory_name() {
+        return category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
+    }
 
     public int getId() {
         return id;
@@ -105,14 +122,6 @@ public class QuestionM {
 
     public void setNote_name(String note_name) {
         this.note_name = note_name;
-    }
-
-    public int getCategory() {
-        return category;
-    }
-
-    public void setCategory(int category) {
-        this.category = category;
     }
 
     public String getSource() {

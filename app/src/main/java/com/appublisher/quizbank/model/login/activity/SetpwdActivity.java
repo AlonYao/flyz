@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.model.login.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -95,15 +94,15 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
                                 // 第三方登录用户绑定手机号需要提供密码
                                 mPhoneNum = getIntent().getStringExtra("phoneNum");
                                 if (mPhoneNum != null && !mPhoneNum.equals("")) {
-                                    ProgressDialogManager.showProgressDialog(SetpwdActivity.this);
+                                    ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
                                     request.authHandle(ParamBuilder.authHandle(
                                             "0", type, mPhoneNum, pwdEncrypt));
                                 }
                             } else if (type != null && type.equals("forget_pwd")) {
-                                ProgressDialogManager.showProgressDialog(SetpwdActivity.this);
+                                ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
                                 request.forgetPwd(ParamBuilder.forgetPwd(phoneNum, pwdEncrypt));
                             } else {
-                                ProgressDialogManager.showProgressDialog(SetpwdActivity.this);
+                                ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
                                 request.register(ParamBuilder.register(phoneNum, pwdEncrypt));
                             }
                         }

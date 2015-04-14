@@ -1,18 +1,12 @@
 package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -24,7 +18,6 @@ import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamSetResponseModel;
-import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -74,7 +67,7 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
         mPreExamStatus = LoginModel.hasExamInfo();
 
         // 获取数据
-        ProgressDialogManager.showProgressDialog(this);
+        ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getExamList();
     }
 

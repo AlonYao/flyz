@@ -37,7 +37,7 @@ public class UserInfoSetModel {
                     new SocializeListeners.UMAuthListener() {
                         @Override
                         public void onStart(SHARE_MEDIA share_media) {
-                            ProgressDialogManager.showProgressDialog(mActivity);
+                            ProgressDialogManager.showProgressDialog(mActivity, false);
                         }
 
                         @Override
@@ -90,7 +90,7 @@ public class UserInfoSetModel {
                     new SocializeListeners.UMAuthListener() {
                         @Override
                         public void onStart(SHARE_MEDIA share_media) {
-                            ProgressDialogManager.showProgressDialog(mActivity);
+                            ProgressDialogManager.showProgressDialog(mActivity, false);
                         }
 
                         @Override

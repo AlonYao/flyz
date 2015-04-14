@@ -34,7 +34,7 @@ public class QaActivity extends ActionBarActivity implements RequestCallback{
         mWebView = (WebView) findViewById(R.id.qa_webview);
         mWebView.setBackgroundColor(0);
 
-        ProgressDialogManager.showProgressDialog(this);
+        ProgressDialogManager.showProgressDialog(this, true);
         new Request(this, this).getQa();
     }
 

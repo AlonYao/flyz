@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.model.login.activity;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -55,7 +54,7 @@ public class PwdChangeActivity extends ActionBarActivity implements RequestCallb
                     String newPwdEncrypt = LoginModel.encrypt(newPwd, "appublisher");
 
                     if (!prePwdEncrypt.isEmpty() && !newPwdEncrypt.isEmpty()) {
-                        ProgressDialogManager.showProgressDialog(PwdChangeActivity.this);
+                        ProgressDialogManager.showProgressDialog(PwdChangeActivity.this, false);
                         new Request(PwdChangeActivity.this, PwdChangeActivity.this).changePwd(
                                 ParamBuilder.changePwd(prePwdEncrypt, newPwdEncrypt)
                         );
