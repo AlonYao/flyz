@@ -54,10 +54,10 @@
                 android:id="@+id/measure_option_a_m"
                 style="@style/MeasureOptionLL">
 
-                <CheckBox
-                    android:id="@+id/measure_option_a_cb"
-                    style="@style/MeasureOptionCb"
-                    android:button="@drawable/measure_option_a_selector"/>
+                <TextView
+                    android:id="@+id/measure_option_a_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_a"/>
 
                 <LinearLayout
                     android:id="@+id/measure_option_a_container"
@@ -73,10 +73,10 @@
                 android:id="@+id/measure_option_b_m"
                 style="@style/MeasureOptionLL">
 
-                <CheckBox
-                    android:id="@+id/measure_option_b_cb"
-                    style="@style/MeasureOptionCb"
-                    android:button="@drawable/measure_option_b_selector"/>
+                <TextView
+                    android:id="@+id/measure_option_b_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_b"/>
 
                 <LinearLayout
                     android:id="@+id/measure_option_b_container"
@@ -92,10 +92,10 @@
                 android:id="@+id/measure_option_c_m"
                 style="@style/MeasureOptionLL">
 
-                <CheckBox
-                    android:id="@+id/measure_option_c_cb"
-                    style="@style/MeasureOptionCb"
-                    android:button="@drawable/measure_option_c_selector"/>
+                <TextView
+                    android:id="@+id/measure_option_c_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_c"/>
 
                 <LinearLayout
                     android:id="@+id/measure_option_c_container"
@@ -111,10 +111,10 @@
                 android:id="@+id/measure_option_d_m"
                 style="@style/MeasureOptionLL">
 
-                <CheckBox
-                    android:id="@+id/measure_option_d_cb"
-                    style="@style/MeasureOptionCb"
-                    android:button="@drawable/measure_option_d_selector"/>
+                <TextView
+                    android:id="@+id/measure_option_d_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_d"/>
 
                 <LinearLayout
                     android:id="@+id/measure_option_d_container"

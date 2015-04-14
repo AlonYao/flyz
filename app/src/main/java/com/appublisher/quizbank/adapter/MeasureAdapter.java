@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
@@ -18,7 +18,6 @@ import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +34,10 @@ public class MeasureAdapter extends PagerAdapter{
     private ArrayList<QuestionM> mQuestions;
 
     /** 页面控件 */
-    private CheckBox mCbOptionA;
-    private CheckBox mCbOptionB;
-    private CheckBox mCbOptionC;
-    private CheckBox mCbOptionD;
+    private TextView mTvOptionA;
+    private TextView mTvOptionB;
+    private TextView mTvOptionC;
+    private TextView mTvOptionD;
 
     public MeasureAdapter(MeasureActivity activity, ArrayList<QuestionM> questions) {
         mActivity = activity;
@@ -70,13 +69,12 @@ public class MeasureAdapter extends PagerAdapter{
             mIsItemLoad.put(position, true);
 
             // 更新成员变量
-//            boolean hasMaterial = true;
             View view = (View) object;
 
-            mCbOptionA = (CheckBox) view.findViewById(R.id.measure_option_a_cb);
-            mCbOptionB = (CheckBox) view.findViewById(R.id.measure_option_b_cb);
-            mCbOptionC = (CheckBox) view.findViewById(R.id.measure_option_c_cb);
-            mCbOptionD = (CheckBox) view.findViewById(R.id.measure_option_d_cb);
+            mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
+            mTvOptionB = (TextView) view.findViewById(R.id.measure_option_b_tv);
+            mTvOptionC = (TextView) view.findViewById(R.id.measure_option_c_tv);
+            mTvOptionD = (TextView) view.findViewById(R.id.measure_option_d_tv);
         }
     }
 
@@ -195,18 +193,18 @@ public class MeasureAdapter extends PagerAdapter{
         MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC);
         MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD);
 
-        mCbOptionA = (CheckBox) view.findViewById(R.id.measure_option_a_cb);
-        mCbOptionB = (CheckBox) view.findViewById(R.id.measure_option_b_cb);
-        mCbOptionC = (CheckBox) view.findViewById(R.id.measure_option_c_cb);
-        mCbOptionD = (CheckBox) view.findViewById(R.id.measure_option_d_cb);
+        mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
+        mTvOptionB = (TextView) view.findViewById(R.id.measure_option_b_tv);
+        mTvOptionC = (TextView) view.findViewById(R.id.measure_option_c_tv);
+        mTvOptionD = (TextView) view.findViewById(R.id.measure_option_d_tv);
 
         // 设置按钮
         setOption(position);
 
-        mCbOptionA.setOnClickListener(optionClick);
-        mCbOptionB.setOnClickListener(optionClick);
-        mCbOptionC.setOnClickListener(optionClick);
-        mCbOptionD.setOnClickListener(optionClick);
+        mTvOptionA.setOnClickListener(optionClick);
+        mTvOptionB.setOnClickListener(optionClick);
+        mTvOptionC.setOnClickListener(optionClick);
+        mTvOptionD.setOnClickListener(optionClick);
 
         container.addView(view);
         return view;
@@ -228,26 +226,26 @@ public class MeasureAdapter extends PagerAdapter{
                     && !mUserAnswerMap.get("answer").equals("")) hasAnswer = true;
 
             switch (v.getId()) {
-                case R.id.measure_option_a_cb:
-                    mCbOptionA.setChecked(true);
+                case R.id.measure_option_a_tv:
+                    mTvOptionA.setSelected(true);
                     mUserAnswerMap.put("answer", "A");
 
                     break;
 
-                case R.id.measure_option_b_cb:
-                    mCbOptionB.setChecked(true);
+                case R.id.measure_option_b_tv:
+                    mTvOptionB.setSelected(true);
                     mUserAnswerMap.put("answer", "B");
 
                     break;
 
-                case R.id.measure_option_c_cb:
-                    mCbOptionC.setChecked(true);
+                case R.id.measure_option_c_tv:
+                    mTvOptionC.setSelected(true);
                     mUserAnswerMap.put("answer", "C");
 
                     break;
 
-                case R.id.measure_option_d_cb:
-                    mCbOptionD.setChecked(true);
+                case R.id.measure_option_d_tv:
+                    mTvOptionD.setSelected(true);
                     mUserAnswerMap.put("answer", "D");
 
                     break;
@@ -271,10 +269,10 @@ public class MeasureAdapter extends PagerAdapter{
      * 重置按钮状态
      */
     private void resetOption() {
-        mCbOptionA.setChecked(false);
-        mCbOptionB.setChecked(false);
-        mCbOptionC.setChecked(false);
-        mCbOptionD.setChecked(false);
+        mTvOptionA.setSelected(false);
+        mTvOptionB.setSelected(false);
+        mTvOptionC.setSelected(false);
+        mTvOptionD.setSelected(false);
     }
 
     /**
@@ -292,19 +290,19 @@ public class MeasureAdapter extends PagerAdapter{
 
         switch (userAnswer) {
             case "A":
-                mCbOptionA.setChecked(true);
+                mTvOptionA.setSelected(true);
                 break;
 
             case "B":
-                mCbOptionB.setChecked(true);
+                mTvOptionB.setSelected(true);
                 break;
 
             case "C":
-                mCbOptionC.setChecked(true);
+                mTvOptionC.setSelected(true);
                 break;
 
             case "D":
-                mCbOptionD.setChecked(true);
+                mTvOptionD.setSelected(true);
                 break;
         }
     }
