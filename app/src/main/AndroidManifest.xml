@@ -143,6 +143,10 @@
             android:name=".activity.PracticeReportActivity"
             android:label="@string/title_activity_practice_report" >
         </activity>
+        <activity
+            android:name=".activity.SpecialPracticeActivity"
+            android:label="@string/title_activity_special_practice" >
+        </activity>
     </application>
 
 </manifest>

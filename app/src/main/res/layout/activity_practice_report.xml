@@ -6,6 +6,6 @@
     android:orientation="vertical"
     tools:context="com.appublisher.quizbank.activity.PracticeReportActivity">
 
-
+    
 
 </LinearLayout>
