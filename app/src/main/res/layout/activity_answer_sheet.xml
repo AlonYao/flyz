@@ -24,6 +24,7 @@
     </GridView>
 
     <TextView
+        android:id="@+id/answer_sheet_submit"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:textColor="@android:color/white"

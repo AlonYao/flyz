@@ -50,6 +50,11 @@
     <!-- 答题卡 -->
     <string name="answer_sheet_handin">交卷</string>
 
+    <!-- 练习报告页面 -->
+    <string name="practice_report_ratio">做对/全部题目</string>
+    <string name="practice_report_semicolon">/</string>
+    <string name="practice_report_zero">0</string>
+
     <!-- Alert -->
     <string name="alert_pause_btn">继续</string>
 
@@ -71,7 +76,7 @@
     <string name="title_activity_measure">题目</string>
     <string name="title_activity_answer_sheet">答题卡</string>
     <string name="title_activity_scratch_paper"> </string>
-    <string name="title_activity_practice_report">PracticeReportActivity</string>
+    <string name="title_activity_practice_report">练习报告</string>
     <string name="title_activity_special_practice">SpecialPracticeActivity</string>
 
 </resources>

@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
@@ -29,6 +30,7 @@ public class AnswerSheetActivity extends ActionBarActivity {
 
         // View 初始化
         GridView gridView = (GridView) findViewById(R.id.answer_sheet_gv);
+        TextView tvSubmit = (TextView) findViewById(R.id.answer_sheet_submit);
 
         // 获取数据
         ArrayList<HashMap<String, Object>> userAnswerList = (ArrayList<HashMap<String, Object>>)
@@ -48,6 +50,15 @@ public class AnswerSheetActivity extends ActionBarActivity {
                 }
             });
         }
+
+        // 交卷
+        tvSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AnswerSheetActivity.this, PracticeReportActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
