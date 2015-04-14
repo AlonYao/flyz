@@ -71,5 +71,6 @@
     <string name="title_activity_measure">题目</string>
     <string name="title_activity_answer_sheet">答题卡</string>
     <string name="title_activity_scratch_paper"> </string>
+    <string name="title_activity_practice_report">PracticeReportActivity</string>
 
 </resources>

@@ -136,8 +136,12 @@
         </activity>
         <activity
             android:name=".activity.ScratchPaperActivity"
-            android:theme="@style/ActivityTransparent"
-            android:label="@string/title_activity_scratch_paper" >
+            android:label="@string/title_activity_scratch_paper"
+            android:theme="@style/ActivityTransparent" >
+        </activity>
+        <activity
+            android:name=".activity.PracticeReportActivity"
+            android:label="@string/title_activity_practice_report" >
         </activity>
     </application>
 
