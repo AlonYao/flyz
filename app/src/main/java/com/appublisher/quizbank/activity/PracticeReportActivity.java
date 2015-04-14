@@ -7,6 +7,9 @@ import android.view.MenuItem;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
 
+/**
+ * 练习报告Activity
+ */
 public class PracticeReportActivity extends ActionBarActivity {
 
     @Override

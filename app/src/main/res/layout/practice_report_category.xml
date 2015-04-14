@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/practice_report_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="36dp"
+        android:ems="4"
+        android:textColor="@color/setting_text"
+        android:text="@string/practice_report_category"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/practice_report_category"
+        android:layout_marginLeft="25dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="146dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/practice_report_progressbar"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <!-- 做对的题目 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/setting_text"
+                android:text="@string/practice_report_zero"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/setting_text"
+                android:textSize="10sp"
+                android:text="@string/practice_report_semicolon"/>
+
+            <!-- 全部的题目 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/setting_text"
+                android:textSize="10sp"
+                android:text="@string/practice_report_zero"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="36dp"
+        android:orientation="horizontal">
+
+        <!-- 时间 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/setting_text"
+            android:text="@string/practice_report_zero"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/setting_text"
+            android:textSize="10sp"
+            android:text="@string/practice_report_time"/>
+    </LinearLayout>
+
+    <View
+        style="@style/SettingLine"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

@@ -54,6 +54,8 @@
     <string name="practice_report_ratio">做对/全部题目</string>
     <string name="practice_report_semicolon">/</string>
     <string name="practice_report_zero">0</string>
+    <string name="practice_report_time">秒/题</string>
+    <string name="practice_report_category">科目</string>
 
     <!-- Alert -->
     <string name="alert_pause_btn">继续</string>

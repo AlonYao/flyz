@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- selected -->
-    <item android:state_checked="true" android:drawable="@drawable/measure_option_b_press"/>
-    <!-- not selected -->
-    <item android:drawable="@drawable/measure_option_b_unpress"/>
-</selector>
