@@ -19,6 +19,7 @@ import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 
@@ -86,7 +87,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
             public void onClick(View v) {
                 int duration_total = 0;
                 HashMap<String, Object> userAnswerMap;
-                JSONObject questions = new JSONObject();
+                JSONArray questions = new JSONArray();
 
                 String redoSubmit;
                 if (redo) {
@@ -123,13 +124,14 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                         // 统计总时长
                         duration_total = duration_total + duration;
 
-                        questions = new JSONObject();
-                        questions.put("id", id);
-                        questions.put("answer", answer);
-                        questions.put("is_right", is_right);
-                        questions.put("category", category);
-                        questions.put("note_id", note_id);
-                        questions.put("duration", duration);
+                        JSONObject joQuestion = new JSONObject();
+                        joQuestion.put("id", id);
+                        joQuestion.put("answer", answer);
+                        joQuestion.put("is_right", is_right);
+                        joQuestion.put("category", category);
+                        joQuestion.put("note_id", note_id);
+                        joQuestion.put("duration", duration);
+                        questions.put(joQuestion);
 
                         // 统计科目信息
                         if (category_name != null
@@ -162,6 +164,8 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                             HashMap<String, Object> map = new HashMap<>();
                             if (is_right) {
                                 map.put("right_num", 1);
+                            } else {
+                                map.put("right_num", 0);
                             }
                             map.put("total_num", 1);
                             map.put("duration_total", duration);
@@ -203,6 +207,8 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     private void dealSubmitPaperResp(JSONObject response) {
         if (response == null) return;
 
+        Logger.i(response.toString());
+
         SubmitPaperResp submitPaperResp =
                 mGson.fromJson(response.toString(), SubmitPaperResp.class);
 
@@ -210,13 +216,14 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
 
         ArrayList<NoteM> notes = submitPaperResp.getNotes();
 
-        Intent intent = new Intent(AnswerSheetActivity.this, PracticeReportActivity.class);
+        Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
         intent.putExtra("notes", notes);
         intent.putExtra("paper_name", mPaperName);
         intent.putExtra("right_num", mRightNum);
         intent.putExtra("total_num", mTotalNum);
         intent.putExtra("category", mCategoryMap);
-        startActivity(intent);
+        setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
+        finish();
     }
 
     @Override

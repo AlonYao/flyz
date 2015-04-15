@@ -19,12 +19,13 @@
 
             <!-- 练习类型及内容信息 -->
             <TextView
+                android:id="@+id/practice_report_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:textColor="@color/setting_text"
-                android:text="练习类型及内容信息"/>
+                android:text="@string/practice_report_name"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,6 +44,7 @@
 
                 <!-- 做对的题目 -->
                 <TextView
+                    android:id="@+id/practice_report_rightnum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
@@ -57,6 +59,7 @@
 
                 <!-- 全部的题目 -->
                 <TextView
+                    android:id="@+id/practice_report_totalnum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/setting_text"
@@ -65,6 +68,7 @@
 
             <!-- 科目 -->
             <LinearLayout
+                android:id="@+id/practice_report_category_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -73,9 +77,13 @@
 
             </LinearLayout>
 
+            <!-- 知识点 -->
             <LinearLayout
+                android:id="@+id/practice_report_note_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -83,26 +91,33 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/setting_text"
                     android:layout_marginLeft="36dp"
-                    android:text="知识点掌握的越好盆栽长得越好哦"/>
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/practice_report_note"/>
 
-                <!-- 知识点 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
-                    android:orientation="vertical">
-
-                </LinearLayout>
             </LinearLayout>
 
-            
-            <ImageView
+            <LinearLayout
+                android:id="@+id/practice_report_notenochange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/practice_report_logo"/>
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/practice_report_logo"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/practice_report_notedesp"
+                    android:text="@string/practice_report_notedesp"/>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

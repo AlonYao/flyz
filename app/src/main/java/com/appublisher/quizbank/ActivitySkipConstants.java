@@ -7,4 +7,7 @@ public class ActivitySkipConstants {
 
     // 答题卡选项跳转至指定题目
     public static final int ANSWER_SHEET_SKIP = 1000;
+
+    // 答题卡提交
+    public static final int ANSWER_SHEET_SUBMIT = 1001;
 }

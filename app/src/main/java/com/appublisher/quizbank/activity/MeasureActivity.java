@@ -22,6 +22,7 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
+import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -185,6 +186,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -195,6 +197,23 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
             if (mViewPager == null) return;
             mViewPager.setCurrentItem(position);
+        } else if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SUBMIT && data != null) {
+            ArrayList<NoteM> notes = (ArrayList<NoteM>) data.getSerializableExtra("notes");
+            String paper_name = data.getStringExtra("paper_name");
+            int right_num = data.getIntExtra("right_num", 0);
+            int total_num = data.getIntExtra("total_num", 0);
+            HashMap<String, HashMap<String, Object>> category =
+                    (HashMap<String, HashMap<String, Object>>)
+                            data.getSerializableExtra("category");
+
+            Intent intent = new Intent(this, PracticeReportActivity.class);
+            intent.putExtra("notes", notes);
+            intent.putExtra("paper_name", paper_name);
+            intent.putExtra("right_num", right_num);
+            intent.putExtra("total_num", total_num);
+            intent.putExtra("category", category);
+            startActivity(intent);
+            finish();
         }
     }
 
