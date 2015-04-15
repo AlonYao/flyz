@@ -96,28 +96,17 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
                 android:id="@+id/practice_report_notenochange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/practice_report_logo"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:textColor="@color/practice_report_notedesp"
-                    android:text="@string/practice_report_notedesp"/>
-            </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="@color/practice_report_notedesp"
+                android:text="@string/practice_report_notedesp"
+                android:drawableTop="@drawable/practice_report_logo"
+                android:drawablePadding="5dp"/>
 
         </LinearLayout>
     </ScrollView>

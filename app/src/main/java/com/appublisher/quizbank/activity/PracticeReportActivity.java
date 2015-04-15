@@ -36,10 +36,10 @@ public class PracticeReportActivity extends ActionBarActivity {
         TextView tvPaperName = (TextView) findViewById(R.id.practice_report_name);
         TextView tvRightNum = (TextView) findViewById(R.id.practice_report_rightnum);
         TextView tvTotalNum = (TextView) findViewById(R.id.practice_report_totalnum);
+        TextView tvNoteNoChange =
+                (TextView) findViewById(R.id.practice_report_notenochange);
         LinearLayout llCategoryContainer =
                 (LinearLayout) findViewById(R.id.practice_report_category_container);
-        LinearLayout llNoteNoChange =
-                (LinearLayout) findViewById(R.id.practice_report_notenochange);
         LinearLayout llNoteContainer =
                 (LinearLayout) findViewById(R.id.practice_report_note_container);
 
@@ -109,10 +109,10 @@ public class PracticeReportActivity extends ActionBarActivity {
 
         // 添加知识点变化
         if (notes == null || notes.size() == 0) {
-            llNoteNoChange.setVisibility(View.VISIBLE);
+            tvNoteNoChange.setVisibility(View.VISIBLE);
             llNoteContainer.setVisibility(View.GONE);
         } else {
-            llNoteNoChange.setVisibility(View.GONE);
+            tvNoteNoChange.setVisibility(View.GONE);
             llNoteContainer.setVisibility(View.VISIBLE);
 
             int size = notes.size();
