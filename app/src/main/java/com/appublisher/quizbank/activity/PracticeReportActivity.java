@@ -108,14 +108,66 @@ public class PracticeReportActivity extends ActionBarActivity {
         }
 
         // 添加知识点变化
-        if (notes == null) {
+        if (notes == null || notes.size() == 0) {
             llNoteNoChange.setVisibility(View.VISIBLE);
             llNoteContainer.setVisibility(View.GONE);
         } else {
             llNoteNoChange.setVisibility(View.GONE);
             llNoteContainer.setVisibility(View.VISIBLE);
+
+            int size = notes.size();
+            for (int i = 0; i < size; i++) {
+                NoteM note = notes.get(i);
+                if (note == null) continue;
+
+                View child = LayoutInflater.from(this).inflate(
+                        R.layout.practice_report_note, llCategoryContainer, false);
+
+                TextView tvNoteName = (TextView) child.findViewById(R.id.practice_report_note);
+                ImageView ivLevelPre =
+                        (ImageView) child.findViewById(R.id.practice_report_note_pre);
+                ImageView ivLevelNow =
+                        (ImageView) child.findViewById(R.id.practice_report_note_now);
+                ImageView ivLevelChange =
+                        (ImageView) child.findViewById(R.id.practice_report_note_change);
+
+                tvNoteName.setText(note.getName());
+
+                int levelPre = note.getFrom();
+                int levelNow = note.getTo();
+
+                setLevelImg(levelPre, ivLevelPre);
+                setLevelImg(levelNow, ivLevelNow);
+
+                if (levelPre > levelNow) {
+                    ivLevelChange.setImageResource(R.drawable.practice_report_down);
+                } else {
+                    ivLevelChange.setImageResource(R.drawable.practice_report_up);
+                }
+            }
         }
 
+    }
+
+    /**
+     * 设置知识点变化img
+     * @param level 知识点等级
+     * @param view 知识点等级view
+     */
+    private void setLevelImg(int level, ImageView view) {
+        if (level == 1) {
+            view.setImageResource(R.drawable.practice_report_level1);
+        } else if (level == 2) {
+            view.setImageResource(R.drawable.practice_report_level2);
+        } else if (level == 3) {
+            view.setImageResource(R.drawable.practice_report_level3);
+        } else if (level == 4) {
+            view.setImageResource(R.drawable.practice_report_level4);
+        } else if (level == 5) {
+            view.setImageResource(R.drawable.practice_report_level5);
+        } else {
+            view.setImageResource(R.drawable.practice_report_level1);
+        }
     }
 
     @Override

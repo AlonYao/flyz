@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:background="@android:color/white">
 
     <TextView
-        android:id="@+id/practice_report_category"
+        android:id="@+id/practice_report_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="36dp"
         android:ems="7"
         android:textColor="@color/setting_text"
-        android:text="@string/practice_report_category"/>
+        android:text="@string/practice_report_note_name"
+        tools:ignore="RelativeOverlap" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,11 +26,13 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/practice_report_note_pre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/practice_report_level3"/>
 
         <ImageView
+            android:id="@+id/practice_report_note_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="27dp"
@@ -36,6 +40,7 @@
             android:src="@drawable/practice_report_down"/>
 
         <ImageView
+            android:id="@+id/practice_report_note_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/practice_report_level1"/>
