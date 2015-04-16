@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/measure_top"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/common_bg">
+
+        <!-- 材料 -->
+        <LinearLayout
+            android:id="@+id/measure_material"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="20dp"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/measure_bottom"
+        android:layout_below="@id/measure_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="15dp"
+            android:orientation="vertical">
+
+            <!-- 题干 -->
+            <LinearLayout
+                android:id="@+id/measure_question_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="26dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <!-- 选项 A -->
+            <LinearLayout
+                android:id="@+id/measure_option_a_m"
+                style="@style/MeasureOptionLL">
+
+                <TextView
+                    android:id="@+id/measure_option_a_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_a"/>
+
+                <LinearLayout
+                    android:id="@+id/measure_option_a_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 选项 B -->
+            <LinearLayout
+                android:id="@+id/measure_option_b_m"
+                style="@style/MeasureOptionLL">
+
+                <TextView
+                    android:id="@+id/measure_option_b_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_b"/>
+
+                <LinearLayout
+                    android:id="@+id/measure_option_b_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 选项 C -->
+            <LinearLayout
+                android:id="@+id/measure_option_c_m"
+                style="@style/MeasureOptionLL">
+
+                <TextView
+                    android:id="@+id/measure_option_c_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_c"/>
+
+                <LinearLayout
+                    android:id="@+id/measure_option_c_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 选项 D -->
+            <LinearLayout
+                android:id="@+id/measure_option_d_m"
+                style="@style/MeasureOptionLL">
+
+                <TextView
+                    android:id="@+id/measure_option_d_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_d"/>
+
+                <LinearLayout
+                    android:id="@+id/measure_option_d_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--解析-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/setting_text"
+                android:text="@string/measure_analysis"/>
+
+            <LinearLayout
+                android:id="@+id/measure_analysis_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/measure_iv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/measure_bottom"
+        android:paddingTop="10dp"
+        android:clickable="true"
+        android:src="@drawable/measure_pull"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/measure_bottom"
+        android:scaleType="fitXY"
+        android:src="@drawable/drawer_shadow_h"
+        tools:ignore="ContentDescription" />
+</RelativeLayout>

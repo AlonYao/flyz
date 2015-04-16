@@ -47,6 +47,9 @@
     <string name="measure_option_c">C</string>
     <string name="measure_option_d">D</string>
 
+    <!-- 解析 -->
+    <string name="measure_analysis">【解析】</string>
+
     <!-- 答题卡 -->
     <string name="answer_sheet_handin">交卷</string>
 

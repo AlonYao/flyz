@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.adapter;
 
 import android.support.v4.view.PagerAdapter;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,23 +11,22 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
- * 做题模块
+ * 题目解析容器
  */
-public class MeasureAdapter extends PagerAdapter{
+public class MeasureAnalysisAdapter extends PagerAdapter{
 
-    private MeasureActivity mActivity;
+    private MeasureAnalysisActivity mActivity;
     private int mLastY;
-    private SparseBooleanArray mIsItemLoad;
-    private HashMap<String, Object> mUserAnswerMap;
     private ArrayList<QuestionM> mQuestions;
+    private ArrayList<AnswerM> mAnswers;
 
     /** 页面控件 */
     private TextView mTvOptionA;
@@ -36,10 +34,12 @@ public class MeasureAdapter extends PagerAdapter{
     private TextView mTvOptionC;
     private TextView mTvOptionD;
 
-    public MeasureAdapter(MeasureActivity activity, ArrayList<QuestionM> questions) {
+    public MeasureAnalysisAdapter(MeasureAnalysisActivity activity,
+                                  ArrayList<QuestionM> questions,
+                                  ArrayList<AnswerM> answers) {
         mActivity = activity;
-        mIsItemLoad = new SparseBooleanArray();
         mQuestions = questions;
+        mAnswers = answers;
     }
 
     @Override
@@ -58,25 +58,7 @@ public class MeasureAdapter extends PagerAdapter{
     }
 
     @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
-
-        if (!mIsItemLoad.get(position, false)) {
-            mIsItemLoad.clear();
-            mIsItemLoad.put(position, true);
-
-            // 更新成员变量
-            View view = (View) object;
-
-            mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
-            mTvOptionB = (TextView) view.findViewById(R.id.measure_option_b_tv);
-            mTvOptionC = (TextView) view.findViewById(R.id.measure_option_c_tv);
-            mTvOptionD = (TextView) view.findViewById(R.id.measure_option_d_tv);
-        }
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, final int position) {
+    public Object instantiateItem(ViewGroup container, int position) {
         QuestionM question = mQuestions.get(position);
 
         if (question == null) return new View(mActivity);
@@ -88,7 +70,7 @@ public class MeasureAdapter extends PagerAdapter{
         if (material != null && material.length() > 0) {
             // 题目带材料
             view = LayoutInflater.from(mActivity).inflate(
-                    R.layout.measure_item_hasmaterial, container, false);
+                    R.layout.measure_analysis_item_hasmaterial, container, false);
 
             ImageView ivPull = (ImageView) view.findViewById(R.id.measure_iv);
             LinearLayout llMaterial = (LinearLayout) view.findViewById(R.id.measure_material);
@@ -150,7 +132,7 @@ public class MeasureAdapter extends PagerAdapter{
         } else {
             // 题目不带材料
             view = LayoutInflater.from(mActivity).inflate(
-                    R.layout.measure_item_withoutmaterial, container, false);
+                    R.layout.measure_analysis_item_withoutmaterial, container, false);
         }
 
         // 题干
@@ -159,12 +141,12 @@ public class MeasureAdapter extends PagerAdapter{
 
         String questionContent = question.getQuestion();
         String questionPosition = String.valueOf(position + 1)
-                + "/" + String.valueOf(mActivity.mUserAnswerList.size()) + " ";
+                + "/" + String.valueOf(mQuestions.size()) + " ";
         questionContent = questionPosition + (questionContent == null ? "" : questionContent);
 
         MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, questionContent);
 
-        // 选项
+        // 设置选项内容
         LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
                 R.id.measure_option_a_container);
         LinearLayout llOptionBContainer = (LinearLayout) view.findViewById(
@@ -184,114 +166,79 @@ public class MeasureAdapter extends PagerAdapter{
         MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC);
         MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD);
 
+        // 选项Textview控件
         mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
         mTvOptionB = (TextView) view.findViewById(R.id.measure_option_b_tv);
         mTvOptionC = (TextView) view.findViewById(R.id.measure_option_c_tv);
         mTvOptionD = (TextView) view.findViewById(R.id.measure_option_d_tv);
 
-        // 设置按钮
-        setOption(position);
+        // 设置正确答案
+        String rightAnswer = question.getAnswer();
+        if (rightAnswer != null && rightAnswer.length() != 0) {
+            setOptionBackground(rightAnswer, true);
+        }
 
-        mTvOptionA.setOnClickListener(optionClick);
-        mTvOptionB.setOnClickListener(optionClick);
-        mTvOptionC.setOnClickListener(optionClick);
-        mTvOptionD.setOnClickListener(optionClick);
+        // 处理用户答案
+        dealUserAnswer(position);
+
+        // 解析
+        LinearLayout llMeasureAnalysis =
+                (LinearLayout) view.findViewById(R.id.measure_analysis_container);
+
+        MeasureModel.addRichTextToContainer(mActivity, llMeasureAnalysis, question.getAnalysis());
 
         container.addView(view);
         return view;
     }
 
     /**
-     * 选项点击事件
+     * 处理用户答案
+     * @param position 当前页面
      */
-    private View.OnClickListener optionClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            resetOption();
-            mUserAnswerMap = mActivity.mUserAnswerList.get(mActivity.mCurPosition);
+    private void dealUserAnswer(int position) {
+        if (mAnswers == null || position >= mAnswers.size()) return;
+        AnswerM answer = mAnswers.get(position);
 
-            boolean hasAnswer = false;
+        if (answer == null) return;
+        String userAnswer = answer.getAnswer();
+        boolean isRight = answer.isIs_right();
 
-            if (mUserAnswerMap.containsKey("answer")
-                    && mUserAnswerMap.get("answer") != null
-                    && !mUserAnswerMap.get("answer").equals("")) hasAnswer = true;
-
-            switch (v.getId()) {
-                case R.id.measure_option_a_tv:
-                    mTvOptionA.setSelected(true);
-                    mUserAnswerMap.put("answer", "A");
-
-                    break;
-
-                case R.id.measure_option_b_tv:
-                    mTvOptionB.setSelected(true);
-                    mUserAnswerMap.put("answer", "B");
-
-                    break;
-
-                case R.id.measure_option_c_tv:
-                    mTvOptionC.setSelected(true);
-                    mUserAnswerMap.put("answer", "C");
-
-                    break;
-
-                case R.id.measure_option_d_tv:
-                    mTvOptionD.setSelected(true);
-                    mUserAnswerMap.put("answer", "D");
-
-                    break;
-            }
-
-            mActivity.mUserAnswerList.set(mActivity.mCurPosition, mUserAnswerMap);
-
-            if (hasAnswer) return;
-
-            if (mActivity.mCurPosition + 1 < mActivity.mUserAnswerList.size()) {
-                mActivity.mViewPager.setCurrentItem(mActivity.mCurPosition + 1);
-            } else {
-                mActivity.skipToAnswerSheet();
-            }
+        if (!isRight) {
+            setOptionBackground(userAnswer, false);
         }
-    };
-
-    /**
-     * 重置按钮状态
-     */
-    private void resetOption() {
-        mTvOptionA.setSelected(false);
-        mTvOptionB.setSelected(false);
-        mTvOptionC.setSelected(false);
-        mTvOptionD.setSelected(false);
     }
 
     /**
-     * 设置按钮状态
+     * 设置选项背景颜色
+     * @param userAnswer 用户答案
      */
-    private void setOption(int position) {
-        resetOption();
-        mUserAnswerMap = mActivity.mUserAnswerList.get(position);
+    private void setOptionBackground(String userAnswer, boolean isRight) {
+        if (userAnswer == null || userAnswer.length() == 0) return;
 
-        if (!mUserAnswerMap.containsKey("answer")) return;
-
-        String userAnswer = (String) mUserAnswerMap.get("answer");
-
-        if (userAnswer == null) return;
+        int resId = R.drawable.measure_analysis_right;
+        if (!isRight) {
+            resId = R.drawable.measure_analysis_wrong;
+        }
 
         switch (userAnswer) {
             case "A":
-                mTvOptionA.setSelected(true);
+                mTvOptionA.setBackgroundResource(resId);
+                mTvOptionA.setTextColor(mActivity.getResources().getColor(R.color.white));
                 break;
 
             case "B":
-                mTvOptionB.setSelected(true);
+                mTvOptionB.setBackgroundResource(resId);
+                mTvOptionB.setTextColor(mActivity.getResources().getColor(R.color.white));
                 break;
 
             case "C":
-                mTvOptionC.setSelected(true);
+                mTvOptionC.setBackgroundResource(resId);
+                mTvOptionC.setTextColor(mActivity.getResources().getColor(R.color.white));
                 break;
 
             case "D":
-                mTvOptionD.setSelected(true);
+                mTvOptionD.setBackgroundResource(resId);
+                mTvOptionD.setTextColor(mActivity.getResources().getColor(R.color.white));
                 break;
         }
     }

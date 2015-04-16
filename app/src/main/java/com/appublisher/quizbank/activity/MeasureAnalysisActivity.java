@@ -5,16 +5,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
+import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 
@@ -22,15 +23,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback{
 
     public int mScreenHeight;
-    public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ViewPager mViewPager;
-
-    private Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +38,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         CommonModel.setToolBar(this);
 
         // View 初始化
-        mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.measure_analysis_viewpager);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // 初始化成员变量
         Request request = new Request(this, this);
-        mGson = new Gson();
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(toolbar);
@@ -83,33 +79,41 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_measure_analysis, menu);
-        return true;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 处理解析回调
+     * @param response 解析数据回调
+     */
+    private void dealMeasureAnalysisResp(JSONObject response) {
+        if (response == null) return;
+
+        Gson gson = new Gson();
+        MeasureAnalysisResp measureAnalysisResp =
+                gson.fromJson(response.toString(), MeasureAnalysisResp.class);
+
+        if (measureAnalysisResp == null || measureAnalysisResp.getResponse_code() != 1) return;
+        ArrayList<QuestionM> questions = measureAnalysisResp.getQuestions();
+
+        if (questions == null || questions.size() == 0) return;
+
+        MeasureAnalysisAdapter adapter = new MeasureAnalysisAdapter(
+                this,
+                questions,
+                measureAnalysisResp.getAnswers());
+        mViewPager.setAdapter(adapter);
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-
-        Logger.i(response.toString());
+        if ("collect_error_questions".equals(apiName)) dealMeasureAnalysisResp(response);
 
         ProgressDialogManager.closeProgressDialog();
     }
