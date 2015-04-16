@@ -86,6 +86,15 @@ public class Request extends BaseRequest implements ApiConstants{
                 "entry_data", "object");
     }
 
+    /**
+     * 专项练习获取题目
+     * @param type 类型(error:有错题的层级 collect:有收藏的层级 all:显示所有层级)
+     */
+    public void getNoteHierarchy(String type) {
+        asyncRequest(ParamBuilder.finalUrl(getNoteHierarchy) + "&type=" + type,
+                "note_hierarchy", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *
