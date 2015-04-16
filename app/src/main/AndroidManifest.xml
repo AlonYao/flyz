@@ -144,8 +144,8 @@
             android:label="@string/title_activity_practice_report" >
         </activity>
         <activity
-            android:name=".activity.SpecialPracticeActivity"
-            android:label="@string/title_activity_special_practice" >
+            android:name=".activity.MeasureAnalysisActivity"
+            android:label="@string/title_activity_measure_analysis" >
         </activity>
     </application>
 

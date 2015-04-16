@@ -86,6 +86,6 @@
     <string name="title_activity_answer_sheet">答题卡</string>
     <string name="title_activity_scratch_paper"> </string>
     <string name="title_activity_practice_report">练习报告</string>
-    <string name="title_activity_special_practice">SpecialPracticeActivity</string>
+    <string name="title_activity_measure_analysis">解析</string>
 
 </resources>
