@@ -170,13 +170,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             AlertManager.pauseAlert(this);
 
         } else if (item.getTitle().equals("答题卡")) {
-            Intent intent = new Intent(this, AnswerSheetActivity.class);
-            intent.putExtra("user_answer", mUserAnswerList);
-            intent.putExtra("paper_type", mPaperType);
-            intent.putExtra("paper_id", mPaperId);
-            intent.putExtra("redo", mRedo);
-            intent.putExtra("paper_name", mPaperName);
-            startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
+            skipToAnswerSheet();
 
         } else if (item.getTitle().equals("草稿纸")) {
             Intent intent = new Intent(this, ScratchPaperActivity.class);
@@ -220,6 +214,19 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public void onBackPressed() {
         saveTest();
+    }
+
+    /**
+     * 跳转至答题卡
+     */
+    public void skipToAnswerSheet() {
+        Intent intent = new Intent(this, AnswerSheetActivity.class);
+        intent.putExtra("user_answer", mUserAnswerList);
+        intent.putExtra("paper_type", mPaperType);
+        intent.putExtra("paper_id", mPaperId);
+        intent.putExtra("redo", mRedo);
+        intent.putExtra("paper_name", mPaperName);
+        startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
     }
 
     /**

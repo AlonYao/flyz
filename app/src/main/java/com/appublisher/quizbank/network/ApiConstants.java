@@ -50,7 +50,7 @@ public interface ApiConstants {
     public static final String getEntryData = baseUrl + "quizbank/get_entry_data";
 
     // 专项练习获取题目
-    public static final String getNoteQuestions = baseUrl + "quizbank/get_entire_papers";
+    public static final String getNoteQuestions = baseUrl + "quizbank/get_note_questions";
 
     // 提交试卷
     public static final String submitPaper = baseUrl + "quizbank/submit_paper";

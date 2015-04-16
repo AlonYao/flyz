@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.adapter;
 
-import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -12,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
@@ -258,9 +255,7 @@ public class MeasureAdapter extends PagerAdapter{
             if (mActivity.mCurPosition + 1 < mActivity.mUserAnswerList.size()) {
                 mActivity.mViewPager.setCurrentItem(mActivity.mCurPosition + 1);
             } else {
-                Intent intent = new Intent(mActivity, AnswerSheetActivity.class);
-                intent.putExtra("user_answer", mActivity.mUserAnswerList);
-                mActivity.startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
+                mActivity.skipToAnswerSheet();
             }
         }
     };

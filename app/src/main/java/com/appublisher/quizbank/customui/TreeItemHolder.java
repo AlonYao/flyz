@@ -49,12 +49,21 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         mIvToggle = (ImageView) view.findViewById(R.id.toggle);
         TextView tvName = (TextView) view.findViewById(R.id.treeview_name);
         ImageView ivDo = (ImageView) view.findViewById(R.id.treeview_do);
+        ImageView ivWatch = (ImageView) view.findViewById(R.id.treeview_watch);
 
         // 知识点层级名字
         tvName.setText(value.name);
 
         // 做题按钮
         ivDo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, value.name, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 看题按钮
+        ivWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, value.name, Toast.LENGTH_SHORT).show();
