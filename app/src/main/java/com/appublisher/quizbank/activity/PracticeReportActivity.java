@@ -146,7 +146,6 @@ public class PracticeReportActivity extends ActionBarActivity {
                 }
             }
         }
-
     }
 
     /**
