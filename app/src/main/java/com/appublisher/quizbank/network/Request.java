@@ -84,7 +84,7 @@ public class Request extends BaseRequest implements ApiConstants{
      * @param hierarchy_3 第三层级id
      */
     public void getNoteQuestions(String hierarchy_1, String hierarchy_2, String hierarchy_3) {
-        asyncRequest(ParamBuilder.finalUrl(getEntryData) + "&hierarchy_1=" + hierarchy_1 +
+        asyncRequest(ParamBuilder.finalUrl(getNoteQuestions) + "&hierarchy_1=" + hierarchy_1 +
                 "&hierarchy_2=" + hierarchy_2 + "&hierarchy_3=" + hierarchy_3,
                 "note_questions", "object");
     }

@@ -19,7 +19,6 @@ import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 
@@ -206,8 +205,6 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
      */
     private void dealSubmitPaperResp(JSONObject response) {
         if (response == null) return;
-
-        Logger.i(response.toString());
 
         SubmitPaperResp submitPaperResp =
                 mGson.fromJson(response.toString(), SubmitPaperResp.class);

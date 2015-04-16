@@ -2,6 +2,7 @@ package com.appublisher.quizbank.customui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MeasureActivity;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**
@@ -58,7 +60,12 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ivDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, value.name, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, MeasureActivity.class);
+                intent.putExtra("paper_type", "note");
+                intent.putExtra("paper_name", value.name);
+                intent.putExtra("hierarchy_id", value.id);
+                intent.putExtra("hierarchy_level", value.level);
+                context.startActivity(intent);
             }
         });
 

@@ -140,6 +140,26 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         if ("auto".equals(mPaperType)) {
             ProgressDialogManager.showProgressDialog(this, true);
             request.getAutoTraining();
+        } else if ("note".equals(mPaperType)) {
+            int hierarchy_id = getIntent().getIntExtra("hierarchy_id", 0);
+            int hierarchy_level = getIntent().getIntExtra("hierarchy_level", 0);
+
+            switch (hierarchy_level) {
+                case 1:
+                    ProgressDialogManager.showProgressDialog(this, true);
+                    request.getNoteQuestions(String.valueOf(hierarchy_id), "", "");
+                    break;
+
+                case 2:
+                    ProgressDialogManager.showProgressDialog(this, true);
+                    request.getNoteQuestions("", String.valueOf(hierarchy_id), "");
+                    break;
+
+                case 3:
+                    ProgressDialogManager.showProgressDialog(this, true);
+                    request.getNoteQuestions("", "", String.valueOf(hierarchy_id));
+                    break;
+            }
         }
     }
 
@@ -377,7 +397,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             return;
         }
 
-        if ("auto_training".equals(apiName)) {
+        if ("auto_training".equals(apiName) || "note_questions".equals(apiName)) {
             AutoTrainingResp autoTrainingResp = mGson.fromJson(
                     response.toString(), AutoTrainingResp.class);
 
