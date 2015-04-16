@@ -61,6 +61,9 @@
     <string name="practice_report_note">知识点掌握的越好盆栽长得越好哦</string>
     <string name="practice_report_notedesp">你的知识点掌握度没发生变化呦，\n要继续加油呀</string>
 
+    <!-- 知识点层级 -->
+    <string name="hierarchy_name">知识点层级</string>
+
     <!-- Alert -->
     <string name="alert_pause_btn">继续</string>
 

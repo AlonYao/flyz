@@ -144,6 +144,8 @@ public class PracticeReportActivity extends ActionBarActivity {
                 } else {
                     ivLevelChange.setImageResource(R.drawable.practice_report_up);
                 }
+
+                llNoteContainer.addView(child);
             }
         }
     }
@@ -154,7 +156,9 @@ public class PracticeReportActivity extends ActionBarActivity {
      * @param view 知识点等级view
      */
     private void setLevelImg(int level, ImageView view) {
-        if (level == 1) {
+        if (level == 0) {
+            view.setImageResource(R.drawable.practice_report_level0);
+        } else if (level == 1) {
             view.setImageResource(R.drawable.practice_report_level1);
         } else if (level == 2) {
             view.setImageResource(R.drawable.practice_report_level2);
@@ -165,7 +169,7 @@ public class PracticeReportActivity extends ActionBarActivity {
         } else if (level == 5) {
             view.setImageResource(R.drawable.practice_report_level5);
         } else {
-            view.setImageResource(R.drawable.practice_report_level1);
+            view.setImageResource(R.drawable.practice_report_level0);
         }
     }
 

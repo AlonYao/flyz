@@ -1,9 +1,11 @@
 package com.appublisher.quizbank.model.netdata.measure;
 
+import java.io.Serializable;
+
 /**
  * 提交试卷回调中的知识点变化数据模型
  */
-public class NoteM {
+public class NoteM implements Serializable{
 
     int id;
     String name;
