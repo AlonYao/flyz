@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**
@@ -73,7 +73,11 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ivWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, value.name, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, MeasureAnalysisActivity.class);
+                intent.putExtra("analysis_type", "error");
+                intent.putExtra("hierarchy_id", value.id);
+                intent.putExtra("hierarchy_level", value.level);
+                context.startActivity(intent);
             }
         });
 

@@ -4,7 +4,15 @@
     android:layout_height="match_parent"
     tools:context="com.appublisher.quizbank.activity.MeasureAnalysisActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/measure_analysis_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"/>
 
 </RelativeLayout>

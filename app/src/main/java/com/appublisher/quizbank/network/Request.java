@@ -98,7 +98,7 @@ public class Request extends BaseRequest implements ApiConstants{
      */
     public void collectErrorQuestions(String hierarchy_1, String hierarchy_2,
                                       String hierarchy_3, String type) {
-        asyncRequest(ParamBuilder.finalUrl(getNoteQuestions) + "&hierarchy_1=" + hierarchy_1 +
+        asyncRequest(ParamBuilder.finalUrl(collectErrorQuestions) + "&hierarchy_1=" + hierarchy_1 +
                         "&hierarchy_2=" + hierarchy_2 + "&hierarchy_3=" + hierarchy_3 + "&type=" +
                         type,
                 "collect_error_questions", "object");
