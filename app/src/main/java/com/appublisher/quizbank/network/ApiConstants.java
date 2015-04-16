@@ -58,6 +58,9 @@ public interface ApiConstants {
     // 获取知识点层级列表
     public static final String getNoteHierarchy = baseUrl + "quizbank/get_note_hierarchy";
 
+    // 获取错题收藏
+    public static final String collectErrorQuestions = baseUrl + "quizbank/collect_error_questions";
+
     // 图片相关
 	public static int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	public static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

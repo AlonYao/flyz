@@ -90,6 +90,21 @@ public class Request extends BaseRequest implements ApiConstants{
     }
 
     /**
+     * 获取错题收藏
+     * @param hierarchy_1 第一层级id
+     * @param hierarchy_2 第二层级id
+     * @param hierarchy_3 第三层级id
+     * @param type 类型: collect:收藏 error:错题
+     */
+    public void collectErrorQuestions(String hierarchy_1, String hierarchy_2,
+                                      String hierarchy_3, String type) {
+        asyncRequest(ParamBuilder.finalUrl(getNoteQuestions) + "&hierarchy_1=" + hierarchy_1 +
+                        "&hierarchy_2=" + hierarchy_2 + "&hierarchy_3=" + hierarchy_3 + "&type=" +
+                        type,
+                "collect_error_questions", "object");
+    }
+
+    /**
      * 专项练习获取题目
      * @param type 类型(error:有错题的层级 collect:有收藏的层级 all:显示所有层级)
      */
