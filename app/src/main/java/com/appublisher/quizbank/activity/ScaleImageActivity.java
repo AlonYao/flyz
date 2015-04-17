@@ -29,7 +29,6 @@ public class ScaleImageActivity extends Activity{
 		
 		imageView = (ScaleImageView)findViewById(R.id.full_screen_imageView);
 		
-		
 		if(url != null && !url.equals("")){
 			new Request(this).loadImage(url, imageView);
 		} else if(filePath != null && !filePath.equals("")) {

@@ -22,6 +22,7 @@ import com.appublisher.quizbank.model.netdata.exam.ExamSetResponseModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -102,34 +103,52 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            // 检查是否设置了考试项目
+            checkExam();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 检查是否设置了考试项目
+        checkExam();
+    }
+
+    /**
+     * 检查是否设置了考试项目
+     */
+    private void checkExam() {
+        if ("login".equals(mFrom) && !LoginModel.hasExamInfo()) {
+            ToastManager.showToast(this, "请选择考试项目");
+        } else {
+            finish();
+        }
     }
 
     /**
      * 设置内容
      */
     private void setContent() {
-        if (mExams != null && mExams.size() != 0) {
-            final ExamListAdapter examListAdapter = new ExamListAdapter(this, mExams);
-            mLv.setAdapter(examListAdapter);
+        if (mExams == null || mExams.size() == 0) return;
 
-            mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    mCurExamItem = mExams.get(position);
-                    String name = mCurExamItem.getName();
+        final ExamListAdapter examListAdapter = new ExamListAdapter(this, mExams);
+        mLv.setAdapter(examListAdapter);
 
-                    mRlSelected.setVisibility(View.VISIBLE);
-                    mTvSelected.setText(name);
+        mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mCurExamItem = mExams.get(position);
+                String name = mCurExamItem.getName();
 
-                    examListAdapter.setSelectedPosition(position);
-                    examListAdapter.notifyDataSetChanged();
-                }
-            });
-        }
+                mRlSelected.setVisibility(View.VISIBLE);
+                mTvSelected.setText(name);
+
+                examListAdapter.setSelectedPosition(position);
+                examListAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

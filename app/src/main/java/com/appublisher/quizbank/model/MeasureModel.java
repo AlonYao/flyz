@@ -2,17 +2,20 @@ package com.appublisher.quizbank.model;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ScaleImageActivity;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -40,31 +43,6 @@ public class MeasureModel {
         int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         view.measure(w, h);
         return view.getMeasuredHeight();
-    }
-
-    /**
-     * 获取View宽度
-     * @param view View控件
-     * @return 宽度
-     */
-    public static int getViewWidth(View view) {
-        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        view.measure(w, h);
-        return view.getMeasuredWidth();
-    }
-
-    /**
-     * 设置View宽度和高度
-     * @param view View控件
-     * @param width 宽度
-     * @param height 高度
-     */
-    public static void setViewWidthAndHeight(View view, int width, int height) {
-        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.width = width;
-        layoutParams.height = height;
-        view.setLayoutParams(layoutParams);
     }
 
     /**
@@ -113,7 +91,7 @@ public class MeasureModel {
                 CommonModel.setTextLongClickCopy(textView);
 
             } else if (MatchInfo.MatchType.Image == segment.type) {
-                ImageView imgView = new ImageView(activity);
+                final ImageView imgView = new ImageView(activity);
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -122,7 +100,35 @@ public class MeasureModel {
                 flowLayout.addView(imgView);
 
                 // 异步加载图片
-                request.loadImage(segment.text.toString(), imgView);
+                DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+                final float minHeight = (float) ((dm.heightPixels - 50)*0.2); // 50是状态栏高度
+
+                ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
+                    @Override
+                    public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                        Bitmap data = imageContainer.getBitmap();
+
+                        if (data == null) return;
+
+                        // 对小于指定尺寸的图片进行放大(2倍)
+                        int width = data.getWidth();
+                        int height = data.getHeight();
+                        if (height < minHeight) {
+                            Matrix matrix = new Matrix();
+                            matrix.postScale(2.0f, 2.0f);
+                            data = Bitmap.createBitmap(data, 0, 0 ,width, height, matrix, true);
+                        }
+
+                        imgView.setImageBitmap(data);
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                };
+
+                request.loadImage(segment.text.toString(), imageListener);
 
                 imgView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -133,19 +139,6 @@ public class MeasureModel {
                         activity.startActivity(intent);
                     }
                 });
-
-                // 如果图片太小，扩大两倍
-                int imgWidth = MeasureModel.getViewWidth(imgView);
-                int imgHeight = MeasureModel.getViewHeight(imgView);
-
-                DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                int screenHeight = dm.heightPixels - 50; // 50是状态栏高度
-
-                if (imgHeight < screenHeight / 10) {
-                    imgWidth = imgWidth * 2;
-                    imgHeight = imgHeight * 2;
-                    MeasureModel.setViewWidthAndHeight(imgView, imgWidth, imgHeight);
-                }
             }
         }
 

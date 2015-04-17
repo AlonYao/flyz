@@ -227,7 +227,6 @@ public class Request extends BaseRequest implements ApiConstants{
 	 * @param imageView 图片控件
 	 */
 	public void loadImage(String url, ImageView imageView) {
-
 		if (!imageCacheInit || ImageCacheManager.getInstance().minWidth!=0) {
 			ImageCacheManager.getInstance().minWidth=0;
 			createImageCache();
@@ -238,28 +237,27 @@ public class Request extends BaseRequest implements ApiConstants{
 		imageLoader.get(url, listener);
 
 		// 如果取失败，换备用地址重取一次
-		if (ImageCacheManager.getInstance().mBitmapCache!=null && !ImageCacheManager.getInstance().mBitmapCache.success) {  // 基于
+		if (ImageCacheManager.getInstance().mBitmapCache!=null
+                && !ImageCacheManager.getInstance().mBitmapCache.success) {  // 基于
 			imageLoader.get(url, listener);
-		} else if (ImageCacheManager.getInstance().mDistCache!=null && !ImageCacheManager.getInstance().mDistCache.success) {
+		} else if (ImageCacheManager.getInstance().mDistCache!=null
+                && !ImageCacheManager.getInstance().mDistCache.success) {
 			imageLoader.get(url.replace("http://dl.cdn.appublisher.com/", baseUrlImg), listener);
 		}
 	}
 	
 	/**
-	 * 加载图片
+	 * 加载图片(用于放大显示过小的图片)
 	 * 
 	 * @param url	图片地址
-	 * @param imageView 图片控件
-	 * @param minWidth	设置最小宽度
 	 */
-	public void loadImage(String url, ImageView imageView, int minWidth) {
-		if (!imageCacheInit || ImageCacheManager.getInstance().minWidth!=minWidth) {
-			ImageCacheManager.getInstance().minWidth = minWidth;
+	public void loadImage(String url, ImageLoader.ImageListener listener) {
+		if (!imageCacheInit || ImageCacheManager.getInstance().minWidth!=0) {
+			ImageCacheManager.getInstance().minWidth = 0;
 			createImageCache();
 		}
 
 		ImageLoader imageLoader = ImageCacheManager.getInstance().getImageLoader();
-		ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, 0, 0);
 		imageLoader.get(url, listener);
 
 		// 如果取失败，换备用地址重取一次
