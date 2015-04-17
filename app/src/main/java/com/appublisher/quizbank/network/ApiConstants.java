@@ -32,10 +32,10 @@ public interface ApiConstants {
     public static final String changePwd = baseUrl + "common/user_pswd_update";
 
     // 获取考试项目
-    public static final String getExamList = baseUrl + "dailyplan/get_exams";
+    public static final String getExamList = baseUrl + "quizbank/get_exams";
 
     // 设置考试项目
-    public static final String setExam = baseUrl + "dailyplan/set_exam";
+    public static final String setExam = baseUrl + "quizbank/set_exam";
 
     // 用户登出
     public static final String userLogout = baseUrl + "common/user_logout";

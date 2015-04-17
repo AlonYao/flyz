@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,15 +18,30 @@
             android:paddingTop="15dp"
             android:orientation="vertical">
 
-            <!-- 题干 -->
-            <LinearLayout
-                android:id="@+id/measure_question_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="26dp"
-                android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            </LinearLayout>
+                <!-- 题干 -->
+                <LinearLayout
+                    android:id="@+id/measure_question_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="26dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/measure_analysis_noanswer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/measure_question_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/measure_analysis_noanswer"
+                    tools:ignore="ContentDescription" />
+
+            </RelativeLayout>
 
             <!-- 选项 A -->
             <LinearLayout

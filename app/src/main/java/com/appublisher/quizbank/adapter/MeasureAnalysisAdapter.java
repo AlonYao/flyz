@@ -33,6 +33,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
     private TextView mTvOptionB;
     private TextView mTvOptionC;
     private TextView mTvOptionD;
+    private ImageView mIvNoAnswer;
 
     public MeasureAnalysisAdapter(MeasureAnalysisActivity activity,
                                   ArrayList<QuestionM> questions,
@@ -172,6 +173,9 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         mTvOptionC = (TextView) view.findViewById(R.id.measure_option_c_tv);
         mTvOptionD = (TextView) view.findViewById(R.id.measure_option_d_tv);
 
+        // 未做标示
+        mIvNoAnswer = (ImageView) view.findViewById(R.id.measure_analysis_noanswer);
+
         // 设置正确答案
         String rightAnswer = question.getAnswer();
         if (rightAnswer != null && rightAnswer.length() != 0) {
@@ -197,11 +201,19 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
      */
     private void dealUserAnswer(int position) {
         if (mAnswers == null || position >= mAnswers.size()) return;
+
         AnswerM answer = mAnswers.get(position);
 
         if (answer == null) return;
+
         String userAnswer = answer.getAnswer();
         boolean isRight = answer.isIs_right();
+
+        if (userAnswer == null || userAnswer.length() == 0) {
+            mIvNoAnswer.setVisibility(View.VISIBLE);
+        } else {
+            mIvNoAnswer.setVisibility(View.GONE);
+        }
 
         if (!isRight) {
             setOptionBackground(userAnswer, false);
