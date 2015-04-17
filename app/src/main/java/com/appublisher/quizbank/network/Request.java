@@ -82,10 +82,12 @@ public class Request extends BaseRequest implements ApiConstants{
      * @param hierarchy_1 第一层级id
      * @param hierarchy_2 第二层级id
      * @param hierarchy_3 第三层级id
+     * @param type 类型: all：所有题目 error：只从错题里抽 collect：只从收藏的题目里抽
      */
-    public void getNoteQuestions(String hierarchy_1, String hierarchy_2, String hierarchy_3) {
+    public void getNoteQuestions(String hierarchy_1, String hierarchy_2, String hierarchy_3,
+                                 String type) {
         asyncRequest(ParamBuilder.finalUrl(getNoteQuestions) + "&hierarchy_1=" + hierarchy_1 +
-                "&hierarchy_2=" + hierarchy_2 + "&hierarchy_3=" + hierarchy_3,
+                "&hierarchy_2=" + hierarchy_2 + "&hierarchy_3=" + hierarchy_3 + "&type=" + type,
                 "note_questions", "object");
     }
 

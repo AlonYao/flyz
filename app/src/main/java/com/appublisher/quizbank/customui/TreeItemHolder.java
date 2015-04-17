@@ -62,6 +62,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             public void onClick(View v) {
                 Intent intent = new Intent(context, MeasureActivity.class);
                 intent.putExtra("paper_type", "note");
+                intent.putExtra("note_type", "error");
                 intent.putExtra("paper_name", value.name);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);

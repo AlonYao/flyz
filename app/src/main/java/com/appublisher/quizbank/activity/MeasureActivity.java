@@ -143,21 +143,22 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         } else if ("note".equals(mPaperType)) {
             int hierarchy_id = getIntent().getIntExtra("hierarchy_id", 0);
             int hierarchy_level = getIntent().getIntExtra("hierarchy_level", 0);
+            String note_type = getIntent().getStringExtra("note_type");
 
             switch (hierarchy_level) {
                 case 1:
                     ProgressDialogManager.showProgressDialog(this, true);
-                    request.getNoteQuestions(String.valueOf(hierarchy_id), "", "");
+                    request.getNoteQuestions(String.valueOf(hierarchy_id), "", "", note_type);
                     break;
 
                 case 2:
                     ProgressDialogManager.showProgressDialog(this, true);
-                    request.getNoteQuestions("", String.valueOf(hierarchy_id), "");
+                    request.getNoteQuestions("", String.valueOf(hierarchy_id), "", note_type);
                     break;
 
                 case 3:
                     ProgressDialogManager.showProgressDialog(this, true);
-                    request.getNoteQuestions("", "", String.valueOf(hierarchy_id));
+                    request.getNoteQuestions("", "", String.valueOf(hierarchy_id), note_type);
                     break;
             }
         }
