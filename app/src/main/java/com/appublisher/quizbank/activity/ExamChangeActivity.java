@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -157,14 +158,10 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
                         UserDAO.updateSno(examSetResponseModel.getSno());
 
                         // 页面跳转
-//                        if (mFrom != null && mFrom.equals("today")) {
-//                            Intent intent = new Intent(ExamChangeActivity.this, TodayActivity.class);
-//                            intent.putExtra("exam", mGson.toJson(mCurExamItem));
-//                            setResult(12, intent);
-//                        } else {
-//                            Intent intent = new Intent(ExamChangeActivity.this, TodayActivity.class);
-//                            startActivity(intent);
-//                        }
+                        if ("splash".equals(mFrom) || "login".equals(mFrom)) {
+                            Intent intent = new Intent(this, MainActivity.class);
+                            startActivity(intent);
+                        }
 
                         finish();
                     }

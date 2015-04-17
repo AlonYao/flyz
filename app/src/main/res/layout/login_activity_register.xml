@@ -12,7 +12,7 @@
     <EditText
         style="@style/Login_EditText"
         android:id="@+id/register_phone_edittext"
-        android:textColor="@color/login_white"
+        android:textColor="@color/login_black"
         android:hint="@string/login_register_phone"
         android:layout_marginTop="30dp"
         android:inputType="phone" />
@@ -43,7 +43,7 @@
                 style="@style/Login_EditText"
                 android:id="@+id/register_smscode_edittext"
                 android:inputType="number"
-                android:textColor="@color/login_white"
+                android:textColor="@color/login_black"
                 android:hint="@string/login_register_smscode_edittext" />
             <!-- 验证码提交按钮 -->
             <ImageButton

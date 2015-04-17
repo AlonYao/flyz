@@ -13,7 +13,7 @@
         style="@style/Login_EditText"
         android:inputType="textEmailAddress"
         android:id="@+id/login_username"
-        android:textColor="@color/login_white"
+        android:textColor="@color/login_black"
         android:hint="@string/login_edittext_username"
         android:layout_marginTop="15dp" />
 
@@ -22,7 +22,7 @@
         style="@style/Login_EditText"
         android:inputType="textPassword"
         android:id="@+id/login_password"
-        android:textColor="@color/login_white"
+        android:textColor="@color/login_black"
         android:hint="@string/login_edittext_password"
         android:layout_marginTop="20dp" />
 

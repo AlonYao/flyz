@@ -9,6 +9,7 @@ import android.os.Handler;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 
 public class SplashActivity extends Activity {
 
@@ -29,7 +30,12 @@ public class SplashActivity extends Activity {
                 boolean is_login = Globals.sharedPreferences.getBoolean("is_login", false);
                 if (is_login) {
                     // 已登录
-                    cls = MainActivity.class;
+                    if (LoginModel.hasExamInfo()) {
+                        cls = MainActivity.class;
+                    } else {
+                        // 没有考试项目
+                        cls = ExamChangeActivity.class;
+                    }
                 } else {
                     // 未登录
                     cls = LoginActivity.class;

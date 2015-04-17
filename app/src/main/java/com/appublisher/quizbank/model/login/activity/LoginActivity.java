@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.CommonModel;
@@ -79,11 +80,13 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                     case LOGIN_SUCCESS:
                         ToastManager.showToast(activity, "登录成功");
 
-                        if (mFrom != null && mFrom.equals("splash")) {
+                        if (!LoginModel.hasExamInfo()) {
+                            Intent intent = new Intent(activity, ExamChangeActivity.class);
+                            intent.putExtra("from", "login");
+                            activity.startActivity(intent);
+                        } else {
                             Intent intent = new Intent(activity, MainActivity.class);
                             activity.startActivity(intent);
-                        } else if (mFrom != null && mFrom.equals("collect")) {
-                            Globals.is_fromGuestToUser = true;
                         }
 
                         activity.finish();
