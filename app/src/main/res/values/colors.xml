@@ -20,4 +20,7 @@
 
     <color name="practice_report_ratio">#80262B2D</color>
     <color name="practice_report_notedesp">#A0A0A5</color>
+    <color name="practice_report_all">#3AAB7D</color>
+    <color name="practice_report_error">#FF6666</color>
+    <color name="practice_report_error_gray">#C7C7CC</color>
 </resources>

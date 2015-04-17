@@ -209,14 +209,16 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         String userAnswer = answer.getAnswer();
         boolean isRight = answer.isIs_right();
 
-        if (userAnswer == null || userAnswer.length() == 0) {
-            mIvNoAnswer.setVisibility(View.VISIBLE);
-        } else {
+        if (isRight) {
             mIvNoAnswer.setVisibility(View.GONE);
-        }
-
-        if (!isRight) {
+        } else {
             setOptionBackground(userAnswer, false);
+
+            if (userAnswer == null || userAnswer.length() == 0) {
+                mIvNoAnswer.setVisibility(View.VISIBLE);
+            } else {
+                mIvNoAnswer.setVisibility(View.GONE);
+            }
         }
     }
 

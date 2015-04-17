@@ -62,6 +62,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private static Toolbar mToolbar;
     private static int mMins;
     private static int mSec;
+    private ArrayList<QuestionM> mQuestions;
 
     private static final int TIME_ON = 0;
     private static final int TIME_OUT = 1;
@@ -227,6 +228,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             intent.putExtra("right_num", right_num);
             intent.putExtra("total_num", total_num);
             intent.putExtra("category", category);
+            intent.putExtra("questions", mQuestions);
+            intent.putExtra("user_answer", mUserAnswerList);
             startActivity(intent);
             finish();
         }
@@ -272,17 +275,17 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      */
     private void setContent(AutoTrainingResp autoTrainingResp) {
         mPaperId = autoTrainingResp.getPaper_id();
-        ArrayList<QuestionM> questions = autoTrainingResp.getQuestions();
+        mQuestions = autoTrainingResp.getQuestions();
 
-        if (questions == null) return;
+        if (mQuestions == null) return;
 
         // 初始化用户答案
-        int size = questions.size();
+        int size = mQuestions.size();
         mUserAnswerList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             HashMap<String, Object> map = new HashMap<>();
 
-            QuestionM question = questions.get(i);
+            QuestionM question = mQuestions.get(i);
             if (question != null) {
                 map.put("id", question.getId());
                 map.put("right_answer", question.getAnswer());
@@ -304,7 +307,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         }
 
         // 设置ViewPager
-        MeasureAdapter measureAdapter = new MeasureAdapter(this, questions);
+        MeasureAdapter measureAdapter = new MeasureAdapter(this, mQuestions);
         mViewPager.setAdapter(measureAdapter);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

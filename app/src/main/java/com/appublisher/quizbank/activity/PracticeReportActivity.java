@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
+import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +45,8 @@ public class PracticeReportActivity extends ActionBarActivity {
                 (LinearLayout) findViewById(R.id.practice_report_category_container);
         LinearLayout llNoteContainer =
                 (LinearLayout) findViewById(R.id.practice_report_note_container);
+        TextView tvAll = (TextView) findViewById(R.id.practice_report_all);
+        TextView tvError = (TextView) findViewById(R.id.practice_report_error);
 
         // 获取数据
         String paperName = getIntent().getStringExtra("paper_name");
@@ -148,6 +153,98 @@ public class PracticeReportActivity extends ActionBarActivity {
                 llNoteContainer.addView(child);
             }
         }
+
+        final ArrayList<QuestionM> questions =
+                (ArrayList<QuestionM>) getIntent().getSerializableExtra("questions");
+
+        final ArrayList<HashMap<String, Object>> userAnswerList =
+                (ArrayList<HashMap<String, Object>>)
+                        getIntent().getSerializableExtra("user_answer");
+
+        // 全部解析
+        tvAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (questions == null || questions.size() == 0) return;
+
+                int size = questions.size();
+                ArrayList<AnswerM> answers = new ArrayList<>();
+
+                for (int i = 0; i < size; i++) {
+                    AnswerM answerItem = new AnswerM();
+
+                    HashMap<String, Object> userAnswerMap = userAnswerList.get(i);
+                    if (userAnswerMap == null) {
+                        answerItem.setId(0);
+                        answerItem.setAnswer("");
+                        answerItem.setIs_right(false);
+                    } else {
+                        answerItem.setId((int) userAnswerMap.get("id"));
+
+                        String userAnswer = (String) userAnswerMap.get("answer");
+                        answerItem.setAnswer(userAnswer);
+
+                        String rightAnswer = (String) userAnswerMap.get("right_answer");
+
+                        if (userAnswer != null && rightAnswer != null
+                                && userAnswer.equals(rightAnswer)) {
+                            answerItem.setIs_right(true);
+                        } else {
+                            answerItem.setIs_right(false);
+                        }
+                    }
+
+                    answers.add(answerItem);
+                }
+
+                Intent intent = new Intent(PracticeReportActivity.this,
+                        MeasureAnalysisActivity.class);
+                intent.putExtra("questions", questions);
+                intent.putExtra("answers", answers);
+                startActivity(intent);
+            }
+        });
+
+        // 错题解析
+        tvError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userAnswerList == null || userAnswerList.size() == 0) return;
+
+                ArrayList<QuestionM> errorQuestions = new ArrayList<>();
+                ArrayList<AnswerM> errorAnswers = new ArrayList<>();
+
+                int size = userAnswerList.size();
+                for (int i = 0; i < size; i++) {
+                    HashMap<String, Object> userAnswerMap = userAnswerList.get(i);
+
+                    if (userAnswerMap == null) continue;
+
+                    String userAnswer = (String) userAnswerMap.get("answer");
+                    String rightAnswer = (String) userAnswerMap.get("right_answer");
+
+                    if (userAnswer != null && rightAnswer != null
+                            && !userAnswer.equals(rightAnswer)) {
+                        AnswerM answerItem = new AnswerM();
+                        answerItem.setId((int) userAnswerMap.get("id"));
+                        answerItem.setAnswer(userAnswer);
+                        answerItem.setIs_right(false);
+
+                        if (questions == null || i >= questions.size()) {
+                            errorQuestions.add(new QuestionM());
+                        } else {
+                            errorQuestions.add(questions.get(i));
+                        }
+                    }
+                }
+
+                Intent intent = new Intent(PracticeReportActivity.this,
+                        MeasureAnalysisActivity.class);
+                intent.putExtra("questions", errorQuestions);
+                intent.putExtra("answers", errorAnswers);
+                startActivity(intent);
+            }
+        });
     }
 
     /**

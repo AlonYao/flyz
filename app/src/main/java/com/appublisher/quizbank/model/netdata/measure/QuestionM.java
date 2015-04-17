@@ -1,9 +1,11 @@
 package com.appublisher.quizbank.model.netdata.measure;
 
+import java.io.Serializable;
+
 /**
  * 题目数据模型
  */
-public class QuestionM {
+public class QuestionM implements Serializable{
     int id;
     String material;
     String question;
