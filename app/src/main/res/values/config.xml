@@ -3,11 +3,11 @@
     <!-- 上岸计划app 第三方id信息 -->
 
     <!-- 微信 -->
-    <string name="weixin_appid">wxebb1a6869a90c15f</string>
-    <string name="weixin_secret">c35db4494a534c7d6a9a26a0c7416424</string>
+    <string name="weixin_appid">wx72dbf6cc832ae55c</string>
+    <string name="weixin_secret">3718f0b50b3a35da1b88bd9c76aeb2d0</string>
 
     <!-- 友盟 -->
-    <string name="umeng_appkey">54abaffcfd98c509a00000fe</string>
+    <string name="umeng_appkey">551bd7ddfd98c50c5500044f</string>
 
     <!-- TalkingData -->
     <string name="talkingdata_appid">81FEB0A34608D63C43DED2D2C79412C4</string>

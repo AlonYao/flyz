@@ -90,5 +90,6 @@
     <string name="title_activity_scratch_paper"> </string>
     <string name="title_activity_practice_report">练习报告</string>
     <string name="title_activity_measure_analysis">解析</string>
+    <string name="title_activity_splash">SplashActivity</string>
 
 </resources>
