@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 上岸计划app 第三方id信息 -->
+    <!-- 天天模考app 第三方id信息 -->
 
     <!-- 微信 -->
     <string name="weixin_appid">wx72dbf6cc832ae55c</string>
