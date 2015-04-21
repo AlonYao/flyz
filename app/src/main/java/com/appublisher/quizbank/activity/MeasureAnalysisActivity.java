@@ -1,10 +1,12 @@
 package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
@@ -80,9 +82,26 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+
+        MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
+                R.drawable.measure_analysis_uncollect), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
+                R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if ("收藏".equals(item.getTitle())) {
+
+        } else if ("反馈".equals(item.getTitle())) {
+
         }
 
         return super.onOptionsItemSelected(item);
