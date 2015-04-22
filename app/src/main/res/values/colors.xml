@@ -4,6 +4,7 @@
     <color name="drawer_text">#506183</color>
     <color name="white_translucence">#80FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparency">#00000000</color>
 
     <color name="homepage_todayexam">#506183</color>
 

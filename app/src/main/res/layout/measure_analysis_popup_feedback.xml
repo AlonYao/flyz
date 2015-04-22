@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right"
+    android:background="@android:color/white"
+    android:layout_marginTop="2dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <TextView
+        android:id="@+id/fb_menu_imagetext"
+        style="@style/MeasureAnalysisFeedbackTv"
+        android:drawableLeft="@drawable/measure_analysis_feedback_imagetext"
+        android:text="@string/measure_analysis_fb_imagetext"/>
+
+    <TextView
+        android:id="@+id/fb_menu_answerwrong"
+        style="@style/MeasureAnalysisFeedbackTv"
+        android:drawableLeft="@drawable/measure_analysis_feedback_answerwrong"
+        android:text="@string/measure_analysis_fb_answerwrong"/>
+
+    <TextView
+        android:id="@+id/fb_menu_analysiswrong"
+        style="@style/MeasureAnalysisFeedbackTv"
+        android:drawableLeft="@drawable/measure_analysis_feedback_analysiswrong"
+        android:text="@string/measure_analysis_fb_analysiswrong"/>
+
+    <TextView
+        android:id="@+id/fb_menu_betteranalysis"
+        style="@style/MeasureAnalysisFeedbackTv"
+        android:drawableLeft="@drawable/measure_analysis_feedback_betteranalysis"
+        android:text="@string/measure_analysis_fb_betteranalysis"/>
+</LinearLayout>

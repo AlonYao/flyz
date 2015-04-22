@@ -49,6 +49,10 @@
 
     <!-- 解析 -->
     <string name="measure_analysis">【解析】</string>
+    <string name="measure_analysis_fb_imagetext">图/文有错</string>
+    <string name="measure_analysis_fb_answerwrong">答案有错</string>
+    <string name="measure_analysis_fb_analysiswrong">解析有错</string>
+    <string name="measure_analysis_fb_betteranalysis">我有更好的解析</string>
 
     <!-- 答题卡 -->
     <string name="answer_sheet_handin">交卷</string>

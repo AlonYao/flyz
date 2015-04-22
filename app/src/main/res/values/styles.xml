@@ -157,4 +157,14 @@
         <item name="android:text">全部解析</item>
     </style>
 
+    <!-- 做题反馈Menu -->
+    <style name="MeasureAnalysisFeedbackTv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">10dp</item>
+    </style>
+
 </resources>
