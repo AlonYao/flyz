@@ -52,10 +52,14 @@
             android:layout_height="1dp"
             android:background="@color/setting_line"/>
 
-        <ListView
+        <com.appublisher.quizbank.customui.XListView
+            android:id="@+id/wholepage_xlistview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            tools:ignore="RtlHardcoded" />
     </LinearLayout>
 
     <include layout="@layout/progressbar"/>

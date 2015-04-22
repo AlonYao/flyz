@@ -3,14 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_bg"
-    android:visibility="gone"
+    android:visibility="visible"
     android:clickable="true"
     android:id="@+id/progressbar">
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.ProgressBar"
         android:layout_centerInParent="true"/>
 
 </RelativeLayout>

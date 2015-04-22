@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
+import com.appublisher.quizbank.adapter.WholePageListAdapter;
+import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 /**
  * 真题演练
  */
-public class WholePageFragment extends Fragment implements RequestCallback{
+public class WholePageFragment extends Fragment implements RequestCallback, XListView.IXListViewListener {
 
     private Activity mActivity;
     private PopupWindow mPwProvince;
@@ -45,6 +47,11 @@ public class WholePageFragment extends Fragment implements RequestCallback{
     private ArrayList<Integer> mYears;
     private TextView mTvLastProvince;
     private int mCurAreaId;
+    private int mCurYear;
+    private int mOffset;
+    private int mCount;
+    private View mMainView;
+    private XListView mLvWholePage;
 
     @Override
     public void onAttach(Activity activity) {
@@ -58,19 +65,23 @@ public class WholePageFragment extends Fragment implements RequestCallback{
         // 成员变量初始化
         mRequest = new Request(mActivity, this);
         mGson = new Gson();
+        mCurAreaId = 0;
+        mCurYear = 0;
+        mOffset = 0;
+        mCount = 5;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // view 初始化
-        View view = inflater.inflate(R.layout.fragment_wholepage, container, false);
+        mMainView = inflater.inflate(R.layout.fragment_wholepage, container, false);
         final RelativeLayout rlProvince =
-                (RelativeLayout) view.findViewById(R.id.wholepage_province_rl);
+                (RelativeLayout) mMainView.findViewById(R.id.wholepage_province_rl);
+        mLvWholePage = (XListView) mMainView.findViewById(R.id.wholepage_xlistview);
 
         // 获取数据
-        ProgressBarManager.showProgressBar(view);
-//        mRequest.getEntirePapers(0, 0, 0, 5);
+        ProgressBarManager.showProgressBar(mMainView);
         mRequest.getAreaYear();
 
         // 省份
@@ -88,7 +99,7 @@ public class WholePageFragment extends Fragment implements RequestCallback{
             }
         });
 
-        return view;
+        return mMainView;
     }
 
     /**
@@ -164,6 +175,8 @@ public class WholePageFragment extends Fragment implements RequestCallback{
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProgressBarManager.showProgressBar(mMainView);
+                mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount);
                 mPwProvince.dismiss();
             }
         });
@@ -208,6 +221,15 @@ public class WholePageFragment extends Fragment implements RequestCallback{
 
         ArrayList<EntirePaperM> entirePapers = entirePapersResp.getList();
 
+        if (entirePapers == null || entirePapers.size() == 0) {
+            ProgressBarManager.hideProgressBar();
+            return;
+        }
+
+        WholePageListAdapter wholePageListAdapter =
+                new WholePageListAdapter(mActivity, entirePapers);
+        mLvWholePage.setAdapter(wholePageListAdapter);
+
         ProgressBarManager.hideProgressBar();
     }
 
@@ -226,5 +248,15 @@ public class WholePageFragment extends Fragment implements RequestCallback{
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         ProgressBarManager.hideProgressBar();
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }
