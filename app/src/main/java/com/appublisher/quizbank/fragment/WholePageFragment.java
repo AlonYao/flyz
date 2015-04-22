@@ -199,7 +199,8 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
             @Override
             public void onClick(View v) {
                 ProgressBarManager.showProgressBar(mMainView);
-                mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
+                mEntirePapers = null;
+                mRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
                 mPwProvince.dismiss();
             }
         });
@@ -259,7 +260,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
 
         if (mEntirePapers == null) {
             mEntirePapers = newEntirePapers;
-
+            setProvinceAdapter();
         } else {
             int size = newEntirePapers.size();
             for (int i = 0; i < size; i++) {
@@ -267,11 +268,16 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
             }
         }
 
+        setLoadFinish();
+    }
+
+    /**
+     * 设置省份容器
+     */
+    private void setProvinceAdapter() {
         WholePageListAdapter wholePageListAdapter =
                 new WholePageListAdapter(mActivity, mEntirePapers);
         mLvWholePage.setAdapter(wholePageListAdapter);
-
-        setLoadFinish();
     }
 
     /**
