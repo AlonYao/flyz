@@ -24,6 +24,7 @@
                     android:text="@string/wholepage_province"/>
 
                 <ImageView
+                    android:id="@+id/wholepage_province_arrow"
                     style="@style/WholePagePopupMenuIv"
                     tools:ignore="ContentDescription" />
             </RelativeLayout>
@@ -42,6 +43,7 @@
                     android:text="@string/wholepage_year"/>
 
                 <ImageView
+                    android:id="@+id/wholepage_year_arrow"
                     style="@style/WholePagePopupMenuIv"
                     tools:ignore="ContentDescription" />
             </RelativeLayout>

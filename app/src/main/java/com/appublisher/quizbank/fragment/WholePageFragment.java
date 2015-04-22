@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
     private View mMainView;
     private XListView mLvWholePage;
     private ArrayList<EntirePaperM> mEntirePapers;
+    private ImageView mIvProvinceArrow;
 
     @Override
     public void onAttach(Activity activity) {
@@ -82,6 +84,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
         final RelativeLayout rlProvince =
                 (RelativeLayout) mMainView.findViewById(R.id.wholepage_province_rl);
         mLvWholePage = (XListView) mMainView.findViewById(R.id.wholepage_xlistview);
+        mIvProvinceArrow = (ImageView) mMainView.findViewById(R.id.wholepage_province_arrow);
 
         // XListView
         mLvWholePage.setXListViewListener(this);
@@ -99,10 +102,12 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
                 if (mPwProvince == null) {
                     initPwProvince();
                     mPwProvince.showAsDropDown(rlProvince, 0, 2);
+                    mIvProvinceArrow.setImageResource(R.drawable.wholepage_arrowup);
                 } else if (mPwProvince.isShowing()) {
                     mPwProvince.dismiss();
                 } else {
                     mPwProvince.showAsDropDown(rlProvince, 0, 2);
+                    mIvProvinceArrow.setImageResource(R.drawable.wholepage_arrowup);
                 }
             }
         });
@@ -196,6 +201,14 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
                 ProgressBarManager.showProgressBar(mMainView);
                 mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
                 mPwProvince.dismiss();
+            }
+        });
+
+        // 箭头修改
+        mPwProvince.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                mIvProvinceArrow.setImageResource(R.drawable.wholepage_arrowdown);
             }
         });
 
