@@ -107,7 +107,20 @@ public class Request extends BaseRequest implements ApiConstants{
     }
 
     /**
-     * 专项练习获取题目
+     * 获取整卷试卷列表
+     * @param area_id 地区id
+     * @param year 年份
+     * @param offset 开始位置
+     * @param count 数量
+     */
+    public void getNoteHierarchy(int area_id, int year, int offset, int count) {
+        asyncRequest(ParamBuilder.finalUrl(getEntirePapers) + "&area_id=" + area_id
+                + "&year=" + year + "&offset=" + offset + "&count=" + count,
+                "entire_papers", "object");
+    }
+
+    /**
+     *
      * @param type 类型(error:有错题的层级 collect:有收藏的层级 all:显示所有层级)
      */
     public void getNoteHierarchy(String type) {

@@ -59,10 +59,15 @@ public interface ApiConstants {
     public static final String getNoteHierarchy = baseUrl + "quizbank/get_note_hierarchy";
 
     // 获取错题收藏
-    public static final String collectErrorQuestions = baseUrl + "quizbank/collect_error_questions";
+    public static final String collectErrorQuestions =
+            baseUrl + "quizbank/collect_error_questions";
+
+    // 获取整卷试卷列表
+    public static final String getEntirePapers = baseUrl + "quizbank/get_entire_papers";
 
     // 图片相关
 	public static int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	public static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
-	public static int DISK_IMAGECACHE_QUALITY = 100;  //PNG is lossless so quality is ignored but must be provided
+    //PNG is lossless so quality is ignored but must be provided
+    public static int DISK_IMAGECACHE_QUALITY = 100;
 }
