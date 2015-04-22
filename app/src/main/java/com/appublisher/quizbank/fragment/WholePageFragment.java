@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.adapter.WholePageGvAdapter;
 
 /**
  * 真题演练
@@ -37,13 +39,19 @@ public class WholePageFragment extends Fragment{
                              @Nullable Bundle savedInstanceState) {
         // view 初始化
         View view = inflater.inflate(R.layout.fragment_wholepage, container, false);
-        RelativeLayout rlProvince = (RelativeLayout) view.findViewById(R.id.wholepage_province_rl);
+        final RelativeLayout rlProvince =
+                (RelativeLayout) view.findViewById(R.id.wholepage_province_rl);
 
         // 省份
         rlProvince.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (mPwProvince != null && mPwProvince.isShowing()) {
+                    mPwProvince.dismiss();
+                } else {
+                    initPwProvince();
+                    mPwProvince.showAsDropDown(rlProvince);
+                }
             }
         });
 
@@ -65,6 +73,12 @@ public class WholePageFragment extends Fragment{
         mPwProvince.setOutsideTouchable(true);
         mPwProvince.setBackgroundDrawable(
                 mActivity.getResources().getDrawable(R.color.transparency));
+
+        // 省份 GridView
+        GridView gvProvince = (GridView) view.findViewById(R.id.wholepage_gv);
+        WholePageGvAdapter wholePageGvAdapter = new WholePageGvAdapter(mActivity);
+        gvProvince.setAdapter(wholePageGvAdapter);
+
         mPwProvince.update();
     }
 }
