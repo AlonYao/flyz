@@ -20,6 +20,8 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
+import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
+import com.appublisher.quizbank.model.netdata.wholepage.EntirePapersResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
@@ -182,13 +184,38 @@ public class WholePageFragment extends Fragment implements RequestCallback{
 
         mAreas = areaYearResp.getArea();
         mYears = areaYearResp.getYear();
+
+        mRequest.getEntirePapers(0, 0, 0, 5);
+    }
+
+    /**
+     * 处理整卷回调
+     * @param response 整卷回调
+     */
+    private void dealEntirePapersResp(JSONObject response) {
+        if (response == null) {
+            ProgressBarManager.hideProgressBar();
+            return;
+        }
+
+        EntirePapersResp entirePapersResp =
+                mGson.fromJson(response.toString(), EntirePapersResp.class);
+
+        if (entirePapersResp == null || entirePapersResp.getResponse_code() != 1) {
+            ProgressBarManager.hideProgressBar();
+            return;
+        }
+
+        ArrayList<EntirePaperM> entirePapers = entirePapersResp.getList();
+
+        ProgressBarManager.hideProgressBar();
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("area_year".equals(apiName)) dealAreaYearResp(response);
 
-        ProgressBarManager.hideProgressBar();
+        if ("entire_papers".equals(apiName)) dealEntirePapersResp(response);
     }
 
     @Override
