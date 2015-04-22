@@ -32,7 +32,9 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * 真题演练
@@ -176,7 +178,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
             @Override
             public void onClick(View v) {
                 ProgressBarManager.showProgressBar(mMainView);
-                mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount);
+                mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
                 mPwProvince.dismiss();
             }
         });
@@ -198,7 +200,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
         mAreas = areaYearResp.getArea();
         mYears = areaYearResp.getYear();
 
-        mRequest.getEntirePapers(0, 0, 0, 5);
+        mRequest.getEntirePapers(0, 0, 0, 5, "true");
     }
 
     /**
@@ -207,7 +209,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
      */
     private void dealEntirePapersResp(JSONObject response) {
         if (response == null) {
-            ProgressBarManager.hideProgressBar();
+            setLoadFinish();
             return;
         }
 
@@ -215,14 +217,14 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
                 mGson.fromJson(response.toString(), EntirePapersResp.class);
 
         if (entirePapersResp == null || entirePapersResp.getResponse_code() != 1) {
-            ProgressBarManager.hideProgressBar();
+            setLoadFinish();
             return;
         }
 
         ArrayList<EntirePaperM> entirePapers = entirePapersResp.getList();
 
         if (entirePapers == null || entirePapers.size() == 0) {
-            ProgressBarManager.hideProgressBar();
+            setLoadFinish();
             return;
         }
 
@@ -230,7 +232,26 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
                 new WholePageListAdapter(mActivity, entirePapers);
         mLvWholePage.setAdapter(wholePageListAdapter);
 
+        setLoadFinish();
+    }
+
+    /**
+     * 加载结束
+     */
+    private void setLoadFinish() {
+        onLoadFinish();
         ProgressBarManager.hideProgressBar();
+    }
+
+    /**
+     * 刷新&加载结束时执行的操作
+     */
+    @SuppressLint("SimpleDateFormat")
+    public void onLoadFinish() {
+        mLvWholePage.stopRefresh();
+        mLvWholePage.stopLoadMore();
+        mLvWholePage.setRefreshTime(
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     }
 
     @Override
@@ -250,11 +271,17 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
         ProgressBarManager.hideProgressBar();
     }
 
+    /**
+     * 下拉刷新
+     */
     @Override
     public void onRefresh() {
 
     }
 
+    /**
+     * 上拉加载更多
+     */
     @Override
     public void onLoadMore() {
 

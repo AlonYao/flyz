@@ -113,9 +113,10 @@ public class Request extends BaseRequest implements ApiConstants{
      * @param offset 开始位置
      * @param count 数量
      */
-    public void getEntirePapers(int area_id, int year, int offset, int count) {
+    public void getEntirePapers(int area_id, int year, int offset, int count, String recommend) {
         asyncRequest(ParamBuilder.finalUrl(getEntirePapers) + "&area_id=" + area_id
-                + "&year=" + year + "&offset=" + offset + "&count=" + count,
+                + "&year=" + year + "&offset=" + offset + "&count=" + count
+                + "&recommend=" + recommend,
                 "entire_papers", "object");
     }
 
