@@ -70,6 +70,10 @@
     <string name="practice_report_all">全部解析</string>
     <string name="practice_report_error">错题解析</string>
 
+    <!-- 整卷练习 -->
+    <string name="wholepage_province">省份</string>
+    <string name="wholepage_year">年份</string>
+
     <!-- 知识点层级 -->
     <string name="hierarchy_name">知识点层级</string>
 

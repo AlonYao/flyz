@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.appublisher.quizbank.R;
 
 /**
- * 整卷练习
+ * 真题演练
  */
 public class WholePageFragment extends Fragment{
 
