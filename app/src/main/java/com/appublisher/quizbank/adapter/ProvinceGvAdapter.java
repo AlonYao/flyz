@@ -8,21 +8,26 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
+
+import java.util.ArrayList;
 
 /**
  * 整卷练习GridView容器
  */
-public class WholePageGvAdapter extends BaseAdapter {
+public class ProvinceGvAdapter extends BaseAdapter {
 
-    Activity mActivity;
+    private Activity mActivity;
+    private ArrayList<AreaM> mAreas;
 
-    public WholePageGvAdapter(Activity activity) {
+    public ProvinceGvAdapter(Activity activity, ArrayList<AreaM> areas) {
         mActivity = activity;
+        mAreas = areas;
     }
 
     @Override
     public int getCount() {
-        return 100;
+        return mAreas.size();
     }
 
     @Override
@@ -52,7 +57,13 @@ public class WholePageGvAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.tvItem.setText("黑龙江");
+        if (mAreas != null && position < mAreas.size()) {
+            AreaM area = mAreas.get(position);
+
+            if (area != null) {
+                viewHolder.tvItem.setText(area.getName() == null ? "省份" : area.getName());
+            }
+        }
 
         return convertView;
     }

@@ -2,25 +2,33 @@ package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.adapter.WholePageGvAdapter;
+import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
+import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
+import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * 真题演练
@@ -30,6 +38,11 @@ public class WholePageFragment extends Fragment implements RequestCallback{
     private Activity mActivity;
     private PopupWindow mPwProvince;
     private Request mRequest;
+    private Gson mGson;
+    private ArrayList<AreaM> mAreas;
+    private ArrayList<Integer> mYears;
+    private TextView mTvLastProvince;
+    private int mCurAreaId;
 
     @Override
     public void onAttach(Activity activity) {
@@ -42,6 +55,7 @@ public class WholePageFragment extends Fragment implements RequestCallback{
         super.onCreate(savedInstanceState);
         // 成员变量初始化
         mRequest = new Request(mActivity, this);
+        mGson = new Gson();
     }
 
     @Override
@@ -61,11 +75,13 @@ public class WholePageFragment extends Fragment implements RequestCallback{
         rlProvince.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPwProvince != null && mPwProvince.isShowing()) {
+                if (mPwProvince == null) {
+                    initPwProvince();
+                    mPwProvince.showAsDropDown(rlProvince, 0, 2);
+                } else if (mPwProvince.isShowing()) {
                     mPwProvince.dismiss();
                 } else {
-                    initPwProvince();
-                    mPwProvince.showAsDropDown(rlProvince);
+                    mPwProvince.showAsDropDown(rlProvince, 0, 2);
                 }
             }
         });
@@ -90,9 +106,65 @@ public class WholePageFragment extends Fragment implements RequestCallback{
                 mActivity.getResources().getDrawable(R.color.transparency));
 
         // 省份 GridView
-        GridView gvProvince = (GridView) view.findViewById(R.id.wholepage_gv);
-        WholePageGvAdapter wholePageGvAdapter = new WholePageGvAdapter(mActivity);
-        gvProvince.setAdapter(wholePageGvAdapter);
+        if (mAreas != null && mAreas.size() > 0) {
+            // 添加全部
+            AreaM area = new AreaM();
+            area.setArea_id(0);
+            area.setName("全部");
+            mAreas.add(0, area);
+
+            GridView gvProvince = (GridView) view.findViewById(R.id.wholepage_gv);
+            final ProvinceGvAdapter provinceGvAdapter = new ProvinceGvAdapter(mActivity, mAreas);
+            gvProvince.setAdapter(provinceGvAdapter);
+
+            gvProvince.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView tvProvinceItem =
+                            (TextView) view.findViewById(R.id.wholepage_gridview_item_tv);
+
+                    tvProvinceItem.setTextColor(Color.WHITE);
+                    tvProvinceItem.setBackgroundResource(R.drawable.wholepage_item_all_selected);
+
+                    // 前一个view改变
+                    if (mTvLastProvince != null && mTvLastProvince != tvProvinceItem) {
+                        mTvLastProvince.setBackgroundResource(R.drawable.wholepage_item_all);
+                        mTvLastProvince.setTextColor(
+                                getResources().getColor(R.color.setting_text));
+                    }
+
+                    mTvLastProvince = tvProvinceItem;
+
+                    // 记录当前的地区id
+                    if (mAreas != null && position < mAreas.size()) {
+                        AreaM area = mAreas.get(position);
+
+                        if (area != null) {
+                            mCurAreaId = area.getArea_id();
+                        }
+                    }
+                }
+            });
+        }
+
+        TextView tvCancel = (TextView) view.findViewById(R.id.wholepage_province_cancel);
+        TextView tvConfirm = (TextView) view.findViewById(R.id.wholepage_province_confirm);
+
+        // 取消
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPwProvince.dismiss();
+            }
+        });
+
+        // 确认
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPwProvince.dismiss();
+            }
+        });
 
         mPwProvince.update();
     }
@@ -104,7 +176,12 @@ public class WholePageFragment extends Fragment implements RequestCallback{
     private void dealAreaYearResp(JSONObject response) {
         if (response == null) return;
 
+        AreaYearResp areaYearResp = mGson.fromJson(response.toString(), AreaYearResp.class);
 
+        if (areaYearResp == null || areaYearResp.getResponse_code() != 1) return;
+
+        mAreas = areaYearResp.getArea();
+        mYears = areaYearResp.getYear();
     }
 
     @Override
