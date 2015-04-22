@@ -12,6 +12,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/wholepage_province_rl"
             style="@style/WholePagePopupMenuRl">
 
             <TextView
@@ -29,6 +30,7 @@
             android:background="@color/setting_line"/>
 
         <RelativeLayout
+            android:id="@+id/wholepage_year_rl"
             style="@style/WholePagePopupMenuRl">
 
             <TextView
