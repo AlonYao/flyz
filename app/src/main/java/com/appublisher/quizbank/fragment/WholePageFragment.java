@@ -54,6 +54,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
     private int mCount;
     private View mMainView;
     private XListView mLvWholePage;
+    private ArrayList<EntirePaperM> mEntirePapers;
 
     @Override
     public void onAttach(Activity activity) {
@@ -82,6 +83,11 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
                 (RelativeLayout) mMainView.findViewById(R.id.wholepage_province_rl);
         mLvWholePage = (XListView) mMainView.findViewById(R.id.wholepage_xlistview);
 
+        // XListView
+        mLvWholePage.setXListViewListener(this);
+        mLvWholePage.setPullLoadEnable(true);
+        mLvWholePage.setOnItemClickListener(xListViewOnClick);
+
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);
         mRequest.getAreaYear();
@@ -103,6 +109,16 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
 
         return mMainView;
     }
+
+    /**
+     * 列表item点击事件
+     */
+    private AdapterView.OnItemClickListener xListViewOnClick = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        }
+    };
 
     /**
      * 初始化省份菜单
@@ -221,15 +237,25 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
             return;
         }
 
-        ArrayList<EntirePaperM> entirePapers = entirePapersResp.getList();
+        ArrayList<EntirePaperM> newEntirePapers = entirePapersResp.getList();
 
-        if (entirePapers == null || entirePapers.size() == 0) {
+        if (newEntirePapers == null || newEntirePapers.size() == 0) {
             setLoadFinish();
             return;
         }
 
+        if (mEntirePapers == null) {
+            mEntirePapers = newEntirePapers;
+
+        } else {
+            int size = newEntirePapers.size();
+            for (int i = 0; i < size; i++) {
+                mEntirePapers.add(newEntirePapers.get(i));
+            }
+        }
+
         WholePageListAdapter wholePageListAdapter =
-                new WholePageListAdapter(mActivity, entirePapers);
+                new WholePageListAdapter(mActivity, mEntirePapers);
         mLvWholePage.setAdapter(wholePageListAdapter);
 
         setLoadFinish();
@@ -276,7 +302,9 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
      */
     @Override
     public void onRefresh() {
-
+        mOffset = 0;
+        mEntirePapers = null;
+        mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
     }
 
     /**
@@ -284,6 +312,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
      */
     @Override
     public void onLoadMore() {
-
+        mOffset = mOffset + mCount;
+        mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
     }
 }
