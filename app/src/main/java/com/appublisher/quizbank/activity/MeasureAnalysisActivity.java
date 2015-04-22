@@ -121,7 +121,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             if (mPopupWindow != null && mPopupWindow.isShowing()) {
                 mPopupWindow.dismiss();
             } else if (System.currentTimeMillis() - mPopupDismissTime > 500) {
-                mPopupWindow.showAsDropDown(feedbackMenu);
+                mPopupWindow.showAsDropDown(feedbackMenu, 0, 12);
             }
         }
 

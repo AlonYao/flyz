@@ -24,4 +24,6 @@
     <color name="practice_report_all">#3AAB7D</color>
     <color name="practice_report_error">#FF6666</color>
     <color name="practice_report_error_gray">#C7C7CC</color>
+
+    <color name="measure_analysis_fb_menu">#EFF4F2</color>
 </resources>
