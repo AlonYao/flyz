@@ -65,6 +65,9 @@ public interface ApiConstants {
     // 获取整卷试卷列表
     public static final String getEntirePapers = baseUrl + "quizbank/get_entire_papers";
 
+    // 获取地区和年份
+    public static final String getAreaYear = baseUrl + "quizbank/get_area_year";
+
     // 图片相关
 	public static int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	public static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

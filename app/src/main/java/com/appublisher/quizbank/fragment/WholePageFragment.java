@@ -12,16 +12,24 @@ import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.WholePageGvAdapter;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.ProgressBarManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * 真题演练
  */
-public class WholePageFragment extends Fragment{
+public class WholePageFragment extends Fragment implements RequestCallback{
 
     private Activity mActivity;
     private PopupWindow mPwProvince;
+    private Request mRequest;
 
     @Override
     public void onAttach(Activity activity) {
@@ -32,6 +40,8 @@ public class WholePageFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 成员变量初始化
+        mRequest = new Request(mActivity, this);
     }
 
     @Override
@@ -41,6 +51,11 @@ public class WholePageFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_wholepage, container, false);
         final RelativeLayout rlProvince =
                 (RelativeLayout) view.findViewById(R.id.wholepage_province_rl);
+
+        // 获取数据
+        ProgressBarManager.showProgressBar(view);
+//        mRequest.getEntirePapers(0, 0, 0, 5);
+        mRequest.getAreaYear();
 
         // 省份
         rlProvince.setOnClickListener(new View.OnClickListener() {
@@ -80,5 +95,32 @@ public class WholePageFragment extends Fragment{
         gvProvince.setAdapter(wholePageGvAdapter);
 
         mPwProvince.update();
+    }
+
+    /**
+     * 处理地区和年份回调
+     * @param response 地区和年份回调
+     */
+    private void dealAreaYearResp(JSONObject response) {
+        if (response == null) return;
+
+
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("area_year".equals(apiName)) dealAreaYearResp(response);
+
+        ProgressBarManager.hideProgressBar();
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        ProgressBarManager.hideProgressBar();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        ProgressBarManager.hideProgressBar();
     }
 }
