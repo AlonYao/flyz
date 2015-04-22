@@ -8,26 +8,25 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
 
 import java.util.ArrayList;
 
 /**
- * 整卷练习list容器
+ * 整卷练习GridView容器
  */
-public class WholePageListAdapter extends BaseAdapter{
+public class YearGvAdapter extends BaseAdapter {
 
-    Activity mActivity;
-    ArrayList<EntirePaperM> mEntirePapers;
+    private Activity mActivity;
+    private ArrayList<Integer> mYears;
 
-    public WholePageListAdapter(Activity activity, ArrayList<EntirePaperM> entirePapers) {
+    public YearGvAdapter(Activity activity, ArrayList<Integer> years) {
         mActivity = activity;
-        mEntirePapers = entirePapers;
+        mYears = years;
     }
 
     @Override
     public int getCount() {
-        return mEntirePapers.size();
+        return mYears.size();
     }
 
     @Override
@@ -46,24 +45,21 @@ public class WholePageListAdapter extends BaseAdapter{
 
         if (convertView == null) {
             convertView = LayoutInflater.from(mActivity).inflate(
-                    R.layout.wholepage_list_item, parent, false);
+                    R.layout.wholepage_province_gridview_item, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.tvItem =
-                    (TextView) convertView.findViewById(R.id.wholepage_list_item_tv);
-            viewHolder.line = convertView.findViewById(R.id.wholepage_list_item_line);
+                    (TextView) convertView.findViewById(R.id.wholepage_gridview_item_tv);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (mEntirePapers != null && mEntirePapers.size() > position) {
-            EntirePaperM entirePaper = mEntirePapers.get(position);
-
-            if (entirePaper != null) {
-                viewHolder.tvItem.setText(entirePaper.getName());
-            }
+        if (mYears != null && position < mYears.size()) {
+            int yearInt = mYears.get(position);
+            String yearString = yearInt == 0 ? "全部" : String.valueOf(yearInt);
+            viewHolder.tvItem.setText(yearString);
         }
 
         return convertView;
@@ -71,6 +67,5 @@ public class WholePageListAdapter extends BaseAdapter{
 
     private class ViewHolder {
         TextView tvItem;
-        View line;
     }
 }

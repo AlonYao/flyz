@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
+import com.appublisher.quizbank.adapter.YearGvAdapter;
 import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
@@ -44,11 +45,13 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
 
     private Activity mActivity;
     private PopupWindow mPwProvince;
+    private PopupWindow mPwYear;
     private Request mRequest;
     private Gson mGson;
     private ArrayList<AreaM> mAreas;
     private ArrayList<Integer> mYears;
     private TextView mTvLastProvince;
+    private TextView mTvLastYear;
     private int mCurAreaId;
     private int mCurYear;
     private int mOffset;
@@ -57,6 +60,7 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
     private XListView mLvWholePage;
     private ArrayList<EntirePaperM> mEntirePapers;
     private ImageView mIvProvinceArrow;
+    private ImageView mIvYearArrow;
 
     @Override
     public void onAttach(Activity activity) {
@@ -83,8 +87,11 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
         mMainView = inflater.inflate(R.layout.fragment_wholepage, container, false);
         final RelativeLayout rlProvince =
                 (RelativeLayout) mMainView.findViewById(R.id.wholepage_province_rl);
+        final RelativeLayout rlYear =
+                (RelativeLayout) mMainView.findViewById(R.id.wholepage_year_rl);
         mLvWholePage = (XListView) mMainView.findViewById(R.id.wholepage_xlistview);
         mIvProvinceArrow = (ImageView) mMainView.findViewById(R.id.wholepage_province_arrow);
+        mIvYearArrow = (ImageView) mMainView.findViewById(R.id.wholepage_year_arrow);
 
         // XListView
         mLvWholePage.setXListViewListener(this);
@@ -108,6 +115,23 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
                 } else {
                     mPwProvince.showAsDropDown(rlProvince, 0, 2);
                     mIvProvinceArrow.setImageResource(R.drawable.wholepage_arrowup);
+                }
+            }
+        });
+
+        // 年份
+        rlYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPwYear == null) {
+                    initPwYear();
+                    mPwYear.showAsDropDown(rlYear, 0, 2);
+                    mIvYearArrow.setImageResource(R.drawable.wholepage_arrowup);
+                } else if (mPwYear.isShowing()) {
+                    mPwYear.dismiss();
+                } else {
+                    mPwYear.showAsDropDown(rlYear, 0, 2);
+                    mIvYearArrow.setImageResource(R.drawable.wholepage_arrowup);
                 }
             }
         });
@@ -214,6 +238,95 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
         });
 
         mPwProvince.update();
+    }
+
+    /**
+     * 初始化省份菜单
+     */
+    private void initPwYear() {
+        @SuppressLint("InflateParams") View view =
+                LayoutInflater.from(mActivity).inflate(R.layout.wholepage_popup_province, null);
+
+        mPwYear = new PopupWindow(
+                view,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true);
+        mPwYear.setOutsideTouchable(true);
+        mPwYear.setBackgroundDrawable(
+                mActivity.getResources().getDrawable(R.color.transparency));
+
+        // 年份 GridView
+        if (mYears != null && mYears.size() > 0) {
+            // 添加全部
+            mYears.add(0, 0);
+
+            GridView gvYear = (GridView) view.findViewById(R.id.wholepage_gv);
+            final YearGvAdapter yearGvAdapter = new YearGvAdapter(mActivity, mYears);
+            gvYear.setAdapter(yearGvAdapter);
+
+            gvYear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView tvYearItem =
+                            (TextView) view.findViewById(R.id.wholepage_gridview_item_tv);
+
+                    tvYearItem.setTextColor(Color.WHITE);
+                    tvYearItem.setBackgroundResource(R.drawable.wholepage_item_all_selected);
+
+                    // 前一个view改变
+                    if (mTvLastYear != null && mTvLastYear != tvYearItem) {
+                        mTvLastYear.setBackgroundResource(R.drawable.wholepage_item_all);
+                        mTvLastYear.setTextColor(
+                                getResources().getColor(R.color.setting_text));
+                    }
+
+                    mTvLastYear = tvYearItem;
+
+                    // 记录当前的地区id
+                    if (mYears != null && position < mYears.size()) {
+                        AreaM area = mAreas.get(position);
+
+                        if (area != null) {
+                            mCurAreaId = area.getArea_id();
+                        }
+                        mCurYear = mYears.get(position);
+                    }
+                }
+            });
+        }
+
+        TextView tvCancel = (TextView) view.findViewById(R.id.wholepage_province_cancel);
+        TextView tvConfirm = (TextView) view.findViewById(R.id.wholepage_province_confirm);
+
+        // 取消
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPwYear.dismiss();
+            }
+        });
+
+        // 确认
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgressBarManager.showProgressBar(mMainView);
+                mEntirePapers = null;
+                mRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
+                mPwYear.dismiss();
+            }
+        });
+
+        // 箭头修改
+        mPwYear.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                mIvYearArrow.setImageResource(R.drawable.wholepage_arrowdown);
+            }
+        });
+
+        mPwYear.update();
     }
 
     /**
