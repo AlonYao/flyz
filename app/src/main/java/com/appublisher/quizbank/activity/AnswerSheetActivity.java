@@ -6,13 +6,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
+import com.appublisher.quizbank.customui.ExpandableHeightGridView;
+import com.appublisher.quizbank.model.AnswerSheetModel;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
@@ -39,6 +42,10 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     private int mRightNum;
     private int mTotalNum;
     private HashMap<String, HashMap<String, Object>> mCategoryMap;
+    private ExpandableHeightGridView mGridView;
+
+    public ArrayList<HashMap<String, Object>> mUserAnswerList;
+    public LinearLayout mLlEntireContainer;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -50,34 +57,35 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         CommonModel.setToolBar(this);
 
         // View 初始化
-        GridView gridView = (GridView) findViewById(R.id.answer_sheet_gv);
+        mGridView = (ExpandableHeightGridView) findViewById(R.id.answer_sheet_gv);
+        mLlEntireContainer = (LinearLayout) findViewById(R.id.answer_sheet_entire_container);
         TextView tvSubmit = (TextView) findViewById(R.id.answer_sheet_submit);
+        ScrollView sv = (ScrollView) findViewById(R.id.answer_sheet_sv);
+        ScrollView svEntire = (ScrollView) findViewById(R.id.answer_sheet_sv_entire);
 
         // 成员变量初始化
         mGson = new Gson();
 
         // 获取数据
-        final ArrayList<HashMap<String, Object>> userAnswerList =
-                (ArrayList<HashMap<String, Object>>)
-                        getIntent().getSerializableExtra("user_answer");
+        mUserAnswerList = (ArrayList<HashMap<String, Object>>)
+                getIntent().getSerializableExtra("user_answer");
+        mPaperName = getIntent().getStringExtra("paper_name");
         final String paperType = getIntent().getStringExtra("paper_type");
         final int paperId = getIntent().getIntExtra("paper_id", 0);
         final boolean redo = getIntent().getBooleanExtra("redo", false);
-        mPaperName = getIntent().getStringExtra("paper_name");
 
-        if (userAnswerList != null) {
-            AnswerSheetAdapter answerSheetAdapter = new AnswerSheetAdapter(this, userAnswerList);
-            gridView.setAdapter(answerSheetAdapter);
+        // 根据试卷类型显示不同的页面
+        if ("entire".equals(paperType)) {
+            svEntire.setVisibility(View.VISIBLE);
+            sv.setVisibility(View.GONE);
 
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
-                    intent.putExtra("position", position);
-                    setResult(ActivitySkipConstants.ANSWER_SHEET_SKIP, intent);
-                    finish();
-                }
-            });
+            AnswerSheetModel.setEntireContent(this);
+
+        } else {
+            svEntire.setVisibility(View.GONE);
+            sv.setVisibility(View.VISIBLE);
+
+            setContent();
         }
 
         // 交卷
@@ -97,12 +105,12 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
 
                 mCategoryMap = new HashMap<>();
 
-                if (userAnswerList == null) return;
+                if (mUserAnswerList == null) return;
 
-                mTotalNum = userAnswerList.size();
+                mTotalNum = mUserAnswerList.size();
                 for (int i = 0; i < mTotalNum; i++) {
                     try {
-                        userAnswerMap = userAnswerList.get(i);
+                        userAnswerMap = mUserAnswerList.get(i);
 
                         int id = (int) userAnswerMap.get("id");
                         String answer = (String) userAnswerMap.get("answer");
@@ -186,6 +194,26 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                                 questions.toString(),
                                 "done")
                 );
+            }
+        });
+    }
+
+    /**
+     * 设置内容
+     */
+    private void setContent() {
+        if (mUserAnswerList == null || mUserAnswerList.size() == 0) return;
+
+        AnswerSheetAdapter answerSheetAdapter = new AnswerSheetAdapter(this, mUserAnswerList);
+        mGridView.setAdapter(answerSheetAdapter);
+
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
+                intent.putExtra("position", position);
+                setResult(ActivitySkipConstants.ANSWER_SHEET_SKIP, intent);
+                finish();
             }
         });
     }

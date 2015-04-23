@@ -10,20 +10,49 @@
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"/>
 
-    <GridView
-        android:id="@+id/answer_sheet_gv"
+    <ScrollView
+        android:id="@+id/answer_sheet_sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:paddingTop="25dp"
-        android:paddingBottom="87dp"
-        android:paddingLeft="36dp"
-        android:paddingRight="36dp"
-        android:numColumns="5"
-        android:clipToPadding="false"
-        android:gravity="center"
-        android:verticalSpacing="15dp">
-    </GridView>
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.appublisher.quizbank.customui.ExpandableHeightGridView
+                android:id="@+id/answer_sheet_gv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="25dp"
+                android:paddingBottom="87dp"
+                android:paddingLeft="36dp"
+                android:paddingRight="36dp"
+                android:numColumns="5"
+                android:clipToPadding="false"
+                android:gravity="center"
+                android:verticalSpacing="15dp">
+            </com.appublisher.quizbank.customui.ExpandableHeightGridView>
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/answer_sheet_sv_entire"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:paddingBottom="72dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/answer_sheet_entire_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/answer_sheet_submit"

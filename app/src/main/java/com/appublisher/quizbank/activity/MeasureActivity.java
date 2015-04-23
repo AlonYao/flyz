@@ -65,6 +65,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private static int mMins;
     private static int mSec;
     private ArrayList<QuestionM> mQuestions;
+    private HashMap<String, Integer> mEntirePaperCategory;
 
     private static final int TIME_ON = 0;
     private static final int TIME_OUT = 1;
@@ -270,6 +271,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         intent.putExtra("paper_id", mPaperId);
         intent.putExtra("redo", mRedo);
         intent.putExtra("paper_name", mPaperName);
+        intent.putExtra("category", mEntirePaperCategory);
         startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
     }
 
@@ -455,6 +457,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
             // 拼接问题
             mQuestions = new ArrayList<>();
+            mEntirePaperCategory = new HashMap<>();
             int size = categorys.size();
             for (int i = 0; i < size; i++) {
                 CategoryM category = categorys.get(i);
@@ -462,10 +465,14 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 if (category == null) continue;
 
                 ArrayList<QuestionM> questions = category.getQuestions();
+                String categoryName = category.getName();
 
-                if (questions == null) continue;
+                if (questions == null || questions.size() == 0) continue;
 
                 mQuestions.addAll(questions);
+
+                // 保存各个分类的数量
+                mEntirePaperCategory.put(categoryName, questions.size());
             }
 
             // 倒计时时间
