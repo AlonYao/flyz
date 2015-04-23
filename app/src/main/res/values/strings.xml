@@ -101,6 +101,6 @@
     <string name="title_activity_practice_report">练习报告</string>
     <string name="title_activity_measure_analysis">解析</string>
     <string name="title_activity_splash">SplashActivity</string>
-    <string name="title_activity_history_mokao">HistoryMokaoActivity</string>
+    <string name="title_activity_history_mokao">历史模考</string>
 
 </resources>

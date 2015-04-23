@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
@@ -58,6 +60,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         // View 初始化
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
         TextView tvQuickTest = (TextView) view.findViewById(R.id.homepage_quicktest);
+        ImageView ivHistoryMokao = (ImageView) view.findViewById(R.id.homepage_history);
         mTvEstimate = (TextView) view.findViewById(R.id.homepage_estimate);
         mTvRanking = (TextView) view.findViewById(R.id.homepage_ranking);
         mTvTodayExam = (TextView) view.findViewById(R.id.homepage_todayexam_tv);
@@ -79,6 +82,15 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 Intent intent = new Intent(mActivity, MeasureActivity.class);
                 intent.putExtra("paper_type", "auto");
                 intent.putExtra("paper_name", "快速智能练习");
+                startActivity(intent);
+            }
+        });
+
+        // 历史模考
+        ivHistoryMokao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, HistoryMokaoActivity.class);
                 startActivity(intent);
             }
         });

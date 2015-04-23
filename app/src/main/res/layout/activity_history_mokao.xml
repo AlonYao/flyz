@@ -8,6 +8,7 @@
     <include layout="@layout/toolbar"/>
 
     <ListView
+        android:id="@+id/historymokao_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"

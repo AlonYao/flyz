@@ -146,6 +146,13 @@ public class Request extends BaseRequest implements ApiConstants{
                 + "&paper_type=" + paper_type, "paper_exercise", "object");
     }
 
+    /**
+     * 历史列表
+     */
+    public void getHistoryMokao() {
+        asyncRequest(ParamBuilder.finalUrl(getHistoryMokao), "history_mokao", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *
