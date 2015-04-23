@@ -15,10 +15,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginRight="36dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="87dp"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
         android:numColumns="5"
+        android:clipToPadding="false"
         android:gravity="center"
         android:verticalSpacing="15dp">
     </GridView>
