@@ -22,7 +22,9 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
+import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
+import com.appublisher.quizbank.model.netdata.measure.PaperExerciseEntireResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -288,16 +290,39 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     }
 
     /**
-     * 设置内容
+     * 处理快速智能练习回调
      * @param autoTrainingResp 快速智能练习回调
      */
-    private void setContent(AutoTrainingResp autoTrainingResp) {
+    private void dealAutoTrainingResp(AutoTrainingResp autoTrainingResp) {
         mPaperId = autoTrainingResp.getPaper_id();
         mQuestions = autoTrainingResp.getQuestions();
 
         if (mQuestions == null) return;
 
+        // 倒计时时间
+        mDuration = autoTrainingResp.getDuration();
+
+        setContent();
+    }
+
+    /**
+     * 设置内容
+     */
+    private void setContent() {
         // 初始化用户答案
+        initUserAnswer();
+
+        // 设置ViewPager
+        setViewPager();
+
+        // 倒计时
+        startTimer();
+    }
+
+    /**
+     * 初始化用户答案
+     */
+    private void initUserAnswer() {
         int size = mQuestions.size();
         mUserAnswerList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -323,8 +348,12 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
             mUserAnswerList.add(map);
         }
+    }
 
-        // 设置ViewPager
+    /**
+     * 设置ViewPager
+     */
+    private void setViewPager() {
         MeasureAdapter measureAdapter = new MeasureAdapter(this, mQuestions);
         mViewPager.setAdapter(measureAdapter);
 
@@ -346,10 +375,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
             }
         });
-
-        // 倒计时
-        mDuration = autoTrainingResp.getDuration();
-        startTimer();
     }
 
     /**
@@ -417,7 +442,37 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * @param response 回调数据
      */
     private void dealPaperExercise(JSONObject response) {
+        if ("entire".equals(mPaperType)) {
+            PaperExerciseEntireResp paperExerciseEntireResp =
+                    mGson.fromJson(response.toString(), PaperExerciseEntireResp.class);
 
+            if (paperExerciseEntireResp == null || paperExerciseEntireResp.getResponse_code() != 1)
+                return;
+
+            ArrayList<CategoryM> categorys = paperExerciseEntireResp.getCategory();
+
+            if (categorys == null || categorys.size() == 0) return;
+
+            // 拼接问题
+            mQuestions = new ArrayList<>();
+            int size = categorys.size();
+            for (int i = 0; i < size; i++) {
+                CategoryM category = categorys.get(i);
+
+                if (category == null) continue;
+
+                ArrayList<QuestionM> questions = category.getQuestions();
+
+                if (questions == null) continue;
+
+                mQuestions.addAll(questions);
+            }
+
+            // 倒计时时间
+            mDuration = paperExerciseEntireResp.getDuration();
+
+            setContent();
+        }
     }
 
     @Override
@@ -432,7 +487,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                     response.toString(), AutoTrainingResp.class);
 
             if (autoTrainingResp != null && autoTrainingResp.getResponse_code() == 1) {
-                setContent(autoTrainingResp);
+                dealAutoTrainingResp(autoTrainingResp);
             } else {
                 ToastManager.showToast(this, getString(R.string.netdata_error));
             }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * 整卷练习数据回调模型
  */
-public class EntirePaperResp {
+public class PaperExerciseEntireResp {
 
     int response_code;
     int paper_id;
