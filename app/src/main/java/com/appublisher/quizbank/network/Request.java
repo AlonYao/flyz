@@ -136,6 +136,16 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getAreaYear), "area_year", "object");
     }
 
+    /**
+     * 生成试卷练习(仅限天天模考、整卷和估分)
+     * @param paper_id 试卷id
+     * @param paper_type 试卷类型(mokao：天天模考 entire：整卷 evaluate：估分)
+     */
+    public void getPaperExercise(int paper_id, String paper_type) {
+        asyncRequest(ParamBuilder.finalUrl(getPaperExercise) + "&paper_id=" + paper_id
+                + "&paper_type=" + paper_type, "paper_exercise", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

@@ -68,6 +68,9 @@ public interface ApiConstants {
     // 获取地区和年份
     public static final String getAreaYear = baseUrl + "quizbank/get_area_year";
 
+    // 生成试卷练习(仅限天天模考、整卷和估分)
+    public static final String getPaperExercise = baseUrl + "quizbank/get_paper_exercise";
+
     // 图片相关
 	public static int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	public static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

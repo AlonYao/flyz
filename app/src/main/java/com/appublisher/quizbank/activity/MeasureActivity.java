@@ -138,30 +138,48 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
-        if ("auto".equals(mPaperType)) {
-            ProgressDialogManager.showProgressDialog(this, true);
-            request.getAutoTraining();
-        } else if ("note".equals(mPaperType)) {
-            int hierarchy_id = getIntent().getIntExtra("hierarchy_id", 0);
-            int hierarchy_level = getIntent().getIntExtra("hierarchy_level", 0);
-            String note_type = getIntent().getStringExtra("note_type");
 
-            switch (hierarchy_level) {
-                case 1:
-                    ProgressDialogManager.showProgressDialog(this, true);
-                    request.getNoteQuestions(String.valueOf(hierarchy_id), "", "", note_type);
-                    break;
+        switch (mPaperType) {
+            case "auto":
+                ProgressDialogManager.showProgressDialog(this, true);
+                request.getAutoTraining();
 
-                case 2:
-                    ProgressDialogManager.showProgressDialog(this, true);
-                    request.getNoteQuestions("", String.valueOf(hierarchy_id), "", note_type);
-                    break;
+                break;
 
-                case 3:
-                    ProgressDialogManager.showProgressDialog(this, true);
-                    request.getNoteQuestions("", "", String.valueOf(hierarchy_id), note_type);
-                    break;
-            }
+            case "note":
+                int hierarchy_id = getIntent().getIntExtra("hierarchy_id", 0);
+                int hierarchy_level = getIntent().getIntExtra("hierarchy_level", 0);
+                String note_type = getIntent().getStringExtra("note_type");
+
+                switch (hierarchy_level) {
+                    case 1:
+                        ProgressDialogManager.showProgressDialog(this, true);
+                        request.getNoteQuestions(String.valueOf(hierarchy_id), "", "", note_type);
+
+                        break;
+
+                    case 2:
+                        ProgressDialogManager.showProgressDialog(this, true);
+                        request.getNoteQuestions("", String.valueOf(hierarchy_id), "", note_type);
+
+                        break;
+
+                    case 3:
+                        ProgressDialogManager.showProgressDialog(this, true);
+                        request.getNoteQuestions("", "", String.valueOf(hierarchy_id), note_type);
+
+                        break;
+                }
+
+                break;
+
+            case "entire":
+                mPaperId = getIntent().getIntExtra("paper_id", 0);
+
+                ProgressDialogManager.showProgressDialog(this, true);
+                request.getPaperExercise(mPaperId, mPaperType);
+
+                break;
         }
     }
 
@@ -394,6 +412,14 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         }
     }
 
+    /**
+     * 处理试卷练习回调
+     * @param response 回调数据
+     */
+    private void dealPaperExercise(JSONObject response) {
+
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) {
@@ -411,6 +437,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 ToastManager.showToast(this, getString(R.string.netdata_error));
             }
         }
+
+        if ("paper_exercise".equals(apiName)) dealPaperExercise(response);
 
         ProgressDialogManager.closeProgressDialog();
     }

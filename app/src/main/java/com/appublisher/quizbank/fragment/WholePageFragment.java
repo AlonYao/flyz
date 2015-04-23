@@ -2,6 +2,7 @@ package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
 import com.appublisher.quizbank.adapter.YearGvAdapter;
@@ -145,7 +147,20 @@ public class WholePageFragment extends Fragment implements RequestCallback, XLis
     private AdapterView.OnItemClickListener xListViewOnClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (mEntirePapers == null || position >= mEntirePapers.size()) return;
 
+            EntirePaperM entirePaper = mEntirePapers.get(position);
+
+            if (entirePaper == null) return;
+
+            int paperId = entirePaper.getId();
+            String paperName = entirePaper.getName();
+
+            Intent intent = new Intent(mActivity, MeasureActivity.class);
+            intent.putExtra("paper_type", "entire");
+            intent.putExtra("paper_id", paperId);
+            intent.putExtra("paper_name", paperName);
+            startActivity(intent);
         }
     };
 
