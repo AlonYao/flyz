@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.GridView;
 
 /**
- * ×Ô¶¨ÒåGridView
+ * è‡ªå®šä¹‰GridView
  */
 public class ExpandableHeightGridView extends GridView{
 

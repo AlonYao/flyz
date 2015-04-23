@@ -19,14 +19,12 @@ import com.appublisher.quizbank.model.AnswerSheetModel;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
-import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -39,13 +37,14 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
 
     private Gson mGson;
     private String mPaperName;
-    private int mRightNum;
-    private int mTotalNum;
-    private HashMap<String, HashMap<String, Object>> mCategoryMap;
     private ExpandableHeightGridView mGridView;
 
+    public int mTotalNum;
+    public int mRightNum;
+    public String mPaperType;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public LinearLayout mLlEntireContainer;
+    public HashMap<String, HashMap<String, Object>> mCategoryMap;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -70,12 +69,11 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         mUserAnswerList = (ArrayList<HashMap<String, Object>>)
                 getIntent().getSerializableExtra("user_answer");
         mPaperName = getIntent().getStringExtra("paper_name");
-        final String paperType = getIntent().getStringExtra("paper_type");
-        final int paperId = getIntent().getIntExtra("paper_id", 0);
+        mPaperType = getIntent().getStringExtra("paper_type");
         final boolean redo = getIntent().getBooleanExtra("redo", false);
 
         // 根据试卷类型显示不同的页面
-        if ("entire".equals(paperType)) {
+        if ("entire".equals(mPaperType)) {
             svEntire.setVisibility(View.VISIBLE);
             sv.setVisibility(View.GONE);
 
@@ -92,108 +90,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         tvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int duration_total = 0;
-                HashMap<String, Object> userAnswerMap;
-                JSONArray questions = new JSONArray();
-
-                String redoSubmit;
-                if (redo) {
-                    redoSubmit = "true";
-                } else {
-                    redoSubmit = "false";
-                }
-
-                mCategoryMap = new HashMap<>();
-
-                if (mUserAnswerList == null) return;
-
-                mTotalNum = mUserAnswerList.size();
-                for (int i = 0; i < mTotalNum; i++) {
-                    try {
-                        userAnswerMap = mUserAnswerList.get(i);
-
-                        int id = (int) userAnswerMap.get("id");
-                        String answer = (String) userAnswerMap.get("answer");
-                        boolean is_right = false;
-                        int category = (int) userAnswerMap.get("category_id");
-                        String category_name = (String) userAnswerMap.get("category_name");
-                        int note_id = (int) userAnswerMap.get("note_id");
-                        int duration = (int) userAnswerMap.get("duration");
-                        String right_answer = (String) userAnswerMap.get("right_answer");
-
-                        // 判断对错
-                        if (answer != null && right_answer != null
-                                && !"".equals(answer) && answer.equals(right_answer)) {
-                            is_right = true;
-                            mRightNum++;
-                        }
-
-                        // 统计总时长
-                        duration_total = duration_total + duration;
-
-                        JSONObject joQuestion = new JSONObject();
-                        joQuestion.put("id", id);
-                        joQuestion.put("answer", answer);
-                        joQuestion.put("is_right", is_right);
-                        joQuestion.put("category", category);
-                        joQuestion.put("note_id", note_id);
-                        joQuestion.put("duration", duration);
-                        questions.put(joQuestion);
-
-                        // 统计科目信息
-                        if (category_name != null
-                                && mCategoryMap.containsKey(category_name)) {
-                            // 更新Map
-                            HashMap<String, Object> map = mCategoryMap.get(category_name);
-
-                            int medium;
-
-                            // 正确题目的数量
-                            if (is_right) {
-                                medium = (int) map.get("right_num");
-                                medium++;
-                                map.put("right_num", medium);
-                            }
-
-                            // 总数
-                            medium = (int) map.get("total_num");
-                            medium++;
-                            map.put("total_num", medium);
-
-                            // 总时长
-                            medium = (int) map.get("duration_total");
-                            medium = medium + duration;
-                            map.put("duration_total", medium);
-
-                            // 保存
-                            mCategoryMap.put(category_name, map);
-                        } else {
-                            HashMap<String, Object> map = new HashMap<>();
-                            if (is_right) {
-                                map.put("right_num", 1);
-                            } else {
-                                map.put("right_num", 0);
-                            }
-                            map.put("total_num", 1);
-                            map.put("duration_total", duration);
-                            mCategoryMap.put(category_name, map);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                ProgressDialogManager.showProgressDialog(AnswerSheetActivity.this, false);
-                new Request(AnswerSheetActivity.this, AnswerSheetActivity.this).submitPaper(
-                        ParamBuilder.submitPaper(
-                                String.valueOf(paperId),
-                                String.valueOf(paperType),
-                                redoSubmit,
-                                String.valueOf(duration_total),
-                                questions.toString(),
-                                "done")
-                );
+                AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
             }
         });
     }
@@ -233,6 +130,8 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
      */
     private void dealSubmitPaperResp(JSONObject response) {
         if (response == null) return;
+
+        Logger.i(response.toString());
 
         SubmitPaperResp submitPaperResp =
                 mGson.fromJson(response.toString(), SubmitPaperResp.class);
