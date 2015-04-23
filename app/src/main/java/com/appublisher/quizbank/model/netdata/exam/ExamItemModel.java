@@ -8,8 +8,8 @@ public class ExamItemModel {
     String name;
     int exam_id;
     boolean is_official;
-    String shortening;
-    String exam_date;
+    String code;
+    String date;
 
     public String getName() {
         return name;
@@ -35,19 +35,23 @@ public class ExamItemModel {
         this.is_official = is_official;
     }
 
-    public String getShortening() {
-        return shortening;
+    public boolean is_official() {
+        return is_official;
     }
 
-    public void setShortening(String shortening) {
-        this.shortening = shortening;
+    public String getCode() {
+        return code;
     }
 
-    public String getExam_date() {
-        return exam_date;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public void setExam_date(String exam_date) {
-        this.exam_date = exam_date;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
