@@ -7,7 +7,7 @@ public class ExamItemModel {
 
     String name;
     int exam_id;
-    boolean is_official;
+    int is_official;
     String code;
     String date;
 
@@ -27,17 +27,17 @@ public class ExamItemModel {
         this.exam_id = exam_id;
     }
 
-    public boolean isIs_official() {
-        return is_official;
-    }
-
-    public void setIs_official(boolean is_official) {
-        this.is_official = is_official;
-    }
-
-    public boolean is_official() {
-        return is_official;
-    }
+//    public boolean isIs_official() {
+//        return is_official;
+//    }
+//
+//    public void setIs_official(boolean is_official) {
+//        this.is_official = is_official;
+//    }
+//
+//    public boolean is_official() {
+//        return is_official;
+//    }
 
     public String getCode() {
         return code;

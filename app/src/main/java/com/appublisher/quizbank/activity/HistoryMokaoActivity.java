@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -92,7 +93,8 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         lvHistoryMokao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -19,6 +19,7 @@ import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamSetResponseModel;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -47,6 +48,7 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
     private ExamItemModel mCurExamItem;
     private String mFrom;
     private boolean mPreExamStatus;
+    private TextView mTvConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
         mLv = (ListView) findViewById(R.id.exam_change_lv);
         mRlSelected = (LinearLayout) findViewById(R.id.exam_change_selected);
         mTvSelected = (TextView) findViewById(R.id.exam_change_selected_tv);
+        mTvConfirm = (TextView) findViewById(R.id.examchange_confirm);
 
         // 成员变量初始化
         mGson = new Gson();
@@ -147,6 +150,18 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
 
                 examListAdapter.setSelectedPosition(position);
                 examListAdapter.notifyDataSetChanged();
+            }
+        });
+
+        mTvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurExamItem == null) return;
+
+                int id = mCurExamItem.getExam_id();
+
+                ProgressDialogManager.showProgressDialog(ExamChangeActivity.this, false);
+                mRequest.setExam(ParamBuilder.setExam(String.valueOf(id)));
             }
         });
     }

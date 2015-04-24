@@ -121,7 +121,7 @@ public class LoginModel {
                                     @Override
                                     public void onComplete(int status, Map<String, Object> info) {
                                         if(status == 200 && info != null){
-                                            String login_id = (String) info.get("openid");
+                                            String login_id = (String) info.get("unionid");
                                             String nickname = (String) info.get("nickname");
                                             String avatar = (String) info.get("headimgurl");
 

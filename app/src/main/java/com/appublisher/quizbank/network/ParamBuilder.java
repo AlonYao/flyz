@@ -179,6 +179,12 @@ public class ParamBuilder implements ApiConstants {
         return params;
     }
 
+    public static Map<String, String> setExam(String exam_id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("exam_id", exam_id);
+        return params;
+    }
+
     /**
      * 又拍云上传头像地址生成
      * @return 地址
