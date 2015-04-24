@@ -83,7 +83,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
 
         if (historyMokaoResp == null || historyMokaoResp.getResponse_code() != 1) return;
 
-        ArrayList<HistoryMokaoM> historyMokaos = historyMokaoResp.getPaper_list();
+        final ArrayList<HistoryMokaoM> historyMokaos = historyMokaoResp.getPaper_list();
 
         if (historyMokaos == null || historyMokaos.size() == 0) return;
 
@@ -93,7 +93,16 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         lvHistoryMokao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= historyMokaos.size()) return;
+
+                HistoryMokaoM historyMokao = historyMokaos.get(position);
+
+                if (historyMokao == null) return;
+
                 Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
+                intent.putExtra("paper_id", historyMokao.getId());
+                intent.putExtra("paper_type", "mokao");
+                intent.putExtra("paper_name", historyMokao.getName());
                 startActivity(intent);
             }
         });

@@ -142,6 +142,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
 
+        if (mPaperType == null) mPaperType = "";
+
         switch (mPaperType) {
             case "auto":
                 ProgressDialogManager.showProgressDialog(this, true);
@@ -177,6 +179,14 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 break;
 
             case "entire":
+                mPaperId = getIntent().getIntExtra("paper_id", 0);
+
+                ProgressDialogManager.showProgressDialog(this, true);
+                request.getPaperExercise(mPaperId, mPaperType);
+
+                break;
+
+            case "mokao":
                 mPaperId = getIntent().getIntExtra("paper_id", 0);
 
                 ProgressDialogManager.showProgressDialog(this, true);
