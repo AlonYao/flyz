@@ -490,7 +490,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             setContent();
         } else if (categorys == null && questions != null) {
             // 非整卷
-            ToastManager.showToast(this, "非整卷……施工中");
+            mQuestions = questions;
+
+            mDuration = paperExerciseEntireResp.getDuration();
+
+            setContent();
         }
     }
 
