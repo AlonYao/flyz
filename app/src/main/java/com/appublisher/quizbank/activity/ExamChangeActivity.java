@@ -16,6 +16,7 @@ import com.appublisher.quizbank.adapter.ExamListAdapter;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamSetResponseModel;
@@ -47,8 +48,9 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
     private Request mRequest;
     private ExamItemModel mCurExamItem;
     private String mFrom;
-    private boolean mPreExamStatus;
     private TextView mTvConfirm;
+    private boolean mPreExamStatus;
+    private int mPreExamId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,13 +152,26 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
 
                 examListAdapter.setSelectedPosition(position);
                 examListAdapter.notifyDataSetChanged();
+
+                // 提交按钮颜色变化
+                if (mPreExamId != mCurExamItem.getExam_id()) {
+                    mTvConfirm.setBackgroundResource(R.color.exam_change_button);
+                } else {
+                    mTvConfirm.setBackgroundResource(R.color.practice_report_error_gray);
+                }
             }
         });
 
         mTvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCurExamItem == null) return;
+                if (mCurExamItem == null) {
+                    ToastManager.showToast(ExamChangeActivity.this, "请选择考试项目");
+                    return;
+                } else if (mPreExamId == mCurExamItem.getExam_id()) {
+                    ToastManager.showToast(ExamChangeActivity.this, "您的考试项目没有变化");
+                    return;
+                }
 
                 int id = mCurExamItem.getExam_id();
 
@@ -164,6 +179,16 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
                 mRequest.setExam(ParamBuilder.setExam(String.valueOf(id)));
             }
         });
+
+        // 添加已选择的考试项目
+        UserExamInfoModel exam = LoginModel.getExamInfo();
+        mPreExamId = 0;
+
+        if (exam != null) {
+            mRlSelected.setVisibility(View.VISIBLE);
+            mTvSelected.setText(exam.getName());
+            mPreExamId = exam.getExam_id();
+        }
     }
 
     @Override

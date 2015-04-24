@@ -5,19 +5,11 @@ package com.appublisher.quizbank.model.login.model.netdata;
  */
 public class UserExamInfoModel {
 
-    String exam_id;
+    int exam_id;
     String code;
     String date;
     String is_official;
     String name;
-
-    public String getExam_id() {
-        return exam_id;
-    }
-
-    public void setExam_id(String exam_id) {
-        this.exam_id = exam_id;
-    }
 
     public String getCode() {
         return code;
@@ -49,5 +41,13 @@ public class UserExamInfoModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getExam_id() {
+        return exam_id;
+    }
+
+    public void setExam_id(int exam_id) {
+        this.exam_id = exam_id;
     }
 }

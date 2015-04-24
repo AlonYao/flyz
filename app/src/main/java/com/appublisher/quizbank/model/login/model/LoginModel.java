@@ -290,10 +290,28 @@ public class LoginModel {
             Gson gson = new Gson();
             UserExamInfoModel exam = gson.fromJson(user.exam, UserExamInfoModel.class);
 
-            return exam != null && exam.getExam_id() != null;
+            return exam != null && exam.getExam_id() != 0;
         }
 
         return false;
+    }
+
+    /**
+     * 获取考试项目
+     * @return 考试项目
+     */
+    public static UserExamInfoModel getExamInfo() {
+        User user = UserDAO.findById();
+        if (user != null) {
+            Gson gson = new Gson();
+            UserExamInfoModel exam = gson.fromJson(user.exam, UserExamInfoModel.class);
+
+            if (exam != null && exam.getExam_id() != 0) {
+                return exam;
+            }
+        }
+
+        return null;
     }
 
     /**

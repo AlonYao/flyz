@@ -77,6 +77,6 @@
         android:textSize="17sp"
         android:textColor="@android:color/white"
         android:text="@string/common_confirm"
-        android:background="@color/exam_change_button"/>
+        android:background="@color/practice_report_error_gray"/>
 
 </RelativeLayout>
