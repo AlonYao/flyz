@@ -153,6 +153,17 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getHistoryMokao), "history_mokao", "object");
     }
 
+    /**
+     * 获取历史练习内容
+     * @param exercise_id 单次练习的id
+     * @param exercise_type 练习类型(mokao：天天模考 entire：整卷 auto：智能练习 等等)
+     */
+    public void getHistoryExerciseDetail(int exercise_id, String exercise_type) {
+        asyncRequest(ParamBuilder.finalUrl(getHistoryExerciseDetail)
+                        + "&exercise_id=" + exercise_id + "&exercise_type=" + exercise_type,
+                "history_exercise_detail", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

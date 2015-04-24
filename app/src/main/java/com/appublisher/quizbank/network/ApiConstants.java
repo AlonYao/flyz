@@ -74,6 +74,9 @@ public interface ApiConstants {
     // 历史列表
     String getHistoryMokao = baseUrl + "quizbank/get_history_mokao";
 
+    // 获取历史练习内容
+    String getHistoryExerciseDetail = baseUrl + "quizbank/history_exercise_detail";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

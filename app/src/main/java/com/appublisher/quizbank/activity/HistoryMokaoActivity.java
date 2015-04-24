@@ -17,7 +17,6 @@ import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -118,7 +117,11 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
                     startActivity(intent);
                 } else if ("done".equals(status)) {
                     // 解析
-                    ToastManager.showToast(HistoryMokaoActivity.this, "跳转解析，施工中");
+                    Intent intent =
+                            new Intent(HistoryMokaoActivity.this, MeasureAnalysisActivity.class);
+                    intent.putExtra("exercise_id", historyMokao.getId());
+                    intent.putExtra("analysis_type", "mokao");
+                    startActivity(intent);
                 }
             }
         });

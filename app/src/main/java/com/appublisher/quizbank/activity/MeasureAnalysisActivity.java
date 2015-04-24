@@ -88,6 +88,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                             "", "", String.valueOf(hierarchy_id), analysisType);
                     break;
             }
+        } else if ("mokao".equals(analysisType)) {
+            int exerciseId = getIntent().getIntExtra("exercise_id", 0);
+
+            ProgressDialogManager.showProgressDialog(this, true);
+            request.getHistoryExerciseDetail(exerciseId, analysisType);
         }
     }
 
@@ -113,7 +118,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if ("收藏".equals(item.getTitle())) {
-
+            ToastManager.showToast(this, "收藏 施工中……");
         } else if ("反馈".equals(item.getTitle())) {
             View feedbackMenu = findViewById(item.getItemId());
 
@@ -216,6 +221,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("collect_error_questions".equals(apiName)) dealMeasureAnalysisResp(response);
+        if ("history_exercise_detail".equals(apiName)) dealMeasureAnalysisResp(response);
 
         ProgressDialogManager.closeProgressDialog();
     }
