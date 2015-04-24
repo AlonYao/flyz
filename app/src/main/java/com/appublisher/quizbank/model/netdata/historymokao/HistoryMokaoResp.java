@@ -3,7 +3,7 @@ package com.appublisher.quizbank.model.netdata.historymokao;
 import java.util.ArrayList;
 
 /**
- * ��ʷģ���ص�
+ * 历史模考回调数据模型
  */
 public class HistoryMokaoResp {
 

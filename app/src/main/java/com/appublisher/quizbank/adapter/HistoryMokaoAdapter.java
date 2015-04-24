@@ -4,10 +4,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
+import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
+
+import java.util.ArrayList;
 
 /**
  * 历史模考列表容器
@@ -15,14 +19,17 @@ import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 public class HistoryMokaoAdapter extends BaseAdapter{
 
     private HistoryMokaoActivity mActivity;
+    ArrayList<HistoryMokaoM> mHistoryMokaos;
 
-    public HistoryMokaoAdapter(HistoryMokaoActivity activity) {
+    public HistoryMokaoAdapter(HistoryMokaoActivity activity,
+                               ArrayList<HistoryMokaoM> historyMokaos) {
         mActivity = activity;
+        mHistoryMokaos = historyMokaos;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return mHistoryMokaos.size();
     }
 
     @Override
@@ -41,23 +48,45 @@ public class HistoryMokaoAdapter extends BaseAdapter{
 
         if (convertView == null) {
             convertView = LayoutInflater.from(mActivity).inflate(
-                    R.layout.wholepage_list_item, parent, false);
+                    R.layout.historymokao_item, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.tvItem =
-                    (TextView) convertView.findViewById(R.id.wholepage_list_item_tv);
-            viewHolder.line = convertView.findViewById(R.id.wholepage_list_item_line);
+            viewHolder.tvName = (TextView) convertView.findViewById(R.id.historymokao_item_name);
+            viewHolder.tvNum = (TextView) convertView.findViewById(R.id.historymokao_item_num);
+            viewHolder.ivStatus =
+                    (ImageView) convertView.findViewById(R.id.historymokao_item_status);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        if (mHistoryMokaos != null && position < mHistoryMokaos.size()) {
+            HistoryMokaoM historyMokao = mHistoryMokaos.get(position);
+
+            if (historyMokao != null) {
+                int num = historyMokao.getPersons_num();
+                String status = historyMokao.getStatus();
+
+                viewHolder.tvName.setText(historyMokao.getName());
+                viewHolder.tvNum.setText(String.valueOf(num) + "人参加");
+
+                if ("done".equals(status)) {
+                    viewHolder.ivStatus.setImageResource(R.drawable.historymokao_done);
+                } else if ("undone".equals(status)) {
+                    viewHolder.ivStatus.setImageResource(R.drawable.historymokao_undone);
+                } else {
+                    viewHolder.ivStatus.setVisibility(View.GONE);
+                }
+            }
+        }
+
         return convertView;
     }
 
     private class ViewHolder {
-        TextView tvItem;
-        View line;
+        TextView tvName;
+        TextView tvNum;
+        ImageView ivStatus;
     }
 }

@@ -3,10 +3,13 @@ package com.appublisher.quizbank.activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.adapter.HistoryMokaoAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoResp;
@@ -83,6 +86,14 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
 
         if (historyMokaos == null || historyMokaos.size() == 0) return;
 
+        HistoryMokaoAdapter historyMokaoAdapter = new HistoryMokaoAdapter(this, historyMokaos);
+        lvHistoryMokao.setAdapter(historyMokaoAdapter);
 
+        lvHistoryMokao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
     }
 }
