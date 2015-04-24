@@ -8,7 +8,7 @@ public class UserExamInfoModel {
     int exam_id;
     String code;
     String date;
-    String is_official;
+    boolean is_official;
     String name;
 
     public String getCode() {
@@ -27,14 +27,6 @@ public class UserExamInfoModel {
         this.date = date;
     }
 
-    public String getIs_official() {
-        return is_official;
-    }
-
-    public void setIs_official(String is_official) {
-        this.is_official = is_official;
-    }
-
     public String getName() {
         return name;
     }
@@ -49,5 +41,13 @@ public class UserExamInfoModel {
 
     public void setExam_id(int exam_id) {
         this.exam_id = exam_id;
+    }
+
+    public boolean is_official() {
+        return is_official;
+    }
+
+    public void setIs_official(boolean is_official) {
+        this.is_official = is_official;
     }
 }

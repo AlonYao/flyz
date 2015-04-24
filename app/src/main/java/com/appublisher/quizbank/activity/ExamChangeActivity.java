@@ -23,6 +23,7 @@ import com.appublisher.quizbank.model.netdata.exam.ExamSetResponseModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -67,7 +68,7 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
         mTvConfirm = (TextView) findViewById(R.id.examchange_confirm);
 
         // 成员变量初始化
-        mGson = new Gson();
+        mGson = GsonManager.initGson();
         mRequest = new Request(this, this);
         mFrom = getIntent().getStringExtra("from");
         if (mFrom == null) mFrom = "";
