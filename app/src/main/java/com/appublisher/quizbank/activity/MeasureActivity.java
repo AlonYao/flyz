@@ -444,18 +444,17 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * @param response 回调数据
      */
     private void dealPaperExercise(JSONObject response) {
-        if ("entire".equals(mPaperType)) {
-            PaperExerciseEntireResp paperExerciseEntireResp =
-                    mGson.fromJson(response.toString(), PaperExerciseEntireResp.class);
+        PaperExerciseEntireResp paperExerciseEntireResp =
+                mGson.fromJson(response.toString(), PaperExerciseEntireResp.class);
 
-            if (paperExerciseEntireResp == null || paperExerciseEntireResp.getResponse_code() != 1)
-                return;
+        if (paperExerciseEntireResp == null || paperExerciseEntireResp.getResponse_code() != 1)
+            return;
 
-            ArrayList<CategoryM> categorys = paperExerciseEntireResp.getCategory();
+        ArrayList<CategoryM> categorys = paperExerciseEntireResp.getCategory();
+        ArrayList<QuestionM> questions = paperExerciseEntireResp.getQuestions();
 
-            if (categorys == null || categorys.size() == 0) return;
-
-            // 拼接问题
+        if (categorys != null && questions == null) {
+            // 整卷
             mQuestions = new ArrayList<>();
             mEntirePaperCategory = new HashMap<>();
             int size = categorys.size();
@@ -464,21 +463,24 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
                 if (category == null) continue;
 
-                ArrayList<QuestionM> questions = category.getQuestions();
+                ArrayList<QuestionM> categoryQuestions = category.getQuestions();
                 String categoryName = category.getName();
 
-                if (questions == null || questions.size() == 0) continue;
+                if (categoryQuestions == null || categoryQuestions.size() == 0) continue;
 
-                mQuestions.addAll(questions);
+                mQuestions.addAll(categoryQuestions);
 
                 // 保存各个分类的数量
-                mEntirePaperCategory.put(categoryName, questions.size());
+                mEntirePaperCategory.put(categoryName, categoryQuestions.size());
             }
 
             // 倒计时时间
             mDuration = paperExerciseEntireResp.getDuration();
 
             setContent();
+        } else if (categorys == null && questions != null) {
+            // 非整卷
+            ToastManager.showToast(this, "非整卷……施工中");
         }
     }
 
@@ -489,6 +491,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             return;
         }
 
+        // 快速智能练习
         if ("auto_training".equals(apiName) || "note_questions".equals(apiName)) {
             AutoTrainingResp autoTrainingResp = mGson.fromJson(
                     response.toString(), AutoTrainingResp.class);
@@ -500,6 +503,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             }
         }
 
+        // 试卷练习
         if ("paper_exercise".equals(apiName)) dealPaperExercise(response);
 
         ProgressDialogManager.closeProgressDialog();

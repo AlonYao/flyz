@@ -11,6 +11,7 @@ public class PaperExerciseEntireResp {
     int paper_id;
     int duration;
     ArrayList<CategoryM> category;
+    ArrayList<QuestionM> questions;
 
     public int getResponse_code() {
         return response_code;
@@ -42,5 +43,13 @@ public class PaperExerciseEntireResp {
 
     public void setCategory(ArrayList<CategoryM> category) {
         this.category = category;
+    }
+
+    public ArrayList<QuestionM> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(ArrayList<QuestionM> questions) {
+        this.questions = questions;
     }
 }
