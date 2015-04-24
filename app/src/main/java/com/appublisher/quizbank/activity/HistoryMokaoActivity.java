@@ -17,6 +17,7 @@ import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -99,11 +100,26 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
 
                 if (historyMokao == null) return;
 
-                Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
-                intent.putExtra("paper_id", historyMokao.getId());
-                intent.putExtra("paper_type", "mokao");
-                intent.putExtra("paper_name", historyMokao.getName());
-                startActivity(intent);
+                String status = historyMokao.getStatus();
+
+                if ("undone".equals(status)) {
+                    Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
+                    intent.putExtra("paper_id", historyMokao.getId());
+                    intent.putExtra("paper_type", "mokao");
+                    intent.putExtra("paper_name", historyMokao.getName());
+                    intent.putExtra("redo", true);
+                    startActivity(intent);
+                } else if ("fresh".equals(status)) {
+                    Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
+                    intent.putExtra("paper_id", historyMokao.getId());
+                    intent.putExtra("paper_type", "mokao");
+                    intent.putExtra("paper_name", historyMokao.getName());
+                    intent.putExtra("redo", false);
+                    startActivity(intent);
+                } else if ("done".equals(status)) {
+                    // 解析
+                    ToastManager.showToast(HistoryMokaoActivity.this, "跳转解析，施工中");
+                }
             }
         });
     }

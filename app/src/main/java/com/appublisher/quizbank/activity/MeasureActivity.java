@@ -141,6 +141,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
+        mRedo = getIntent().getBooleanExtra("redo", false);
 
         if (mPaperType == null) mPaperType = "";
 
