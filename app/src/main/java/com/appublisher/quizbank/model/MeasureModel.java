@@ -29,6 +29,7 @@ import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -36,6 +37,8 @@ import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
 import org.apmem.tools.layouts.FlowLayout;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -359,5 +362,71 @@ public class MeasureModel {
                 }
             }
         }, 0, 1000);
+    }
+
+    /**
+     * 提交答案(从做题页面Alert处的提交)
+     * @param activity MeasureActivity
+     */
+    public static void submitPaper(MeasureActivity activity) {
+        int duration_total = 0;
+        HashMap<String, Object> userAnswerMap;
+        JSONArray questions = new JSONArray();
+
+        String redoSubmit;
+        if (activity.mRedo) {
+            redoSubmit = "true";
+        } else {
+            redoSubmit = "false";
+        }
+
+        if (activity.mUserAnswerList == null) return;
+
+        int size = activity.mUserAnswerList.size();
+        for (int i = 0; i < size; i++) {
+            try {
+                userAnswerMap = activity.mUserAnswerList.get(i);
+
+                int id = (int) userAnswerMap.get("id");
+                String answer = (String) userAnswerMap.get("answer");
+                boolean is_right = false;
+                int category = (int) userAnswerMap.get("category_id");
+                int note_id = (int) userAnswerMap.get("note_id");
+                int duration = (int) userAnswerMap.get("duration");
+                String right_answer = (String) userAnswerMap.get("right_answer");
+
+                // 判断对错
+                if (answer != null && right_answer != null
+                        && !"".equals(answer) && answer.equals(right_answer)) {
+                    is_right = true;
+                }
+
+                // 统计总时长
+                duration_total = duration_total + duration;
+
+                JSONObject joQuestion = new JSONObject();
+                joQuestion.put("id", id);
+                joQuestion.put("answer", answer);
+                joQuestion.put("is_right", is_right);
+                joQuestion.put("category", category);
+                joQuestion.put("note_id", note_id);
+                joQuestion.put("duration", duration);
+                questions.put(joQuestion);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ProgressDialogManager.showProgressDialog(activity, false);
+        new Request(activity, activity).submitPaper(
+                ParamBuilder.submitPaper(
+                        String.valueOf(activity.mPaperId),
+                        String.valueOf(activity.mPaperType),
+                        redoSubmit,
+                        String.valueOf(duration_total),
+                        questions.toString(),
+                        "undone")
+        );
     }
 }

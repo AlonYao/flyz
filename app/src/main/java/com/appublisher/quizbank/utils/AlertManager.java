@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.model.MeasureModel;
 
 /**
  * Alert管理
@@ -57,6 +58,9 @@ public class AlertManager {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // 提交数据
+                                MeasureModel.submitPaper(activity);
+
                                 // 保存练习
                                 ToastManager.showToast(activity, "保存成功");
                                 dialog.dismiss();

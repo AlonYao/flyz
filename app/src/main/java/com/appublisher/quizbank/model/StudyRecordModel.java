@@ -75,6 +75,8 @@ public class StudyRecordModel {
                     intent.putExtra("exercise_id", historyPaper.getPaper_id());
                     intent.putExtra("paper_type",
                             convertPaperType(historyPaper.getPaper_type()));
+                    intent.putExtra("paper_name",
+                            convertPaperType(historyPaper.getName()));
                     intent.putExtra("redo", true);
                     fragment.mActivity.startActivity(intent);
                 }
