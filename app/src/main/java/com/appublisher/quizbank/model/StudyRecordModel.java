@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.model;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.AdapterView;
 
