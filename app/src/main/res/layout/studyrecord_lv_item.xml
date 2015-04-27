@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="66dp"
     android:background="@android:color/white">
@@ -9,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="36dp"
-        android:src="@drawable/studyrecord_auto"/>
+        android:src="@drawable/studyrecord_auto"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -23,8 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:textColor="@color/setting_text"
-            android:textSize="18sp"
-            android:text="名称"/>
+            android:textSize="18sp"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -33,7 +34,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日期"
                 android:textColor="@color/setting_text"/>
 
             <TextView
@@ -41,8 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="36dp"
-                android:text="日期"
-                android:textColor="@color/setting_text"/>
+                android:textColor="@color/setting_text"
+                tools:ignore="RelativeOverlap" />
         </RelativeLayout>
 
     </LinearLayout>

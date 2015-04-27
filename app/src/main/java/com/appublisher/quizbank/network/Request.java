@@ -164,6 +164,16 @@ public class Request extends BaseRequest implements ApiConstants{
                 "history_exercise_detail", "object");
     }
 
+    /**
+     * 获取学习记录列表
+     * @param offset 开始位置(从1开始)
+     * @param count 数量
+     */
+    public void getHistoryPapers(int offset, int count) {
+        asyncRequest(ParamBuilder.finalUrl(getHistoryPapers) + "&offset=" + offset
+                + "&count=" + count, "history_papers", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

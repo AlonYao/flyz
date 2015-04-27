@@ -77,6 +77,9 @@ public interface ApiConstants {
     // 获取历史练习内容
     String getHistoryExerciseDetail = baseUrl + "quizbank/history_exercise_detail";
 
+    // 获取学习记录列表
+    String getHistoryPapers = baseUrl + "quizbank/get_history_papers";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
