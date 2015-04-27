@@ -43,7 +43,8 @@ import java.util.Date;
 /**
  * 真题演练
  */
-public class WholePageFragment extends Fragment implements RequestCallback, XListView.IXListViewListener {
+public class WholePageFragment extends Fragment implements RequestCallback,
+        XListView.IXListViewListener {
 
     private Activity mActivity;
     private PopupWindow mPwProvince;

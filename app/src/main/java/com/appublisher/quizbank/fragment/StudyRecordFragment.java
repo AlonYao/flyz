@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,9 @@ import android.view.ViewGroup;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.customui.XListView;
+import com.appublisher.quizbank.model.StudyRecordModel;
+import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
@@ -17,12 +21,23 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * 学习记录
  */
-public class StudyRecordFragment extends Fragment implements RequestCallback{
+public class StudyRecordFragment extends Fragment implements RequestCallback,
+        XListView.IXListViewListener{
 
-    private Activity mActivity;
+    public Activity mActivity;
+    public XListView mXListView;
+    public ArrayList<HistoryPaperM> mHistoryPapers;
+    public int mOffset;
+
+    private int mCount;
+    private Request mRequest;
 
     @Override
     public void onAttach(Activity activity) {
@@ -31,30 +46,79 @@ public class StudyRecordFragment extends Fragment implements RequestCallback{
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mOffset = 0;
+        mCount = 5;
+        mRequest = new Request(mActivity, this);
+        mHistoryPapers = new ArrayList<>();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // View 初始化
         View view = inflater.inflate(R.layout.fragment_studyrecord, container, false);
+        mXListView = (XListView) view.findViewById(R.id.studyrecord_lv);
+
+        // 初始化XListView
+        mXListView.setXListViewListener(this);
+        mXListView.setPullLoadEnable(true);
 
         // 获取数据
         ProgressBarManager.showProgressBar(view);
-        new Request(mActivity, this).getHistoryPapers(1, 5);
+        mRequest.getHistoryPapers(0, 5);
 
         return view;
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        ProgressBarManager.hideProgressBar();
+        if ("history_papers".equals(apiName))
+            StudyRecordModel.dealHistoryPapersResp(this, response);
+
+        setLoadFinish();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressBarManager.hideProgressBar();
+        setLoadFinish();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
+        setLoadFinish();
+    }
+
+    @Override
+    public void onRefresh() {
+        mOffset = 0;
+        mHistoryPapers = new ArrayList<>();
+        mRequest.getHistoryPapers(mOffset, mCount);
+    }
+
+    @Override
+    public void onLoadMore() {
+        mOffset = mOffset + mCount;
+        mRequest.getHistoryPapers(mOffset, mCount);
+    }
+
+    /**
+     * 加载结束
+     */
+    private void setLoadFinish() {
+        onLoadFinish();
         ProgressBarManager.hideProgressBar();
+    }
+
+    /**
+     * 刷新&加载结束时执行的操作
+     */
+    @SuppressLint("SimpleDateFormat")
+    public void onLoadFinish() {
+        mXListView.stopRefresh();
+        mXListView.stopLoadMore();
+        mXListView.setRefreshTime(
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     }
 }
