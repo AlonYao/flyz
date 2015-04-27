@@ -16,7 +16,6 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -28,7 +27,6 @@ public class MeasureAdapter extends PagerAdapter{
     private int mLastY;
     private SparseBooleanArray mIsItemLoad;
     private HashMap<String, Object> mUserAnswerMap;
-    private ArrayList<QuestionM> mQuestions;
 
     /** 页面控件 */
     private TextView mTvOptionA;
@@ -36,15 +34,14 @@ public class MeasureAdapter extends PagerAdapter{
     private TextView mTvOptionC;
     private TextView mTvOptionD;
 
-    public MeasureAdapter(MeasureActivity activity, ArrayList<QuestionM> questions) {
+    public MeasureAdapter(MeasureActivity activity) {
         mActivity = activity;
         mIsItemLoad = new SparseBooleanArray();
-        mQuestions = questions;
     }
 
     @Override
     public int getCount() {
-        return mQuestions.size();
+        return mActivity.mQuestions.size();
     }
 
     @Override
@@ -77,7 +74,7 @@ public class MeasureAdapter extends PagerAdapter{
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        QuestionM question = mQuestions.get(position);
+        QuestionM question = mActivity.mQuestions.get(position);
 
         if (question == null) return new View(mActivity);
 

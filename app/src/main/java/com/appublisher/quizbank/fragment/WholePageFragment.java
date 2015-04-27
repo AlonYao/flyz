@@ -145,12 +145,13 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     /**
      * 列表item点击事件
      */
-    private AdapterView.OnItemClickListener xListViewOnClick = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener xListViewOnClick =
+            new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (mEntirePapers == null || position >= mEntirePapers.size()) return;
+            if (mEntirePapers == null || position - 1 >= mEntirePapers.size()) return;
 
-            EntirePaperM entirePaper = mEntirePapers.get(position);
+            EntirePaperM entirePaper = mEntirePapers.get(position - 1);
 
             if (entirePaper == null) return;
 

@@ -10,6 +10,11 @@ public class AnswerM implements Serializable{
     int id;
     boolean is_right;
     String answer;
+    int duration;
+
+    public int getDuration() {
+        return duration;
+    }
 
     public int getId() {
         return id;

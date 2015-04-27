@@ -10,6 +10,7 @@ public class CategoryM {
     int id;
     String name;
     ArrayList<QuestionM> questions;
+    ArrayList<AnswerM> answers;
 
     public int getId() {
         return id;
@@ -33,5 +34,9 @@ public class CategoryM {
 
     public void setQuestions(ArrayList<QuestionM> questions) {
         this.questions = questions;
+    }
+
+    public ArrayList<AnswerM> getAnswers() {
+        return answers;
     }
 }

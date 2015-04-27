@@ -26,7 +26,6 @@ import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.PaperExerciseEntireResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -53,22 +52,23 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public long mCurTimestamp;
     public int mCurPosition;
     public int mDuration;
+    public String mPaperType;
+    public int mPaperId;
+    public int mExerciseId;
+    public boolean mRedo;
+    public Gson mGson;
+    public Handler mHandler;
+    public Timer mTimer;
+    public String mPaperName;
+    public ArrayList<QuestionM> mQuestions;
+    public HashMap<String, Integer> mEntirePaperCategory;
 
-    private Gson mGson;
-    private Handler mHandler;
-    private Timer mTimer;
-    private String mPaperType;
-    private String mPaperName;
-    private int mPaperId;
-    private boolean mRedo;
-    private static Toolbar mToolbar;
-    private static int mMins;
-    private static int mSec;
-    private ArrayList<QuestionM> mQuestions;
-    private HashMap<String, Integer> mEntirePaperCategory;
+    public static Toolbar mToolbar;
+    public static int mMins;
+    public static int mSec;
 
-    private static final int TIME_ON = 0;
-    private static final int TIME_OUT = 1;
+    public static final int TIME_ON = 0;
+    public static final int TIME_OUT = 1;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -127,7 +127,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 初始化成员变量
         mCurTimestamp = System.currentTimeMillis();
         mCurPosition = 0;
-        Request request = new Request(this, this);
         mGson = new Gson();
         mHandler = new MsgHandler(this);
 
@@ -141,60 +140,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
+        mPaperId = getIntent().getIntExtra("paper_id", 0);
+        mExerciseId = getIntent().getIntExtra("exercise_id", 0);
         mRedo = getIntent().getBooleanExtra("redo", false);
 
-        if (mPaperType == null) mPaperType = "";
-
-        switch (mPaperType) {
-            case "auto":
-                ProgressDialogManager.showProgressDialog(this, true);
-                request.getAutoTraining();
-
-                break;
-
-            case "note":
-                int hierarchy_id = getIntent().getIntExtra("hierarchy_id", 0);
-                int hierarchy_level = getIntent().getIntExtra("hierarchy_level", 0);
-                String note_type = getIntent().getStringExtra("note_type");
-
-                switch (hierarchy_level) {
-                    case 1:
-                        ProgressDialogManager.showProgressDialog(this, true);
-                        request.getNoteQuestions(String.valueOf(hierarchy_id), "", "", note_type);
-
-                        break;
-
-                    case 2:
-                        ProgressDialogManager.showProgressDialog(this, true);
-                        request.getNoteQuestions("", String.valueOf(hierarchy_id), "", note_type);
-
-                        break;
-
-                    case 3:
-                        ProgressDialogManager.showProgressDialog(this, true);
-                        request.getNoteQuestions("", "", String.valueOf(hierarchy_id), note_type);
-
-                        break;
-                }
-
-                break;
-
-            case "entire":
-                mPaperId = getIntent().getIntExtra("paper_id", 0);
-
-                ProgressDialogManager.showProgressDialog(this, true);
-                request.getPaperExercise(mPaperId, mPaperType);
-
-                break;
-
-            case "mokao":
-                mPaperId = getIntent().getIntExtra("paper_id", 0);
-
-                ProgressDialogManager.showProgressDialog(this, true);
-                request.getPaperExercise(mPaperId, mPaperType);
-
-                break;
-        }
+        MeasureModel.getData(this);
     }
 
     @Override
@@ -367,7 +317,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * 设置ViewPager
      */
     private void setViewPager() {
-        MeasureAdapter measureAdapter = new MeasureAdapter(this, mQuestions);
+        MeasureAdapter measureAdapter = new MeasureAdapter(this);
         mViewPager.setAdapter(measureAdapter);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -520,6 +470,10 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
         // 试卷练习
         if ("paper_exercise".equals(apiName)) dealPaperExercise(response);
+
+        // 历史练习内容
+        if ("history_exercise_detail".equals(apiName))
+            MeasureModel.dealHistoryExerciseDetailResp(this, response);
 
         ProgressDialogManager.closeProgressDialog();
     }

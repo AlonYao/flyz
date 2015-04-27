@@ -3,7 +3,7 @@ package com.appublisher.quizbank.model.netdata.history;
 import java.util.ArrayList;
 
 /**
- * Ñ§Ï°ÀúÊ·¼ÇÂ¼½Ó¿Ú»Øµ÷Êı¾İÄ£ĞÍ
+ * å†å²æ¨¡è€ƒå›è°ƒ
  */
 public class HistoryPapersResp {
 

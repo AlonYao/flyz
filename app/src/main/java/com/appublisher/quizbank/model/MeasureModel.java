@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -17,16 +18,30 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.ScaleImageActivity;
+import com.appublisher.quizbank.adapter.MeasureAdapter;
+import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseEntireResp;
+import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
+import com.appublisher.quizbank.model.netdata.measure.AnswerM;
+import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
 import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
+import com.google.gson.Gson;
 
 import org.apmem.tools.layouts.FlowLayout;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 做题模块
@@ -143,5 +158,204 @@ public class MeasureModel {
         }
 
         container.addView(flowLayout);
+    }
+
+    public static void getData(MeasureActivity activity) {
+        if (activity.mPaperType == null) return;
+
+        Request request = new Request(activity, activity);
+
+        if (activity.mRedo) {
+            // 重新做题
+            ProgressDialogManager.showProgressDialog(activity, true);
+            request.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
+        } else {
+            // 做新题
+            if ("auto".equals(activity.mPaperType)) {
+                ProgressDialogManager.showProgressDialog(activity, true);
+                request.getAutoTraining();
+            } else if ("note".equals(activity.mPaperType)) {
+                int hierarchy_id = activity.getIntent().getIntExtra("hierarchy_id", 0);
+                int hierarchy_level = activity.getIntent().getIntExtra("hierarchy_level", 0);
+                String note_type = activity.getIntent().getStringExtra("note_type");
+
+                switch (hierarchy_level) {
+                    case 1:
+                        ProgressDialogManager.showProgressDialog(activity, true);
+                        request.getNoteQuestions(String.valueOf(hierarchy_id), "", "", note_type);
+
+                        break;
+
+                    case 2:
+                        ProgressDialogManager.showProgressDialog(activity, true);
+                        request.getNoteQuestions("", String.valueOf(hierarchy_id), "", note_type);
+
+                        break;
+
+                    case 3:
+                        ProgressDialogManager.showProgressDialog(activity, true);
+                        request.getNoteQuestions("", "", String.valueOf(hierarchy_id), note_type);
+
+                        break;
+                }
+            } else if ("entire".equals(activity.mPaperType)
+                    || "mokao".equals(activity.mPaperType)) {
+                ProgressDialogManager.showProgressDialog(activity, true);
+                request.getPaperExercise(activity.mPaperId, activity.mPaperType);
+            }
+        }
+    }
+
+    /**
+     * 处理历史练习回调
+     * @param activity MeasureActivity
+     * @param response 回调数据
+     */
+    public static void dealHistoryExerciseDetailResp(MeasureActivity activity,
+                                                     JSONObject response) {
+        if (response == null) return;
+
+        Gson gson = GsonManager.initGson();
+
+        if ("entire".equals(activity.mPaperType)) {
+            // 整卷
+            HistoryExerciseEntireResp historyExerciseEntireResp =
+                    gson.fromJson(response.toString(), HistoryExerciseEntireResp.class);
+
+            if (historyExerciseEntireResp == null
+                    || historyExerciseEntireResp.getResponse_code() != 1) return;
+
+            ToastManager.showToast(activity, "整卷 施工中");
+        } else {
+            // 非整卷
+            HistoryExerciseResp historyExerciseResp =
+                    gson.fromJson(response.toString(), HistoryExerciseResp.class);
+
+            if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
+
+            activity.mQuestions = historyExerciseResp.getQuestions();
+
+            if (activity.mQuestions == null || activity.mQuestions.size() == 0) return;
+
+            // 初始化答案
+            int size = activity.mQuestions.size();
+            activity.mUserAnswerList = new ArrayList<>();
+            ArrayList<AnswerM> answers = historyExerciseResp.getAnswers();
+
+            for (int i = 0; i < size; i++) {
+                HashMap<String, Object> map = new HashMap<>();
+
+                QuestionM question = activity.mQuestions.get(i);
+                if (question != null) {
+                    map.put("id", question.getId());
+                    map.put("right_answer", question.getAnswer());
+                    map.put("note_id", question.getNote_id());
+                    map.put("category_id", question.getCategory_id());
+                    map.put("category_name", question.getCategory_name());
+                } else {
+                    map.put("id", 0);
+                    map.put("right_answer", "right_answer");
+                    map.put("note_id", 0);
+                    map.put("category_id", 0);
+                    map.put("category_name", "科目");
+                }
+
+                if (answers == null || i >= answers.size() || answers.get(i) == null) {
+                    map.put("duration", 0);
+                    map.put("answer", "");
+                } else {
+                    AnswerM answer = answers.get(i);
+                    map.put("duration", answer.getDuration());
+                    map.put("answer", answer.getAnswer());
+                }
+
+                activity.mUserAnswerList.add(map);
+            }
+
+            // 获取时长
+            activity.mDuration =
+                    historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
+            startTimer(activity);
+
+            // 设置ViewPager
+            setViewPager(activity);
+        }
+    }
+
+    /**
+     * 设置ViewPager
+     */
+    private static void setViewPager(final MeasureActivity activity) {
+        MeasureAdapter measureAdapter = new MeasureAdapter(activity);
+        activity.mViewPager.setAdapter(measureAdapter);
+
+        activity.mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                saveQuestionTime(activity);
+                activity.mCurPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    /**
+     * 保存做题时间
+     */
+    private static void saveQuestionTime(MeasureActivity activity) {
+        int duration = (int) ((System.currentTimeMillis() - activity.mCurTimestamp) / 1000);
+        activity.mCurTimestamp = System.currentTimeMillis();
+        HashMap<String, Object> userAnswerMap =
+                activity.mUserAnswerList.get(activity.mCurPosition);
+
+        if (userAnswerMap.containsKey("duration")) {
+            duration = duration + (int) userAnswerMap.get("duration");
+        }
+
+        userAnswerMap.put("duration", duration);
+        activity.mUserAnswerList.set(activity.mCurPosition, userAnswerMap);
+    }
+
+    /**
+     * 倒计时启动
+     */
+    private static void startTimer(final MeasureActivity activity) {
+        MeasureActivity.mMins = activity.mDuration / 60;
+        MeasureActivity.mSec = activity.mDuration % 60;
+
+        if (activity.mTimer != null) {
+            activity.mTimer.cancel();
+        }
+
+        activity.mTimer = new Timer();
+        activity.mTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                MeasureActivity.mSec--;
+                activity.mDuration--;
+                if (MeasureActivity.mSec < 0) {
+                    MeasureActivity.mMins--;
+                    MeasureActivity.mSec = 59;
+                    activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
+                    if (MeasureActivity.mMins < 0) {
+                        activity.mTimer.cancel();
+                        activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_OUT);
+                    }
+                } else {
+                    activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
+                }
+            }
+        }, 0, 1000);
     }
 }
