@@ -69,7 +69,7 @@ public class StudyRecordModel {
                 String status = historyPaper.getStatus();
 
                 if ("done".equals(status)) {
-                    ToastManager.showToast(fragment.mActivity, "施工中……");
+                    ToastManager.showToast(fragment.mActivity, "能力评估页面 施工中……");
                 } else if ("undone".equals(status)) {
                     Intent intent = new Intent(fragment.mActivity, MeasureActivity.class);
                     intent.putExtra("exercise_id", historyPaper.getPaper_id());
