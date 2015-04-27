@@ -70,7 +70,6 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                 getIntent().getSerializableExtra("user_answer");
         mPaperName = getIntent().getStringExtra("paper_name");
         mPaperType = getIntent().getStringExtra("paper_type");
-        final boolean redo = getIntent().getBooleanExtra("redo", false);
 
         // 根据试卷类型显示不同的页面
         if ("entire".equals(mPaperType)) {

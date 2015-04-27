@@ -38,6 +38,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     private int mCount;
     private Request mRequest;
+    private View mView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -58,18 +59,23 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // View 初始化
-        View view = inflater.inflate(R.layout.fragment_studyrecord, container, false);
-        mXListView = (XListView) view.findViewById(R.id.studyrecord_lv);
+        mView = inflater.inflate(R.layout.fragment_studyrecord, container, false);
+        mXListView = (XListView) mView.findViewById(R.id.studyrecord_lv);
 
         // 初始化XListView
         mXListView.setXListViewListener(this);
         mXListView.setPullLoadEnable(true);
 
-        // 获取数据
-        ProgressBarManager.showProgressBar(view);
-        mRequest.getHistoryPapers(0, 5);
+        return mView;
+    }
 
-        return view;
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // 获取数据
+        ProgressBarManager.showProgressBar(mView);
+        onRefresh();
     }
 
     @Override

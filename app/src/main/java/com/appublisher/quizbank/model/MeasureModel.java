@@ -167,6 +167,8 @@ public class MeasureModel {
 
         if (activity.mRedo) {
             // 重新做题
+            activity.mPaperId = activity.mExerciseId;
+
             ProgressDialogManager.showProgressDialog(activity, true);
             request.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
         } else {
