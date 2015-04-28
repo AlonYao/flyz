@@ -132,12 +132,24 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 mLlMokao.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mActivity, MeasureActivity.class);
-                        intent.putExtra("paper_id", todayExam.getId());
-                        intent.putExtra("paper_type", "mokao");
-                        intent.putExtra("paper_name", "今日模考");
-                        intent.putExtra("redo", false);
-                        startActivity(intent);
+                        String status = todayExam.getStatus();
+
+                        if ("done".equals(status)) {
+                            ToastManager.showToast(mActivity, "模考解析 施工中……");
+                        } else {
+                            Intent intent = new Intent(mActivity, MeasureActivity.class);
+                            intent.putExtra("paper_id", todayExam.getId());
+                            intent.putExtra("paper_type", "mokao");
+                            intent.putExtra("paper_name", "今日模考");
+
+                            if ("fresh".equals(status)) {
+                                intent.putExtra("redo", false);
+                            } else {
+                                intent.putExtra("redo", true);
+                            }
+
+                            startActivity(intent);
+                        }
                     }
                 });
             }
@@ -150,12 +162,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 mLlSpecial.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(mActivity, MeasureActivity.class);
-//                        intent.putExtra("paper_id", todayExam.getId());
-//                        intent.putExtra("paper_type", "mokao");
-//                        intent.putExtra("paper_name", "今日模考");
-//                        intent.putExtra("redo", false);
-//                        startActivity(intent);
+                        ToastManager.showToast(mActivity, "专项练习 施工中……");
                     }
                 });
             }

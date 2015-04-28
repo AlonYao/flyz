@@ -9,6 +9,11 @@ public class PaperTodayM {
     boolean done;
     int persons_num;
     String description;
+    String status;
+
+    public String getStatus() {
+        return status;
+    }
 
     public int getId() {
         return id;
