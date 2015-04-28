@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -42,6 +43,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     private TextView mTvTodayExam;
     private TextView mTvSpecial;
     private TextView mTvZhiboke;
+    private LinearLayout mLlMokao;
 
     @Override
     public void onAttach(Activity activity) {
@@ -66,6 +68,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         mTvTodayExam = (TextView) view.findViewById(R.id.homepage_todayexam_tv);
         mTvSpecial = (TextView) view.findViewById(R.id.homepage_special_tv);
         mTvZhiboke = (TextView) view.findViewById(R.id.homepage_zhiboke);
+        mLlMokao = (LinearLayout) view.findViewById(R.id.homepage_todayexam_ll);
 
         // 获取&呈现 数据
         if (Globals.homepageResp != null) {
@@ -120,9 +123,21 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         PaperM pager = homepageData.getPaper();
         if (pager != null) {
             // 今日模考
-            PaperTodayM todayExam = pager.getToday();
+            final PaperTodayM todayExam = pager.getToday();
             if (todayExam != null) {
                 mTvTodayExam.setText("已有" + String.valueOf(todayExam.getPersons_num()) + "人参加");
+
+                mLlMokao.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mActivity, MeasureActivity.class);
+                        intent.putExtra("paper_id", todayExam.getId());
+                        intent.putExtra("paper_type", "mokao");
+                        intent.putExtra("paper_name", "今日模考");
+                        intent.putExtra("redo", false);
+                        startActivity(intent);
+                    }
+                });
             }
 
             // 知识点专项训练
