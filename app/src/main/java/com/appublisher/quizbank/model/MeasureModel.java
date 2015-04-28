@@ -418,8 +418,7 @@ public class MeasureModel {
             }
         }
 
-        ProgressDialogManager.showProgressDialog(activity, false);
-        new Request(activity, activity).submitPaper(
+        new Request(activity).submitPaper(
                 ParamBuilder.submitPaper(
                         String.valueOf(activity.mPaperId),
                         String.valueOf(activity.mPaperType),
