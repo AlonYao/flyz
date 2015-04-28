@@ -20,6 +20,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
@@ -93,6 +94,20 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
             ProgressDialogManager.showProgressDialog(this, true);
             request.getHistoryExerciseDetail(exerciseId, analysisType);
+        } else {
+            @SuppressWarnings("unchecked") ArrayList<QuestionM> questions =
+                    (ArrayList<QuestionM>) getIntent().getSerializableExtra("questions");
+
+            @SuppressWarnings("unchecked") ArrayList<AnswerM> answers =
+                    (ArrayList<AnswerM>) getIntent().getSerializableExtra("answers");
+
+            if (questions != null && questions.size() != 0) {
+                MeasureAnalysisAdapter adapter = new MeasureAnalysisAdapter(
+                        this,
+                        questions,
+                        answers);
+                mViewPager.setAdapter(adapter);
+            }
         }
     }
 
