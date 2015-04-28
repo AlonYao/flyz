@@ -24,6 +24,7 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseEntireResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
+import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
@@ -33,7 +34,6 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -212,7 +212,7 @@ public class MeasureModel {
     }
 
     /**
-     * 处理历史练习回调
+     * 处理历史练习回调(用户已经做过一次后，请求的接口)
      * @param activity MeasureActivity
      * @param response 回调数据
      */
@@ -230,7 +230,40 @@ public class MeasureModel {
             if (historyExerciseEntireResp == null
                     || historyExerciseEntireResp.getResponse_code() != 1) return;
 
-            ToastManager.showToast(activity, "整卷 施工中");
+            ArrayList<CategoryM> categorys = historyExerciseEntireResp.getCategory();
+
+            if (categorys == null || categorys.size() == 0) return;
+
+            // 整卷
+            activity.mQuestions = new ArrayList<>();
+            activity.mEntirePaperCategory = new HashMap<>();
+            activity.mUserAnswerList = new ArrayList<>();
+
+            int size = categorys.size();
+            for (int i = 0; i < size; i++) {
+                CategoryM category = categorys.get(i);
+
+                if (category == null) continue;
+
+                ArrayList<QuestionM> categoryQuestions = category.getQuestions();
+                String categoryName = category.getName();
+
+                if (categoryQuestions == null || categoryQuestions.size() == 0) continue;
+
+                activity.mQuestions.addAll(categoryQuestions);
+
+                // 保存各个分类的数量
+                activity.mEntirePaperCategory.put(categoryName, categoryQuestions.size());
+
+                // 拼接用户答案
+                ArrayList<AnswerM> answers = category.getAnswers();
+                jointUserAnswer(categoryQuestions, answers, activity);
+            }
+
+            // 倒计时时间
+            activity.mDuration = historyExerciseEntireResp.getDuration()
+                    - historyExerciseEntireResp.getStart_from();
+
         } else {
             // 非整卷
             HistoryExerciseResp historyExerciseResp =
@@ -243,48 +276,20 @@ public class MeasureModel {
             if (activity.mQuestions == null || activity.mQuestions.size() == 0) return;
 
             // 初始化答案
-            int size = activity.mQuestions.size();
             activity.mUserAnswerList = new ArrayList<>();
             ArrayList<AnswerM> answers = historyExerciseResp.getAnswers();
-
-            for (int i = 0; i < size; i++) {
-                HashMap<String, Object> map = new HashMap<>();
-
-                QuestionM question = activity.mQuestions.get(i);
-                if (question != null) {
-                    map.put("id", question.getId());
-                    map.put("right_answer", question.getAnswer());
-                    map.put("note_id", question.getNote_id());
-                    map.put("category_id", question.getCategory_id());
-                    map.put("category_name", question.getCategory_name());
-                } else {
-                    map.put("id", 0);
-                    map.put("right_answer", "right_answer");
-                    map.put("note_id", 0);
-                    map.put("category_id", 0);
-                    map.put("category_name", "科目");
-                }
-
-                if (answers == null || i >= answers.size() || answers.get(i) == null) {
-                    map.put("duration", 0);
-                    map.put("answer", "");
-                } else {
-                    AnswerM answer = answers.get(i);
-                    map.put("duration", answer.getDuration());
-                    map.put("answer", answer.getAnswer());
-                }
-
-                activity.mUserAnswerList.add(map);
-            }
+            jointUserAnswer(activity.mQuestions, answers, activity);
 
             // 获取时长
             activity.mDuration =
                     historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
-            startTimer(activity);
-
-            // 设置ViewPager
-            setViewPager(activity);
         }
+
+        // 倒计时
+        startTimer(activity);
+
+        // 设置ViewPager
+        setViewPager(activity);
     }
 
     /**
@@ -427,5 +432,46 @@ public class MeasureModel {
                         questions.toString(),
                         "undone")
         );
+    }
+
+    /**
+     * 拼接用户答案
+     * @param questions 题目
+     * @param answers 用户答案
+     * @param activity MeasureActivity
+     */
+    private static void jointUserAnswer(ArrayList<QuestionM> questions,
+                                 ArrayList<AnswerM> answers,
+                                 MeasureActivity activity) {
+        int size = questions.size();
+        for (int i = 0; i < size; i++) {
+            HashMap<String, Object> map = new HashMap<>();
+            QuestionM question = questions.get(i);
+
+            if (question != null) {
+                map.put("id", question.getId());
+                map.put("right_answer", question.getAnswer());
+                map.put("note_id", question.getNote_id());
+                map.put("category_id", question.getCategory_id());
+                map.put("category_name", question.getCategory_name());
+            } else {
+                map.put("id", 0);
+                map.put("right_answer", "right_answer");
+                map.put("note_id", 0);
+                map.put("category_id", 0);
+                map.put("category_name", "科目");
+            }
+
+            if (answers == null || i >= answers.size() || answers.get(i) == null) {
+                map.put("duration", 0);
+                map.put("answer", "");
+            } else {
+                AnswerM answer = answers.get(i);
+                map.put("duration", answer.getDuration());
+                map.put("answer", answer.getAnswer());
+            }
+
+            activity.mUserAnswerList.add(map);
+        }
     }
 }
