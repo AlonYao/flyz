@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
@@ -181,6 +182,14 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 // 即将上课
                 mTvZhiboke.setText("即将开始：" + liveCourse.getName());
             }
+
+            mTvZhiboke.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mActivity, EvaluationActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         ProgressBarManager.hideProgressBar();

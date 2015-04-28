@@ -35,4 +35,5 @@ dependencies {
     compile 'com.umeng:fb:5.1.0'
     compile 'org.apmem.tools:layouts:1.8@aar'
     compile project(':treeviewlib')
+    compile project(':diagramlib')
 }

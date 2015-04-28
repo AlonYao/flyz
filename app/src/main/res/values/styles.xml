@@ -192,4 +192,64 @@
         <item name="android:src">@drawable/wholepage_arrowdown</item>
     </style>
 
+    <!-- 能力评估 -->
+    <style name="EvaluationListRl">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">66dp</item>
+    </style>
+
+    <style name="EvaluationListLogo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">31dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:src">@drawable/evaluation_learningdays</item>
+    </style>
+
+    <style name="EvaluationListTitleTv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">21dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/setting_text</item>
+        <item name="android:text">@string/evaluation_learningdays</item>
+    </style>
+
+    <style name="EvaluationListTitleTvSmall">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">21dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/setting_text</item>
+        <item name="android:text">@string/evaluation_learningdays</item>
+    </style>
+
+    <style name="EvaluationListRightLl">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">36dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="EvaluationListCountTvBig">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/setting_text</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:text">0</item>
+    </style>
+
+    <style name="EvaluationListCountTvSmall">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/setting_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:text">0</item>
+    </style>
+
 </resources>

@@ -165,6 +165,10 @@
             android:name=".activity.HistoryMokaoActivity"
             android:label="@string/title_activity_history_mokao" >
         </activity>
+        <activity
+            android:name=".activity.EvaluationActivity"
+            android:label="@string/title_activity_evaluation" >
+        </activity>
     </application>
 
 </manifest>

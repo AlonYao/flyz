@@ -1,0 +1,317 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/common_bg"
+    tools:context="com.appublisher.quizbank.activity.EvaluationActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 预测分&排名 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <!-- 预测分 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="45dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/evaluation_text_gray"
+                        android:text="@string/evaluation_score"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/setting_text"
+                        android:textStyle="bold"
+                        android:textSize="43sp"/>
+                </LinearLayout>
+
+                <!-- 排名 -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/evaluation_rank_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/evaluation_text_gray"
+                            android:text="@string/evaluation_rank"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/setting_text"
+                            android:textStyle="bold"
+                            android:textSize="43sp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/evaluation_rank_ll"
+                        android:layout_alignParentBottom="true"
+                        android:paddingBottom="10dp"
+                        android:text="@string/homepage_percent"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!-- 列表 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <!-- 学习天数 -->
+                <RelativeLayout
+                    style="@style/EvaluationListRl">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/EvaluationListLogo"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            style="@style/EvaluationListTitleTv"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/EvaluationListRightLl">
+
+                        <TextView
+                            style="@style/EvaluationListCountTvBig"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/setting_text"
+                            android:textSize="16sp"
+                            android:text="@string/evaluation_day"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- 模考时长 -->
+                <RelativeLayout
+                    style="@style/EvaluationListRl">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/EvaluationListLogo"
+                            android:src="@drawable/evaluation_totaltime"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            style="@style/EvaluationListTitleTv"
+                            android:text="@string/evaluation_totaltime"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/EvaluationListRightLl">
+
+                        <TextView
+                            style="@style/EvaluationListCountTvBig"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/setting_text"
+                            android:textSize="16sp"
+                            android:text="@string/evaluation_sec"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- 答题量 -->
+                <RelativeLayout
+                    style="@style/EvaluationListRl">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/EvaluationListLogo"
+                            android:src="@drawable/evaluation_totalquestions"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                style="@style/EvaluationListTitleTv"
+                                android:text="@string/evaluation_totalquestions"/>
+                            <TextView
+                                style="@style/EvaluationListTitleTvSmall"
+                                android:text="@string/evaluation_average"
+                                android:layout_marginTop="5dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/EvaluationListRightLl"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                style="@style/EvaluationListCountTvBig"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/setting_text"
+                                android:textSize="16sp"
+                                android:text="@string/evaluation_dao"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                style="@style/EvaluationListCountTvSmall"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/setting_text"
+                                android:text="@string/evaluation_dao"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- 正确率 -->
+                <RelativeLayout
+                    style="@style/EvaluationListRl">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/EvaluationListLogo"
+                            android:src="@drawable/evaluation_accuracy"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                style="@style/EvaluationListTitleTv"
+                                android:text="@string/evaluation_accuracy"/>
+                            <TextView
+                                style="@style/EvaluationListTitleTvSmall"
+                                android:text="@string/evaluation_average"
+                                android:layout_marginTop="5dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/EvaluationListRightLl"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                style="@style/EvaluationListCountTvBig"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/setting_text"
+                                android:textSize="16sp"
+                                android:text="@string/homepage_percent"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                style="@style/EvaluationListCountTvSmall"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/setting_text"
+                                android:text="@string/homepage_percent"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/evaluation_history"/>
+
+            <!-- 折线图 -->
+            <com.db.chart.view.LineChartView
+                android:id="@+id/linechart"
+                android:layout_width="match_parent"
+                android:layout_height="209dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

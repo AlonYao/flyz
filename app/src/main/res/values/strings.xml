@@ -83,6 +83,19 @@
     <string name="alert_savetest_title">提示</string>
     <string name="alert_savetest_msg">确定要退出练习？退出后未完成的练习会保存在练习历史中</string>
 
+    <!-- 能力评估 -->
+    <string name="evaluation_score">预测分</string>
+    <string name="evaluation_rank">排在前</string>
+    <string name="evaluation_learningdays">学习天数</string>
+    <string name="evaluation_totaltime">模考时长</string>
+    <string name="evaluation_totalquestions">答题量</string>
+    <string name="evaluation_accuracy">正确率</string>
+    <string name="evaluation_day">天</string>
+    <string name="evaluation_sec">秒</string>
+    <string name="evaluation_dao">道</string>
+    <string name="evaluation_average">全站平均</string>
+    <string name="evaluation_history">历史估分</string>
+
     <!-- Activity -->
     <!-- 登录注册Activity -->
     <string name="title_activity_login">登录</string>
@@ -102,5 +115,6 @@
     <string name="title_activity_measure_analysis">解析</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_history_mokao">历史模考</string>
+    <string name="title_activity_evaluation">能力评估</string>
 
 </resources>

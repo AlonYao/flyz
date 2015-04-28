@@ -1,1 +1,1 @@
-include ':app', ':umeng', ':treeviewlib'
+include ':app', ':umeng', ':treeviewlib', ':diagramlib'
