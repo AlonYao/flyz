@@ -169,6 +169,10 @@
             android:name=".activity.EvaluationActivity"
             android:label="@string/title_activity_evaluation" >
         </activity>
+        <activity
+            android:name=".activity.PracticeDescriptionActivity"
+            android:label="@string/title_activity_practice_description" >
+        </activity>
     </application>
 
 </manifest>
