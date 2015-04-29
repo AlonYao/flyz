@@ -241,6 +241,8 @@ public class PracticeReportActivity extends ActionBarActivity {
                             } else {
                                 errorQuestions.add(questions.get(i));
                             }
+
+                            errorAnswers.add(answerItem);
                         }
                     }
 
