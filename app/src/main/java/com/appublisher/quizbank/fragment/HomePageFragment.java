@@ -18,6 +18,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
 import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
@@ -46,6 +47,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     private TextView mTvZhiboke;
     private LinearLayout mLlMokao;
     private LinearLayout mLlSpecial;
+    private TextView mTvQuickTest;
 
     @Override
     public void onAttach(Activity activity) {
@@ -63,9 +65,9 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                              @Nullable Bundle savedInstanceState) {
         // View 初始化
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
-        TextView tvQuickTest = (TextView) view.findViewById(R.id.homepage_quicktest);
         ImageView ivHistoryMokao = (ImageView) view.findViewById(R.id.homepage_history);
         LinearLayout llEvaluation = (LinearLayout) view.findViewById(R.id.homepage_evaluation);
+        mTvQuickTest = (TextView) view.findViewById(R.id.homepage_quicktest);
         mTvEstimate = (TextView) view.findViewById(R.id.homepage_estimate);
         mTvRanking = (TextView) view.findViewById(R.id.homepage_ranking);
         mTvTodayExam = (TextView) view.findViewById(R.id.homepage_todayexam_tv);
@@ -81,17 +83,6 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             ProgressBarManager.showProgressBar(view);
             new Request(mActivity, this).getEntryData();
         }
-
-        // 快速练习
-        tvQuickTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, MeasureActivity.class);
-                intent.putExtra("paper_type", "auto");
-                intent.putExtra("paper_name", "快速智能练习");
-                startActivity(intent);
-            }
-        });
 
         // 历史模考
         ivHistoryMokao.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +169,17 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 });
             }
         }
+
+        // 快速练习
+        mTvQuickTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+                intent.putExtra("paper_type", "auto");
+                intent.putExtra("paper_name", "快速智能练习");
+                startActivity(intent);
+            }
+        });
 
         // 直播课
         LiveCourseM liveCourse = homepageData.getLive_course();

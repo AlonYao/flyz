@@ -96,6 +96,10 @@
     <string name="evaluation_average">全站平均</string>
     <string name="evaluation_history">历史估分</string>
 
+    <!-- 练习说明 -->
+    <string name="practicedesc_start">开始练习</string>
+    <string name="practicedesc_hide">以后不再显示</string>
+
     <!-- Activity -->
     <!-- 登录注册Activity -->
     <string name="title_activity_login">登录</string>

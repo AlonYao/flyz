@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- selected -->
+    <item android:state_selected="true" android:drawable="@drawable/practicedesc_checked"/>
+
+    <!-- focused -->
+    <item android:state_focused="true" android:drawable="@drawable/practicedesc_checked"/>
+
+    <!-- pressed -->
+    <item android:state_pressed="true" android:drawable="@drawable/practicedesc_checked"/>
+
+    <!-- checked -->
+    <item android:state_checked="true" android:drawable="@drawable/practicedesc_checked"/>
+
+    <!-- not selected -->
+    <item android:drawable="@drawable/practicedesc_unchecked"/>
+</selector>
