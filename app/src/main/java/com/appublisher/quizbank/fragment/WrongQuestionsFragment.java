@@ -97,7 +97,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
                 new TreeItemHolder.TreeItem(
                         1,
                         hierarchy.getCategory_id(),
-                        hierarchy.getName()));
+                        hierarchy.getName(),
+                        "error"));
 
         root.addChild(firstRoot);
 
@@ -140,7 +141,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
                     new TreeItemHolder.TreeItem(
                             2,
                             noteGroup.getGroup_id(),
-                            noteGroup.getName()));
+                            noteGroup.getName(),
+                            "error"));
             firstRoot.addChild(secondRoot);
 
             addNotes(secondRoot, noteGroup.getNotes());
@@ -164,7 +166,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
                     new TreeItemHolder.TreeItem(
                             3,
                             note.getNote_id(),
-                            note.getName()));
+                            note.getName(),
+                            "error"));
             secondRoot.addChild(thirdRoot);
         }
     }

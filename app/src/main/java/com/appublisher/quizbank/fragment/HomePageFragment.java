@@ -19,6 +19,7 @@ import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
 import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
@@ -164,7 +165,8 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 mLlSpecial.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastManager.showToast(mActivity, "专项练习 施工中……");
+                        Intent intent = new Intent(mActivity, SpecialProjectActivity.class);
+                        startActivity(intent);
                     }
                 });
             }

@@ -63,7 +63,8 @@ public class SpecialProjectModel {
                 new TreeItemHolder.TreeItem(
                         1,
                         hierarchy.getCategory_id(),
-                        hierarchy.getName()));
+                        hierarchy.getName(),
+                        "all"));
 
         root.addChild(firstRoot);
 
@@ -106,7 +107,8 @@ public class SpecialProjectModel {
                     new TreeItemHolder.TreeItem(
                             2,
                             noteGroup.getGroup_id(),
-                            noteGroup.getName()));
+                            noteGroup.getName(),
+                            "all"));
             firstRoot.addChild(secondRoot);
 
             addNotes(secondRoot, noteGroup.getNotes());
@@ -130,7 +132,8 @@ public class SpecialProjectModel {
                     new TreeItemHolder.TreeItem(
                             3,
                             note.getNote_id(),
-                            note.getName()));
+                            note.getName(),
+                            "all"));
             secondRoot.addChild(thirdRoot);
         }
     }

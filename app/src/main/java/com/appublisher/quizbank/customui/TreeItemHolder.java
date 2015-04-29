@@ -62,7 +62,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             public void onClick(View v) {
                 Intent intent = new Intent(context, MeasureActivity.class);
                 intent.putExtra("paper_type", "note");
-                intent.putExtra("note_type", "error");
+                intent.putExtra("note_type", value.note_type);
                 intent.putExtra("paper_name", value.name);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
@@ -75,7 +75,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MeasureAnalysisActivity.class);
-                intent.putExtra("analysis_type", "error");
+                intent.putExtra("analysis_type", value.note_type);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
                 context.startActivity(intent);
@@ -85,6 +85,13 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         // 最后一层不显示开关
         if (value.level == 3) {
             mIvToggle.setVisibility(View.GONE);
+        }
+
+        // 全部专项不显示看题按钮
+        if ("all".equals(value.note_type)) {
+            ivWatch.setVisibility(View.GONE);
+        } else {
+            ivWatch.setVisibility(View.VISIBLE);
         }
 
         return view;
@@ -102,11 +109,13 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         public int level;
         public int id;
         public String name;
+        public String note_type;
 
-        public TreeItem(int level, int id, String name) {
+        public TreeItem(int level, int id, String name, String note_type) {
             this.level = level;
             this.id = id;
             this.name = name;
+            this.note_type = note_type;
         }
     }
 }
