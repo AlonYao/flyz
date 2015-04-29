@@ -81,6 +81,15 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * 跳转到MeasureActivity
      */
@@ -103,14 +112,5 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
         editor.putBoolean(mPaperType, isHide);
         editor.commit();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
