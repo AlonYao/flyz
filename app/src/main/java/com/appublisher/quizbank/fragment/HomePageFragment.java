@@ -65,6 +65,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
         TextView tvQuickTest = (TextView) view.findViewById(R.id.homepage_quicktest);
         ImageView ivHistoryMokao = (ImageView) view.findViewById(R.id.homepage_history);
+        LinearLayout llEvaluation = (LinearLayout) view.findViewById(R.id.homepage_evaluation);
         mTvEstimate = (TextView) view.findViewById(R.id.homepage_estimate);
         mTvRanking = (TextView) view.findViewById(R.id.homepage_ranking);
         mTvTodayExam = (TextView) view.findViewById(R.id.homepage_todayexam_tv);
@@ -97,6 +98,15 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, HistoryMokaoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 能力评估
+        llEvaluation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, EvaluationActivity.class);
                 startActivity(intent);
             }
         });
@@ -186,8 +196,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             mTvZhiboke.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mActivity, EvaluationActivity.class);
-                    startActivity(intent);
+                    ToastManager.showToast(mActivity, "直播课 施工中……");
                 }
             });
         }

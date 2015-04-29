@@ -3,24 +3,27 @@ package com.appublisher.quizbank.activity;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.model.CommonModel;
 import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
 import com.db.chart.view.LineChartView;
 import com.db.chart.view.XController;
 import com.db.chart.view.YController;
 
+/**
+ * 能力评估
+ */
 public class EvaluationActivity extends ActionBarActivity {
 
     private LineChartView mLineChart;
     private Paint mLineGridPaint;
     private TextView mLineTooltip;
     private final static String[] lineLabels = {"", "ANT", "GNU", "OWL", "APE", "JAY", ""};
-    private final static float[][] lineValues = { {10f, 60f, 20f, 100f, 0f, 10f, 50f} };
+    private final static float[][] lineValues = { {10, 80, 20, 100, 0, 10, 50} };
     private final static int LINE_MAX = 100;
     private final static int LINE_MIN = 0;
 
@@ -28,6 +31,9 @@ public class EvaluationActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation);
+
+        // Toolbar
+        CommonModel.setToolBar(this);
 
         mLineChart = (LineChartView) findViewById(R.id.linechart);
 
@@ -64,22 +70,9 @@ public class EvaluationActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_evaluation, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

@@ -18,6 +18,7 @@
 
             <!-- 头像&估分&排名 -->
             <LinearLayout
+                android:id="@+id/homepage_evaluation"
                 android:layout_width="293dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
