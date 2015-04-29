@@ -1,31 +1,41 @@
 package com.appublisher.quizbank.activity;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
-import com.db.chart.Tools;
-import com.db.chart.model.LineSet;
+import com.appublisher.quizbank.model.EvaluationModel;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.db.chart.view.LineChartView;
-import com.db.chart.view.XController;
-import com.db.chart.view.YController;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * 能力评估
  */
-public class EvaluationActivity extends ActionBarActivity {
+public class EvaluationActivity extends ActionBarActivity implements RequestCallback{
 
-    private LineChartView mLineChart;
-    private Paint mLineGridPaint;
-    private TextView mLineTooltip;
-    private final static String[] lineLabels = {"", "ANT", "GNU", "OWL", "APE", "JAY", ""};
-    private final static float[][] lineValues = { {10, 80, 20, 100, 0, 10, 50} };
-    private final static int LINE_MAX = 100;
-    private final static int LINE_MIN = 0;
+    public LineChartView mLineChart;
+    public TextView mTvScore;
+    public TextView mTvRank;
+    public TextView mTvLearningDays;
+    public TextView mTvTotalTime;
+    public TextView mTvTotalQuestions;
+    public TextView mTvAvarageQuestions;
+    public TextView mTvAccuracy;
+    public TextView mTvAvarageAccuracy;
+    public TextView mTvSummarySource;
+    public TextView mTvCalculationBasis;
+    public TextView mTvSummaryDate;
+    public LinearLayout mLlHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,38 +45,24 @@ public class EvaluationActivity extends ActionBarActivity {
         // Toolbar
         CommonModel.setToolBar(this);
 
+        // View 初始化
         mLineChart = (LineChartView) findViewById(R.id.linechart);
+        mTvScore = (TextView) findViewById(R.id.evaluation_score_tv);
+        mTvRank = (TextView) findViewById(R.id.evaluation_rank_tv);
+        mTvLearningDays = (TextView) findViewById(R.id.evaluation_learningdays_tv);
+        mTvTotalTime = (TextView) findViewById(R.id.evaluation_totaltime_tv);
+        mTvTotalQuestions = (TextView) findViewById(R.id.evaluation_totalquestions_tv);
+        mTvAvarageQuestions = (TextView) findViewById(R.id.evaluation_avaragequestions_tv);
+        mTvAccuracy = (TextView) findViewById(R.id.evaluation_accuracy_tv);
+        mTvAvarageAccuracy = (TextView) findViewById(R.id.evaluation_avarageaccuracy_tv);
+        mLlHistory = (LinearLayout) findViewById(R.id.evaluation_history_ll);
+        mTvSummarySource = (TextView) findViewById(R.id.evaluation_summarysource);
+        mTvCalculationBasis = (TextView) findViewById(R.id.evaluation_calculationbasis);
+        mTvSummaryDate = (TextView) findViewById(R.id.evaluation_summarydate);
 
-        mLineGridPaint = new Paint();
-        mLineGridPaint.setColor(this.getResources().getColor(R.color.setting_line));
-        mLineGridPaint.setStyle(Paint.Style.STROKE);
-        mLineGridPaint.setAntiAlias(true);
-        mLineGridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
-
-        mLineChart.reset();
-
-        LineSet dataSet = new LineSet();
-        dataSet.addPoints(lineLabels, lineValues[0]);
-        dataSet.setSmooth(true);
-        dataSet.setDashed(false);
-        dataSet.setDots(true)
-                .setDotsColor(this.getResources().getColor(R.color.evaluation_diagram_line))
-                .setDotsRadius(Tools.fromDpToPx(5))
-                .setDotsStrokeThickness(Tools.fromDpToPx(2))
-                .setDotsStrokeColor(this.getResources().getColor(R.color.evaluation_diagram_line))
-                .setLineColor(this.getResources().getColor(R.color.evaluation_diagram_line))
-                .setLineThickness(Tools.fromDpToPx(3))
-                .beginAt(1).endAt(lineLabels.length - 1);
-        mLineChart.addData(dataSet);
-
-        mLineChart.setBorderSpacing(Tools.fromDpToPx(4))
-                .setGrid(LineChartView.GridType.FULL, mLineGridPaint)
-                .setXAxis(false)
-                .setXLabels(XController.LabelPosition.OUTSIDE)
-                .setYAxis(false)
-                .setYLabels(YController.LabelPosition.OUTSIDE)
-                .setAxisBorderValues(LINE_MIN, LINE_MAX, 20)
-                .show();
+        // 获取数据
+        ProgressDialogManager.showProgressDialog(this, true);
+        new Request(this, this).getEvaluation();
     }
 
     @Override
@@ -76,5 +72,22 @@ public class EvaluationActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("evaluation".equals(apiName)) EvaluationModel.dealEvaluationResp(this, response);
+
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        ProgressDialogManager.closeProgressDialog();
     }
 }

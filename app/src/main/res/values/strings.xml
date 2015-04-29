@@ -91,7 +91,7 @@
     <string name="evaluation_totalquestions">答题量</string>
     <string name="evaluation_accuracy">正确率</string>
     <string name="evaluation_day">天</string>
-    <string name="evaluation_sec">秒</string>
+    <string name="evaluation_min">分钟</string>
     <string name="evaluation_dao">道</string>
     <string name="evaluation_average">全站平均</string>
     <string name="evaluation_history">历史估分</string>

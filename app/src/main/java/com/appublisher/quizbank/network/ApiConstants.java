@@ -80,6 +80,9 @@ public interface ApiConstants {
     // 获取学习记录列表
     String getHistoryPapers = baseUrl + "quizbank/get_history_papers";
 
+    // 获取能力评估
+    String getEvaluation = baseUrl + "quizbank/get_evaluation";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

@@ -174,6 +174,13 @@ public class Request extends BaseRequest implements ApiConstants{
                 + "&count=" + count, "history_papers", "object");
     }
 
+    /**
+     * 获取能力评估
+     */
+    public void getEvaluation() {
+        asyncRequest(ParamBuilder.finalUrl(getEvaluation), "evaluation", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

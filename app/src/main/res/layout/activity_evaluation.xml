@@ -41,6 +41,7 @@
                         android:text="@string/evaluation_score"/>
 
                     <TextView
+                        android:id="@+id/evaluation_score_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/setting_text"
@@ -66,6 +67,7 @@
                             android:text="@string/evaluation_rank"/>
 
                         <TextView
+                            android:id="@+id/evaluation_rank_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/setting_text"
@@ -114,6 +116,7 @@
                         style="@style/EvaluationListRightLl">
 
                         <TextView
+                            android:id="@+id/evaluation_learningdays_tv"
                             style="@style/EvaluationListCountTvBig"/>
 
                         <TextView
@@ -149,6 +152,7 @@
                         style="@style/EvaluationListRightLl">
 
                         <TextView
+                            android:id="@+id/evaluation_totaltime_tv"
                             style="@style/EvaluationListCountTvBig"/>
 
                         <TextView
@@ -156,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/setting_text"
                             android:textSize="16sp"
-                            android:text="@string/evaluation_sec"/>
+                            android:text="@string/evaluation_min"/>
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -200,6 +204,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/evaluation_totalquestions_tv"
                                 style="@style/EvaluationListCountTvBig"/>
 
                             <TextView
@@ -215,6 +220,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/evaluation_avaragequestions_tv"
                                 style="@style/EvaluationListCountTvSmall"/>
 
                             <TextView
@@ -266,6 +272,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/evaluation_accuracy_tv"
                                 style="@style/EvaluationListCountTvBig"/>
 
                             <TextView
@@ -281,6 +288,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/evaluation_avarageaccuracy_tv"
                                 style="@style/EvaluationListCountTvSmall"/>
 
                             <TextView
@@ -294,23 +302,62 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/evaluation_history_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/evaluation_history"/>
+
+                <!-- 折线图 -->
+                <com.db.chart.view.LineChartView
+                    android:id="@+id/linechart"
+                    android:layout_width="match_parent"
+                    android:layout_height="209dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="36dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/evaluation_history"/>
+                android:layout_marginLeft="36dp"
+                android:layout_marginRight="36dp"
+                android:orientation="vertical">
 
-            <!-- 折线图 -->
-            <com.db.chart.view.LineChartView
-                android:id="@+id/linechart"
-                android:layout_width="match_parent"
-                android:layout_height="209dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"/>
+                <TextView
+                    android:id="@+id/evaluation_summarysource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/evaluation_text_gray"/>
+
+                <TextView
+                    android:id="@+id/evaluation_calculationbasis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/evaluation_text_gray"/>
+
+                <TextView
+                    android:id="@+id/evaluation_summarydate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/evaluation_text_gray"/>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
