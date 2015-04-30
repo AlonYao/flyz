@@ -22,6 +22,8 @@ import java.util.ArrayList;
  */
 public class StudyRecordModel {
 
+    private static HistoryPapersListAdapter mHistoryPapersListAdapter;
+
     /**
      * 处理学习记录回调
      * @param fragment StudyRecordFragment
@@ -44,15 +46,16 @@ public class StudyRecordModel {
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mHistoryPapers = historyPapers;
+
+            mHistoryPapersListAdapter = new HistoryPapersListAdapter(
+                    fragment.mActivity, fragment.mHistoryPapers);
+
+            fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
         } else {
             fragment.mHistoryPapers.addAll(historyPapers);
+
+            mHistoryPapersListAdapter.notifyDataSetChanged();
         }
-
-        HistoryPapersListAdapter historyPapersListAdapter =
-                new HistoryPapersListAdapter(
-                        fragment.mActivity, fragment.mHistoryPapers);
-
-        fragment.mXListView.setAdapter(historyPapersListAdapter);
 
         fragment.mXListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
