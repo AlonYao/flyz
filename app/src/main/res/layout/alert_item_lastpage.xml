@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/alert_lastpage_logo"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/alert_lastpage_btn_list"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="288dp"
+            android:layout_height="54dp"
+            android:gravity="center"
+            android:text="再来一发"
+            android:textColor="@android:color/white"
+            android:background="@drawable/alert_lastpage_btn_another"/>
+
+        <TextView
+            android:layout_width="288dp"
+            android:layout_height="54dp"
+            android:gravity="center"
+            android:text="返回"
+            android:textColor="@android:color/white"
+            android:background="@color/alert_lastpage_back"/>
+
+        <TextView
+            android:layout_width="288dp"
+            android:layout_height="54dp"
+            android:gravity="center"
+            android:text="看个直播"
+            android:textColor="@android:color/white"
+            android:background="@drawable/alert_lastpage_btn_without_zhibo"/>
+    </LinearLayout>
+
+</LinearLayout>
