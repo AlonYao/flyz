@@ -6,7 +6,7 @@ import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.utils.Logger;
+import com.appublisher.quizbank.utils.AlertManager;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class MeasureAnalysisModel {
      * @param questions 问题
      * @param answers 答案
      */
-    public static void setViewPager(MeasureAnalysisActivity activity,
+    public static void setViewPager(final MeasureAnalysisActivity activity,
                                     final ArrayList<QuestionM> questions,
                                     ArrayList<AnswerM> answers) {
         if (questions == null || questions.size() == 0) return;
@@ -45,7 +45,7 @@ public class MeasureAnalysisModel {
                     if (!mIsShowAlert) {
                         mIsShowAlert = true;
                     } else {
-                        Logger.i("show Alert");
+                        AlertManager.lastPageAlert(activity);
                     }
                 }
             }

@@ -31,4 +31,9 @@
     <color name="evaluation_diagram_line">#39AC7E</color>
     <color name="evaluation_text_gray">#8A8D90</color>
 
+    <color name="alert_lastpage_another">#00ACC2</color>
+    <color name="alert_lastpage_back">#38B3A1</color>
+    <color name="alert_lastpage_has_zhibo">#64BE88</color>
+    <color name="alert_lastpage_without_zhibo">#C7C7CC</color>
+
 </resources>

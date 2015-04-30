@@ -8,12 +8,15 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.model.MeasureModel;
 
 /**
  * Alert管理
  */
 public class AlertManager {
+
+    private static AlertDialog mAlertLastPage;
 
     /**
      * 暂停Alert
@@ -67,5 +70,20 @@ public class AlertManager {
                                 activity.finish();
                             }
                         }).show();
+    }
+
+    /**
+     * 末题引导Alert
+     * @param activity MeasureAnalysisActivity
+     */
+    public static void lastPageAlert(MeasureAnalysisActivity activity) {
+        if (mAlertLastPage != null && mAlertLastPage.isShowing()) return;
+
+        mAlertLastPage = new AlertDialog.Builder(activity).create();
+        mAlertLastPage.setCancelable(true);
+        mAlertLastPage.show();
+
+        Window window = mAlertLastPage.getWindow();
+        window.setContentView(R.layout.alert_item_lastpage);
     }
 }
