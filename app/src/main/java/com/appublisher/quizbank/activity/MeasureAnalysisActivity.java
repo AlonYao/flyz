@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
@@ -41,6 +41,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
+    private int mCurPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,19 +97,14 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             ProgressDialogManager.showProgressDialog(this, true);
             request.getHistoryExerciseDetail(exerciseId, analysisType);
         } else {
-            @SuppressWarnings("unchecked") ArrayList<QuestionM> questions =
+            //noinspection unchecked
+            ArrayList<QuestionM> questions =
                     (ArrayList<QuestionM>) getIntent().getSerializableExtra("questions");
 
             @SuppressWarnings("unchecked") ArrayList<AnswerM> answers =
                     (ArrayList<AnswerM>) getIntent().getSerializableExtra("answers");
 
-            if (questions != null && questions.size() != 0) {
-                MeasureAnalysisAdapter adapter = new MeasureAnalysisAdapter(
-                        this,
-                        questions,
-                        answers);
-                mViewPager.setAdapter(adapter);
-            }
+            MeasureAnalysisModel.setViewPager(this, questions, answers);
         }
     }
 
@@ -149,6 +145,16 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mPopupWindow != null) mPopupWindow.dismiss();
+    }
+
+    /**
+     * 初始化popup菜单
+     */
     private void initPopupWindowView() {
         @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(
                 R.layout.measure_analysis_popup_feedback,
@@ -225,13 +231,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if (measureAnalysisResp == null || measureAnalysisResp.getResponse_code() != 1) return;
         ArrayList<QuestionM> questions = measureAnalysisResp.getQuestions();
 
-        if (questions == null || questions.size() == 0) return;
-
-        MeasureAnalysisAdapter adapter = new MeasureAnalysisAdapter(
-                this,
-                questions,
-                measureAnalysisResp.getAnswers());
-        mViewPager.setAdapter(adapter);
+        MeasureAnalysisModel.setViewPager(this, questions, measureAnalysisResp.getAnswers());
     }
 
     @Override
