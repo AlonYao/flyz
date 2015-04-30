@@ -5,12 +5,12 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.model.netdata.history.HistoryPapersResp;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -69,8 +69,17 @@ public class StudyRecordModel {
                 String status = historyPaper.getStatus();
 
                 if ("done".equals(status)) {
-                    ToastManager.showToast(fragment.mActivity, "能力评估页面 施工中……");
+                    // 跳转至练习报告页面
+                    Intent intent = new Intent(fragment.mActivity, PracticeReportActivity.class);
+                    intent.putExtra("from", "study_record");
+                    intent.putExtra("exercise_id", historyPaper.getPaper_id());
+                    intent.putExtra("paper_type",
+                            convertPaperType(historyPaper.getPaper_type()));
+                    intent.putExtra("paper_name",
+                            convertPaperType(historyPaper.getName()));
+                    fragment.mActivity.startActivity(intent);
                 } else if ("undone".equals(status)) {
+                    // 跳转至做题页面
                     Intent intent = new Intent(fragment.mActivity, MeasureActivity.class);
                     intent.putExtra("exercise_id", historyPaper.getPaper_id());
                     intent.putExtra("paper_type",
