@@ -76,7 +76,7 @@ public class AlertManager {
      * 末题引导Alert
      * @param activity MeasureAnalysisActivity
      */
-    public static void lastPageAlert(MeasureAnalysisActivity activity) {
+    public static void lastPageAlert(final MeasureAnalysisActivity activity) {
         if (mAlertLastPage != null && mAlertLastPage.isShowing()) return;
 
         mAlertLastPage = new AlertDialog.Builder(activity).create();
@@ -85,5 +85,41 @@ public class AlertManager {
 
         Window window = mAlertLastPage.getWindow();
         window.setContentView(R.layout.alert_item_lastpage);
+
+        TextView tvAnother = (TextView) window.findViewById(R.id.alert_lastpage_another);
+        TextView tvBack = (TextView) window.findViewById(R.id.alert_lastpage_back);
+        TextView tvZhibo = (TextView) window.findViewById(R.id.alert_lastpage_zhibo);
+
+        // 再来一发
+        if ("mokao".equals(activity.mAnalysisType) || "entire".equals(activity.mAnalysisType)) {
+            tvAnother.setVisibility(View.GONE);
+        } else {
+            tvAnother.setVisibility(View.VISIBLE);
+        }
+
+        tvAnother.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastManager.showToast(activity, "直播中");
+            }
+        });
+
+        // 返回
+        tvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertLastPage.dismiss();
+                mAlertLastPage = null;
+                activity.finish();
+            }
+        });
+
+        // 看个直播
+        tvZhibo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastManager.showToast(activity, "直播课 施工中……");
+            }
+        });
     }
 }

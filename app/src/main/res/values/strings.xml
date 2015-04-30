@@ -83,6 +83,10 @@
     <string name="alert_savetest_title">提示</string>
     <string name="alert_savetest_msg">确定要退出练习？退出后未完成的练习会保存在练习历史中</string>
 
+    <string name="alert_lastpage_another">再来一发</string>
+    <string name="alert_lastpage_back">返回</string>
+    <string name="alert_lastpage_zhibo">看个直播</string>
+
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>
     <string name="evaluation_rank">排在前</string>

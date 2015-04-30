@@ -18,28 +18,31 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/alert_lastpage_another"
             android:layout_width="288dp"
             android:layout_height="54dp"
             android:gravity="center"
-            android:text="再来一发"
+            android:text="@string/alert_lastpage_another"
             android:textColor="@android:color/white"
             android:background="@drawable/alert_lastpage_btn_another"/>
 
         <TextView
+            android:id="@+id/alert_lastpage_back"
             android:layout_width="288dp"
             android:layout_height="54dp"
             android:gravity="center"
-            android:text="返回"
+            android:text="@string/alert_lastpage_back"
             android:textColor="@android:color/white"
             android:background="@color/alert_lastpage_back"/>
 
         <TextView
+            android:id="@+id/alert_lastpage_zhibo"
             android:layout_width="288dp"
             android:layout_height="54dp"
             android:gravity="center"
-            android:text="看个直播"
+            android:text="@string/alert_lastpage_zhibo"
             android:textColor="@android:color/white"
-            android:background="@drawable/alert_lastpage_btn_without_zhibo"/>
+            android:background="@drawable/alert_lastpage_btn_has_zhibo"/>
     </LinearLayout>
 
 </LinearLayout>
