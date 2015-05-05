@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
+import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
@@ -138,7 +139,11 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                         String status = todayExam.getStatus();
 
                         if ("done".equals(status)) {
-                            ToastManager.showToast(mActivity, "模考解析 施工中……");
+                            Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
+                            intent.putExtra("analysis_type", "mokao");
+                            intent.putExtra("exercise_id", todayExam.getId());
+                            startActivity(intent);
+
                         } else {
                             Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
                             intent.putExtra("paper_id", todayExam.getId());
