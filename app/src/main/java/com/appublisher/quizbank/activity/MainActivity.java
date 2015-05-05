@@ -246,11 +246,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        // Nothing
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        // Nothing
     }
 }

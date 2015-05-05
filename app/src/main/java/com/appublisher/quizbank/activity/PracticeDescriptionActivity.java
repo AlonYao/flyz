@@ -14,7 +14,15 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.db.GlobalSetting;
+import com.appublisher.quizbank.model.netdata.globalsettings.ExerciseIntroM;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 /**
  * 练习说明
@@ -23,6 +31,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
 
     private String mPaperType;
     private String mPaperName;
+    private TextView mTvDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +42,17 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         CommonModel.setToolBar(this);
 
         // View 初始化
-        TextView tvDesc = (TextView) findViewById(R.id.practicedesc_content);
+        mTvDesc = (TextView) findViewById(R.id.practicedesc_content);
         TextView tvStart = (TextView) findViewById(R.id.practicedesc_start);
         LinearLayout llHide = (LinearLayout) findViewById(R.id.practicedesc_hide_ll);
         final CheckBox cbHide = (CheckBox) findViewById(R.id.practicedesc_hide_cb);
 
         // 获取数据
-        String desc = getIntent().getStringExtra("desc");
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
 
-        if (desc == null) desc = "";
-        tvDesc.setText(desc.replaceAll("，", "/n"));
+        // 设置描述文字
+        setDesc();
 
         if (mPaperType == null || mPaperType.length() == 0) finish();
 
@@ -112,5 +120,39 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
         editor.putBoolean(mPaperType, isHide);
         editor.commit();
+    }
+
+    /**
+     * 设置描述文字
+     */
+    private void setDesc() {
+        GlobalSetting globalSetting = GlobalSettingDAO.findById();
+
+        if (globalSetting == null) return;
+
+        String content = globalSetting.content;
+
+        Gson gson = GsonManager.initGson();
+        GlobalSettingsResp globalSettingsResp = gson.fromJson(content, GlobalSettingsResp.class);
+
+        if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1) return;
+
+        ArrayList<ExerciseIntroM> exerciseIntros = globalSettingsResp.getExercise_intro();
+
+        if (exerciseIntros == null || exerciseIntros.size() == 0) return;
+
+        int size = exerciseIntros.size();
+        for (int i = 0; i < size; i++) {
+            ExerciseIntroM exerciseIntro = exerciseIntros.get(i);
+
+            if (exerciseIntro == null) continue;
+
+            String desc = exerciseIntro.getIntro();
+            String type = exerciseIntro.getType();
+
+            if (type != null && mPaperType.equals(type) && desc != null) {
+                mTvDesc.setText(desc.replaceAll("，", "\n"));
+            }
+        }
     }
 }
