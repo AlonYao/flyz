@@ -66,8 +66,6 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                              @Nullable Bundle savedInstanceState) {
         // View 初始化
         mView = inflater.inflate(R.layout.fragment_homepage, container, false);
-        ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
-        LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
         mTvQuickTest = (TextView) mView.findViewById(R.id.homepage_quicktest);
         mTvEstimate = (TextView) mView.findViewById(R.id.homepage_estimate);
         mTvRanking = (TextView) mView.findViewById(R.id.homepage_ranking);
@@ -76,6 +74,9 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         mTvZhiboke = (TextView) mView.findViewById(R.id.homepage_zhiboke);
         mLlMokao = (LinearLayout) mView.findViewById(R.id.homepage_todayexam_ll);
         mLlSpecial = (LinearLayout) mView.findViewById(R.id.homepage_special_ll);
+        ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
+        ImageView ivSpecial = (ImageView) mView.findViewById(R.id.homepage_special);
+        LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
 
         // 历史模考
         ivHistoryMokao.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +92,15 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, EvaluationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 全部专项
+        ivSpecial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, SpecialProjectActivity.class);
                 startActivity(intent);
             }
         });
@@ -162,15 +172,21 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 });
             }
 
-            // 知识点专项训练
-            PaperNoteM note = pager.getNote();
+            // 推荐专项训练
+            final PaperNoteM note = pager.getNote();
             if (note != null) {
                 mTvSpecial.setText(note.getName());
 
                 mLlSpecial.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mActivity, SpecialProjectActivity.class);
+                        Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+                        intent.putExtra("hierarchy_id", note.getId());
+                        intent.putExtra("hierarchy_level", 3);
+                        intent.putExtra("paper_type", "note");
+                        intent.putExtra("note_type", "all");
+                        intent.putExtra("paper_name", note.getName());
+                        intent.putExtra("redo", false);
                         startActivity(intent);
                     }
                 });

@@ -34,6 +34,9 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
     private TextView mTvDesc;
     private int mPaperId;
     private boolean mRedo;
+    private int mHierarchyId;
+    private int mHierarchyLevel;
+    private String mNoteType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,9 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         mPaperName = getIntent().getStringExtra("paper_name");
         mPaperId = getIntent().getIntExtra("paper_id", 0);
         mRedo = getIntent().getBooleanExtra("redo", false);
+        mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
+        mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
+        mNoteType = getIntent().getStringExtra("note_type");
 
         // 设置描述文字
         setDesc();
@@ -111,6 +117,9 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         intent.putExtra("paper_name", mPaperName);
         intent.putExtra("paper_id", mPaperId);
         intent.putExtra("redo", mRedo);
+        intent.putExtra("hierarchy_id", mHierarchyId);
+        intent.putExtra("hierarchy_level", mHierarchyLevel);
+        intent.putExtra("note_type", mNoteType);
         startActivity(intent);
         finish();
     }
