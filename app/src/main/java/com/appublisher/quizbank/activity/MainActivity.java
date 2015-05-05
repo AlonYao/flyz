@@ -215,6 +215,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     private void hideFragments(FragmentTransaction transaction) {
         if (mHomePageFragment != null) {
             transaction.hide(mHomePageFragment);
+            transaction.remove(mHomePageFragment);
+            mHomePageFragment = null;
         }
 
         if (mWholePageFragment != null) {
@@ -231,6 +233,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         if (mStudyRecordFragment != null) {
             transaction.hide(mStudyRecordFragment);
+            transaction.remove(mStudyRecordFragment);
+            mStudyRecordFragment = null;
         }
 
         if (mSettingFragment != null) {
