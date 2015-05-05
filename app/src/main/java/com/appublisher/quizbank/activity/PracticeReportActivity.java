@@ -6,14 +6,21 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.PracticeReportModel;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * 练习报告Activity
  */
-public class PracticeReportActivity extends ActionBarActivity {
+public class PracticeReportActivity extends ActionBarActivity implements RequestCallback{
 
     public TextView mTvPaperName;
     public TextView mTvRightNum;
@@ -23,6 +30,7 @@ public class PracticeReportActivity extends ActionBarActivity {
     public TextView mTvError;
     public LinearLayout mLlCategoryContainer;
     public LinearLayout mLlNoteContainer;
+    public String mPaperName;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -45,7 +53,18 @@ public class PracticeReportActivity extends ActionBarActivity {
         mTvError = (TextView) findViewById(R.id.practice_report_error);
 
         // 获取数据
-        PracticeReportModel.getData(this);
+        String from = getIntent().getStringExtra("from");
+
+        if ("study_record".equals(from)) {
+            int exerciseId = getIntent().getIntExtra("exercise_id", 0);
+            String exerciseType = getIntent().getStringExtra("paper_type");
+            mPaperName = getIntent().getStringExtra("paper_name");
+
+            ProgressDialogManager.showProgressDialog(this, true);
+            new Request(this, this).getHistoryExerciseDetail(exerciseId, exerciseType);
+        } else {
+            PracticeReportModel.getData(this);
+        }
     }
 
     @Override
@@ -55,5 +74,23 @@ public class PracticeReportActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("history_exercise_detail".equals(apiName))
+            PracticeReportModel.dealHistoryExerciseDetailResp(this, response);
+
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        ProgressDialogManager.closeProgressDialog();
     }
 }
