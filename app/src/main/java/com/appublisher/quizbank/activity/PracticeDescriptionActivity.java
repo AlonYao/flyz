@@ -32,6 +32,8 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
     private String mPaperType;
     private String mPaperName;
     private TextView mTvDesc;
+    private int mPaperId;
+    private boolean mRedo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         // 获取数据
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
+        mPaperId = getIntent().getIntExtra("paper_id", 0);
+        mRedo = getIntent().getBooleanExtra("redo", false);
 
         // 设置描述文字
         setDesc();
@@ -105,6 +109,8 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         Intent intent = new Intent(this, MeasureActivity.class);
         intent.putExtra("paper_type", mPaperType);
         intent.putExtra("paper_name", mPaperName);
+        intent.putExtra("paper_id", mPaperId);
+        intent.putExtra("redo", mRedo);
         startActivity(intent);
         finish();
     }

@@ -17,7 +17,6 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
-import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
@@ -140,7 +139,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                         if ("done".equals(status)) {
                             ToastManager.showToast(mActivity, "模考解析 施工中……");
                         } else {
-                            Intent intent = new Intent(mActivity, MeasureActivity.class);
+                            Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
                             intent.putExtra("paper_id", todayExam.getId());
                             intent.putExtra("paper_type", "mokao");
                             intent.putExtra("paper_name", "今日模考");
