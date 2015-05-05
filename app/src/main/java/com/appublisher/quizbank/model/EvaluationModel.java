@@ -6,7 +6,9 @@ import android.view.View;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.model.netdata.evaluation.EvaluationResp;
+import com.appublisher.quizbank.model.netdata.evaluation.HistoryScoreM;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
 import com.db.chart.view.LineChartView;
@@ -66,47 +68,63 @@ public class EvaluationModel {
         activity.mTvSummaryDate.setText("报告时间：" + summaryDate);
 
         // 绘制折线图
-        ArrayList<Object> historyScores = evaluationResp.getHistory_score();
+        ArrayList<HistoryScoreM> historyScores = evaluationResp.getHistory_score();
+        String[] lineLabels= new String[]{"", "", "", "", "", "", ""};  // X轴上显示的文字
+        float[] lineValues = new float[]{0, 0, 0, 0, 0, 0, 0};  // 各个点的分值
+        int size;
 
         if (historyScores != null && historyScores.size() != 0) {
-            String[] lineLabels = {"", "ANT", "GNU", "OWL", "APE", "JAY", ""};
-            float[][] lineValues = { {10, 80, 20, 100, 0, 10, 50} };
+            size = historyScores.size();
 
-            Paint lineGridPaint = new Paint();
-            lineGridPaint.setColor(activity.getResources().getColor(R.color.setting_line));
-            lineGridPaint.setStyle(Paint.Style.STROKE);
-            lineGridPaint.setAntiAlias(true);
-            lineGridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
+            for (int i = 0; i < size; i++) {
+                HistoryScoreM historyScore = historyScores.get(i);
 
-            activity.mLineChart.reset();
+                if (historyScore == null) continue;
 
-            LineSet dataSet = new LineSet();
-            dataSet.addPoints(lineLabels, lineValues[0]);
-            dataSet.setSmooth(true);
-            dataSet.setDashed(false);
-            dataSet.setDots(true)
-                    .setDotsColor(activity.getResources().getColor(R.color.evaluation_diagram_line))
-                    .setDotsRadius(Tools.fromDpToPx(5))
-                    .setDotsStrokeThickness(Tools.fromDpToPx(2))
-                    .setDotsStrokeColor(
-                            activity.getResources().getColor(R.color.evaluation_diagram_line))
-                    .setLineColor(activity.getResources().getColor(R.color.evaluation_diagram_line))
-                    .setLineThickness(Tools.fromDpToPx(3))
-                    .beginAt(1).endAt(lineLabels.length - 1);
-            activity.mLineChart.addData(dataSet);
+                String itemDate = historyScore.getDate();
+                int itemScore = historyScore.getScore();
 
-            activity.mLineChart.setBorderSpacing(Tools.fromDpToPx(4))
-                    .setGrid(LineChartView.GridType.FULL, lineGridPaint)
-                    .setXAxis(false)
-                    .setXLabels(XController.LabelPosition.OUTSIDE)
-                    .setYAxis(false)
-                    .setYLabels(YController.LabelPosition.OUTSIDE)
-                    .setAxisBorderValues(0, 100, 20)
-                    .show();
+                lineLabels[i] = Utils.switchDate(itemDate, "hh-dd");
+                lineValues[i] = itemScore;
+            }
 
-            activity.mLlHistory.setVisibility(View.VISIBLE);
         } else {
-            activity.mLlHistory.setVisibility(View.GONE);
+            size = 1;
         }
+
+        // 根据值绘图
+        Paint lineGridPaint = new Paint();
+        lineGridPaint.setColor(activity.getResources().getColor(R.color.setting_line));
+        lineGridPaint.setStyle(Paint.Style.STROKE);
+        lineGridPaint.setAntiAlias(true);
+        lineGridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
+
+        activity.mLineChart.reset();
+
+        LineSet dataSet = new LineSet();
+        dataSet.addPoints(lineLabels, lineValues);
+        dataSet.setSmooth(true);
+        dataSet.setDashed(false);
+        dataSet.setDots(true)
+                .setDotsColor(activity.getResources().getColor(R.color.evaluation_diagram_line))
+                .setDotsRadius(Tools.fromDpToPx(5))
+                .setDotsStrokeThickness(Tools.fromDpToPx(2))
+                .setDotsStrokeColor(
+                        activity.getResources().getColor(R.color.evaluation_diagram_line))
+                .setLineColor(activity.getResources().getColor(R.color.evaluation_diagram_line))
+                .setLineThickness(Tools.fromDpToPx(3))
+                .beginAt(0).endAt(size);
+        activity.mLineChart.addData(dataSet);
+
+        activity.mLineChart.setBorderSpacing(Tools.fromDpToPx(4))
+                .setGrid(LineChartView.GridType.FULL, lineGridPaint)
+                .setXAxis(false)
+                .setXLabels(XController.LabelPosition.OUTSIDE)
+                .setYAxis(false)
+                .setYLabels(YController.LabelPosition.OUTSIDE)
+                .setAxisBorderValues(0, 100, 20)
+                .show();
+
+        activity.mLlHistory.setVisibility(View.VISIBLE);
     }
 }

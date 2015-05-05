@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.utils;
 
 
+import android.annotation.SuppressLint;
+
 import com.appublisher.quizbank.Globals;
 
 import org.json.JSONArray;
@@ -79,7 +81,8 @@ public class Utils {
     public static String DateToString(Date date, String format) {
         if (date != null && format != null) {
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat(format);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf =
+                        new SimpleDateFormat(format);
                 return sdf.format(date);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -95,7 +98,7 @@ public class Utils {
      */
     public static Date getYesterdayDate() {
         Date dNow = new Date();   //当前时间
-        Date dBefore = new Date();
+        Date dBefore;
 
         Calendar calendar = Calendar.getInstance();  //得到日历
         calendar.setTime(dNow);//把当前时间赋给日历
@@ -153,4 +156,23 @@ public class Utils {
         return day;
     }
 
+    /**
+     * 日期转换
+     * @param date 原日期
+     * @param targetType 转换后的日期类型
+     * @return 转换后的日期
+     */
+    public static String switchDate(String date, String targetType) {
+        if (date == null || date.equals("")) return "";
+
+        if ("hh-dd".equals(targetType)) {
+            try {
+                return date.substring(5, 10);
+            } catch (Exception e) {
+                return "";
+            }
+        }
+
+        return "";
+    }
 }

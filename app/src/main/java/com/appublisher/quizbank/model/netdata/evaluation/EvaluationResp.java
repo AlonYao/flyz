@@ -16,7 +16,7 @@ public class EvaluationResp {
     int avarage_questions;
     float accuracy;
     float avarage_accuracy;
-    ArrayList<Object> history_score;
+    ArrayList<HistoryScoreM> history_score;
     String summary_source;
     String calculation_basis;
     String summary_date;
@@ -49,7 +49,7 @@ public class EvaluationResp {
         return avarage_questions;
     }
 
-    public ArrayList<Object> getHistory_score() {
+    public ArrayList<HistoryScoreM> getHistory_score() {
         return history_score;
     }
 
