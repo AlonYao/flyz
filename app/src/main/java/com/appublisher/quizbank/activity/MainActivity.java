@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.SettingFragment;
@@ -22,9 +24,14 @@ import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     private DrawerLayout mDrawerLayout;
     private FragmentManager mFragmentManager;
@@ -78,6 +85,9 @@ public class MainActivity extends ActionBarActivity {
 
         // 默认选中首页
         changeFragment(0);
+
+        // 获取全局配置
+        new Request(this, this).getGlobalSettings();
     }
 
     @Override
@@ -226,5 +236,21 @@ public class MainActivity extends ActionBarActivity {
         if (mSettingFragment != null) {
             transaction.hide(mSettingFragment);
         }
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("global_settings".equals(apiName) && response != null)
+            GlobalSettingDAO.save(response.toString());
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+
     }
 }
