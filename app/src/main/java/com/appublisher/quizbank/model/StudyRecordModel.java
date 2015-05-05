@@ -76,20 +76,16 @@ public class StudyRecordModel {
                     Intent intent = new Intent(fragment.mActivity, PracticeReportActivity.class);
                     intent.putExtra("from", "study_record");
                     intent.putExtra("exercise_id", historyPaper.getPaper_id());
-                    intent.putExtra("paper_type",
-                            convertPaperType(historyPaper.getPaper_type()));
-                    intent.putExtra("paper_name",
-                            convertPaperType(historyPaper.getName()));
+                    intent.putExtra("paper_type", historyPaper.getPaper_type());
+                    intent.putExtra("paper_name", historyPaper.getName());
                     fragment.mActivity.startActivity(intent);
 
                 } else if ("undone".equals(status)) {
                     // 跳转至做题页面
                     Intent intent = new Intent(fragment.mActivity, MeasureActivity.class);
                     intent.putExtra("exercise_id", historyPaper.getPaper_id());
-                    intent.putExtra("paper_type",
-                            convertPaperType(historyPaper.getPaper_type()));
-                    intent.putExtra("paper_name",
-                            convertPaperType(historyPaper.getName()));
+                    intent.putExtra("paper_type", historyPaper.getPaper_type());
+                    intent.putExtra("paper_name", historyPaper.getName());
                     intent.putExtra("redo", true);
                     fragment.mActivity.startActivity(intent);
                 }
@@ -97,28 +93,4 @@ public class StudyRecordModel {
         });
     }
 
-    /**
-     * 试卷类型转换
-     * @param paperType 试卷类型
-     * @return 转换后的数据类型
-     */
-    private static String convertPaperType(String paperType) {
-        if ("整卷练习".equals(paperType)) {
-            return "entire";
-        } else if ("天天模考".equals(paperType)) {
-            return "mokao";
-        } else if ("专项练习".equals(paperType)) {
-            return "note";
-        } else if ("快速练习".equals(paperType)) {
-            return "auto";
-        } else if ("错题练习".equals(paperType)) {
-            return "error";
-        } else if ("收藏练习".equals(paperType)) {
-            return "collect";
-        } else if ("估分".equals(paperType)) {
-            return "evaluate";
-        }
-
-        return "";
-    }
 }

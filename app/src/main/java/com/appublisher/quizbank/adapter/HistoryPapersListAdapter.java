@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
-import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
 
 import java.util.ArrayList;
 
@@ -97,19 +96,19 @@ public class HistoryPapersListAdapter extends BaseAdapter{
      * @param paperType 试卷类型
      */
     private void setLogo(ImageView ivLogo, String paperType) {
-        if ("整卷练习".equals(paperType)) {
+        if ("entire".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_entire);
-        } else if ("天天模考".equals(paperType)) {
+        } else if ("mokao".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_mokao);
-        } else if ("专项练习".equals(paperType)) {
+        } else if ("note".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_special);
-        } else if ("快速练习".equals(paperType)) {
+        } else if ("auto".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_auto);
-        } else if ("错题练习".equals(paperType)) {
+        } else if ("error".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_wrong);
-        } else if ("收藏练习".equals(paperType)) {
+        } else if ("collect".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_collect);
-        } else if ("估分".equals(paperType)) {
+        } else if ("evaluate".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_estimate);
         } else {
             ivLogo.setVisibility(View.GONE);
