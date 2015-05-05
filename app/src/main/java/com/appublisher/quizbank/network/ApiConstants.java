@@ -83,6 +83,9 @@ public interface ApiConstants {
     // 获取能力评估
     String getEvaluation = baseUrl + "quizbank/get_evaluation";
 
+    // 获取全局配置
+    String getGlobalSettings = baseUrl + "quizbank/get_global_settings";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

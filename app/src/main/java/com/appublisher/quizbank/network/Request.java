@@ -181,6 +181,13 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getEvaluation), "evaluation", "object");
     }
 
+    /**
+     * 获取全局配置
+     */
+    public void getGlobalSettings() {
+        asyncRequest(ParamBuilder.finalUrl(getGlobalSettings), "global_settings", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *
