@@ -16,7 +16,6 @@ import com.appublisher.quizbank.model.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 
 import org.json.JSONArray;
@@ -99,9 +98,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     @Override
     public void onRefresh() {
-
-        Logger.i("onRefresh");
-
         mOffset = 0;
         mHistoryPapers = new ArrayList<>();
         mRequest.getHistoryPapers(mOffset, mCount);
