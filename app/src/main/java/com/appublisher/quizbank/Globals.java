@@ -2,8 +2,6 @@ package com.appublisher.quizbank;
 
 import android.content.SharedPreferences;
 
-import org.json.JSONObject;
-
 /**
  * 全局变量
  */
@@ -42,6 +40,4 @@ public class Globals {
     // 友盟统计：上一个事件名称
     public static String umeng_quiz_lastevent;
 
-    // 首页数据缓存
-    public static JSONObject homepageResp;
 }

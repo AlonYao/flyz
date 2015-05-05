@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
@@ -48,6 +47,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     private LinearLayout mLlMokao;
     private LinearLayout mLlSpecial;
     private TextView mTvQuickTest;
+    private View mView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -64,25 +64,17 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // View 初始化
-        View view = inflater.inflate(R.layout.fragment_homepage, container, false);
-        ImageView ivHistoryMokao = (ImageView) view.findViewById(R.id.homepage_history);
-        LinearLayout llEvaluation = (LinearLayout) view.findViewById(R.id.homepage_evaluation);
-        mTvQuickTest = (TextView) view.findViewById(R.id.homepage_quicktest);
-        mTvEstimate = (TextView) view.findViewById(R.id.homepage_estimate);
-        mTvRanking = (TextView) view.findViewById(R.id.homepage_ranking);
-        mTvTodayExam = (TextView) view.findViewById(R.id.homepage_todayexam_tv);
-        mTvSpecial = (TextView) view.findViewById(R.id.homepage_special_tv);
-        mTvZhiboke = (TextView) view.findViewById(R.id.homepage_zhiboke);
-        mLlMokao = (LinearLayout) view.findViewById(R.id.homepage_todayexam_ll);
-        mLlSpecial = (LinearLayout) view.findViewById(R.id.homepage_special_ll);
-
-        // 获取&呈现 数据
-        if (Globals.homepageResp != null) {
-            setContent(Globals.homepageResp);
-        } else {
-            ProgressBarManager.showProgressBar(view);
-            new Request(mActivity, this).getEntryData();
-        }
+        mView = inflater.inflate(R.layout.fragment_homepage, container, false);
+        ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
+        LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
+        mTvQuickTest = (TextView) mView.findViewById(R.id.homepage_quicktest);
+        mTvEstimate = (TextView) mView.findViewById(R.id.homepage_estimate);
+        mTvRanking = (TextView) mView.findViewById(R.id.homepage_ranking);
+        mTvTodayExam = (TextView) mView.findViewById(R.id.homepage_todayexam_tv);
+        mTvSpecial = (TextView) mView.findViewById(R.id.homepage_special_tv);
+        mTvZhiboke = (TextView) mView.findViewById(R.id.homepage_zhiboke);
+        mLlMokao = (LinearLayout) mView.findViewById(R.id.homepage_todayexam_ll);
+        mLlSpecial = (LinearLayout) mView.findViewById(R.id.homepage_special_ll);
 
         // 历史模考
         ivHistoryMokao.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +94,16 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             }
         });
 
-        return view;
+        return mView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // 获取&呈现 数据
+        ProgressBarManager.showProgressBar(mView);
+        new Request(mActivity, this).getEntryData();
     }
 
     /**
