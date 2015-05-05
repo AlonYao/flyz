@@ -103,7 +103,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
 
                 if ("undone".equals(status)) {
                     Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
-                    intent.putExtra("paper_id", historyMokao.getId());
+                    intent.putExtra("paper_id", historyMokao.getExercise_id());
                     intent.putExtra("paper_type", "mokao");
                     intent.putExtra("paper_name", historyMokao.getName());
                     intent.putExtra("redo", true);
@@ -119,7 +119,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
                     // 解析
                     Intent intent =
                             new Intent(HistoryMokaoActivity.this, MeasureAnalysisActivity.class);
-                    intent.putExtra("exercise_id", historyMokao.getId());
+                    intent.putExtra("exercise_id", historyMokao.getExercise_id());
                     intent.putExtra("analysis_type", "mokao");
                     startActivity(intent);
                 }

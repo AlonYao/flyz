@@ -6,10 +6,15 @@ package com.appublisher.quizbank.model.netdata.historymokao;
 public class HistoryMokaoM {
 
     int id;
+    int exercise_id;
     String name;
     String date;
     int persons_num;
     String status;
+
+    public int getExercise_id() {
+        return exercise_id;
+    }
 
     public int getId() {
         return id;
