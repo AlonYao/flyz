@@ -81,6 +81,7 @@ public class StudyRecordModel {
                     intent.putExtra("paper_name",
                             convertPaperType(historyPaper.getName()));
                     fragment.mActivity.startActivity(intent);
+
                 } else if ("undone".equals(status)) {
                     // 跳转至做题页面
                     Intent intent = new Intent(fragment.mActivity, MeasureActivity.class);
