@@ -12,14 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.QaActivity;
 import com.appublisher.quizbank.activity.SystemNoticeActivity;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.dao.UserDAO;
+import com.appublisher.quizbank.model.db.GlobalSetting;
+import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
+import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
+import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.google.gson.Gson;
 import com.parse.ParsePush;
 import com.umeng.fb.FeedbackAgent;
 
@@ -29,6 +39,9 @@ import com.umeng.fb.FeedbackAgent;
 public class SettingFragment extends Fragment{
 
     private Activity mActivity;
+    private TextView mTvSno;
+    private TextView mTvExam;
+    private ImageView mIvRedPoint;
 
     @Override
     public void onAttach(Activity activity) {
@@ -47,6 +60,9 @@ public class SettingFragment extends Fragment{
         RelativeLayout rlFeedback = (RelativeLayout) view.findViewById(R.id.setting_feedback);
         RelativeLayout rlQa = (RelativeLayout) view.findViewById(R.id.setting_qa);
         CheckBox cbPush = (CheckBox) view.findViewById(R.id.setting_push_cb);
+        mIvRedPoint = (ImageView) view.findViewById(R.id.setting_redpoint);
+        mTvSno = (TextView) view.findViewById(R.id.setting_sno);
+        mTvExam = (TextView) view.findViewById(R.id.setting_exam);
 
         // 账号设置
         rlAccount.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +114,8 @@ public class SettingFragment extends Fragment{
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, SystemNoticeActivity.class);
                 startActivity(intent);
+
+                mIvRedPoint.setVisibility(View.GONE);
             }
         });
 
@@ -126,8 +144,30 @@ public class SettingFragment extends Fragment{
     public void onResume() {
         super.onResume();
 
-        // 显示学号
+        // 显示学号&考试项目
+        User user = UserDAO.findById();
+        if (user != null) {
+            Gson gson = GsonManager.initGson();
+            UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
+            ExamItemModel examInfo = gson.fromJson(user.exam, ExamItemModel.class);
 
-        // 显示已
+            // 学号
+            if (userInfo != null) {
+                mTvSno.setText(String.valueOf(userInfo.getSno()));
+            }
+
+            // 考试项目
+            if (examInfo != null) {
+                mTvExam.setText(examInfo.getName());
+            }
+        }
+
+        // 显示系统通知红点
+        GlobalSetting globalSetting = GlobalSettingDAO.findById();
+        if (globalSetting != null && globalSetting.latest_notify == Globals.last_notice_id) {
+            mIvRedPoint.setVisibility(View.GONE);
+        } else {
+            mIvRedPoint.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
@@ -119,24 +120,24 @@ public class HomePageFragment extends Fragment implements RequestCallback{
 
     /**
      * 设置内容
-     * @param homepageResp 首页数据回调
+     * @param response 首页数据回调
      */
-    private void setContent(JSONObject homepageResp) {
+    private void setContent(JSONObject response) {
         Gson gson = new Gson();
-        HomePageResp homepageData = gson.fromJson(homepageResp.toString(), HomePageResp.class);
-        if (homepageData == null || homepageData.getResponse_code() != 1) {
+        HomePageResp homePageResp = gson.fromJson(response.toString(), HomePageResp.class);
+        if (homePageResp == null || homePageResp.getResponse_code() != 1) {
             ProgressBarManager.hideProgressBar();
             return;
         }
 
         // 估分&排名
-        AssessmentM assessment = homepageData.getAssessment();
+        AssessmentM assessment = homePageResp.getAssessment();
         if (assessment != null) {
             mTvEstimate.setText(String.valueOf(assessment.getScore()));
             mTvRanking.setText(String.valueOf(assessment.getRank()));
         }
 
-        PaperM pager = homepageData.getPaper();
+        PaperM pager = homePageResp.getPaper();
         if (pager != null) {
             // 今日模考
             final PaperTodayM todayExam = pager.getToday();
@@ -155,7 +156,8 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                             startActivity(intent);
 
                         } else {
-                            Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+                            Intent intent =
+                                    new Intent(mActivity, PracticeDescriptionActivity.class);
                             intent.putExtra("paper_id", todayExam.getId());
                             intent.putExtra("paper_type", "mokao");
                             intent.putExtra("paper_name", "今日模考");
@@ -205,7 +207,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         });
 
         // 直播课
-        LiveCourseM liveCourse = homepageData.getLive_course();
+        LiveCourseM liveCourse = homePageResp.getLive_course();
         if (liveCourse != null && liveCourse.getId() != 0) {
             mTvZhiboke.setBackgroundResource(R.drawable.homepage_item_bg);
             mTvZhiboke.setTextColor(getResources().getColor(R.color.homepage_todayexam));
@@ -225,6 +227,9 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 }
             });
         }
+
+        // 记录最近的系统通知的id
+        Globals.last_notice_id = homePageResp.getLatest_notify();
 
         ProgressBarManager.hideProgressBar();
     }

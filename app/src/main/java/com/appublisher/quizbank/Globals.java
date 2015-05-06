@@ -40,4 +40,6 @@ public class Globals {
     // 友盟统计：上一个事件名称
     public static String umeng_quiz_lastevent;
 
+    // 记录最近的系统通知的id
+    public static int last_notice_id;
 }

@@ -44,6 +44,11 @@
                     <TextView
                         style="@style/SettingTV"
                         android:text="@string/setting_studentid"/>
+                    <TextView
+                        android:id="@+id/setting_sno"
+                        style="@style/SettingTV"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="18dp"/>
                 </RelativeLayout>
 
                 <View
@@ -57,10 +62,10 @@
                         style="@style/SettingTV"
                         android:text="@string/setting_myexam"/>
                     <TextView
+                        android:id="@+id/setting_exam"
                         style="@style/SettingTV"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="18dp"
-                        android:text="辽宁省考"/>
+                        android:layout_marginRight="18dp"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -98,6 +103,7 @@
                         style="@style/SettingArrow"
                         tools:ignore="ContentDescription" />
                     <ImageView
+                        android:id="@+id/setting_redpoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/setting_notice_tv"
