@@ -63,4 +63,43 @@ public class GlobalSettingDAO {
             insert(content);
         }
     }
+
+    /**
+     * 保存最近一条通知的id
+     * @param latest_notify 最近一条通知的id
+     */
+    public static void save(int latest_notify) {
+        GlobalSetting item = findById();
+
+        if (item != null) {
+            update(latest_notify);
+        } else {
+            insert(latest_notify);
+        }
+    }
+
+    /**
+     * 插入最近一条通知的id
+     * @param latest_notify 最近一条通知的id
+     */
+    public static void insert(int latest_notify) {
+        GlobalSetting item = new GlobalSetting();
+        item.latest_notify = latest_notify;
+        item.save();
+    }
+
+    /**
+     * 更新最近一条通知的id
+     * @param latest_notify 最近一条通知的id
+     */
+    public static void update(int latest_notify) {
+        try {
+            new Update(GlobalSetting.class)
+                    .set("latest_notify = ?", latest_notify)
+                    .where("Id = ?", 1)
+                    .execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -188,6 +188,16 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getGlobalSettings), "global_settings", "object");
     }
 
+    /**
+     * 获取通知
+     * @param offset 起点
+     * @param count 数量
+     */
+    public void getNotifications(int offset, int count) {
+        asyncRequest(ParamBuilder.finalUrl(getNotifications) + "&offset=" + offset
+                + "&count=" + count, "notifications", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

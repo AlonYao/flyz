@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +8,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.SystemNoticeActivity;
 
 /**
  * 系统通知
  */
 public class NoticeListAdapter extends BaseAdapter{
 
-    private Context mContext;
+    private SystemNoticeActivity mActivity;
 
-    public NoticeListAdapter(Context context) {
-        this.mContext = context;
+    public NoticeListAdapter(SystemNoticeActivity activity) {
+        this.mActivity = activity;
     }
 
     @Override
     public int getCount() {
-        return 50;
+        return mActivity.mNotices.size();
     }
 
     @Override
@@ -42,7 +42,8 @@ public class NoticeListAdapter extends BaseAdapter{
 
         // view初始化
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.notice_item, parent, false);
+            convertView =
+                    LayoutInflater.from(mActivity).inflate(R.layout.notice_item, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.tvNotice = (TextView) convertView.findViewById(R.id.notice_item_tv);
