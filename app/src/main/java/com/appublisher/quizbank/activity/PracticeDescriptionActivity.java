@@ -66,7 +66,6 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
 
         if (mPaperType == null || mPaperType.length() == 0) finish();
 
-        // 收藏&错题 特殊处理
         boolean isHide = Globals.sharedPreferences.getBoolean(mPaperType, false);
 
         if (isHide) {
