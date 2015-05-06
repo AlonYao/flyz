@@ -1,11 +1,15 @@
 package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.CommonModel;
@@ -31,6 +35,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
     public XListView mXListView;
     public ArrayList<NoticeM> mNotices;
     public int mOffset;
+    public ImageView mCurRedPoint;
 
     private int mCount;
     private Request mRequest;
@@ -67,6 +72,15 @@ public class SystemNoticeActivity extends ActionBarActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ActivitySkipConstants.NOTICE_READ) {
+            mCurRedPoint.setVisibility(View.GONE);
+        }
     }
 
     @Override

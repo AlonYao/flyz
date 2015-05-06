@@ -10,4 +10,7 @@ public class ActivitySkipConstants {
 
     // 答题卡提交
     public static final int ANSWER_SHEET_SUBMIT = 1001;
+
+    // 阅读系统通知
+    public static final int NOTICE_READ = 1002;
 }

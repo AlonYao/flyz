@@ -177,6 +177,10 @@
             android:name=".activity.SpecialProjectActivity"
             android:label="@string/title_activity_special_project" >
         </activity>
+        <activity
+            android:name=".activity.NoticeDetailActivity"
+            android:label="@string/title_activity_notice_detail" >
+        </activity>
     </application>
 
 </manifest>

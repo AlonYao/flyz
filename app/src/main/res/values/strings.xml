@@ -126,5 +126,6 @@
     <string name="title_activity_evaluation">能力评估</string>
     <string name="title_activity_practice_description">练习说明</string>
     <string name="title_activity_special_project">专项练习</string>
+    <string name="title_activity_notice_detail">通知</string>
 
 </resources>
