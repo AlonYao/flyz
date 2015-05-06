@@ -23,6 +23,7 @@ import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -39,9 +40,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public int mScreenHeight;
     public ViewPager mViewPager;
     public String mAnalysisType;
+    public int mCurQuestionId;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
+    private Request mRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // 初始化成员变量
-        Request request = new Request(this, this);
+        mRequest = new Request(this, this);
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(toolbar);
@@ -74,19 +77,19 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             switch (hierarchy_level) {
                 case 1:
                     ProgressDialogManager.showProgressDialog(this, true);
-                    request.collectErrorQuestions(
+                    mRequest.collectErrorQuestions(
                             String.valueOf(hierarchy_id), "", "", mAnalysisType);
                     break;
 
                 case 2:
                     ProgressDialogManager.showProgressDialog(this, true);
-                    request.collectErrorQuestions(
+                    mRequest.collectErrorQuestions(
                             "", String.valueOf(hierarchy_id), "", mAnalysisType);
                     break;
 
                 case 3:
                     ProgressDialogManager.showProgressDialog(this, true);
-                    request.collectErrorQuestions(
+                    mRequest.collectErrorQuestions(
                             "", "", String.valueOf(hierarchy_id), mAnalysisType);
                     break;
             }
@@ -94,7 +97,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);
 
             ProgressDialogManager.showProgressDialog(this, true);
-            request.getHistoryExerciseDetail(exerciseId, mAnalysisType);
+            mRequest.getHistoryExerciseDetail(exerciseId, mAnalysisType);
         } else {
             //noinspection unchecked
             ArrayList<QuestionM> questions =
@@ -129,7 +132,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if ("收藏".equals(item.getTitle())) {
-            ToastManager.showToast(this, "收藏 施工中……");
+            mRequest.collectQuestion(ParamBuilder.collectQuestion(
+                    String.valueOf(mCurQuestionId), "collect"));
         } else if ("反馈".equals(item.getTitle())) {
             View feedbackMenu = findViewById(item.getItemId());
 
@@ -237,6 +241,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public void requestCompleted(JSONObject response, String apiName) {
         if ("collect_error_questions".equals(apiName)) dealMeasureAnalysisResp(response);
         if ("history_exercise_detail".equals(apiName)) dealMeasureAnalysisResp(response);
+        if ("collect_question".equals(apiName)) ToastManager.showToast(this, "收藏成功");
 
         ProgressDialogManager.closeProgressDialog();
     }

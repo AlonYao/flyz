@@ -299,6 +299,14 @@ public class Request extends BaseRequest implements ApiConstants{
         postRequest(ParamBuilder.finalUrl(submitPaper), params, "submit_paper", "object");
     }
 
+    /**
+     * 收藏&取消收藏题目
+     * @param params 参数
+     */
+    public void collectQuestion(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(collectQuestion), params, "collect_question", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	图片加载方法代码块	 *

@@ -5,6 +5,7 @@ import com.appublisher.quizbank.utils.OpenUDID_manager;
 import com.appublisher.quizbank.utils.Utils;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class ParamBuilder implements ApiConstants {
@@ -15,6 +16,7 @@ public class ParamBuilder implements ApiConstants {
      * @return  拼接后的url
      */
     public static String finalUrl(String url) {
+        //noinspection StringBufferReplaceableByString
         StringBuilder finalUrl = new StringBuilder();
 
         // 参数说明
@@ -33,9 +35,7 @@ public class ParamBuilder implements ApiConstants {
                 .append(Globals.appVersion)
                 .append("&uuid=")
                 .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
-                .append("&user_id=")
-//                .append(Globals.sharedPreferences.getString("user_id", ""))
-                .append("4791")
+                .append(Globals.sharedPreferences.getString("user_id", ""))
                 .append("&user_token=")
                 .append(Globals.sharedPreferences.getString("user_token", ""))
                 .append("&timestamp=")
@@ -220,6 +220,20 @@ public class ParamBuilder implements ApiConstants {
         params.put("duration", duration);
         params.put("questions", questions);
         params.put("status", status);
+
+        return params;
+    }
+
+    /**
+     * 收藏&取消收藏题目
+     * @param question_id 题目id
+     * @param type collect：收藏 cancel：取消收藏
+     * @return 参数Map
+     */
+    public static Map<String, String> collectQuestion(String question_id, String type) {
+        Map<String, String> params = new Hashtable<>();
+        params.put("question_id", question_id);
+        params.put("type", type);
 
         return params;
     }

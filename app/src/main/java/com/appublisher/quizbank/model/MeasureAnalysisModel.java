@@ -53,6 +53,14 @@ public class MeasureAnalysisModel {
             @Override
             public void onPageSelected(int position) {
                 mCurPosition = position;
+
+                if (position < questions.size()) {
+                    QuestionM question = questions.get(position);
+
+                    if (question != null) {
+                        activity.mCurQuestionId = question.getId();
+                    }
+                }
             }
 
             @Override

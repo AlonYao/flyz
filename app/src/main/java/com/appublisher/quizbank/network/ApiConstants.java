@@ -89,6 +89,9 @@ public interface ApiConstants {
     // 获取通知
     String getNotifications = baseUrl + "quizbank/get_notifications";
 
+    // 收藏、取消收藏题目
+    String collectQuestion = baseUrl + "quizbank/collect_question";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
