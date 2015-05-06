@@ -121,4 +121,13 @@ public class SettingFragment extends Fragment{
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // 显示学号
+
+        // 显示已
+    }
 }

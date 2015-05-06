@@ -9,6 +9,7 @@ public class HomePageResp {
     AssessmentM assessment;
     PaperM paper;
     LiveCourseM live_course;
+    int latest_notify;
 
     public int getResponse_code() {
         return response_code;
@@ -40,5 +41,9 @@ public class HomePageResp {
 
     public void setAssessment(AssessmentM assessment) {
         this.assessment = assessment;
+    }
+
+    public int getLatest_notify() {
+        return latest_notify;
     }
 }
