@@ -179,27 +179,31 @@ public class MeasureModel {
             if ("auto".equals(activity.mPaperType)) {
                 ProgressDialogManager.showProgressDialog(activity, true);
                 request.getAutoTraining();
-            } else if ("note".equals(activity.mPaperType)) {
+            } else if ("note".equals(activity.mPaperType)
+                    || "error".equals(activity.mPaperType)
+                    || "collect".equals(activity.mPaperType)) {
                 int hierarchy_id = activity.getIntent().getIntExtra("hierarchy_id", 0);
                 int hierarchy_level = activity.getIntent().getIntExtra("hierarchy_level", 0);
-                String note_type = activity.getIntent().getStringExtra("note_type");
 
                 switch (hierarchy_level) {
                     case 1:
                         ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions(String.valueOf(hierarchy_id), "", "", note_type);
+                        request.getNoteQuestions(String.valueOf(hierarchy_id), "", "",
+                                activity.mPaperType);
 
                         break;
 
                     case 2:
                         ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions("", String.valueOf(hierarchy_id), "", note_type);
+                        request.getNoteQuestions("", String.valueOf(hierarchy_id), "",
+                                activity.mPaperType);
 
                         break;
 
                     case 3:
                         ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions("", "", String.valueOf(hierarchy_id), note_type);
+                        request.getNoteQuestions("", "", String.valueOf(hierarchy_id),
+                                activity.mPaperType);
 
                         break;
                 }

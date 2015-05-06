@@ -66,7 +66,9 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
 
         if (mPaperType == null || mPaperType.length() == 0) finish();
 
+        // 收藏&错题 特殊处理
         boolean isHide = Globals.sharedPreferences.getBoolean(mPaperType, false);
+
         if (isHide) {
             skipToMeasureActivity();
         }
@@ -165,7 +167,9 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
             String desc = exerciseIntro.getIntro();
             String type = exerciseIntro.getType();
 
-            if (type != null && mPaperType.equals(type) && desc != null) {
+            if (type == null || desc == null) continue;
+
+            if (type.equals(mPaperType)) {
                 mTvDesc.setText(desc.replaceAll("，", "\n"));
             }
         }

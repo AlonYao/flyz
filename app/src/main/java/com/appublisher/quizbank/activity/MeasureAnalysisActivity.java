@@ -67,8 +67,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
         // 获取数据
         mAnalysisType = getIntent().getStringExtra("analysis_type");
-        if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)
-                || "all".equals(mAnalysisType)) {
+        if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
             int hierarchy_id = getIntent().getIntExtra("hierarchy_id", 0);
             int hierarchy_level = getIntent().getIntExtra("hierarchy_level", 0);
 

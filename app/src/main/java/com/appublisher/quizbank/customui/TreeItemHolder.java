@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**
@@ -60,9 +60,8 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ivDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MeasureActivity.class);
-                intent.putExtra("paper_type", "note");
-                intent.putExtra("note_type", value.note_type);
+                Intent intent = new Intent(context, PracticeDescriptionActivity.class);
+                intent.putExtra("paper_type", value.note_type);
                 intent.putExtra("paper_name", value.name);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
@@ -88,7 +87,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         }
 
         // 全部专项不显示看题按钮
-        if ("all".equals(value.note_type)) {
+        if ("note".equals(value.note_type)) {
             ivWatch.setVisibility(View.GONE);
         } else {
             ivWatch.setVisibility(View.VISIBLE);

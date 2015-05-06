@@ -64,7 +64,7 @@ public class SpecialProjectModel {
                         1,
                         hierarchy.getCategory_id(),
                         hierarchy.getName(),
-                        "all"));
+                        "note"));
 
         root.addChild(firstRoot);
 
@@ -108,7 +108,7 @@ public class SpecialProjectModel {
                             2,
                             noteGroup.getGroup_id(),
                             noteGroup.getName(),
-                            "all"));
+                            "note"));
             firstRoot.addChild(secondRoot);
 
             addNotes(secondRoot, noteGroup.getNotes());
@@ -133,7 +133,7 @@ public class SpecialProjectModel {
                             3,
                             note.getNote_id(),
                             note.getName(),
-                            "all"));
+                            "note"));
             secondRoot.addChild(thirdRoot);
         }
     }
