@@ -7,6 +7,11 @@ public class ExerciseIntroM {
 
     String type;
     String intro;
+    String name;
+
+    public String getName() {
+        return name;
+    }
 
     public String getType() {
         return type;

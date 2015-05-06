@@ -32,6 +32,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
     private String mPaperType;
     private String mPaperName;
     private TextView mTvDesc;
+    private TextView mTvName;
     private int mPaperId;
     private boolean mRedo;
     private int mHierarchyId;
@@ -48,6 +49,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
 
         // View 初始化
         mTvDesc = (TextView) findViewById(R.id.practicedesc_content);
+        mTvName = (TextView) findViewById(R.id.practicedesc_name);
         TextView tvStart = (TextView) findViewById(R.id.practicedesc_start);
         LinearLayout llHide = (LinearLayout) findViewById(R.id.practicedesc_hide_ll);
         final CheckBox cbHide = (CheckBox) findViewById(R.id.practicedesc_hide_cb);
@@ -165,11 +167,13 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
 
             String desc = exerciseIntro.getIntro();
             String type = exerciseIntro.getType();
+            String name = exerciseIntro.getName();
 
             if (type == null || desc == null) continue;
 
             if (type.equals(mPaperType)) {
                 mTvDesc.setText(desc.replaceAll("，", "\n"));
+                mTvName.setText(name);
             }
         }
     }
