@@ -181,6 +181,10 @@
             android:name=".activity.NoticeDetailActivity"
             android:label="@string/title_activity_notice_detail" >
         </activity>
+        <activity
+            android:name=".activity.MyAnalysisActivity"
+            android:label="@string/title_activity_my_analysis" >
+        </activity>
     </application>
 
 </manifest>

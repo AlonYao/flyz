@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -218,6 +219,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             public void onClick(View v) {
                 mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
                         String.valueOf(mCurQuestionId), "1", ""));
+
+                mPopupWindow.dismiss();
+
+                ToastManager.showToast(MeasureAnalysisActivity.this, "提交成功");
             }
         });
 
@@ -227,6 +232,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             public void onClick(View v) {
                 mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
                         String.valueOf(mCurQuestionId), "2", ""));
+
+                mPopupWindow.dismiss();
+
+                ToastManager.showToast(MeasureAnalysisActivity.this, "提交成功");
             }
         });
 
@@ -236,6 +245,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             public void onClick(View v) {
                 mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
                         String.valueOf(mCurQuestionId), "3", ""));
+
+                mPopupWindow.dismiss();
+
+                ToastManager.showToast(MeasureAnalysisActivity.this, "提交成功");
             }
         });
 
@@ -243,7 +256,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvBetterAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastManager.showToast(MeasureAnalysisActivity.this, "更好的解析");
+                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                intent.putExtra("question_id", String.valueOf(mCurQuestionId));
+                startActivity(intent);
+
+                mPopupWindow.dismiss();
             }
         });
     }
