@@ -11,6 +11,11 @@ public class AnswerM implements Serializable{
     boolean is_right;
     String answer;
     int duration;
+    boolean is_collected;
+
+    public boolean is_collected() {
+        return is_collected;
+    }
 
     public int getDuration() {
         return duration;

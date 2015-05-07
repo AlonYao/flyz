@@ -41,6 +41,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public ViewPager mViewPager;
     public String mAnalysisType;
     public int mCurQuestionId;
+    public boolean mIsCurQuestionCollect;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -127,13 +128,24 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mIsCurQuestionCollect) {
+            menu.getItem(0).setIcon(R.drawable.measure_analysis_collected);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
             finish();
+
         } else if ("收藏".equals(item.getTitle())) {
             mRequest.collectQuestion(ParamBuilder.collectQuestion(
                     String.valueOf(mCurQuestionId), "collect"));
+
         } else if ("反馈".equals(item.getTitle())) {
             View feedbackMenu = findViewById(item.getItemId());
 
