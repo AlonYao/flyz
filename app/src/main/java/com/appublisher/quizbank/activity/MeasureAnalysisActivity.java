@@ -216,7 +216,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvImageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastManager.showToast(MeasureAnalysisActivity.this, "图文问题");
+                mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
+                        String.valueOf(mCurQuestionId), "1", ""));
             }
         });
 
@@ -224,7 +225,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvAnswerWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastManager.showToast(MeasureAnalysisActivity.this, "答案问题");
+                mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
+                        String.valueOf(mCurQuestionId), "2", ""));
             }
         });
 
@@ -232,7 +234,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvAnalysisWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastManager.showToast(MeasureAnalysisActivity.this, "解析问题");
+                mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
+                        String.valueOf(mCurQuestionId), "3", ""));
             }
         });
 

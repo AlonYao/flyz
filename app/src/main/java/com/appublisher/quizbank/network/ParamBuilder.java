@@ -238,4 +238,22 @@ public class ParamBuilder implements ApiConstants {
 
         return params;
     }
+
+    /**
+     * 错题反馈
+     * @param question_id 题目id
+     * @param error_type 1：图/文有错 2：答案有错 3：解析有错 4：我有更好的解析
+     * @param my_analysis error_type为4时，更好的解析
+     * @return 参数Map
+     */
+    public static Map<String, String> reportErrorQuestion(String question_id,
+                                                      String error_type,
+                                                      String my_analysis) {
+        Map<String, String> params = new Hashtable<>();
+        params.put("question_id", question_id);
+        params.put("error_type", error_type);
+        params.put("my_analysis", my_analysis);
+
+        return params;
+    }
 }

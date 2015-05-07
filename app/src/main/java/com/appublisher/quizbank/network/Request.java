@@ -307,6 +307,15 @@ public class Request extends BaseRequest implements ApiConstants{
         postRequest(ParamBuilder.finalUrl(collectQuestion), params, "collect_question", "object");
     }
 
+    /**
+     * 错题反馈
+     * @param params 参数
+     */
+    public void reportErrorQuestion(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(reportErrorQuestion),
+                params, "report_error_question", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	图片加载方法代码块	 *
