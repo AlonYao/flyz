@@ -1,7 +1,9 @@
 package com.appublisher.quizbank.model;
 
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
@@ -84,7 +86,7 @@ public class MeasureAnalysisModel {
         if (answer == null) return;
 
         activity.mCurQuestionId = answer.getId();
-        activity.mIsCurQuestionCollect = answer.is_collected();
+        activity.mCurAnswerModel = answer;
 
         // 更新Menu
         if(android.os.Build.VERSION.SDK_INT >= 11) {
@@ -92,5 +94,31 @@ public class MeasureAnalysisModel {
         } else {
             activity.supportInvalidateOptionsMenu();
         }
+    }
+
+    /**
+     * 设置收藏
+     * @param activity MeasureAnalysisActivity
+     * @param item MenuItem
+     */
+    public static void setCollect(MeasureAnalysisActivity activity, MenuItem item) {
+        activity.mCollect = "collect";
+
+        if (activity.mCurAnswerModel != null) activity.mCurAnswerModel.setIs_collected(true);
+
+        item.setIcon(R.drawable.measure_analysis_collected);
+    }
+
+    /**
+     * 设置未收藏
+     * @param activity MeasureAnalysisActivity
+     * @param item MenuItem
+     */
+    public static void setUnCollect(MeasureAnalysisActivity activity, MenuItem item) {
+        activity.mCollect = "cancel";
+
+        if (activity.mCurAnswerModel != null) activity.mCurAnswerModel.setIs_collected(false);
+
+        item.setIcon(R.drawable.measure_analysis_uncollect);
     }
 }

@@ -41,7 +41,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public ViewPager mViewPager;
     public String mAnalysisType;
     public int mCurQuestionId;
-    public boolean mIsCurQuestionCollect;
+    public AnswerM mCurAnswerModel;
+    public String mCollect;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -129,7 +130,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mIsCurQuestionCollect) {
+        if (mCurAnswerModel != null && mCurAnswerModel.is_collected()) {
             menu.getItem(0).setIcon(R.drawable.measure_analysis_collected);
         }
 
@@ -143,8 +144,20 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             finish();
 
         } else if ("收藏".equals(item.getTitle())) {
+            //noinspection ConstantConditions
+            if (item.getIcon().getConstantState().equals(
+                    getResources().getDrawable(
+                            R.drawable.measure_analysis_uncollect).getConstantState())) {
+                // 未收藏
+                MeasureAnalysisModel.setCollect(this, item);
+
+            } else {
+                // 已收藏
+                MeasureAnalysisModel.setUnCollect(this, item);
+            }
+
             mRequest.collectQuestion(ParamBuilder.collectQuestion(
-                    String.valueOf(mCurQuestionId), "collect"));
+                    String.valueOf(mCurQuestionId), mCollect));
 
         } else if ("反馈".equals(item.getTitle())) {
             View feedbackMenu = findViewById(item.getItemId());
@@ -252,8 +265,16 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("collect_error_questions".equals(apiName)) dealMeasureAnalysisResp(response);
+
         if ("history_exercise_detail".equals(apiName)) dealMeasureAnalysisResp(response);
-        if ("collect_question".equals(apiName)) ToastManager.showToast(this, "收藏成功");
+
+        if ("collect_question".equals(apiName)) {
+            if ("collect".equals(mCollect)) {
+                ToastManager.showToast(this, "收藏成功");
+            } else if ("cancel".equals(mCollect)) {
+                ToastManager.showToast(this, "取消收藏");
+            }
+        }
 
         ProgressDialogManager.closeProgressDialog();
     }

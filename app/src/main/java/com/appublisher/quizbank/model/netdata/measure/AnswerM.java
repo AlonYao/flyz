@@ -17,6 +17,10 @@ public class AnswerM implements Serializable{
         return is_collected;
     }
 
+    public void setIs_collected(boolean is_collected) {
+        this.is_collected = is_collected;
+    }
+
     public int getDuration() {
         return duration;
     }
