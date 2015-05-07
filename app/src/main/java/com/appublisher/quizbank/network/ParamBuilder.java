@@ -35,6 +35,7 @@ public class ParamBuilder implements ApiConstants {
                 .append(Globals.appVersion)
                 .append("&uuid=")
                 .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
+                .append("&user_id=")
                 .append(Globals.sharedPreferences.getString("user_id", ""))
                 .append("&user_token=")
                 .append(Globals.sharedPreferences.getString("user_token", ""))
