@@ -183,6 +183,7 @@
         </activity>
         <activity
             android:name=".activity.MyAnalysisActivity"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/title_activity_my_analysis" >
         </activity>
     </application>
