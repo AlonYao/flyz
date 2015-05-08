@@ -198,6 +198,16 @@ public class Request extends BaseRequest implements ApiConstants{
                 + "&count=" + count, "notifications", "object");
     }
 
+    /**
+     * 获取地理位置
+     * @param location 经纬度
+     */
+    public void getLocation(String location) {
+        String url = "http://api.map.baidu.com/geocoder/v2/?location="
+                + location + "&output=json&ak=B3547418bc3eb81c55baa59a8fb16975&pois=0";
+        asyncRequest(url, "location", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

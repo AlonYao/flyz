@@ -30,6 +30,8 @@ import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePapersResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.LocationManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
 
@@ -104,6 +106,8 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);
         mRequest.getAreaYear();
+
+        LocationManager.getBaiduLocation(mActivity);
 
         // 省份
         rlProvince.setOnClickListener(new View.OnClickListener() {
@@ -432,6 +436,8 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("area_year".equals(apiName)) dealAreaYearResp(response);
+
+        if ("location".equals(apiName)) Logger.i(response.toString());
 
         if ("entire_papers".equals(apiName)) dealEntirePapersResp(response);
     }
