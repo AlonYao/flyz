@@ -26,6 +26,7 @@ import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.LocationManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -88,6 +89,14 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         // 获取全局配置
         new Request(this, this).getGlobalSettings();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // 关闭定位
+        LocationManager.stopBaiduLocation();
     }
 
     @Override

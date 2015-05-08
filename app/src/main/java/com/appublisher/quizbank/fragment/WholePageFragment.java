@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
 import com.appublisher.quizbank.adapter.YearGvAdapter;
 import com.appublisher.quizbank.customui.XListView;
+import com.appublisher.quizbank.model.WholePageModel;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
@@ -33,11 +36,14 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,16 +54,12 @@ import java.util.Date;
 public class WholePageFragment extends Fragment implements RequestCallback,
         XListView.IXListViewListener {
 
-    private Activity mActivity;
     private PopupWindow mPwProvince;
     private PopupWindow mPwYear;
     private Request mRequest;
     private Gson mGson;
-    private ArrayList<AreaM> mAreas;
     private ArrayList<Integer> mYears;
-    private TextView mTvLastProvince;
     private TextView mTvLastYear;
-    private int mCurAreaId;
     private int mCurYear;
     private int mOffset;
     private int mCount;
@@ -67,10 +69,54 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     private ImageView mIvProvinceArrow;
     private ImageView mIvYearArrow;
 
+    public static RelativeLayout mRlLocation;
+    public static TextView mTvLocation;
+    public static TextView mTvReLocation;
+    public static TextView mTvLastProvince;
+    public static Activity mActivity;
+    public static ArrayList<AreaM> mAreas;
+    public static Handler mHandler;
+    public static int mCurAreaId;
+    public static final int GET_LOCATION = 10;
+
+    private static class MsgHandler extends Handler {
+        private WeakReference<Activity> mWeakActivity;
+
+        public MsgHandler(Activity activity) {
+            mWeakActivity = new WeakReference<>(activity);
+        }
+
+        @SuppressLint("CommitPrefEdits")
+        @Override
+        public void handleMessage(Message msg) {
+            final Activity activity = mWeakActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case GET_LOCATION:
+                        LocationManager.getBaiduLocation(mActivity, new BDLocationListener() {
+                            @Override
+                            public void onReceiveLocation(BDLocation bdLocation) {
+                                if (bdLocation == null) {
+                                    return;
+                                }
+
+                                WholePageModel.dealLocation(bdLocation);
+                            }
+                        });
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.mActivity = activity;
+        mActivity = activity;
     }
 
     @Override
@@ -83,6 +129,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mCurYear = 0;
         mOffset = 0;
         mCount = 5;
+        mHandler = new MsgHandler(mActivity);
     }
 
     @Override
@@ -106,8 +153,6 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);
         mRequest.getAreaYear();
-
-        LocationManager.getBaiduLocation(mActivity);
 
         // 省份
         rlProvince.setOnClickListener(new View.OnClickListener() {
@@ -259,10 +304,18 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         });
 
         mPwProvince.update();
+
+        // 初始化定位view
+        mRlLocation = (RelativeLayout) view.findViewById(R.id.wholepage_location_rl);
+        mTvLocation = (TextView) view.findViewById(R.id.wholepage_location_tv);
+        mTvReLocation = (TextView) view.findViewById(R.id.wholepage_relocation_tv);
+
+        // 获取地理位置
+        mHandler.sendEmptyMessage(GET_LOCATION);
     }
 
     /**
-     * 初始化省份菜单
+     * 初始化年份菜单
      */
     private void initPwYear() {
         @SuppressLint("InflateParams") View view =

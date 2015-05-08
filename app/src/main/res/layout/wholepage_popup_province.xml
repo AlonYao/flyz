@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="right"
     android:background="@android:color/white">
 
+    <RelativeLayout
+        android:id="@+id/wholepage_location_rl"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/wholepage_location_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textColor="@color/setting_text"
+            android:background="@drawable/wholepage_item_all"/>
+
+        <TextView
+            android:id="@+id/wholepage_relocation_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="18dp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/wholepage_relocation"
+            android:drawablePadding="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/wholepage_relocation"
+            android:textColor="@color/setting_text"
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
     <GridView
         android:id="@+id/wholepage_gv"
+        android:layout_below="@id/wholepage_location_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="18dp"
@@ -54,5 +88,13 @@
         android:layout_height="1dp"
         android:layout_above="@id/wholepage_ll"
         android:background="@color/setting_line"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/wholepage_ll"
+        android:scaleType="fitXY"
+        android:src="@drawable/drawer_shadow_bottom"
+        tools:ignore="ContentDescription" />
 
 </RelativeLayout>

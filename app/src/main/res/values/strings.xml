@@ -73,6 +73,7 @@
     <!-- 整卷练习 -->
     <string name="wholepage_province">省份</string>
     <string name="wholepage_year">年份</string>
+    <string name="wholepage_relocation">重新定位</string>
 
     <!-- 知识点层级 -->
     <string name="hierarchy_name">知识点层级</string>
