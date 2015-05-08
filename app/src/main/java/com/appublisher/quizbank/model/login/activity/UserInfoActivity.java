@@ -36,6 +36,7 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.thirdparty.upyun.UpYunUpload;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.DownloadAsyncTask;
 import com.appublisher.quizbank.utils.FileMange;
 import com.appublisher.quizbank.utils.Logger;
@@ -103,8 +104,8 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
         mTvWeixin = (TextView) findViewById(R.id.userinfo_weixin_binding);
         mAvatar = (RoundedImageView) findViewById(R.id.userinfo_avatar);
         RelativeLayout rlNickName = (RelativeLayout) findViewById(R.id.userinfo_nickname_rl);
-        RelativeLayout rlPhoneNum = (RelativeLayout) findViewById(R.id.userinfo_phonenum_rl);
         RelativeLayout rlPassWord = (RelativeLayout) findViewById(R.id.userinfo_password_rl);
+        RelativeLayout rlPhoneNum = (RelativeLayout) findViewById(R.id.userinfo_phonenum_rl);
 
         // 成员变量初始化
         mGson = new Gson();
@@ -197,16 +198,11 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
         rlPhoneNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!mTvPhoneNum.getText().toString().equals("")) return;
+
                 Intent intent = new Intent(UserInfoActivity.this, RegisterActivity.class);
                 intent.putExtra("from", "UserInfoActivity");
-
-                if (mTvPhoneNum.getText().toString() != null
-                        && !mTvPhoneNum.getText().toString().equals("")) {
-                    intent.putExtra("type", "update");
-                } else {
-                    intent.putExtra("type", "add");
-                }
-
+                intent.putExtra("type", "add");
                 startActivityForResult(intent, 11);
             }
         });
@@ -216,8 +212,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
             @Override
             public void onClick(View v) {
                 // 未绑定手机号的账号不能修改密码
-                if (mTvPhoneNum.getText().toString() != null
-                        && !mTvPhoneNum.getText().toString().equals("")) {
+                if (!mTvPhoneNum.getText().toString().equals("")) {
                     Intent intent = new Intent(UserInfoActivity.this, PwdChangeActivity.class);
                     startActivity(intent);
                 }
@@ -351,7 +346,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getTitle().equals("登出")) {
-//            AlertManager.showLogoutAlert(this);
+            AlertManager.showLogoutAlert(this);
         }
 
         return super.onOptionsItemSelected(item);
@@ -380,7 +375,8 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
 
             // 上传至又拍云
             // 上传alert界面
-            View uploadView = LayoutInflater.from(this).inflate(R.layout.filebrowser_uploading, null);
+            @SuppressLint("InflateParams") View uploadView =
+                    LayoutInflater.from(this).inflate(R.layout.filebrowser_uploading, null);
             ProgressBar pb = (ProgressBar) uploadView.findViewById(R.id.pb_filebrowser_uploading);
             TextView tv = (TextView) uploadView.findViewById(R.id.tv_filebrowser_uploading);
 
@@ -429,19 +425,6 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
     @SuppressLint("CommitPrefEdits")
     public void cleanLocalData() {
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
-        editor.putString("user_id", "");
-        editor.putString("guest_id", "");
-        editor.putString("user_token", "");
-        editor.putBoolean("is_login", false);
-        editor.commit();
-
-        // 清空用户提交做题记录
-        editor = Globals.reportErrorQuestions.edit();
-        editor.clear();
-        editor.commit();
-
-        // 清空知识点做题数据
-        editor = Globals.knowledgePointProgress.edit();
         editor.clear();
         editor.commit();
     }

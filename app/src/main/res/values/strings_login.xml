@@ -26,4 +26,10 @@
     <string name="userinfo_binding">已绑定</string>
     <string name="userinfo_unbinding">未绑定</string>
 
+    <!-- 用户登出 -->
+    <string name="alert_logout_content">确定要登出么？</string>
+    <string name="alert_logout_title">提示</string>
+    <string name="alert_logout_positive">确定</string>
+    <string name="alert_logout_negative">取消</string>
+
 </resources>

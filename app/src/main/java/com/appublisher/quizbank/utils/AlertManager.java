@@ -13,6 +13,9 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.model.login.activity.LoginActivity;
+import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
+import com.appublisher.quizbank.network.Request;
 
 /**
  * Alert管理
@@ -162,5 +165,39 @@ public class AlertManager {
         mAlertLastPage.dismiss();
         mAlertLastPage = null;
         activity.finish();
+    }
+
+    /**
+     * 显示登出Alert
+     * @param userInfoActivity 用户个人信息Activity
+     */
+    public static void showLogoutAlert(final UserInfoActivity userInfoActivity) {
+        new AlertDialog.Builder(userInfoActivity)
+                .setMessage(R.string.alert_logout_content)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_logout_positive,
+                        new DialogInterface.OnClickListener() {// 确定
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 提交登出信息至服务器
+                                new Request(userInfoActivity).userLogout();
+                                // 清空本地数据
+                                userInfoActivity.cleanLocalData();
+                                // 跳转至登录页面
+                                Intent intent = new Intent(userInfoActivity, LoginActivity.class);
+                                userInfoActivity.startActivity(intent);
+                                userInfoActivity.finish();
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_logout_negative,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
     }
 }
