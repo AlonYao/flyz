@@ -37,6 +37,7 @@ public class PracticeReportModel {
     private static ArrayList<HashMap<String, Object>> mUserAnswerList;
     private static int mRightNum;
     private static int mTotalNum;
+    private static boolean mIsFromError;
 
     /**
      * 获取数据
@@ -130,6 +131,7 @@ public class PracticeReportModel {
             }
 
             // 跳转
+            mIsFromError = false;
             skipToMeasureAnalysisActivity(mQuestions, answers);
         }
     };
@@ -172,6 +174,7 @@ public class PracticeReportModel {
             }
 
             // 跳转
+            mIsFromError = true;
             skipToMeasureAnalysisActivity(errorQuestions, errorAnswers);
         }
     };
@@ -191,6 +194,7 @@ public class PracticeReportModel {
         intent.putExtra("hierarchy_id", mActivity.mHierarchyId);
         intent.putExtra("hierarchy_level", mActivity.mHierarchyLevel);
         intent.putExtra("from", mActivity.mFrom);
+        intent.putExtra("is_from_error", mIsFromError);
         mActivity.startActivity(intent);
 
         mActivity.finish();

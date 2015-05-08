@@ -51,6 +51,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public int mHierarchyLevel;
     public String mPaperName;
     public String mFrom;
+    public boolean mIsFromError;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -84,6 +85,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mFrom = getIntent().getStringExtra("from");
+        mIsFromError = getIntent().getBooleanExtra("is_from_error", false);
 
         if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
 
@@ -118,7 +120,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             ArrayList<QuestionM> questions =
                     (ArrayList<QuestionM>) getIntent().getSerializableExtra("questions");
 
-            @SuppressWarnings("unchecked") ArrayList<AnswerM> answers =
+            //noinspection unchecked
+            ArrayList<AnswerM> answers =
                     (ArrayList<AnswerM>) getIntent().getSerializableExtra("answers");
 
             MeasureAnalysisModel.setViewPager(this, questions, answers);
@@ -134,6 +137,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
         MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
                 R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        if (mIsFromError) {
+            MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
+                    R.drawable.scratch_paper_clear), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
 
         // 初始化反馈菜单
         initPopupWindowView();
@@ -152,7 +160,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == android.R.id.home) {
             finish();
 
@@ -181,6 +188,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             } else if (System.currentTimeMillis() - mPopupDismissTime > 500) {
                 mPopupWindow.showAsDropDown(feedbackMenu, 0, 12);
             }
+        } else if ("错题".equals(item.getTitle())) {
+            ToastManager.showToast(this, "错题 施工中……");
         }
 
         return super.onOptionsItemSelected(item);
