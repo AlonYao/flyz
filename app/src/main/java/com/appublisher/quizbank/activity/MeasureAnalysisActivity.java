@@ -49,6 +49,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public String mCollect;
     public int mHierarchyId;
     public int mHierarchyLevel;
+    public String mPaperName;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -78,9 +79,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
         // 获取数据
         mAnalysisType = getIntent().getStringExtra("analysis_type");
+        mPaperName = getIntent().getStringExtra("paper_name");
+        mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
+        mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
+
         if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
-            mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
-            mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
 
             switch (mHierarchyLevel) {
                 case 1:

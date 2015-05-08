@@ -163,6 +163,10 @@ public class MeasureModel {
         container.addView(flowLayout);
     }
 
+    /**
+     * 获取数据
+     * @param activity MeasureActivity
+     */
     public static void getData(MeasureActivity activity) {
         if (activity.mPaperType == null) return;
 
@@ -182,27 +186,25 @@ public class MeasureModel {
             } else if ("note".equals(activity.mPaperType)
                     || "error".equals(activity.mPaperType)
                     || "collect".equals(activity.mPaperType)) {
-                int hierarchy_id = activity.getIntent().getIntExtra("hierarchy_id", 0);
-                int hierarchy_level = activity.getIntent().getIntExtra("hierarchy_level", 0);
 
-                switch (hierarchy_level) {
+                switch (activity.mHierarchyLevel) {
                     case 1:
                         ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions(String.valueOf(hierarchy_id), "", "",
+                        request.getNoteQuestions(String.valueOf(activity.mHierarchyId), "", "",
                                 activity.mPaperType);
 
                         break;
 
                     case 2:
                         ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions("", String.valueOf(hierarchy_id), "",
+                        request.getNoteQuestions("", String.valueOf(activity.mHierarchyId), "",
                                 activity.mPaperType);
 
                         break;
 
                     case 3:
                         ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions("", "", String.valueOf(hierarchy_id),
+                        request.getNoteQuestions("", "", String.valueOf(activity.mHierarchyId),
                                 activity.mPaperType);
 
                         break;

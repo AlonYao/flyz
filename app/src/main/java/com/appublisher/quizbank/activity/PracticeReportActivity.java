@@ -32,6 +32,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public LinearLayout mLlNoteContainer;
     public String mPaperName;
     public String mPaperType;
+    public int mHierarchyId;
+    public int mHierarchyLevel;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -55,11 +57,13 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
         // 获取数据
         String from = getIntent().getStringExtra("from");
+        mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
+        mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
+        mPaperType = getIntent().getStringExtra("paper_type");
+        mPaperName = getIntent().getStringExtra("paper_name");
 
         if ("study_record".equals(from)) {
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);
-            mPaperType = getIntent().getStringExtra("paper_type");
-            mPaperName = getIntent().getStringExtra("paper_name");
 
             ProgressDialogManager.showProgressDialog(this, true);
             new Request(this, this).getHistoryExerciseDetail(exerciseId, mPaperType);

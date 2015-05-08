@@ -62,6 +62,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public String mPaperName;
     public ArrayList<QuestionM> mQuestions;
     public HashMap<String, Integer> mEntirePaperCategory;
+    public int mHierarchyId;
+    public int mHierarchyLevel;
 
     public static Toolbar mToolbar;
     public static int mMins;
@@ -143,6 +145,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mPaperId = getIntent().getIntExtra("paper_id", 0);
         mExerciseId = getIntent().getIntExtra("exercise_id", 0);
         mRedo = getIntent().getBooleanExtra("redo", false);
+        mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
+        mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
 
         MeasureModel.getData(this);
     }
@@ -204,6 +208,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                     (HashMap<String, HashMap<String, Object>>)
                             data.getSerializableExtra("category");
 
+            // 跳转到练习报告页面
             Intent intent = new Intent(this, PracticeReportActivity.class);
             intent.putExtra("notes", notes);
             intent.putExtra("paper_name", paper_name);
@@ -213,6 +218,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             intent.putExtra("category", category);
             intent.putExtra("questions", mQuestions);
             intent.putExtra("user_answer", mUserAnswerList);
+            intent.putExtra("hierarchy_id", mHierarchyId);
+            intent.putExtra("hierarchy_level", mHierarchyLevel);
             startActivity(intent);
             finish();
         }

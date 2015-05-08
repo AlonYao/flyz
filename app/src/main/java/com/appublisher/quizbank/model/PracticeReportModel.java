@@ -45,8 +45,6 @@ public class PracticeReportModel {
     public static void getData(final PracticeReportActivity activity) {
         mActivity = activity;
 
-        activity.mPaperName = activity.getIntent().getStringExtra("paper_name");
-        activity.mPaperType = activity.getIntent().getStringExtra("paper_type");
         mRightNum = activity.getIntent().getIntExtra("right_num", 0);
         mTotalNum = activity.getIntent().getIntExtra("total_num", 0);
         //noinspection unchecked
@@ -131,13 +129,8 @@ public class PracticeReportModel {
                 answers.add(answerItem);
             }
 
-            Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
-            intent.putExtra("questions", mQuestions);
-            intent.putExtra("answers", answers);
-            intent.putExtra("analysis_type", mActivity.mPaperType);
-            mActivity.startActivity(intent);
-
-            mActivity.finish();
+            // 跳转
+            skipToMeasureAnalysisActivity(mQuestions, answers);
         }
     };
 
@@ -178,14 +171,29 @@ public class PracticeReportModel {
                 }
             }
 
-            Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
-            intent.putExtra("questions", errorQuestions);
-            intent.putExtra("answers", errorAnswers);
-            mActivity.startActivity(intent);
-
-            mActivity.finish();
+            // 跳转
+            skipToMeasureAnalysisActivity(errorQuestions, errorAnswers);
         }
     };
+
+    /**
+     * 跳转到做题解析页面
+     * @param questions 题目
+     * @param answers 答案
+     */
+    private static void skipToMeasureAnalysisActivity(ArrayList<QuestionM> questions,
+                                                      ArrayList<AnswerM> answers) {
+        Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
+        intent.putExtra("questions", questions);
+        intent.putExtra("answers", answers);
+        intent.putExtra("paper_name", mActivity.mPaperName);
+        intent.putExtra("analysis_type", mActivity.mPaperType);
+        intent.putExtra("hierarchy_id", mActivity.mHierarchyId);
+        intent.putExtra("hierarchy_level", mActivity.mHierarchyLevel);
+        mActivity.startActivity(intent);
+
+        mActivity.finish();
+    }
 
     /**
      * 添加知识点

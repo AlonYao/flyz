@@ -104,6 +104,11 @@ public class AlertManager {
         tvAnother.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Logger.i(activity.mAnalysisType == null ? "null" : activity.mAnalysisType);
+                Logger.i(String.valueOf(activity.mHierarchyId));
+                Logger.i(String.valueOf(activity.mHierarchyLevel));
+
                 if ("auto".equals(activity.mAnalysisType)) {
                     Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
                     intent.putExtra("paper_type", activity.mAnalysisType);
@@ -112,12 +117,18 @@ public class AlertManager {
 
                     finishActivity(activity);
 
-                } else if ("note".equals(activity.mAnalysisType)) {
-                    ToastManager.showToast(activity, "note");
-                } else if ("collect".equals(activity.mAnalysisType)) {
-                    ToastManager.showToast(activity, "collect");
-                } else if ("error".equals(activity.mAnalysisType)) {
-                    ToastManager.showToast(activity, "error");
+                } else if ("note".equals(activity.mAnalysisType)
+                        || "collect".equals(activity.mAnalysisType)
+                        || "error".equals(activity.mAnalysisType)) {
+                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
+                    intent.putExtra("paper_type", activity.mAnalysisType);
+                    intent.putExtra("paper_name", activity.mPaperName);
+                    intent.putExtra("hierarchy_id", activity.mHierarchyId);
+                    intent.putExtra("hierarchy_level", activity.mHierarchyLevel);
+                    activity.startActivity(intent);
+
+                    finishActivity(activity);
+
                 } else {
                     mAlertLastPage.dismiss();
                 }
