@@ -47,7 +47,9 @@ public class MeasureAnalysisModel {
             @Override
             public void onPageScrolled(int position, float positionOffset,
                                        int positionOffsetPixels) {
-                if(mCurPosition == questions.size() - 1 && positionOffsetPixels == 0) {
+                if(mCurPosition == questions.size() - 1
+                        && positionOffsetPixels == 0
+                        && !"study_record".equals(activity.mFrom)) {
                     if (!mIsShowAlert) {
                         mIsShowAlert = true;
                     } else {

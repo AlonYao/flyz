@@ -190,6 +190,7 @@ public class PracticeReportModel {
         intent.putExtra("analysis_type", mActivity.mPaperType);
         intent.putExtra("hierarchy_id", mActivity.mHierarchyId);
         intent.putExtra("hierarchy_level", mActivity.mHierarchyLevel);
+        intent.putExtra("from", mActivity.mFrom);
         mActivity.startActivity(intent);
 
         mActivity.finish();

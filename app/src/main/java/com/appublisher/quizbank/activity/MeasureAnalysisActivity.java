@@ -50,6 +50,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public int mHierarchyId;
     public int mHierarchyLevel;
     public String mPaperName;
+    public String mFrom;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -82,6 +83,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mPaperName = getIntent().getStringExtra("paper_name");
         mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
+        mFrom = getIntent().getStringExtra("from");
 
         if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
 
