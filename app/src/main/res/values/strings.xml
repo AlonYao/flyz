@@ -80,13 +80,12 @@
 
     <!-- Alert -->
     <string name="alert_pause_btn">继续</string>
-
     <string name="alert_savetest_title">提示</string>
     <string name="alert_savetest_msg">确定要退出练习？退出后未完成的练习会保存在练习历史中</string>
-
     <string name="alert_lastpage_another">再来一发</string>
     <string name="alert_lastpage_back">返回</string>
     <string name="alert_lastpage_zhibo">看个直播</string>
+    <string name="alert_delete_error_content">确定要从错题本中删除这道错题么？</string>
 
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>

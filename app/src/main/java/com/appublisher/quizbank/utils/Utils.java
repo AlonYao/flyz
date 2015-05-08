@@ -2,6 +2,7 @@ package com.appublisher.quizbank.utils;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 
 import com.appublisher.quizbank.Globals;
 
@@ -174,5 +175,13 @@ public class Utils {
         }
 
         return "";
+    }
+
+    /**
+     * 更新Menu
+     * @param activity Activity
+     */
+    public static void updateMenu(Activity activity) {
+
     }
 }

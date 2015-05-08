@@ -256,4 +256,15 @@ public class ParamBuilder implements ApiConstants {
 
         return params;
     }
+
+    /**
+     * 删除错题
+     * @param question_id 题目id
+     * @return 参数Map
+     */
+    public static Map<String, String> deleteErrorQuestion(String question_id) {
+        Map<String, String> params = new Hashtable<>();
+        params.put("question_id", question_id);
+        return params;
+    }
 }

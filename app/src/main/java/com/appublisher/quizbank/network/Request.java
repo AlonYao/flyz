@@ -326,6 +326,15 @@ public class Request extends BaseRequest implements ApiConstants{
                 params, "report_error_question", "object");
     }
 
+    /**
+     * 错题删除
+     * @param params 删除
+     */
+    public void deleteErrorQuestion(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(deleteErrorQuestion),
+                params, "delete_error_question", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	图片加载方法代码块	 *

@@ -15,6 +15,7 @@ import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 
 /**
@@ -188,6 +189,47 @@ public class AlertManager {
                                 Intent intent = new Intent(userInfoActivity, LoginActivity.class);
                                 userInfoActivity.startActivity(intent);
                                 userInfoActivity.finish();
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_logout_negative,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
+    }
+
+    /**
+     * 显示登出Alert
+     * @param activity MeasureAnalysisActivity
+     */
+    public static void deleteErrorQuestionAlert(final MeasureAnalysisActivity activity) {
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.alert_delete_error_content)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_logout_positive,
+                        new DialogInterface.OnClickListener() {// 确定
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 提交登出信息至服务器
+                                new Request(activity, activity).deleteErrorQuestion(
+                                        ParamBuilder.deleteErrorQuestion(
+                                                String.valueOf(activity.mCurQuestionId)));
+
+                                // 保存已删除的错题
+                                if (activity.mDeleteErrorQuestions != null) {
+                                    activity.mDeleteErrorQuestions.add(activity.mCurQuestionId);
+                                }
+
+                                // 更新Menu
+                                Utils.updateMenu(activity);
+
+                                ToastManager.showToast(activity, "删除成功");
+
                                 dialog.dismiss();
                             }
                         })

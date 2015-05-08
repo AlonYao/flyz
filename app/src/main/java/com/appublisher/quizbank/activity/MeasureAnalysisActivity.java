@@ -27,6 +27,8 @@ import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -42,16 +44,17 @@ import java.util.ArrayList;
 public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback{
 
     public int mScreenHeight;
-    public ViewPager mViewPager;
-    public String mAnalysisType;
     public int mCurQuestionId;
-    public AnswerM mCurAnswerModel;
-    public String mCollect;
     public int mHierarchyId;
     public int mHierarchyLevel;
+    public boolean mIsFromError;
+    public ViewPager mViewPager;
+    public String mAnalysisType;
+    public String mCollect;
     public String mPaperName;
     public String mFrom;
-    public boolean mIsFromError;
+    public AnswerM mCurAnswerModel;
+    public ArrayList<Integer> mDeleteErrorQuestions;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -86,6 +89,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mFrom = getIntent().getStringExtra("from");
         mIsFromError = getIntent().getBooleanExtra("is_from_error", false);
+
+        if (mIsFromError) mDeleteErrorQuestions = new ArrayList<>();
 
         if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
 
@@ -130,6 +135,9 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        Logger.i("onCreateOptionsMenu");
+
         menu.clear();
 
         MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
@@ -138,9 +146,24 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
                 R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
-        if (mIsFromError) {
-            MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
-                    R.drawable.scratch_paper_clear), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        // 判断是否显示错题
+        if (mIsFromError && mDeleteErrorQuestions != null) {
+            int size = mDeleteErrorQuestions.size();
+
+            if (size == 0) {
+                MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
+                        R.drawable.scratch_paper_clear), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            } else {
+                // 遍历
+                for (int i = 0; i < size; i++) {
+                    int questionId = mDeleteErrorQuestions.get(i);
+                    if (questionId == mCurQuestionId) {
+                        MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
+                                R.drawable.scratch_paper_clear),
+                                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+                    }
+                }
+            }
         }
 
         // 初始化反馈菜单
@@ -189,7 +212,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 mPopupWindow.showAsDropDown(feedbackMenu, 0, 12);
             }
         } else if ("错题".equals(item.getTitle())) {
-            ToastManager.showToast(this, "错题 施工中……");
+            AlertManager.deleteErrorQuestionAlert(this);
         }
 
         return super.onOptionsItemSelected(item);
@@ -316,6 +339,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 ToastManager.showToast(this, "取消收藏");
             }
         }
+
+        if ("delete_error_question".equals(apiName)) Logger.i(response.toString());
 
         ProgressDialogManager.closeProgressDialog();
     }

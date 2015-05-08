@@ -9,6 +9,7 @@ import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -92,11 +93,7 @@ public class MeasureAnalysisModel {
         activity.mCurAnswerModel = answer;
 
         // 更新Menu
-        if(android.os.Build.VERSION.SDK_INT >= 11) {
-            activity.invalidateOptionsMenu();
-        } else {
-            activity.supportInvalidateOptionsMenu();
-        }
+        Utils.updateMenu(activity);
     }
 
     /**
