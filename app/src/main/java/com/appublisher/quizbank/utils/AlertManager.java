@@ -1,7 +1,9 @@
 package com.appublisher.quizbank.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.MeasureModel;
 
 /**
@@ -97,10 +100,27 @@ public class AlertManager {
             tvAnother.setVisibility(View.VISIBLE);
         }
 
+        // 再来一发点击事件
         tvAnother.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastManager.showToast(activity, "直播中");
+                if ("auto".equals(activity.mAnalysisType)) {
+                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
+                    intent.putExtra("paper_type", activity.mAnalysisType);
+                    intent.putExtra("paper_name", activity.getString(R.string.paper_type_auto));
+                    activity.startActivity(intent);
+
+                    finishActivity(activity);
+
+                } else if ("note".equals(activity.mAnalysisType)) {
+                    ToastManager.showToast(activity, "note");
+                } else if ("collect".equals(activity.mAnalysisType)) {
+                    ToastManager.showToast(activity, "collect");
+                } else if ("error".equals(activity.mAnalysisType)) {
+                    ToastManager.showToast(activity, "error");
+                } else {
+                    mAlertLastPage.dismiss();
+                }
             }
         });
 
@@ -108,9 +128,7 @@ public class AlertManager {
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAlertLastPage.dismiss();
-                mAlertLastPage = null;
-                activity.finish();
+                finishActivity(activity);
             }
         });
 
@@ -121,5 +139,17 @@ public class AlertManager {
                 ToastManager.showToast(activity, "直播课 施工中……");
             }
         });
+    }
+
+    /**
+     * 关闭Activity
+     * @param activity Activity
+     */
+    private static void finishActivity(Activity activity) {
+        if (mAlertLastPage == null) return;
+
+        mAlertLastPage.dismiss();
+        mAlertLastPage = null;
+        activity.finish();
     }
 }

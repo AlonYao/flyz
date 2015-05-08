@@ -108,6 +108,9 @@
     <!-- 其他解析 -->
     <string name="myanalysis_hint">最少输入十个字……</string>
 
+    <!-- 试卷类型 -->
+    <string name="paper_type_auto">快速智能练习</string>
+
     <!-- Activity -->
     <!-- 登录注册Activity -->
     <string name="title_activity_login">登录</string>

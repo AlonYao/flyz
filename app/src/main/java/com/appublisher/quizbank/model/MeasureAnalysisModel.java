@@ -9,6 +9,7 @@ import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
 
@@ -40,12 +41,16 @@ public class MeasureAnalysisModel {
         mIsShowAlert = false;
 
         // 更新第一个页面的状态
-        setCurPageStatus(0, activity, answers);
+        mCurPosition = 0;
+        setCurPageStatus(mCurPosition, activity, answers);
 
         activity.mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
                                        int positionOffsetPixels) {
+
+                Logger.i(String.valueOf(mCurPosition));
+
                 if(mCurPosition == questions.size() - 1 && positionOffsetPixels == 0) {
                     if (!mIsShowAlert) {
                         mIsShowAlert = true;

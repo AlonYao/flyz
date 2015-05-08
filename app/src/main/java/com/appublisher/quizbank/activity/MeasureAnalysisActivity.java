@@ -36,6 +36,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * 做题解析模块
+ */
 public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback{
 
     public int mScreenHeight;
@@ -44,6 +47,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public int mCurQuestionId;
     public AnswerM mCurAnswerModel;
     public String mCollect;
+    public int mHierarchyId;
+    public int mHierarchyLevel;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -74,33 +79,35 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         // 获取数据
         mAnalysisType = getIntent().getStringExtra("analysis_type");
         if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
-            int hierarchy_id = getIntent().getIntExtra("hierarchy_id", 0);
-            int hierarchy_level = getIntent().getIntExtra("hierarchy_level", 0);
+            mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
+            mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
 
-            switch (hierarchy_level) {
+            switch (mHierarchyLevel) {
                 case 1:
                     ProgressDialogManager.showProgressDialog(this, true);
                     mRequest.collectErrorQuestions(
-                            String.valueOf(hierarchy_id), "", "", mAnalysisType);
+                            String.valueOf(mHierarchyId), "", "", mAnalysisType);
                     break;
 
                 case 2:
                     ProgressDialogManager.showProgressDialog(this, true);
                     mRequest.collectErrorQuestions(
-                            "", String.valueOf(hierarchy_id), "", mAnalysisType);
+                            "", String.valueOf(mHierarchyId), "", mAnalysisType);
                     break;
 
                 case 3:
                     ProgressDialogManager.showProgressDialog(this, true);
                     mRequest.collectErrorQuestions(
-                            "", "", String.valueOf(hierarchy_id), mAnalysisType);
+                            "", "", String.valueOf(mHierarchyId), mAnalysisType);
                     break;
             }
+
         } else if ("mokao".equals(mAnalysisType)) {
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);
 
             ProgressDialogManager.showProgressDialog(this, true);
             mRequest.getHistoryExerciseDetail(exerciseId, mAnalysisType);
+
         } else {
             //noinspection unchecked
             ArrayList<QuestionM> questions =

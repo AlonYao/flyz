@@ -31,6 +31,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public LinearLayout mLlCategoryContainer;
     public LinearLayout mLlNoteContainer;
     public String mPaperName;
+    public String mPaperType;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -57,11 +58,11 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
         if ("study_record".equals(from)) {
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);
-            String exerciseType = getIntent().getStringExtra("paper_type");
+            mPaperType = getIntent().getStringExtra("paper_type");
             mPaperName = getIntent().getStringExtra("paper_name");
 
             ProgressDialogManager.showProgressDialog(this, true);
-            new Request(this, this).getHistoryExerciseDetail(exerciseId, exerciseType);
+            new Request(this, this).getHistoryExerciseDetail(exerciseId, mPaperType);
         } else {
             PracticeReportModel.getData(this);
         }

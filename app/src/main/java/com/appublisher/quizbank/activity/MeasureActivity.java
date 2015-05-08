@@ -207,6 +207,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             Intent intent = new Intent(this, PracticeReportActivity.class);
             intent.putExtra("notes", notes);
             intent.putExtra("paper_name", paper_name);
+            intent.putExtra("paper_type", mPaperType);
             intent.putExtra("right_num", right_num);
             intent.putExtra("total_num", total_num);
             intent.putExtra("category", category);

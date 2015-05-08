@@ -46,6 +46,7 @@ public class PracticeReportModel {
         mActivity = activity;
 
         activity.mPaperName = activity.getIntent().getStringExtra("paper_name");
+        activity.mPaperType = activity.getIntent().getStringExtra("paper_type");
         mRightNum = activity.getIntent().getIntExtra("right_num", 0);
         mTotalNum = activity.getIntent().getIntExtra("total_num", 0);
         //noinspection unchecked
@@ -133,7 +134,10 @@ public class PracticeReportModel {
             Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
             intent.putExtra("questions", mQuestions);
             intent.putExtra("answers", answers);
+            intent.putExtra("analysis_type", mActivity.mPaperType);
             mActivity.startActivity(intent);
+
+            mActivity.finish();
         }
     };
 
@@ -178,6 +182,8 @@ public class PracticeReportModel {
             intent.putExtra("questions", errorQuestions);
             intent.putExtra("answers", errorAnswers);
             mActivity.startActivity(intent);
+
+            mActivity.finish();
         }
     };
 
