@@ -2,7 +2,7 @@ package com.appublisher.quizbank.utils;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 
 import com.appublisher.quizbank.Globals;
 
@@ -181,7 +181,11 @@ public class Utils {
      * 更新Menu
      * @param activity Activity
      */
-    public static void updateMenu(Activity activity) {
-
+    public static void updateMenu(ActionBarActivity activity) {
+        if(android.os.Build.VERSION.SDK_INT >= 11) {
+            activity.invalidateOptionsMenu();	// 改变menu的状态
+        } else {
+            activity.supportInvalidateOptionsMenu();
+        }
     }
 }

@@ -157,7 +157,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 // 遍历
                 for (int i = 0; i < size; i++) {
                     int questionId = mDeleteErrorQuestions.get(i);
-                    if (questionId == mCurQuestionId) {
+                    if (questionId != mCurQuestionId) {
                         MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
                                 R.drawable.scratch_paper_clear),
                                 MenuItemCompat.SHOW_AS_ACTION_ALWAYS);

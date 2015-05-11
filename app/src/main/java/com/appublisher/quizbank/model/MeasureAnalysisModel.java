@@ -48,6 +48,7 @@ public class MeasureAnalysisModel {
             @Override
             public void onPageScrolled(int position, float positionOffset,
                                        int positionOffsetPixels) {
+                // 最后一页再往后滑，弹出末题引导
                 if(mCurPosition == questions.size() - 1
                         && positionOffsetPixels == 0
                         && !"study_record".equals(activity.mFrom)) {
