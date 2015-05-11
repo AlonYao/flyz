@@ -65,6 +65,7 @@ public class NicknameChangeActivity extends ActionBarActivity implements Request
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("NicknameChangeActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -72,6 +73,7 @@ public class NicknameChangeActivity extends ActionBarActivity implements Request
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("NicknameChangeActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }

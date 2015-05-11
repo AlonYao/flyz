@@ -168,6 +168,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("RegisterActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -175,6 +176,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("RegisterActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }

@@ -69,6 +69,7 @@ public class PwdChangeActivity extends ActionBarActivity implements RequestCallb
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("PwdChangeActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -76,6 +77,7 @@ public class PwdChangeActivity extends ActionBarActivity implements RequestCallb
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("PwdChangeActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }

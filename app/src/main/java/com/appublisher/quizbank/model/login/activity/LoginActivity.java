@@ -217,6 +217,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         });
         mHomeWatcher.startWatch();
 
+        // Umeng
+        MobclickAgent.onPageStart("LoginActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -227,6 +229,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         // Home键监听
         mHomeWatcher.stopWatch();
 
+        // Umeng
+        MobclickAgent.onPageEnd("LoginActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }

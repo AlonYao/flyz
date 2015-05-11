@@ -129,6 +129,7 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("SetpwdActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -136,6 +137,7 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("SetpwdActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }

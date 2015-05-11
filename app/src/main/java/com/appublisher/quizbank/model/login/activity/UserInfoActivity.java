@@ -266,6 +266,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("UserInfoActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -273,6 +274,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("UserInfoActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }

@@ -46,6 +46,7 @@ public class CannotGetSmsActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("CannotGetSmsActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -53,6 +54,7 @@ public class CannotGetSmsActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("CannotGetSmsActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }
