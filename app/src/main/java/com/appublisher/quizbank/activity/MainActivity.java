@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
@@ -27,6 +29,7 @@ import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.LocationManager;
+import com.appublisher.quizbank.utils.ToastManager;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -44,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     private FavoriteFragment mFavoriteFragment;
     private StudyRecordFragment mStudyRecordFragment;
     private SettingFragment mSettingFragment;
+    private boolean mDoubleBackToExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         // 获取全局配置
         new Request(this, this).getGlobalSettings();
+
+        // Add Activity
+        QuizBankApp.getInstance().addActivity(this);
     }
 
     @Override
@@ -116,7 +123,22 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
             return;
         }
 
-        super.onBackPressed();
+        // 两次Back退出
+        if (mDoubleBackToExit) {
+            QuizBankApp.getInstance().exit();
+            super.onBackPressed();
+            return;
+        }
+
+        mDoubleBackToExit = true;
+        ToastManager.showToast(this, "再按一次退出");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mDoubleBackToExit = false;
+            }
+        }, 2000);
     }
 
     /**

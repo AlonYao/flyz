@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.CommonModel;
@@ -159,6 +160,9 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                 startActivity(intent);
             }
         });
+
+        // Add Activity
+        QuizBankApp.getInstance().addActivity(this);
     }
 
     @Override

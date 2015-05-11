@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.MainActivity;
@@ -191,6 +192,9 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
         mController.getConfig().setSinaCallbackUrl("http://www.sina.com");
         weiboBtn.setOnClickListener(mLoginModel.weiboOnClick);
+
+        // 保存Activity
+        QuizBankApp.getInstance().addActivity(this);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.appublisher.quizbank;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,10 +14,16 @@ import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
+import java.util.LinkedList;
+
 /**
  * QuizBankApp
  */
 public class QuizBankApp extends Application{
+
+    public LinkedList<Activity> mActivityList = new LinkedList<>();
+    public static QuizBankApp mInstance;
+    public QuizBankApp() { }
 
     @Override
     public void onCreate() {
@@ -58,5 +65,29 @@ public class QuizBankApp extends Application{
 
         // Umeng 统计
         MobclickAgent.openActivityDurationTrack(false);
+    }
+
+    // 单例模式中获取唯一的QuizBankApp实例
+    public static QuizBankApp getInstance() {
+        if(null == mInstance) {
+            mInstance = new QuizBankApp();
+        }
+        return mInstance;
+    }
+
+    // 添加Activity到容器中
+    public void addActivity(Activity activity)  {
+        if (mActivityList == null) mActivityList = new LinkedList<>();
+
+        mActivityList.add(activity);
+    }
+
+    // 遍历所有Activity并finish
+    public void exit(){
+        if (mActivityList == null) return;
+
+        for(Activity activity : mActivityList) {
+            activity.finish();
+        }
     }
 }

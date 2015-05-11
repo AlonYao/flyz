@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.MainActivity;
@@ -120,6 +121,9 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
                 }
             }
         });
+
+        // Add Activity
+        QuizBankApp.getInstance().addActivity(this);
     }
 
     @Override
