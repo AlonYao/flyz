@@ -39,6 +39,7 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -189,6 +190,20 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         });
 
         return mMainView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("WholePageFragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("WholePageFragment");
     }
 
     /**

@@ -10,7 +10,11 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.umeng.analytics.MobclickAgent;
 
+/**
+ * 启动页
+ */
 public class SplashActivity extends Activity {
 
     @Override
@@ -58,5 +62,21 @@ public class SplashActivity extends Activity {
         };
 
         handler.postDelayed(runnable, 1000);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("SplashActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("SplashActivity");
+        MobclickAgent.onPause(this);
     }
 }

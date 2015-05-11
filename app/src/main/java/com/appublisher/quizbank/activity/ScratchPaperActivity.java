@@ -10,7 +10,11 @@ import android.view.MenuItem;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.PaintView;
 import com.appublisher.quizbank.model.CommonModel;
+import com.umeng.analytics.MobclickAgent;
 
+/**
+ * 草稿纸
+ */
 public class ScratchPaperActivity extends ActionBarActivity {
 
     private PaintView mPaintView;
@@ -29,6 +33,22 @@ public class ScratchPaperActivity extends ActionBarActivity {
 
         // 修改Toolbar icon
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("ScratchPaperActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("ScratchPaperActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

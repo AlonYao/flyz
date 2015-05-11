@@ -21,6 +21,7 @@ import com.appublisher.quizbank.model.netdata.globalsettings.ExerciseIntroM;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -100,6 +101,22 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
                 skipToMeasureActivity();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("PracticeDescriptionActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("PracticeDescriptionActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

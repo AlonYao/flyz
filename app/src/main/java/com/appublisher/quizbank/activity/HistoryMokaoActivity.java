@@ -18,6 +18,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +43,22 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new Request(this, this).getHistoryMokao();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("HistoryMokaoActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("HistoryMokaoActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

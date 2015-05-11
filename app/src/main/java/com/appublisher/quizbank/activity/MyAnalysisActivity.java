@@ -14,6 +14,7 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,6 +37,22 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
 
         // 获取数据
         mQuestionId = getIntent().getStringExtra("question_id");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("MyAnalysisActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("MyAnalysisActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.appublisher.quizbank.model.PracticeReportModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -71,6 +72,22 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         } else {
             PracticeReportModel.getData(this);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("PracticeReportActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("PracticeReportActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

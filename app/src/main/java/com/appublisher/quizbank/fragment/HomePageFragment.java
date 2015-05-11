@@ -31,6 +31,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -112,10 +113,19 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     @Override
     public void onResume() {
         super.onResume();
-
         // 获取&呈现 数据
         ProgressBarManager.showProgressBar(mView);
         new Request(mActivity, this).getEntryData();
+
+        // Umeng
+        MobclickAgent.onPageStart("HomePageFragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("HomePageFragment");
     }
 
     /**

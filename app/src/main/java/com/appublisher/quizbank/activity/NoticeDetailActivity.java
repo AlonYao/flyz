@@ -6,7 +6,11 @@ import android.view.MenuItem;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
+import com.umeng.analytics.MobclickAgent;
 
+/**
+ * 通知详情
+ */
 public class NoticeDetailActivity extends ActionBarActivity {
 
     @Override
@@ -16,6 +20,22 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
         // Toolbar
         CommonModel.setToolBar(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("NoticeDetailActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("NoticeDetailActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

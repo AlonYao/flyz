@@ -12,6 +12,7 @@ import com.appublisher.quizbank.model.SpecialProjectModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +38,22 @@ public class SpecialProjectActivity extends ActionBarActivity implements Request
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new Request(this, this).getNoteHierarchy("all");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("SpecialProjectActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("SpecialProjectActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

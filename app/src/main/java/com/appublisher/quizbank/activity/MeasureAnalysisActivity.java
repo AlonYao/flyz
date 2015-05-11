@@ -31,6 +31,7 @@ import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -133,6 +134,25 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("MeasureAnalysisActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mPopupWindow != null) mPopupWindow.dismiss();
+
+        // Umeng
+        MobclickAgent.onPageEnd("MeasureAnalysisActivity");
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         menu.clear();
@@ -213,13 +233,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (mPopupWindow != null) mPopupWindow.dismiss();
     }
 
     /**

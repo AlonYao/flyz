@@ -31,6 +31,7 @@ import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -149,6 +150,22 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
 
         MeasureModel.getData(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("MeasureActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("MeasureActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

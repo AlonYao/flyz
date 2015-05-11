@@ -27,7 +27,6 @@ import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
-import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -82,8 +81,9 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
     @Override
     protected void onResume() {
         super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("ExamChangeActivity");
         MobclickAgent.onResume(this);
-        TCAgent.onResume(this);
     }
 
     @Override
@@ -102,8 +102,9 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
             MobclickAgent.onEvent(this, "SetPlan", map);
         }
 
+        // Umeng
+        MobclickAgent.onPageEnd("ExamChangeActivity");
         MobclickAgent.onPause(this);
-        TCAgent.onPause(this);
     }
 
     @Override

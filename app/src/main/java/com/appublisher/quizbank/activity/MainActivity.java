@@ -27,6 +27,7 @@ import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.LocationManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -92,11 +93,20 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-
         // 关闭定位
         LocationManager.stopBaiduLocation();
+
+        // Umeng
+        MobclickAgent.onPause(this);
     }
 
     @Override

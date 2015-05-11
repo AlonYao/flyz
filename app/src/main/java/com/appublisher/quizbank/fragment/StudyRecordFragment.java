@@ -17,6 +17,7 @@ import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -72,10 +73,19 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     @Override
     public void onResume() {
         super.onResume();
-
         // 获取数据
         ProgressBarManager.showProgressBar(mView);
         onRefresh();
+
+        // Umeng
+        MobclickAgent.onPageStart("StudyRecordFragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("StudyRecordFragment");
     }
 
     @Override

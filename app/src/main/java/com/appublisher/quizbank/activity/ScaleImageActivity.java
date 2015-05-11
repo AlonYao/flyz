@@ -4,12 +4,14 @@ package com.appublisher.quizbank.activity;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.Window;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.ScaleImageView;
 import com.appublisher.quizbank.network.Request;
+import com.umeng.analytics.MobclickAgent;
 
 public class ScaleImageActivity extends Activity{
 	private ScaleImageView imageView;
@@ -41,21 +43,25 @@ public class ScaleImageActivity extends Activity{
 
 //		DailyLearnApp.resumeFromScaleImage = true;
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		// Umeng
+		MobclickAgent.onPageStart("ScaleImageActivity");
+		MobclickAgent.onResume(this);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
-
+		// Umeng
+		MobclickAgent.onPageEnd("ScaleImageActivity");
+		MobclickAgent.onPause(this);
 	}
 	
 	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
+	public boolean dispatchTouchEvent(@NonNull MotionEvent ev) {
 		switch(ev.getAction()){
 		case MotionEvent.ACTION_DOWN:
 			isReturn = true;

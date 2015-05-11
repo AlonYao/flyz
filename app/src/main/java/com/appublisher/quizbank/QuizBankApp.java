@@ -10,6 +10,7 @@ import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.tendcloud.tenddata.TCAgent;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
 /**
@@ -54,5 +55,8 @@ public class QuizBankApp extends Application{
         // 友盟反馈
         FeedbackAgent agent = new FeedbackAgent(this);
         agent.sync();
+
+        // Umeng 统计
+        MobclickAgent.openActivityDurationTrack(false);
     }
 }

@@ -14,6 +14,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.db.chart.view.LineChartView;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -63,6 +64,22 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new Request(this, this).getEvaluation();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("EvaluationActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("EvaluationActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
@@ -58,6 +59,20 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
         request.getNoteHierarchy("error");
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("WrongQuestionsFragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("WrongQuestionsFragment");
     }
 
     /**

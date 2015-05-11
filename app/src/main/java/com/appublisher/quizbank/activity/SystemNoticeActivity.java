@@ -18,6 +18,7 @@ import com.appublisher.quizbank.model.netdata.notice.NoticeM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -63,6 +64,22 @@ public class SystemNoticeActivity extends ActionBarActivity implements
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getNotifications(mOffset, mCount);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("SystemNoticeActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("SystemNoticeActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

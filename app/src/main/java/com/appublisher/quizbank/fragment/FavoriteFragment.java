@@ -15,6 +15,7 @@ import com.appublisher.quizbank.model.FavoriteModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +46,20 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
         new Request(mActivity, this).getNoteHierarchy("collect");
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Umeng
+        MobclickAgent.onPageStart("FavoriteFragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("FavoriteFragment");
     }
 
     @Override

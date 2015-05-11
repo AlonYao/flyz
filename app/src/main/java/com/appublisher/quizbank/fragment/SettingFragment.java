@@ -31,6 +31,7 @@ import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
 import com.parse.ParsePush;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
 /**
@@ -143,7 +144,6 @@ public class SettingFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-
         // 显示学号&考试项目
         User user = UserDAO.findById();
         if (user != null) {
@@ -169,5 +169,15 @@ public class SettingFragment extends Fragment{
         } else {
             mIvRedPoint.setVisibility(View.VISIBLE);
         }
+
+        // Umeng
+        MobclickAgent.onPageStart("SettingFragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("SettingFragment");
     }
 }
