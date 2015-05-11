@@ -328,14 +328,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                     UserExamInfoModel ueim = lrm.getExam();
 
                     if (uim != null) {
-                        boolean is_new = lrm.isIs_new();
                         String user_id = uim.getUser_id();
-                        if (is_new) {
-                            // 从游客库切换至用户库
-                            LoginModel.migrateGuestToUser(this, user_id);
-                        } else {
-                            LoginModel.setDatabase(user_id, this);
-                        }
+                        LoginModel.setDatabase(user_id, this);
 
                         // 友盟
                         sendToUmeng(mSocialLoginType);

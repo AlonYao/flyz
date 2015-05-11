@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.model.login.model;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Base64;
@@ -23,7 +22,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.exception.SocializeException;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -225,27 +223,6 @@ public class LoginModel {
         builder.setDatabaseVersion(1);
         ActiveAndroid.initialize(builder.create());
         Globals.db_initialize = true;
-    }
-
-    /**
-     * 将游客数据库更改为用户数据库
-     * @param activity 当前Activity
-     * @param user_id 用户id
-     */
-    public static void migrateGuestToUser(Activity activity, String user_id) {
-        String guestDBPath = activity.getApplicationContext().getDatabasePath("guest").getAbsolutePath();
-
-        File file = new File(guestDBPath);
-        if (file.exists()) {
-            // 如果存在游客数据库
-            String userDBPath = file.getParentFile() + "/" + user_id;
-            File newFile = new File(userDBPath);
-            if (file.renameTo(newFile)) {
-                LoginModel.setDatabase(user_id, activity);
-            }
-        } else {
-            LoginModel.setDatabase(user_id, activity);
-        }
     }
 
     /**

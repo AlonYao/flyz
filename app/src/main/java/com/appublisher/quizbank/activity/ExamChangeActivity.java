@@ -219,7 +219,9 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
                         UserDAO.updateSno(examSetResponseModel.getSno());
 
                         // 页面跳转
-                        if ("splash".equals(mFrom) || "login".equals(mFrom)) {
+                        if ("splash".equals(mFrom)
+                                || "login".equals(mFrom)
+                                || "reg".equals(mFrom)) {
                             Intent intent = new Intent(this, MainActivity.class);
                             startActivity(intent);
                         }

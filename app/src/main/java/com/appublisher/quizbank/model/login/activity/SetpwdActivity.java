@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.model.login.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.CommonModel;
@@ -20,6 +23,7 @@ import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.CommonResponseModel;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
+import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
@@ -48,8 +52,14 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
             super.handleMessage(msg);
             switch (msg.what) {
                 case SET_PASSWORD_SUCCESS:
-                    Intent intent = new Intent(SetpwdActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    if (!LoginModel.hasExamInfo()) {
+                        Intent intent = new Intent(SetpwdActivity.this, ExamChangeActivity.class);
+                        intent.putExtra("from", "reg");
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(SetpwdActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
 
                     finish();
 
@@ -135,21 +145,33 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response != null) {
+            // 注册
             if (apiName.equals("register")) {
                 LoginResponseModel lrm = mGson.fromJson(response.toString(),
                         LoginResponseModel.class);
 
                 if (lrm != null && lrm.getResponse_code() == 1) {
                     UserInfoModel uim = lrm.getUser();
+                    UserExamInfoModel ueim = lrm.getExam();
 
                     if (uim != null) {
                         String user_id = uim.getUser_id();
                         if (user_id != null && !user_id.equals("")) {
-                            LoginModel.migrateGuestToUser(this, user_id);
-                            UserDAO.updateUserInfo(mGson.toJson(uim));
+                            LoginModel.setDatabase(user_id, this);
+
+                            // 保存用户信息至数据库
+                            UserDAO.save(mGson.toJson(uim), mGson.toJson(ueim));
+
+                            // 本地缓存
+                            SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                            editor.putString("user_id", uim.getUser_id());
+                            editor.putString("user_token", uim.getUser_token());
+                            editor.putBoolean("is_login", true);
+                            editor.commit();
 
                             // 友盟
                             HashMap<String, String> map = new HashMap<>();
@@ -163,6 +185,7 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
                 }
             }
 
+            // 修改密码
             if (apiName.equals("auth_handle")) {
                 CommonResponseModel crm = mGson.fromJson(response.toString(),
                         CommonResponseModel.class);
@@ -185,6 +208,7 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
                 }
             }
 
+            // 忘记密码
             if (apiName.equals("forget_password")) {
                 CommonResponseModel commonResponse =
                         mGson.fromJson(response.toString(), CommonResponseModel.class);
