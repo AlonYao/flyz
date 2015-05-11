@@ -29,7 +29,7 @@ public class Utils {
     }
 
     /**
-     * 转换成百分比(保留3位小数点)
+     * 转换成百分比(保留2位小数点)
      * @param rate 比率
      * @return 百分比
      */

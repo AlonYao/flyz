@@ -15,6 +15,7 @@ import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+import com.appublisher.quizbank.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -191,6 +192,16 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
 
         MeasureModel.addRichTextToContainer(
                 mActivity, llMeasureAnalysis, question.getAnalysis(), true);
+
+        // 解析 知识点&来源&统计信息
+        TextView tvNote = (TextView) view.findViewById(R.id.measure_analysis_note);
+        TextView tvSource = (TextView) view.findViewById(R.id.measure_analysis_source);
+        TextView tvAccuracy = (TextView) view.findViewById(R.id.measure_analysis_accuracy);
+
+        tvNote.setText("【知识点】 " + question.getNote_name());
+        tvSource.setText("【来源】 " + question.getSource());
+        tvAccuracy.setText("【统计】 全站正确率为"
+                + Utils.rateToString(question.getAccuracy()) + "%");
 
         container.addView(view);
         return view;
