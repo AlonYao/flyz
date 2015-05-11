@@ -335,6 +335,15 @@ public class Request extends BaseRequest implements ApiConstants{
                 params, "delete_error_question", "object");
     }
 
+    /**
+     * 标记通知已读
+     * @param params 参数
+     */
+    public void readNotification(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(readNotification),
+                params, "read_notification", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	图片加载方法代码块	 *

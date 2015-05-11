@@ -33,6 +33,6 @@ public class HomePageModel {
 
         long day = Utils.dateMinusNow(date);
 
-        textView.setText("据"+ name + "还有" + String.valueOf(day) + "天");
+        textView.setText("距离"+ name + "还有" + String.valueOf(day) + "天");
     }
 }

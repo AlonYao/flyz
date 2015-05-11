@@ -34,8 +34,8 @@ public class Utils {
      * @return 百分比
      */
     public static String rateToString(float rate) {
-        rate = (float) (Math.round(rate*100000)/1000.0);
-        return String.valueOf(rate) + "%";
+        int rateInt = (int) (Math.round(rate*10000)/100.0);
+        return String.valueOf(rateInt);
     }
 
     /**

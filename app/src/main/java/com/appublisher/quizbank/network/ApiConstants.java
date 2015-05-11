@@ -98,6 +98,9 @@ public interface ApiConstants {
     // 删除错题
     String deleteErrorQuestion = baseUrl + "quizbank/delete_error_question";
 
+    // 标记通知
+    String readNotification = baseUrl + "quizbank/read_notification";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

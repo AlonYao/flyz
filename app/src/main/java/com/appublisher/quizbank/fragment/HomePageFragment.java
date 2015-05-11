@@ -31,6 +31,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -82,7 +83,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
         TextView tvExam = (TextView) mView.findViewById(R.id.homepage_exam);
 
-        // 倒计时
+        // 考试项目倒计时
         HomePageModel.setExamCountDown(tvExam);
 
         // 历史模考
@@ -149,7 +150,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         AssessmentM assessment = homePageResp.getAssessment();
         if (assessment != null) {
             mTvEstimate.setText(String.valueOf(assessment.getScore()));
-            mTvRanking.setText(String.valueOf((int) assessment.getRank()*100));
+            mTvRanking.setText(Utils.rateToString(assessment.getRank()));
         }
 
         PaperM pager = homePageResp.getPaper();

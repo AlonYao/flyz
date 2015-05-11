@@ -55,7 +55,7 @@ public class EvaluationModel {
         avarageAccuracy = (float) (Math.round(avarageAccuracy*10000)/100.0);
 
         activity.mTvScore.setText(String.valueOf(score));
-        activity.mTvRank.setText(String.valueOf((int) rank*100));
+        activity.mTvRank.setText(Utils.rateToString(rank));
         activity.mTvLearningDays.setText(String.valueOf(learningDays));
         activity.mTvTotalTime.setText(String.valueOf(totalTime / 60));
         activity.mTvTotalQuestions.setText(String.valueOf(totalQuestions));

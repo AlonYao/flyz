@@ -267,4 +267,15 @@ public class ParamBuilder implements ApiConstants {
         params.put("question_id", question_id);
         return params;
     }
+
+    /**
+     * 标记通知已读
+     * @param notification_id 题目id
+     * @return 参数Map
+     */
+    public static Map<String, String> readNotification(String notification_id) {
+        Map<String, String> params = new Hashtable<>();
+        params.put("notification_id", notification_id);
+        return params;
+    }
 }

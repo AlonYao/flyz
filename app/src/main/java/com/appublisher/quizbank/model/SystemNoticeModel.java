@@ -13,6 +13,8 @@ import com.appublisher.quizbank.adapter.NoticeListAdapter;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.notice.NoticeM;
 import com.appublisher.quizbank.model.netdata.notice.NoticeResp;
+import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
 
@@ -73,6 +75,10 @@ public class SystemNoticeModel {
                     // 记录当前View的红点view
                     activity.mCurRedPoint =
                             (ImageView) view.findViewById(R.id.notice_item_redpoint);
+
+                    // 通知服务器已读
+                    new Request(activity).readNotification(
+                            ParamBuilder.readNotification(String.valueOf(notice.getId())));
 
                     // 跳转
                     Intent intent = new Intent(activity, NoticeDetailActivity.class);
