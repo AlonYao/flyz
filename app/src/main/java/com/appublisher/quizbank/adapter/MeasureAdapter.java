@@ -92,7 +92,7 @@ public class MeasureAdapter extends PagerAdapter{
             final ScrollView svTop = (ScrollView) view.findViewById(R.id.measure_top);
 
             // 材料
-            MeasureModel.addRichTextToContainer(mActivity, llMaterial, material);
+            MeasureModel.addRichTextToContainer(mActivity, llMaterial, material, true);
 
             ivPull.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -159,7 +159,7 @@ public class MeasureAdapter extends PagerAdapter{
                 + "/" + String.valueOf(mActivity.mUserAnswerList.size()) + " ";
         questionContent = questionPosition + (questionContent == null ? "" : questionContent);
 
-        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, questionContent);
+        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, questionContent, true);
 
         // 选项
         LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
@@ -176,15 +176,20 @@ public class MeasureAdapter extends PagerAdapter{
         String optionC = question.getOption_c();
         String optionD = question.getOption_d();
 
-        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA, false);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB, false);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC, false);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD, false);
 
         mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
         mTvOptionB = (TextView) view.findViewById(R.id.measure_option_b_tv);
         mTvOptionC = (TextView) view.findViewById(R.id.measure_option_c_tv);
         mTvOptionD = (TextView) view.findViewById(R.id.measure_option_d_tv);
+
+        LinearLayout llOptionA = (LinearLayout) view.findViewById(R.id.measure_option_a);
+        LinearLayout llOptionB = (LinearLayout) view.findViewById(R.id.measure_option_b);
+        LinearLayout llOptionC = (LinearLayout) view.findViewById(R.id.measure_option_c);
+        LinearLayout llOptionD = (LinearLayout) view.findViewById(R.id.measure_option_d);
 
         // 设置按钮
         setOption(position);
@@ -193,6 +198,35 @@ public class MeasureAdapter extends PagerAdapter{
         mTvOptionB.setOnClickListener(optionClick);
         mTvOptionC.setOnClickListener(optionClick);
         mTvOptionD.setOnClickListener(optionClick);
+
+        // 选中行执行点击
+        llOptionA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTvOptionA.performClick();
+            }
+        });
+
+        llOptionB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTvOptionB.performClick();
+            }
+        });
+
+        llOptionC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTvOptionC.performClick();
+            }
+        });
+
+        llOptionD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTvOptionD.performClick();
+            }
+        });
 
         container.addView(view);
         return view;

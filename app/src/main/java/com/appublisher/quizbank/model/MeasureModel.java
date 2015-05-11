@@ -70,7 +70,7 @@ public class MeasureModel {
      * @param rich 富文本
      */
     public static void addRichTextToContainer(final Activity activity, LinearLayout container,
-                                              String rich) {
+                                              String rich, boolean textClick) {
         if (rich == null || rich.length() <= 0) return;
 
         Request request = new Request(activity);
@@ -103,10 +103,13 @@ public class MeasureModel {
                 textView.setLayoutParams(p);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
-                textView.setClickable(false);
                 flowLayout.addView(textView);
                 textView.setText(segment.text);
-                CommonModel.setTextLongClickCopy(textView);
+
+                // text长按复制
+                if (textClick) {
+                    CommonModel.setTextLongClickCopy(textView);
+                }
 
             } else if (MatchInfo.MatchType.Image == segment.type) {
                 final ImageView imgView = new ImageView(activity);

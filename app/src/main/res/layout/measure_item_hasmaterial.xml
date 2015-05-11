@@ -51,7 +51,7 @@
 
             <!-- 选项 A -->
             <LinearLayout
-                android:id="@+id/measure_option_a_m"
+                android:id="@+id/measure_option_a"
                 style="@style/MeasureOptionLL">
 
                 <TextView
@@ -70,7 +70,7 @@
 
             <!-- 选项 B -->
             <LinearLayout
-                android:id="@+id/measure_option_b_m"
+                android:id="@+id/measure_option_b"
                 style="@style/MeasureOptionLL">
 
                 <TextView
@@ -89,7 +89,7 @@
 
             <!-- 选项 C -->
             <LinearLayout
-                android:id="@+id/measure_option_c_m"
+                android:id="@+id/measure_option_c"
                 style="@style/MeasureOptionLL">
 
                 <TextView
@@ -108,7 +108,7 @@
 
             <!-- 选项 D -->
             <LinearLayout
-                android:id="@+id/measure_option_d_m"
+                android:id="@+id/measure_option_d"
                 style="@style/MeasureOptionLL">
 
                 <TextView

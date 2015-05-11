@@ -78,7 +78,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
             final ScrollView svTop = (ScrollView) view.findViewById(R.id.measure_top);
 
             // 材料
-            MeasureModel.addRichTextToContainer(mActivity, llMaterial, material);
+            MeasureModel.addRichTextToContainer(mActivity, llMaterial, material, true);
 
             ivPull.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -145,7 +145,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
                 + "/" + String.valueOf(mQuestions.size()) + " ";
         questionContent = questionPosition + (questionContent == null ? "" : questionContent);
 
-        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, questionContent);
+        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, questionContent, true);
 
         // 设置选项内容
         LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
@@ -162,10 +162,10 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         String optionC = question.getOption_c();
         String optionD = question.getOption_d();
 
-        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA, true);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB, true);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC, true);
+        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD, true);
 
         // 选项Textview控件
         mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
@@ -189,7 +189,8 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         LinearLayout llMeasureAnalysis =
                 (LinearLayout) view.findViewById(R.id.measure_analysis_container);
 
-        MeasureModel.addRichTextToContainer(mActivity, llMeasureAnalysis, question.getAnalysis());
+        MeasureModel.addRichTextToContainer(
+                mActivity, llMeasureAnalysis, question.getAnalysis(), true);
 
         container.addView(view);
         return view;
