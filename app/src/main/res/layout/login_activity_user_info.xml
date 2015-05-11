@@ -102,7 +102,7 @@
                     android:id="@+id/userinfo_phonenum"
                     android:maxLines="1"
                     android:textSize="15sp"
-                    android:textColor="@color/login_white" />
+                    android:textColor="@color/login_edittext_username" />
             </LinearLayout>
             <ImageView
                 android:layout_width="wrap_content"

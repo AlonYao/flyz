@@ -13,7 +13,7 @@
         style="@style/Login_EditText"
         android:id="@+id/setpwd_et"
         android:inputType="textPassword"
-        android:textColor="@color/login_white"
+        android:textColor="@color/login_edittext_username"
         android:layout_marginTop="30dp"
         android:hint="@string/login_setpwd_edittext"/>
 
