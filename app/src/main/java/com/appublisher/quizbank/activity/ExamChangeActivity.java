@@ -127,7 +127,7 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
      * 检查是否设置了考试项目
      */
     private void checkExam() {
-        if ("login".equals(mFrom) && !LoginModel.hasExamInfo()) {
+        if (("reg".equals(mFrom) || "login".equals(mFrom)) && !LoginModel.hasExamInfo()) {
             ToastManager.showToast(this, "请选择考试项目");
         } else {
             finish();
