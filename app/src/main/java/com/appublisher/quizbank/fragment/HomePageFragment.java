@@ -144,7 +144,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         AssessmentM assessment = homePageResp.getAssessment();
         if (assessment != null) {
             mTvEstimate.setText(String.valueOf(assessment.getScore()));
-            mTvRanking.setText(String.valueOf(assessment.getRank()));
+            mTvRanking.setText(String.valueOf((int) assessment.getRank()*100));
         }
 
         PaperM pager = homePageResp.getPaper();

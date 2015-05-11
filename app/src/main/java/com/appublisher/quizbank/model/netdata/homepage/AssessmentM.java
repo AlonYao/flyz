@@ -6,7 +6,7 @@ package com.appublisher.quizbank.model.netdata.homepage;
 public class AssessmentM {
 
     int score;
-    String rank;
+    float rank;
 
     public int getScore() {
         return score;
@@ -16,7 +16,7 @@ public class AssessmentM {
         this.score = score;
     }
 
-    public String getRank() {
+    public float getRank() {
         return rank;
     }
 
