@@ -40,7 +40,7 @@ public class EvaluationModel {
 
         // 列表数据
         int score = evaluationResp.getScore();
-        int rank = evaluationResp.getRank();
+        float rank = evaluationResp.getRank();
         int learningDays = evaluationResp.getLearning_days();
         int totalTime = evaluationResp.getTotal_time();
         int totalQuestions = evaluationResp.getTotal_questions();
@@ -55,7 +55,7 @@ public class EvaluationModel {
         avarageAccuracy = (float) (Math.round(avarageAccuracy*10000)/100.0);
 
         activity.mTvScore.setText(String.valueOf(score));
-        activity.mTvRank.setText(String.valueOf(rank));
+        activity.mTvRank.setText(String.valueOf((int) rank*100));
         activity.mTvLearningDays.setText(String.valueOf(learningDays));
         activity.mTvTotalTime.setText(String.valueOf(totalTime / 60));
         activity.mTvTotalQuestions.setText(String.valueOf(totalQuestions));

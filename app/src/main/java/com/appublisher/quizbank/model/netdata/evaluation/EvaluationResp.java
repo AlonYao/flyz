@@ -9,7 +9,7 @@ public class EvaluationResp {
 
     int response_code;
     int score;
-    int rank;
+    float rank;
     int learning_days;
     int total_time;
     int total_questions;
@@ -29,7 +29,7 @@ public class EvaluationResp {
         return score;
     }
 
-    public int getRank() {
+    public float getRank() {
         return rank;
     }
 
