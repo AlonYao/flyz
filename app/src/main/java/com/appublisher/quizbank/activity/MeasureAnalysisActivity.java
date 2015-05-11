@@ -28,7 +28,6 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -135,8 +134,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        Logger.i("onCreateOptionsMenu");
 
         menu.clear();
 
@@ -339,8 +336,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 ToastManager.showToast(this, "取消收藏");
             }
         }
-
-        if ("delete_error_question".equals(apiName)) Logger.i(response.toString());
 
         ProgressDialogManager.closeProgressDialog();
     }
