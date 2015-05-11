@@ -25,9 +25,6 @@ public class Globals {
     // 是否从游客状态变成已注册用户
     public static boolean is_fromGuestToUser = false;
 
-    // 客服QQ
-    public static String service_qq;
-
     // 友盟统计：进入登陆注册页面的方式
     public static String umeng_login_event;
 

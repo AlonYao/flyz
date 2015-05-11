@@ -23,6 +23,7 @@
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
         android:textSize="15sp"
-        android:textColor="@color/login_white"/>
+        android:text="@string/login_default_qq"
+        android:textColor="@color/login_edittext_username"/>
 
 </LinearLayout>

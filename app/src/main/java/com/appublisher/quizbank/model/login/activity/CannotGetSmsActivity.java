@@ -1,14 +1,17 @@
 package com.appublisher.quizbank.model.login.activity;
 
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.db.GlobalSetting;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -24,7 +27,20 @@ public class CannotGetSmsActivity extends ActionBarActivity {
 
         // view初始化
         TextView tv = (TextView) findViewById(R.id.cannotget_sms_serviceqq);
-        tv.setText("客服QQ号：" + Globals.service_qq);
+
+        // 获取客服QQ
+        GlobalSetting globalSetting = GlobalSettingDAO.findById();
+
+        if (globalSetting != null) {
+            Gson gson = GsonManager.initGson();
+            GlobalSettingsResp globalSettingsResp =
+                    gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
+
+            if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+                String qq = globalSettingsResp.getService_qq();
+                tv.setText("客服QQ号：" + qq);
+            }
+        }
     }
 
     @Override
