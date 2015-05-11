@@ -134,6 +134,7 @@ public class Utils {
 
         if (date != null && !date.equals("")) {
             try {
+                @SuppressLint("SimpleDateFormat")
                 SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd");
 
                 Calendar cal = Calendar.getInstance();

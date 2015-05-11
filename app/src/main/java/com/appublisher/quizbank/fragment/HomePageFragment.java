@@ -20,6 +20,7 @@ import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
+import com.appublisher.quizbank.model.HomePageModel;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
 import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
@@ -79,6 +80,10 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
         ImageView ivSpecial = (ImageView) mView.findViewById(R.id.homepage_special);
         LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
+        TextView tvExam = (TextView) mView.findViewById(R.id.homepage_exam);
+
+        // 倒计时
+        HomePageModel.setExamCountDown(tvExam);
 
         // 历史模考
         ivHistoryMokao.setOnClickListener(new View.OnClickListener() {

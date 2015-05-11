@@ -91,7 +91,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@android:color/white"
                                 android:textSize="43sp"
-                                android:text="100"/>
+                                android:text="@string/practice_report_zero"/>
                         </LinearLayout>
                         <!-- 百分号 -->
                         <TextView
@@ -108,11 +108,11 @@
 
                 <!-- 考试日期 -->
                 <TextView
+                    android:id="@+id/homepage_exam"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="距离新疆公务员考试还有10天"
                     android:textSize="17sp"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
