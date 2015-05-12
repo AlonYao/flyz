@@ -85,7 +85,9 @@
                         android:text="@string/setting_push"/>
                     <CheckBox
                         android:id="@+id/setting_push_cb"
-                        style="@style/SettingCheckBox"/>
+                        style="@style/SettingCheckBox"
+                        android:paddingRight="6dp"
+                        tools:ignore="RtlSymmetry" />
                 </RelativeLayout>
 
                 <View
