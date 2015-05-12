@@ -211,9 +211,13 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 // 未收藏
                 MeasureAnalysisModel.setCollect(this, item);
 
+                ToastManager.showToast(this, "收藏成功");
+
             } else {
                 // 已收藏
                 MeasureAnalysisModel.setUnCollect(this, item);
+
+                ToastManager.showToast(this, "取消收藏");
             }
 
             mRequest.collectQuestion(ParamBuilder.collectQuestion(
@@ -341,14 +345,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if ("collect_error_questions".equals(apiName)) dealMeasureAnalysisResp(response);
 
         if ("history_exercise_detail".equals(apiName)) dealMeasureAnalysisResp(response);
-
-        if ("collect_question".equals(apiName)) {
-            if ("collect".equals(mCollect)) {
-                ToastManager.showToast(this, "收藏成功");
-            } else if ("cancel".equals(mCollect)) {
-                ToastManager.showToast(this, "取消收藏");
-            }
-        }
 
         ProgressDialogManager.closeProgressDialog();
     }
