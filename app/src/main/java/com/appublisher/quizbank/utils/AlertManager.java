@@ -13,6 +13,7 @@ import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
@@ -106,6 +107,13 @@ public class AlertManager {
         } else {
             tvAnother.setVisibility(View.VISIBLE);
         }
+
+        mAlertLastPage.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                MeasureAnalysisModel.mIsShowAlert = false;
+            }
+        });
 
         // 再来一发点击事件
         tvAnother.setOnClickListener(new View.OnClickListener() {

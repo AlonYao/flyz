@@ -19,7 +19,8 @@ import java.util.ArrayList;
 public class MeasureAnalysisModel {
 
     private static int mCurPosition;
-    private static boolean mIsShowAlert;
+
+    public static boolean mIsShowAlert;
 
     /**
      * 设置ViewPager
@@ -52,6 +53,7 @@ public class MeasureAnalysisModel {
                 if(mCurPosition == questions.size() - 1
                         && positionOffsetPixels == 0
                         && !"study_record".equals(activity.mFrom)) {
+
                     if (!mIsShowAlert) {
                         mIsShowAlert = true;
                     } else {
