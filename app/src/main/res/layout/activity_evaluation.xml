@@ -50,40 +50,42 @@
                 </LinearLayout>
 
                 <!-- 排名 -->
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/evaluation_text_gray"
+                        android:text="@string/evaluation_rank"/>
 
                     <LinearLayout
                         android:id="@+id/evaluation_rank_ll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/evaluation_text_gray"
-                            android:text="@string/evaluation_rank"/>
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/evaluation_rank_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/setting_text"
+                            android:text="@string/practice_report_zero"
                             android:textStyle="bold"
                             android:textSize="43sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="10dp"
+                            android:text="@string/homepage_percent"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/evaluation_rank_ll"
-                        android:layout_alignParentBottom="true"
-                        android:paddingBottom="10dp"
-                        android:text="@string/homepage_percent"/>
-
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 列表 -->
@@ -112,21 +114,19 @@
                             style="@style/EvaluationListTitleTv"/>
                     </LinearLayout>
 
-                    <LinearLayout
-                        style="@style/EvaluationListRightLl">
+                    <TextView
+                        android:id="@+id/evaluation_learningdays_tv"
+                        style="@style/EvaluationListCountTvBig"/>
 
-                        <TextView
-                            android:id="@+id/evaluation_learningdays_tv"
-                            style="@style/EvaluationListCountTvBig"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/setting_text"
-                            android:textSize="16sp"
-                            android:text="@string/evaluation_day"/>
-                    </LinearLayout>
+                    <TextView
+                        style="@style/EvaluationListUnitTvBig"
+                        android:text="@string/evaluation_day"
+                        android:layout_alignBottom="@id/evaluation_learningdays_tv"
+                        tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
+
+                <View
+                    style="@style/SettingLine"/>
 
                 <!-- 模考时长 -->
                 <RelativeLayout
@@ -148,21 +148,18 @@
                             android:text="@string/evaluation_totaltime"/>
                     </LinearLayout>
 
-                    <LinearLayout
-                        style="@style/EvaluationListRightLl">
+                    <TextView
+                        android:id="@+id/evaluation_totaltime_tv"
+                        style="@style/EvaluationListCountTvBig"/>
 
-                        <TextView
-                            android:id="@+id/evaluation_totaltime_tv"
-                            style="@style/EvaluationListCountTvBig"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/setting_text"
-                            android:textSize="16sp"
-                            android:text="@string/evaluation_min"/>
-                    </LinearLayout>
+                    <TextView
+                        style="@style/EvaluationListUnitTvBig"
+                        android:layout_alignBottom="@id/evaluation_totaltime_tv"
+                        android:text="@string/evaluation_min"/>
                 </RelativeLayout>
+
+                <View
+                    style="@style/SettingLine"/>
 
                 <!-- 答题量 -->
                 <RelativeLayout
@@ -195,43 +192,35 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        style="@style/EvaluationListRightLl"
-                        android:orientation="vertical">
+                    <!-- 答题量&全站平均 数值 -->
+                    <TextView
+                        android:id="@+id/evaluation_totalquestions_tv"
+                        style="@style/EvaluationListCountTvBig"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="15dp"/>
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:id="@+id/evaluation_totalquestions_tv"
-                                style="@style/EvaluationListCountTvBig"/>
+                    <TextView
+                        style="@style/EvaluationListUnitTvBig"
+                        android:layout_alignBottom="@id/evaluation_totalquestions_tv"
+                        android:text="@string/evaluation_dao"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/setting_text"
-                                android:textSize="16sp"
-                                android:text="@string/evaluation_dao"/>
-                        </LinearLayout>
+                    <TextView
+                        android:id="@+id/evaluation_avaragequestions_tv"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="16sp"
+                        style="@style/EvaluationListCountTvBig"/>
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:id="@+id/evaluation_avaragequestions_tv"
-                                style="@style/EvaluationListCountTvSmall"/>
+                    <TextView
+                        style="@style/EvaluationListUnitTvBig"
+                        android:layout_alignBottom="@id/evaluation_avaragequestions_tv"
+                        android:text="@string/evaluation_dao"
+                        android:textSize="15sp"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/setting_text"
-                                android:text="@string/evaluation_dao"/>
-                        </LinearLayout>
-
-                    </LinearLayout>
                 </RelativeLayout>
+
+                <View
+                    style="@style/SettingLine"/>
 
                 <!-- 正确率 -->
                 <RelativeLayout
@@ -263,42 +252,31 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        style="@style/EvaluationListRightLl"
-                        android:orientation="vertical">
+                    <!-- 正确率&全站平均 数值 -->
+                    <TextView
+                        android:id="@+id/evaluation_accuracy_tv"
+                        style="@style/EvaluationListCountTvBig"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="15dp"/>
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:id="@+id/evaluation_accuracy_tv"
-                                style="@style/EvaluationListCountTvBig"/>
+                    <TextView
+                        style="@style/EvaluationListUnitTvBig"
+                        android:layout_alignBottom="@id/evaluation_accuracy_tv"
+                        android:text="@string/homepage_percent"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/setting_text"
-                                android:textSize="16sp"
-                                android:text="@string/homepage_percent"/>
-                        </LinearLayout>
+                    <TextView
+                        android:id="@+id/evaluation_avarageaccuracy_tv"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="16sp"
+                        style="@style/EvaluationListCountTvBig"/>
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:id="@+id/evaluation_avarageaccuracy_tv"
-                                style="@style/EvaluationListCountTvSmall"/>
+                    <TextView
+                        style="@style/EvaluationListUnitTvBig"
+                        android:layout_alignBottom="@id/evaluation_avarageaccuracy_tv"
+                        android:text="@string/homepage_percent"
+                        android:textSize="15sp"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/setting_text"
-                                android:text="@string/homepage_percent"/>
-                        </LinearLayout>
-
-                    </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
 

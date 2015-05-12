@@ -54,15 +54,25 @@ public class EvaluationModel {
         int accuracyInt = (int) (Math.round(accuracy*100)/1.0);
         int avarageAccuracyInt = (int) (Math.round(avarageAccuracy*100)/1.0);
 
+        // 预测分&排名
         activity.mTvScore.setText(String.valueOf(score));
         activity.mTvRank.setText(Utils.rateToString(rank));
+
+        // 学习天数
         activity.mTvLearningDays.setText(String.valueOf(learningDays));
+
+        // 模考时长
         activity.mTvTotalTime.setText(String.valueOf(totalTime / 60));
+
+        // 答题量&全站平均
         activity.mTvTotalQuestions.setText(String.valueOf(totalQuestions));
         activity.mTvAvarageQuestions.setText(String.valueOf(avarageQuestions));
+
+        // 正确率&全站平均
         activity.mTvAccuracy.setText(String.valueOf(accuracyInt));
         activity.mTvAvarageAccuracy.setText(String.valueOf(avarageAccuracyInt));
 
+        // 统计
         activity.mTvSummarySource.setText("统计来源：" + summarySource);
         activity.mTvCalculationBasis.setText("计算根据：" + calculationBasis);
         activity.mTvSummaryDate.setText("报告时间：" + summaryDate);
