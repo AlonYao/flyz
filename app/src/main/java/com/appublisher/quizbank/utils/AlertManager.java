@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
@@ -17,6 +18,8 @@ import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
+
+import org.json.JSONArray;
 
 /**
  * Alert管理
@@ -234,6 +237,49 @@ public class AlertManager {
                             }
                         })
                 .setNegativeButton(R.string.alert_logout_negative,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
+    }
+
+    /**
+     * 如果有未完成题目时的提示
+     * @param activity AnswerSheetActivity
+     * @param redoSubmit 是否是重做
+     * @param duration_total 总做题时间
+     * @param questions 用户答案信息
+     */
+    public static void answerSheetNoticeAlert(final AnswerSheetActivity activity,
+                                              final String redoSubmit,
+                                              final int duration_total,
+                                              final JSONArray questions) {
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.alert_answersheet_content)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_answersheet_p,
+                        new DialogInterface.OnClickListener() {// 确定
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ProgressDialogManager.showProgressDialog(activity, false);
+                                new Request(activity, activity).submitPaper(
+                                        ParamBuilder.submitPaper(
+                                                String.valueOf(activity.mPaperId),
+                                                String.valueOf(activity.mPaperType),
+                                                redoSubmit,
+                                                String.valueOf(duration_total),
+                                                questions.toString(),
+                                                "done")
+                                );
+
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_answersheet_n,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

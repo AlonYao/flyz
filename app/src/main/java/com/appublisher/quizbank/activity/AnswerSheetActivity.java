@@ -20,7 +20,6 @@ import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
@@ -43,6 +42,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     public int mTotalNum;
     public int mRightNum;
     public String mPaperType;
+    public int mPaperId;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public LinearLayout mLlEntireContainer;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
@@ -146,8 +146,6 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
      */
     private void dealSubmitPaperResp(JSONObject response) {
         if (response == null) return;
-
-        Logger.i(response.toString());
 
         SubmitPaperResp submitPaperResp =
                 mGson.fromJson(response.toString(), SubmitPaperResp.class);

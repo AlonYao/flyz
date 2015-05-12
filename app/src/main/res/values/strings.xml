@@ -91,6 +91,9 @@
     <string name="alert_lastpage_back">返回</string>
     <string name="alert_lastpage_zhibo">看个直播</string>
     <string name="alert_delete_error_content">确定要从错题本中删除这道错题么？</string>
+    <string name="alert_answersheet_content">你还有题没做，确认要交卷吗？</string>
+    <string name="alert_answersheet_n">再看看</string>
+    <string name="alert_answersheet_p">交卷</string>
 
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>

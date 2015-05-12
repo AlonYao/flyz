@@ -10,6 +10,7 @@ import com.appublisher.quizbank.adapter.EntireAnswerSheetAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 
 import org.json.JSONArray;
@@ -86,6 +87,8 @@ public class AnswerSheetModel {
         JSONArray questions = new JSONArray();
 
         boolean redo = activity.getIntent().getBooleanExtra("redo", false);
+        // 标记有没有未做的题
+        boolean hasNoAnswer = false;
 
         String redoSubmit;
         if (redo) {
@@ -118,6 +121,9 @@ public class AnswerSheetModel {
                     is_right = true;
                     activity.mRightNum++;
                 }
+
+                // 标记有没有未做的题
+                if (answer == null || answer.length() == 0) hasNoAnswer = true;
 
                 // 统计总时长
                 duration_total = duration_total + duration;
@@ -175,17 +181,22 @@ public class AnswerSheetModel {
             }
         }
 
-        int paperId = activity.getIntent().getIntExtra("paper_id", 0);
+        activity.mPaperId = activity.getIntent().getIntExtra("paper_id", 0);
 
-        ProgressDialogManager.showProgressDialog(activity, false);
-        new Request(activity, activity).submitPaper(
-                ParamBuilder.submitPaper(
-                        String.valueOf(paperId),
-                        String.valueOf(activity.mPaperType),
-                        redoSubmit,
-                        String.valueOf(duration_total),
-                        questions.toString(),
-                        "done")
-        );
+        if (hasNoAnswer) {
+            // 提示用户是否提交
+            AlertManager.answerSheetNoticeAlert(activity, redoSubmit, duration_total, questions);
+        } else {
+            ProgressDialogManager.showProgressDialog(activity, false);
+            new Request(activity, activity).submitPaper(
+                    ParamBuilder.submitPaper(
+                            String.valueOf(activity.mPaperId),
+                            String.valueOf(activity.mPaperType),
+                            redoSubmit,
+                            String.valueOf(duration_total),
+                            questions.toString(),
+                            "done")
+            );
+        }
     }
 }
