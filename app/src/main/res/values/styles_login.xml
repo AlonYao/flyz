@@ -7,7 +7,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:ems">10</item>
         <item name="android:textColorHint">@color/login_edittext_username</item>
-        <item name="android:textColor">@color/login_white</item>
+        <item name="android:textColor">@color/login_edittext_username</item>
         <item name="android:background">@drawable/login_edittext_background</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
