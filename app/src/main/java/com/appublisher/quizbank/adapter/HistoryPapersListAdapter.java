@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
+import com.appublisher.quizbank.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -76,7 +77,7 @@ public class HistoryPapersListAdapter extends BaseAdapter{
 
                 if ("done".equals(status)) {
                     viewHolder.tvContent.setText("正确率"
-                            + String.valueOf(historyPaper.getAccuracy())
+                            + Utils.rateToString(historyPaper.getAccuracy())
                             + "%");
                 } else {
                     viewHolder.tvContent.setText("未完成");

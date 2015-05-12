@@ -2,6 +2,7 @@ package com.appublisher.quizbank.model.netdata.historyexercise;
 
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
+import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
 import java.util.ArrayList;
@@ -18,6 +19,11 @@ public class HistoryExerciseResp {
     ArrayList<QuestionM> questions;
     ArrayList<AnswerM> answers;
     ArrayList<CategoryM> category;
+    ArrayList<NoteM> notes;
+
+    public ArrayList<NoteM> getNotes() {
+        return notes;
+    }
 
     public ArrayList<CategoryM> getCategory() {
         return category;

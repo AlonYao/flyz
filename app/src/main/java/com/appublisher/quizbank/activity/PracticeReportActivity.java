@@ -10,6 +10,8 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.PracticeReportModel;
+import com.appublisher.quizbank.model.netdata.measure.NoteM;
+import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -17,6 +19,9 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 练习报告Activity
@@ -36,6 +41,14 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public int mHierarchyId;
     public int mHierarchyLevel;
     public String mFrom;
+
+    public HashMap<String, HashMap<String, Object>> mCategoryMap;
+    public ArrayList<NoteM> mNotes;
+    public ArrayList<QuestionM> mQuestions;
+    public ArrayList<HashMap<String, Object>> mUserAnswerList;
+    public int mRightNum;
+    public int mTotalNum;
+    public boolean mIsFromError;
 
     @SuppressWarnings("unchecked")
     @Override

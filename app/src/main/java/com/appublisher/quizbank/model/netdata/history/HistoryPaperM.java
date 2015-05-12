@@ -8,7 +8,7 @@ public class HistoryPaperM {
     int paper_id;
     String paper_type;
     String name;
-    int accuracy;
+    float accuracy;
     String status;
     String action_time;
 
@@ -24,7 +24,7 @@ public class HistoryPaperM {
         return name;
     }
 
-    public int getAccuracy() {
+    public float getAccuracy() {
         return accuracy;
     }
 

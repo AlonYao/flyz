@@ -31,13 +31,6 @@ import java.util.Map;
 public class PracticeReportModel {
 
     private static PracticeReportActivity mActivity;
-    private static HashMap<String, HashMap<String, Object>> mCategoryMap;
-    private static ArrayList<NoteM> mNotes;
-    private static ArrayList<QuestionM> mQuestions;
-    private static ArrayList<HashMap<String, Object>> mUserAnswerList;
-    private static int mRightNum;
-    private static int mTotalNum;
-    private static boolean mIsFromError;
 
     /**
      * 获取数据
@@ -46,18 +39,19 @@ public class PracticeReportModel {
     public static void getData(final PracticeReportActivity activity) {
         mActivity = activity;
 
-        mRightNum = activity.getIntent().getIntExtra("right_num", 0);
-        mTotalNum = activity.getIntent().getIntExtra("total_num", 0);
+        activity.mRightNum = activity.getIntent().getIntExtra("right_num", 0);
+        activity.mTotalNum = activity.getIntent().getIntExtra("total_num", 0);
         //noinspection unchecked
-        mCategoryMap = (HashMap<String, HashMap<String, Object>>)
+        activity.mCategoryMap = (HashMap<String, HashMap<String, Object>>)
                         activity.getIntent().getSerializableExtra("category");
         //noinspection unchecked
-        mNotes = (ArrayList<NoteM>) activity.getIntent().getSerializableExtra("notes");
+        activity.mNotes = (ArrayList<NoteM>) activity.getIntent().getSerializableExtra("notes");
         //noinspection unchecked
-        mQuestions = (ArrayList<QuestionM>) activity.getIntent().getSerializableExtra("questions");
+        activity.mQuestions = (ArrayList<QuestionM>)
+                activity.getIntent().getSerializableExtra("questions");
 
         //noinspection unchecked
-        mUserAnswerList = (ArrayList<HashMap<String, Object>>)
+        activity.mUserAnswerList = (ArrayList<HashMap<String, Object>>)
                 activity.getIntent().getSerializableExtra("user_answer");
 
         // 显示内容
@@ -69,8 +63,8 @@ public class PracticeReportModel {
      */
     private static void setContent() {
         mActivity.mTvPaperName.setText(mActivity.mPaperName);
-        mActivity.mTvRightNum.setText(String.valueOf(mRightNum));
-        mActivity.mTvTotalNum.setText(String.valueOf(mTotalNum));
+        mActivity.mTvRightNum.setText(String.valueOf(mActivity.mRightNum));
+        mActivity.mTvTotalNum.setText(String.valueOf(mActivity.mTotalNum));
 
         // 添加科目
         addCategory();
@@ -82,7 +76,7 @@ public class PracticeReportModel {
         mActivity.mTvAll.setOnClickListener(allOnClick);
 
         // 错题解析
-        if (mRightNum == mTotalNum) {
+        if (mActivity.mRightNum == mActivity.mTotalNum) {
             // 没有错题
             mActivity.mTvError.setOnClickListener(null);
             mActivity.mTvError.setBackgroundResource(R.color.practice_report_error_gray);
@@ -98,15 +92,15 @@ public class PracticeReportModel {
     private static View.OnClickListener allOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (mQuestions == null || mQuestions.size() == 0) return;
+            if (mActivity.mQuestions == null || mActivity.mQuestions.size() == 0) return;
 
-            int size = mQuestions.size();
+            int size = mActivity.mQuestions.size();
             ArrayList<AnswerM> answers = new ArrayList<>();
 
             for (int i = 0; i < size; i++) {
                 AnswerM answerItem = new AnswerM();
 
-                HashMap<String, Object> userAnswerMap = mUserAnswerList.get(i);
+                HashMap<String, Object> userAnswerMap = mActivity.mUserAnswerList.get(i);
                 if (userAnswerMap == null) {
                     answerItem.setId(0);
                     answerItem.setAnswer("");
@@ -131,8 +125,8 @@ public class PracticeReportModel {
             }
 
             // 跳转
-            mIsFromError = false;
-            skipToMeasureAnalysisActivity(mQuestions, answers);
+            mActivity.mIsFromError = false;
+            skipToMeasureAnalysisActivity(mActivity.mQuestions, answers);
         }
     };
 
@@ -142,14 +136,14 @@ public class PracticeReportModel {
     private static View.OnClickListener errorOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (mUserAnswerList == null || mUserAnswerList.size() == 0) return;
+            if (mActivity.mUserAnswerList == null || mActivity.mUserAnswerList.size() == 0) return;
 
             ArrayList<QuestionM> errorQuestions = new ArrayList<>();
             ArrayList<AnswerM> errorAnswers = new ArrayList<>();
 
-            int size = mUserAnswerList.size();
+            int size = mActivity.mUserAnswerList.size();
             for (int i = 0; i < size; i++) {
-                HashMap<String, Object> userAnswerMap = mUserAnswerList.get(i);
+                HashMap<String, Object> userAnswerMap = mActivity.mUserAnswerList.get(i);
 
                 if (userAnswerMap == null) continue;
 
@@ -163,10 +157,10 @@ public class PracticeReportModel {
                     answerItem.setAnswer(userAnswer);
                     answerItem.setIs_right(false);
 
-                    if (mQuestions == null || i >= mQuestions.size()) {
+                    if (mActivity.mQuestions == null || i >= mActivity.mQuestions.size()) {
                         errorQuestions.add(new QuestionM());
                     } else {
-                        errorQuestions.add(mQuestions.get(i));
+                        errorQuestions.add(mActivity.mQuestions.get(i));
                     }
 
                     errorAnswers.add(answerItem);
@@ -174,7 +168,7 @@ public class PracticeReportModel {
             }
 
             // 跳转
-            mIsFromError = true;
+            mActivity.mIsFromError = true;
             skipToMeasureAnalysisActivity(errorQuestions, errorAnswers);
         }
     };
@@ -194,7 +188,7 @@ public class PracticeReportModel {
         intent.putExtra("hierarchy_id", mActivity.mHierarchyId);
         intent.putExtra("hierarchy_level", mActivity.mHierarchyLevel);
         intent.putExtra("from", mActivity.mFrom);
-        intent.putExtra("is_from_error", mIsFromError);
+        intent.putExtra("is_from_error", mActivity.mIsFromError);
         mActivity.startActivity(intent);
 
         mActivity.finish();
@@ -204,16 +198,16 @@ public class PracticeReportModel {
      * 添加知识点
      */
     private static void addNote() {
-        if (mNotes == null || mNotes.size() == 0) {
+        if (mActivity.mNotes == null || mActivity.mNotes.size() == 0) {
             mActivity.mTvNoteNoChange.setVisibility(View.VISIBLE);
             mActivity.mLlNoteContainer.setVisibility(View.GONE);
         } else {
             mActivity.mTvNoteNoChange.setVisibility(View.GONE);
             mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
 
-            int size = mNotes.size();
+            int size = mActivity.mNotes.size();
             for (int i = 0; i < size; i++) {
-                NoteM note = mNotes.get(i);
+                NoteM note = mActivity.mNotes.get(i);
                 if (note == null) continue;
 
                 View child = LayoutInflater.from(mActivity).inflate(
@@ -250,9 +244,9 @@ public class PracticeReportModel {
      * 添加科目
      */
     private static void addCategory() {
-        if (mCategoryMap == null) return;
+        if (mActivity.mCategoryMap == null) return;
 
-        for (Object o : mCategoryMap.entrySet()) {
+        for (Object o : mActivity.mCategoryMap.entrySet()) {
             Map.Entry entry = (Map.Entry) o;
             String categoryName = (String) entry.getKey();
             //noinspection unchecked
@@ -333,24 +327,24 @@ public class PracticeReportModel {
                                                      JSONObject response) {
         if (response == null) return;
 
+        mActivity = activity;
+
         Gson gson = GsonManager.initGson();
         HistoryExerciseResp historyExerciseResp =
                 gson.fromJson(response.toString(), HistoryExerciseResp.class);
 
         if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
 
-        mQuestions = historyExerciseResp.getQuestions();
+        activity.mQuestions = historyExerciseResp.getQuestions();
         ArrayList<CategoryM> categorys = historyExerciseResp.getCategory();
 
-        mActivity = activity;
-
-        if (mQuestions != null && categorys == null) {
+        if (activity.mQuestions != null && categorys == null) {
             // 非整卷
             ArrayList<AnswerM> answers = historyExerciseResp.getAnswers();
             jointUserAnswer(answers);
-        } else if (mQuestions == null && categorys != null) {
+        } else if (activity.mQuestions == null && categorys != null) {
             // 整卷
-            mQuestions = new ArrayList<>();
+            activity.mQuestions = new ArrayList<>();
 
             int size = categorys.size();
             for (int i = 0; i < size; i++) {
@@ -359,17 +353,20 @@ public class PracticeReportModel {
                 if (category == null) continue;
 
                 ArrayList<QuestionM> categoryQuestions = category.getQuestions();
-                String categoryName = category.getName();
+//                String categoryName = category.getName();
 
                 if (categoryQuestions == null || categoryQuestions.size() == 0) continue;
 
-                mQuestions.addAll(categoryQuestions);
+                activity.mQuestions.addAll(categoryQuestions);
 
                 // 拼接用户答案
                 ArrayList<AnswerM> answers = category.getAnswers();
                 jointUserAnswer(answers);
             }
         }
+
+        // 知识点变化
+        activity.mNotes = historyExerciseResp.getNotes();
 
         // 拼接科目
         jointCategoryMap();
@@ -382,15 +379,15 @@ public class PracticeReportModel {
      * 拼接科目
      */
     private static void jointCategoryMap() {
-        if (mUserAnswerList == null) return;
+        if (mActivity.mUserAnswerList == null) return;
 
-        mTotalNum = mUserAnswerList.size();
+        mActivity.mTotalNum = mActivity.mUserAnswerList.size();
 
         HashMap<String, Object> userAnswerMap;
-        mCategoryMap = new HashMap<>();
+        mActivity.mCategoryMap = new HashMap<>();
 
-        for (int i = 0; i < mTotalNum; i++) {
-            userAnswerMap = mUserAnswerList.get(i);
+        for (int i = 0; i < mActivity.mTotalNum; i++) {
+            userAnswerMap = mActivity.mUserAnswerList.get(i);
 
             String category_name = (String) userAnswerMap.get("category_name");
             String answer = (String) userAnswerMap.get("answer");
@@ -402,14 +399,14 @@ public class PracticeReportModel {
             if (answer != null && right_answer != null
                     && !"".equals(answer) && answer.equals(right_answer)) {
                 is_right = true;
-                mRightNum++;
+                mActivity.mRightNum++;
             }
 
             // 统计科目信息
             if (category_name != null
-                    && mCategoryMap.containsKey(category_name)) {
+                    && mActivity.mCategoryMap.containsKey(category_name)) {
                 // 更新Map
-                HashMap<String, Object> map = mCategoryMap.get(category_name);
+                HashMap<String, Object> map = mActivity.mCategoryMap.get(category_name);
 
                 int medium;
 
@@ -431,7 +428,7 @@ public class PracticeReportModel {
                 map.put("duration_total", medium);
 
                 // 保存
-                mCategoryMap.put(category_name, map);
+                mActivity.mCategoryMap.put(category_name, map);
             } else {
                 HashMap<String, Object> map = new HashMap<>();
                 if (is_right) {
@@ -441,7 +438,7 @@ public class PracticeReportModel {
                 }
                 map.put("total_num", 1);
                 map.put("duration_total", duration);
-                mCategoryMap.put(category_name, map);
+                mActivity.mCategoryMap.put(category_name, map);
             }
         }
     }
@@ -451,12 +448,12 @@ public class PracticeReportModel {
      * @param answers 用户答案
      */
     private static void jointUserAnswer(ArrayList<AnswerM> answers) {
-        mUserAnswerList = new ArrayList<>();
+        mActivity.mUserAnswerList = new ArrayList<>();
 
-        int size = mQuestions.size();
+        int size = mActivity.mQuestions.size();
         for (int i = 0; i < size; i++) {
             HashMap<String, Object> map = new HashMap<>();
-            QuestionM question = mQuestions.get(i);
+            QuestionM question = mActivity.mQuestions.get(i);
 
             if (question != null) {
                 map.put("id", question.getId());
@@ -481,7 +478,7 @@ public class PracticeReportModel {
                 map.put("answer", answer.getAnswer());
             }
 
-            mUserAnswerList.add(map);
+            mActivity.mUserAnswerList.add(map);
         }
     }
 }
