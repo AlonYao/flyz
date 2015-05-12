@@ -199,13 +199,12 @@ public class Request extends BaseRequest implements ApiConstants{
     }
 
     /**
-     * 获取地理位置
-     * @param location 经纬度
+     * 获取公开课详情
+     * @param course_id 公开课id
      */
-    public void getLocation(String location) {
-        String url = "http://api.map.baidu.com/geocoder/v2/?location="
-                + location + "&output=json&ak=B3547418bc3eb81c55baa59a8fb16975&pois=0";
-        asyncRequest(url, "location", "object");
+    public void openCourseDetail(String course_id) {
+        asyncRequest(ParamBuilder.finalUrl(openCourseDetail) + "&course_id=" + course_id,
+                "open_course_detail", "object");
     }
 
 	/*********************
