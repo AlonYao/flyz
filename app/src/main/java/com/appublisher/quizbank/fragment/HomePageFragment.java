@@ -43,16 +43,17 @@ import org.json.JSONObject;
  */
 public class HomePageFragment extends Fragment implements RequestCallback{
 
-    private Activity mActivity;
     private TextView mTvEstimate;
     private TextView mTvRanking;
     private TextView mTvTodayExam;
     private TextView mTvSpecial;
-    private TextView mTvZhiboke;
     private LinearLayout mLlMokao;
     private LinearLayout mLlSpecial;
     private TextView mTvQuickTest;
     private View mView;
+
+    public TextView mTvZhiboke;
+    public Activity mActivity;
 
     @Override
     public void onAttach(Activity activity) {
@@ -222,33 +223,9 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             }
         });
 
-        // 直播课
+        // 公开课
         LiveCourseM liveCourse = homePageResp.getLive_course();
-        if (liveCourse != null) {
-
-            int type = liveCourse.getType();
-
-            switch (type) {
-                case 0:
-                    // 没有公开课
-                    break;
-
-                case 1:
-                    // 正在上课
-                    break;
-
-                case 2:
-                    // 即将上课
-                    break;
-            }
-
-            mTvZhiboke.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ToastManager.showToast(mActivity, "直播课 施工中……");
-                }
-            });
-        }
+        HomePageModel.setOpenCourse(this, liveCourse);
 
         // 记录最近的系统通知的id
         Globals.last_notice_id = homePageResp.getLatest_notify();

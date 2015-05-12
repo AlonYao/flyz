@@ -35,7 +35,8 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"/>
+            android:process=":remote" />
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="B3547418bc3eb81c55baa59a8fb16975" />
@@ -196,8 +197,12 @@
         </activity>
         <activity
             android:name=".activity.MyAnalysisActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:label="@string/title_activity_my_analysis" >
+            android:label="@string/title_activity_my_analysis"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name=".activity.OpenCourseUnstartActivity"
+            android:label="@string/title_activity_open_course_unstart" >
         </activity>
     </application>
 

@@ -252,4 +252,15 @@
         <item name="android:text">0</item>
     </style>
 
+    <!-- 公开课 -->
+    <style name="OpenCourseTv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:text">@string/common_none</item>
+        <item name="android:textColor">@color/setting_text</item>
+    </style>
+
 </resources>

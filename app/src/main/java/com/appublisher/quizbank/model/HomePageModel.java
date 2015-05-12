@@ -1,10 +1,15 @@
 package com.appublisher.quizbank.model;
 
+import android.content.Intent;
+import android.view.View;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.dao.UserDAO;
+import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
+import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
@@ -34,5 +39,51 @@ public class HomePageModel {
         long day = Utils.dateMinusNow(date);
 
         textView.setText("距离"+ name + "还有" + String.valueOf(day) + "天");
+    }
+
+    /**
+     * 设置公开课
+     * @param fragment HomePageFragment
+     * @param liveCourse 公开课数据
+     */
+    public static void setOpenCourse(final HomePageFragment fragment, LiveCourseM liveCourse) {
+        if (liveCourse == null) return;
+
+        int type = liveCourse.getType();
+        final String content = liveCourse.getContent();
+
+        switch (type) {
+            case 0:
+                // 没有公开课
+                break;
+
+            case 1:
+                // 正在上课
+                break;
+
+            case 2:
+                // 即将上课
+                fragment.mTvZhiboke.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent =
+                                new Intent(fragment.mActivity, OpenCourseUnstartActivity.class);
+                        intent.putExtra("content", content);
+                        fragment.mActivity.startActivity(intent);
+                    }
+                });
+
+                break;
+        }
+
+        fragment.mTvZhiboke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =
+                        new Intent(fragment.mActivity, OpenCourseUnstartActivity.class);
+                intent.putExtra("content", content);
+                fragment.mActivity.startActivity(intent);
+            }
+        });
     }
 }

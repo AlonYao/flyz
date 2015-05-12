@@ -202,7 +202,7 @@ public class Request extends BaseRequest implements ApiConstants{
      * 获取公开课详情
      * @param course_id 公开课id
      */
-    public void openCourseDetail(String course_id) {
+    public void getOpenCourseDetail(String course_id) {
         asyncRequest(ParamBuilder.finalUrl(openCourseDetail) + "&course_id=" + course_id,
                 "open_course_detail", "object");
     }

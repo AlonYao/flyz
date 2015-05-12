@@ -8,6 +8,16 @@ public class OpenCourseM {
     String name;
     String cover_pic;
     String lector;
+    String start_time;
+    String end_time;
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
 
     public String getName() {
         return name;
