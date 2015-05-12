@@ -51,6 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="29dp"
                         android:layout_marginTop="15dp"
+                        android:gravity="center_horizontal"
                         android:orientation="vertical">
 
                         <TextView
@@ -89,6 +90,7 @@
                                 android:id="@+id/homepage_ranking"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:textColor="@android:color/white"
                                 android:textSize="43sp"
                                 android:text="@string/practice_report_zero"/>

@@ -21,9 +21,9 @@
     <string name="drawer_setting">设置</string>
 
     <!-- 首页 -->
-    <string name="homepage_gufen">估分</string>
+    <string name="homepage_gufen">预测分</string>
     <string name="homepage_gufen_value">0</string>
-    <string name="homepage_paiming">排名</string>
+    <string name="homepage_paiming">排在前</string>
     <string name="homepage_paiming_value">0</string>
     <string name="homepage_percent">%</string>
     <string name="homepage_autotest">快速智能练习</string>
