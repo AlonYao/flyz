@@ -316,7 +316,6 @@
                     android:id="@+id/evaluation_summarysource"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
                     android:textColor="@color/evaluation_text_gray"/>
 
                 <TextView
@@ -325,14 +324,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:textSize="18sp"
                     android:textColor="@color/evaluation_text_gray"/>
 
                 <TextView
                     android:id="@+id/evaluation_summarydate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
                     android:textColor="@color/evaluation_text_gray"/>
             </LinearLayout>
 
