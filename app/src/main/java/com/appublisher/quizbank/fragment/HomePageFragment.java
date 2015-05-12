@@ -224,16 +224,22 @@ public class HomePageFragment extends Fragment implements RequestCallback{
 
         // 直播课
         LiveCourseM liveCourse = homePageResp.getLive_course();
-        if (liveCourse != null && liveCourse.getId() != 0) {
-            mTvZhiboke.setBackgroundResource(R.drawable.homepage_item_bg);
-            mTvZhiboke.setTextColor(getResources().getColor(R.color.homepage_todayexam));
+        if (liveCourse != null) {
 
-            if (liveCourse.isStarted()) {
-                // 正在上课
-                mTvZhiboke.setText("正在直播：" + liveCourse.getName());
-            } else {
-                // 即将上课
-                mTvZhiboke.setText("即将开始：" + liveCourse.getName());
+            int type = liveCourse.getType();
+
+            switch (type) {
+                case 0:
+                    // 没有公开课
+                    break;
+
+                case 1:
+                    // 正在上课
+                    break;
+
+                case 2:
+                    // 即将上课
+                    break;
             }
 
             mTvZhiboke.setOnClickListener(new View.OnClickListener() {

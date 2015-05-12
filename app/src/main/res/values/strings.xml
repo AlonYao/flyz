@@ -30,7 +30,7 @@
     <string name="homepage_special_value">暂无</string>
     <string name="homepage_today_exam">今日模考</string>
     <string name="homepage_today_exam_value">已有0人参加</string>
-    <string name="homepage_zhiboke">敬请期待</string>
+    <string name="homepage_zhiboke">免费公开课</string>
 
     <!-- 设置 -->
     <string name="setting_account">账号设置</string>

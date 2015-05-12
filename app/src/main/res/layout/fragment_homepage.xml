@@ -210,10 +210,15 @@
             <!-- 快速练习 -->
             <TextView
                 android:id="@+id/homepage_zhiboke"
-                style="@style/HomePageAutoTestTv"
+                android:layout_width="288dp"
+                android:layout_height="66dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"
+                android:gravity="center"
+                android:textSize="17sp"
                 android:text="@string/homepage_zhiboke"
                 android:textColor="@android:color/white"
-                android:background="@drawable/homepage_item_bg_hollow"
+                android:background="@drawable/homepage_gongkaike_bg"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
     </ScrollView>
