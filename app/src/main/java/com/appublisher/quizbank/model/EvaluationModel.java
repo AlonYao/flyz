@@ -51,8 +51,8 @@ public class EvaluationModel {
         String calculationBasis = evaluationResp.getCalculation_basis();
         String summaryDate = evaluationResp.getSummary_date();
 
-        accuracy = (float) (Math.round(accuracy*10000)/100.0);
-        avarageAccuracy = (float) (Math.round(avarageAccuracy*10000)/100.0);
+        int accuracyInt = (int) (Math.round(accuracy*100)/1.0);
+        int avarageAccuracyInt = (int) (Math.round(avarageAccuracy*100)/1.0);
 
         activity.mTvScore.setText(String.valueOf(score));
         activity.mTvRank.setText(Utils.rateToString(rank));
@@ -60,8 +60,8 @@ public class EvaluationModel {
         activity.mTvTotalTime.setText(String.valueOf(totalTime / 60));
         activity.mTvTotalQuestions.setText(String.valueOf(totalQuestions));
         activity.mTvAvarageQuestions.setText(String.valueOf(avarageQuestions));
-        activity.mTvAccuracy.setText(String.valueOf(accuracy));
-        activity.mTvAvarageAccuracy.setText(String.valueOf(avarageAccuracy));
+        activity.mTvAccuracy.setText(String.valueOf(accuracyInt));
+        activity.mTvAvarageAccuracy.setText(String.valueOf(avarageAccuracyInt));
 
         activity.mTvSummarySource.setText("统计来源：" + summarySource);
         activity.mTvCalculationBasis.setText("计算根据：" + calculationBasis);

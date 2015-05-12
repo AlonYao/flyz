@@ -194,7 +194,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
             // 推荐专项训练
             final PaperNoteM note = pager.getNote();
             if (note != null) {
-                mTvSpecial.setText(note.getName());
+                mTvSpecial.setText("推荐："  + note.getName());
 
                 mLlSpecial.setOnClickListener(new View.OnClickListener() {
                     @Override
