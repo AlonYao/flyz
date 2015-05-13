@@ -63,6 +63,9 @@ public class WholePageModel {
 
                         // 匹配成功
                         WholePageFragment.mCurAreaId = area.getArea_id();
+
+                        // 更新菜单栏文字
+                        WholePageFragment.mTvProvince.setText(area.getName());
                         break;
                     }
                 }

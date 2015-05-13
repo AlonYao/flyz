@@ -20,6 +20,7 @@
                 style="@style/WholePagePopupMenuRl">
 
                 <TextView
+                    android:id="@+id/wholepage_province_tv"
                     style="@style/WholePagePopupMenuTv"
                     android:text="@string/wholepage_province"/>
 
@@ -39,6 +40,7 @@
                 style="@style/WholePagePopupMenuRl">
 
                 <TextView
+                    android:id="@+id/wholepage_year_tv"
                     style="@style/WholePagePopupMenuTv"
                     android:text="@string/wholepage_year"/>
 

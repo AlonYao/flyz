@@ -69,7 +69,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     private ArrayList<EntirePaperM> mEntirePapers;
     private ImageView mIvProvinceArrow;
     private ImageView mIvYearArrow;
+    private TextView mTvYear;
 
+    public static TextView mTvProvince;
     public static RelativeLayout mRlLocation;
     public static TextView mTvLocation;
     public static TextView mTvReLocation;
@@ -145,6 +147,8 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mLvWholePage = (XListView) mMainView.findViewById(R.id.wholepage_xlistview);
         mIvProvinceArrow = (ImageView) mMainView.findViewById(R.id.wholepage_province_arrow);
         mIvYearArrow = (ImageView) mMainView.findViewById(R.id.wholepage_year_arrow);
+        mTvProvince = (TextView) mMainView.findViewById(R.id.wholepage_province_tv);
+        mTvYear = (TextView) mMainView.findViewById(R.id.wholepage_year_tv);
 
         // XListView
         mLvWholePage.setXListViewListener(this);
@@ -282,6 +286,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 
                         if (area != null) {
                             mCurAreaId = area.getArea_id();
+
+                            // 更新菜单栏文字
+                            mTvProvince.setText(area.getName());
                         }
                     }
                 }
@@ -374,12 +381,10 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 
                     // 记录当前的地区id
                     if (mYears != null && position < mYears.size()) {
-                        AreaM area = mAreas.get(position);
-
-                        if (area != null) {
-                            mCurAreaId = area.getArea_id();
-                        }
                         mCurYear = mYears.get(position);
+
+                        // 更新菜单栏文字
+                        mTvYear.setText(mCurYear == 0 ? "全部" : String.valueOf(mCurYear));
                     }
                 }
             });
