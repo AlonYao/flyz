@@ -22,10 +22,14 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.Timer;
+
 /**
  * OpenCourse Model
  */
 public class OpenCourseModel {
+
+    private static Timer mTimer;
 
     /**
      * 处理公开课详情回调
@@ -162,5 +166,32 @@ public class OpenCourseModel {
 
         // 展示WebView
         activity.showWebView(url);
+
+        // 设置轮询
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//            mTimer = null;
+//        }
+//
+//        mTimer = new Timer();
+//        mTimer.schedule(new TimerTask() {
+//
+//            @Override
+//            public void run() {
+//                mSec--;
+//                mDuration--;
+//                if (mSec < 0) {
+//                    mMins--;
+//                    mSec = 59;
+//                    mHandler.sendEmptyMessage(TIME_ON);
+//                    if (mMins < 0) {
+//                        mTimer.cancel();
+//                        mHandler.sendEmptyMessage(TIME_OUT);
+//                    }
+//                } else {
+//                    mHandler.sendEmptyMessage(TIME_ON);
+//                }
+//            }
+//        }, 0, 1000);
     }
 }
