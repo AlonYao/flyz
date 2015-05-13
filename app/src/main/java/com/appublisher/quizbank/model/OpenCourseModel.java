@@ -6,6 +6,7 @@ import android.view.View;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
@@ -13,6 +14,7 @@ import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseDetailResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseM;
+import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseUrlResp;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -140,5 +142,25 @@ public class OpenCourseModel {
 
             ToastManager.showToast(activity, "预约成功");
         }
+    }
+
+    /**
+     * 处理获取公开课连接回调
+     * @param activity WebViewActivity
+     * @param response 回调数据
+     */
+    public static void dealOpenCourseUrlResp(WebViewActivity activity, JSONObject response) {
+        if (response == null) return;
+
+        Gson gson = GsonManager.initGson();
+        OpenCourseUrlResp openCourseUrlResp =
+                gson.fromJson(response.toString(), OpenCourseUrlResp.class);
+
+        if (openCourseUrlResp == null || openCourseUrlResp.getResponse_code() != 1) return;
+
+        String url = openCourseUrlResp.getUrl();
+
+        // 展示WebView
+        activity.showWebView(url);
     }
 }

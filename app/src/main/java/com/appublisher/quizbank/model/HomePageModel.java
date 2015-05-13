@@ -6,9 +6,13 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.model.db.User;
+import com.appublisher.quizbank.model.login.activity.RegisterActivity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
 import com.appublisher.quizbank.utils.GsonManager;
@@ -65,6 +69,18 @@ public class HomePageModel {
 
             case 1:
                 // 正在上课
+                UserInfoModel userInfo = LoginModel.getUserInfoM();
+
+                if (userInfo == null) return;
+
+                if (userInfo.getMobile_num() == null || userInfo.getMobile_num().length() == 0) {
+                    // 没有手机号
+                    mCls = RegisterActivity.class;
+                } else {
+                    // 有手机号
+                    mCls = WebViewActivity.class;
+                }
+
                 break;
 
             case 2:
@@ -82,6 +98,7 @@ public class HomePageModel {
                 Intent intent =
                         new Intent(fragment.mActivity, mCls);
                 intent.putExtra("content", content);
+                intent.putExtra("from", "opencourse_started");
                 fragment.mActivity.startActivity(intent);
             }
         });

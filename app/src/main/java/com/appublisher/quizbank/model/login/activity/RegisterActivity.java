@@ -49,6 +49,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     private Gson mGson;
 
     public String mFrom;
+    public String mOpenCourseId;
 
     private int mTimeLimit = 60;
     private static final int TIME_ON = 1;
@@ -102,8 +103,9 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
             if (mType.equals("add")) getSupportActionBar().setTitle("绑定手机号");
         } else if ("forget_pwd".equals(mFrom)) {
             getSupportActionBar().setTitle("找回密码");
-        } else if ("book_opencourse".equals(mFrom)) {
+        } else if ("book_opencourse".equals(mFrom) || "opencourse_started".equals(mFrom)) {
             getSupportActionBar().setTitle("预约公开课");
+            mOpenCourseId = getIntent().getStringExtra("content");
         }
 
         // 获取验证码按钮
@@ -136,7 +138,8 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
 
                     if ("forget_pwd".equals(mFrom)) {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "resetPswd"));
-                    } else if ("book_opencourse".equals(mFrom)) {
+                    } else if ("book_opencourse".equals(mFrom)
+                            || "opencourse_started".equals(mFrom)) {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
                     } else {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
@@ -154,7 +157,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                 if (!smsCode.isEmpty() && !mPhoneNum.isEmpty()) {
                     ProgressDialogManager.showProgressDialog(RegisterActivity.this, false);
 
-                    if ("book_opencourse".equals(mFrom)) {
+                    if ("book_opencourse".equals(mFrom) || "opencourse_started".equals(mFrom)) {
                         mRequest.login(ParamBuilder.openCourseLoginParams(
                                 "3", mPhoneNum, smsCode));
                     } else {

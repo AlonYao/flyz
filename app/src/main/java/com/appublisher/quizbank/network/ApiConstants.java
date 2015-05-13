@@ -107,6 +107,9 @@ public interface ApiConstants {
     // 预约公开课
     String bookOpenCourse = baseUrl + "quizbank/book_open_course";
 
+    // 获取公开课播放地址
+    String getOpenCourseUrl = baseUrl + "quizbank/open_course_url";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

@@ -14,6 +14,7 @@ import com.activeandroid.Configuration;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
@@ -388,6 +389,13 @@ public class LoginModel {
                     // 预约公开课
                     Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
                     activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
+                    activity.finish();
+                } else if ("opencourse_started".equals(activity.mFrom)) {
+                    // 进入直播课页面
+                    Intent intent = new Intent(activity, WebViewActivity.class);
+                    intent.putExtra("from", activity.mFrom);
+                    intent.putExtra("opencourse_id", activity.mOpenCourseId);
+                    activity.startActivity(intent);
                     activity.finish();
                 }
 
