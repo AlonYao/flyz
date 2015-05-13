@@ -394,7 +394,7 @@ public class LoginModel {
                     // 进入直播课页面
                     Intent intent = new Intent(activity, WebViewActivity.class);
                     intent.putExtra("from", activity.mFrom);
-                    intent.putExtra("opencourse_id", activity.mOpenCourseId);
+                    intent.putExtra("content", activity.mOpenCourseId);
                     activity.startActivity(intent);
                     activity.finish();
                 }

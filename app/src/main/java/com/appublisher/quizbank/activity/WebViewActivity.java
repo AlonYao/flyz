@@ -48,7 +48,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         String url = getIntent().getStringExtra("url");
         String from = getIntent().getStringExtra("from");
-        String opencourseId = getIntent().getStringExtra("opencourse_id");
+        String opencourseId = getIntent().getStringExtra("content");
 
         if ("opencourse_started".equals(from)) {
             ProgressDialogManager.showProgressDialog(this, true);
