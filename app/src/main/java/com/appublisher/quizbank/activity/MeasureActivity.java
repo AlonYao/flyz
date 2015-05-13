@@ -22,9 +22,7 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
-import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
-import com.appublisher.quizbank.model.netdata.measure.PaperExerciseEntireResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
@@ -62,7 +60,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public Timer mTimer;
     public String mPaperName;
     public ArrayList<QuestionM> mQuestions;
-    public HashMap<String, Integer> mEntirePaperCategory;
+    public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
     public int mHierarchyId;
     public int mHierarchyLevel;
 
@@ -425,55 +423,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         }
     }
 
-    /**
-     * 处理试卷练习回调
-     * @param response 回调数据
-     */
-    private void dealPaperExercise(JSONObject response) {
-        PaperExerciseEntireResp paperExerciseEntireResp =
-                mGson.fromJson(response.toString(), PaperExerciseEntireResp.class);
-
-        if (paperExerciseEntireResp == null || paperExerciseEntireResp.getResponse_code() != 1)
-            return;
-
-        ArrayList<CategoryM> categorys = paperExerciseEntireResp.getCategory();
-        ArrayList<QuestionM> questions = paperExerciseEntireResp.getQuestions();
-
-        if (categorys != null && questions == null) {
-            // 整卷
-            mQuestions = new ArrayList<>();
-            mEntirePaperCategory = new HashMap<>();
-            int size = categorys.size();
-            for (int i = 0; i < size; i++) {
-                CategoryM category = categorys.get(i);
-
-                if (category == null) continue;
-
-                ArrayList<QuestionM> categoryQuestions = category.getQuestions();
-                String categoryName = category.getName();
-
-                if (categoryQuestions == null || categoryQuestions.size() == 0) continue;
-
-                mQuestions.addAll(categoryQuestions);
-
-                // 保存各个分类的数量
-                mEntirePaperCategory.put(categoryName, categoryQuestions.size());
-            }
-
-            // 倒计时时间
-            mDuration = paperExerciseEntireResp.getDuration();
-
-            setContent();
-        } else if (categorys == null && questions != null) {
-            // 非整卷
-            mQuestions = questions;
-
-            mDuration = paperExerciseEntireResp.getDuration();
-
-            setContent();
-        }
-    }
-
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) {
@@ -494,11 +443,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         }
 
         // 试卷练习
-        if ("paper_exercise".equals(apiName)) dealPaperExercise(response);
+        if ("paper_exercise".equals(apiName)) MeasureModel.dealExerciseDetailResp(this, response);
 
         // 历史练习内容
         if ("history_exercise_detail".equals(apiName))
-            MeasureModel.dealHistoryExerciseDetailResp(this, response);
+            MeasureModel.dealExerciseDetailResp(this, response);
 
         ProgressDialogManager.closeProgressDialog();
     }

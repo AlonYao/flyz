@@ -225,7 +225,7 @@ public class MeasureModel {
      * @param activity MeasureActivity
      * @param response 回调数据
      */
-    public static void dealHistoryExerciseDetailResp(MeasureActivity activity,
+    public static void dealExerciseDetailResp(MeasureActivity activity,
                                                      JSONObject response) {
         if (response == null) return;
 
@@ -245,7 +245,7 @@ public class MeasureModel {
 
             // 整卷
             activity.mQuestions = new ArrayList<>();
-            activity.mEntirePaperCategory = new HashMap<>();
+            activity.mEntirePaperCategory = new ArrayList<>();
             activity.mUserAnswerList = new ArrayList<>();
 
             int size = categorys.size();
@@ -261,8 +261,10 @@ public class MeasureModel {
 
                 activity.mQuestions.addAll(categoryQuestions);
 
-                // 保存各个分类的数量
-                activity.mEntirePaperCategory.put(categoryName, categoryQuestions.size());
+                // 保存各个分类的数量(根据科目分组)
+                HashMap<String, Integer> map = new HashMap<>();
+                map.put(categoryName, categoryQuestions.size());
+                activity.mEntirePaperCategory.add(map);
 
                 // 拼接用户答案
                 ArrayList<AnswerM> answers = category.getAnswers();
@@ -483,4 +485,5 @@ public class MeasureModel {
             activity.mUserAnswerList.add(map);
         }
     }
+
 }

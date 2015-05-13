@@ -33,17 +33,28 @@ public class AnswerSheetModel {
     public static void setEntireContent(final AnswerSheetActivity activity) {
         if (activity.mUserAnswerList == null || activity.mUserAnswerList.size() == 0) return;
 
-        HashMap<String, Integer> entirePaperCategory =
-                (HashMap<String, Integer>) activity.getIntent().getSerializableExtra("category");
+        ArrayList<HashMap<String, Integer>> entirePaperCategory =
+                (ArrayList<HashMap<String, Integer>>)
+                        activity.getIntent().getSerializableExtra("category");
 
         if (entirePaperCategory == null) return;
 
         int offset = 0;
         int categoryNum = 1;
-        for (Object o : entirePaperCategory.entrySet()) {
-            HashMap.Entry entry = (HashMap.Entry) o;
-            String categoryName = (String) entry.getKey();
-            int categorySize = (int) entry.getValue();
+
+        int size = entirePaperCategory.size();
+
+        for (int i = 0; i < size; i++) {
+            HashMap<String, Integer> map = entirePaperCategory.get(i);
+
+            if (map == null) continue;
+
+            String categoryName = null;
+            for (String key : map.keySet()) {
+                categoryName = key;
+            }
+
+            int categorySize = map.get(categoryName);
 
             View categoryChildView =
                     LayoutInflater.from(activity).inflate(
@@ -62,8 +73,8 @@ public class AnswerSheetModel {
             // 构造分类的题目
             ArrayList<HashMap<String, Object>> categoryUserAnswer = new ArrayList<>();
 
-            for (int i = offset; i < offset + categorySize; i++) {
-                categoryUserAnswer.add(activity.mUserAnswerList.get(i));
+            for (int j = offset; j < offset + categorySize; j++) {
+                categoryUserAnswer.add(activity.mUserAnswerList.get(j));
             }
 
             EntireAnswerSheetAdapter entireAnswerSheetAdapter =
