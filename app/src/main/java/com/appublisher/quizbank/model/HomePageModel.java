@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.fragment.HomePageFragment;
@@ -18,6 +19,8 @@ import com.google.gson.Gson;
  * HomePageFragment Model
  */
 public class HomePageModel {
+
+    private static Class<?> mCls;
 
     /**
      * 设置考试项目倒计时
@@ -52,9 +55,12 @@ public class HomePageModel {
         int type = liveCourse.getType();
         final String content = liveCourse.getContent();
 
+        mCls = null;
+
         switch (type) {
             case 0:
                 // 没有公开课
+                mCls = OpenCourseNoneActivity.class;
                 break;
 
             case 1:
@@ -63,15 +69,7 @@ public class HomePageModel {
 
             case 2:
                 // 即将上课
-                fragment.mTvZhiboke.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent =
-                                new Intent(fragment.mActivity, OpenCourseUnstartActivity.class);
-                        intent.putExtra("content", content);
-                        fragment.mActivity.startActivity(intent);
-                    }
-                });
+                mCls = OpenCourseUnstartActivity.class;
 
                 break;
         }
@@ -79,8 +77,10 @@ public class HomePageModel {
         fragment.mTvZhiboke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mCls == null) return;
+
                 Intent intent =
-                        new Intent(fragment.mActivity, OpenCourseUnstartActivity.class);
+                        new Intent(fragment.mActivity, mCls);
                 intent.putExtra("content", content);
                 fragment.mActivity.startActivity(intent);
             }

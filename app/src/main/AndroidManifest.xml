@@ -204,6 +204,14 @@
             android:name=".activity.OpenCourseUnstartActivity"
             android:label="@string/title_activity_open_course_unstart" >
         </activity>
+        <activity
+            android:name=".activity.OpenCourseNoneActivity"
+            android:label="@string/title_activity_open_course_none" >
+        </activity>
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:label="@string/title_activity_web_view" >
+        </activity>
     </application>
 
 </manifest>

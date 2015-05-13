@@ -36,6 +36,7 @@
     <!-- 公开课 -->
     <string name="opencourse_notice_true">课程开始前5分钟会给你发短信提醒</string>
     <string name="opencourse_notice_false">开课前5分钟给我发短信提醒</string>
+    <string name="opencourse_none">暂时没有公开课哦~\n看看往期内容吧</string>
 
     <!-- 设置 -->
     <string name="setting_account">账号设置</string>
@@ -144,5 +145,7 @@
     <string name="title_activity_notice_detail">通知</string>
     <string name="title_activity_my_analysis">我有更好的解析</string>
     <string name="title_activity_open_course_unstart">即将开始</string>
+    <string name="title_activity_open_course_none">查看往期</string>
+    <string name="title_activity_web_view"> </string>
 
 </resources>
