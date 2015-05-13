@@ -9,7 +9,17 @@ public class GlobalSettingsResp {
 
     int response_code;
     String service_qq;
+    String market_qq;
+    int open_course_heartbeat;
     ArrayList<ExerciseIntroM> exercise_intro;
+
+    public String getMarket_qq() {
+        return market_qq;
+    }
+
+    public int getOpen_course_heartbeat() {
+        return open_course_heartbeat;
+    }
 
     public int getResponse_code() {
         return response_code;
