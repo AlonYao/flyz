@@ -4,8 +4,13 @@ import android.view.View;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.dao.UserDAO;
+import com.appublisher.quizbank.model.db.User;
+import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
+import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseDetailResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseM;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -26,7 +31,7 @@ public class OpenCourseModel {
                                                 JSONObject response) {
         if (response == null) return;
 
-        Gson gson = GsonManager.initGson();
+        final Gson gson = GsonManager.initGson();
         OpenCourseDetailResp openCourseDetailResp = gson.fromJson(response.toString(),
                 OpenCourseDetailResp.class);
 
@@ -63,13 +68,7 @@ public class OpenCourseModel {
         boolean booked = openCourseDetailResp.isBooked();
 
         if (booked) {
-            activity.mTvNotice.setText(R.string.opencourse_notice_true);
-            activity.mTvNotice.setTextColor(
-                    activity.getResources().getColor(R.color.setting_text));
-            activity.mTvNotice.setBackgroundColor(
-                    activity.getResources().getColor(R.color.transparency));
-
-            activity.mTvNotice.setOnClickListener(null);
+            setBooked(activity);
 
         } else {
             activity.mTvNotice.setText(R.string.opencourse_notice_false);
@@ -81,9 +80,58 @@ public class OpenCourseModel {
             activity.mTvNotice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToastManager.showToast(activity, "预约……施工中");
+                    // 判断用户是否有手机号
+                    User user = UserDAO.findById();
+
+                    if (user == null) return;
+
+                    UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
+
+                    if (userInfo == null) return;
+
+                    String mobileNum = userInfo.getMobile_num();
+
+                    if (mobileNum == null || mobileNum.length() == 0) {
+                        // 没有手机号
+                    } else {
+                        // 有手机号
+                        AlertManager.bookOpenCourseAlert(activity, mobileNum, activity.mContent);
+                    }
                 }
             });
+        }
+    }
+
+    /**
+     * 设置已预约状态
+     * @param activity OpenCourseUnstartActivity
+     */
+    private static void setBooked(OpenCourseUnstartActivity activity) {
+        activity.mTvNotice.setText(R.string.opencourse_notice_true);
+        activity.mTvNotice.setTextColor(
+                activity.getResources().getColor(R.color.setting_text));
+        activity.mTvNotice.setBackgroundColor(
+                activity.getResources().getColor(R.color.transparency));
+
+        activity.mTvNotice.setOnClickListener(null);
+    }
+
+    /**
+     * 处理预定公开课回调
+     * @param activity OpenCourseUnstartActivity
+     * @param response 数据回调
+     */
+    public static void dealBookOpenCourseResp(OpenCourseUnstartActivity activity,
+                                              JSONObject response) {
+        if (response == null) return;
+
+        Gson gson = GsonManager.initGson();
+        CommonResp commonResp = gson.fromJson(response.toString(), CommonResp.class);
+
+        if (commonResp != null && commonResp.getResponse_code() == 1) {
+            setBooked(activity);
+
+            ToastManager.showToast(activity, "预约成功");
         }
     }
 }

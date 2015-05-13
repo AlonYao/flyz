@@ -343,6 +343,15 @@ public class Request extends BaseRequest implements ApiConstants{
                 params, "read_notification", "object");
     }
 
+    /**
+     * 预约公开课
+     * @param params 参数
+     */
+    public void bookOpenCourse(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(bookOpenCourse),
+                params, "book_open_course", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	图片加载方法代码块	 *

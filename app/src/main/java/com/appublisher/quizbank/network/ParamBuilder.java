@@ -278,4 +278,15 @@ public class ParamBuilder implements ApiConstants {
         params.put("notification_id", notification_id);
         return params;
     }
+
+    /**
+     * 预约公开课
+     * @param course_id 课程id
+     * @return 参数Map
+     */
+    public static Map<String, String> bookOpenCourse(String course_id) {
+        Map<String, String> params = new Hashtable<>();
+        params.put("course_id", course_id);
+        return params;
+    }
 }

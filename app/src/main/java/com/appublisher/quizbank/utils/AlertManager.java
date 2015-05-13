@@ -12,6 +12,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.MeasureModel;
@@ -288,6 +289,38 @@ public class AlertManager {
                             }
                         })
                 .setNegativeButton(R.string.alert_answersheet_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
+    }
+
+    /**
+     * 预约直播课
+     * @param activity OpenCourseUnstartActivity
+     */
+    public static void bookOpenCourseAlert(final OpenCourseUnstartActivity activity,
+                                           String mobileNum,
+                                           final String courseId) {
+        new AlertDialog.Builder(activity)
+                .setMessage("提醒短信将发送到你的手机：" + "\n" + mobileNum)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_opencourse_p,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ProgressDialogManager.showProgressDialog(activity, false);
+                                new Request(activity, activity).bookOpenCourse(
+                                        ParamBuilder.bookOpenCourse(courseId));
+
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_n,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -29,6 +29,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     public TextView mTvTime;
     public TextView mTvLector;
     public TextView mTvNotice;
+    public String mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +50,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         mTvNotice = (TextView) findViewById(R.id.opencourse_notice);
 
         // 获取数据
-        String content = getIntent().getStringExtra("content");
+        mContent = getIntent().getStringExtra("content");
         ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getOpenCourseDetail(content);
+        mRequest.getOpenCourseDetail(mContent);
     }
 
     @Override
@@ -83,6 +84,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     public void requestCompleted(JSONObject response, String apiName) {
         if ("open_course_detail".equals(apiName))
             OpenCourseModel.dealOpenCourseDetailResp(this, response);
+
+        if ("book_open_course".equals(apiName))
+            OpenCourseModel.dealBookOpenCourseResp(this, response);
 
         ProgressDialogManager.closeProgressDialog();
     }

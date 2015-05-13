@@ -94,6 +94,7 @@
     <string name="alert_answersheet_content">你还有题没做，确认要交卷吗？</string>
     <string name="alert_answersheet_n">再看看</string>
     <string name="alert_answersheet_p">交卷</string>
+    <string name="alert_opencourse_p">好的</string>
 
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>
