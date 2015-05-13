@@ -1,11 +1,14 @@
 package com.appublisher.quizbank.model;
 
+import android.content.Intent;
 import android.view.View;
 
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
+import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseDetailResp;
@@ -93,6 +96,10 @@ public class OpenCourseModel {
 
                     if (mobileNum == null || mobileNum.length() == 0) {
                         // 没有手机号
+                        Intent intent = new Intent(activity, RegisterActivity.class);
+                        intent.putExtra("from", "book_opencourse");
+                        activity.startActivityForResult(intent,
+                                ActivitySkipConstants.BOOK_OPENCOURSE);
                     } else {
                         // 有手机号
                         AlertManager.bookOpenCourseAlert(activity, mobileNum, activity.mContent);
@@ -106,7 +113,7 @@ public class OpenCourseModel {
      * 设置已预约状态
      * @param activity OpenCourseUnstartActivity
      */
-    private static void setBooked(OpenCourseUnstartActivity activity) {
+    public static void setBooked(OpenCourseUnstartActivity activity) {
         activity.mTvNotice.setText(R.string.opencourse_notice_true);
         activity.mTvNotice.setTextColor(
                 activity.getResources().getColor(R.color.setting_text));

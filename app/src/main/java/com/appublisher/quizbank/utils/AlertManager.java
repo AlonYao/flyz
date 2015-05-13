@@ -16,8 +16,9 @@ import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.MeasureModel;
-import com.appublisher.quizbank.model.login.activity.LoginActivity;
+import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 
@@ -193,14 +194,7 @@ public class AlertManager {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // 提交登出信息至服务器
-                                new Request(userInfoActivity).userLogout();
-                                // 清空本地数据
-                                userInfoActivity.cleanLocalData();
-                                // 跳转至登录页面
-                                Intent intent = new Intent(userInfoActivity, LoginActivity.class);
-                                userInfoActivity.startActivity(intent);
-                                userInfoActivity.finish();
+                                LoginModel.setLogout(userInfoActivity);
                                 dialog.dismiss();
                             }
                         })
@@ -321,6 +315,33 @@ public class AlertManager {
                             }
                         })
                 .setNegativeButton(R.string.alert_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
+    }
+
+    /**
+     * 公开课模块提示用户切换账号Alert
+     * @param activity RegisterActivity
+     */
+    public static void openCourseUserChangeAlert(final RegisterActivity activity) {
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.alert_userchange_content)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_logout_positive,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LoginModel.setLogout(activity);
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_logout_negative,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

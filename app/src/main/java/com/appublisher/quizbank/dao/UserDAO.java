@@ -4,6 +4,7 @@ import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
 
 /**
@@ -121,5 +122,28 @@ public class UserDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 更新手机号
+     * @param mobileNum 手机号
+     */
+    public static void updateMobileNum(String mobileNum) {
+        if (mobileNum == null || mobileNum.length() == 0) return;
+
+        User user = findById();
+
+        if (user == null) return;
+
+        Gson gson = GsonManager.initGson();
+        UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
+
+        if (userInfo == null) return;
+
+        userInfo.setMobile_num(mobileNum);
+
+        String userString = gson.toJson(userInfo);
+
+        updateUserInfo(userString);
     }
 }

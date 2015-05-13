@@ -23,6 +23,7 @@ import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -44,8 +45,10 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     private String mPhoneNum;
     private Timer mTimer;
     private Button mBtnGetSmsCode;
-    private String mFrom;
     private String mType;
+    private Gson mGson;
+
+    public String mFrom;
 
     private int mTimeLimit = 60;
     private static final int TIME_ON = 1;
@@ -88,17 +91,19 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
 
         // 成员变量初始化
         mRequest = new Request(RegisterActivity.this, RegisterActivity.this);
+        mGson = GsonManager.initGson();
 
-        // 获取数据
+        // 获取数据 & ActionBar标题修改
         mFrom = getIntent().getStringExtra("from");
-        if (mFrom == null) mFrom = "";
-        if (mFrom.equals("UserInfoActivity")) {
+        if ("UserInfoActivity".equals(mFrom)) {
             mType = getIntent().getStringExtra("type");
             if (mType == null) mType = "";
             if (mType.equals("update")) getSupportActionBar().setTitle("更换手机号");
             if (mType.equals("add")) getSupportActionBar().setTitle("绑定手机号");
-        } else if (mFrom.equals("forget_pwd")) {
+        } else if ("forget_pwd".equals(mFrom)) {
             getSupportActionBar().setTitle("找回密码");
+        } else if ("book_opencourse".equals(mFrom)) {
+            getSupportActionBar().setTitle("预约公开课");
         }
 
         // 获取验证码按钮
@@ -129,8 +134,10 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                         }
                     }, 0, 1000);
 
-                    if (mFrom.equals("forget_pwd")) {
+                    if ("forget_pwd".equals(mFrom)) {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "resetPswd"));
+                    } else if ("book_opencourse".equals(mFrom)) {
+                        mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
                     } else {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
                     }
@@ -146,7 +153,14 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                 mPhoneNum = etPhone.getText().toString();
                 if (!smsCode.isEmpty() && !mPhoneNum.isEmpty()) {
                     ProgressDialogManager.showProgressDialog(RegisterActivity.this, false);
-                    mRequest.checkSmsCode(ParamBuilder.checkSmsCodeParams(mPhoneNum, smsCode));
+
+                    if ("book_opencourse".equals(mFrom)) {
+                        mRequest.login(ParamBuilder.openCourseLoginParams(
+                                "3", mPhoneNum, smsCode));
+                    } else {
+                        mRequest.checkSmsCode(ParamBuilder.checkSmsCodeParams(mPhoneNum, smsCode));
+                    }
+
                 } else {
                     ToastManager.showToast(RegisterActivity.this, "手机号或验证码为空");
                 }
@@ -228,74 +242,78 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response != null) {
-            Gson gson = new Gson();
-            if (apiName.equals("sms_code")) {
-                CommonResponseModel commonResponse = gson.fromJson(
-                        response.toString(), CommonResponseModel.class);
+        if (response == null) return;
 
-                if (commonResponse != null && commonResponse.getResponse_code() == 1102) {
-                    // 手机号已存在
-                    setTimeOut();
+        if ("sms_code".equals(apiName)) {
+            CommonResponseModel commonResponse = mGson.fromJson(
+                    response.toString(), CommonResponseModel.class);
 
-                    ToastManager.showToast(this, commonResponse.getResponse_msg());
-                }
+            if (commonResponse != null && commonResponse.getResponse_code() == 1102) {
+                // 手机号已存在
+                setTimeOut();
+
+                ToastManager.showToast(this, commonResponse.getResponse_msg());
             }
+        }
 
-            if (apiName.equals("check_sms_code")) {
-                CommonResponseModel crm = gson.fromJson(response.toString(),
-                        CommonResponseModel.class);
+        if ("check_sms_code".equals(apiName)) {
+            CommonResponseModel crm = mGson.fromJson(response.toString(),
+                    CommonResponseModel.class);
 
-                if (crm != null && crm.getResponse_code() == 1) {
-                    if (mFrom != null && mFrom.equals("UserInfoActivity")) {
-                        if (mType != null && !mType.equals("")) {
-                            // 检查是否是第三方登录
-                            if (mType.equals("add") && LoginModel.checkIsSocialUser()) {
-                                Intent intent = new Intent(this, SetpwdActivity.class);
-                                intent.putExtra("phoneNum", mPhoneNum);
-                                intent.putExtra("type", "add");
-                                startActivityForResult(intent, 10);
-                            } else {
-                                mRequest.authHandle(ParamBuilder.authHandle("0", mType, mPhoneNum, ""));
-                            }
+            if (crm != null && crm.getResponse_code() == 1) {
+                if ("UserInfoActivity".equals(mFrom)) {
+                    if (mType != null && !mType.equals("")) {
+                        // 检查是否是第三方登录
+                        if (mType.equals("add") && LoginModel.checkIsSocialUser()) {
+                            Intent intent = new Intent(this, SetpwdActivity.class);
+                            intent.putExtra("phoneNum", mPhoneNum);
+                            intent.putExtra("type", "add");
+                            startActivityForResult(intent, 10);
+                        } else {
+                            mRequest.authHandle(ParamBuilder.authHandle("0", mType, mPhoneNum, ""));
                         }
-                    } else if (mFrom != null && mFrom.equals("forget_pwd")) {
-                        Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
-                        intent.putExtra("phoneNum", mPhoneNum);
-                        intent.putExtra("type", "forget_pwd");
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
-                        intent.putExtra("phoneNum", mPhoneNum);
-                        startActivity(intent);
                     }
+                } else if ("forget_pwd".equals(mFrom)) {
+                    Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
+                    intent.putExtra("phoneNum", mPhoneNum);
+                    intent.putExtra("type", "forget_pwd");
+                    startActivity(intent);
+                    finish();
                 } else {
-                    ToastManager.showToast(this, "验证码不正确");
+                    Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
+                    intent.putExtra("phoneNum", mPhoneNum);
+                    startActivity(intent);
+                }
+            } else {
+                ToastManager.showToast(this, "验证码不正确");
+            }
+        }
+
+        if ("auth_handle".equals(apiName)) {
+            CommonResponseModel crm = mGson.fromJson(response.toString(),
+                    CommonResponseModel.class);
+            if (crm != null && crm.getResponse_code() == 1) {
+                // 修改成功
+                User user = UserDAO.findById();
+                if (user != null) {
+                    UserInfoModel userInfo = mGson.fromJson(user.user, UserInfoModel.class);
+                    userInfo.setMobile_num(mPhoneNum);
+                    UserDAO.updateUserInfo(mGson.toJson(userInfo));
+
+                    ToastManager.showToast(this, "修改成功");
+
+                    Intent intent = new Intent(this, UserInfoActivity.class);
+                    intent.putExtra("user_info", mGson.toJson(userInfo));
+                    setResult(11, intent);
+
+                    finish();
                 }
             }
+        }
 
-            if (apiName.equals("auth_handle")) {
-                CommonResponseModel crm = gson.fromJson(response.toString(),
-                        CommonResponseModel.class);
-                if (crm != null && crm.getResponse_code() == 1) {
-                    // 修改成功
-                    User user = UserDAO.findById();
-                    if (user != null) {
-                        UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
-                        userInfo.setMobile_num(mPhoneNum);
-                        UserDAO.updateUserInfo(gson.toJson(userInfo));
-
-                        ToastManager.showToast(this, "修改成功");
-
-                        Intent intent = new Intent(this, UserInfoActivity.class);
-                        intent.putExtra("user_info", gson.toJson(userInfo));
-                        setResult(11, intent);
-
-                        finish();
-                    }
-                }
-            }
+        // 处理预约公开课手机号验证部分的回调
+        if ("login".equals(apiName)) {
+            LoginModel.dealBookOpenCourse(this, response);
         }
 
         ProgressDialogManager.closeProgressDialog();

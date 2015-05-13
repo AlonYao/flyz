@@ -1,19 +1,31 @@
 package com.appublisher.quizbank.model.login.model;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
+import com.appublisher.quizbank.model.login.activity.RegisterActivity;
+import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -21,6 +33,8 @@ import com.google.gson.Gson;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.exception.SocializeException;
+
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -292,10 +306,98 @@ public class LoginModel {
     }
 
     /**
+     * 获取本地存储的用户信息
+     * @return 用户信息模型
+     */
+    public static UserInfoModel getUserInfoM() {
+        User user = UserDAO.findById();
+
+        if (user == null) return null;
+
+        Gson gson = GsonManager.initGson();
+        return gson.fromJson(user.user, UserInfoModel.class);
+    }
+
+    /**
      * 判断是否登录
      * @return 是或否
      */
     public static boolean isLogin() {
         return Globals.sharedPreferences.getBoolean("is_login", false);
+    }
+
+    /**
+     * 执行登录
+     * @param activity Activity
+     */
+    public static void setLogout(Activity activity) {
+        // 提交登出信息至服务器
+        new Request(activity).userLogout();
+
+        // 清空本地数据
+        cleanLocalData();
+
+        // 跳转至登录页面
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
+    /**
+     * 清空本地数据
+     */
+    @SuppressLint("CommitPrefEdits")
+    public static void cleanLocalData() {
+        SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+    }
+
+    /**
+     * 处理预约公开课手机号验证部分的回调
+     * @param activity RegisterActivity
+     * @param response 回调数据
+     */
+    public static void dealBookOpenCourse(RegisterActivity activity, JSONObject response) {
+        if (response == null) return;
+
+        Logger.i(response.toString());
+
+        Gson gson = GsonManager.initGson();
+        LoginResponseModel loginResp = gson.fromJson(response.toString(), LoginResponseModel.class);
+
+        if (loginResp != null && loginResp.getResponse_code() == 1) {
+            // 获取原有用户的user_id
+            UserInfoModel userInfo = getUserInfoM();
+            String userId = null;
+
+            if (userInfo != null) {
+                userId = userInfo.getUser_id();
+            }
+
+            UserInfoModel userInfoOnline = loginResp.getUser();
+
+            if (userInfoOnline == null || userInfoOnline.getUser_id() == null) return;
+
+            if (userInfoOnline.getUser_id().equals(userId)) {
+                // 手机号不存在，视为绑定手机号
+                // 更新本地数据
+                UserDAO.updateMobileNum(userInfoOnline.getMobile_num());
+
+                if ("book_opencourse".equals(activity.mFrom)) {
+                    // 预约公开课
+                    Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
+                    activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
+                    activity.finish();
+                }
+
+            } else {
+                // 手机号存在，提示用户切换账号
+                AlertManager.openCourseUserChangeAlert(activity);
+            }
+
+        } else {
+            ToastManager.showToast(activity, "校验失败");
+        }
     }
 }

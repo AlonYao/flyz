@@ -13,4 +13,7 @@ public class ActivitySkipConstants {
 
     // 阅读系统通知
     public static final int NOTICE_READ = 1002;
+
+    // 预约直播课
+    public static final int BOOK_OPENCOURSE = 1003;
 }

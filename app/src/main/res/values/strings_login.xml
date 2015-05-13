@@ -33,4 +33,7 @@
     <string name="alert_logout_positive">确定</string>
     <string name="alert_logout_negative">取消</string>
 
+    <!-- 公开课模块 -->
+    <string name="alert_userchange_content">该手机号已经被注册，请切换账号</string>
+
 </resources>

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -23,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.CommonModel;
@@ -419,16 +417,6 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
         intent.putExtra("circleCrop", "true");
         intent.putExtra("return-data", true);
         startActivityForResult(intent, RESULT_REQUEST_CODE);
-    }
-
-    /**
-     * 清空本地数据
-     */
-    @SuppressLint("CommitPrefEdits")
-    public void cleanLocalData() {
-        SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
-        editor.clear();
-        editor.commit();
     }
 
     @Override

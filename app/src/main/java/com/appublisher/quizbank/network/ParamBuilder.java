@@ -65,6 +65,23 @@ public class ParamBuilder implements ApiConstants {
     }
 
     /**
+     * 公开课模块用户登录参数
+     * @param login_type  登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
+     * @param login_id  登录的id  手机号/邮箱，或者是第三方的open_id
+     * @param mobile_token  短信验证码
+     * @return params  用户登录参数
+     */
+    public static Map<String, String> openCourseLoginParams(String login_type, String login_id,
+                                                  String mobile_token) {
+        Map<String, String> params = new HashMap<>();
+        params.put("login_type", login_type);
+        params.put("login_id", login_id);
+        params.put("mobile_token", mobile_token);
+
+        return params;
+    }
+
+    /**
      * 第三方用户登录参数
      * @param login_type  登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
      * @param login_id  登录的id  手机号/邮箱，或者是第三方的open_id

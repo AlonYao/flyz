@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -7,9 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.OpenCourseModel;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -69,6 +72,17 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         // Umeng
         MobclickAgent.onPageEnd("AnswerSheetActivity");
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == ActivitySkipConstants.BOOK_OPENCOURSE) {
+            // 预约公开课回调
+            ProgressDialogManager.showProgressDialog(this, false);
+            mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
+        }
     }
 
     @Override

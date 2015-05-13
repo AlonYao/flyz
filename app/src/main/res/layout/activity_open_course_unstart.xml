@@ -54,7 +54,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:background="@color/answer_sheet_btn"
+        android:background="@color/transparency"
         android:textSize="17sp"
         android:textColor="@color/white"
         android:text="@string/opencourse_notice_false"/>
