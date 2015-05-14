@@ -174,6 +174,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                     transaction.show(mHomePageFragment);
                 }
 
+                getSupportActionBar().setTitle(" ");
+
                 break;
 
             case 1:
@@ -186,6 +188,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mWholePageFragment);
                 }
+
+                getSupportActionBar().setTitle(R.string.drawer_wholepage);
 
                 break;
 
@@ -200,6 +204,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                     transaction.show(mWrongQuestionsFragment);
                 }
 
+                getSupportActionBar().setTitle(R.string.drawer_wrong);
+
                 break;
 
             case 3:
@@ -212,6 +218,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mFavoriteFragment);
                 }
+
+                getSupportActionBar().setTitle(R.string.drawer_store);
 
                 break;
 
@@ -226,6 +234,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                     transaction.show(mStudyRecordFragment);
                 }
 
+                getSupportActionBar().setTitle(R.string.drawer_record);
+
                 break;
 
             case 5:
@@ -238,6 +248,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mSettingFragment);
                 }
+
+                getSupportActionBar().setTitle(R.string.drawer_setting);
 
                 break;
 
