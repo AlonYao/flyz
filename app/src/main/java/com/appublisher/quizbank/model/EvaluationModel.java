@@ -126,7 +126,7 @@ public class EvaluationModel {
                 .beginAt(0).endAt(size);
         activity.mLineChart.addData(dataSet);
 
-        activity.mLineChart.setBorderSpacing(Tools.fromDpToPx(4))
+        activity.mLineChart.setBorderSpacing(Tools.fromDpToPx(0))
                 .setGrid(LineChartView.GridType.FULL, lineGridPaint)
                 .setXAxis(false)
                 .setXLabels(XController.LabelPosition.OUTSIDE)

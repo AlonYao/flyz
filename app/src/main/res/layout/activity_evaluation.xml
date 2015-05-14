@@ -282,6 +282,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
+            <!-- 历史估分折线图 -->
             <LinearLayout
                 android:id="@+id/evaluation_history_ll"
                 android:layout_width="match_parent"
