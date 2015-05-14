@@ -15,6 +15,7 @@ import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
+import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseConsultResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseDetailResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseM;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseUrlResp;
@@ -32,8 +33,6 @@ import java.util.TimerTask;
  * OpenCourse Model
  */
 public class OpenCourseModel {
-
-    private static Timer mTimer;
 
     /**
      * 处理公开课详情回调
@@ -193,18 +192,54 @@ public class OpenCourseModel {
         int heartbeat = globalSettingsResp.getOpen_course_heartbeat();
 
         // 设置轮询
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
+        if (activity.mTimer != null) {
+            activity.mTimer.cancel();
+            activity.mTimer = null;
         }
 
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
+        activity.mTimer = new Timer();
+        activity.mTimer.schedule(new TimerTask() {
 
             @Override
             public void run() {
                 activity.mHandler.sendEmptyMessage(WebViewActivity.TIME_ON);
             }
-        }, 0, heartbeat);
+        }, 0, heartbeat*1000);
+    }
+
+    /**
+     * 处理轮询回调
+     * @param activity WebViewActivity
+     * @param response 回调数据
+     */
+    public static void dealOpenCourseConsultResp(final WebViewActivity activity,
+                                                 JSONObject response) {
+        if (response == null || activity.mHasShowOpenCourseConsult) return;
+
+        Gson gson = GsonManager.initGson();
+        OpenCourseConsultResp openCourseConsultResp =
+                gson.fromJson(response.toString(), OpenCourseConsultResp.class);
+
+        if (openCourseConsultResp == null || openCourseConsultResp.getResponse_code() != 1) return;
+
+        boolean alertStatus = openCourseConsultResp.isAlert_status();
+
+        if (alertStatus) {
+            // 暂停计时器
+            if (activity.mTimer != null) {
+                activity.mTimer.cancel();
+                activity.mTimer = null;
+            }
+
+            activity.mLlOpenCourseConsult.setVisibility(View.VISIBLE);
+            activity.mHasShowOpenCourseConsult = true;
+
+            activity.mTvOpenCourseConsult.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToastManager.showToast(activity, "营销QQ……");
+                }
+            });
+        }
     }
 }

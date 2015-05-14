@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
@@ -25,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.Timer;
 
 /**
  * WebView
@@ -37,9 +40,12 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     private static String mOpencourseId;
 
     public Handler mHandler;
+    public LinearLayout mLlOpenCourseConsult;
+    public TextView mTvOpenCourseConsult;
+    public Timer mTimer;
+    public boolean mHasShowOpenCourseConsult;
 
     public static final int TIME_ON = 10;
-    public static final int TIME_OUT = 11;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -51,14 +57,11 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         @SuppressLint("CommitPrefEdits")
         @Override
         public void handleMessage(Message msg) {
-            final MeasureActivity activity = (MeasureActivity) mActivity.get();
+            final WebViewActivity activity = (WebViewActivity) mActivity.get();
             if (activity != null) {
                 switch (msg.what) {
                     case TIME_ON:
                         mRequest.getOpenCourseConsult(mOpencourseId);
-                        break;
-
-                    case TIME_OUT:
                         break;
 
                     default:
@@ -79,10 +82,13 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         // View 初始化
         mWebView = (WebView) findViewById(R.id.webView);
         mProgressBar = (RelativeLayout) findViewById(R.id.progressbar);
-        mHandler = new MsgHandler(this);
+        mLlOpenCourseConsult = (LinearLayout) findViewById(R.id.opencourse_consult_ll);
+        mTvOpenCourseConsult = (TextView) findViewById(R.id.opencourse_consult_tv);
 
         // 成员变量初始化
+        mHandler = new MsgHandler(this);
         mRequest = new Request(this, this);
+        mHasShowOpenCourseConsult = false;
 
         // 获取数据
         String url = getIntent().getStringExtra("url");
@@ -114,6 +120,16 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 关闭定时器
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -126,6 +142,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     public void requestCompleted(JSONObject response, String apiName) {
         if ("open_course_url".equals(apiName))
             OpenCourseModel.dealOpenCourseUrlResp(this, response);
+
+        if ("open_course_consult".equals(apiName))
+            OpenCourseModel.dealOpenCourseConsultResp(this, response);
 
         ProgressDialogManager.closeProgressDialog();
     }

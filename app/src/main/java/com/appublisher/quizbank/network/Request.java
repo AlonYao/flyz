@@ -222,7 +222,7 @@ public class Request extends BaseRequest implements ApiConstants{
      */
     public void getOpenCourseConsult(String course_id) {
         asyncRequest(ParamBuilder.finalUrl(getOpenCourseConsult) + "&course_id=" + course_id,
-                "open_course_detail", "object");
+                "open_course_consult", "object");
     }
 
 	/*********************
