@@ -200,37 +200,57 @@ public class MeasureAdapter extends PagerAdapter{
         mTvOptionD.setOnClickListener(optionClick);
 
         // 选中行执行点击
-        llOptionA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTvOptionA.performClick();
-            }
-        });
-
-        llOptionB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTvOptionB.performClick();
-            }
-        });
-
-        llOptionC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTvOptionC.performClick();
-            }
-        });
-
-        llOptionD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTvOptionD.performClick();
-            }
-        });
+        llOptionA.setOnTouchListener(optionLlClick);
+        llOptionB.setOnTouchListener(optionLlClick);
+        llOptionC.setOnTouchListener(optionLlClick);
+        llOptionD.setOnTouchListener(optionLlClick);
 
         container.addView(view);
         return view;
     }
+
+    /**
+     * 选项所在行点击事件
+     */
+    private View.OnTouchListener optionLlClick = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            TextView option = null;
+
+            switch (v.getId()) {
+                case R.id.measure_option_a:
+                    option = mTvOptionA;
+                    break;
+
+                case R.id.measure_option_b:
+                    option = mTvOptionB;
+                    break;
+
+                case R.id.measure_option_c:
+                    option = mTvOptionC;
+                    break;
+
+                case R.id.measure_option_d:
+                    option = mTvOptionD;
+                    break;
+            }
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    if (option == null) break;
+                    option.setPressed(true);
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    if (option == null) break;
+                    option.setPressed(false);
+                    option.performClick();
+                    break;
+            }
+
+            return true;
+        }
+    };
 
     /**
      * 选项点击事件
