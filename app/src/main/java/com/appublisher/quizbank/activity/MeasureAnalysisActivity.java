@@ -275,12 +275,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvImageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
-                        String.valueOf(mCurQuestionId), "1", ""));
-
+                AlertManager.reportErrorAlert(MeasureAnalysisActivity.this, "1");
                 mPopupWindow.dismiss();
-
-                ToastManager.showToast(MeasureAnalysisActivity.this, "提交成功");
             }
         });
 
@@ -288,12 +284,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvAnswerWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
-                        String.valueOf(mCurQuestionId), "2", ""));
-
+                AlertManager.reportErrorAlert(MeasureAnalysisActivity.this, "2");
                 mPopupWindow.dismiss();
-
-                ToastManager.showToast(MeasureAnalysisActivity.this, "提交成功");
             }
         });
 
@@ -301,12 +293,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvAnalysisWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRequest.reportErrorQuestion(ParamBuilder.reportErrorQuestion(
-                        String.valueOf(mCurQuestionId), "3", ""));
-
+                AlertManager.reportErrorAlert(MeasureAnalysisActivity.this, "3");
                 mPopupWindow.dismiss();
-
-                ToastManager.showToast(MeasureAnalysisActivity.this, "提交成功");
             }
         });
 
