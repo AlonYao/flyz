@@ -117,7 +117,7 @@ public class EvaluationModel {
         dataSet.setDashed(false);
         dataSet.setDots(true)
                 .setDotsColor(activity.getResources().getColor(R.color.evaluation_diagram_line))
-                .setDotsRadius(Tools.fromDpToPx(5))
+                .setDotsRadius(Tools.fromDpToPx(4))
                 .setDotsStrokeThickness(Tools.fromDpToPx(2))
                 .setDotsStrokeColor(
                         activity.getResources().getColor(R.color.evaluation_diagram_line))

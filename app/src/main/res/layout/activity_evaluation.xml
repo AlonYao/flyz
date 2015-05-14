@@ -32,6 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="45dp"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical">
 
                     <TextView
@@ -44,6 +45,7 @@
                         android:id="@+id/evaluation_score_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/practice_report_zero"
                         android:textColor="@color/setting_text"
                         android:textStyle="bold"
                         android:textSize="43sp"/>
@@ -285,6 +287,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -300,8 +303,9 @@
                     android:layout_height="209dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"/>
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@color/white"/>
             </LinearLayout>
 
             <LinearLayout
