@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,8 +34,6 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.thirdparty.upyun.UpYunUpload;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.DownloadAsyncTask;
-import com.appublisher.quizbank.utils.FileMange;
 import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -146,39 +143,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
         }
 
         // 头像处理
-        String avatarFolder = getApplicationContext().getFilesDir().getAbsolutePath() + "/"
-                + LoginModel.getUserId();
-        FileMange.mkDir(avatarFolder);
-        final String filePath = avatarFolder + "/avatar.png";
-        File yourAvatarFile = new File(filePath);
-        if (yourAvatarFile.exists()) {
-            Bitmap avatarImg = BitmapFactory.decodeFile(filePath);
-            if (avatarImg != null) {
-                mAvatar.setImageBitmap(avatarImg);
-            }
-        } else {
-            // 下载
-            if (mUserInfoModel != null) {
-                String fileUrl = mUserInfoModel.getAvatar();
-                if (fileUrl != null && !fileUrl.equals("")) {
-                    DownloadAsyncTask mDownloadAsyncTask = new DownloadAsyncTask(fileUrl, filePath,
-                            new DownloadAsyncTask.FinishListener() {
-
-                                @Override
-                                public void onFinished() {
-                                    File file = new File(filePath);
-                                    if (file.exists()) {
-                                        Bitmap avatarImg = BitmapFactory.decodeFile(filePath);
-                                        if (avatarImg != null) {
-                                            mAvatar.setImageBitmap(avatarImg);
-                                        }
-                                    }
-                                }
-                            }, null);
-                    mDownloadAsyncTask.execute();
-                }
-            }
-        }
+        LoginModel.setAvatar(this, mAvatar);
 
         // 昵称修改
         rlNickName.setOnClickListener(new View.OnClickListener() {

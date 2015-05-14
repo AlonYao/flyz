@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
@@ -25,18 +27,22 @@ import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.DownloadAsyncTask;
+import com.appublisher.quizbank.utils.FileMange;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.exception.SocializeException;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -406,6 +412,49 @@ public class LoginModel {
 
         } else {
             ToastManager.showToast(activity, "校验失败");
+        }
+    }
+
+    /**
+     * 设置头像
+     * @param activity Activity
+     * @param avatar 头像
+     */
+    public static void setAvatar(Activity activity, final RoundedImageView avatar) {
+        String avatarFolder = activity.getApplicationContext().getFilesDir().getAbsolutePath() + "/"
+                + LoginModel.getUserId();
+        FileMange.mkDir(avatarFolder);
+        final String filePath = avatarFolder + "/avatar.png";
+        File yourAvatarFile = new File(filePath);
+        if (yourAvatarFile.exists()) {
+            Bitmap avatarImg = BitmapFactory.decodeFile(filePath);
+            if (avatarImg != null) {
+                avatar.setImageBitmap(avatarImg);
+            }
+        } else {
+            // 下载
+            UserInfoModel userInfoModel = LoginModel.getUserInfoM();
+
+            if (userInfoModel == null) return;
+
+            String fileUrl = userInfoModel.getAvatar();
+            if (fileUrl != null && !fileUrl.equals("")) {
+                DownloadAsyncTask mDownloadAsyncTask = new DownloadAsyncTask(fileUrl, filePath,
+                        new DownloadAsyncTask.FinishListener() {
+
+                            @Override
+                            public void onFinished() {
+                                File file = new File(filePath);
+                                if (file.exists()) {
+                                    Bitmap avatarImg = BitmapFactory.decodeFile(filePath);
+                                    if (avatarImg != null) {
+                                        avatar.setImageBitmap(avatarImg);
+                                    }
+                                }
+                            }
+                        }, null);
+                mDownloadAsyncTask.execute();
+            }
         }
     }
 }

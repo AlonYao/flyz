@@ -21,6 +21,7 @@ import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.model.HomePageModel;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
 import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
@@ -33,6 +34,7 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -83,6 +85,10 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         ImageView ivSpecial = (ImageView) mView.findViewById(R.id.homepage_special);
         LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
         TextView tvExam = (TextView) mView.findViewById(R.id.homepage_exam);
+        RoundedImageView ivAvatar = (RoundedImageView) mView.findViewById(R.id.homepage_avatar);
+
+        // 设置头像
+        LoginModel.setAvatar(mActivity, ivAvatar);
 
         // 考试项目倒计时
         HomePageModel.setExamCountDown(tvExam);
