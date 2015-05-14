@@ -82,6 +82,9 @@ public class DrawerAdapter extends BaseAdapter{
 
         // 判断设置按钮是否显示红点
         GlobalSetting globalSetting = GlobalSettingDAO.findById();
+
+        int a = Globals.last_notice_id;
+
         if (position == 5
                 && globalSetting != null
                 && globalSetting.latest_notify != Globals.last_notice_id) {

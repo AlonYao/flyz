@@ -122,6 +122,8 @@ public class HomePageModel {
         } else {
             MainActivity.mIvDrawerRedPoint.setVisibility(View.VISIBLE);
         }
+
+        if (MainActivity.mDrawerAdapter != null) MainActivity.mDrawerAdapter.notifyDataSetChanged();
     }
 
     /**

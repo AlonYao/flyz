@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
+    public static DrawerAdapter mDrawerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         /** 侧边栏设置 */
         // 侧边栏按钮列表
-        DrawerAdapter drawerAdapter = new DrawerAdapter(this);
-        mDrawerList.setAdapter(drawerAdapter);
+        mDrawerAdapter = new DrawerAdapter(this);
+        mDrawerList.setAdapter(mDrawerAdapter);
         mDrawerList.setOnItemClickListener(drawerListOnClick);
 
         // 侧边栏样式
