@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.model;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -216,7 +218,7 @@ public class OpenCourseModel {
                                                  JSONObject response) {
         if (response == null || activity.mHasShowOpenCourseConsult) return;
 
-        Gson gson = GsonManager.initGson();
+        final Gson gson = GsonManager.initGson();
         OpenCourseConsultResp openCourseConsultResp =
                 gson.fromJson(response.toString(), OpenCourseConsultResp.class);
 
@@ -237,7 +239,24 @@ public class OpenCourseModel {
             activity.mTvOpenCourseConsult.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToastManager.showToast(activity, "营销QQ……");
+                    // 获取营销QQ
+                    GlobalSetting globalSetting = GlobalSettingDAO.findById();
+                    if (globalSetting == null) return;
+
+                    GlobalSettingsResp globalSettingsResp =
+                            gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
+
+                    if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1)
+                        return;
+
+                    String qq = globalSettingsResp.getMarket_qq();
+                    String url="mqqwpa://im/chat?chat_type=wpa&uin=" + qq;
+
+                    try {
+                        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    } catch (ActivityNotFoundException e) {
+                        ToastManager.showToast(activity, "您未安装手机QQ，请到应用市场下载……");
+                    }
                 }
             });
         }
