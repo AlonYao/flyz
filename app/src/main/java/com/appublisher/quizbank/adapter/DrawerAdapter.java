@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.model.db.GlobalSetting;
 
 /**
  * 侧边栏按钮容器
@@ -54,6 +58,7 @@ public class DrawerAdapter extends BaseAdapter{
         return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
@@ -65,6 +70,7 @@ public class DrawerAdapter extends BaseAdapter{
             viewHolder = new ViewHolder();
             viewHolder.ivItem = (ImageView) convertView.findViewById(R.id.drawer_item_iv);
             viewHolder.tvItem = (TextView) convertView.findViewById(R.id.drawer_item_tv);
+            viewHolder.ivRedPoint = (ImageView) convertView.findViewById(R.id.drawer_item_redpoint);
 
             convertView.setTag(viewHolder);
         } else {
@@ -74,11 +80,22 @@ public class DrawerAdapter extends BaseAdapter{
         viewHolder.ivItem.setImageResource(mItemImgs[position]);
         viewHolder.tvItem.setText(mItemNames[position]);
 
+        // 判断设置按钮是否显示红点
+        GlobalSetting globalSetting = GlobalSettingDAO.findById();
+        if (position == 5
+                && globalSetting != null
+                && globalSetting.latest_notify != Globals.last_notice_id) {
+            viewHolder.ivRedPoint.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivRedPoint.setVisibility(View.GONE);
+        }
+
         return convertView;
     }
 
     private class ViewHolder {
         ImageView ivItem;
         TextView tvItem;
+        ImageView ivRedPoint;
     }
 }

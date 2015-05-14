@@ -2,13 +2,19 @@ package com.appublisher.quizbank.model;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.fragment.HomePageFragment;
+import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
@@ -102,5 +108,30 @@ public class HomePageModel {
                 fragment.mActivity.startActivity(intent);
             }
         });
+    }
+
+    /**
+     * 设置侧边栏红点
+     */
+    public static void setDrawerRedPoint() {
+        if (MainActivity.mIvDrawerRedPoint == null) return;
+
+        GlobalSetting globalSetting = GlobalSettingDAO.findById();
+        if (globalSetting != null && globalSetting.latest_notify == Globals.last_notice_id) {
+            MainActivity.mIvDrawerRedPoint.setVisibility(View.GONE);
+        } else {
+            MainActivity.mIvDrawerRedPoint.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 获取侧边栏设置Button View
+     * @return view
+     */
+    public static ImageView getSettingRedPointView() {
+        if (MainActivity.mDrawerList == null) return null;
+
+        View setting = CommonModel.getViewByPosition(5, MainActivity.mDrawerList);
+        return (ImageView) setting.findViewById(R.id.drawer_item_redpoint);
     }
 }

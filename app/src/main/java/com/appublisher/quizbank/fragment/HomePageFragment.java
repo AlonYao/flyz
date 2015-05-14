@@ -230,6 +230,9 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         // 记录最近的系统通知的id
         Globals.last_notice_id = homePageResp.getLatest_notify();
 
+        // 显示红点
+        HomePageModel.setDrawerRedPoint();
+
         ProgressBarManager.hideProgressBar();
     }
 

@@ -1,16 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <include layout="@layout/toolbar"/>
 
+    <ImageView
+        android:id="@+id/drawer_redpoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="32dp"
+        android:visibility="gone"
+        android:src="@drawable/setting_notice"
+        tools:ignore="ContentDescription" />
+
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
 
         <!-- Main layout -->
         <FrameLayout
@@ -34,4 +44,4 @@
             android:background="#FFFFFF"/>
     </android.support.v4.widget.DrawerLayout>
 
-</LinearLayout>
+</RelativeLayout>

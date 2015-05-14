@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
@@ -40,7 +41,6 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     private DrawerLayout mDrawerLayout;
     private FragmentManager mFragmentManager;
-    private ListView mDrawerList;
     private HomePageFragment mHomePageFragment;
     private WholePageFragment mWholePageFragment;
     private WrongQuestionsFragment mWrongQuestionsFragment;
@@ -48,6 +48,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     private StudyRecordFragment mStudyRecordFragment;
     private SettingFragment mSettingFragment;
     private boolean mDoubleBackToExit;
+
+    public static ListView mDrawerList;
+    public static ImageView mIvDrawerRedPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        mIvDrawerRedPoint = (ImageView) findViewById(R.id.drawer_redpoint);
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
@@ -149,6 +153,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             changeFragment(position);
+
+            // 侧边栏顶部红点消失
+            if (position == 5) {
+                mIvDrawerRedPoint.setVisibility(View.GONE);
+            }
         }
     };
 
