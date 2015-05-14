@@ -2,6 +2,7 @@ package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -130,6 +131,11 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             mTimer.cancel();
             mTimer = null;
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
