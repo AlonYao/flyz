@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -36,6 +38,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
     private RelativeLayout mProgressBar;
     private WebView mWebView;
+    private String mFrom;
     private static Request mRequest;
     private static String mOpencourseId;
 
@@ -92,10 +95,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
         // 获取数据
         String url = getIntent().getStringExtra("url");
-        String from = getIntent().getStringExtra("from");
+        mFrom = getIntent().getStringExtra("from");
         mOpencourseId = getIntent().getStringExtra("content");
 
-        if ("opencourse_started".equals(from)) {
+        if ("opencourse_started".equals(mFrom)) {
             ProgressDialogManager.showProgressDialog(this, true);
             mRequest.getOpenCourseUrl(mOpencourseId);
         } else {
@@ -130,9 +133,28 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+
+        MenuItemCompat.setShowAsAction(menu.add("刷新").setIcon(
+                R.drawable.webview_refresh), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        if ("opencourse_started".equals(mFrom)) {
+            MenuItemCompat.setShowAsAction(menu.add("咨询"),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if ("刷新".equals(item.getTitle())) {
+            mWebView.reload();
+        } else if ("咨询".equals(item.getTitle())) {
+            OpenCourseModel.setMarketQQ(this);
         }
 
         return super.onOptionsItemSelected(item);

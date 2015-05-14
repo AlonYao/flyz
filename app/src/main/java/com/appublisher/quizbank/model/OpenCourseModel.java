@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.model;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -206,7 +207,7 @@ public class OpenCourseModel {
             public void run() {
                 activity.mHandler.sendEmptyMessage(WebViewActivity.TIME_ON);
             }
-        }, 2000, heartbeat*1000);
+        }, 2000, heartbeat * 1000);
     }
 
     /**
@@ -240,25 +241,34 @@ public class OpenCourseModel {
                 @Override
                 public void onClick(View v) {
                     // 获取营销QQ
-                    GlobalSetting globalSetting = GlobalSettingDAO.findById();
-                    if (globalSetting == null) return;
-
-                    GlobalSettingsResp globalSettingsResp =
-                            gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
-
-                    if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1)
-                        return;
-
-                    String qq = globalSettingsResp.getMarket_qq();
-                    String url="mqqwpa://im/chat?chat_type=wpa&uin=" + qq;
-
-                    try {
-                        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                    } catch (ActivityNotFoundException e) {
-                        ToastManager.showToast(activity, "您未安装手机QQ，请到应用市场下载……");
-                    }
+                    setMarketQQ(activity);
                 }
             });
+        }
+    }
+
+    /**
+     * 设置营销QQ
+     * @param activity Activity
+     */
+    public static void setMarketQQ(Activity activity) {
+        GlobalSetting globalSetting = GlobalSettingDAO.findById();
+        if (globalSetting == null) return;
+
+        Gson gson = GsonManager.initGson();
+        GlobalSettingsResp globalSettingsResp =
+                gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
+
+        if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1)
+            return;
+
+        String qq = globalSettingsResp.getMarket_qq();
+        String url="mqqwpa://im/chat?chat_type=wpa&uin=" + qq;
+
+        try {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (ActivityNotFoundException e) {
+            ToastManager.showToast(activity, "您未安装手机QQ，请到应用市场下载……");
         }
     }
 }
