@@ -204,7 +204,7 @@ public class OpenCourseModel {
             public void run() {
                 activity.mHandler.sendEmptyMessage(WebViewActivity.TIME_ON);
             }
-        }, 0, heartbeat*1000);
+        }, 2000, heartbeat*1000);
     }
 
     /**
