@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.model;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,14 +14,12 @@ import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.UserDAO;
-import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
-import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
@@ -56,14 +55,14 @@ public class HomePageModel {
 
     /**
      * 设置公开课
-     * @param fragment HomePageFragment
-     * @param liveCourse 公开课数据
+     * @param activity Activity
+     * @param view View
      */
-    public static void setOpenCourse(final HomePageFragment fragment, LiveCourseM liveCourse) {
-        if (liveCourse == null) return;
+    public static void setOpenCourse(final Activity activity, View view) {
+        if (Globals.live_course == null) return;
 
-        int type = liveCourse.getType();
-        final String content = liveCourse.getContent();
+        int type = Globals.live_course.getType();
+        final String content = Globals.live_course.getContent();
 
         mCls = null;
 
@@ -96,16 +95,16 @@ public class HomePageModel {
                 break;
         }
 
-        fragment.mTvZhiboke.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mCls == null) return;
 
                 Intent intent =
-                        new Intent(fragment.mActivity, mCls);
+                        new Intent(activity, mCls);
                 intent.putExtra("content", content);
                 intent.putExtra("from", "opencourse_started");
-                fragment.mActivity.startActivity(intent);
+                activity.startActivity(intent);
             }
         });
     }

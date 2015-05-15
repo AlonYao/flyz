@@ -24,7 +24,6 @@ import com.appublisher.quizbank.model.HomePageModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
-import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperNoteM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
@@ -230,8 +229,8 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         });
 
         // 公开课
-        LiveCourseM liveCourse = homePageResp.getLive_course();
-        HomePageModel.setOpenCourse(this, liveCourse);
+        Globals.live_course = homePageResp.getLive_course();
+        HomePageModel.setOpenCourse(mActivity, mTvZhiboke);
 
         // 记录最近的系统通知的id
         Globals.last_notice_id = homePageResp.getLatest_notify();

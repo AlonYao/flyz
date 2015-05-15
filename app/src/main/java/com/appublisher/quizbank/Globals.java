@@ -2,6 +2,8 @@ package com.appublisher.quizbank;
 
 import android.content.SharedPreferences;
 
+import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
+
 /**
  * 全局变量
  */
@@ -39,4 +41,7 @@ public class Globals {
 
     // 记录最近的系统通知的id
     public static int last_notice_id;
+
+    // 记录公开课数据模型
+    public static LiveCourseM live_course;
 }

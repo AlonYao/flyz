@@ -14,6 +14,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.model.HomePageModel;
 import com.appublisher.quizbank.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
@@ -161,12 +162,7 @@ public class AlertManager {
         });
 
         // 看个直播
-        tvZhibo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastManager.showToast(activity, "直播课 施工中……");
-            }
-        });
+        HomePageModel.setOpenCourse(activity, tvZhibo);
     }
 
     /**
