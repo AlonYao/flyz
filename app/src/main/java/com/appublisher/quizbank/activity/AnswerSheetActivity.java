@@ -46,6 +46,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public LinearLayout mLlEntireContainer;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
+    public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -71,6 +72,8 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                 getIntent().getSerializableExtra("user_answer");
         mPaperName = getIntent().getStringExtra("paper_name");
         mPaperType = getIntent().getStringExtra("paper_type");
+        mEntirePaperCategory = (ArrayList<HashMap<String, Integer>>)
+                getIntent().getSerializableExtra("category");
 
         // 根据试卷类型显示不同的页面
         if ("entire".equals(mPaperType)) {

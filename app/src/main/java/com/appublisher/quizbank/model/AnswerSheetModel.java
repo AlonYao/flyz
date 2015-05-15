@@ -31,21 +31,16 @@ public class AnswerSheetModel {
      */
     @SuppressWarnings({"unchecked", "Annotator"})
     public static void setEntireContent(final AnswerSheetActivity activity) {
-        if (activity.mUserAnswerList == null || activity.mUserAnswerList.size() == 0) return;
-
-        ArrayList<HashMap<String, Integer>> entirePaperCategory =
-                (ArrayList<HashMap<String, Integer>>)
-                        activity.getIntent().getSerializableExtra("category");
-
-        if (entirePaperCategory == null) return;
+        if (activity.mUserAnswerList == null
+                || activity.mUserAnswerList.size() == 0
+                || activity.mEntirePaperCategory == null) return;
 
         int offset = 0;
         int categoryNum = 1;
-
-        int size = entirePaperCategory.size();
+        int size = activity.mEntirePaperCategory.size();
 
         for (int i = 0; i < size; i++) {
-            HashMap<String, Integer> map = entirePaperCategory.get(i);
+            HashMap<String, Integer> map = activity.mEntirePaperCategory.get(i);
 
             if (map == null) continue;
 
