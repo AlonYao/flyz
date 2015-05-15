@@ -306,6 +306,10 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
 
                             // 新建||切换数据库
                             LoginModel.setDatabase(user_id, this);
+
+                            // Umeng 首页访问 统计
+                            UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
+
                             // 执行成功后的操作
                             setLoginSuccess(uim, ueim);
                         }
@@ -328,9 +332,13 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                         String user_id = uim.getUser_id();
                         LoginModel.setDatabase(user_id, this);
 
-                        // 友盟
-                        UmengManager.sendCountEvent(
-                                LoginActivity.this, "RegLog", "Action", mSocialLoginType);
+                        // Umeng 注册/登陆 统计
+                        UmengManager.sendCountEvent(this, "RegLog", "Action", mSocialLoginType);
+
+                        // Umeng 首页访问 统计
+                        if (!lrm.isIs_new()) {
+                            UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
+                        }
 
                         // 执行成功后的操作
                         setLoginSuccess(uim, ueim);

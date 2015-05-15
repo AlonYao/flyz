@@ -230,6 +230,10 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
                             startActivity(intent);
                         }
 
+                        // Umeng 首页访问统计
+                        if ("login".equals(mFrom) || "reg".equals(mFrom))
+                            UmengManager.sendCountEvent(this, "Home", "Entry", "NewUser");
+
                         finish();
                     }
                 }

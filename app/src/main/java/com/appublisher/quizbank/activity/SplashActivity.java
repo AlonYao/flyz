@@ -10,6 +10,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -40,6 +41,10 @@ public class SplashActivity extends Activity {
                         // 没有考试项目
                         cls = ExamChangeActivity.class;
                     }
+
+                    // Umeng
+                    UmengManager.sendCountEvent(SplashActivity.this, "Home", "Entry", "Launch");
+
                 } else {
                     // 未登录
                     cls = LoginActivity.class;
