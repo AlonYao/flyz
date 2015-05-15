@@ -34,6 +34,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -47,7 +48,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 
 /**
  * 登录注册Activity
@@ -59,7 +59,6 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     private Gson mGson;
     private HomeWatcher mHomeWatcher;
     private Handler mHandler;
-    private static String mFrom;
 
     public Request mRequest;
     public UMSocialService mController;
@@ -126,11 +125,11 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         mHandler = new MsgHandler(this);
 
         // 获取数据
-        mFrom = getIntent().getStringExtra("from");
-        if (mFrom == null) mFrom = ""; // 设置默认值
+        String from = getIntent().getStringExtra("from");
+        if (from == null) from = ""; // 设置默认值
 
         // ActionBar
-        if (mFrom.equals("collect") || mFrom.equals("mine") || mFrom.equals("setting")) {
+        if (from.equals("collect") || from.equals("mine") || from.equals("setting")) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -171,7 +170,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
             @Override
             public void onClick(View v) {
                 // 友盟
-                sendToUmeng("Forget");
+                UmengManager.sendCountEvent(LoginActivity.this, "RegLog", "Action", "Forget");
 
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 intent.putExtra("from", "forget_pwd");
@@ -207,7 +206,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
             @Override
             public void onHomePressed() {
                 // 友盟统计
-                sendToUmeng("Quit");
+                UmengManager.sendCountEvent(LoginActivity.this, "RegLog", "Action", "Quit");
             }
 
             @Override
@@ -250,7 +249,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             // 友盟统计
-            sendToUmeng("Quit");
+            UmengManager.sendCountEvent(this, "RegLog", "Action", "Quit");
 
             finish();
         }
@@ -286,17 +285,6 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         mHandler.sendEmptyMessage(LOGIN_SUCCESS);
     }
 
-    /**
-     * 友盟
-     * @param action 动作
-     */
-    private void sendToUmeng(String action) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Action", action);
-        MobclickAgent.onEvent(this, Globals.umeng_login_event, map);
-        Globals.umeng_quiz_lastevent = Globals.umeng_login_event;
-    }
-
     @SuppressLint("CommitPrefEdits")
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
@@ -313,7 +301,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                         String user_id = uim.getUser_id();
                         if (user_id != null && !user_id.equals("")) {
                             // 友盟
-                            sendToUmeng("Login");
+                            UmengManager.sendCountEvent(
+                                    LoginActivity.this, "RegLog", "Action", "Login");
 
                             // 新建||切换数据库
                             LoginModel.setDatabase(user_id, this);
@@ -340,7 +329,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                         LoginModel.setDatabase(user_id, this);
 
                         // 友盟
-                        sendToUmeng(mSocialLoginType);
+                        UmengManager.sendCountEvent(
+                                LoginActivity.this, "RegLog", "Action", mSocialLoginType);
 
                         // 执行成功后的操作
                         setLoginSuccess(uim, ueim);

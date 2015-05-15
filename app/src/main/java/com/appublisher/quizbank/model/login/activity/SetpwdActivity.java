@@ -31,14 +31,13 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 public class SetpwdActivity extends ActionBarActivity implements RequestCallback{
 
@@ -180,10 +179,7 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
                             editor.commit();
 
                             // 友盟
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("Action", "Reg");
-                            MobclickAgent.onEvent(this, Globals.umeng_login_event, map);
-                            Globals.umeng_quiz_lastevent = Globals.umeng_login_event;
+                            UmengManager.sendCountEvent(this, "RegLog", "Action", "Reg");
 
                             mHandler.sendEmptyMessage(SET_PASSWORD_SUCCESS);
                         }
