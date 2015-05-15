@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.adapter;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.AnswerSheetActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +19,11 @@ import java.util.HashMap;
  */
 public class AnswerSheetAdapter extends BaseAdapter{
 
-    private Activity mActivity;
+    private AnswerSheetActivity mActivity;
     private ArrayList<HashMap<String, Object>> mUserAnswerList;
 
-    public AnswerSheetAdapter(Activity activity, ArrayList<HashMap<String, Object>> userAnswerList) {
+    public AnswerSheetAdapter(AnswerSheetActivity activity,
+                              ArrayList<HashMap<String, Object>> userAnswerList) {
         mActivity = activity;
         mUserAnswerList = userAnswerList;
     }
@@ -61,14 +62,38 @@ public class AnswerSheetAdapter extends BaseAdapter{
         viewHolder.tvNum.setText(String.valueOf(position + 1));
 
         HashMap<String, Object> userAnswerMap = mUserAnswerList.get(position);
-        if (userAnswerMap.containsKey("answer")
-                && userAnswerMap.get("answer") != null
-                && !userAnswerMap.get("answer").equals("")) {
-            viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_selected);
+
+        if ("analysis".equals(mActivity.mFrom)) {
+            // 解析
+            boolean isRight = false;
+
+            if (userAnswerMap.containsKey("answer")
+                    && userAnswerMap.containsKey("right_answer")
+                    && userAnswerMap.get("answer") != null
+                    && userAnswerMap.get("right_answer").equals(userAnswerMap.get("answer"))) {
+                isRight = true;
+            }
+
+            if (isRight) {
+                viewHolder.ivBg.setImageResource(R.drawable.measure_analysis_right);
+            } else {
+                viewHolder.ivBg.setImageResource(R.drawable.measure_analysis_wrong);
+            }
+
             viewHolder.tvNum.setTextColor(Color.WHITE);
+
         } else {
-            viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_unselect);
-            viewHolder.tvNum.setTextColor(mActivity.getResources().getColor(R.color.setting_text));
+            // 非解析
+            if (userAnswerMap.containsKey("answer")
+                    && userAnswerMap.get("answer") != null
+                    && !userAnswerMap.get("answer").equals("")) {
+                viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_selected);
+                viewHolder.tvNum.setTextColor(Color.WHITE);
+            } else {
+                viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_unselect);
+                viewHolder.tvNum.setTextColor(
+                        mActivity.getResources().getColor(R.color.setting_text));
+            }
         }
 
         return convertView;

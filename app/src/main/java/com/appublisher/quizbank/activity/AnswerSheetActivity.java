@@ -38,8 +38,8 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     private Gson mGson;
     private String mPaperName;
     private ExpandableHeightGridView mGridView;
-    private String mFrom;
 
+    public String mFrom;
     public int mTotalNum;
     public int mRightNum;
     public String mPaperType;

@@ -242,7 +242,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         } else if ("错题".equals(item.getTitle())) {
             AlertManager.deleteErrorQuestionAlert(this);
         } else if (item.getTitle().equals("答题卡")) {
-            ToastManager.showToast(this, "答题卡 施工中……");
+            skipToAnswerSheet();
         }
 
         return super.onOptionsItemSelected(item);
