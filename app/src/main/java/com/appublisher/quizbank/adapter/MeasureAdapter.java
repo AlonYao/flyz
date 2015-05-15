@@ -240,7 +240,7 @@ public class MeasureAdapter extends PagerAdapter{
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (option == null || hasAnswer(mActivity.mCurPosition)) break;
+                    if (option == null) break;
                     resetOption();
                     option.setSelected(true);
                     break;
@@ -261,31 +261,12 @@ public class MeasureAdapter extends PagerAdapter{
     private View.OnClickListener optionClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            boolean hasAnswer = hasAnswer(mActivity.mCurPosition);
-
             updateUserAnswer(v);
 
             // 页面跳转
-            if (!hasAnswer) pageSkip();
+            pageSkip();
         }
     };
-
-    /**
-     * 判断当前页面是否有用户答案
-     * @param positon 当前页面位置
-     * @return 是否
-     */
-    private boolean hasAnswer(int positon) {
-        if (mActivity.mUserAnswerList == null || positon >= mActivity.mUserAnswerList.size())
-            return false;
-
-        mUserAnswerMap = mActivity.mUserAnswerList.get(positon);
-
-        return mUserAnswerMap != null
-                && mUserAnswerMap.containsKey("answer")
-                && mUserAnswerMap.get("answer") != null
-                && !mUserAnswerMap.get("answer").equals("");
-    }
 
     /**
      * 页面跳转
