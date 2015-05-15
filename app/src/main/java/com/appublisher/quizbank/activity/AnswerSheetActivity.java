@@ -38,6 +38,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     private Gson mGson;
     private String mPaperName;
     private ExpandableHeightGridView mGridView;
+    private String mFrom;
 
     public int mTotalNum;
     public int mRightNum;
@@ -74,6 +75,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         mPaperType = getIntent().getStringExtra("paper_type");
         mEntirePaperCategory = (ArrayList<HashMap<String, Integer>>)
                 getIntent().getSerializableExtra("category");
+        mFrom = getIntent().getStringExtra("from");
 
         // 根据试卷类型显示不同的页面
         if ("entire".equals(mPaperType)) {
@@ -126,7 +128,14 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
+                Class<?> cls;
+                if ("analysis".equals(mFrom)) {
+                    cls = MeasureAnalysisActivity.class;
+                } else {
+                    cls = MeasureActivity.class;
+                }
+
+                Intent intent = new Intent(AnswerSheetActivity.this, cls);
                 intent.putExtra("position", position);
                 setResult(ActivitySkipConstants.ANSWER_SHEET_SKIP, intent);
                 finish();

@@ -17,6 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.MeasureAnalysisModel;
@@ -37,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 做题解析模块
@@ -55,6 +57,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public String mFrom;
     public AnswerM mCurAnswerModel;
     public ArrayList<Integer> mDeleteErrorQuestions;
+    public ArrayList<HashMap<String, Object>> mUserAnswerList;
+    public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
@@ -186,6 +190,9 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         // 初始化反馈菜单
         initPopupWindowView();
 
+        MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
+                R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -234,9 +241,36 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             }
         } else if ("错题".equals(item.getTitle())) {
             AlertManager.deleteErrorQuestionAlert(this);
+        } else if (item.getTitle().equals("答题卡")) {
+            ToastManager.showToast(this, "答题卡 施工中……");
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 答题卡回调
+        if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SKIP && data != null) {
+            int position = data.getIntExtra("position", 0);
+
+            if (mViewPager == null) return;
+            mViewPager.setCurrentItem(position);
+        }
+    }
+
+    /**
+     * 跳转至答题卡
+     */
+    public void skipToAnswerSheet() {
+        Intent intent = new Intent(this, AnswerSheetActivity.class);
+        intent.putExtra("user_answer", mUserAnswerList);
+        intent.putExtra("paper_type", mAnalysisType);
+        intent.putExtra("category", mEntirePaperCategory);
+        intent.putExtra("from", "analysis");
+        startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
     }
 
     /**

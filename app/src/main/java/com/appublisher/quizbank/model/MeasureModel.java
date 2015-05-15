@@ -268,7 +268,7 @@ public class MeasureModel {
 
                 // 拼接用户答案
                 ArrayList<AnswerM> answers = category.getAnswers();
-                jointUserAnswer(categoryQuestions, answers, activity);
+                jointUserAnswer(categoryQuestions, answers, activity.mUserAnswerList);
             }
 
             // 倒计时时间
@@ -289,7 +289,7 @@ public class MeasureModel {
             // 初始化答案
             activity.mUserAnswerList = new ArrayList<>();
             ArrayList<AnswerM> answers = historyExerciseResp.getAnswers();
-            jointUserAnswer(activity.mQuestions, answers, activity);
+            jointUserAnswer(activity.mQuestions, answers, activity.mUserAnswerList);
 
             // 获取时长
             activity.mDuration =
@@ -449,11 +449,11 @@ public class MeasureModel {
      * 拼接用户答案
      * @param questions 题目
      * @param answers 用户答案
-     * @param activity MeasureActivity
+     * @param userAnswerList 用户答案List
      */
-    private static void jointUserAnswer(ArrayList<QuestionM> questions,
+    public static void jointUserAnswer(ArrayList<QuestionM> questions,
                                  ArrayList<AnswerM> answers,
-                                 MeasureActivity activity) {
+                                 ArrayList<HashMap<String, Object>> userAnswerList) {
         int size = questions.size();
         for (int i = 0; i < size; i++) {
             HashMap<String, Object> map = new HashMap<>();
@@ -482,7 +482,7 @@ public class MeasureModel {
                 map.put("answer", answer.getAnswer());
             }
 
-            activity.mUserAnswerList.add(map);
+            if (userAnswerList != null) userAnswerList.add(map);
         }
     }
 

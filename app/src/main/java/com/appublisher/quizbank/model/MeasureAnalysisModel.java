@@ -12,6 +12,7 @@ import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * MeasureAnalysisActivity Model
@@ -75,6 +76,43 @@ public class MeasureAnalysisModel {
 
             }
         });
+
+        // 拼接用户答案（用于展示答题卡）
+        activity.mUserAnswerList = new ArrayList<>();
+        if ("entire".equals(activity.mAnalysisType)) {
+            // 筛选科目信息
+            activity.mEntirePaperCategory = new ArrayList<>();
+
+            int size = questions.size();
+            for (int i = 0; i < size; i++) {
+                QuestionM question = questions.get(i);
+
+                if (question == null) continue;
+                String categoryName = question.getCategory_name();
+
+                if (categoryName == null || categoryName.length() == 0) continue;
+
+                int sizeCategory =  activity.mEntirePaperCategory.size();
+                if (sizeCategory == 0) {
+                    HashMap<String, Integer> map = new HashMap<>();
+                    map.put(categoryName, 1);
+                    activity.mEntirePaperCategory.add(map);
+                } else {
+                    for (int j = 0; j < sizeCategory; j++) {
+                        HashMap<String, Integer> map = activity.mEntirePaperCategory.get(j);
+                        if (map.containsKey(categoryName)) {
+                            int count = map.get(categoryName);
+                            count++;
+                            map.put(categoryName, count);
+                            activity.mEntirePaperCategory.set(j, map);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        MeasureModel.jointUserAnswer(questions, answers, activity.mUserAnswerList);
     }
 
     /**
