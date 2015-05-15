@@ -69,6 +69,9 @@ public class MeasureAdapter extends PagerAdapter{
             mTvOptionB = (TextView) view.findViewById(R.id.measure_option_b_tv);
             mTvOptionC = (TextView) view.findViewById(R.id.measure_option_c_tv);
             mTvOptionD = (TextView) view.findViewById(R.id.measure_option_d_tv);
+
+            // 更新用户答案
+            setOption(position);
         }
     }
 
@@ -237,13 +240,13 @@ public class MeasureAdapter extends PagerAdapter{
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (option == null) break;
-                    option.setPressed(true);
+                    if (option == null || hasAnswer(mActivity.mCurPosition)) break;
+                    resetOption();
+                    option.setSelected(true);
                     break;
 
                 case MotionEvent.ACTION_UP:
                     if (option == null) break;
-                    option.setPressed(false);
                     option.performClick();
                     break;
             }
@@ -258,52 +261,81 @@ public class MeasureAdapter extends PagerAdapter{
     private View.OnClickListener optionClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            resetOption();
-            mUserAnswerMap = mActivity.mUserAnswerList.get(mActivity.mCurPosition);
+            boolean hasAnswer = hasAnswer(mActivity.mCurPosition);
 
-            boolean hasAnswer = false;
+            updateUserAnswer(v);
 
-            if (mUserAnswerMap.containsKey("answer")
-                    && mUserAnswerMap.get("answer") != null
-                    && !mUserAnswerMap.get("answer").equals("")) hasAnswer = true;
-
-            switch (v.getId()) {
-                case R.id.measure_option_a_tv:
-                    mTvOptionA.setSelected(true);
-                    mUserAnswerMap.put("answer", "A");
-
-                    break;
-
-                case R.id.measure_option_b_tv:
-                    mTvOptionB.setSelected(true);
-                    mUserAnswerMap.put("answer", "B");
-
-                    break;
-
-                case R.id.measure_option_c_tv:
-                    mTvOptionC.setSelected(true);
-                    mUserAnswerMap.put("answer", "C");
-
-                    break;
-
-                case R.id.measure_option_d_tv:
-                    mTvOptionD.setSelected(true);
-                    mUserAnswerMap.put("answer", "D");
-
-                    break;
-            }
-
-            mActivity.mUserAnswerList.set(mActivity.mCurPosition, mUserAnswerMap);
-
-            if (hasAnswer) return;
-
-            if (mActivity.mCurPosition + 1 < mActivity.mUserAnswerList.size()) {
-                mActivity.mViewPager.setCurrentItem(mActivity.mCurPosition + 1);
-            } else {
-                mActivity.skipToAnswerSheet();
-            }
+            // 页面跳转
+            if (!hasAnswer) pageSkip();
         }
     };
+
+    /**
+     * 判断当前页面是否有用户答案
+     * @param positon 当前页面位置
+     * @return 是否
+     */
+    private boolean hasAnswer(int positon) {
+        if (mActivity.mUserAnswerList == null || positon >= mActivity.mUserAnswerList.size())
+            return false;
+
+        mUserAnswerMap = mActivity.mUserAnswerList.get(positon);
+
+        return mUserAnswerMap != null
+                && mUserAnswerMap.containsKey("answer")
+                && mUserAnswerMap.get("answer") != null
+                && !mUserAnswerMap.get("answer").equals("");
+    }
+
+    /**
+     * 页面跳转
+     */
+    private void pageSkip() {
+        if (mActivity.mCurPosition + 1 < mActivity.mUserAnswerList.size()) {
+            mActivity.mViewPager.setCurrentItem(mActivity.mCurPosition + 1);
+        } else {
+            mActivity.skipToAnswerSheet();
+        }
+    }
+
+    /**
+     * 更新用户答案
+     * @param v Option View
+     */
+    private void updateUserAnswer(View v) {
+        resetOption();
+        mUserAnswerMap = mActivity.mUserAnswerList.get(mActivity.mCurPosition);
+
+        if (mUserAnswerMap == null) return;
+
+        switch (v.getId()) {
+            case R.id.measure_option_a_tv:
+                mTvOptionA.setSelected(true);
+                mUserAnswerMap.put("answer", "A");
+
+                break;
+
+            case R.id.measure_option_b_tv:
+                mTvOptionB.setSelected(true);
+                mUserAnswerMap.put("answer", "B");
+
+                break;
+
+            case R.id.measure_option_c_tv:
+                mTvOptionC.setSelected(true);
+                mUserAnswerMap.put("answer", "C");
+
+                break;
+
+            case R.id.measure_option_d_tv:
+                mTvOptionD.setSelected(true);
+                mUserAnswerMap.put("answer", "D");
+
+                break;
+        }
+
+        mActivity.mUserAnswerList.set(mActivity.mCurPosition, mUserAnswerMap);
+    }
 
     /**
      * 重置按钮状态

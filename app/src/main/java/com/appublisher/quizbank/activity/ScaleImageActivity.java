@@ -36,12 +36,6 @@ public class ScaleImageActivity extends Activity{
 		} else if(filePath != null && !filePath.equals("")) {
 			imageView.setImageBitmap(BitmapFactory.decodeFile(filePath));
 		}
-
-//        else if(bitmap.equals("toscale") && DailyLearnApp.toScale != null) {
-//			imageView.setImageBitmap(BitmapFactory.decodeFile(DailyLearnApp.toScale));
-//		}
-
-//		DailyLearnApp.resumeFromScaleImage = true;
 	}
 
 	@Override
