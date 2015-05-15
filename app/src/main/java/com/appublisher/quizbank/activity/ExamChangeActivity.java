@@ -26,13 +26,13 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -49,7 +49,6 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
     private ExamItemModel mCurExamItem;
     private String mFrom;
     private TextView mTvConfirm;
-    private boolean mPreExamStatus;
     private int mPreExamId;
 
     @Override
@@ -71,7 +70,6 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
         mRequest = new Request(this, this);
         mFrom = getIntent().getStringExtra("from");
         if (mFrom == null) mFrom = "";
-        mPreExamStatus = LoginModel.hasExamInfo();
 
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
@@ -89,17 +87,23 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
     @Override
     protected void onPause() {
         super.onPause();
-        // 开启计划的放弃点统计
-        if (!LoginModel.hasExamInfo()) {
-            // 如果没有考试项目
-            HashMap<String,String> map = new HashMap<>();
-            map.put("Action", "0");
-            MobclickAgent.onEvent(this, "SetPlan", map);
-        } else if (!mPreExamStatus && LoginModel.hasExamInfo()) {
-            // 之前没有考试项目，结束的时候有考试项目
-            HashMap<String,String> map = new HashMap<>();
-            map.put("Action", "1");
-            MobclickAgent.onEvent(this, "SetPlan", map);
+        // Umeng 统计
+        if ("splash".equals(mFrom) || "login".equals(mFrom) || "reg".equals(mFrom)) {
+            // 从登录注册页面进入
+            if (LoginModel.hasExamInfo()) {
+                UmengManager.sendCountEvent(this, "SetExam", "Action", "0");
+            } else {
+                UmengManager.sendCountEvent(this, "SetExam", "Action", "1");
+            }
+        } else {
+            // 从设置页面进入
+            if (mCurExamItem != null && mPreExamId != mCurExamItem.getExam_id()) {
+                // 考试项目有变化
+                UmengManager.sendCountEvent(this, "Setting", "MyTest", "1");
+            } else {
+                // 考试项目没有变化
+                UmengManager.sendCountEvent(this, "Setting", "MyTest", "0");
+            }
         }
 
         // Umeng
