@@ -92,12 +92,18 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         }
 
         // 交卷
-        tvSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
-            }
-        });
+        if ("analysis".equals(mFrom)) {
+            tvSubmit.setVisibility(View.GONE);
+            tvSubmit.setOnClickListener(null);
+        } else {
+            tvSubmit.setVisibility(View.VISIBLE);
+            tvSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
+                }
+            });
+        }
     }
 
     @Override

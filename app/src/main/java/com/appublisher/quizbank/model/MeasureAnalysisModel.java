@@ -86,10 +86,9 @@ public class MeasureAnalysisModel {
             int size = questions.size();
             for (int i = 0; i < size; i++) {
                 QuestionM question = questions.get(i);
-
                 if (question == null) continue;
-                String categoryName = question.getCategory_name();
 
+                String categoryName = question.getCategory_name();
                 if (categoryName == null || categoryName.length() == 0) continue;
 
                 int sizeCategory =  activity.mEntirePaperCategory.size();
@@ -98,14 +97,28 @@ public class MeasureAnalysisModel {
                     map.put(categoryName, 1);
                     activity.mEntirePaperCategory.add(map);
                 } else {
+                    boolean hasCategory = false;
+                    HashMap<String, Integer> map;
+
+                    // 开始匹配
                     for (int j = 0; j < sizeCategory; j++) {
-                        HashMap<String, Integer> map = activity.mEntirePaperCategory.get(j);
-                        if (map.containsKey(categoryName)) {
-                            int count = map.get(categoryName);
-                            count++;
-                            map.put(categoryName, count);
-                            activity.mEntirePaperCategory.set(j, map);
-                        }
+                        map = activity.mEntirePaperCategory.get(j);
+
+                        if (map == null || !map.containsKey(categoryName)) continue;
+
+                        int count = map.get(categoryName);
+                        count++;
+                        map.put(categoryName, count);
+                        activity.mEntirePaperCategory.set(j, map);
+
+                        hasCategory = true;
+                    }
+
+                    // 如果没有匹配到
+                    if (!hasCategory) {
+                        map = new HashMap<>();
+                        map.put(categoryName, 1);
+                        activity.mEntirePaperCategory.add(map);
                     }
                 }
             }
