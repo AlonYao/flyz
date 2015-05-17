@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
+import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
@@ -100,11 +101,12 @@ public class HomePageModel {
             public void onClick(View v) {
                 if (mCls == null) return;
 
-                Intent intent =
-                        new Intent(activity, mCls);
+                Intent intent = new Intent(activity, mCls);
                 intent.putExtra("content", content);
                 intent.putExtra("from", "opencourse_started");
                 activity.startActivity(intent);
+
+                if (activity instanceof MeasureAnalysisActivity) activity.finish();
             }
         });
     }

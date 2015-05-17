@@ -63,6 +63,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
     public int mHierarchyId;
     public int mHierarchyLevel;
+    public String mEntry;
 
     public static Toolbar mToolbar;
     public static int mMins;
@@ -146,6 +147,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mRedo = getIntent().getBooleanExtra("redo", false);
         mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
+        mEntry = getIntent().getStringExtra("entry");
 
         MeasureModel.getData(this);
     }
