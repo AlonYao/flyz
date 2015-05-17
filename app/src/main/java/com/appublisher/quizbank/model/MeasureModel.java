@@ -180,6 +180,9 @@ public class MeasureModel {
 
         if (activity.mRedo) {
             // 重新做题
+            // 提交时的字段是paperId，所有这里要统一
+            activity.mPaperId = activity.mExerciseId;
+
             ProgressDialogManager.showProgressDialog(activity, true);
             request.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
         } else {
