@@ -126,6 +126,7 @@ public class AlertManager {
         tvAnother.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //noinspection IfCanBeSwitch
                 if ("auto".equals(activity.mAnalysisType)) {
                     Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
                     intent.putExtra("paper_type", activity.mAnalysisType);

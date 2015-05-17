@@ -29,6 +29,7 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -60,12 +61,15 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
 
-    public String mUmengEntry;
+    public boolean mUmengIsPressHome;
     public long mUmengTimestamp;
+    public long mCurTimestamp;
+    public String mUmengEntry;
 
-    private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
+    private PopupWindow mPopupWindow;
     private Request mRequest;
+    private HomeWatcher mHomeWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,9 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
         // 初始化成员变量
         mRequest = new Request(this, this);
+        mUmengIsPressHome = false;
+        mCurTimestamp = System.currentTimeMillis();
+        mHomeWatcher = new HomeWatcher(this);
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(toolbar);
@@ -100,6 +107,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
         if (mIsFromError) mDeleteErrorQuestions = new ArrayList<>();
 
+        //noinspection IfCanBeSwitch
         if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
 
             switch (mHierarchyLevel) {
@@ -144,6 +152,31 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     protected void onResume() {
         super.onResume();
+        // Umeng 统计时长处理
+        if (mUmengIsPressHome) {
+            mUmengTimestamp = System.currentTimeMillis();
+            mUmengIsPressHome = false;
+        } else {
+            mUmengTimestamp = mCurTimestamp;
+        }
+
+        // Home键监听
+        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+
+            @Override
+            public void onHomePressed() {
+                // 友盟统计
+                mUmengIsPressHome = true;
+                MeasureModel.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+            }
+
+            @Override
+            public void onHomeLongPressed() {
+                // Do Nothing
+            }
+        });
+        mHomeWatcher.startWatch();
+
         // Umeng
         MobclickAgent.onPageStart("MeasureAnalysisActivity");
         MobclickAgent.onResume(this);
@@ -152,6 +185,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     protected void onPause() {
         super.onPause();
+        // Home键监听
+        mHomeWatcher.stopWatch();
 
         if (mPopupWindow != null) mPopupWindow.dismiss();
 
@@ -212,6 +247,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            // Umeng
+            MeasureModel.sendToUmeng(MeasureAnalysisActivity.this, "Back");
             finish();
 
         } else if ("收藏".equals(item.getTitle())) {
@@ -250,6 +287,13 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Umeng
+        MeasureModel.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+        super.onBackPressed();
     }
 
     @Override
