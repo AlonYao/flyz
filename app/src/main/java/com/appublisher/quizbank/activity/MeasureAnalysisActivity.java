@@ -60,6 +60,9 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
 
+    public String mUmengEntry;
+    public long mUmengTimestamp;
+
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
     private Request mRequest;
@@ -93,6 +96,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mFrom = getIntent().getStringExtra("from");
         mIsFromError = getIntent().getBooleanExtra("is_from_error", false);
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         if (mIsFromError) mDeleteErrorQuestions = new ArrayList<>();
 

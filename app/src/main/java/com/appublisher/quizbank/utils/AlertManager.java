@@ -81,6 +81,10 @@ public class AlertManager {
                                 // 保存练习
                                 ToastManager.showToast(activity, "保存成功");
                                 dialog.dismiss();
+
+                                // Umeng 练习统计
+                                MeasureModel.sendToUmeng(activity, "Back");
+
                                 activity.finish();
                             }
                         }).show();
@@ -122,16 +126,14 @@ public class AlertManager {
         tvAnother.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Logger.i(activity.mAnalysisType == null ? "null" : activity.mAnalysisType);
-                Logger.i(String.valueOf(activity.mHierarchyId));
-                Logger.i(String.valueOf(activity.mHierarchyLevel));
-
                 if ("auto".equals(activity.mAnalysisType)) {
                     Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
                     intent.putExtra("paper_type", activity.mAnalysisType);
                     intent.putExtra("paper_name", activity.getString(R.string.paper_type_auto));
                     activity.startActivity(intent);
+
+                    // Umeng 练习类型统计
+                    MeasureModel.sendToUmeng(activity, "Again");
 
                     finishActivity(activity);
 

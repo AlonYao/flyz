@@ -87,6 +87,7 @@ public class StudyRecordModel {
                     intent.putExtra("paper_type", historyPaper.getPaper_type());
                     intent.putExtra("paper_name", historyPaper.getName());
                     intent.putExtra("redo", true);
+                    intent.putExtra("umeng_entry", "Continue");
                     fragment.mActivity.startActivity(intent);
                 }
             }

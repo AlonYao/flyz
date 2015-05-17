@@ -42,6 +42,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public int mHierarchyLevel;
     public String mFrom;
 
+    public String mUmengEntry;
+
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
     public ArrayList<NoteM> mNotes;
     public ArrayList<QuestionM> mQuestions;
@@ -76,6 +78,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         if ("study_record".equals(mFrom)) {
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);

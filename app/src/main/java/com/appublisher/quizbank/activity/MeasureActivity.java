@@ -27,10 +27,8 @@ import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -180,10 +178,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                long dur = System.currentTimeMillis() - mUmengTimestamp;
-                HashMap<String, String> map = UmengManager.umengMeasureMap(mUmengEntry, "0");
-                UmengManager.sendComputeEvent(
-                        MeasureActivity.this, "auto", map, (int) (dur/1000));
+                MeasureModel.sendToUmeng(MeasureActivity.this, "0");
             }
 
             @Override
@@ -207,12 +202,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // Umeng
         MobclickAgent.onPageEnd("MeasureActivity");
         MobclickAgent.onPause(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Logger.i("onDestroy");
     }
 
     @Override
@@ -284,6 +273,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             intent.putExtra("user_answer", mUserAnswerList);
             intent.putExtra("hierarchy_id", mHierarchyId);
             intent.putExtra("hierarchy_level", mHierarchyLevel);
+            intent.putExtra("umeng_entry", mUmengEntry);
             startActivity(intent);
             finish();
         }
@@ -449,25 +439,24 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * 是否记录本次练习
      */
     private void saveTest() {
-        if (mUserAnswerList == null || mUserAnswerList.size() == 0) {
-            finish();
-            return;
-        }
-
         boolean isSave = false;
-        int size = mUserAnswerList.size();
-        for (int i = 0; i < size; i++) {
-            HashMap<String, Object> map = mUserAnswerList.get(i);
-            if (map != null && map.containsKey("answer")
-                    && !"".equals(map.get("answer"))) {
-                isSave = true;
-                break;
+
+        if (mUserAnswerList != null) {
+            int size = mUserAnswerList.size();
+            for (int i = 0; i < size; i++) {
+                HashMap<String, Object> map = mUserAnswerList.get(i);
+                if (map != null && map.containsKey("answer")
+                        && !"".equals(map.get("answer"))) {
+                    isSave = true;
+                    break;
+                }
             }
         }
 
         if (isSave) {
             AlertManager.saveTestAlert(this);
         } else {
+            MeasureModel.sendToUmeng(MeasureActivity.this, "0");
             finish();
         }
     }
