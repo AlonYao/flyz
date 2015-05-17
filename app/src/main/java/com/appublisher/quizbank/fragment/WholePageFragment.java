@@ -34,7 +34,6 @@ import com.appublisher.quizbank.model.netdata.wholepage.EntirePapersResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.LocationManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -70,6 +69,8 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     private ImageView mIvProvinceArrow;
     private ImageView mIvYearArrow;
     private TextView mTvYear;
+
+    private boolean mUmengIsSelfPick; // 是否是自定义列表
 
     public static TextView mTvProvince;
     public static RelativeLayout mRlLocation;
@@ -133,6 +134,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mOffset = 0;
         mCount = 5;
         mHandler = new MsgHandler(mActivity);
+        mUmengIsSelfPick = false;
     }
 
     @Override
@@ -230,6 +232,14 @@ public class WholePageFragment extends Fragment implements RequestCallback,
             intent.putExtra("paper_type", "entire");
             intent.putExtra("paper_id", paperId);
             intent.putExtra("paper_name", paperName);
+
+            // Umeng
+            if (mUmengIsSelfPick) {
+                intent.putExtra("umeng_entry", "SelfPick");
+            } else {
+                intent.putExtra("umeng_entry", "Recom");
+            }
+
             startActivity(intent);
         }
     };
@@ -314,6 +324,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 mEntirePapers = null;
                 mRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
                 mPwProvince.dismiss();
+
+                // Umeng
+                mUmengIsSelfPick = true;
             }
         });
 
@@ -409,6 +422,8 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 mEntirePapers = null;
                 mRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
                 mPwYear.dismiss();
+
+                mUmengIsSelfPick = true;
             }
         });
 
@@ -509,8 +524,6 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("area_year".equals(apiName)) dealAreaYearResp(response);
-
-        if ("location".equals(apiName)) Logger.i(response.toString());
 
         if ("entire_papers".equals(apiName)) dealEntirePapersResp(response);
     }
