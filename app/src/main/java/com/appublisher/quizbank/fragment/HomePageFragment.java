@@ -213,6 +213,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                         intent.putExtra("note_type", "all");
                         intent.putExtra("paper_name", note.getName());
                         intent.putExtra("redo", false);
+                        intent.putExtra("umeng_entry", "Home");
                         startActivity(intent);
                     }
                 });

@@ -65,6 +65,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 intent.putExtra("paper_name", value.name);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
+                intent.putExtra("umeng_entry", "List");
                 context.startActivity(intent);
             }
         });
@@ -77,6 +78,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 intent.putExtra("analysis_type", value.note_type);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
+                intent.putExtra("umeng_entry", "List");
                 if ("error".equals(value.note_type))
                     intent.putExtra("is_from_error", true);
                 context.startActivity(intent);
