@@ -8,3 +8,6 @@
 /umeng/build
 /treeviewlib/build
 /diagramlib/build
+.idea/
+app/app.iml
+*.iml
