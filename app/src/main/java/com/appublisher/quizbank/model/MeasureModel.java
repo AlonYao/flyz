@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.ScaleImageActivity;
@@ -183,39 +184,44 @@ public class MeasureModel {
             request.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
         } else {
             // 做新题
-            if ("auto".equals(activity.mPaperType)) {
-                ProgressDialogManager.showProgressDialog(activity, true);
-                request.getAutoTraining();
-            } else if ("note".equals(activity.mPaperType)
-                    || "error".equals(activity.mPaperType)
-                    || "collect".equals(activity.mPaperType)) {
+            switch (activity.mPaperType) {
+                case "auto":
+                    ProgressDialogManager.showProgressDialog(activity, true);
+                    request.getAutoTraining();
+                    break;
 
-                switch (activity.mHierarchyLevel) {
-                    case 1:
-                        ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions(String.valueOf(activity.mHierarchyId), "", "",
-                                activity.mPaperType);
+                case "note":
+                case "error":
+                case "collect":
+                    switch (activity.mHierarchyLevel) {
+                        case 1:
+                            ProgressDialogManager.showProgressDialog(activity, true);
+                            request.getNoteQuestions(String.valueOf(activity.mHierarchyId), "", "",
+                                    activity.mPaperType);
 
-                        break;
+                            break;
 
-                    case 2:
-                        ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions("", String.valueOf(activity.mHierarchyId), "",
-                                activity.mPaperType);
+                        case 2:
+                            ProgressDialogManager.showProgressDialog(activity, true);
+                            request.getNoteQuestions("", String.valueOf(activity.mHierarchyId), "",
+                                    activity.mPaperType);
 
-                        break;
+                            break;
 
-                    case 3:
-                        ProgressDialogManager.showProgressDialog(activity, true);
-                        request.getNoteQuestions("", "", String.valueOf(activity.mHierarchyId),
-                                activity.mPaperType);
+                        case 3:
+                            ProgressDialogManager.showProgressDialog(activity, true);
+                            request.getNoteQuestions("", "", String.valueOf(activity.mHierarchyId),
+                                    activity.mPaperType);
 
-                        break;
-                }
-            } else if ("entire".equals(activity.mPaperType)
-                    || "mokao".equals(activity.mPaperType)) {
-                ProgressDialogManager.showProgressDialog(activity, true);
-                request.getPaperExercise(activity.mPaperId, activity.mPaperType);
+                            break;
+                    }
+                    break;
+
+                case "entire":
+                case "mokao":
+                    ProgressDialogManager.showProgressDialog(activity, true);
+                    request.getPaperExercise(activity.mPaperId, activity.mPaperType);
+                    break;
             }
         }
     }
@@ -506,5 +512,16 @@ public class MeasureModel {
         long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
         HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
         UmengManager.sendComputeEvent(activity, activity.mAnalysisType, map, (int) (dur/1000));
+    }
+
+    /**
+     * 发送到Umeng
+     * @param activity AnswerSheetActivity
+     * @param done 离开练习的状态
+     */
+    public static void sendToUmeng(AnswerSheetActivity activity, String done) {
+        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
+        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
+        UmengManager.sendComputeEvent(activity, activity.mPaperType, map, (int) (dur/1000));
     }
 }

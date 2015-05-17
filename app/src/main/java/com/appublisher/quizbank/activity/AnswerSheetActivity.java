@@ -17,6 +17,7 @@ import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.model.AnswerSheetModel;
 import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -39,15 +40,18 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     private String mPaperName;
     private ExpandableHeightGridView mGridView;
 
-    public String mFrom;
     public int mTotalNum;
     public int mRightNum;
-    public String mPaperType;
     public int mPaperId;
-    public ArrayList<HashMap<String, Object>> mUserAnswerList;
+    public String mFrom;
+    public String mPaperType;
     public LinearLayout mLlEntireContainer;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
+    public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
+
+    public long mUmengTimestamp;
+    public String mUmengEntry;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -76,6 +80,8 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         mEntirePaperCategory = (ArrayList<HashMap<String, Integer>>)
                 getIntent().getSerializableExtra("category");
         mFrom = getIntent().getStringExtra("from");
+        mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         // 根据试卷类型显示不同的页面
         if ("entire".equals(mPaperType)) {
@@ -179,6 +185,10 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         intent.putExtra("total_num", mTotalNum);
         intent.putExtra("category", mCategoryMap);
         setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
+
+        // Umeng
+        MeasureModel.sendToUmeng(this, "1");
+
         finish();
     }
 

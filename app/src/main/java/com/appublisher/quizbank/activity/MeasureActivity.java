@@ -295,6 +295,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         intent.putExtra("redo", mRedo);
         intent.putExtra("paper_name", mPaperName);
         intent.putExtra("category", mEntirePaperCategory);
+        intent.putExtra("umeng_entry", mUmengEntry);
+        intent.putExtra("umeng_timestamp", mUmengTimestamp);
         startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
     }
 
