@@ -175,6 +175,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                             Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
                             intent.putExtra("analysis_type", "mokao");
                             intent.putExtra("exercise_id", todayExam.getId());
+                            intent.putExtra("umeng_entry", "Home");
                             startActivity(intent);
 
                         } else {

@@ -118,12 +118,14 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
 
                 String status = historyMokao.getStatus();
 
+                //noinspection IfCanBeSwitch
                 if ("undone".equals(status)) {
                     Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
                     intent.putExtra("exercise_id", historyMokao.getExercise_id());
                     intent.putExtra("paper_type", "mokao");
                     intent.putExtra("paper_name", historyMokao.getName());
                     intent.putExtra("redo", true);
+                    intent.putExtra("umeng_entry", "List");
                     startActivity(intent);
                 } else if ("fresh".equals(status)) {
                     Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
@@ -131,6 +133,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
                     intent.putExtra("paper_type", "mokao");
                     intent.putExtra("paper_name", historyMokao.getName());
                     intent.putExtra("redo", false);
+                    intent.putExtra("umeng_entry", "List");
                     startActivity(intent);
                 } else if ("done".equals(status)) {
                     // 解析
@@ -138,6 +141,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
                             new Intent(HistoryMokaoActivity.this, MeasureAnalysisActivity.class);
                     intent.putExtra("exercise_id", historyMokao.getExercise_id());
                     intent.putExtra("analysis_type", "mokao");
+                    intent.putExtra("umeng_entry", "List");
                     startActivity(intent);
                 }
             }
