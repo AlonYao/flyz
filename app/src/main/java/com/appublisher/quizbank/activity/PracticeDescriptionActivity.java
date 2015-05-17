@@ -39,6 +39,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
     private int mHierarchyId;
     private int mHierarchyLevel;
     private String mNoteType;
+    private String mUmengEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mNoteType = getIntent().getStringExtra("note_type");
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         // 设置描述文字
         setDesc();
@@ -140,6 +142,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         intent.putExtra("hierarchy_id", mHierarchyId);
         intent.putExtra("hierarchy_level", mHierarchyLevel);
         intent.putExtra("note_type", mNoteType);
+        intent.putExtra("umeng_entry", mUmengEntry);
         startActivity(intent);
         finish();
     }

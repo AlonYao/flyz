@@ -26,8 +26,11 @@ import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.HomeWatcher;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -46,24 +49,29 @@ import java.util.TimerTask;
 public class MeasureActivity extends ActionBarActivity implements RequestCallback{
 
     public int mScreenHeight;
-    public ArrayList<HashMap<String, Object>> mUserAnswerList;
-    public ViewPager mViewPager;
-    public long mCurTimestamp;
     public int mCurPosition;
     public int mDuration;
-    public String mPaperType;
     public int mPaperId;
     public int mExerciseId;
+    public int mHierarchyId;
+    public int mHierarchyLevel;
+    public long mCurTimestamp;
     public boolean mRedo;
+    public ArrayList<HashMap<String, Object>> mUserAnswerList;
+    public ArrayList<QuestionM> mQuestions;
+    public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
+    public ViewPager mViewPager;
+    public String mPaperType;
+    public String mPaperName;
     public Gson mGson;
     public Handler mHandler;
     public Timer mTimer;
-    public String mPaperName;
-    public ArrayList<QuestionM> mQuestions;
-    public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
-    public int mHierarchyId;
-    public int mHierarchyLevel;
-    public String mEntry;
+
+    public long mUmengTimestamp;
+    public boolean mUmengIsPressHome;
+    public String mUmengEntry;
+
+    private HomeWatcher mHomeWatcher;
 
     public static Toolbar mToolbar;
     public static int mMins;
@@ -131,6 +139,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mCurPosition = 0;
         mGson = new Gson();
         mHandler = new MsgHandler(this);
+        mHomeWatcher = new HomeWatcher(this);
+        mUmengIsPressHome = false;
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(mToolbar);
@@ -147,7 +157,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mRedo = getIntent().getBooleanExtra("redo", false);
         mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
-        mEntry = getIntent().getStringExtra("entry");
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         MeasureModel.getData(this);
     }
@@ -155,6 +165,34 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     protected void onResume() {
         super.onResume();
+        // Umeng 统计时长处理
+        if (mUmengIsPressHome) {
+            mUmengTimestamp = System.currentTimeMillis();
+            mUmengIsPressHome = false;
+        } else {
+            mUmengTimestamp = mCurTimestamp;
+        }
+
+        // Home键监听
+        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+
+            @Override
+            public void onHomePressed() {
+                // 友盟统计
+                mUmengIsPressHome = true;
+                long dur = System.currentTimeMillis() - mUmengTimestamp;
+                HashMap<String, String> map = UmengManager.umengMeasureMap(mUmengEntry, "0");
+                UmengManager.sendComputeEvent(
+                        MeasureActivity.this, "auto", map, (int) (dur/1000));
+            }
+
+            @Override
+            public void onHomeLongPressed() {
+                // Do Nothing
+            }
+        });
+        mHomeWatcher.startWatch();
+
         // Umeng
         MobclickAgent.onPageStart("MeasureActivity");
         MobclickAgent.onResume(this);
@@ -163,9 +201,18 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     protected void onPause() {
         super.onPause();
+        // Home键监听
+        mHomeWatcher.stopWatch();
+
         // Umeng
         MobclickAgent.onPageEnd("MeasureActivity");
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Logger.i("onDestroy");
     }
 
     @Override

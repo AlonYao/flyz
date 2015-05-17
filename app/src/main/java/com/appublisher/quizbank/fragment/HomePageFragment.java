@@ -183,6 +183,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                             intent.putExtra("paper_id", todayExam.getId());
                             intent.putExtra("paper_type", "mokao");
                             intent.putExtra("paper_name", "今日模考");
+                            intent.putExtra("umeng_entry", "Home");
 
                             if ("fresh".equals(status)) {
                                 intent.putExtra("redo", false);
@@ -224,6 +225,7 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                 Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
                 intent.putExtra("paper_type", "auto");
                 intent.putExtra("paper_name", "快速智能练习");
+                intent.putExtra("umeng_entry", "Home");
                 startActivity(intent);
             }
         });
