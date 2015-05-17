@@ -39,15 +39,15 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
 
         // View 初始化
         lvHistoryMokao = (ListView) findViewById(R.id.historymokao_lv);
-
-        // 获取数据
-        ProgressDialogManager.showProgressDialog(this, true);
-        new Request(this, this).getHistoryMokao();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // 获取数据
+        ProgressDialogManager.showProgressDialog(this, true);
+        new Request(this, this).getHistoryMokao();
+
         // Umeng
         MobclickAgent.onPageStart("HistoryMokaoActivity");
         MobclickAgent.onResume(this);
@@ -120,7 +120,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
 
                 if ("undone".equals(status)) {
                     Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
-                    intent.putExtra("paper_id", historyMokao.getExercise_id());
+                    intent.putExtra("exercise_id", historyMokao.getExercise_id());
                     intent.putExtra("paper_type", "mokao");
                     intent.putExtra("paper_name", historyMokao.getName());
                     intent.putExtra("redo", true);

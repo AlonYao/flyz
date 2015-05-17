@@ -76,7 +76,7 @@ public class HistoryMokaoAdapter extends BaseAdapter{
                 } else if ("undone".equals(status)) {
                     viewHolder.ivStatus.setImageResource(R.drawable.historymokao_undone);
                 } else {
-                    viewHolder.ivStatus.setVisibility(View.GONE);
+                    viewHolder.ivStatus.setImageResource(R.color.transparency);
                 }
             }
         }
