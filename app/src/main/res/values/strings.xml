@@ -32,6 +32,7 @@
     <string name="homepage_today_exam">今日mini模考</string>
     <string name="homepage_today_exam_value">已有0人参加</string>
     <string name="homepage_zhiboke">免费公开课</string>
+    <string name="drawer_version">版本号</string>
 
     <!-- 公开课 -->
     <string name="opencourse_notice_true">课程开始前5分钟会给你发短信提醒</string>

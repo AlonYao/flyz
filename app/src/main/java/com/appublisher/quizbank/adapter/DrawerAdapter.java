@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
@@ -45,7 +47,7 @@ public class DrawerAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return mItemNames.length;
+        return mItemNames.length + 1;
     }
 
     @Override
@@ -71,19 +73,31 @@ public class DrawerAdapter extends BaseAdapter{
             viewHolder.ivItem = (ImageView) convertView.findViewById(R.id.drawer_item_iv);
             viewHolder.tvItem = (TextView) convertView.findViewById(R.id.drawer_item_tv);
             viewHolder.ivRedPoint = (ImageView) convertView.findViewById(R.id.drawer_item_redpoint);
+            viewHolder.rlIcon = (RelativeLayout) convertView.findViewById(R.id.drawer_item_icon);
+            viewHolder.llVersion = (LinearLayout) convertView.findViewById(R.id.drawer_item_version);
+            viewHolder.tvVersion =
+                    (TextView) convertView.findViewById(R.id.drawer_item_version_value);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.ivItem.setImageResource(mItemImgs[position]);
-        viewHolder.tvItem.setText(mItemNames[position]);
+        if (position != 6) {
+            viewHolder.ivItem.setImageResource(mItemImgs[position]);
+            viewHolder.tvItem.setText(mItemNames[position]);
+
+            viewHolder.llVersion.setVisibility(View.GONE);
+            viewHolder.rlIcon.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.llVersion.setVisibility(View.VISIBLE);
+            viewHolder.rlIcon.setVisibility(View.GONE);
+
+            viewHolder.tvVersion.setText(Globals.appVersion);
+        }
 
         // 判断设置按钮是否显示红点
         GlobalSetting globalSetting = GlobalSettingDAO.findById();
-
-        int a = Globals.last_notice_id;
 
         if (position == 5
                 && globalSetting != null
@@ -100,6 +114,9 @@ public class DrawerAdapter extends BaseAdapter{
     private class ViewHolder {
         ImageView ivItem;
         TextView tvItem;
+        TextView tvVersion;
         ImageView ivRedPoint;
+        RelativeLayout rlIcon;
+        LinearLayout llVersion;
     }
 }
