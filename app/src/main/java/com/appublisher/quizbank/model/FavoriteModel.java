@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.model;
 
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.appublisher.quizbank.customui.TreeItemHolder;
@@ -25,24 +26,39 @@ public class FavoriteModel {
     private static FavoriteFragment mFragment;
 
     public static void dealNoteHierarchyResp(FavoriteFragment fragment, JSONObject response) {
-        if (response == null) return;
+        if (response == null) {
+            fragment.mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
 
         Gson gson = GsonManager.initGson();
         HierarchyResp hierarchyResp = gson.fromJson(response.toString(), HierarchyResp.class);
 
-        if (hierarchyResp == null || hierarchyResp.getResponse_code() != 1) return;
+        if (hierarchyResp == null || hierarchyResp.getResponse_code() != 1) {
+            fragment.mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
+
         ArrayList<HierarchyM> hierarchys = hierarchyResp.getHierarchy();
 
-        if (hierarchys == null || hierarchys.size() == 0) return;
+        if (hierarchys == null || hierarchys.size() == 0) {
+            fragment.mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
 
         int hierarchysSize = hierarchys.size();
-        for (int i = 0; i < hierarchysSize; i++) {
-            HierarchyM hierarchy = hierarchys.get(i);
+        if (hierarchysSize == 0) {
+            fragment.mIvNull.setVisibility(View.VISIBLE);
+        } else {
+            fragment.mIvNull.setVisibility(View.GONE);
+            for (int i = 0; i < hierarchysSize; i++) {
+                HierarchyM hierarchy = hierarchys.get(i);
 
-            if (hierarchy == null) continue;
+                if (hierarchy == null) continue;
 
-            mFragment = fragment;
-            addHierarchy(hierarchy);
+                mFragment = fragment;
+                addHierarchy(hierarchy);
+            }
         }
     }
 

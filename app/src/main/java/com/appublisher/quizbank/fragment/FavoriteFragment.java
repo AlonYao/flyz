@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
@@ -27,6 +28,7 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
 
     public Activity mActivity;
     public LinearLayout mContainer;
+    public ImageView mIvNull;
 
     @Override
     public void onAttach(Activity activity) {
@@ -40,6 +42,7 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
         // View 初始化
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         mContainer = (LinearLayout) view.findViewById(R.id.collect_container);
+        mIvNull = (ImageView) view.findViewById(R.id.quizbank_null);
 
         // 获取数据
         ProgressBarManager.showProgressBar(view);
