@@ -87,7 +87,8 @@ public class DrawerAdapter extends BaseAdapter{
 
         if (position == 5
                 && globalSetting != null
-                && globalSetting.latest_notify != Globals.last_notice_id) {
+                && globalSetting.latest_notify != Globals.last_notice_id
+                && Globals.last_notice_id != 0) {
             viewHolder.ivRedPoint.setVisibility(View.VISIBLE);
         } else {
             viewHolder.ivRedPoint.setVisibility(View.GONE);

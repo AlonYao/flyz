@@ -37,6 +37,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
     public ArrayList<NoticeM> mNotices;
     public int mOffset;
     public ImageView mCurRedPoint;
+    public ImageView mIvNull;
 
     private int mCount;
     private Request mRequest;
@@ -51,6 +52,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
 
         // View 初始化
         mXListView = (XListView) findViewById(R.id.notice_lv);
+        mIvNull = (ImageView) findViewById(R.id.quizbank_null);
 
         // 成员变量初始化
         mOffset = 0;

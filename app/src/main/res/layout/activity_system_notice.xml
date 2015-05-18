@@ -14,4 +14,6 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp"/>
 
+    <include layout="@layout/quizbank_null"/>
+
 </LinearLayout>

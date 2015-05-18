@@ -89,4 +89,16 @@ public class SystemNoticeModel {
             }
         });
     }
+
+    /**
+     * 显示空白图片
+     * @param activity SystemNoticeActivity
+     */
+    public static void showNullImg(SystemNoticeActivity activity) {
+        if (activity.mNotices == null || activity.mNotices.size() == 0) {
+            activity.mIvNull.setVisibility(View.VISIBLE);
+        } else {
+            activity.mIvNull.setVisibility(View.GONE);
+        }
+    }
 }

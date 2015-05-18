@@ -173,6 +173,8 @@ public class SettingFragment extends Fragment{
         GlobalSetting globalSetting = GlobalSettingDAO.findById();
         if (globalSetting != null && globalSetting.latest_notify == Globals.last_notice_id) {
             mIvRedPoint.setVisibility(View.GONE);
+        } else if (Globals.last_notice_id == 0){
+            mIvRedPoint.setVisibility(View.GONE);
         } else {
             mIvRedPoint.setVisibility(View.VISIBLE);
         }

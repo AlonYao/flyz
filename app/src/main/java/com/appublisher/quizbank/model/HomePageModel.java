@@ -121,7 +121,7 @@ public class HomePageModel {
      * 设置侧边栏红点
      */
     public static void setDrawerRedPoint() {
-        if (MainActivity.mIvDrawerRedPoint == null) return;
+        if (MainActivity.mIvDrawerRedPoint == null || Globals.last_notice_id == 0) return;
 
         GlobalSetting globalSetting = GlobalSettingDAO.findById();
         if (globalSetting != null && globalSetting.latest_notify == Globals.last_notice_id) {
