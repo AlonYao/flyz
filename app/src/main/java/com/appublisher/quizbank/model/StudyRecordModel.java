@@ -95,4 +95,15 @@ public class StudyRecordModel {
         });
     }
 
+    /**
+     * 显示空白图片
+     * @param fragment StudyRecordFragment
+     */
+    public static void showNullImg(StudyRecordFragment fragment) {
+        if (fragment.mHistoryPapers == null || fragment.mHistoryPapers.size() == 0) {
+            fragment.mIvNull.setVisibility(View.VISIBLE);
+        } else {
+            fragment.mIvNull.setVisibility(View.GONE);
+        }
+    }
 }

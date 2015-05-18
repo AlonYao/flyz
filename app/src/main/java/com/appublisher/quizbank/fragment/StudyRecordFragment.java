@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
@@ -36,6 +37,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public XListView mXListView;
     public ArrayList<HistoryPaperM> mHistoryPapers;
     public int mOffset;
+    public ImageView mIvNull;
 
     private int mCount;
     private Request mRequest;
@@ -62,6 +64,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         // View 初始化
         mView = inflater.inflate(R.layout.fragment_studyrecord, container, false);
         mXListView = (XListView) mView.findViewById(R.id.studyrecord_lv);
+        mIvNull = (ImageView) mView.findViewById(R.id.quizbank_null);
 
         // 初始化XListView
         mXListView.setXListViewListener(this);
