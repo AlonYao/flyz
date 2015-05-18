@@ -65,13 +65,14 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     private int mCount;
     private View mMainView;
     private XListView mLvWholePage;
-    private ArrayList<EntirePaperM> mEntirePapers;
     private ImageView mIvProvinceArrow;
     private ImageView mIvYearArrow;
     private TextView mTvYear;
 
     private boolean mUmengIsSelfPick; // 是否是自定义列表
 
+    public ArrayList<EntirePaperM> mEntirePapers;
+    public ImageView mIvNull;
     public static TextView mTvProvince;
     public static RelativeLayout mRlLocation;
     public static TextView mTvLocation;
@@ -151,6 +152,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mIvYearArrow = (ImageView) mMainView.findViewById(R.id.wholepage_year_arrow);
         mTvProvince = (TextView) mMainView.findViewById(R.id.wholepage_province_tv);
         mTvYear = (TextView) mMainView.findViewById(R.id.wholepage_year_tv);
+        mIvNull = (ImageView) mMainView.findViewById(R.id.quizbank_null);
 
         // XListView
         mLvWholePage.setXListViewListener(this);
@@ -494,7 +496,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     }
 
     /**
-     * 设置省份容器
+     * 设置容器
      */
     private void setProvinceAdapter() {
         WholePageListAdapter wholePageListAdapter =
@@ -507,6 +509,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
      */
     private void setLoadFinish() {
         onLoadFinish();
+        WholePageModel.showNullImg(this);
         ProgressBarManager.hideProgressBar();
     }
 

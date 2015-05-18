@@ -84,4 +84,16 @@ public class WholePageModel {
 
         LocationManager.stopBaiduLocation();
     }
+
+    /**
+     * 显示空白图片
+     * @param fragment WholePageFragment
+     */
+    public static void showNullImg(WholePageFragment fragment) {
+        if (fragment.mEntirePapers == null || fragment.mEntirePapers.size() == 0) {
+            fragment.mIvNull.setVisibility(View.VISIBLE);
+        } else {
+            fragment.mIvNull.setVisibility(View.GONE);
+        }
+    }
 }

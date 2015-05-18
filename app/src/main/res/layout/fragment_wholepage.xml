@@ -65,6 +65,9 @@
             android:dividerHeight="0dp"
             android:clipToPadding="false"
             tools:ignore="RtlHardcoded" />
+
+        <include layout="@layout/quizbank_null"/>
+
     </LinearLayout>
 
     <include layout="@layout/progressbar"/>
