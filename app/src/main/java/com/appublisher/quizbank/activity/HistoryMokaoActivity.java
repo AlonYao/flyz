@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
@@ -27,7 +28,8 @@ import java.util.ArrayList;
 
 public class HistoryMokaoActivity extends ActionBarActivity implements RequestCallback{
 
-    private ListView lvHistoryMokao;
+    private ListView mLvHistoryMokao;
+    private ImageView mIvNull;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,8 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         CommonModel.setToolBar(this);
 
         // View 初始化
-        lvHistoryMokao = (ListView) findViewById(R.id.historymokao_lv);
+        mLvHistoryMokao = (ListView) findViewById(R.id.historymokao_lv);
+        mIvNull = (ImageView) findViewById(R.id.quizbank_null);
     }
 
     @Override
@@ -92,22 +95,33 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
      * @param response 历史模考回调
      */
     private void dealHistoryMokaoResp(JSONObject response) {
-        if (response == null) return;
+        if (response == null) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
 
         Gson gson = new Gson();
         HistoryMokaoResp historyMokaoResp =
                 gson.fromJson(response.toString(), HistoryMokaoResp.class);
 
-        if (historyMokaoResp == null || historyMokaoResp.getResponse_code() != 1) return;
+        if (historyMokaoResp == null || historyMokaoResp.getResponse_code() != 1) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
 
         final ArrayList<HistoryMokaoM> historyMokaos = historyMokaoResp.getPaper_list();
 
-        if (historyMokaos == null || historyMokaos.size() == 0) return;
+        if (historyMokaos == null || historyMokaos.size() == 0) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            mIvNull.setVisibility(View.GONE);
+        }
 
         HistoryMokaoAdapter historyMokaoAdapter = new HistoryMokaoAdapter(this, historyMokaos);
-        lvHistoryMokao.setAdapter(historyMokaoAdapter);
+        mLvHistoryMokao.setAdapter(historyMokaoAdapter);
 
-        lvHistoryMokao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mLvHistoryMokao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position >= historyMokaos.size()) return;
