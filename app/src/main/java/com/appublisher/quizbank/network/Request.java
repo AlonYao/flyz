@@ -66,8 +66,7 @@ public class Request extends BaseRequest implements ApiConstants{
      * 获取常见问题
      */
     public void getQa() {
-        String url = "http://daily.edu.appublisher.com/cats/dp_qa.json";
-        asyncRequest(url, "qa", "array");
+        asyncRequest(ParamBuilder.finalUrl(getQa), "qa", "object");
     }
 
     /**

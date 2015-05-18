@@ -113,6 +113,9 @@ public interface ApiConstants {
     // 轮询公开课咨询窗口的弹出
     String getOpenCourseConsult = baseUrl + "quizbank/open_course_alert";
 
+    // 设置页面QA
+    String getQa = baseUrl + "quizbank/get_qa";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
