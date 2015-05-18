@@ -69,6 +69,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public long mUmengTimestamp;
     public boolean mUmengIsPressHome;
     public String mUmengEntry;
+    private String mUmengDraft; // 草稿纸
+    private String mUmengPause; // 暂停
+    private String mUmengAnswerSheet; // 答题卡
 
     private HomeWatcher mHomeWatcher;
 
@@ -140,6 +143,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mHandler = new MsgHandler(this);
         mHomeWatcher = new HomeWatcher(this);
         mUmengIsPressHome = false;
+        mUmengDraft = "0";
+        mUmengPause = "0";
+        mUmengAnswerSheet = "0";
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(mToolbar);
@@ -206,6 +212,17 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Draft", mUmengDraft);
+        map.put("Pause", mUmengPause);
+        map.put("AnswerSheet", mUmengAnswerSheet);
+        MobclickAgent.onEvent(this, "Test", map);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
 
@@ -231,12 +248,21 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             saveQuestionTime();
             AlertManager.pauseAlert(this);
 
+            // Umeng
+            mUmengPause = "1";
+
         } else if (item.getTitle().equals("答题卡")) {
             skipToAnswerSheet();
+
+            // Umeng
+            mUmengAnswerSheet = "1";
 
         } else if (item.getTitle().equals("草稿纸")) {
             Intent intent = new Intent(this, ScratchPaperActivity.class);
             startActivity(intent);
+
+            // Umeng
+            mUmengDraft = "1";
         }
 
         return super.onOptionsItemSelected(item);
