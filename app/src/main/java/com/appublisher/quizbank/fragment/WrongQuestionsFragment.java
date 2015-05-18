@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
@@ -36,6 +37,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
     private Activity mActivity;
     private LinearLayout mContainer;
+    private ImageView mIvNull;
 
     @Override
     public void onAttach(Activity activity) {
@@ -50,6 +52,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
         // View 初始化
         mContainer = (LinearLayout) view.findViewById(R.id.wrongq_container);
+        mIvNull = (ImageView) view.findViewById(R.id.quizbank_null);
 
         // 成员变量初始化
         Request request = new Request(mActivity, this);
@@ -80,22 +83,36 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
      * @param response 回调对象
      */
     private void dealNoteHierarchyResp(JSONObject response) {
-        if (response == null) return;
+        if (response == null) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
 
         Gson gson = new Gson();
         HierarchyResp hierarchyResp = gson.fromJson(response.toString(), HierarchyResp.class);
 
-        if (hierarchyResp == null || hierarchyResp.getResponse_code() != 1) return;
+        if (hierarchyResp == null || hierarchyResp.getResponse_code() != 1) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
         ArrayList<HierarchyM> hierarchys = hierarchyResp.getHierarchy();
 
-        if (hierarchys == null || hierarchys.size() == 0) return;
+        if (hierarchys == null || hierarchys.size() == 0) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
 
         int hierarchysSize = hierarchys.size();
-        for (int i = 0; i < hierarchysSize; i++) {
-            HierarchyM hierarchy = hierarchys.get(i);
+        if (hierarchysSize == 0) {
+            mIvNull.setVisibility(View.VISIBLE);
+        } else {
+            mIvNull.setVisibility(View.GONE);
+            for (int i = 0; i < hierarchysSize; i++) {
+                HierarchyM hierarchy = hierarchys.get(i);
 
-            if (hierarchy == null) continue;
-            addHierarchy(hierarchy);
+                if (hierarchy == null) continue;
+                addHierarchy(hierarchy);
+            }
         }
     }
 
