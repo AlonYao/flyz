@@ -2,11 +2,15 @@ package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.ClipboardManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +48,7 @@ public class SettingFragment extends Fragment{
     private TextView mTvSno;
     private TextView mTvExam;
     private ImageView mIvRedPoint;
+    private RelativeLayout mRlSno;
 
     @Override
     public void onAttach(Activity activity) {
@@ -65,6 +70,7 @@ public class SettingFragment extends Fragment{
         mIvRedPoint = (ImageView) view.findViewById(R.id.setting_redpoint);
         mTvSno = (TextView) view.findViewById(R.id.setting_sno);
         mTvExam = (TextView) view.findViewById(R.id.setting_exam);
+        mRlSno = (RelativeLayout) view.findViewById(R.id.setting_sno_rl);
 
         // 账号设置
         rlAccount.setOnClickListener(new View.OnClickListener() {
@@ -155,12 +161,31 @@ public class SettingFragment extends Fragment{
         User user = UserDAO.findById();
         if (user != null) {
             Gson gson = GsonManager.initGson();
-            UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
+            final UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
             ExamItemModel examInfo = gson.fromJson(user.exam, ExamItemModel.class);
 
             // 学号
             if (userInfo != null) {
                 mTvSno.setText(String.valueOf(userInfo.getSno()));
+                mRlSno.setOnClickListener(new View.OnClickListener() {
+                    @SuppressWarnings("deprecation")
+                    @Override
+                    public void onClick(View v) {
+                        ClipboardManager cm = (ClipboardManager)
+                                mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+                        cm.setText(String.valueOf(userInfo.getSno()));
+
+                        new AlertDialog.Builder(mActivity).setTitle("提示")
+                                .setMessage("您的学号(" + cm.getText() + ")已经复制到剪切板~")
+                                .setPositiveButton("好哒", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create().show();
+                    }
+                });
             }
 
             // 考试项目

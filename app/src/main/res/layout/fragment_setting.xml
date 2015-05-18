@@ -40,6 +40,7 @@
 
                 <!-- 我的学号 -->
                 <RelativeLayout
+                    android:id="@+id/setting_sno_rl"
                     style="@style/SettingRL">
                     <TextView
                         style="@style/SettingTV"
