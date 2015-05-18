@@ -46,6 +46,7 @@ public class PracticeReportModel {
                         activity.getIntent().getSerializableExtra("category");
         //noinspection unchecked
         activity.mNotes = (ArrayList<NoteM>) activity.getIntent().getSerializableExtra("notes");
+
         //noinspection unchecked
         activity.mQuestions = (ArrayList<QuestionM>)
                 activity.getIntent().getSerializableExtra("questions");
@@ -124,6 +125,9 @@ public class PracticeReportModel {
                 answers.add(answerItem);
             }
 
+            // Umeng
+            mActivity.mUmengStatus = "2";
+
             // 跳转
             mActivity.mIsFromError = false;
             skipToMeasureAnalysisActivity(mActivity.mQuestions, answers);
@@ -166,6 +170,9 @@ public class PracticeReportModel {
                     errorAnswers.add(answerItem);
                 }
             }
+
+            // Umeng
+            mActivity.mUmengStatus = "3";
 
             // 跳转
             mActivity.mIsFromError = true;

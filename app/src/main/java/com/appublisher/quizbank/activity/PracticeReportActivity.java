@@ -15,6 +15,7 @@ import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -28,29 +29,30 @@ import java.util.HashMap;
  */
 public class PracticeReportActivity extends ActionBarActivity implements RequestCallback{
 
+    public int mHierarchyId;
+    public int mHierarchyLevel;
+    public LinearLayout mLlCategoryContainer;
+    public LinearLayout mLlNoteContainer;
+    public String mPaperName;
+    public String mPaperType;
+    public String mFrom;
     public TextView mTvPaperName;
     public TextView mTvRightNum;
     public TextView mTvTotalNum;
     public TextView mTvNoteNoChange;
     public TextView mTvAll;
     public TextView mTvError;
-    public LinearLayout mLlCategoryContainer;
-    public LinearLayout mLlNoteContainer;
-    public String mPaperName;
-    public String mPaperType;
-    public int mHierarchyId;
-    public int mHierarchyLevel;
-    public String mFrom;
 
-    public String mUmengEntry;
-
-    public HashMap<String, HashMap<String, Object>> mCategoryMap;
-    public ArrayList<NoteM> mNotes;
-    public ArrayList<QuestionM> mQuestions;
-    public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public int mRightNum;
     public int mTotalNum;
     public boolean mIsFromError;
+    public ArrayList<NoteM> mNotes;
+    public ArrayList<QuestionM> mQuestions;
+    public ArrayList<HashMap<String, Object>> mUserAnswerList;
+    public HashMap<String, HashMap<String, Object>> mCategoryMap;
+
+    public String mUmengStatus; // 1：未看 2：全部 3：错题
+    public String mUmengEntry;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -71,6 +73,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mLlNoteContainer = (LinearLayout) findViewById(R.id.practice_report_note_container);
         mTvAll = (TextView) findViewById(R.id.practice_report_all);
         mTvError = (TextView) findViewById(R.id.practice_report_error);
+
+        // 成员变量初始化
+        mUmengStatus = "1";
 
         // 获取数据
         mFrom = getIntent().getStringExtra("from");
@@ -104,6 +109,13 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         // Umeng
         MobclickAgent.onPageEnd("PracticeReportActivity");
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        UmengManager.sendCountEvent(this, "Report", "Analysis", mUmengStatus);
     }
 
     @Override
