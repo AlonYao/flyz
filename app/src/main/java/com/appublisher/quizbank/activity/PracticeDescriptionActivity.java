@@ -192,7 +192,11 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
             if (type == null || desc == null) continue;
 
             if (type.equals(mPaperType)) {
-                mTvDesc.setText(desc.replaceAll("，", "\n"));
+                mTvDesc.setText(desc.replaceAll("，", "\n")
+                        .replaceAll("!", "\n")
+                        .replaceAll("！", "\n")
+                        .replaceAll(";", "\n")
+                        .replaceAll("；", "\n"));
                 mTvName.setText(name);
             }
         }
