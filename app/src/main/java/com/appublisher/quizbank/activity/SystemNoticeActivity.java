@@ -137,6 +137,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
      */
     private void setLoadFinish() {
         onLoadFinish();
+        SystemNoticeModel.showNullImg(this);
         ProgressDialogManager.closeProgressDialog();
     }
 

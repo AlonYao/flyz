@@ -4,7 +4,8 @@ import android.graphics.Bitmap.CompressFormat;
 
 public interface ApiConstants {
 	// 服务器切换：dev为测试服务器，api为正式服务器
-    String base = "dev";
+//    String base = "dev";
+    String base = "spark";
 
 	String baseUrl = "http://api." + base + ".appublisher.com/";
 

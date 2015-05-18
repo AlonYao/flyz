@@ -15,6 +15,9 @@
 
     <include layout="@layout/progressbar"/>
 
-    <include layout="@layout/quizbank_null"/>
+    <include layout="@layout/quizbank_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

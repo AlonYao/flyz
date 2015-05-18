@@ -127,6 +127,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
      */
     private void setLoadFinish() {
         onLoadFinish();
+        StudyRecordModel.showNullImg(this);
         ProgressBarManager.hideProgressBar();
     }
 
