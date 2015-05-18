@@ -16,6 +16,7 @@
     <string name="login_setpwd_submit">确认</string>
     <string name="login_guest">跳过</string>
     <string name="login_default_qq">客服QQ：540922713</string>
+    <string name="login_account_notice">以下账号也可以登录</string>
 
     <!-- 用户信息模块 string资源 -->
     <string name="userinfo_nickname">昵称：</string>
