@@ -29,6 +29,7 @@ import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -394,6 +395,18 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             @Override
             public void onPageSelected(int position) {
                 saveQuestionTime();
+
+                // Umeng 判断单个题是否完成
+                if (mUserAnswerList != null && position < mUserAnswerList.size()) {
+                    HashMap<String, Object> map = mUserAnswerList.get(mCurPosition);
+                    if (map != null && map.containsKey("answer")
+                            && map.get("answer") != null && !map.get("answer").equals("")) {
+                        UmengManager.sendCountEvent(MeasureActivity.this, "Problem", "Answer", "1");
+                    } else {
+                        UmengManager.sendCountEvent(MeasureActivity.this, "Problem", "Answer", "0");
+                    }
+                }
+
                 mCurPosition = position;
             }
 
