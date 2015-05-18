@@ -154,19 +154,27 @@
         </activity>
         <activity
             android:name=".activity.AnswerSheetActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_answer_sheet" >
         </activity>
         <activity
             android:name=".activity.ScratchPaperActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_scratch_paper"
             android:theme="@style/ActivityTransparent" >
         </activity>
         <activity
             android:name=".activity.PracticeReportActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_practice_report" >
         </activity>
         <activity
             android:name=".activity.MeasureAnalysisActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_measure_analysis" >
         </activity>
         <activity
@@ -177,31 +185,45 @@
         </activity>
         <activity
             android:name=".activity.HistoryMokaoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_history_mokao" >
         </activity>
         <activity
             android:name=".activity.EvaluationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_evaluation" >
         </activity>
         <activity
             android:name=".activity.PracticeDescriptionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_practice_description" >
         </activity>
         <activity
             android:name=".activity.SpecialProjectActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_special_project" >
         </activity>
         <activity
             android:name=".activity.NoticeDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_notice_detail" >
         </activity>
         <activity
             android:name=".activity.MyAnalysisActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_my_analysis"
             android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name=".activity.OpenCourseUnstartActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_open_course_unstart" >
         </activity>
         <activity
