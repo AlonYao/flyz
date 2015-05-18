@@ -65,6 +65,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public long mUmengTimestamp;
     public long mCurTimestamp;
     public String mUmengEntry;
+    public String mUmengFavorite;
+    public String mUmengDelete;
 
     private long mPopupDismissTime;
     private PopupWindow mPopupWindow;
@@ -88,6 +90,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mUmengIsPressHome = false;
         mCurTimestamp = System.currentTimeMillis();
         mHomeWatcher = new HomeWatcher(this);
+        mUmengFavorite = "0";
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(toolbar);
@@ -261,11 +264,17 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
                 ToastManager.showToast(this, "收藏成功");
 
+                // Umeng
+                mUmengFavorite = "1";
+
             } else {
                 // 已收藏
                 MeasureAnalysisModel.setUnCollect(this, item);
 
                 ToastManager.showToast(this, "取消收藏");
+
+                // Umeng
+                mUmengFavorite = "-1";
             }
 
             mRequest.collectQuestion(ParamBuilder.collectQuestion(
@@ -282,6 +291,9 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             }
         } else if ("错题".equals(item.getTitle())) {
             AlertManager.deleteErrorQuestionAlert(this);
+
+            // Umeng
+            mUmengDelete = "1";
         } else if (item.getTitle().equals("答题卡")) {
             skipToAnswerSheet();
         }

@@ -10,6 +10,7 @@ import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.Utils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +66,13 @@ public class MeasureAnalysisModel {
 
             @Override
             public void onPageSelected(int position) {
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Favorite", activity.mUmengFavorite);
+                if (activity.mUmengDelete != null)
+                    map.put("Delete", activity.mUmengDelete);
+                MobclickAgent.onEvent(activity, "ReviewDetail", map);
+
                 mCurPosition = position;
 
                 // 设置页面的状态
