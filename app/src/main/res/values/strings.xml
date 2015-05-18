@@ -97,7 +97,8 @@
     <string name="alert_answersheet_n">再看看</string>
     <string name="alert_answersheet_p">交卷</string>
     <string name="alert_opencourse_p">好的</string>
-    <string name="alert_report_error_content">确定要提交解析反馈么？</string>
+    <string name="alert_report_error_content">确认是这类错误吗？</string>
+    <string name="alert_report_error_p">提交</string>
 
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>

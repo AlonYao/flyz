@@ -360,7 +360,7 @@ public class AlertManager {
         new AlertDialog.Builder(activity)
                 .setMessage(R.string.alert_report_error_content)
                 .setTitle(R.string.alert_logout_title)
-                .setPositiveButton(R.string.alert_p,
+                .setPositiveButton(R.string.alert_report_error_p,
                         new DialogInterface.OnClickListener() {
 
                             @Override
@@ -374,7 +374,7 @@ public class AlertManager {
                                 dialog.dismiss();
                             }
                         })
-                .setNegativeButton(R.string.alert_n,
+                .setNegativeButton(R.string.alert_answersheet_n,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
