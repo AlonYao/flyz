@@ -23,11 +23,19 @@
 
             <!-- 练习类型及内容信息 -->
             <TextView
+                android:id="@+id/practice_report_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="2dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/setting_text"/>
+
+            <TextView
                 android:id="@+id/practice_report_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
                 android:textColor="@color/setting_text"
                 android:text="@string/practice_report_name"/>
 

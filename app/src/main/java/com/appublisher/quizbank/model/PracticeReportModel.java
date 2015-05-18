@@ -63,7 +63,6 @@ public class PracticeReportModel {
      * 设置内容
      */
     private static void setContent() {
-        mActivity.mTvPaperName.setText(mActivity.mPaperName);
         mActivity.mTvRightNum.setText(String.valueOf(mActivity.mRightNum));
         mActivity.mTvTotalNum.setText(String.valueOf(mActivity.mTotalNum));
 
@@ -486,6 +485,49 @@ public class PracticeReportModel {
             }
 
             mActivity.mUserAnswerList.add(map);
+        }
+    }
+
+    /**
+     * 显示试卷类型
+     * @param activity PracticeReportActivity
+     */
+    public static void showPaperType(PracticeReportActivity activity) {
+        String sPaperType = "";
+
+        if ("auto".equals(activity.mPaperType)) {
+            sPaperType = "快速智能练习";
+        } else if ("note".equals(activity.mPaperType)) {
+            sPaperType = "专项练习";
+        } else if ("mokao".equals(activity.mPaperType)) {
+            sPaperType = "天天模考";
+        } else if ("collect".equals(activity.mPaperType)) {
+            sPaperType = "收藏夹练习";
+        } else if ("error".equals(activity.mPaperType)) {
+            sPaperType = "错题本练习";
+        } else if ("entire".equals(activity.mPaperType)) {
+            sPaperType = "真题演练";
+        }
+
+        activity.mTvPaperType.setText(sPaperType);
+    }
+
+    /**
+     * 显示试卷描述
+     * @param activity PracticeReportActivity
+     */
+    public static void showPaperDesc(PracticeReportActivity activity) {
+        if ("auto".equals(activity.mPaperType) || "mokao".equals(activity.mPaperType)) {
+            // 显示日期
+            if (activity.mPaperTime != null && activity.mPaperTime.length() > 10) {
+                activity.mTvPaperName.setText(
+                        activity.mPaperTime.substring(0, 10).replaceAll("-", "/"));
+            } else {
+                activity.mTvPaperName.setText(activity.mPaperTime);
+            }
+        } else {
+            // 显示试卷名称
+            activity.mTvPaperName.setText(activity.mPaperName);
         }
     }
 }

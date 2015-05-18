@@ -78,6 +78,7 @@ public class StudyRecordModel {
                     intent.putExtra("exercise_id", historyPaper.getPaper_id());
                     intent.putExtra("paper_type", historyPaper.getPaper_type());
                     intent.putExtra("paper_name", historyPaper.getName());
+                    intent.putExtra("paper_time", historyPaper.getAction_time());
                     fragment.mActivity.startActivity(intent);
 
                 } else if ("undone".equals(status)) {

@@ -16,12 +16,14 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -36,12 +38,14 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public String mPaperName;
     public String mPaperType;
     public String mFrom;
+    public String mPaperTime;
     public TextView mTvPaperName;
     public TextView mTvRightNum;
     public TextView mTvTotalNum;
     public TextView mTvNoteNoChange;
     public TextView mTvAll;
     public TextView mTvError;
+    public TextView mTvPaperType;
 
     public int mRightNum;
     public int mTotalNum;
@@ -73,6 +77,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mLlNoteContainer = (LinearLayout) findViewById(R.id.practice_report_note_container);
         mTvAll = (TextView) findViewById(R.id.practice_report_all);
         mTvError = (TextView) findViewById(R.id.practice_report_error);
+        mTvPaperType = (TextView) findViewById(R.id.practice_report_type);
 
         // 成员变量初始化
         mUmengStatus = "1";
@@ -84,6 +89,14 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+        mPaperTime = getIntent().getStringExtra("paper_time");
+        if (mPaperTime == null) mPaperTime = Utils.DateToString(new Date(), "yyyy/MM/dd");
+
+        // 显示考试类型
+        PracticeReportModel.showPaperType(this);
+
+        // 显示考试描述
+        PracticeReportModel.showPaperDesc(this);
 
         if ("study_record".equals(mFrom)) {
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);
