@@ -24,12 +24,14 @@ import com.appublisher.quizbank.model.OpenCourseModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.Timer;
 
 /**
@@ -42,6 +44,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     private String mFrom;
     private static Request mRequest;
     private static String mOpencourseId;
+
+    private long mUmengTimestamp;
+    private String mUmengEntry;
+    public String mUmengQQ;
 
     public Handler mHandler;
     public LinearLayout mLlOpenCourseConsult;
@@ -93,11 +99,15 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mHandler = new MsgHandler(this);
         mRequest = new Request(this, this);
         mHasShowOpenCourseConsult = false;
+        mUmengQQ = "0";
 
         // 获取数据
         String url = getIntent().getStringExtra("url");
         mFrom = getIntent().getStringExtra("from");
         mOpencourseId = getIntent().getStringExtra("content");
+        mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
+        if (mUmengTimestamp == 0) mUmengTimestamp = System.currentTimeMillis();
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         if ("opencourse_started".equals(mFrom)) {
             ProgressDialogManager.showProgressDialog(this, true);
@@ -126,6 +136,14 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Entry", mUmengEntry);
+        map.put("EnterLive", "1");
+        map.put("QQ", mUmengQQ);
+        long dur = System.currentTimeMillis() - mUmengTimestamp;
+        UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur/1000));
+
         // 关闭定时器
         if (mTimer != null) {
             mTimer.cancel();
@@ -160,6 +178,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         } else if ("刷新".equals(item.getTitle())) {
             mWebView.reload();
         } else if ("咨询".equals(item.getTitle())) {
+            // Umeng
+            mUmengQQ = "1";
+
             OpenCourseModel.setMarketQQ(this);
         }
 

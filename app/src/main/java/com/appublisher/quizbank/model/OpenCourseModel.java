@@ -85,6 +85,9 @@ public class OpenCourseModel {
         if (booked) {
             setBooked(activity);
 
+            // Umeng
+            activity.mUmengPreSit = "3";
+
         } else {
             activity.mTvNotice.setText(R.string.opencourse_notice_false);
             activity.mTvNotice.setTextColor(
@@ -116,6 +119,9 @@ public class OpenCourseModel {
                         // 有手机号
                         AlertManager.bookOpenCourseAlert(activity, mobileNum, activity.mContent);
                     }
+
+                    // Umeng
+                    activity.mUmengPreSit = "2";
                 }
             });
         }
@@ -151,6 +157,9 @@ public class OpenCourseModel {
             setBooked(activity);
 
             ToastManager.showToast(activity, "预约成功");
+
+            // Umeng
+            activity.mUmengPreSit = "3";
         }
     }
 
@@ -240,6 +249,9 @@ public class OpenCourseModel {
             activity.mTvOpenCourseConsult.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Umeng
+                    activity.mUmengQQ = "2";
+
                     // 获取营销QQ
                     setMarketQQ(activity);
                 }

@@ -51,7 +51,7 @@ public class HomePageModel {
 
         long day = Utils.dateMinusNow(date);
 
-        textView.setText("距离"+ name + "还有" + String.valueOf(day) + "天");
+        textView.setText("距离" + name + "还有" + String.valueOf(day) + "天");
     }
 
     /**
@@ -104,9 +104,15 @@ public class HomePageModel {
                 Intent intent = new Intent(activity, mCls);
                 intent.putExtra("content", content);
                 intent.putExtra("from", "opencourse_started");
-                activity.startActivity(intent);
 
-                if (activity instanceof MeasureAnalysisActivity) activity.finish();
+                if (activity instanceof MeasureAnalysisActivity) {
+                    intent.putExtra("umeng_entry", "AfterTest");
+                    activity.startActivity(intent);
+                    activity.finish();
+                } else {
+                    intent.putExtra("umeng_entry", "Home");
+                    activity.startActivity(intent);
+                }
             }
         });
     }

@@ -18,10 +18,13 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * 公开课即将开始
@@ -36,6 +39,11 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     public TextView mTvNotice;
     public String mContent;
 
+    private long mUmengTimestamp;
+    private String mUmengEntry;
+    private String mUmengQQ;
+    public String mUmengPreSit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +54,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
 
         // 成员变量初始化
         mRequest = new Request(this, this);
+        mUmengTimestamp = System.currentTimeMillis();
+        mUmengQQ = "0";
+        mUmengPreSit = "0";
 
         // View 初始化
         mIvPic = (ImageView) findViewById(R.id.opencourse_img);
@@ -58,6 +69,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         mContent = getIntent().getStringExtra("content");
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getOpenCourseDetail(mContent);
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
     }
 
     @Override
@@ -74,6 +86,18 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         // Umeng
         MobclickAgent.onPageEnd("AnswerSheetActivity");
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Entry", mUmengEntry);
+        map.put("PreSit", mUmengPreSit);
+        map.put("QQ", mUmengQQ);
+        long dur = System.currentTimeMillis() - mUmengTimestamp;
+        UmengManager.sendComputeEvent(this, "Reserve", map, (int) (dur/1000));
     }
 
     @Override
@@ -101,6 +125,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if ("咨询".equals(item.getTitle())) {
+            // Umeng
+            mUmengQQ = "1";
+
             OpenCourseModel.setMarketQQ(this);
         }
 

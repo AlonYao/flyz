@@ -30,7 +30,6 @@ import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.DownloadAsyncTask;
 import com.appublisher.quizbank.utils.FileMange;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -368,8 +367,6 @@ public class LoginModel {
     public static void dealBookOpenCourse(RegisterActivity activity, JSONObject response) {
         if (response == null) return;
 
-        Logger.i(response.toString());
-
         Gson gson = GsonManager.initGson();
         LoginResponseModel loginResp = gson.fromJson(response.toString(), LoginResponseModel.class);
 
@@ -397,10 +394,15 @@ public class LoginModel {
                     activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
                     activity.finish();
                 } else if ("opencourse_started".equals(activity.mFrom)) {
+                    // Umeng
+                    activity.mUmengIsCheckSuccess = true;
+
                     // 进入直播课页面
                     Intent intent = new Intent(activity, WebViewActivity.class);
                     intent.putExtra("from", activity.mFrom);
                     intent.putExtra("content", activity.mOpenCourseId);
+                    intent.putExtra("umeng_entry", activity.mUmengEntry);
+                    intent.putExtra("umeng_timestamp", activity.mUmengTimestamp);
                     activity.startActivity(intent);
                     activity.finish();
                 }

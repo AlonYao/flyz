@@ -26,6 +26,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -33,6 +34,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -54,6 +56,11 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     private int mTimeLimit = 60;
     private static final int TIME_ON = 1;
     private static final int TIME_OUT = 2;
+
+    /** Umeng */
+    public boolean mUmengIsCheckSuccess;
+    public long mUmengTimestamp;
+    public String mUmengEntry;
 
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -93,8 +100,11 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
         // 成员变量初始化
         mRequest = new Request(RegisterActivity.this, RegisterActivity.this);
         mGson = GsonManager.initGson();
+        mUmengTimestamp = System.currentTimeMillis();
+        mUmengIsCheckSuccess = false;
 
         // 获取数据 & ActionBar标题修改
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
         mFrom = getIntent().getStringExtra("from");
         if ("UserInfoActivity".equals(mFrom)) {
             mType = getIntent().getStringExtra("type");
@@ -193,6 +203,16 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     @Override
     protected void onPause() {
         super.onPause();
+        // Umeng
+        if ("opencourse_started".equals(mFrom) && !mUmengIsCheckSuccess) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Entry", mUmengEntry);
+            map.put("EnterLive", "0");
+            map.put("QQ", "0");
+            long dur = System.currentTimeMillis() - mUmengTimestamp;
+            UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur/1000));
+        }
+
         MobclickAgent.onPageEnd("RegisterActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
