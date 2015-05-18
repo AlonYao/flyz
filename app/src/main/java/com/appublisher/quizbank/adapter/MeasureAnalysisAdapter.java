@@ -185,12 +185,24 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         // 处理用户答案
         dealUserAnswer(position);
 
+        // 正确答案
+        TextView tvRightAnswer = (TextView) view.findViewById(R.id.measure_analysis_rightanswer);
+        String sRight = "【正确答案】 " + (rightAnswer == null ? "" : rightAnswer) + "；";
+        if (mAnswers != null
+                && position < mAnswers.size()
+                && mAnswers.get(position) != null
+                && mAnswers.get(position).getAnswer() != null
+                && !mAnswers.get(position).getAnswer().equals("")) {
+            sRight = sRight + "你的选择是" + mAnswers.get(position).getAnswer();
+        }
+        tvRightAnswer.setText(sRight);
+
         // 解析
         LinearLayout llMeasureAnalysis =
                 (LinearLayout) view.findViewById(R.id.measure_analysis_container);
 
         MeasureModel.addRichTextToContainer(
-                mActivity, llMeasureAnalysis, question.getAnalysis(), true);
+                mActivity, llMeasureAnalysis, "【解析】 " + question.getAnalysis(), true);
 
         // 解析 知识点&来源
         TextView tvNote = (TextView) view.findViewById(R.id.measure_analysis_note);

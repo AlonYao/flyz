@@ -142,11 +142,11 @@
 
             <!--解析-->
             <TextView
+                android:id="@+id/measure_analysis_rightanswer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/setting_text"
-                android:textSize="17sp"
-                android:text="@string/measure_analysis"/>
+                android:textSize="17sp"/>
 
             <LinearLayout
                 android:id="@+id/measure_analysis_container"
