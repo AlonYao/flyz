@@ -142,10 +142,11 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
 
         String questionContent = question.getQuestion();
         String questionPosition = String.valueOf(position + 1)
-                + "/" + String.valueOf(mQuestions.size()) + " ";
+                + "/" + String.valueOf(mQuestions.size()) + "  ";
         questionContent = questionPosition + (questionContent == null ? "" : questionContent);
 
-        MeasureModel.addRichTextToContainer(mActivity, llQuestionContent, questionContent, true);
+        MeasureModel.addRichTextToContainer(
+                mActivity, llQuestionContent, questionContent, true, questionPosition);
 
         // 设置选项内容
         LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
