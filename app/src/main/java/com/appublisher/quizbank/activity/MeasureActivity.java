@@ -27,6 +27,7 @@ import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
@@ -97,6 +98,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             if (activity != null) {
                 switch (msg.what) {
                     case TIME_ON:
+
+                        Logger.i("TIME_ON");
+
                         String mins = String.valueOf(mMins);
                         String sec = String.valueOf(mSec);
 
@@ -217,6 +221,12 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 清空计时器
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+
         // Umeng
         HashMap<String, String> map = new HashMap<>();
         map.put("Draft", mUmengDraft);

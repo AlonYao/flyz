@@ -341,7 +341,7 @@ public class MeasureModel {
     /**
      * 保存做题时间
      */
-    private static void saveQuestionTime(MeasureActivity activity) {
+    public static void saveQuestionTime(MeasureActivity activity) {
         int duration = (int) ((System.currentTimeMillis() - activity.mCurTimestamp) / 1000);
         activity.mCurTimestamp = System.currentTimeMillis();
         HashMap<String, Object> userAnswerMap =
@@ -364,6 +364,7 @@ public class MeasureModel {
 
         if (activity.mTimer != null) {
             activity.mTimer.cancel();
+            activity.mTimer = null;
         }
 
         activity.mTimer = new Timer();

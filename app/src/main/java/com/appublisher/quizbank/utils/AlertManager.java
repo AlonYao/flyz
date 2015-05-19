@@ -75,6 +75,10 @@ public class AlertManager {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // 如果在第一页退出，更新第一页的时长
+                                if (activity.mCurPosition == 0)
+                                    MeasureModel.saveQuestionTime(activity);
+
                                 // 提交数据
                                 MeasureModel.submitPaper(activity);
 
