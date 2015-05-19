@@ -14,6 +14,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.HomePageModel;
 import com.appublisher.quizbank.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.MeasureModel;
@@ -78,6 +79,9 @@ public class AlertManager {
                                 // 如果在第一页退出，更新第一页的时长
                                 if (activity.mCurPosition == 0)
                                     MeasureModel.saveQuestionTime(activity);
+
+                                // 保存至本地
+                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
 
                                 // 提交数据
                                 MeasureModel.submitPaper(activity);

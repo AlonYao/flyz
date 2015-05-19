@@ -24,6 +24,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.ScaleImageActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
+import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseEntireResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
@@ -110,9 +111,6 @@ public class MeasureModel {
                 textView.setLayoutParams(p);
 
                 if (rich.toLowerCase().contains(questionPosition.toLowerCase())) {
-
-                    int a = questionPosition.length();
-
                     Spannable word = new SpannableString(segment.text);
                     word.setSpan(
                             new AbsoluteSizeSpan(Utils.sp2px(activity, 22)),
@@ -471,6 +469,12 @@ public class MeasureModel {
 
             }
         });
+
+        // 执行跳转
+        if (activity.mRedo && "study_record".equals(activity.mFrom)) {
+            activity.mCurPosition = PaperDAO.getLastPosition(activity.mPaperId);
+            activity.mViewPager.setCurrentItem(activity.mCurPosition);
+        }
     }
 
     /**

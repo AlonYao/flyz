@@ -27,7 +27,6 @@ import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
@@ -63,6 +62,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public ViewPager mViewPager;
     public String mPaperType;
     public String mPaperName;
+    public String mFrom;
     public Gson mGson;
     public Handler mHandler;
     public Timer mTimer;
@@ -98,9 +98,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             if (activity != null) {
                 switch (msg.what) {
                     case TIME_ON:
-
-                        Logger.i("TIME_ON");
-
                         String mins = String.valueOf(mMins);
                         String sec = String.valueOf(mSec);
 
@@ -168,6 +165,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+        mFrom = getIntent().getStringExtra("from");
 
         MeasureModel.getData(this);
     }
