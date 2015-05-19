@@ -121,6 +121,8 @@ public class MeasureModel {
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 imgView.setLayoutParams(p);
 
+                imgView.setImageResource(R.drawable.measure_loading_img);
+
                 flowLayout.addView(imgView);
 
                 // 异步加载图片
