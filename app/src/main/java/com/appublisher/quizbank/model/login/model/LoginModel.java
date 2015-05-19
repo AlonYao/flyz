@@ -32,6 +32,7 @@ import com.appublisher.quizbank.utils.FileMange;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -406,6 +407,9 @@ public class LoginModel {
                     activity.startActivity(intent);
                     activity.finish();
                 }
+
+                // Umeng
+                UmengManager.sendCountEvent(activity, "CodeVerified", "", "");
 
             } else {
                 // 手机号存在，提示用户切换账号

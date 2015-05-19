@@ -148,11 +148,28 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
 
                     if ("forget_pwd".equals(mFrom)) {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "resetPswd"));
+                        // Umeng
+                        UmengManager.sendCountEvent(
+                                RegisterActivity.this, "CodeReq", "Type", "Forget");
+
                     } else if ("book_opencourse".equals(mFrom)
                             || "opencourse_started".equals(mFrom)) {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
+                        // Umeng
+                        UmengManager.sendCountEvent(
+                                RegisterActivity.this, "CodeReq", "Type", "Verify");
+
+                    } else if ("UserInfoActivity".equals(mFrom)){
+                        mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
+                        // Umeng
+                        UmengManager.sendCountEvent(
+                                RegisterActivity.this, "CodeReq", "Type", "Link");
+
                     } else {
                         mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
+                        // Umeng
+                        UmengManager.sendCountEvent(
+                                RegisterActivity.this, "CodeReq", "Type", "Reg");
                     }
                 }
             }
@@ -285,6 +302,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
 
             if (crm != null && crm.getResponse_code() == 1) {
                 if ("UserInfoActivity".equals(mFrom)) {
+                    // 绑定&修改手机号
                     if (mType != null && !mType.equals("")) {
                         // 检查是否是第三方登录
                         if (mType.equals("add") && LoginModel.checkIsSocialUser()) {
@@ -297,12 +315,14 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                         }
                     }
                 } else if ("forget_pwd".equals(mFrom)) {
+                    // 忘记密码
                     Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
                     intent.putExtra("phoneNum", mPhoneNum);
                     intent.putExtra("type", "forget_pwd");
                     startActivity(intent);
                     finish();
                 } else {
+                    // 注册
                     Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
                     intent.putExtra("phoneNum", mPhoneNum);
                     startActivity(intent);
