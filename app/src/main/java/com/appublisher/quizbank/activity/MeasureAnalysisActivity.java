@@ -112,7 +112,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if (mIsFromError) mDeleteErrorQuestions = new ArrayList<>();
 
         //noinspection IfCanBeSwitch
-        if ("collect".equals(mAnalysisType) || "error".equals(mAnalysisType)) {
+        if (("collect".equals(mAnalysisType) || "error".equals(mAnalysisType))
+                && !"study_record".equals(mFrom)) {
 
             switch (mHierarchyLevel) {
                 case 1:
@@ -134,7 +135,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                     break;
             }
 
-        } else if ("mokao".equals(mAnalysisType)) {
+        } else if ("mokao".equals(mAnalysisType) && !"study_record".equals(mFrom)) {
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);
 
             ProgressDialogManager.showProgressDialog(this, true);

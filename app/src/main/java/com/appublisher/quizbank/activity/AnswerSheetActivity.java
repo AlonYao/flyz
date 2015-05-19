@@ -17,11 +17,11 @@ import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.model.AnswerSheetModel;
 import com.appublisher.quizbank.model.CommonModel;
-import com.appublisher.quizbank.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -187,7 +187,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
 
         // Umeng
-        MeasureModel.sendToUmeng(this, "1");
+        UmengManager.sendToUmeng(this, "1");
 
         finish();
     }
