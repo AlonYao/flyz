@@ -13,6 +13,7 @@ import com.appublisher.quizbank.model.EvaluationModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.db.chart.view.LineChartView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -64,6 +65,9 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new Request(this, this).getEvaluation();
+
+        // Umeng
+        UmengManager.sendCountEvent(this, "Mine", "Entry", "");
     }
 
     @Override
