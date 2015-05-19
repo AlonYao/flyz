@@ -66,6 +66,14 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public Handler mHandler;
     public Timer mTimer;
 
+    public static Toolbar mToolbar;
+    public static int mMins;
+    public static int mSec;
+
+    public static final int TIME_ON = 0;
+    public static final int TIME_OUT = 1;
+
+    /** Umeng */
     public long mUmengTimestamp;
     public boolean mUmengIsPressHome;
     public String mUmengEntry;
@@ -74,13 +82,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private String mUmengAnswerSheet; // 答题卡
 
     private HomeWatcher mHomeWatcher;
-
-    public static Toolbar mToolbar;
-    public static int mMins;
-    public static int mSec;
-
-    public static final int TIME_ON = 0;
-    public static final int TIME_OUT = 1;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -172,6 +173,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         super.onResume();
         // Umeng 统计时长处理
         if (mUmengIsPressHome) {
+            // 如果已经按过Home键后，再次回到App，更新参数状态
+            mUmengEntry = "Continue";
             mUmengTimestamp = System.currentTimeMillis();
             mUmengIsPressHome = false;
         } else {
@@ -185,7 +188,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                MeasureModel.sendToUmeng(MeasureActivity.this, "0");
+                UmengManager.sendToUmeng(MeasureActivity.this, "0");
             }
 
             @Override
@@ -301,6 +304,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             intent.putExtra("hierarchy_id", mHierarchyId);
             intent.putExtra("hierarchy_level", mHierarchyLevel);
             intent.putExtra("umeng_entry", mUmengEntry);
+            intent.putExtra("umeng_timestamp", mUmengTimestamp);
             startActivity(intent);
             finish();
         }
@@ -497,7 +501,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         if (isSave) {
             AlertManager.saveTestAlert(this);
         } else {
-            MeasureModel.sendToUmeng(MeasureActivity.this, "0");
+            UmengManager.sendToUmeng(MeasureActivity.this, "0");
             finish();
         }
     }

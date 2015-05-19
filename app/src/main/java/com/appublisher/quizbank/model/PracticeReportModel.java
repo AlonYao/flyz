@@ -195,6 +195,8 @@ public class PracticeReportModel {
         intent.putExtra("hierarchy_level", mActivity.mHierarchyLevel);
         intent.putExtra("from", mActivity.mFrom);
         intent.putExtra("is_from_error", mActivity.mIsFromError);
+        intent.putExtra("umeng_entry", mActivity.mUmengEntry);
+        intent.putExtra("umeng_timestamp", mActivity.mUmengTimestamp);
         mActivity.startActivity(intent);
 
         mActivity.finish();

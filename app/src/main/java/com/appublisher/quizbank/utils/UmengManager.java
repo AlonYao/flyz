@@ -2,6 +2,10 @@ package com.appublisher.quizbank.utils;
 
 import android.content.Context;
 
+import com.appublisher.quizbank.activity.AnswerSheetActivity;
+import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
@@ -54,4 +58,47 @@ public class UmengManager {
         return map;
     }
 
+    /**
+     * 练习统计发送到Umeng(练习页面)
+     * @param activity MeasureActivity
+     * @param done 离开练习的状态
+     */
+    public static void sendToUmeng(MeasureActivity activity, String done) {
+        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
+        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
+        UmengManager.sendComputeEvent(activity, activity.mPaperType, map, (int) (dur / 1000));
+    }
+
+    /**
+     * 练习统计发送到Umeng(练习解析页面)
+     * @param activity MeasureActivity
+     * @param done 离开练习的状态
+     */
+    public static void sendToUmeng(MeasureAnalysisActivity activity, String done) {
+        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
+        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
+        UmengManager.sendComputeEvent(activity, activity.mAnalysisType, map, (int) (dur / 1000));
+    }
+
+    /**
+     * 练习统计发送到Umeng(答题卡页面)
+     * @param activity AnswerSheetActivity
+     * @param done 离开练习的状态
+     */
+    public static void sendToUmeng(AnswerSheetActivity activity, String done) {
+        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
+        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
+        UmengManager.sendComputeEvent(activity, activity.mPaperType, map, (int) (dur / 1000));
+    }
+
+    /**
+     * 练习统计发送到Umeng(练习报告页面)
+     * @param activity PracticeReportActivity
+     * @param done 离开练习的状态
+     */
+    public static void sendToUmeng(PracticeReportActivity activity, String done) {
+        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
+        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
+        UmengManager.sendComputeEvent(activity, activity.mPaperType, map, (int) (dur / 1000));
+    }
 }

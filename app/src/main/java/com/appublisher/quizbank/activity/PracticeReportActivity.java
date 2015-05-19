@@ -14,6 +14,7 @@ import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -55,8 +56,12 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
 
+    /** Umeng */
+    public boolean mUmengIsPressHome;
+    public long mUmengTimestamp;
     public String mUmengStatus; // 1：未看 2：全部 3：错题
     public String mUmengEntry;
+    private HomeWatcher mHomeWatcher;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -81,6 +86,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
         // 成员变量初始化
         mUmengStatus = "1";
+        mHomeWatcher = new HomeWatcher(this);
 
         // 获取数据
         mFrom = getIntent().getStringExtra("from");
@@ -91,6 +97,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         mPaperTime = getIntent().getStringExtra("paper_time");
         if (mPaperTime == null) mPaperTime = Utils.DateToString(new Date(), "yyyy/MM/dd");
+        mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", System.currentTimeMillis());
 
         // 显示考试类型
         PracticeReportModel.showPaperType(this);
@@ -111,6 +118,31 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     @Override
     protected void onResume() {
         super.onResume();
+        // Umeng 统计时长处理
+        if (mUmengIsPressHome) {
+            // 如果已经按过Home键后，再次回到App，更新参数状态
+            mUmengEntry = "Continue";
+            mUmengTimestamp = System.currentTimeMillis();
+            mUmengIsPressHome = false;
+        }
+
+        // Home键监听
+        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+
+            @Override
+            public void onHomePressed() {
+                // 友盟统计
+                mUmengIsPressHome = true;
+                UmengManager.sendToUmeng(PracticeReportActivity.this, "Back");
+            }
+
+            @Override
+            public void onHomeLongPressed() {
+                // Do Nothing
+            }
+        });
+        mHomeWatcher.startWatch();
+
         // Umeng
         MobclickAgent.onPageStart("PracticeReportActivity");
         MobclickAgent.onResume(this);
@@ -119,6 +151,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     @Override
     protected void onPause() {
         super.onPause();
+        // Home键监听
+        mHomeWatcher.stopWatch();
+
         // Umeng
         MobclickAgent.onPageEnd("PracticeReportActivity");
         MobclickAgent.onPause(this);

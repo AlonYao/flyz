@@ -83,7 +83,7 @@ public class AlertManager {
                                 dialog.dismiss();
 
                                 // Umeng 练习统计
-                                MeasureModel.sendToUmeng(activity, "Back");
+                                UmengManager.sendToUmeng(activity, "0");
 
                                 activity.finish();
                             }
@@ -134,7 +134,7 @@ public class AlertManager {
                     activity.startActivity(intent);
 
                     // Umeng 练习类型统计
-                    MeasureModel.sendToUmeng(activity, "Again");
+                    UmengManager.sendToUmeng(activity, "Again");
 
                     finishActivity(activity);
 
@@ -160,6 +160,9 @@ public class AlertManager {
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Umeng 练习类型统计
+                UmengManager.sendToUmeng(activity, "Back");
+
                 finishActivity(activity);
             }
         });

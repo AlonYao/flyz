@@ -32,6 +32,7 @@ import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -61,17 +62,17 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
 
-    public boolean mUmengIsPressHome;
-    public long mUmengTimestamp;
-    public long mCurTimestamp;
-    public String mUmengEntry;
-    public String mUmengFavorite;
-    public String mUmengDelete;
-
     private long mPopupDismissTime;
     private PopupWindow mPopupWindow;
     private Request mRequest;
     private HomeWatcher mHomeWatcher;
+
+    /** Umeng */
+    public boolean mUmengIsPressHome;
+    public long mUmengTimestamp;
+    public String mUmengEntry;
+    public String mUmengFavorite;
+    public String mUmengDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         // 初始化成员变量
         mRequest = new Request(this, this);
         mUmengIsPressHome = false;
-        mCurTimestamp = System.currentTimeMillis();
         mHomeWatcher = new HomeWatcher(this);
         mUmengFavorite = "0";
 
@@ -107,6 +107,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mFrom = getIntent().getStringExtra("from");
         mIsFromError = getIntent().getBooleanExtra("is_from_error", false);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+        mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", System.currentTimeMillis());
 
         if (mIsFromError) mDeleteErrorQuestions = new ArrayList<>();
 
@@ -157,10 +158,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         super.onResume();
         // Umeng 统计时长处理
         if (mUmengIsPressHome) {
+            // 如果已经按过Home键后，再次回到App，更新参数状态
+            mUmengEntry = "Continue";
             mUmengTimestamp = System.currentTimeMillis();
             mUmengIsPressHome = false;
-        } else {
-            mUmengTimestamp = mCurTimestamp;
         }
 
         // Home键监听
@@ -170,7 +171,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                MeasureModel.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+                UmengManager.sendToUmeng(MeasureAnalysisActivity.this, "Back");
             }
 
             @Override
@@ -251,7 +252,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // Umeng
-            MeasureModel.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+            UmengManager.sendToUmeng(MeasureAnalysisActivity.this, "Back");
             finish();
 
         } else if ("收藏".equals(item.getTitle())) {
@@ -304,7 +305,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     public void onBackPressed() {
         // Umeng
-        MeasureModel.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+        UmengManager.sendToUmeng(MeasureAnalysisActivity.this, "Back");
         super.onBackPressed();
     }
 

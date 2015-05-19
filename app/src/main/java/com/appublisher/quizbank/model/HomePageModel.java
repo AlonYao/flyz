@@ -22,6 +22,7 @@ import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 
@@ -106,6 +107,9 @@ public class HomePageModel {
                 intent.putExtra("from", "opencourse_started");
 
                 if (activity instanceof MeasureAnalysisActivity) {
+                    // Umeng
+                    UmengManager.sendToUmeng((MeasureAnalysisActivity) activity, "Live");
+
                     intent.putExtra("umeng_entry", "AfterTest");
                     activity.startActivity(intent);
                     activity.finish();

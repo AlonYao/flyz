@@ -18,9 +18,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.ScaleImageActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseEntireResp;
@@ -36,7 +34,6 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -495,38 +492,5 @@ public class MeasureModel {
 
             if (userAnswerList != null) userAnswerList.add(map);
         }
-    }
-
-    /**
-     * 发送到Umeng
-     * @param activity MeasureActivity
-     * @param done 离开练习的状态
-     */
-    public static void sendToUmeng(MeasureActivity activity, String done) {
-        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
-        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
-        UmengManager.sendComputeEvent(activity, activity.mPaperType, map, (int) (dur/1000));
-    }
-
-    /**
-     * 发送到Umeng
-     * @param activity MeasureActivity
-     * @param done 离开练习的状态
-     */
-    public static void sendToUmeng(MeasureAnalysisActivity activity, String done) {
-        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
-        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
-        UmengManager.sendComputeEvent(activity, activity.mAnalysisType, map, (int) (dur/1000));
-    }
-
-    /**
-     * 发送到Umeng
-     * @param activity AnswerSheetActivity
-     * @param done 离开练习的状态
-     */
-    public static void sendToUmeng(AnswerSheetActivity activity, String done) {
-        long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
-        HashMap<String, String> map = UmengManager.umengMeasureMap(activity.mUmengEntry, done);
-        UmengManager.sendComputeEvent(activity, activity.mPaperType, map, (int) (dur/1000));
     }
 }
