@@ -79,8 +79,13 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
                 intent.putExtra("umeng_entry", "List");
-                if ("error".equals(value.note_type))
+                if ("error".equals(value.note_type)) {
                     intent.putExtra("is_from_error", true);
+                    intent.putExtra("umeng_entry_review", "Error");
+                } else if ("collect".equals(value.note_type)) {
+                    intent.putExtra("umeng_entry_review", "Collect");
+                }
+
                 context.startActivity(intent);
             }
         });

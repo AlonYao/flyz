@@ -71,8 +71,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public boolean mUmengIsPressHome;
     public long mUmengTimestamp;
     public String mUmengEntry;
+    public String mUmengEntryReview;
     public String mUmengFavorite;
     public String mUmengDelete;
+    public String mUmengAnswerSheet;
+    public String mUmengFeedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mUmengIsPressHome = false;
         mHomeWatcher = new HomeWatcher(this);
         mUmengFavorite = "0";
+        mUmengAnswerSheet = "0";
+        mUmengFeedback = "0";
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(toolbar);
@@ -107,6 +112,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mFrom = getIntent().getStringExtra("from");
         mIsFromError = getIntent().getBooleanExtra("is_from_error", false);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+        mUmengEntryReview = getIntent().getStringExtra("umeng_entry_review");
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", System.currentTimeMillis());
 
         if (mIsFromError) mDeleteErrorQuestions = new ArrayList<>();
@@ -198,6 +204,17 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         // Umeng
         MobclickAgent.onPageEnd("MeasureAnalysisActivity");
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Entry", mUmengEntryReview);
+        map.put("AnswerSheet", mUmengAnswerSheet);
+        map.put("Feedback", mUmengFeedback);
+        MobclickAgent.onEvent(this, "Review", map);
     }
 
     @Override

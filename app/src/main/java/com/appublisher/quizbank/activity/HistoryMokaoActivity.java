@@ -156,6 +156,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
                     intent.putExtra("exercise_id", historyMokao.getExercise_id());
                     intent.putExtra("analysis_type", "mokao");
                     intent.putExtra("umeng_entry", "List");
+                    intent.putExtra("umeng_entry_review", "MokaoList");
                     startActivity(intent);
                 }
             }

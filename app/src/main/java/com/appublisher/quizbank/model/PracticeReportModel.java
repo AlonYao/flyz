@@ -195,8 +195,16 @@ public class PracticeReportModel {
         intent.putExtra("hierarchy_level", mActivity.mHierarchyLevel);
         intent.putExtra("from", mActivity.mFrom);
         intent.putExtra("is_from_error", mActivity.mIsFromError);
+
+        // Umeng
         intent.putExtra("umeng_entry", mActivity.mUmengEntry);
         intent.putExtra("umeng_timestamp", mActivity.mUmengTimestamp);
+        if ("study_record".equals(mActivity.mFrom)) {
+            intent.putExtra("umeng_entry_review", "Record");
+        } else {
+            intent.putExtra("umeng_entry_review", "Report");
+        }
+
         mActivity.startActivity(intent);
 
         mActivity.finish();
