@@ -3,6 +3,7 @@ package com.appublisher.quizbank.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -60,6 +61,12 @@ public class SplashActivity extends Activity {
                 boolean isFirstStart = Globals.sharedPreferences.getBoolean("isFirstStart", true);
                 if (isFirstStart) {
                     // app 引导页
+                    intent = new Intent(SplashActivity.this, AppGuideActivity.class);
+                    startActivity(intent);
+
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("isFirstStart", false);
+                    editor.commit();
                 }
 
                 finish();
