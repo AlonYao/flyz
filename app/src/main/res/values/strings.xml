@@ -35,8 +35,8 @@
     <string name="drawer_version">版本号</string>
 
     <!-- 公开课 -->
-    <string name="opencourse_notice_true">课程开始前5分钟会给你发短信提醒</string>
-    <string name="opencourse_notice_false">开课前5分钟给我发短信提醒</string>
+    <string name="opencourse_notice_true">开讲时会提醒你哒</string>
+    <string name="opencourse_notice_false">开讲时提醒我</string>
     <string name="opencourse_none">暂时没有公开课哦~\n看看往期内容吧</string>
     <string name="opencourse_consult">点我咨询</string>
 
@@ -112,7 +112,7 @@
     <string name="evaluation_min">分钟</string>
     <string name="evaluation_dao">道</string>
     <string name="evaluation_average">全站平均</string>
-    <string name="evaluation_history">历史估分</string>
+    <string name="evaluation_history">历史预测分</string>
 
     <!-- 练习说明 -->
     <string name="practicedesc_start">开始练习</string>
