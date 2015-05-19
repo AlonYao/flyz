@@ -91,6 +91,9 @@ public class StudyRecordModel {
                     intent.putExtra("umeng_entry", "Continue");
                     fragment.mActivity.startActivity(intent);
                 }
+
+                // Umeng
+                fragment.mUmengAction = "1";
             }
         });
     }

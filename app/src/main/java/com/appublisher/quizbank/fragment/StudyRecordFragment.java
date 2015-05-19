@@ -18,6 +18,7 @@ import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -42,6 +43,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     private int mCount;
     private Request mRequest;
     private View mView;
+
+    /** Umeng */
+    public String mUmengAction;
 
     @Override
     public void onAttach(Activity activity) {
@@ -81,6 +85,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         onRefresh();
 
         // Umeng
+        mUmengAction = "0";
         MobclickAgent.onPageStart("StudyRecordFragment");
     }
 
@@ -88,6 +93,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public void onPause() {
         super.onPause();
         // Umeng
+        UmengManager.sendCountEvent(mActivity, "Record", "Action", mUmengAction);
         MobclickAgent.onPageEnd("StudyRecordFragment");
     }
 
