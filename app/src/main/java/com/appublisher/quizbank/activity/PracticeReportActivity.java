@@ -3,6 +3,7 @@ package com.appublisher.quizbank.activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,10 +44,10 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public TextView mTvPaperName;
     public TextView mTvRightNum;
     public TextView mTvTotalNum;
-    public TextView mTvNoteNoChange;
     public TextView mTvAll;
     public TextView mTvError;
     public TextView mTvPaperType;
+    public ImageView mIvNoteNoChange;
 
     public int mRightNum;
     public int mTotalNum;
@@ -76,7 +77,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mTvPaperName = (TextView) findViewById(R.id.practice_report_name);
         mTvRightNum = (TextView) findViewById(R.id.practice_report_rightnum);
         mTvTotalNum = (TextView) findViewById(R.id.practice_report_totalnum);
-        mTvNoteNoChange = (TextView) findViewById(R.id.practice_report_notenochange);
+        mIvNoteNoChange = (ImageView) findViewById(R.id.practice_report_notenochange);
         mLlCategoryContainer =
                 (LinearLayout) findViewById(R.id.practice_report_category_container);
         mLlNoteContainer = (LinearLayout) findViewById(R.id.practice_report_note_container);

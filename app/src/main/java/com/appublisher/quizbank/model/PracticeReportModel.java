@@ -215,10 +215,10 @@ public class PracticeReportModel {
      */
     private static void addNote() {
         if (mActivity.mNotes == null || mActivity.mNotes.size() == 0) {
-            mActivity.mTvNoteNoChange.setVisibility(View.VISIBLE);
+            mActivity.mIvNoteNoChange.setVisibility(View.VISIBLE);
             mActivity.mLlNoteContainer.setVisibility(View.GONE);
         } else {
-            mActivity.mTvNoteNoChange.setVisibility(View.GONE);
+            mActivity.mIvNoteNoChange.setVisibility(View.GONE);
             mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
 
             int size = mActivity.mNotes.size();

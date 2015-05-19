@@ -23,7 +23,7 @@
         android:layout_width="288dp"
         android:layout_height="172dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/opencourse_none_img"
+        android:src="@drawable/opencourse_unstart"
         tools:ignore="ContentDescription" />
 
 </LinearLayout>
