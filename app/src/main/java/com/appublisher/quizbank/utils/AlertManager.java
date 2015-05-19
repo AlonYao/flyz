@@ -135,10 +135,8 @@ public class AlertManager {
                     Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
                     intent.putExtra("paper_type", activity.mAnalysisType);
                     intent.putExtra("paper_name", activity.getString(R.string.paper_type_auto));
+                    intent.putExtra("umeng_entry", activity.mUmengEntry);
                     activity.startActivity(intent);
-
-                    // Umeng 练习类型统计
-                    UmengManager.sendToUmeng(activity, "Again");
 
                     finishActivity(activity);
 
@@ -150,6 +148,7 @@ public class AlertManager {
                     intent.putExtra("paper_name", activity.mPaperName);
                     intent.putExtra("hierarchy_id", activity.mHierarchyId);
                     intent.putExtra("hierarchy_level", activity.mHierarchyLevel);
+                    intent.putExtra("umeng_entry", activity.mUmengEntry);
                     activity.startActivity(intent);
 
                     finishActivity(activity);
@@ -157,6 +156,9 @@ public class AlertManager {
                 } else {
                     mAlertLastPage.dismiss();
                 }
+
+                // Umeng 练习类型统计
+                UmengManager.sendToUmeng(activity, "Again");
             }
         });
 

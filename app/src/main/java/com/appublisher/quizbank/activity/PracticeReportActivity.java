@@ -167,8 +167,19 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     }
 
     @Override
+    public void onBackPressed() {
+        // Umeng
+        UmengManager.sendToUmeng(this, "Back");
+
+        super.onBackPressed();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            // Umeng
+            UmengManager.sendToUmeng(this, "Back");
+
             finish();
         }
 
