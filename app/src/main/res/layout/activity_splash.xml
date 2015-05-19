@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     tools:context="com.appublisher.quizbank.activity.SplashActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:drawableTop="@drawable/practice_report_logo"
-        android:text="爱普质量市场 小米市场 联合首发"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/splash_bg"
+        android:scaleType="fitXY"
+        android:src="@drawable/splash_bg"
+        tools:ignore="ContentDescription" />
 
 </RelativeLayout>
