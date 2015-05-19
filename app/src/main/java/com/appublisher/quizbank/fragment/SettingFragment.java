@@ -39,6 +39,8 @@ import com.parse.ParsePush;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
+import java.util.HashMap;
+
 /**
  * 设置
  */
@@ -49,6 +51,14 @@ public class SettingFragment extends Fragment{
     private TextView mTvExam;
     private ImageView mIvRedPoint;
     private RelativeLayout mRlSno;
+
+    /** Umeng */
+    private String mUmengAccount;
+    private String mUmengMyTest;
+    private String mUmengRemind;
+    private String mUmengInforms;
+    private String mUmengFeedback;
+    private String mUmengFAQ;
 
     @Override
     public void onAttach(Activity activity) {
@@ -72,12 +82,23 @@ public class SettingFragment extends Fragment{
         mTvExam = (TextView) view.findViewById(R.id.setting_exam);
         mRlSno = (RelativeLayout) view.findViewById(R.id.setting_sno_rl);
 
+        // 成员变量初始化
+        mUmengAccount = "0";
+        mUmengMyTest = "0";
+        mUmengRemind = "0";
+        mUmengInforms = "0";
+        mUmengFeedback = "0";
+        mUmengFAQ = "0";
+
         // 账号设置
         rlAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, UserInfoActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                mUmengAccount = "1";
             }
         });
 
@@ -87,6 +108,9 @@ public class SettingFragment extends Fragment{
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, ExamChangeActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                mUmengMyTest = "1";
             }
         });
 
@@ -113,6 +137,9 @@ public class SettingFragment extends Fragment{
                     editor.putBoolean("isPushOpen", false);
                 }
                 editor.commit();
+
+                // Umeng
+                mUmengRemind = "1";
             }
         });
 
@@ -130,6 +157,9 @@ public class SettingFragment extends Fragment{
 
                 if (ivSettingRedPoint == null) return;
                 ivSettingRedPoint.setVisibility(View.GONE);
+
+                // Umeng
+                mUmengInforms = "1";
             }
         });
 
@@ -139,6 +169,9 @@ public class SettingFragment extends Fragment{
             public void onClick(View v) {
                 FeedbackAgent agent = new FeedbackAgent(mActivity);
                 agent.startFeedbackActivity();
+
+                // Umeng
+                mUmengFeedback = "1";
             }
         });
 
@@ -148,6 +181,9 @@ public class SettingFragment extends Fragment{
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, QaActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                mUmengFAQ = "1";
             }
         });
 
@@ -213,5 +249,19 @@ public class SettingFragment extends Fragment{
         super.onPause();
         // Umeng
         MobclickAgent.onPageEnd("SettingFragment");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Account", mUmengAccount);
+        map.put("MyTest", mUmengMyTest);
+        map.put("Remind", mUmengRemind);
+        map.put("Informs", mUmengInforms);
+        map.put("Feedback", mUmengFeedback);
+        map.put("FAQ", mUmengFAQ);
+        MobclickAgent.onEvent(mActivity, "Setting", map);
     }
 }
