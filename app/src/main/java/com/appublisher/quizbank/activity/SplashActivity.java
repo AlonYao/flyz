@@ -9,6 +9,8 @@ import android.os.Handler;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.utils.UmengManager;
@@ -49,9 +51,6 @@ public class SplashActivity extends Activity {
                 } else {
                     // 未登录
                     cls = LoginActivity.class;
-
-                    // 友盟
-                    Globals.umeng_login_event = "RegLogLaunch";
                 }
 
                 Intent intent = new Intent(SplashActivity.this, cls);
@@ -74,6 +73,9 @@ public class SplashActivity extends Activity {
         };
 
         handler.postDelayed(runnable, 1000);
+
+        // Update Use Count
+        if (LoginModel.isLogin() && !GlobalSettingDAO.isGrade()) CommonModel.updateUseCount();
     }
 
     @Override

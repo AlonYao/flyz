@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
@@ -14,6 +16,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.HomePageModel;
 import com.appublisher.quizbank.model.MeasureAnalysisModel;
@@ -23,6 +26,7 @@ import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
+import com.umeng.fb.FeedbackAgent;
 
 import org.json.JSONArray;
 
@@ -179,6 +183,65 @@ public class AlertManager {
 
         // 看个直播
         HomePageModel.setOpenCourse(activity, tvZhibo);
+    }
+
+    /**
+     * 显示评分Alert
+     * @param activity Activity
+     */
+    public static void showGradeAlert(final Activity activity) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        Window window = alertDialog.getWindow();
+        window.setContentView(R.layout.alert_item_grade);
+
+        ImageView ivClose = (ImageView) window.findViewById(R.id.alert_grade_close);
+        TextView tvGrade = (TextView) window.findViewById(R.id.alert_grade_grade);
+        TextView tvFeedback = (TextView) window.findViewById(R.id.alert_grade_feedback);
+
+        // 关闭
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 保存本地存储
+                GlobalSettingDAO.saveUseCount(0);
+                alertDialog.dismiss();
+            }
+        });
+
+        // 评价
+        tvGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 保存本地存储
+                GlobalSettingDAO.updateIsGrade(true);
+                GlobalSettingDAO.saveUseCount(0);
+
+                // 评价
+                Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+                marketIntent.setData(Uri.parse("market://details?id=" + activity.getPackageName()));
+                activity.startActivity(marketIntent);
+
+                alertDialog.dismiss();
+            }
+        });
+
+        // 吐槽
+        tvFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 保存本地存储
+                GlobalSettingDAO.saveUseCount(0);
+
+                // 进入反馈
+                FeedbackAgent agent = new FeedbackAgent(activity);
+                agent.startFeedbackActivity();
+
+                alertDialog.dismiss();
+            }
+        });
     }
 
     /**

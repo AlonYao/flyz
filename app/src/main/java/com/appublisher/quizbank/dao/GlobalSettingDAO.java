@@ -3,6 +3,7 @@ package com.appublisher.quizbank.dao;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
 import com.appublisher.quizbank.model.db.GlobalSetting;
+import com.appublisher.quizbank.utils.Utils;
 
 /**
  * 全局配置数据库表DAO层
@@ -136,5 +137,32 @@ public class GlobalSettingDAO {
         if (globalSetting == null) return 0;
 
         return globalSetting.use_count;
+    }
+
+    /**
+     * 更新是否评价过的状态
+     * @param is_grade  是否评价过
+     */
+    public static void updateIsGrade(boolean is_grade) {
+        try {
+            int valueInt = Utils.booleanToInt(is_grade);
+            new Update(GlobalSetting.class)
+                    .set("is_grade = ?", valueInt)
+                    .where("Id = ?", 1)
+                    .execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取是否评价过
+     * @return 是否
+     */
+    public static boolean isGrade() {
+        GlobalSetting globalSetting = findById();
+
+        return globalSetting != null && globalSetting.is_grade;
+
     }
 }

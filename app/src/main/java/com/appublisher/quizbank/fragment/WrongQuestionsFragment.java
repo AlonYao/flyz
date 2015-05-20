@@ -62,6 +62,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
     public void onResume() {
         super.onResume();
         // 获取数据
+        mContainer.removeAllViews();
         ProgressBarManager.showProgressBar(mView);
         new Request(mActivity, this).getNoteHierarchy("error");
 

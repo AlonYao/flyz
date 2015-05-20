@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
@@ -29,6 +30,7 @@ import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.umeng.analytics.MobclickAgent;
@@ -107,6 +109,10 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     @Override
     protected void onResume() {
         super.onResume();
+        // 显示评分Alert
+        if (!GlobalSettingDAO.isGrade() && Globals.is_show_grade_alert)
+            AlertManager.showGradeAlert(this);
+
         // Umeng
         MobclickAgent.onResume(this);
     }

@@ -7,6 +7,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 
 /**
  * 通用模型
@@ -51,5 +52,14 @@ public class CommonModel {
             final int childIndex = pos - firstListItemPosition;
             return listView.getChildAt(childIndex);
         }
+    }
+
+    /**
+     * 更新使用次数
+     */
+    public static void updateUseCount() {
+        int count = GlobalSettingDAO.getUseCount();
+        count++;
+        GlobalSettingDAO.saveUseCount(count);
     }
 }

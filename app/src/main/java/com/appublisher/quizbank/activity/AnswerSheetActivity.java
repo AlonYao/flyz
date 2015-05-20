@@ -12,16 +12,17 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.AnswerSheetModel;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -186,8 +187,9 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         intent.putExtra("category", mCategoryMap);
         setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
 
-        // Umeng
-        UmengManager.sendToUmeng(this, "1");
+        // 判断是否需要显示评分Alert
+        int count = GlobalSettingDAO.getUseCount();
+        if (count >= 6) Globals.is_show_grade_alert = true;
 
         finish();
     }

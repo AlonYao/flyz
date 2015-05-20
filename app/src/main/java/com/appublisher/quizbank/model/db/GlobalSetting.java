@@ -19,4 +19,8 @@ public class GlobalSetting extends Model{
     // 使用次数
     @Column(name = "use_count")
     public int use_count;
+
+    // 是否评价过
+    @Column(name = "is_grade")
+    public boolean is_grade;
 }
