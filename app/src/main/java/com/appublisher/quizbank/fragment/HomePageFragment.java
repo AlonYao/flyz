@@ -163,12 +163,17 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         if (pager != null) {
             // 今日模考
             final PaperTodayM todayExam = pager.getToday();
-            if (todayExam != null && todayExam.getId() != 0) {
+            if (todayExam != null) {
                 mTvTodayExam.setText("已有" + String.valueOf(todayExam.getPersons_num()) + "人参加");
 
                 mLlMokao.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (todayExam.getId() == 0) {
+                            ToastManager.showToast(mActivity, "今日暂时没有模考……");
+                            return;
+                        }
+
                         String status = todayExam.getStatus();
 
                         if ("done".equals(status)) {
@@ -197,8 +202,6 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                         }
                     }
                 });
-            } else {
-                ToastManager.showToast(mActivity, "今日暂时没有模考……");
             }
 
             // 推荐专项训练
