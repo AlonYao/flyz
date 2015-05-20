@@ -38,6 +38,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
     private Activity mActivity;
     private LinearLayout mContainer;
     private ImageView mIvNull;
+    private View mView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -48,25 +49,22 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_wrongquestions, container, false);
+        mView = inflater.inflate(R.layout.fragment_wrongquestions, container, false);
 
         // View 初始化
-        mContainer = (LinearLayout) view.findViewById(R.id.wrongq_container);
-        mIvNull = (ImageView) view.findViewById(R.id.quizbank_null);
+        mContainer = (LinearLayout) mView.findViewById(R.id.wrongq_container);
+        mIvNull = (ImageView) mView.findViewById(R.id.quizbank_null);
 
-        // 成员变量初始化
-        Request request = new Request(mActivity, this);
-
-        // 获取数据
-        ProgressBarManager.showProgressBar(view);
-        request.getNoteHierarchy("error");
-
-        return view;
+        return mView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        // 获取数据
+        ProgressBarManager.showProgressBar(mView);
+        new Request(mActivity, this).getNoteHierarchy("error");
+
         // Umeng
         MobclickAgent.onPageStart("WrongQuestionsFragment");
     }

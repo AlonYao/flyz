@@ -30,6 +30,8 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
     public LinearLayout mContainer;
     public ImageView mIvNull;
 
+    private View mView;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -40,20 +42,20 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // View 初始化
-        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
-        mContainer = (LinearLayout) view.findViewById(R.id.collect_container);
-        mIvNull = (ImageView) view.findViewById(R.id.quizbank_null);
+        mView = inflater.inflate(R.layout.fragment_favorite, container, false);
+        mContainer = (LinearLayout) mView.findViewById(R.id.collect_container);
+        mIvNull = (ImageView) mView.findViewById(R.id.quizbank_null);
 
-        // 获取数据
-        ProgressBarManager.showProgressBar(view);
-        new Request(mActivity, this).getNoteHierarchy("collect");
-
-        return view;
+        return mView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        // 获取数据
+        ProgressBarManager.showProgressBar(mView);
+        new Request(mActivity, this).getNoteHierarchy("collect");
+
         // Umeng
         MobclickAgent.onPageStart("FavoriteFragment");
     }
