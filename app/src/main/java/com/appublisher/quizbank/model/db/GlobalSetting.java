@@ -15,4 +15,8 @@ public class GlobalSetting extends Model{
     // 最近一条通知
     @Column(name = "latest_notify")
     public int latest_notify;
+
+    // 使用次数
+    @Column(name = "use_count")
+    public int use_count;
 }

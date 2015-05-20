@@ -102,4 +102,39 @@ public class GlobalSettingDAO {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 保存使用次数
+     * @param count 次数
+     */
+    public static void saveUseCount(int count) {
+        GlobalSetting globalSetting = findById();
+
+        if (globalSetting == null) {
+            globalSetting = new GlobalSetting();
+            globalSetting.use_count = count;
+            globalSetting.save();
+        } else {
+            try {
+                new Update(GlobalSetting.class)
+                        .set("use_count = ?", count)
+                        .where("Id = ?", 1)
+                        .execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 获取使用次数
+     * @return 使用次数
+     */
+    public static int getUseCount() {
+        GlobalSetting globalSetting = findById();
+
+        if (globalSetting == null) return 0;
+
+        return globalSetting.use_count;
+    }
 }
