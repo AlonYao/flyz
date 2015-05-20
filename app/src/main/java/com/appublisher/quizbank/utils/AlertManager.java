@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
@@ -240,6 +241,9 @@ public class AlertManager {
                 alertDialog.dismiss();
             }
         });
+
+        // 重置状态
+        Globals.is_show_grade_alert = false;
     }
 
     /**

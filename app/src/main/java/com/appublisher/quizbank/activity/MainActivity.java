@@ -116,7 +116,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     protected void onResume() {
         super.onResume();
         // 显示评分Alert
-        if (!GlobalSettingDAO.isGrade() && Globals.is_show_grade_alert)
+        int useCount = GlobalSettingDAO.getUseCount();
+        if (!GlobalSettingDAO.isGrade() && Globals.is_show_grade_alert && useCount >= 6)
             AlertManager.showGradeAlert(this);
 
         // Umeng
