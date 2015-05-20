@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.utils.OpenUDID_manager;
+import com.networkbench.agent.impl.NBSAppAgent;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
@@ -67,6 +68,10 @@ public class QuizBankApp extends Application{
 
         // Umeng 统计
         MobclickAgent.openActivityDurationTrack(false);
+
+        // 听云
+        NBSAppAgent.setLicenseKey(getString(R.string.tingyun_appkey))
+                .withLocationServiceEnabled(true).start(this);
     }
 
     // 单例模式中获取唯一的QuizBankApp实例

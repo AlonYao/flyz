@@ -105,10 +105,10 @@
     <orderEntry type="library" exported="" name="fb-5.1.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="message-1.4.1" level="project" />
+    <orderEntry type="library" exported="" name="nbs.newlens.agent-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="nbs.newlens.agent-2.2.1" level="project" />
     <orderEntry type="library" exported="" name="activeandroid-3.1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="layouts-1.8" level="project" />
     <orderEntry type="module" module-name="umeng" exported="" />
     <orderEntry type="module" module-name="treeviewlib" exported="" />
