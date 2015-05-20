@@ -150,13 +150,12 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
                     intent.putExtra("umeng_entry", "List");
                     startActivity(intent);
                 } else if ("done".equals(status)) {
-                    // 解析
-                    Intent intent =
-                            new Intent(HistoryMokaoActivity.this, MeasureAnalysisActivity.class);
+                    // 跳转至练习报告页面
+                    Intent intent = new Intent(HistoryMokaoActivity.this,
+                            PracticeReportActivity.class);
                     intent.putExtra("exercise_id", historyMokao.getExercise_id());
-                    intent.putExtra("analysis_type", "mokao");
-                    intent.putExtra("umeng_entry", "List");
-                    intent.putExtra("umeng_entry_review", "MokaoList");
+                    intent.putExtra("paper_type", "mokao");
+                    intent.putExtra("from", "mokao_history_list");
                     startActivity(intent);
                 }
             }

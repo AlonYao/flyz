@@ -106,7 +106,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         // 显示考试描述
         PracticeReportModel.showPaperDesc(this);
 
-        if ("study_record".equals(mFrom)) {
+        if ("study_record".equals(mFrom)
+                || "mokao_homepage".equals(mFrom)
+                || "mokao_history_list".equals(mFrom)) {
             int exerciseId = getIntent().getIntExtra("exercise_id", 0);
 
             ProgressDialogManager.showProgressDialog(this, true);

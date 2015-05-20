@@ -141,12 +141,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                     break;
             }
 
-        } else if ("mokao".equals(mAnalysisType) && !"study_record".equals(mFrom)) {
-            int exerciseId = getIntent().getIntExtra("exercise_id", 0);
-
-            ProgressDialogManager.showProgressDialog(this, true);
-            mRequest.getHistoryExerciseDetail(exerciseId, mAnalysisType);
-
         } else {
             //noinspection unchecked
             ArrayList<QuestionM> questions =

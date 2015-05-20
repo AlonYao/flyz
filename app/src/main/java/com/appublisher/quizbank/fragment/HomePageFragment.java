@@ -17,8 +17,8 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.model.HomePageModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
@@ -172,10 +172,11 @@ public class HomePageFragment extends Fragment implements RequestCallback{
                         String status = todayExam.getStatus();
 
                         if ("done".equals(status)) {
-                            Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
-                            intent.putExtra("analysis_type", "mokao");
+                            // 跳转至练习报告页面
+                            Intent intent = new Intent(mActivity, PracticeReportActivity.class);
                             intent.putExtra("exercise_id", todayExam.getId());
-                            intent.putExtra("umeng_entry", "Home");
+                            intent.putExtra("paper_type", "mokao");
+                            intent.putExtra("from", "mokao_homepage");
                             startActivity(intent);
 
                         } else {
