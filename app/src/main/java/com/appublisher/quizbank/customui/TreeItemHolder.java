@@ -85,6 +85,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 } else if ("collect".equals(value.note_type)) {
                     intent.putExtra("umeng_entry_review", "Collect");
                 }
+                intent.putExtra("from", "collect_or_error");
 
                 context.startActivity(intent);
             }

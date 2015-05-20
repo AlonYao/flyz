@@ -54,7 +54,8 @@ public class MeasureAnalysisModel {
                 // 最后一页再往后滑，弹出末题引导
                 if(mCurPosition == questions.size() - 1
                         && positionOffsetPixels == 0
-                        && !"study_record".equals(activity.mFrom)) {
+                        && !"study_record".equals(activity.mFrom)
+                        && !"collect_or_error".equals(activity.mFrom)) {
 
                     if (!mIsShowAlert) {
                         mIsShowAlert = true;
