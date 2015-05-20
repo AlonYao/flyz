@@ -1,5 +1,8 @@
 package com.appublisher.quizbank.model;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -61,5 +64,14 @@ public class CommonModel {
         int count = GlobalSettingDAO.getUseCount();
         count++;
         GlobalSettingDAO.saveUseCount(count);
+    }
+
+    /**
+     * 跳转至评价页面
+     */
+    public static void skipToGrade(Activity activity) {
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+        marketIntent.setData(Uri.parse("market://details?id=" + activity.getPackageName()));
+        activity.startActivity(marketIntent);
     }
 }

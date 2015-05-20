@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -18,6 +17,7 @@ import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
+import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.HomePageModel;
 import com.appublisher.quizbank.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.MeasureModel;
@@ -220,9 +220,7 @@ public class AlertManager {
                 GlobalSettingDAO.saveUseCount(0);
 
                 // 评价
-                Intent marketIntent = new Intent(Intent.ACTION_VIEW);
-                marketIntent.setData(Uri.parse("market://details?id=" + activity.getPackageName()));
-                activity.startActivity(marketIntent);
+                CommonModel.skipToGrade(activity);
 
                 alertDialog.dismiss();
             }

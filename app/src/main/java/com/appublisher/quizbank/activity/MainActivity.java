@@ -2,14 +2,18 @@ package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -33,6 +37,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -50,6 +55,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     private StudyRecordFragment mStudyRecordFragment;
     private SettingFragment mSettingFragment;
     private boolean mDoubleBackToExit;
+    private Fragment mCurFragment;
 
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
@@ -128,6 +134,32 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+
+        if (mCurFragment == mHomePageFragment) {
+            MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(
+                    R.drawable.homepage_grade), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("评价")) {
+            // 保存本地记录
+            GlobalSettingDAO.updateIsGrade(true);
+            GlobalSettingDAO.saveUseCount(0);
+
+            // 跳转
+            CommonModel.skipToGrade(this);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
         if(mDrawerLayout.isDrawerOpen(Gravity.START|Gravity.LEFT)){
             mDrawerLayout.closeDrawers();
@@ -192,6 +224,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
                 getSupportActionBar().setTitle(" ");
 
+                mCurFragment = mHomePageFragment;
+
                 break;
 
             case 1:
@@ -206,6 +240,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 }
 
                 getSupportActionBar().setTitle(R.string.drawer_wholepage);
+
+                mCurFragment = mWholePageFragment;
 
                 break;
 
@@ -222,6 +258,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
                 getSupportActionBar().setTitle(R.string.drawer_wrong);
 
+                mCurFragment = mWrongQuestionsFragment;
+
                 break;
 
             case 3:
@@ -236,6 +274,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 }
 
                 getSupportActionBar().setTitle(R.string.drawer_store);
+
+                mCurFragment = mFavoriteFragment;
 
                 break;
 
@@ -252,6 +292,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
                 getSupportActionBar().setTitle(R.string.drawer_record);
 
+                mCurFragment = mStudyRecordFragment;
+
                 break;
 
             case 5:
@@ -267,6 +309,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
                 getSupportActionBar().setTitle(R.string.drawer_setting);
 
+                mCurFragment = mSettingFragment;
+
                 break;
 
             default:
@@ -275,6 +319,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         mDrawerLayout.closeDrawer(mDrawerList);
         transaction.commit();
+
+        // 更新Menu
+        Utils.updateMenu(this);
     }
 
     /**
