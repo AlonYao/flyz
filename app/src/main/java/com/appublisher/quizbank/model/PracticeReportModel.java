@@ -201,6 +201,9 @@ public class PracticeReportModel {
         intent.putExtra("umeng_timestamp", mActivity.mUmengTimestamp);
         if ("study_record".equals(mActivity.mFrom)) {
             intent.putExtra("umeng_entry_review", "Record");
+        } else if ("mokao_homepage".equals(mActivity.mFrom)
+                || "mokao_history_list".equals(mActivity.mFrom)) {
+            intent.putExtra("umeng_entry_review", "MokaoList");
         } else {
             intent.putExtra("umeng_entry_review", "Report");
         }
