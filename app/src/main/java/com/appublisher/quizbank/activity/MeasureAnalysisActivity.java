@@ -274,26 +274,23 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             finish();
 
         } else if ("收藏".equals(item.getTitle())) {
-            //noinspection ConstantConditions
-            if (item.getIcon().getConstantState().equals(
-                    getResources().getDrawable(
-                            R.drawable.measure_analysis_uncollect).getConstantState())) {
-                // 未收藏
-                MeasureAnalysisModel.setCollect(this, item);
-
-                ToastManager.showToast(this, "收藏成功");
-
-                // Umeng
-                mUmengFavorite = "1";
-
-            } else {
-                // 已收藏
+            if (mCurAnswerModel != null && mCurAnswerModel.is_collected()) {
+                // 如果是已收藏状态，取消收藏
                 MeasureAnalysisModel.setUnCollect(this, item);
 
                 ToastManager.showToast(this, "取消收藏");
 
                 // Umeng
                 mUmengFavorite = "-1";
+
+            } else {
+                // 如果是未收藏状态，收藏
+                MeasureAnalysisModel.setCollect(this, item);
+
+                ToastManager.showToast(this, "收藏成功");
+
+                // Umeng
+                mUmengFavorite = "1";
             }
 
             mRequest.collectQuestion(ParamBuilder.collectQuestion(

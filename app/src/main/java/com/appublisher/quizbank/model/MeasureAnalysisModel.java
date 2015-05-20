@@ -130,7 +130,6 @@ public class MeasureAnalysisModel {
                     }
                 }
             }
-
         }
 
         MeasureModel.jointUserAnswer(questions, answers, activity.mUserAnswerList);
