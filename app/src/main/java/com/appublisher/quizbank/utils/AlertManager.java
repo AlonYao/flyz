@@ -209,6 +209,9 @@ public class AlertManager {
                 // 保存本地存储
                 GlobalSettingDAO.saveUseCount(0);
                 alertDialog.dismiss();
+
+                // Umeng
+                UmengManager.sendCountEvent(activity, "Rating", "Done", "No");
             }
         });
 
@@ -224,6 +227,9 @@ public class AlertManager {
                 CommonModel.skipToGrade(activity);
 
                 alertDialog.dismiss();
+
+                // Umeng
+                UmengManager.sendCountEvent(activity, "Rating", "Done", "Yes");
             }
         });
 
@@ -239,6 +245,9 @@ public class AlertManager {
                 agent.startFeedbackActivity();
 
                 alertDialog.dismiss();
+
+                // Umeng
+                UmengManager.sendCountEvent(activity, "Rating", "Done", "No");
             }
         });
 
