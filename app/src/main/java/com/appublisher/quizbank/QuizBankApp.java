@@ -8,9 +8,6 @@ import android.content.pm.PackageManager;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.utils.OpenUDID_manager;
 import com.networkbench.agent.impl.NBSAppAgent;
-import com.parse.Parse;
-import com.parse.ParseInstallation;
-import com.parse.ParsePush;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -40,12 +37,6 @@ public class QuizBankApp extends Application{
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
-        // Parse
-        Parse.initialize(this, getString(R.string.parse_applicationid),
-                getString(R.string.parse_clientkey));
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-        ParsePush.subscribeInBackground("");
 
         // TalkingData
         TCAgent.init(this);

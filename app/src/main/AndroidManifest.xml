@@ -41,25 +41,6 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="B3547418bc3eb81c55baa59a8fb16975" />
 
-        <!-- Parse -->
-        <service android:name="com.parse.PushService" />
-
-        <receiver android:name="com.parse.ParseBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.parse.push.intent.RECEIVE" />
-                <action android:name="com.parse.push.intent.DELETE" />
-                <action android:name="com.parse.push.intent.OPEN" />
-            </intent-filter>
-        </receiver>
-
         <!-- 友盟反馈 -->
         <activity android:name="com.umeng.fb.ConversationActivity" />
 

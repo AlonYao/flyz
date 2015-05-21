@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,7 +34,6 @@ import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
-import com.parse.ParsePush;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
@@ -126,18 +124,6 @@ public class SettingFragment extends Fragment{
             @SuppressLint("CommitPrefEdits")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
-                if (isChecked) {
-                    // 执行选中动作
-                    ParsePush.subscribeInBackground("");
-                    editor.putBoolean("isPushOpen", true);
-                } else {
-                    // 执行取消选中动作
-                    ParsePush.unsubscribeInBackground("");
-                    editor.putBoolean("isPushOpen", false);
-                }
-                editor.commit();
-
                 // Umeng
                 mUmengRemind = "1";
             }
