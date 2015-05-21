@@ -356,7 +356,9 @@ public class LoginModel {
     @SuppressLint("CommitPrefEdits")
     public static void cleanLocalData() {
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
-        editor.clear();
+        editor.putString("user_id", "");
+        editor.putString("user_token", "");
+        editor.putBoolean("is_login", false);
         editor.commit();
     }
 
