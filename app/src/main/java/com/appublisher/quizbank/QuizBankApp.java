@@ -27,7 +27,7 @@ public class QuizBankApp extends Application{
     public void onCreate() {
         super.onCreate();
 
-        MobclickAgent.setDebugMode(true);
+//        MobclickAgent.setDebugMode(true);
 
         // 获取版本号
         try {

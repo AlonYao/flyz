@@ -12,7 +12,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
-import com.appublisher.quizbank.utils.Logger;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
@@ -106,9 +105,6 @@ public class BaseRequest {
      * @param type 	请求的数据类型：array | object | plaintext
      */
     protected void asyncRequest(final String url, final String name, String type) {
-
-        Logger.i(url);
-
         switch (type) {
             case "object": {
                 JsonObjectRequest request = new JsonObjectRequest(url, null,
@@ -203,10 +199,6 @@ public class BaseRequest {
      * @param type		请求的数据类型：array | object | plaintext
      */
     public void postRequest(final String url, final Map<String, String> params, final String name, String type) {
-
-        Logger.i(url);
-        Logger.i(params.toString());
-
         switch (type) {
             case "object": {
                 buildMultipartEntity(params);
