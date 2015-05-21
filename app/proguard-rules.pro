@@ -92,3 +92,6 @@
 # TalkingData
 -keep public class com.tendcloud.tenddata.** { public protected *;}
 -dontwarn com.tendcloud.tenddata.**
+
+# picasso
+-dontwarn com.squareup.okhttp.**
