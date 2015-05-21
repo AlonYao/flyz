@@ -16,6 +16,7 @@ import com.appublisher.quizbank.model.FavoriteModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -59,6 +60,9 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
 
         // Umeng
         MobclickAgent.onPageStart("FavoriteFragment");
+
+        // TalkingData
+        TCAgent.onPageStart(mActivity, "FavoriteFragment");
     }
 
     @Override
@@ -66,6 +70,9 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
         super.onPause();
         // Umeng
         MobclickAgent.onPageEnd("FavoriteFragment");
+
+        // TalkingData
+        TCAgent.onPageEnd(mActivity, "FavoriteFragment");
     }
 
     @Override

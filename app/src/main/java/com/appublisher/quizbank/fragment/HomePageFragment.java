@@ -34,6 +34,7 @@ import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -131,6 +132,9 @@ public class HomePageFragment extends Fragment implements RequestCallback{
 
         // Umeng
         MobclickAgent.onPageStart("HomePageFragment");
+
+        // TalkingData
+        TCAgent.onPageStart(mActivity, "HomePageFragment");
     }
 
     @Override
@@ -138,6 +142,9 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         super.onPause();
         // Umeng
         MobclickAgent.onPageEnd("HomePageFragment");
+
+        // TalkingData
+        TCAgent.onPageEnd(mActivity, "HomePageFragment");
     }
 
     /**

@@ -38,6 +38,7 @@ import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -122,6 +123,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         // Umeng
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -132,6 +136,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         // Umeng
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

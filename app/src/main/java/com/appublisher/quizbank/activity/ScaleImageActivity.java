@@ -9,6 +9,7 @@ import android.view.Window;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.network.Request;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import uk.co.senab.photoview.PhotoView;
@@ -47,6 +48,9 @@ public class ScaleImageActivity extends Activity{
 		// Umeng
 		MobclickAgent.onPageStart("ScaleImageActivity");
 		MobclickAgent.onResume(this);
+
+		// TalkingData
+		TCAgent.onResume(this);
 	}
 
 	@Override
@@ -55,5 +59,8 @@ public class ScaleImageActivity extends Activity{
 		// Umeng
 		MobclickAgent.onPageEnd("ScaleImageActivity");
 		MobclickAgent.onPause(this);
+
+		// TalkingData
+		TCAgent.onPause(this);
 	}
 }

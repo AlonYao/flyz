@@ -24,6 +24,7 @@ import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -119,6 +120,9 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         // Umeng
         MobclickAgent.onPageStart("AnswerSheetActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -127,6 +131,9 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         // Umeng
         MobclickAgent.onPageEnd("AnswerSheetActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     /**

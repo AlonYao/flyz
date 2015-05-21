@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -65,6 +66,9 @@ public class NoticeDetailActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageStart("NoticeDetailActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -73,6 +77,9 @@ public class NoticeDetailActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageEnd("NoticeDetailActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

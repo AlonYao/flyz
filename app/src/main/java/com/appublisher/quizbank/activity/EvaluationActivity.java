@@ -15,6 +15,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.db.chart.view.LineChartView;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -76,6 +77,9 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         // Umeng
         MobclickAgent.onPageStart("EvaluationActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -84,6 +88,9 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         // Umeng
         MobclickAgent.onPageEnd("EvaluationActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

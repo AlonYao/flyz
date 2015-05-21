@@ -38,6 +38,7 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -205,6 +206,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         super.onResume();
         // Umeng
         MobclickAgent.onPageStart("WholePageFragment");
+
+        // TalkingData
+        TCAgent.onPageStart(mActivity, "WholePageFragment");
     }
 
     @Override
@@ -212,6 +216,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         super.onPause();
         // Umeng
         MobclickAgent.onPageEnd("WholePageFragment");
+
+        // TalkingData
+        TCAgent.onPageEnd(mActivity, "WholePageFragment");
     }
 
     /**

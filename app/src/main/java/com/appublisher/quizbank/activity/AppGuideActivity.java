@@ -42,6 +42,7 @@ public class AppGuideActivity extends Activity {
         // Umeng
         MobclickAgent.onPageStart("AppGuideActivity");
         MobclickAgent.onResume(this);
+
         TCAgent.onResume(this);
     }
 
@@ -51,6 +52,7 @@ public class AppGuideActivity extends Activity {
         // Umeng
         MobclickAgent.onPageEnd("AppGuideActivity");
         MobclickAgent.onPause(this);
+
         TCAgent.onPause(this);
     }
 

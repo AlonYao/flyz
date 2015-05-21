@@ -19,6 +19,7 @@ import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -149,6 +150,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         // Umeng
         MobclickAgent.onPageStart("PracticeReportActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -160,6 +164,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         // Umeng
         MobclickAgent.onPageEnd("PracticeReportActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

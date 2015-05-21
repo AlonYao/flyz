@@ -18,6 +18,7 @@ import com.appublisher.quizbank.model.netdata.notice.NoticeM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -74,6 +75,9 @@ public class SystemNoticeActivity extends ActionBarActivity implements
         // Umeng
         MobclickAgent.onPageStart("SystemNoticeActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -82,6 +86,9 @@ public class SystemNoticeActivity extends ActionBarActivity implements
         // Umeng
         MobclickAgent.onPageEnd("SystemNoticeActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

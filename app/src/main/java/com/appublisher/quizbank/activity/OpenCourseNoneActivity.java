@@ -13,6 +13,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.OpenCourseModel;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
@@ -67,6 +68,9 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageStart("OpenCourseNoneActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -75,6 +79,9 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageEnd("OpenCourseNoneActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

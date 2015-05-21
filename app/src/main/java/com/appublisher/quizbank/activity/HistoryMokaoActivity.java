@@ -19,6 +19,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -54,6 +55,9 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         // Umeng
         MobclickAgent.onPageStart("HistoryMokaoActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -62,6 +66,9 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         // Umeng
         MobclickAgent.onPageEnd("HistoryMokaoActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -78,6 +79,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         // Umeng
         MobclickAgent.onPageStart("AnswerSheetActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -86,6 +90,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         // Umeng
         MobclickAgent.onPageEnd("AnswerSheetActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

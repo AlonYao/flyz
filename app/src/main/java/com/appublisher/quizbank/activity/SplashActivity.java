@@ -14,6 +14,7 @@ import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -84,6 +85,9 @@ public class SplashActivity extends Activity {
         // Umeng
         MobclickAgent.onPageStart("SplashActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -92,5 +96,8 @@ public class SplashActivity extends Activity {
         // Umeng
         MobclickAgent.onPageEnd("SplashActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 }

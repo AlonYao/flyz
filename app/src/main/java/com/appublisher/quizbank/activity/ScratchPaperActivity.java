@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.PaintView;
 import com.appublisher.quizbank.model.CommonModel;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -41,6 +42,9 @@ public class ScratchPaperActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageStart("ScratchPaperActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -49,6 +53,9 @@ public class ScratchPaperActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageEnd("ScratchPaperActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

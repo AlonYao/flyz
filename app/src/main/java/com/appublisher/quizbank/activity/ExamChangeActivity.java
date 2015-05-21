@@ -28,6 +28,7 @@ import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -82,6 +83,9 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
         // Umeng
         MobclickAgent.onPageStart("ExamChangeActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -109,6 +113,9 @@ public class ExamChangeActivity extends ActionBarActivity implements RequestCall
         // Umeng
         MobclickAgent.onPageEnd("ExamChangeActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

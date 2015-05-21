@@ -21,6 +21,7 @@ import com.appublisher.quizbank.model.netdata.globalsettings.ExerciseIntroM;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -111,6 +112,9 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageStart("PracticeDescriptionActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -119,6 +123,9 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         // Umeng
         MobclickAgent.onPageEnd("PracticeDescriptionActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

@@ -34,6 +34,7 @@ import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
@@ -228,6 +229,9 @@ public class SettingFragment extends Fragment{
 
         // Umeng
         MobclickAgent.onPageStart("SettingFragment");
+
+        // TalkingData
+        TCAgent.onPageStart(mActivity, "SettingFragment");
     }
 
     @Override
@@ -235,6 +239,9 @@ public class SettingFragment extends Fragment{
         super.onPause();
         // Umeng
         MobclickAgent.onPageEnd("SettingFragment");
+
+        // TalkingData
+        TCAgent.onPageEnd(mActivity, "SettingFragment");
     }
 
     @Override

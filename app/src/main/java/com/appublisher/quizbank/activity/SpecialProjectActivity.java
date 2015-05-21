@@ -12,6 +12,7 @@ import com.appublisher.quizbank.model.SpecialProjectModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -46,6 +47,9 @@ public class SpecialProjectActivity extends ActionBarActivity implements Request
         // Umeng
         MobclickAgent.onPageStart("SpecialProjectActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -54,6 +58,9 @@ public class SpecialProjectActivity extends ActionBarActivity implements Request
         // Umeng
         MobclickAgent.onPageEnd("SpecialProjectActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

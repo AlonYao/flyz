@@ -14,6 +14,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -48,6 +49,9 @@ public class QaActivity extends ActionBarActivity implements RequestCallback{
         // Umeng
         MobclickAgent.onPageStart("QaActivity");
         MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
     }
 
     @Override
@@ -56,6 +60,9 @@ public class QaActivity extends ActionBarActivity implements RequestCallback{
         // Umeng
         MobclickAgent.onPageEnd("QaActivity");
         MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override

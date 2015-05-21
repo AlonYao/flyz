@@ -21,6 +21,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -68,6 +69,9 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
         // Umeng
         MobclickAgent.onPageStart("WrongQuestionsFragment");
+
+        // TalkingData
+        TCAgent.onPageStart(mActivity, "WrongQuestionsFragment");
     }
 
     @Override
@@ -75,6 +79,9 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
         super.onPause();
         // Umeng
         MobclickAgent.onPageEnd("WrongQuestionsFragment");
+
+        // TalkingData
+        TCAgent.onPageEnd(mActivity, "WrongQuestionsFragment");
     }
 
     /**

@@ -19,6 +19,7 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -87,6 +88,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         // Umeng
         mUmengAction = "0";
         MobclickAgent.onPageStart("StudyRecordFragment");
+
+        // TalkingData
+        TCAgent.onPageStart(mActivity, "StudyRecordFragment");
     }
 
     @Override
@@ -95,6 +99,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         // Umeng
         UmengManager.sendCountEvent(mActivity, "Record", "Action", mUmengAction);
         MobclickAgent.onPageEnd("StudyRecordFragment");
+
+        // TalkingData
+        TCAgent.onPageEnd(mActivity, "StudyRecordFragment");
     }
 
     @Override
