@@ -19,7 +19,7 @@
             <!-- 头像&估分&排名 -->
             <LinearLayout
                 android:id="@+id/homepage_evaluation"
-                android:layout_width="293dp"
+                android:layout_width="295dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
@@ -213,7 +213,7 @@
             <!-- 快速练习 -->
             <TextView
                 android:id="@+id/homepage_zhiboke"
-                android:layout_width="288dp"
+                android:layout_width="295dp"
                 android:layout_height="66dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="15dp"
