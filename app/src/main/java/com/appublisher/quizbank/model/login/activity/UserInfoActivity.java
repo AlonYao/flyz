@@ -126,7 +126,8 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
                 } else {
                     // 微博 设置新浪SSO handler
                     mController.getConfig().setSsoHandler(new SinaSsoHandler());
-                    mController.getConfig().setSinaCallbackUrl("http://www.sina.com");
+                    mController.getConfig().setSinaCallbackUrl(
+                            "http://sns.whalecloud.com/sina2/callback");
                     mBtnWeibo.setOnClickListener(userInfoSetModel.weiboOnClick);
                 }
 

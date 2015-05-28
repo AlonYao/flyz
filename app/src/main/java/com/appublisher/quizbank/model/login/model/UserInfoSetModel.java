@@ -52,7 +52,7 @@ public class UserInfoSetModel {
                                         @Override
                                         public void onComplete(int status, Map<String, Object> info) {
                                             if(status == 200 && info != null){
-                                                String login_id = info.get("openid").toString();
+                                                String login_id = info.get("unionid").toString();
                                                 mActivity.mRequest.authHandle(ParamBuilder.authHandle(
                                                         "2",
                                                         "add",
