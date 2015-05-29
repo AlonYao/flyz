@@ -278,6 +278,7 @@ public class OpenCourseModel {
         String url="mqqwpa://im/chat?chat_type=wpa&uin=" + qq;
 
         try {
+            if (activity instanceof WebViewActivity) ((WebViewActivity) activity).mIsFromQQ = true;
             activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         } catch (ActivityNotFoundException e) {
             ToastManager.showToast(activity, "您未安装手机QQ，请到应用市场下载……");

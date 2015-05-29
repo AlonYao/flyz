@@ -23,6 +23,7 @@ import com.appublisher.quizbank.model.CommonModel;
 import com.appublisher.quizbank.model.OpenCourseModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -43,6 +44,8 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     private RelativeLayout mProgressBar;
     private WebView mWebView;
     private String mFrom;
+    private String mUrl;
+    private HomeWatcher mHomeWatcher;
     private static Request mRequest;
     private static String mOpencourseId;
 
@@ -55,6 +58,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     public TextView mTvOpenCourseConsult;
     public Timer mTimer;
     public boolean mHasShowOpenCourseConsult;
+    public boolean mIsFromQQ;
 
     public static final int TIME_ON = 10;
 
@@ -101,26 +105,49 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mRequest = new Request(this, this);
         mHasShowOpenCourseConsult = false;
         mUmengQQ = "0";
+        mHomeWatcher = new HomeWatcher(this);
+        mIsFromQQ = false;
 
         // 获取数据
-        String url = getIntent().getStringExtra("url");
+        mUrl = getIntent().getStringExtra("url");
         mFrom = getIntent().getStringExtra("from");
         mOpencourseId = getIntent().getStringExtra("content");
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
         if (mUmengTimestamp == 0) mUmengTimestamp = System.currentTimeMillis();
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
-
-        if ("opencourse_started".equals(mFrom)) {
-            ProgressDialogManager.showProgressDialog(this, true);
-            mRequest.getOpenCourseUrl(mOpencourseId);
-        } else {
-            showWebView(url);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Load Url
+        if (!mIsFromQQ) {
+            if ("opencourse_started".equals(mFrom)) {
+                ProgressDialogManager.showProgressDialog(this, true);
+                mRequest.getOpenCourseUrl(mOpencourseId);
+            } else {
+                showWebView(mUrl);
+            }
+        }
+
+        // 重置状态
+        mIsFromQQ = false;
+
+        // Home键监听
+        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+
+            @Override
+            public void onHomePressed() {
+                if (mWebView != null) mWebView.loadUrl("");
+            }
+
+            @Override
+            public void onHomeLongPressed() {
+                // Do Nothing
+            }
+        });
+        mHomeWatcher.startWatch();
+
         // Umeng
         MobclickAgent.onPageStart("WebViewActivity");
         MobclickAgent.onResume(this);
@@ -132,6 +159,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     @Override
     protected void onPause() {
         super.onPause();
+        // Home键监听
+        mHomeWatcher.stopWatch();
+
         // Umeng
         MobclickAgent.onPageEnd("WebViewActivity");
         MobclickAgent.onPause(this);
@@ -157,8 +187,13 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             mTimer = null;
         }
 
-        // 销毁Webview
         mWebView.destroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mWebView != null) mWebView.loadUrl("");
+        super.onBackPressed();
     }
 
     @Override
@@ -184,6 +219,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            if (mWebView != null) mWebView.loadUrl("");
             finish();
         } else if ("刷新".equals(item.getTitle())) {
             mWebView.reload();
@@ -224,6 +260,8 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
      */
     @SuppressLint("SetJavaScriptEnabled")
     public void showWebView(String url) {
+        if (url == null) return;
+
         mProgressBar.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.loadUrl(url);
