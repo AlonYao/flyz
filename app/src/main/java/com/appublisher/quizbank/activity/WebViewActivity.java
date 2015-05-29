@@ -156,6 +156,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             mTimer.cancel();
             mTimer = null;
         }
+
+        // 销毁Webview
+        mWebView.destroy();
     }
 
     @Override
