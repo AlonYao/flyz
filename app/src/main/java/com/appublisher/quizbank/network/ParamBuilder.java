@@ -302,7 +302,7 @@ public class ParamBuilder implements ApiConstants {
      * @return 参数Map
      */
     public static Map<String, String> bookOpenCourse(String course_id) {
-        Map<String, String> params = new Hashtable<>();
+        Map<String, String> params = new HashMap<>();
         params.put("course_id", course_id);
         return params;
     }
