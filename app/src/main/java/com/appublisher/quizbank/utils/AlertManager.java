@@ -470,4 +470,39 @@ public class AlertManager {
                         })
                 .create().show();
     }
+
+    /**
+     * 报告错题Alert
+     * @param activity MeasureAnalysisActivity
+     * @param type 类型
+     */
+    public static void reportErrorAlert(final Activity activity,
+                                        final String type,
+                                        final int curQuestionId) {
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.alert_report_error_content)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_report_error_p,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new Request(activity).reportErrorQuestion(
+                                        ParamBuilder.reportErrorQuestion(
+                                                String.valueOf(curQuestionId), type, ""));
+
+                                ToastManager.showToast(activity, "提交成功");
+
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_answersheet_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
+    }
 }

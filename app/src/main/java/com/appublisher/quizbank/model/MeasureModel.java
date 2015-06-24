@@ -462,6 +462,9 @@ public class MeasureModel {
             public void onPageSelected(int position) {
                 saveQuestionTime(activity);
                 activity.mCurPosition = position;
+
+                // 获取当前题目id
+                getCurQuestionId(activity, position);
             }
 
             @Override
@@ -475,6 +478,24 @@ public class MeasureModel {
             activity.mCurPosition = PaperDAO.getLastPosition(activity.mPaperId);
             activity.mViewPager.setCurrentItem(activity.mCurPosition);
         }
+
+        MeasureModel.getCurQuestionId(activity, 0);
+    }
+
+    /**
+     * 获取当前页面题目的id
+     * @param activity MeasureActivity
+     * @param position 页面位置
+     */
+    public static void getCurQuestionId(MeasureActivity activity, int position) {
+        if (activity.mUserAnswerList == null || position >= activity.mUserAnswerList.size())
+            return;
+
+        HashMap<String, Object> map = activity.mUserAnswerList.get(position);
+
+        if (map == null || !map.containsKey("id")) return;
+
+        activity.mCurQuestionId = (int) map.get("id");
     }
 
     /**

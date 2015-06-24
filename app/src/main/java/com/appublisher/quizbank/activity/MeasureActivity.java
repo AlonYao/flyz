@@ -12,8 +12,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -55,6 +60,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public int mExerciseId;
     public int mHierarchyId;
     public int mHierarchyLevel;
+    public int mCurQuestionId;
     public long mCurTimestamp;
     public boolean mRedo;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
@@ -84,6 +90,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private String mUmengAnswerSheet; // 答题卡
 
     private HomeWatcher mHomeWatcher;
+    private PopupWindow mPopupWindow;
+    private long mPopupDismissTime;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -253,6 +261,12 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(
                 R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
+        MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
+                R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        // 初始化反馈菜单
+        initPopupWindowView();
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -281,6 +295,15 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
             // Umeng
             mUmengDraft = "1";
+        } else if ("反馈".equals(item.getTitle())) {
+            View feedbackMenu = findViewById(item.getItemId());
+
+            // 显示反馈菜单
+            if (mPopupWindow != null && mPopupWindow.isShowing()) {
+                mPopupWindow.dismiss();
+            } else if (System.currentTimeMillis() - mPopupDismissTime > 500) {
+                mPopupWindow.showAsDropDown(feedbackMenu, 0, 12);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -453,6 +476,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 }
 
                 mCurPosition = position;
+
+                MeasureModel.getCurQuestionId(MeasureActivity.this, position);
             }
 
             @Override
@@ -460,6 +485,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
             }
         });
+
+        MeasureModel.getCurQuestionId(MeasureActivity.this, 0);
     }
 
     /**
@@ -558,5 +585,77 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         ProgressDialogManager.closeProgressDialog();
+    }
+
+    /**
+     * 初始化popup菜单
+     */
+    private void initPopupWindowView() {
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(
+                R.layout.measure_analysis_popup_feedback,
+                null, false);
+        mPopupWindow = new PopupWindow(
+                view,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setContentView(view);
+        mPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setFocusable(false);
+        mPopupWindow.setBackgroundDrawable(
+                getResources().getDrawable(R.color.transparency));
+
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                mPopupDismissTime = System.currentTimeMillis();
+            }
+        });
+
+        // 菜单
+        TextView tvImageText = (TextView) view.findViewById(R.id.fb_menu_imagetext);
+        TextView tvAnswerWrong = (TextView) view.findViewById(R.id.fb_menu_answerwrong);
+        TextView tvAnalysisWrong = (TextView) view.findViewById(R.id.fb_menu_analysiswrong);
+        TextView tvBetterAnalysis = (TextView) view.findViewById(R.id.fb_menu_betteranalysis);
+
+        // 图文问题
+        tvImageText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertManager.reportErrorAlert(MeasureActivity.this, "1", mCurQuestionId);
+                mPopupWindow.dismiss();
+            }
+        });
+
+        // 答案问题
+        tvAnswerWrong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertManager.reportErrorAlert(MeasureActivity.this, "2", mCurQuestionId);
+                mPopupWindow.dismiss();
+            }
+        });
+
+        // 解析问题
+        tvAnalysisWrong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertManager.reportErrorAlert(MeasureActivity.this, "3", mCurQuestionId);
+                mPopupWindow.dismiss();
+            }
+        });
+
+        // 其他解析
+        tvBetterAnalysis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MeasureActivity.this, MyAnalysisActivity.class);
+                intent.putExtra("question_id", String.valueOf(mCurQuestionId));
+                startActivity(intent);
+
+                mPopupWindow.dismiss();
+            }
+        });
     }
 }
