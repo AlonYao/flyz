@@ -12,6 +12,8 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
+import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.utils.Logger;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
@@ -59,8 +61,10 @@ public class BaseRequest {
     protected Object syncRequest(String url, String type) {
         if (type.equals("object")) {
             RequestFuture<JSONObject> future = RequestFuture.newFuture();
-            JsonObjectRequest request = new JsonObjectRequest(url, new JSONObject(), future, future);
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            JsonObjectRequest request = new JsonObjectRequest(
+                    url, new JSONObject(), future, future);
+            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             request.setTag(TAG);
             mQueue.add(request);
 
@@ -72,7 +76,8 @@ public class BaseRequest {
         } else {
             RequestFuture<JSONArray> future = RequestFuture.newFuture();
             JsonArrayRequest request = new JsonArrayRequest(url, future, future);
-            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S*1000, RETRY_NUM,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             mQueue.add(request);
 
@@ -105,6 +110,13 @@ public class BaseRequest {
      * @param type 	请求的数据类型：array | object | plaintext
      */
     protected void asyncRequest(final String url, final String name, String type) {
+        if (Globals.IS_DEBUG) {
+            Logger.i("\n======================================="
+                    + "\nGET Url-> " + url
+                    + "\nGET Name-> " + name
+                    + "\nGET Type-> " + type);
+        }
+
         switch (type) {
             case "object": {
                 JsonObjectRequest request = new JsonObjectRequest(url, null,
@@ -117,6 +129,8 @@ public class BaseRequest {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (Globals.IS_DEBUG) Logger.i("\nGET " + name + " resp-> error");
+
                         if (listener != null)
                             listener.requestEndedWithError(error, name);
                     }
@@ -140,7 +154,8 @@ public class BaseRequest {
                         return super.parseNetworkResponse(response);
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 request.setTag(name.isEmpty() ? TAG : name);
                 mQueue.add(request);
 
@@ -157,11 +172,14 @@ public class BaseRequest {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (Globals.IS_DEBUG) Logger.i("\nGET " + name + " resp-> error");
+
                         if (listener != null)
                             listener.requestEndedWithError(error, name);
                     }
                 });
-                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 request.setTag(name.isEmpty() ? TAG : name);
                 mQueue.add(request);
 
@@ -180,7 +198,8 @@ public class BaseRequest {
                             listener.requestEndedWithError(error, name);
                     }
                 });
-                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 request.setTag(name.isEmpty() ? TAG : name);
                 mQueue.add(request);
                 break;
@@ -198,20 +217,35 @@ public class BaseRequest {
      * @param name		回调的接口标识
      * @param type		请求的数据类型：array | object | plaintext
      */
-    public void postRequest(final String url, final Map<String, String> params, final String name, String type) {
+    public void postRequest(final String url, final Map<String, String> params,
+                            final String name, String type) {
+        if (Globals.IS_DEBUG) {
+            Logger.i("\n======================================="
+                    + "\nPOST Url-> " + url
+                    + "\nPOST Name-> " + name
+                    + "\nPOST Type-> " + type
+                    + "\nPOST params-> " + params.toString());
+        }
+
         switch (type) {
             case "object": {
                 buildMultipartEntity(params);
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null,
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                if (Globals.IS_DEBUG)
+                                    Logger.i(response == null ? "\nPOST " + name + " resp-> null"
+                                            : "\nPOST " + name + " resp-> " + response.toString());
+
                                 if (listener != null)
                                     listener.requestCompleted(response, name);
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (Globals.IS_DEBUG) Logger.i("\nPOST " + name + " resp-> error");
+
                         if (listener != null)
                             listener.requestEndedWithError(error, name);
                     }
@@ -226,7 +260,7 @@ public class BaseRequest {
                     /**
                      * Returns the raw POST or PUT body to be sent.
                      *
-                     * @throws com.android.volley.AuthFailureError in the event of auth failure
+                     * @throws AuthFailureError in the event of auth failure
                      */
                     public byte[] getBody() {
                         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -245,7 +279,8 @@ public class BaseRequest {
                         return headers;
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 request.setTag(name.isEmpty() ? TAG : name);
                 mQueue.add(request);
 
@@ -256,6 +291,10 @@ public class BaseRequest {
                         new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
+                                if (Globals.IS_DEBUG)
+                                    Logger.i(response == null ? "\nPOST " + name + " resp-> null"
+                                            : "\nPOST " + name + " resp-> " + response.toString());
+
                                 if (listener != null)
                                     listener.requestCompleted(response, name);
                             }
@@ -263,6 +302,8 @@ public class BaseRequest {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (Globals.IS_DEBUG) Logger.i("\nPOST " + name + " resp-> error");
+
                         if (listener != null)
                             listener.requestEndedWithError(error, name);
                     }
@@ -280,14 +321,16 @@ public class BaseRequest {
                         return headers;
                     }
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 request.setTag(name.isEmpty() ? TAG : name);
                 mQueue.add(request);
 
                 break;
             }
             default: {
-                StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                StringRequest request = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 //			        	listener.requestCompleted(response, name);
@@ -313,7 +356,8 @@ public class BaseRequest {
                     }
 
                 };
-                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_S * 1000, RETRY_NUM,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 request.setTag(name.isEmpty() ? TAG : name);
                 mQueue.add(request);
                 break;
