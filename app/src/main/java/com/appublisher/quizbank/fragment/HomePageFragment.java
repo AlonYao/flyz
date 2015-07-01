@@ -43,7 +43,7 @@ import org.json.JSONObject;
 /**
  * 首页
  */
-public class HomePageFragment extends Fragment implements RequestCallback{
+public class HomePageFragment extends Fragment implements RequestCallback, View.OnClickListener{
 
     private TextView mTvEstimate;
     private TextView mTvRanking;
@@ -53,6 +53,8 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     private LinearLayout mLlSpecial;
     private TextView mTvQuickTest;
     private View mView;
+    private PaperTodayM mTodayExam;
+    private PaperNoteM mNote;
 
     public TextView mTvZhiboke;
     public Activity mActivity;
@@ -94,31 +96,13 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         HomePageModel.setExamCountDown(tvExam);
 
         // 历史模考
-        ivHistoryMokao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, HistoryMokaoActivity.class);
-                startActivity(intent);
-            }
-        });
+        ivHistoryMokao.setOnClickListener(this);
 
         // 能力评估
-        llEvaluation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, EvaluationActivity.class);
-                startActivity(intent);
-            }
-        });
+        llEvaluation.setOnClickListener(this);
 
         // 全部专项
-        ivSpecial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, SpecialProjectActivity.class);
-                startActivity(intent);
-            }
-        });
+        ivSpecial.setOnClickListener(this);
 
         return mView;
     }
@@ -169,81 +153,23 @@ public class HomePageFragment extends Fragment implements RequestCallback{
         PaperM pager = homePageResp.getPaper();
         if (pager != null) {
             // 今日模考
-            final PaperTodayM todayExam = pager.getToday();
-            if (todayExam != null) {
-                mTvTodayExam.setText("已有" + String.valueOf(todayExam.getPersons_num()) + "人参加");
-
-                mLlMokao.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (todayExam.getId() == 0) {
-                            ToastManager.showToast(mActivity, "今日暂时没有模考……");
-                            return;
-                        }
-
-                        String status = todayExam.getStatus();
-
-                        if ("done".equals(status)) {
-                            // 跳转至练习报告页面
-                            Intent intent = new Intent(mActivity, PracticeReportActivity.class);
-                            intent.putExtra("exercise_id", todayExam.getId());
-                            intent.putExtra("paper_type", "mokao");
-                            intent.putExtra("from", "mokao_homepage");
-                            startActivity(intent);
-
-                        } else {
-                            Intent intent =
-                                    new Intent(mActivity, PracticeDescriptionActivity.class);
-                            intent.putExtra("paper_id", todayExam.getId());
-                            intent.putExtra("paper_type", "mokao");
-                            intent.putExtra("paper_name", "今日模考");
-                            intent.putExtra("umeng_entry", "Home");
-
-                            if ("fresh".equals(status)) {
-                                intent.putExtra("redo", false);
-                            } else {
-                                intent.putExtra("redo", true);
-                            }
-
-                            startActivity(intent);
-                        }
-                    }
-                });
+            mTodayExam = pager.getToday();
+            if (mTodayExam != null) {
+                mTvTodayExam.setText("已有" + String.valueOf(
+                        mTodayExam.getPersons_num()) + "人参加");
+                mLlMokao.setOnClickListener(this);
             }
 
             // 推荐专项训练
-            final PaperNoteM note = pager.getNote();
-            if (note != null) {
-                mTvSpecial.setText("推荐："  + note.getName());
-
-                mLlSpecial.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
-                        intent.putExtra("hierarchy_id", note.getId());
-                        intent.putExtra("hierarchy_level", 3);
-                        intent.putExtra("paper_type", "note");
-                        intent.putExtra("note_type", "all");
-                        intent.putExtra("paper_name", note.getName());
-                        intent.putExtra("redo", false);
-                        intent.putExtra("umeng_entry", "Home");
-                        startActivity(intent);
-                    }
-                });
+            mNote = pager.getNote();
+            if (mNote != null) {
+                mTvSpecial.setText("推荐："  + mNote.getName());
+                mLlSpecial.setOnClickListener(this);
             }
         }
 
         // 快速练习
-        mTvQuickTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
-                intent.putExtra("paper_type", "auto");
-                intent.putExtra("paper_name", "快速智能练习");
-                intent.putExtra("umeng_entry", "Home");
-                startActivity(intent);
-            }
-        });
+        mTvQuickTest.setOnClickListener(this);
 
         // 公开课
         Globals.live_course = homePageResp.getLive_course();
@@ -279,5 +205,86 @@ public class HomePageFragment extends Fragment implements RequestCallback{
     public void requestEndedWithError(VolleyError error, String apiName) {
         ToastManager.showToast(mActivity, getString(R.string.netdata_overtime));
         ProgressBarManager.hideProgressBar();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.homepage_history:
+                // 历史模考
+                Intent intent = new Intent(mActivity, HistoryMokaoActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.homepage_evaluation:
+                // 能力评估
+                intent = new Intent(mActivity, EvaluationActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.homepage_special:
+                // 全部专项
+                intent = new Intent(mActivity, SpecialProjectActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.homepage_todayexam_ll:
+                // 今日模考
+                if (mTodayExam == null || mTodayExam.getId() == 0) {
+                    ToastManager.showToast(mActivity, "今日暂时没有模考……");
+                    break;
+                }
+
+                String status = mTodayExam.getStatus();
+
+                if ("done".equals(status)) {
+                    // 跳转至练习报告页面
+                    intent = new Intent(mActivity, PracticeReportActivity.class);
+                    intent.putExtra("exercise_id", mTodayExam.getId());
+                    intent.putExtra("paper_type", "mokao");
+                    intent.putExtra("from", "mokao_homepage");
+                    startActivity(intent);
+
+                } else {
+                    intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+                    intent.putExtra("paper_id", mTodayExam.getId());
+                    intent.putExtra("paper_type", "mokao");
+                    intent.putExtra("paper_name", "今日模考");
+                    intent.putExtra("umeng_entry", "Home");
+
+                    if ("fresh".equals(status)) {
+                        intent.putExtra("redo", false);
+                    } else {
+                        intent.putExtra("redo", true);
+                    }
+
+                    startActivity(intent);
+                }
+
+                break;
+
+            case R.id.homepage_special_ll:
+                // 推荐专项
+                if (mNote == null || mNote.getId() == 0) break;
+                intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+                intent.putExtra("hierarchy_id", mNote.getId());
+                intent.putExtra("hierarchy_level", 3);
+                intent.putExtra("paper_type", "note");
+                intent.putExtra("note_type", "all");
+                intent.putExtra("paper_name", mNote.getName());
+                intent.putExtra("redo", false);
+                intent.putExtra("umeng_entry", "Home");
+                startActivity(intent);
+                break;
+
+            case R.id.homepage_quicktest:
+                // 快速智能练习
+                intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+                intent.putExtra("paper_type", "auto");
+                intent.putExtra("paper_name", "快速智能练习");
+                intent.putExtra("umeng_entry", "Home");
+                startActivity(intent);
+                break;
+        }
     }
 }
