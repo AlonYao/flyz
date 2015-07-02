@@ -10,7 +10,7 @@ import com.appublisher.quizbank.model.netdata.homepage.LiveCourseM;
 public class Globals {
 
     // 调试模式
-    public static final boolean IS_DEBUG = true;
+    public static final boolean IS_DEBUG = false;
 
     // 版本号
     public static String appVersion;
