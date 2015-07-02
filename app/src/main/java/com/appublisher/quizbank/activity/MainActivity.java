@@ -25,6 +25,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.SettingFragment;
@@ -47,16 +48,19 @@ import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity implements RequestCallback{
 
-    private DrawerLayout mDrawerLayout;
+    /** Fragment **/
     private FragmentManager mFragmentManager;
     private HomePageFragment mHomePageFragment;
     private WholePageFragment mWholePageFragment;
+    private CourseFragment mCourseFragment;
     private WrongQuestionsFragment mWrongQuestionsFragment;
     private FavoriteFragment mFavoriteFragment;
     private StudyRecordFragment mStudyRecordFragment;
     private SettingFragment mSettingFragment;
-    private boolean mDoubleBackToExit;
     private Fragment mCurFragment;
+
+    private DrawerLayout mDrawerLayout;
+    private boolean mDoubleBackToExit;
 
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
@@ -254,6 +258,23 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 break;
 
             case 2:
+                // 课程中心
+                if (mCourseFragment == null) {
+                    // 如果Fragment为空，则创建一个并添加到界面上
+                    mCourseFragment = new CourseFragment();
+                    transaction.add(R.id.drawer_frame, mCourseFragment);
+                } else {
+                    // 如果Fragment不为空，则直接将它显示出来
+                    transaction.show(mCourseFragment);
+                }
+
+                getSupportActionBar().setTitle(R.string.drawer_course);
+
+                mCurFragment = mCourseFragment;
+
+                break;
+
+            case 3:
                 // 错题本
                 if (mWrongQuestionsFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
@@ -270,7 +291,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
                 break;
 
-            case 3:
+            case 4:
                 // 收藏夹
                 if (mFavoriteFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
@@ -287,7 +308,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
                 break;
 
-            case 4:
+            case 5:
                 // 学习记录
                 if (mStudyRecordFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
@@ -304,7 +325,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
                 break;
 
-            case 5:
+            case 6:
                 // 设置
                 if (mSettingFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
@@ -337,33 +358,34 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
      * @param transaction 用于对Fragment执行操作的事务
      */
     private void hideFragments(FragmentTransaction transaction) {
+        // 首页
         if (mHomePageFragment != null) {
             transaction.hide(mHomePageFragment);
             transaction.remove(mHomePageFragment);
             mHomePageFragment = null;
         }
 
-        if (mWholePageFragment != null) {
-            transaction.hide(mWholePageFragment);
-        }
+        // 真题演练
+        if (mWholePageFragment != null) transaction.hide(mWholePageFragment);
 
-        if (mWrongQuestionsFragment != null) {
-            transaction.hide(mWrongQuestionsFragment);
-        }
+        // 课程中心
+        if (mCourseFragment != null) transaction.hide(mCourseFragment);
 
-        if (mFavoriteFragment != null) {
-            transaction.hide(mFavoriteFragment);
-        }
+        // 错题本
+        if (mWrongQuestionsFragment != null) transaction.hide(mWrongQuestionsFragment);
 
+        // 收藏夹
+        if (mFavoriteFragment != null) transaction.hide(mFavoriteFragment);
+
+        // 学习记录
         if (mStudyRecordFragment != null) {
             transaction.hide(mStudyRecordFragment);
             transaction.remove(mStudyRecordFragment);
             mStudyRecordFragment = null;
         }
 
-        if (mSettingFragment != null) {
-            transaction.hide(mSettingFragment);
-        }
+        // 设置
+        if (mSettingFragment != null) transaction.hide(mSettingFragment);
     }
 
     @Override

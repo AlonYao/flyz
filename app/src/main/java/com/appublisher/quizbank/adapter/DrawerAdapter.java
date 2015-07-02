@@ -26,6 +26,7 @@ public class DrawerAdapter extends BaseAdapter{
     private int[] mItemNames = new int[] {
             R.string.drawer_homepage,
             R.string.drawer_wholepage,
+            R.string.drawer_course,
             R.string.drawer_wrong,
             R.string.drawer_store,
             R.string.drawer_record,
@@ -34,6 +35,7 @@ public class DrawerAdapter extends BaseAdapter{
 
     private int[] mItemImgs = new int[] {
             R.drawable.drawer_homepage,
+            R.drawable.drawer_wholepage,
             R.drawable.drawer_wholepage,
             R.drawable.drawer_wrong,
             R.drawable.drawer_store,
@@ -83,7 +85,7 @@ public class DrawerAdapter extends BaseAdapter{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (position != 6) {
+        if (position != mItemNames.length) {
             viewHolder.ivItem.setImageResource(mItemImgs[position]);
             viewHolder.tvItem.setText(mItemNames[position]);
 
@@ -99,7 +101,7 @@ public class DrawerAdapter extends BaseAdapter{
         // 判断设置按钮是否显示红点
         GlobalSetting globalSetting = GlobalSettingDAO.findById();
 
-        if (position == 5
+        if (position == mItemNames.length - 1
                 && globalSetting != null
                 && globalSetting.latest_notify != Globals.last_notice_id
                 && Globals.last_notice_id != 0) {
