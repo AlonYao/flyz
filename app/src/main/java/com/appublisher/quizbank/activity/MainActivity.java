@@ -108,7 +108,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         // 默认选中首页
-        changeFragment(0);
+        if (savedInstanceState == null) changeFragment(0);
 
         // 获取全局配置
         new Request(this, this).getGlobalSettings();
