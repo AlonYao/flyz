@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.PaintView;
-import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 

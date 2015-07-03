@@ -10,7 +10,7 @@ import android.os.Handler;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
-import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.utils.UmengManager;

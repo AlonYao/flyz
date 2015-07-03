@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.UserDAO;
-import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.model.netdata.CommonResponseModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;

@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.CommonModel;
-import com.appublisher.quizbank.model.PracticeReportModel;
+import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;

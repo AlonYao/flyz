@@ -224,6 +224,15 @@ public class Request extends BaseRequest implements ApiConstants{
                 "open_course_consult", "object");
     }
 
+    /** 课程中心 **/
+
+    /**
+     * 获取课程标签
+     */
+    public void getCourseFilterTag() {
+        asyncRequest(ParamBuilder.finalUrl(getCourseFilterTag), "course_filter_tag", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

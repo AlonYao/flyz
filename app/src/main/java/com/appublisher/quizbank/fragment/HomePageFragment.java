@@ -20,7 +20,7 @@ import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
-import com.appublisher.quizbank.model.HomePageModel;
+import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;

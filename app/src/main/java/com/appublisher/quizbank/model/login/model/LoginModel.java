@@ -33,7 +33,6 @@ import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
-import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -271,11 +270,7 @@ public class LoginModel {
      * @return 用户id
      */
     public static String getUserId() {
-        if (Utils.isGuest()) {
-            return Globals.sharedPreferences.getString("guest_id", "");
-        } else {
-            return Globals.sharedPreferences.getString("user_id", "");
-        }
+        return Globals.sharedPreferences.getString("user_id", "");
     }
 
     /**

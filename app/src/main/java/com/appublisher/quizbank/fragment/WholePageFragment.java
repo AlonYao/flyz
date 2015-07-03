@@ -26,7 +26,7 @@ import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
 import com.appublisher.quizbank.adapter.YearGvAdapter;
 import com.appublisher.quizbank.customui.XListView;
-import com.appublisher.quizbank.model.WholePageModel;
+import com.appublisher.quizbank.model.business.WholePageModel;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;

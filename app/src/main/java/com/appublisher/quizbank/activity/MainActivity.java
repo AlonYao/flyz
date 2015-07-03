@@ -32,7 +32,7 @@ import com.appublisher.quizbank.fragment.SettingFragment;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
-import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;

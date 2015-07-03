@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.CommonModel;
-import com.appublisher.quizbank.model.EvaluationModel;
+import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.EvaluationModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;

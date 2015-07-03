@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model;
+package com.appublisher.quizbank.model.business;
 
 import android.graphics.Color;
 import android.view.View;

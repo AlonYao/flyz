@@ -23,7 +23,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.dao.UserDAO;
-import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;

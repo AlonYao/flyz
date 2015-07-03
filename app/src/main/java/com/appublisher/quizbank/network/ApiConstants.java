@@ -117,6 +117,9 @@ public interface ApiConstants {
     // 设置页面QA
     String getQa = baseUrl + "quizbank/get_qa";
 
+    /** 课程中心 **/
+    String getCourseFilterTag = baseUrl + "course/course_filter_tag";
+
     // 图片相关
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

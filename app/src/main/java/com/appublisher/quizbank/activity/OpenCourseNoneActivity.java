@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.CommonModel;
-import com.appublisher.quizbank.model.OpenCourseModel;
+import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;

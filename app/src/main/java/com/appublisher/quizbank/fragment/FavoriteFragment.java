@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.FavoriteModel;
+import com.appublisher.quizbank.model.business.FavoriteModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;

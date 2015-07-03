@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.UserDAO;
-import com.appublisher.quizbank.model.CommonModel;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.UserInfoSetModel;
@@ -329,10 +329,12 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
                     + "/" + LoginModel.getUserId() + "/" + IMAGE_AVATAR);
             BufferedOutputStream bos;
             try {
-                bos = new BufferedOutputStream(new FileOutputStream(tempFile));
-                photo.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                bos.flush();
-                bos.close();
+                if (photo != null) {
+                    bos = new BufferedOutputStream(new FileOutputStream(tempFile));
+                    photo.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                    bos.flush();
+                    bos.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
-import com.appublisher.quizbank.model.MeasureModel;
+import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
 import java.util.HashMap;

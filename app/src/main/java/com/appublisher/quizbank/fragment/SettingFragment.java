@@ -26,7 +26,7 @@ import com.appublisher.quizbank.activity.QaActivity;
 import com.appublisher.quizbank.activity.SystemNoticeActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.UserDAO;
-import com.appublisher.quizbank.model.HomePageModel;
+import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
