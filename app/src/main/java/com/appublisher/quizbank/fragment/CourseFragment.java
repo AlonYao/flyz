@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
@@ -25,11 +26,14 @@ import org.json.JSONObject;
  */
 public class CourseFragment extends Fragment implements RequestCallback{
 
-    private Activity mActivity;
-    private View mMainView;
     private Request mRequest;
     private String mUserId;
+    private View mMainView;
 
+    /** Filter **/
+    public RelativeLayout mRlTag;
+
+    public Activity mActivity;
     public static Gson mGson;
 
     @Override
@@ -51,6 +55,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
                              Bundle savedInstanceState) {
         // view初始化
         mMainView = inflater.inflate(R.layout.fragment_course, container, false);
+        mRlTag = (RelativeLayout) mMainView.findViewById(R.id.course_tag_rl);
 
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);
@@ -73,7 +78,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("course_filter_tag".equals(apiName))
-            CourseModel.dealCourseFilterTagResp(response);
+            CourseModel.dealCourseFilterTagResp(response, this);
         ProgressBarManager.hideProgressBar();
     }
 
