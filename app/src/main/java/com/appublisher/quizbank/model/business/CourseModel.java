@@ -1,11 +1,14 @@
 package com.appublisher.quizbank.model.business;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.FilterCourseTagAdapter;
@@ -25,6 +28,8 @@ public class CourseModel {
     private static PopupWindow mPwTag;
     private static CourseFragment mCourseFragment;
     private static ArrayList<FilterTagM> mFilterTags;
+    private static TextView mTvLastTag;
+    private static int mCurTagId;
 
     /**
      * 处理课程标签回调
@@ -53,13 +58,63 @@ public class CourseModel {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.course_tag_rl:
-                    // Filter课程标签
+                    // Filter：课程标签
                     if (mPwTag == null) initPwTag();
                     mPwTag.showAsDropDown(mCourseFragment.mRlTag, 0, 2);
                     break;
             }
         }
     };
+
+    /**
+     * 课程中心点击事件
+     */
+    private static AdapterView.OnItemClickListener onItemClickListener =
+            new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (parent.getId()) {
+                case R.id.filter_coursetag_gv:
+                    // Popup：课程标签
+                    TextView tvTag = (TextView) view.findViewById(R.id.course_filter_gv_item);
+                    tvTag.setTextColor(Color.WHITE);
+                    tvTag.setBackgroundResource(R.drawable.wholepage_item_all_selected);
+
+                    // 前一个view改变
+                    if (mTvLastTag != null && mTvLastTag != tvTag) {
+                        mTvLastTag.setBackgroundResource(R.drawable.wholepage_item_all);
+                        mTvLastTag.setTextColor(
+                                mCourseFragment.mActivity
+                                        .getResources().getColor(R.color.setting_text));
+                    }
+
+                    mTvLastTag = tvTag;
+
+                    // 记录当前的课程标签
+                    recordCurTag(position, tvTag);
+
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 记录当前课程标签
+     * @param position 位置
+     * @param tvTag 课程标签控件
+     */
+    private static void recordCurTag(int position, TextView tvTag) {
+        if (mFilterTags == null || position >= mFilterTags.size()) return;
+
+        FilterTagM filterTag = mFilterTags.get(position);
+
+        if (filterTag == null) return;
+
+        mCurTagId = filterTag.getId();
+
+        // 更新菜单栏文字
+        tvTag.setText(filterTag.getCategory_name());
+    }
 
     /**
      * 初始化Filter课程标签
@@ -87,6 +142,8 @@ public class CourseModel {
         FilterCourseTagAdapter filterCourseTagAdapter =
                 new FilterCourseTagAdapter(mCourseFragment.mActivity, mFilterTags);
         gvTag.setAdapter(filterCourseTagAdapter);
+
+        gvTag.setOnItemClickListener(onItemClickListener);
 
         mPwTag.update();
     }
