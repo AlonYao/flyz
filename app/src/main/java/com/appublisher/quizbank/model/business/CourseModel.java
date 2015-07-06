@@ -91,7 +91,7 @@ public class CourseModel {
                     mTvLastTag = tvTag;
 
                     // 记录当前的课程标签
-                    recordCurTag(position, tvTag);
+                    recordCurTag(position);
 
                     break;
             }
@@ -101,9 +101,8 @@ public class CourseModel {
     /**
      * 记录当前课程标签
      * @param position 位置
-     * @param tvTag 课程标签控件
      */
-    private static void recordCurTag(int position, TextView tvTag) {
+    private static void recordCurTag(int position) {
         if (mFilterTags == null || position >= mFilterTags.size()) return;
 
         FilterTagM filterTag = mFilterTags.get(position);
@@ -113,7 +112,7 @@ public class CourseModel {
         mCurTagId = filterTag.getId();
 
         // 更新菜单栏文字
-        tvTag.setText(filterTag.getCategory_name());
+        mCourseFragment.mTvFilterTag.setText(filterTag.getCategory_name());
     }
 
     /**

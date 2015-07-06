@@ -20,6 +20,9 @@
             <TextView
                 android:id="@+id/course_tag_tv"
                 style="@style/WholePagePopupMenuTv"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:maxEms="4"
                 android:text="@string/course_filter_all"/>
 
             <ImageView

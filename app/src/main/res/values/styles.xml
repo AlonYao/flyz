@@ -177,7 +177,7 @@
     <style name="WholePagePopupMenuTv">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/setting_text</item>
@@ -187,7 +187,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:layout_marginRight">15dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:src">@drawable/wholepage_arrowdown</item>
     </style>

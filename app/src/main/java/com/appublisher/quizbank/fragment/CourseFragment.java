@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
@@ -32,6 +33,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
 
     /** Filter **/
     public RelativeLayout mRlTag;
+    public TextView mTvFilterTag;
 
     public Activity mActivity;
     public static Gson mGson;
@@ -56,6 +58,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         // view初始化
         mMainView = inflater.inflate(R.layout.fragment_course, container, false);
         mRlTag = (RelativeLayout) mMainView.findViewById(R.id.course_tag_rl);
+        mTvFilterTag = (TextView) mMainView.findViewById(R.id.course_tag_tv);
 
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);
