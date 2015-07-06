@@ -27,16 +27,17 @@ import org.json.JSONObject;
  */
 public class CourseFragment extends Fragment implements RequestCallback{
 
-    private Request mRequest;
     private String mUserId;
     private View mMainView;
 
+    public Activity mActivity;
+    public Request mRequest;
+    public Gson mGson;
+
     /** Filter **/
     public RelativeLayout mRlTag;
+    public RelativeLayout mRlArea;
     public TextView mTvFilterTag;
-
-    public Activity mActivity;
-    public static Gson mGson;
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,6 +60,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mMainView = inflater.inflate(R.layout.fragment_course, container, false);
         mRlTag = (RelativeLayout) mMainView.findViewById(R.id.course_tag_rl);
         mTvFilterTag = (TextView) mMainView.findViewById(R.id.course_tag_tv);
+        mRlArea = (RelativeLayout) mMainView.findViewById(R.id.course_area_rl);
 
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);
@@ -82,16 +84,31 @@ public class CourseFragment extends Fragment implements RequestCallback{
     public void requestCompleted(JSONObject response, String apiName) {
         if ("course_filter_tag".equals(apiName))
             CourseModel.dealCourseFilterTagResp(response, this);
+
+        if ("course_filter_area".equals(apiName))
+            CourseModel.dealCourseFilterAreaResp(response, this);
         ProgressBarManager.hideProgressBar();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
         ProgressBarManager.hideProgressBar();
+
+        if ("course_filter_tag".equals(apiName)) {
+            // 获取课程标签接口异常
+            ProgressBarManager.showProgressBar(mMainView);
+            mRequest.getCourseFilterArea();
+        }
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         ProgressBarManager.hideProgressBar();
+
+        if ("course_filter_tag".equals(apiName)) {
+            // 获取课程标签接口异常
+            ProgressBarManager.showProgressBar(mMainView);
+            mRequest.getCourseFilterArea();
+        }
     }
 }

@@ -233,6 +233,13 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getCourseFilterTag), "course_filter_tag", "object");
     }
 
+    /**
+     * 获取课程地区
+     */
+    public void getCourseFilterArea() {
+        asyncRequest(ParamBuilder.finalUrl(getCourseFilterArea), "course_filter_area", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *
