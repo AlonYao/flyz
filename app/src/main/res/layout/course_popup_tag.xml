@@ -6,26 +6,16 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white">
 
-    <GridView
-        android:id="@+id/wholepage_gv"
+    <include layout="@layout/course_filter_gv"
+        android:id="@+id/filter_coursetag_gv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="18dp"
-        android:paddingRight="18dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:clipToPadding="false"
-        android:numColumns="4"
-        android:gravity="center"
-        android:listSelector="@color/transparency"
-        android:verticalSpacing="15dp">
-    </GridView>
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:id="@+id/wholepage_ll"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@id/wholepage_gv"
+        android:layout_below="@id/filter_coursetag_gv"
         android:orientation="horizontal">
 
         <TextView
