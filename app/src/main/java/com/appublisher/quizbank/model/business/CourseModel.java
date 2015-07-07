@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.FilterCourseTagAdapter;
+import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaResp;
@@ -101,7 +102,8 @@ public class CourseModel {
 
         if (mFilterTags == null || mFilterTags.size() == 0) return;
 
-        GridView gvTag = (GridView) view.findViewById(R.id.filter_coursetag_gv);
+        ExpandableHeightGridView gvTag =
+                (ExpandableHeightGridView) view.findViewById(R.id.filter_course_ehgv);
         gvTag.setNumColumns(2);
 
         FilterCourseTagAdapter filterCourseTagAdapter =
@@ -130,6 +132,17 @@ public class CourseModel {
         mPwArea.setOutsideTouchable(true);
         mPwArea.setBackgroundDrawable(
                 mCourseFragment.mActivity.getResources().getDrawable(R.color.transparency));
+
+        if (mFilterAreas == null || mFilterAreas.size() == 0) return;
+
+        ExpandableHeightGridView gvArea =
+                (ExpandableHeightGridView) view.findViewById(R.id.filter_course_ehgv);
+
+        FilterCourseTagAdapter filterCourseTagAdapter =
+                new FilterCourseTagAdapter(mCourseFragment.mActivity, mFilterTags);
+        gvArea.setAdapter(filterCourseTagAdapter);
+
+        gvArea.setOnItemClickListener(onItemClickListener);
     }
 
     /**
@@ -179,7 +192,7 @@ public class CourseModel {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     switch (parent.getId()) {
-                        case R.id.filter_coursetag_gv:
+                        case R.id.filter_course_ehgv:
                             // Popup：课程标签
                             TextView tvTag = (TextView) view.findViewById(
                                     R.id.course_filter_gv_item);
