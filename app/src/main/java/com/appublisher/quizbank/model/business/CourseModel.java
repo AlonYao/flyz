@@ -35,7 +35,9 @@ public class CourseModel {
     private static ArrayList<FilterTagM> mFilterTags;
     private static ArrayList<FilterAreaM> mFilterAreas;
     private static TextView mTvLastTag;
+    private static TextView mTvLastArea;
     private static int mCurTagId;
+    private static String mCurAreaId;
 
     /**
      * 处理课程标签回调
@@ -124,7 +126,7 @@ public class CourseModel {
         @SuppressLint("InflateParams") View view =
                 LayoutInflater
                         .from(mCourseFragment.mActivity)
-                        .inflate(R.layout.course_popup_tag, null);
+                        .inflate(R.layout.course_popup_area, null);
         mPwArea = new PopupWindow(
                 view,
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -137,7 +139,7 @@ public class CourseModel {
         if (mFilterAreas == null || mFilterAreas.size() == 0) return;
 
         ExpandableHeightGridView gvArea =
-                (ExpandableHeightGridView) view.findViewById(R.id.filter_course_ehgv);
+                (ExpandableHeightGridView) view.findViewById(R.id.course_filter_area_ehgv);
 
         FilterCourseAreaAdapter filterCourseAreaAdapter =
                 new FilterCourseAreaAdapter(mCourseFragment.mActivity, mFilterAreas);
@@ -161,6 +163,23 @@ public class CourseModel {
 
         // 更新菜单栏文字
         mCourseFragment.mTvFilterTag.setText(filterTag.getCategory_name());
+    }
+
+    /**
+     * 记录当前课程地区
+     * @param position 位置
+     */
+    private static void recordCurArea(int position) {
+        if (mFilterAreas == null || position >= mFilterAreas.size()) return;
+
+        FilterAreaM filterArea = mFilterAreas.get(position);
+
+        if (filterArea == null) return;
+
+        mCurAreaId = filterArea.getCode();
+
+        // 更新菜单栏文字
+        mCourseFragment.mTvFilterArea.setText(filterArea.getName());
     }
 
     /**
@@ -189,32 +208,64 @@ public class CourseModel {
      * 课程中心点击事件
      */
     private static AdapterView.OnItemClickListener onItemClickListener =
-            new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    switch (parent.getId()) {
-                        case R.id.filter_course_ehgv:
-                            // Popup：课程标签
-                            TextView tvTag = (TextView) view.findViewById(
-                                    R.id.course_filter_gv_item);
-                            tvTag.setTextColor(Color.WHITE);
-                            tvTag.setBackgroundResource(R.drawable.wholepage_item_all_selected);
+        new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (parent.getId()) {
+                    case R.id.filter_course_ehgv:
+                        // Popup：课程标签
+                        TextView tvTag = (TextView) view.findViewById(R.id.course_filter_gv_item);
+                        setPopupTextViewSelect(tvTag);
 
-                            // 前一个view改变
-                            if (mTvLastTag != null && mTvLastTag != tvTag) {
-                                mTvLastTag.setBackgroundResource(R.drawable.wholepage_item_all);
-                                mTvLastTag.setTextColor(
-                                        mCourseFragment.mActivity
-                                                .getResources().getColor(R.color.setting_text));
-                            }
+                        // 前一个view改变
+                        if (mTvLastTag != null && mTvLastTag != tvTag)
+                            cancelPopupTextViewSelect(mTvLastTag);
 
-                            mTvLastTag = tvTag;
+                        mTvLastTag = tvTag;
 
-                            // 记录当前的课程标签
-                            recordCurTag(position);
+                        // 记录当前的课程标签
+                        recordCurTag(position);
 
-                            break;
-                    }
+                        break;
+
+                    case R.id.course_filter_area_ehgv:
+                        // Popup：课程地区
+                        @SuppressLint("CutPasteId")
+                        TextView tvArea = (TextView) view.findViewById(
+                                R.id.course_filter_gv_item);
+                        setPopupTextViewSelect(tvArea);
+
+                        // 前一个view改变
+                        if (mTvLastArea != null && mTvLastArea != tvArea)
+                            cancelPopupTextViewSelect(mTvLastArea);
+
+                        mTvLastArea = tvArea;
+
+                        // 记录当前的课程标签
+                        recordCurArea(position);
+
+                        break;
                 }
-            };
+            }
+        };
+
+    /**
+     * 设置控件的选中状态
+     * @param textView 控件
+     */
+    private static void setPopupTextViewSelect(TextView textView) {
+        textView.setTextColor(Color.WHITE);
+        textView.setBackgroundResource(R.drawable.wholepage_item_all_selected);
+    }
+
+    /**
+     * 取消控件的选中状态
+     * @param textView 控件
+     */
+    private static void cancelPopupTextViewSelect(TextView textView) {
+        textView.setBackgroundResource(R.drawable.wholepage_item_all);
+        textView.setTextColor(
+                mCourseFragment.mActivity
+                        .getResources().getColor(R.color.setting_text));
+    }
 }
