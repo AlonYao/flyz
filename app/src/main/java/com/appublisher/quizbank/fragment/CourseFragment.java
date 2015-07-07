@@ -37,8 +37,10 @@ public class CourseFragment extends Fragment implements RequestCallback{
     /** Filter **/
     public RelativeLayout mRlTag;
     public RelativeLayout mRlArea;
+    public RelativeLayout mRlPurchase;
     public TextView mTvFilterTag;
     public TextView mTvFilterArea;
+    public TextView mTvFilterPurchase;
 
     @Override
     public void onAttach(Activity activity) {
@@ -63,6 +65,11 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mTvFilterTag = (TextView) mMainView.findViewById(R.id.course_tag_tv);
         mRlArea = (RelativeLayout) mMainView.findViewById(R.id.course_area_rl);
         mTvFilterArea = (TextView) mMainView.findViewById(R.id.course_area_tv);
+        mRlPurchase = (RelativeLayout) mMainView.findViewById(R.id.course_purchase_rl);
+        mTvFilterPurchase = (TextView) mMainView.findViewById(R.id.course_purchase_tv);
+
+        // 已购/未购
+        mRlPurchase.setOnClickListener(CourseModel.onClickListener);
 
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);

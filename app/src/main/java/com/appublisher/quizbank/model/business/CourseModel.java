@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.FilterCourseAreaAdapter;
+import com.appublisher.quizbank.adapter.FilterCoursePurchaseAdapter;
 import com.appublisher.quizbank.adapter.FilterCourseTagAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.fragment.CourseFragment;
@@ -23,6 +24,7 @@ import com.appublisher.quizbank.model.netdata.course.FilterTagResp;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 课程中心
@@ -31,13 +33,17 @@ public class CourseModel {
 
     private static PopupWindow mPwTag;
     private static PopupWindow mPwArea;
+    private static PopupWindow mPwPurchase;
     private static CourseFragment mCourseFragment;
     private static ArrayList<FilterTagM> mFilterTags;
     private static ArrayList<FilterAreaM> mFilterAreas;
+    private static ArrayList<String> mFilterPurchase;
     private static TextView mTvLastTag;
     private static TextView mTvLastArea;
-    private static int mCurTagId;
+    private static TextView mTvLastPurchase;
     private static String mCurAreaId;
+    private static int mCurTagId;
+    private static int mCurPurchaseId;
 
     /**
      * 处理课程标签回调
@@ -112,10 +118,40 @@ public class CourseModel {
         FilterCourseTagAdapter filterCourseTagAdapter =
                 new FilterCourseTagAdapter(mCourseFragment.mActivity, mFilterTags);
         gvTag.setAdapter(filterCourseTagAdapter);
-
         gvTag.setOnItemClickListener(onItemClickListener);
+    }
 
-        mPwTag.update();
+    /**
+     * 初始化Filter课程购买状态
+     */
+    public static void initPwPurchase() {
+        // 初始化PopupWindow控件
+        @SuppressLint("InflateParams") View view =
+                LayoutInflater
+                        .from(mCourseFragment.mActivity)
+                        .inflate(R.layout.course_popup_purchase, null);
+        mPwPurchase = new PopupWindow(
+                view,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true);
+        mPwPurchase.setOutsideTouchable(true);
+        mPwPurchase.setBackgroundDrawable(
+                mCourseFragment.mActivity.getResources().getDrawable(R.color.transparency));
+
+        // 构造数据结构
+        mFilterPurchase = new ArrayList<>();
+        mFilterPurchase.add("全部");
+        mFilterPurchase.add("已购");
+        mFilterPurchase.add("未购");
+
+        ExpandableHeightGridView gvPurchase =
+                (ExpandableHeightGridView) view.findViewById(R.id.course_filter_purchase_ehgv);
+
+        FilterCoursePurchaseAdapter filterCoursePurchaseAdapter =
+                new FilterCoursePurchaseAdapter(mCourseFragment.mActivity, mFilterPurchase);
+        gvPurchase.setAdapter(filterCoursePurchaseAdapter);
+        gvPurchase.setOnItemClickListener(onItemClickListener);
     }
 
     /**
@@ -144,7 +180,6 @@ public class CourseModel {
         FilterCourseAreaAdapter filterCourseAreaAdapter =
                 new FilterCourseAreaAdapter(mCourseFragment.mActivity, mFilterAreas);
         gvArea.setAdapter(filterCourseAreaAdapter);
-
         gvArea.setOnItemClickListener(onItemClickListener);
     }
 
@@ -163,6 +198,26 @@ public class CourseModel {
 
         // 更新菜单栏文字
         mCourseFragment.mTvFilterTag.setText(filterTag.getCategory_name());
+    }
+
+    /**
+     * 记录当前课程购买状态
+     * @param position 位置
+     */
+    private static void recordCurPurchase(int position) {
+        if (mFilterPurchase == null || position >= mFilterPurchase.size()) return;
+
+        String curPurchase = mFilterPurchase.get(position);
+        mCurPurchaseId = 2;
+
+        if ("未购".equals(curPurchase)) {
+            mCurPurchaseId = 0;
+        } else if ("已购".equals(curPurchase)) {
+            mCurPurchaseId = 1;
+        }
+
+        // 更新菜单栏文字
+        mCourseFragment.mTvFilterPurchase.setText(curPurchase);
     }
 
     /**
@@ -185,7 +240,7 @@ public class CourseModel {
     /**
      * 课程中心点击事件
      */
-    private static View.OnClickListener onClickListener = new View.OnClickListener() {
+    public static View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -193,6 +248,12 @@ public class CourseModel {
                     // Filter：课程标签
                     if (mPwTag == null) initPwTag();
                     mPwTag.showAsDropDown(mCourseFragment.mRlTag, 0, 2);
+                    break;
+
+                case R.id.course_purchase_rl:
+                    // Filter：课程购买状态
+                    if (mFilterPurchase == null) initPwPurchase();
+                    mPwPurchase.showAsDropDown(mCourseFragment.mRlPurchase, 0, 2);
                     break;
 
                 case R.id.course_area_rl:
@@ -225,6 +286,24 @@ public class CourseModel {
 
                         // 记录当前的课程标签
                         recordCurTag(position);
+
+                        break;
+
+                    case R.id.course_filter_purchase_ehgv:
+                        // Popup：课程购买状态
+                        @SuppressLint("CutPasteId")
+                        TextView tvPurchase = (TextView) view.findViewById(
+                                R.id.course_filter_gv_item);
+                        setPopupTextViewSelect(tvPurchase);
+
+                        // 前一个view改变
+                        if (mTvLastPurchase != null && mTvLastPurchase != tvPurchase)
+                            cancelPopupTextViewSelect(mTvLastPurchase);
+
+                        mTvLastPurchase = tvPurchase;
+
+                        // 记录当前的课程购买状态
+                        recordCurPurchase(position);
 
                         break;
 
@@ -268,4 +347,5 @@ public class CourseModel {
                 mCourseFragment.mActivity
                         .getResources().getColor(R.color.setting_text));
     }
+
 }
