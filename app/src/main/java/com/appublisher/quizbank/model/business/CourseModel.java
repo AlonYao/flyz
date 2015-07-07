@@ -11,6 +11,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.adapter.FilterCourseAreaAdapter;
 import com.appublisher.quizbank.adapter.FilterCourseTagAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.fragment.CourseFragment;
@@ -138,9 +139,9 @@ public class CourseModel {
         ExpandableHeightGridView gvArea =
                 (ExpandableHeightGridView) view.findViewById(R.id.filter_course_ehgv);
 
-        FilterCourseTagAdapter filterCourseTagAdapter =
-                new FilterCourseTagAdapter(mCourseFragment.mActivity, mFilterTags);
-        gvArea.setAdapter(filterCourseTagAdapter);
+        FilterCourseAreaAdapter filterCourseAreaAdapter =
+                new FilterCourseAreaAdapter(mCourseFragment.mActivity, mFilterAreas);
+        gvArea.setAdapter(filterCourseAreaAdapter);
 
         gvArea.setOnItemClickListener(onItemClickListener);
     }

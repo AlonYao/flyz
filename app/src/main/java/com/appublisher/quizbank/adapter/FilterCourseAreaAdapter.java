@@ -68,7 +68,13 @@ public class FilterCourseAreaAdapter extends BaseAdapter{
      * @param position 位置
      */
     private void setContent(ViewHolder viewHolder, int position) {
+        if (mFilterAreas == null || position >= mFilterAreas.size()) return;
 
+        FilterAreaM filterArea = mFilterAreas.get(position);
+
+        if (filterArea == null) return;
+
+        viewHolder.tvItem.setText(filterArea.getName());
     }
 
     class ViewHolder {
