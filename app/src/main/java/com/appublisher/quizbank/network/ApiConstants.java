@@ -118,14 +118,16 @@ public interface ApiConstants {
     String getQa = baseUrl + "quizbank/get_qa";
 
     /** 课程中心 **/
-
     // Filter:课程标签
     String getCourseFilterTag = baseUrl + "course/course_filter_tag";
 
     // Filter:课程地区
     String getCourseFilterArea = baseUrl + "course/course_filter_area";
 
-    // 图片相关
+    // 获取课程列表
+    String getCourseList = baseUrl + "course/get_course_list";
+
+    /** 图片相关 **/
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
     //PNG is lossless so quality is ignored but must be provided
