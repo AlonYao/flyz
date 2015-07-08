@@ -240,6 +240,20 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getCourseFilterArea), "course_filter_area", "object");
     }
 
+    /**
+     * 获取课程列表
+     * @param tag 标签id
+     * @param area 地区
+     * @param is_purchased 购买状态：未购0 已购1 所有2
+     */
+    public void getCourseList(int tag, String area, int is_purchased) {
+        asyncRequest(ParamBuilder.finalUrl(getCourseList)
+                + "&tag=" + tag
+                + "&area=" + area
+                + "&is_purchased=" + is_purchased,
+                "course_list", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *

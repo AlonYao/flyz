@@ -20,6 +20,7 @@ import com.appublisher.quizbank.model.netdata.course.FilterAreaM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaResp;
 import com.appublisher.quizbank.model.netdata.course.FilterTagM;
 import com.appublisher.quizbank.model.netdata.course.FilterTagResp;
+import com.appublisher.quizbank.utils.ProgressBarManager;
 
 import org.json.JSONObject;
 
@@ -41,9 +42,6 @@ public class CourseModel {
     private static TextView mTvLastTag;
     private static TextView mTvLastArea;
     private static TextView mTvLastPurchase;
-    private static String mCurAreaId;
-    private static int mCurTagId;
-    private static int mCurPurchaseId;
 
     /**
      * 处理课程标签回调
@@ -89,6 +87,21 @@ public class CourseModel {
 
         // 设置点击事件
         mCourseFragment.mRlArea.setOnClickListener(onClickListener);
+
+        // 获取课程列表
+        mCourseFragment.mRequest.getCourseList(
+                mCourseFragment.mCurTagId,
+                mCourseFragment.mCurAreaId,
+                mCourseFragment.mCurPurchaseId);
+    }
+
+    /**
+     * 处理课程列表回调
+     * @param response 回调数据
+     * @param courseFragment 课程中心
+     */
+    public static void dealCourseListResp(JSONObject response, CourseFragment courseFragment) {
+        ProgressBarManager.hideProgressBar();
     }
 
     /**
@@ -194,7 +207,7 @@ public class CourseModel {
 
         if (filterTag == null) return;
 
-        mCurTagId = filterTag.getId();
+        mCourseFragment.mCurTagId = filterTag.getId();
 
         // 更新菜单栏文字
         mCourseFragment.mTvFilterTag.setText(filterTag.getCategory_name());
@@ -208,12 +221,12 @@ public class CourseModel {
         if (mFilterPurchase == null || position >= mFilterPurchase.size()) return;
 
         String curPurchase = mFilterPurchase.get(position);
-        mCurPurchaseId = 2;
+        mCourseFragment.mCurPurchaseId = 2;
 
         if ("未购".equals(curPurchase)) {
-            mCurPurchaseId = 0;
+            mCourseFragment.mCurPurchaseId = 0;
         } else if ("已购".equals(curPurchase)) {
-            mCurPurchaseId = 1;
+            mCourseFragment.mCurPurchaseId = 1;
         }
 
         // 更新菜单栏文字
@@ -231,7 +244,7 @@ public class CourseModel {
 
         if (filterArea == null) return;
 
-        mCurAreaId = filterArea.getCode();
+        mCourseFragment.mCurAreaId = filterArea.getCode();
 
         // 更新菜单栏文字
         mCourseFragment.mTvFilterArea.setText(filterArea.getName());
@@ -346,6 +359,30 @@ public class CourseModel {
         textView.setTextColor(
                 mCourseFragment.mActivity
                         .getResources().getColor(R.color.setting_text));
+    }
+
+    /**
+     * 接口回调异常处理
+     * @param apiName 接口类型
+     * @param courseFragment 课程中心
+     */
+    public static void dealRespError(String apiName, CourseFragment courseFragment) {
+        ProgressBarManager.hideProgressBar();
+
+        if ("course_filter_tag".equals(apiName)) {
+            // 获取课程标签接口异常
+            ProgressBarManager.showProgressBar(courseFragment.mMainView);
+            courseFragment.mRequest.getCourseFilterArea();
+        }
+
+        if ("course_filter_area".equals(apiName)) {
+            // 获取课程地区接口异常
+            ProgressBarManager.showProgressBar(courseFragment.mMainView);
+            courseFragment.mRequest.getCourseList(
+                    courseFragment.mCurTagId,
+                    courseFragment.mCurAreaId,
+                    courseFragment.mCurPurchaseId);
+        }
     }
 
 }

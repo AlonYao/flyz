@@ -28,8 +28,7 @@ import org.json.JSONObject;
 public class CourseFragment extends Fragment implements RequestCallback{
 
     private String mUserId;
-    private View mMainView;
-
+    public View mMainView;
     public Activity mActivity;
     public Request mRequest;
     public Gson mGson;
@@ -41,6 +40,9 @@ public class CourseFragment extends Fragment implements RequestCallback{
     public TextView mTvFilterTag;
     public TextView mTvFilterArea;
     public TextView mTvFilterPurchase;
+    public String mCurAreaId;
+    public int mCurTagId;
+    public int mCurPurchaseId;
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,6 +69,11 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mTvFilterArea = (TextView) mMainView.findViewById(R.id.course_area_tv);
         mRlPurchase = (RelativeLayout) mMainView.findViewById(R.id.course_purchase_rl);
         mTvFilterPurchase = (TextView) mMainView.findViewById(R.id.course_purchase_tv);
+
+        // 成员变量初始化
+        mCurTagId = 0;
+        mCurPurchaseId = 2;
+        mCurAreaId = "ALL";
 
         // 已购/未购
         mRlPurchase.setOnClickListener(CourseModel.onClickListener);
@@ -96,28 +103,19 @@ public class CourseFragment extends Fragment implements RequestCallback{
 
         if ("course_filter_area".equals(apiName))
             CourseModel.dealCourseFilterAreaResp(response, this);
-        ProgressBarManager.hideProgressBar();
+
+        if ("course_list".equals(apiName))
+            CourseModel.dealCourseListResp(response, this);
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressBarManager.hideProgressBar();
-
-        if ("course_filter_tag".equals(apiName)) {
-            // 获取课程标签接口异常
-            ProgressBarManager.showProgressBar(mMainView);
-            mRequest.getCourseFilterArea();
-        }
+        CourseModel.dealRespError(apiName, this);
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ProgressBarManager.hideProgressBar();
-
-        if ("course_filter_tag".equals(apiName)) {
-            // 获取课程标签接口异常
-            ProgressBarManager.showProgressBar(mMainView);
-            mRequest.getCourseFilterArea();
-        }
+        CourseModel.dealRespError(apiName, this);
     }
+
 }
