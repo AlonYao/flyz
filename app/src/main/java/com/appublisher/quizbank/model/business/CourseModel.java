@@ -16,6 +16,8 @@ import com.appublisher.quizbank.adapter.FilterCoursePurchaseAdapter;
 import com.appublisher.quizbank.adapter.FilterCourseTagAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.fragment.CourseFragment;
+import com.appublisher.quizbank.model.netdata.course.CourseListResp;
+import com.appublisher.quizbank.model.netdata.course.CourseM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaResp;
 import com.appublisher.quizbank.model.netdata.course.FilterTagM;
@@ -39,6 +41,7 @@ public class CourseModel {
     private static ArrayList<FilterTagM> mFilterTags;
     private static ArrayList<FilterAreaM> mFilterAreas;
     private static ArrayList<String> mFilterPurchase;
+    private static ArrayList<CourseM> mCourses;
     private static TextView mTvLastTag;
     private static TextView mTvLastArea;
     private static TextView mTvLastPurchase;
@@ -101,6 +104,23 @@ public class CourseModel {
      * @param courseFragment 课程中心
      */
     public static void dealCourseListResp(JSONObject response, CourseFragment courseFragment) {
+        if (response == null) {
+            ProgressBarManager.hideProgressBar();
+            return;
+        }
+
+        // 初始化数据
+        mCourseFragment = courseFragment;
+        CourseListResp courseListResp = courseFragment.mGson.fromJson(
+                response.toString(), CourseListResp.class);
+
+        if (courseListResp == null || courseListResp.getResponse_code() != 1) {
+            ProgressBarManager.hideProgressBar();
+            return;
+        }
+
+        mCourses = courseListResp.getCourses();
+
         ProgressBarManager.hideProgressBar();
     }
 
