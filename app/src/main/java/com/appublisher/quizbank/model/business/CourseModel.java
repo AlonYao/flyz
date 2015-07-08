@@ -147,11 +147,16 @@ public class CourseModel {
         ExpandableHeightGridView gvTag =
                 (ExpandableHeightGridView) view.findViewById(R.id.filter_course_ehgv);
         gvTag.setNumColumns(2);
+        TextView tvConfirm = (TextView) view.findViewById(R.id.course_filter_confirm);
+        TextView tvCancel = (TextView) view.findViewById(R.id.course_filter_cancel);
 
         FilterCourseTagAdapter filterCourseTagAdapter =
                 new FilterCourseTagAdapter(mCourseFragment.mActivity, mFilterTags);
         gvTag.setAdapter(filterCourseTagAdapter);
         gvTag.setOnItemClickListener(onItemClickListener);
+
+        tvConfirm.setOnClickListener(onClickListener);
+        tvCancel.setOnClickListener(onClickListener);
     }
 
     /**
@@ -180,11 +185,16 @@ public class CourseModel {
 
         ExpandableHeightGridView gvPurchase =
                 (ExpandableHeightGridView) view.findViewById(R.id.course_filter_purchase_ehgv);
+        TextView tvConfirm = (TextView) view.findViewById(R.id.course_filter_confirm);
+        TextView tvCancel = (TextView) view.findViewById(R.id.course_filter_cancel);
 
         FilterCoursePurchaseAdapter filterCoursePurchaseAdapter =
                 new FilterCoursePurchaseAdapter(mCourseFragment.mActivity, mFilterPurchase);
         gvPurchase.setAdapter(filterCoursePurchaseAdapter);
         gvPurchase.setOnItemClickListener(onItemClickListener);
+
+        tvConfirm.setOnClickListener(onClickListener);
+        tvCancel.setOnClickListener(onClickListener);
     }
 
     /**
@@ -209,11 +219,16 @@ public class CourseModel {
 
         ExpandableHeightGridView gvArea =
                 (ExpandableHeightGridView) view.findViewById(R.id.course_filter_area_ehgv);
+        TextView tvConfirm = (TextView) view.findViewById(R.id.course_filter_confirm);
+        TextView tvCancel = (TextView) view.findViewById(R.id.course_filter_cancel);
 
         FilterCourseAreaAdapter filterCourseAreaAdapter =
                 new FilterCourseAreaAdapter(mCourseFragment.mActivity, mFilterAreas);
         gvArea.setAdapter(filterCourseAreaAdapter);
         gvArea.setOnItemClickListener(onItemClickListener);
+
+        tvConfirm.setOnClickListener(onClickListener);
+        tvCancel.setOnClickListener(onClickListener);
     }
 
     /**
@@ -293,6 +308,21 @@ public class CourseModel {
                     // Filter：课程地区
                     if (mPwArea == null) initPwArea();
                     mPwArea.showAsDropDown(mCourseFragment.mRlArea, 0, 2);
+                    break;
+
+                case R.id.course_filter_confirm:
+                    // 确认按钮
+                    ProgressBarManager.showProgressBar(mCourseFragment.mMainView);
+                    mCourseFragment.mRequest.getCourseList(
+                            mCourseFragment.mCurTagId,
+                            mCourseFragment.mCurAreaId,
+                            mCourseFragment.mCurPurchaseId);
+                    dismissAllPw();
+                    break;
+
+                case R.id.course_filter_cancel:
+                    // 取消按钮
+                    dismissAllPw();
                     break;
             }
         }
@@ -413,6 +443,15 @@ public class CourseModel {
                     courseFragment.mCurAreaId,
                     courseFragment.mCurPurchaseId);
         }
+    }
+
+    /**
+     * 关闭所有的popupwindow
+     */
+    private static void dismissAllPw() {
+        if (mPwTag != null && mPwTag.isShowing()) mPwTag.dismiss();
+        if (mPwPurchase != null && mPwPurchase.isShowing()) mPwPurchase.dismiss();
+        if (mPwArea != null && mPwArea.isShowing()) mPwArea.dismiss();
     }
 
 }
