@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.business.CourseModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.Request;
@@ -44,6 +46,9 @@ public class CourseFragment extends Fragment implements RequestCallback{
     public int mCurTagId;
     public int mCurPurchaseId;
 
+    /** 课程中心列表 **/
+    public ListView mLvCourse;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -69,6 +74,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mTvFilterArea = (TextView) mMainView.findViewById(R.id.course_area_tv);
         mRlPurchase = (RelativeLayout) mMainView.findViewById(R.id.course_purchase_rl);
         mTvFilterPurchase = (TextView) mMainView.findViewById(R.id.course_purchase_tv);
+        mLvCourse = (ListView) mMainView.findViewById(R.id.course_listview);
 
         // 成员变量初始化
         mCurTagId = 0;

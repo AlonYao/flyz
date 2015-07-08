@@ -11,6 +11,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.adapter.CourseListAdapter;
 import com.appublisher.quizbank.adapter.FilterCourseAreaAdapter;
 import com.appublisher.quizbank.adapter.FilterCoursePurchaseAdapter;
 import com.appublisher.quizbank.adapter.FilterCourseTagAdapter;
@@ -45,6 +46,7 @@ public class CourseModel {
     private static TextView mTvLastTag;
     private static TextView mTvLastArea;
     private static TextView mTvLastPurchase;
+    private static CourseListAdapter mCourseListAdapter;
 
     /**
      * 处理课程标签回调
@@ -119,7 +121,15 @@ public class CourseModel {
             return;
         }
 
-        mCourses = courseListResp.getCourses();
+        if (mCourseListAdapter == null) {
+            mCourses = courseListResp.getCourses();
+            mCourseListAdapter = new CourseListAdapter(mCourseFragment.mActivity, mCourses);
+            mCourseFragment.mLvCourse.setAdapter(mCourseListAdapter);
+        } else {
+            mCourses.clear();
+            mCourses.addAll(courseListResp.getCourses());
+            mCourseListAdapter.notifyDataSetChanged();
+        }
 
         ProgressBarManager.hideProgressBar();
     }

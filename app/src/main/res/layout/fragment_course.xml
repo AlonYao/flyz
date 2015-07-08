@@ -82,8 +82,8 @@
         android:background="@color/setting_line"/>
 
     <!-- 课程列表 -->
-    <com.appublisher.quizbank.customui.XListView
-        android:id="@+id/course_xlistview"
+    <ListView
+        android:id="@+id/course_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/course_belowfilter_line"
