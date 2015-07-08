@@ -203,6 +203,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
             new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // 点击版本号，直接返回
+            if (position == DrawerAdapter.mItemNames.length) return;
+
             changeFragment(position);
 
             // 侧边栏顶部红点消失

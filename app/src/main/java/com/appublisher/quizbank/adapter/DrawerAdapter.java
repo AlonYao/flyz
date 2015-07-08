@@ -23,7 +23,7 @@ public class DrawerAdapter extends BaseAdapter{
 
     private Context mContext;
 
-    private int[] mItemNames = new int[] {
+    public static int[] mItemNames = new int[] {
             R.string.drawer_homepage,
             R.string.drawer_wholepage,
             R.string.drawer_course,
