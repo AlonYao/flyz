@@ -86,6 +86,9 @@
 
     <!-- 课程中心 -->
     <string name="course_filter_all">全部</string>
+    <string name="course_filter_tag">科目</string>
+    <string name="course_filter_purchase">已/未购</string>
+    <string name="course_filter_area">地区</string>
 
     <!-- 知识点层级 -->
     <string name="hierarchy_name">知识点层级</string>

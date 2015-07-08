@@ -209,8 +209,8 @@ public class CourseModel {
 
         mCourseFragment.mCurTagId = filterTag.getId();
 
-        // 更新菜单栏文字
-        mCourseFragment.mTvFilterTag.setText(filterTag.getCategory_name());
+        // 更新Filter文字
+        changeFilterText(mCourseFragment.mTvFilterTag, filterTag.getCategory_name());
     }
 
     /**
@@ -229,8 +229,8 @@ public class CourseModel {
             mCourseFragment.mCurPurchaseId = 1;
         }
 
-        // 更新菜单栏文字
-        mCourseFragment.mTvFilterPurchase.setText(curPurchase);
+        // 更新Filter文字
+        changeFilterText(mCourseFragment.mTvFilterPurchase, curPurchase);
     }
 
     /**
@@ -246,8 +246,8 @@ public class CourseModel {
 
         mCourseFragment.mCurAreaId = filterArea.getCode();
 
-        // 更新菜单栏文字
-        mCourseFragment.mTvFilterArea.setText(filterArea.getName());
+        // 更新Filter文字
+        changeFilterText(mCourseFragment.mTvFilterArea, filterArea.getName());
     }
 
     /**
@@ -359,6 +359,16 @@ public class CourseModel {
         textView.setTextColor(
                 mCourseFragment.mActivity
                         .getResources().getColor(R.color.setting_text));
+    }
+
+    /**
+     * 更新Filter文字
+     * @param textView 控件
+     * @param name 名称
+     */
+    private static void changeFilterText(TextView textView, String name) {
+        textView.setText(name);
+        textView.setTextColor(mCourseFragment.mActivity.getResources().getColor(R.color.blue));
     }
 
     /**

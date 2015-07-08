@@ -6,6 +6,7 @@
     <color name="white">#FFFFFF</color>
     <color name="transparency">#00000000</color>
     <color name="black_translucence">#80000000</color>
+    <color name="blue">#4E90F5</color>
 
     <color name="homepage_todayexam">#506183</color>
     <color name="homepage_gongkaike_bg">#E84E40</color>

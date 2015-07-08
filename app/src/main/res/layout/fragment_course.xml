@@ -20,7 +20,7 @@
             <TextView
                 android:id="@+id/course_tag_tv"
                 style="@style/WholePagePopupMenuTv"
-                android:text="@string/course_filter_all"/>
+                android:text="@string/course_filter_tag"/>
 
             <ImageView
                 android:id="@+id/course_tag_arrow"
@@ -42,7 +42,7 @@
             <TextView
                 android:id="@+id/course_purchase_tv"
                 style="@style/WholePagePopupMenuTv"
-                android:text="@string/course_filter_all"/>
+                android:text="@string/course_filter_purchase"/>
 
             <ImageView
                 android:id="@+id/course_purchase_arrow"
@@ -64,7 +64,7 @@
             <TextView
                 android:id="@+id/course_area_tv"
                 style="@style/WholePagePopupMenuTv"
-                android:text="@string/course_filter_all"/>
+                android:text="@string/course_filter_area"/>
 
             <ImageView
                 android:id="@+id/course_area_arrow"
