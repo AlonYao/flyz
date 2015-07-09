@@ -19,7 +19,7 @@
             <!-- 头像&估分&排名 -->
             <LinearLayout
                 android:id="@+id/homepage_evaluation"
-                android:layout_width="295dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
@@ -123,7 +123,7 @@
             <!-- 今日模考 -->
             <RelativeLayout
                 style="@style/HomePageListRL"
-                android:layout_marginTop="27dp">
+                android:layout_marginTop="15dp">
                 <LinearLayout
                     android:id="@+id/homepage_todayexam_ll"
                     style="@style/HomePageListLL"
@@ -203,26 +203,15 @@
                 tools:ignore="RtlSymmetry" />
 
             <View
-                android:layout_width="293dp"
+                android:layout_width="300dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="21dp"
-                android:layout_marginBottom="21dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
                 android:background="@color/homepage_line"/>
 
-            <!-- 快速练习 -->
-            <TextView
-                android:id="@+id/homepage_zhiboke"
-                android:layout_width="295dp"
-                android:layout_height="66dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="15dp"
-                android:gravity="center"
-                android:textSize="17sp"
-                android:text="@string/homepage_zhiboke"
-                android:textColor="@android:color/white"
-                android:background="@drawable/homepage_gongkaike_bg"
-                tools:ignore="RtlSymmetry" />
+            <!-- 公开课按钮 -->
+            <include layout="@layout/opencourse_btn"/>
         </LinearLayout>
     </ScrollView>
 

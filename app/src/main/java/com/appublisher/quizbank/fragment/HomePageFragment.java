@@ -80,7 +80,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         mTvRanking = (TextView) mView.findViewById(R.id.homepage_ranking);
         mTvTodayExam = (TextView) mView.findViewById(R.id.homepage_todayexam_tv);
         mTvSpecial = (TextView) mView.findViewById(R.id.homepage_special_tv);
-        mTvZhiboke = (TextView) mView.findViewById(R.id.homepage_zhiboke);
+        mTvZhiboke = (TextView) mView.findViewById(R.id.opencourse_btn);
         mLlMokao = (LinearLayout) mView.findViewById(R.id.homepage_todayexam_ll);
         mLlSpecial = (LinearLayout) mView.findViewById(R.id.homepage_special_ll);
         ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
