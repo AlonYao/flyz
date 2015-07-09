@@ -31,8 +31,6 @@ import com.google.gson.Gson;
  */
 public class HomePageModel {
 
-    private static Class<?> mCls;
-
     /**
      * 设置考试项目倒计时
      * @param textView textView
@@ -53,72 +51,6 @@ public class HomePageModel {
         long day = Utils.dateMinusNow(date);
 
         textView.setText("距离" + name + "还有" + String.valueOf(day) + "天");
-    }
-
-    /**
-     * 设置公开课
-     * @param activity Activity
-     * @param view View
-     */
-    public static void setOpenCourse(final Activity activity, View view) {
-        if (Globals.live_course == null) return;
-
-        int type = Globals.live_course.getType();
-        final String content = Globals.live_course.getContent();
-
-        mCls = null;
-
-        switch (type) {
-            case 0:
-                // 没有公开课
-                mCls = OpenCourseNoneActivity.class;
-                break;
-
-            case 1:
-                // 正在上课
-                UserInfoModel userInfo = LoginModel.getUserInfoM();
-
-                if (userInfo == null) return;
-
-                if (userInfo.getMobile_num() == null || userInfo.getMobile_num().length() == 0) {
-                    // 没有手机号
-                    mCls = RegisterActivity.class;
-                } else {
-                    // 有手机号
-                    mCls = WebViewActivity.class;
-                }
-
-                break;
-
-            case 2:
-                // 即将上课
-                mCls = OpenCourseUnstartActivity.class;
-
-                break;
-        }
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCls == null) return;
-
-                Intent intent = new Intent(activity, mCls);
-                intent.putExtra("content", content);
-                intent.putExtra("from", "opencourse_started");
-
-                if (activity instanceof MeasureAnalysisActivity) {
-                    // Umeng
-                    UmengManager.sendToUmeng((MeasureAnalysisActivity) activity, "Live");
-
-                    intent.putExtra("umeng_entry", "AfterTest");
-                    activity.startActivity(intent);
-                    activity.finish();
-                } else {
-                    intent.putExtra("umeng_entry", "Home");
-                    activity.startActivity(intent);
-                }
-            }
-        });
     }
 
     /**

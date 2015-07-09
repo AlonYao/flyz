@@ -127,6 +127,9 @@ public interface ApiConstants {
     // 获取课程列表
     String getCourseList = baseUrl + "course/get_course_list";
 
+    // 获取公开课状态
+    String getFreeOpenCourseStatus = baseUrl + "course/free_open_course";
+
     /** 图片相关 **/
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
 	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;

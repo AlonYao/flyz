@@ -21,6 +21,7 @@ import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.model.business.HomePageModel;
+import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
@@ -29,6 +30,7 @@ import com.appublisher.quizbank.model.netdata.homepage.PaperNoteM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -55,6 +57,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private View mView;
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
+    private Request mRequest;
 
     public TextView mTvZhiboke;
     public Activity mActivity;
@@ -89,6 +92,9 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         TextView tvExam = (TextView) mView.findViewById(R.id.homepage_exam);
         RoundedImageView ivAvatar = (RoundedImageView) mView.findViewById(R.id.homepage_avatar);
 
+        // 成员变量初始化
+        mRequest = new Request(mActivity, this);
+
         // 设置头像
         LoginModel.setAvatar(mActivity, ivAvatar);
 
@@ -112,7 +118,8 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         super.onResume();
         // 获取&呈现 数据
         ProgressBarManager.showProgressBar(mView);
-        new Request(mActivity, this).getEntryData();
+        mRequest.getEntryData();
+        mRequest.getFreeOpenCourseStatus();
 
         // Umeng
         MobclickAgent.onPageStart("HomePageFragment");
@@ -171,10 +178,6 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         // 快速练习
         mTvQuickTest.setOnClickListener(this);
 
-        // 公开课
-        Globals.live_course = homePageResp.getLive_course();
-        HomePageModel.setOpenCourse(mActivity, mTvZhiboke);
-
         // 记录最近的系统通知的id
         Globals.last_notice_id = homePageResp.getLatest_notify();
 
@@ -193,6 +196,11 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         if ("entry_data".equals(apiName)) {
             setContent(response);
+        }
+
+        if ("free_open_course_status".equals(apiName)) {
+            OpenCourseModel.dealOpenCourseStatusResp(response);
+            OpenCourseModel.setOpenCourseBtn(mActivity, mTvZhiboke);
         }
     }
 

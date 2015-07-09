@@ -5,9 +5,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
@@ -15,12 +18,14 @@ import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseConsultResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseDetailResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseM;
+import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseStatusResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseUrlResp;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
@@ -284,4 +289,108 @@ public class OpenCourseModel {
             ToastManager.showToast(activity, "您未安装手机QQ，请到应用市场下载……");
         }
     }
+
+    /**
+     * 处理公开课状态回调
+     * @param response 回调数据
+     */
+    public static void dealOpenCourseStatusResp(JSONObject response) {
+        if (response == null) return;
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        OpenCourseStatusResp openCourseStatusResp =
+                Globals.gson.fromJson(response.toString(), OpenCourseStatusResp.class);
+
+        if (openCourseStatusResp == null || openCourseStatusResp.getResponse_code() != 1) return;
+
+        Globals.openCourseStatus = openCourseStatusResp;
+    }
+
+    /**
+     * 设置公开课按钮
+     * @param activity Activity
+     * @param textView 公开课按钮控件
+     */
+    public static void setOpenCourseBtn(final Activity activity, TextView textView) {
+        // 更新按钮文字
+        String head = "免费公开课";
+        if (Globals.openCourseStatus != null && Globals.openCourseStatus.getType() != 0) {
+            String courseName = Globals.openCourseStatus.getCourse_name() == null
+                    ? ""
+                    : Globals.openCourseStatus.getCourse_name();
+
+            if (Globals.openCourseStatus.getType() == 1) {
+                head = "正在手机直播：\n" + courseName;
+            } else if (Globals.openCourseStatus.getType() == 2) {
+                head = "即将手机直播：\n" + courseName;
+            }
+        }
+        textView.setText(head);
+
+        // 跳转
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                skipToOpenCoursePage(activity, "Home");
+            }
+        });
+    }
+
+    /**
+     * 跳转至公开课相关页面
+     * @param activity Activity
+     */
+    public static void skipToOpenCoursePage(Activity activity, String umengEntry) {
+        if (Globals.openCourseStatus == null) return;
+
+        Class<?> cls = getOpenCourseClass(Globals.openCourseStatus.getType());
+
+        if (cls == null) return;
+
+        Intent intent = new Intent(activity, cls);
+
+        if (Globals.openCourseStatus.getType() == 0) {
+            // 如果是查看往期
+            intent.putExtra("from", "opencourse_pre");
+            intent.putExtra("url", Globals.openCourseStatus.getContent());
+        } else {
+            intent.putExtra("from", "opencourse_started");
+            intent.putExtra("content", Globals.openCourseStatus.getContent());
+        }
+
+        intent.putExtra("umeng_entry", umengEntry);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 获取公开课跳转Class
+     * @param type 公开课状态
+     * @return Class
+     */
+    public static Class<?> getOpenCourseClass(int type) {
+        switch (type) {
+            case 0:
+                // 没有公开课
+                return OpenCourseNoneActivity.class;
+
+            case 1:
+                // 正在上课
+                String mobile = LoginModel.getUserMobile();
+
+                if (mobile == null || mobile.length() == 0) {
+                    // 没有手机号
+                    return RegisterActivity.class;
+                } else {
+                    // 有手机号
+                    return WebViewActivity.class;
+                }
+
+            case 2:
+                // 即将上课
+                return OpenCourseUnstartActivity.class;
+        }
+
+        return null;
+    }
+
 }

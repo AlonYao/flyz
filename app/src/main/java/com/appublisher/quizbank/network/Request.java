@@ -224,7 +224,7 @@ public class Request extends BaseRequest implements ApiConstants{
                 "open_course_consult", "object");
     }
 
-    /** 课程中心 **/
+    /****** 课程中心 ******/
 
     /**
      * 获取课程标签
@@ -252,6 +252,14 @@ public class Request extends BaseRequest implements ApiConstants{
                 + "&area=" + area
                 + "&is_purchased=" + is_purchased,
                 "course_list", "object");
+    }
+
+    /**
+     * 获取公开课状态
+     */
+    public void getFreeOpenCourseStatus() {
+        asyncRequest(ParamBuilder.finalUrl(getFreeOpenCourseStatus),
+                "free_open_course_status", "object");
     }
 
 	/*********************

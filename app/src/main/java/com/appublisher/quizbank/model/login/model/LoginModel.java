@@ -274,11 +274,27 @@ public class LoginModel {
     }
 
     /**
-     * 获取用户id
-     * @return 用户id
+     * 获取用户Token
+     * @return 用户Token
      */
     public static String getUserToken() {
         return Globals.sharedPreferences.getString("user_token", "");
+    }
+
+    /**
+     * 获取用户手机号
+     * @return 手机号
+     */
+    public static String getUserMobile() {
+        User user = UserDAO.findById();
+        if (user == null) return "";
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
+        UserInfoModel userInfo = Globals.gson.fromJson(user.user, UserInfoModel.class);
+        if (userInfo == null) return "";
+
+        return userInfo.getMobile_num() == null ? "" : userInfo.getMobile_num();
     }
 
     /**

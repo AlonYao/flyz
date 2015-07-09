@@ -22,6 +22,7 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
@@ -183,7 +184,7 @@ public class AlertManager {
         });
 
         // 看个直播
-        HomePageModel.setOpenCourse(activity, tvZhibo);
+        OpenCourseModel.setOpenCourseBtn(activity, tvZhibo);
     }
 
     /**
