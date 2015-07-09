@@ -102,9 +102,6 @@ public interface ApiConstants {
     // 标记通知
     String readNotification = baseUrl + "quizbank/read_notification";
 
-    // 获取公开课详情
-    String getOpenCourseDetail = baseUrl + "quizbank/open_course_detail";
-
     // 预约公开课
     String bookOpenCourse = baseUrl + "quizbank/book_open_course";
 
@@ -129,6 +126,9 @@ public interface ApiConstants {
 
     // 获取公开课状态
     String getFreeOpenCourseStatus = baseUrl + "course/free_open_course";
+
+    // 获取公开课详情
+    String getOpenCourseDetail = baseUrl + "course/open_course_detail";
 
     /** 图片相关 **/
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存

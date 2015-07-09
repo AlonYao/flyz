@@ -33,17 +33,18 @@ import java.util.HashMap;
 public class OpenCourseUnstartActivity extends ActionBarActivity implements RequestCallback{
 
     public Request mRequest;
-    public ImageView mIvPic;
     public TextView mTvName;
     public TextView mTvTime;
     public TextView mTvLector;
     public TextView mTvNotice;
     public String mContent;
+    public ImageView mIvOldtimey;
 
     private long mUmengTimestamp;
     private String mUmengEntry;
     private String mUmengQQ;
     public String mUmengPreSit;
+    public String mUmengVideoPlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +61,11 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         mUmengPreSit = "0";
 
         // View 初始化
-        mIvPic = (ImageView) findViewById(R.id.opencourse_img);
         mTvName = (TextView) findViewById(R.id.opencourse_name);
         mTvTime = (TextView) findViewById(R.id.opencourse_time);
         mTvLector = (TextView) findViewById(R.id.opencourse_lector);
         mTvNotice = (TextView) findViewById(R.id.opencourse_notice);
+        mIvOldtimey = (ImageView) findViewById(R.id.opencourse_oldtimey);
 
         // 获取数据
         mContent = getIntent().getStringExtra("content");

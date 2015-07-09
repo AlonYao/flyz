@@ -8,6 +8,7 @@ public class OpenCourseDetailResp {
     int response_code;
     OpenCourseM course;
     boolean booked;
+    String staticCourseUrl;
 
     public int getResponse_code() {
         return response_code;
@@ -19,5 +20,9 @@ public class OpenCourseDetailResp {
 
     public boolean isBooked() {
         return booked;
+    }
+
+    public String getStaticCourseUrl() {
+        return staticCourseUrl;
     }
 }

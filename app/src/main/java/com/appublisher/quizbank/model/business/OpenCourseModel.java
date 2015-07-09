@@ -51,9 +51,9 @@ public class OpenCourseModel {
                                                 JSONObject response) {
         if (response == null) return;
 
-        final Gson gson = GsonManager.initGson();
-        OpenCourseDetailResp openCourseDetailResp = gson.fromJson(response.toString(),
-                OpenCourseDetailResp.class);
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        final OpenCourseDetailResp openCourseDetailResp =
+                Globals.gson.fromJson(response.toString(), OpenCourseDetailResp.class);
 
         if (openCourseDetailResp == null || openCourseDetailResp.getResponse_code() != 1) return;
 
@@ -61,11 +61,8 @@ public class OpenCourseModel {
 
         if (openCourse == null) return;
 
-        // 公开课封面
-        activity.mRequest.loadImage(openCourse.getCover_pic(), activity.mIvPic);
-
         // 公开课名字
-        activity.mTvName.setText("名字：" + openCourse.getName());
+        activity.mTvName.setText("公开课：" + openCourse.getName());
 
         // 公开课时间
         String startTime = openCourse.getStart_time();
@@ -86,10 +83,8 @@ public class OpenCourseModel {
 
         // 预约状态
         boolean booked = openCourseDetailResp.isBooked();
-
         if (booked) {
             setBooked(activity);
-
             // Umeng
             activity.mUmengPreSit = "3";
 
@@ -104,16 +99,7 @@ public class OpenCourseModel {
                 @Override
                 public void onClick(View v) {
                     // 判断用户是否有手机号
-                    User user = UserDAO.findById();
-
-                    if (user == null) return;
-
-                    UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
-
-                    if (userInfo == null) return;
-
-                    String mobileNum = userInfo.getMobile_num();
-
+                    String mobileNum = LoginModel.getUserMobile();
                     if (mobileNum == null || mobileNum.length() == 0) {
                         // 没有手机号
                         Intent intent = new Intent(activity, RegisterActivity.class);
@@ -130,6 +116,41 @@ public class OpenCourseModel {
                 }
             });
         }
+
+        // 往期内容
+        activity.mIvOldtimey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mobileNum = LoginModel.getUserMobile();
+                if (mobileNum == null || mobileNum.length() == 0) {
+                    // 没有手机号
+                    Intent intent = new Intent(activity, RegisterActivity.class);
+                    intent.putExtra("from", "opencourse_pre");
+                    activity.startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
+
+                } else {
+                    // 跳转
+                    String url = openCourseDetailResp.getStaticCourseUrl();
+                    OpenCourseModel.skipToPreOpenCourse(activity, url);
+                }
+
+                // Umeng
+                activity.mUmengVideoPlay = "1";
+            }
+        });
+    }
+
+    /**
+     * 跳转到查看往期页面
+     * @param activity Activity
+     * @param url url
+     */
+    public static void skipToPreOpenCourse(Activity activity, String url) {
+        Intent intent = new Intent(activity, WebViewActivity.class);
+        intent.putExtra("from", "opencourse_pre");
+        intent.putExtra("url", url);
+        intent.putExtra("umeng_entry", "Home");
+        activity.startActivity(intent);
     }
 
     /**

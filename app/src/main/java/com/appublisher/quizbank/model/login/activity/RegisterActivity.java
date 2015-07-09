@@ -113,8 +113,10 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
             if (mType.equals("add")) getSupportActionBar().setTitle("绑定手机号");
         } else if ("forget_pwd".equals(mFrom)) {
             getSupportActionBar().setTitle("找回密码");
-        } else if ("book_opencourse".equals(mFrom) || "opencourse_started".equals(mFrom)) {
-            getSupportActionBar().setTitle("预约公开课");
+        } else if ("book_opencourse".equals(mFrom)
+                || "opencourse_started".equals(mFrom)
+                || "opencourse_pre".equals(mFrom)) {
+            getSupportActionBar().setTitle("验证手机号");
             mOpenCourseId = getIntent().getStringExtra("content");
         }
 
@@ -124,53 +126,54 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
             public void onClick(View v) {
                 mPhoneNum = etPhone.getText().toString();
 
-                if (!mPhoneNum.isEmpty()) {
-                    mBtnGetSmsCode.setBackgroundResource(R.drawable.login_button_wait);
-                    mBtnGetSmsCode.setClickable(false);
+                if (mPhoneNum.isEmpty()) return;
 
-                    if (mTimer != null) {
-                        mTimer.cancel();
-                    }
+                mBtnGetSmsCode.setBackgroundResource(R.drawable.login_button_wait);
+                mBtnGetSmsCode.setClickable(false);
 
-                    mTimer = new Timer();
-                    mTimer.schedule(new TimerTask() {
+                if (mTimer != null) {
+                    mTimer.cancel();
+                }
 
-                        @Override
-                        public void run() {
-                            mTimeLimit--;
-                            mHandler.sendEmptyMessage(TIME_ON);
-                            if (mTimeLimit < 0) {
-                                mTimer.cancel();
-                                mHandler.sendEmptyMessage(TIME_OUT);
-                            }
+                mTimer = new Timer();
+                mTimer.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        mTimeLimit--;
+                        mHandler.sendEmptyMessage(TIME_ON);
+                        if (mTimeLimit < 0) {
+                            mTimer.cancel();
+                            mHandler.sendEmptyMessage(TIME_OUT);
                         }
-                    }, 0, 1000);
-
-                    if ("forget_pwd".equals(mFrom)) {
-                        mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "resetPswd"));
-                        // Umeng
-                        UmengManager.sendCountEvent(
-                                RegisterActivity.this, "CodeReq", "Type", "Forget");
-
-                    } else if ("book_opencourse".equals(mFrom)
-                            || "opencourse_started".equals(mFrom)) {
-                        mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
-                        // Umeng
-                        UmengManager.sendCountEvent(
-                                RegisterActivity.this, "CodeReq", "Type", "Verify");
-
-                    } else if ("UserInfoActivity".equals(mFrom)){
-                        mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
-                        // Umeng
-                        UmengManager.sendCountEvent(
-                                RegisterActivity.this, "CodeReq", "Type", "Link");
-
-                    } else {
-                        mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
-                        // Umeng
-                        UmengManager.sendCountEvent(
-                                RegisterActivity.this, "CodeReq", "Type", "Reg");
                     }
+                }, 0, 1000);
+
+                if ("forget_pwd".equals(mFrom)) {
+                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "resetPswd"));
+                    // Umeng
+                    UmengManager.sendCountEvent(
+                            RegisterActivity.this, "CodeReq", "Type", "Forget");
+
+                } else if ("book_opencourse".equals(mFrom)
+                        || "opencourse_started".equals(mFrom)
+                        || "opencourse_pre".equals(mFrom)) {
+                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
+                    // Umeng
+                    UmengManager.sendCountEvent(
+                            RegisterActivity.this, "CodeReq", "Type", "Verify");
+
+                } else if ("UserInfoActivity".equals(mFrom)){
+                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
+                    // Umeng
+                    UmengManager.sendCountEvent(
+                            RegisterActivity.this, "CodeReq", "Type", "Link");
+
+                } else {
+                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
+                    // Umeng
+                    UmengManager.sendCountEvent(
+                            RegisterActivity.this, "CodeReq", "Type", "Reg");
                 }
             }
         });

@@ -8,55 +8,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <!-- course img -->
-    <ImageView
-        android:id="@+id/opencourse_img"
-        android:layout_width="288dp"
-        android:layout_height="172dp"
-        android:layout_below="@id/toolbar"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/opencourse_unstart"
-        tools:ignore="ContentDescription" />
-
-    <!-- course detail -->
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/opencourse_img"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_below="@id/toolbar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <!-- course detail -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/opencourse_name"
-            style="@style/OpenCourseTv"/>
+                <TextView
+                    android:id="@+id/opencourse_name"
+                    style="@style/OpenCourseTv"/>
 
-        <View
-            style="@style/SettingLine"/>
+                <View
+                    style="@style/SettingLine"/>
 
-        <TextView
-            android:id="@+id/opencourse_time"
-            style="@style/OpenCourseTv"/>
+                <TextView
+                    android:id="@+id/opencourse_time"
+                    style="@style/OpenCourseTv"/>
 
-        <View
-            style="@style/SettingLine"/>
+                <View
+                    style="@style/SettingLine"/>
 
-        <TextView
-            android:id="@+id/opencourse_lector"
-            style="@style/OpenCourseTv"/>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/opencourse_lector"
+                    style="@style/OpenCourseTv"/>
+            </LinearLayout>
 
-    <!-- course notice -->
-    <TextView
-        android:id="@+id/opencourse_notice"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:background="@color/transparency"
-        android:textSize="17sp"
-        android:textColor="@color/white"
-        android:text="@string/opencourse_notice_false"/>
+            <!-- course notice -->
+            <TextView
+                android:id="@+id/opencourse_notice"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:background="@color/answer_sheet_btn"
+                android:textSize="17sp"
+                android:textColor="@color/white"
+                android:text="@string/opencourse_notice_false"/>
+
+            <!-- 往期回顾 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:text="@string/opencourse_passed_events"
+                tools:ignore="RtlHardcoded" />
+
+            <ImageView
+                android:id="@+id/opencourse_oldtimey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/opencourse_unstart"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

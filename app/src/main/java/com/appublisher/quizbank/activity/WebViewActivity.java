@@ -22,6 +22,7 @@ import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.HomeWatcher;
@@ -130,6 +131,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             if ("opencourse_started".equals(mFrom)) {
                 ProgressDialogManager.showProgressDialog(this, true);
                 mRequest.getOpenCourseUrl(mOpencourseId);
+            } else if ("opencourse_pre".equals(mFrom)) {
+                showWebView(mUrl
+                        + "&user_id=" + LoginModel.getUserId()
+                        + "&user_token=" + LoginModel.getUserToken());
             } else {
                 showWebView(mUrl);
             }
@@ -179,12 +184,14 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     protected void onDestroy() {
         super.onDestroy();
         // Umeng
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Entry", mUmengEntry);
-        map.put("EnterLive", "1");
-        map.put("QQ", mUmengQQ);
-        long dur = System.currentTimeMillis() - mUmengTimestamp;
-        UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur/1000));
+        if ("opencourse_started".equals(mFrom)) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Entry", mUmengEntry);
+            map.put("EnterLive", "1");
+            map.put("QQ", mUmengQQ);
+            long dur = System.currentTimeMillis() - mUmengTimestamp;
+            UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur/1000));
+        }
 
         // 关闭定时器
         if (mTimer != null) {

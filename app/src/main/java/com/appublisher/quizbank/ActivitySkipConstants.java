@@ -17,6 +17,9 @@ public class ActivitySkipConstants {
     // 预约直播课
     public static final int BOOK_OPENCOURSE = 1003;
 
+    // 跳转至查看往期
+    public static final int OPENCOURSE_PRE = 1004;
+
     // 课程中心跳转至详情页面
-    public static final int COURSE = 1004;
+    public static final int COURSE = 1005;
 }
