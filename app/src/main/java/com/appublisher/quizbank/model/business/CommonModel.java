@@ -74,4 +74,13 @@ public class CommonModel {
         marketIntent.setData(Uri.parse("market://details?id=" + activity.getPackageName()));
         activity.startActivity(marketIntent);
     }
+
+    /**
+     * 设置Bar标题
+     * @param activity ActionBarActivity
+     * @param title 标题
+     */
+    public static void setBarTitle(ActionBarActivity activity, String title) {
+        activity.getSupportActionBar().setTitle(title);
+    }
 }

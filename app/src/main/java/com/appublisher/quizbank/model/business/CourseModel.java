@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.model.business;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +11,16 @@ import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.adapter.CourseListAdapter;
 import com.appublisher.quizbank.adapter.FilterCourseAreaAdapter;
 import com.appublisher.quizbank.adapter.FilterCoursePurchaseAdapter;
 import com.appublisher.quizbank.adapter.FilterCourseTagAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.fragment.CourseFragment;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.course.CourseListResp;
 import com.appublisher.quizbank.model.netdata.course.CourseM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaM;
@@ -46,7 +50,7 @@ public class CourseModel {
     private static TextView mTvLastTag;
     private static TextView mTvLastArea;
     private static TextView mTvLastPurchase;
-    private static CourseListAdapter mCourseListAdapter;
+    public static CourseListAdapter mCourseListAdapter;
 
     /**
      * 处理课程标签回调
@@ -94,10 +98,7 @@ public class CourseModel {
         mCourseFragment.mRlArea.setOnClickListener(onClickListener);
 
         // 获取课程列表
-        mCourseFragment.mRequest.getCourseList(
-                mCourseFragment.mCurTagId,
-                mCourseFragment.mCurAreaId,
-                mCourseFragment.mCurPurchaseId);
+        getCourseList(courseFragment);
     }
 
     /**
@@ -130,6 +131,8 @@ public class CourseModel {
             mCourses.addAll(courseListResp.getCourses());
             mCourseListAdapter.notifyDataSetChanged();
         }
+
+        mCourseFragment.mLvCourse.setOnItemClickListener(onItemClickListener);
 
         ProgressBarManager.hideProgressBar();
     }
@@ -322,11 +325,7 @@ public class CourseModel {
 
                 case R.id.course_filter_confirm:
                     // 确认按钮
-                    ProgressBarManager.showProgressBar(mCourseFragment.mMainView);
-                    mCourseFragment.mRequest.getCourseList(
-                            mCourseFragment.mCurTagId,
-                            mCourseFragment.mCurAreaId,
-                            mCourseFragment.mCurPurchaseId);
+                    getCourseList(mCourseFragment);
                     dismissAllPw();
                     break;
 
@@ -397,9 +396,50 @@ public class CourseModel {
                         recordCurArea(position);
 
                         break;
+
+                    case R.id.course_listview:
+                        // 课程列表
+                        skipToCoursePage(position);
+                        break;
                 }
             }
         };
+
+    /**
+     * 跳转至课程页面
+     * @param position item位置
+     */
+    private static void skipToCoursePage(int position) {
+        if (mCourses == null || position >= mCourses.size()) return;
+
+        CourseM course = mCourses.get(position);
+        if (course == null) return;
+
+        String type = course.getType();
+        String title = course.getName();
+        String courseUrl = "";
+        int courseId = course.getId();
+
+        if ("live".equals(type)) {
+            // 直播课&公开课
+            courseUrl = course.getDetail_page()
+                    + "user_id=" + LoginModel.getUserId()
+                    + "&user_token=" + LoginModel.getUserToken()
+                    + "&course_id=" + String.valueOf(courseId);
+
+        } else if ("vod".equals(type)) {
+            // 录播课
+            courseUrl = "http://daily.edu.appublisher.com/buy/detail.php?courseid="
+                    + String.valueOf(courseId)
+                    + "&uid=" + LoginModel.getUserId();
+        }
+
+        Intent intent = new Intent(mCourseFragment.mActivity, WebViewActivity.class);
+        intent.putExtra("url", courseUrl);
+        intent.putExtra("bar_title", title == null ? "" : title);
+        intent.putExtra("from", "course");
+        mCourseFragment.startActivityForResult(intent, ActivitySkipConstants.COURSE);
+    }
 
     /**
      * 设置控件的选中状态
@@ -447,11 +487,7 @@ public class CourseModel {
 
         if ("course_filter_area".equals(apiName)) {
             // 获取课程地区接口异常
-            ProgressBarManager.showProgressBar(courseFragment.mMainView);
-            courseFragment.mRequest.getCourseList(
-                    courseFragment.mCurTagId,
-                    courseFragment.mCurAreaId,
-                    courseFragment.mCurPurchaseId);
+            getCourseList(courseFragment);
         }
     }
 
@@ -464,4 +500,15 @@ public class CourseModel {
         if (mPwArea != null && mPwArea.isShowing()) mPwArea.dismiss();
     }
 
+    /**
+     * 获取课程列表
+     * @param courseFragment CourseFragment
+     */
+    public static void getCourseList(CourseFragment courseFragment) {
+        ProgressBarManager.showProgressBar(courseFragment.mMainView);
+        courseFragment.mRequest.getCourseList(
+                courseFragment.mCurTagId,
+                courseFragment.mCurAreaId,
+                courseFragment.mCurPurchaseId);
+    }
 }

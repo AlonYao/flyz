@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
@@ -115,6 +116,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
         if (mUmengTimestamp == 0) mUmengTimestamp = System.currentTimeMillis();
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+        String barTitle = getIntent().getStringExtra("bar_title");
+
+        // 设置Bar Name
+        CommonModel.setBarTitle(this, barTitle == null ? "" : barTitle);
     }
 
     @Override
@@ -261,6 +266,8 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     @SuppressLint("SetJavaScriptEnabled")
     public void showWebView(String url) {
         if (url == null) return;
+
+        if (!url.contains("http://")) url = "http://" + url;
 
         mProgressBar.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);

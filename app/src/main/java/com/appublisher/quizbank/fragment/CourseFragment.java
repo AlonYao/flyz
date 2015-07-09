@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.business.CourseModel;
@@ -18,6 +20,7 @@ import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
 
@@ -29,7 +32,6 @@ import org.json.JSONObject;
  */
 public class CourseFragment extends Fragment implements RequestCallback{
 
-    private String mUserId;
     public View mMainView;
     public Activity mActivity;
     public Request mRequest;
@@ -80,6 +82,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mCurTagId = 0;
         mCurPurchaseId = 2;
         mCurAreaId = "ALL";
+        CourseModel.mCourseListAdapter = null;
 
         // 已购/未购
         mRlPurchase.setOnClickListener(CourseModel.onClickListener);
@@ -92,13 +95,10 @@ public class CourseFragment extends Fragment implements RequestCallback{
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden && !LoginModel.getUserId().equals(mUserId)) {
-            // 如果登录用户发生变化，则刷新课程列表
-
-            // 更新用户id
-            mUserId = LoginModel.getUserId();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ActivitySkipConstants.COURSE) {
+            CourseModel.getCourseList(this);
         }
     }
 

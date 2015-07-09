@@ -274,6 +274,14 @@ public class LoginModel {
     }
 
     /**
+     * 获取用户id
+     * @return 用户id
+     */
+    public static String getUserToken() {
+        return Globals.sharedPreferences.getString("user_token", "");
+    }
+
+    /**
      * 判断是否有考试项目
      * @return 是或否
      */
