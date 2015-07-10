@@ -5,7 +5,7 @@
     <string name="login_edittext_password">密码</string>
     <string name="login_button_login">登录</string>
     <string name="login_button_register">注册</string>
-    <string name="login_forgetpwd"><u>忘记密码</u></string>
+    <string name="login_forgetpwd">忘记密码</string>
     <string name="login_error_username">邮箱或手机号不正确，请重新输入</string>
     <string name="login_error_password">密码不正确，请重新输入</string>
     <string name="login_register_phone">填写手机号</string>
@@ -16,7 +16,7 @@
     <string name="login_setpwd_submit">确认</string>
     <string name="login_guest">跳过</string>
     <string name="login_default_qq">客服QQ：540922713</string>
-    <string name="login_account_notice">以下账号也可以登录</string>
+    <string name="login_account_notice">腰果账号是通用的哦~</string>
 
     <!-- 用户信息模块 string资源 -->
     <string name="userinfo_nickname">昵称：</string>

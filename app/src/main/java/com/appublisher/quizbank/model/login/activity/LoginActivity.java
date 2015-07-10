@@ -110,7 +110,6 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
 
         // view初始化
         Button btnLogin = (Button) findViewById(R.id.login_btn);
-        Button btnRegister = (Button) findViewById(R.id.login_register);
         ImageButton weixinBtn = (ImageButton) findViewById(R.id.login_weixin);
         ImageButton weiboBtn = (ImageButton) findViewById(R.id.login_weibo);
         TextView tvForgetPwd = (TextView) findViewById(R.id.login_forgetpwd);
@@ -153,15 +152,6 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                         mRequest.login(ParamBuilder.loginParams("0", username, "", pwdEncrypt));
                     }
                 }
-            }
-        });
-
-        // 注册按钮
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
             }
         });
 

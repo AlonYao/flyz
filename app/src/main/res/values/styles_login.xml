@@ -3,14 +3,14 @@
     <!-- 登录注册模块 style资源 -->
     <!-- EditText -->
     <style name="Login_EditText">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
         <item name="android:ems">10</item>
-        <item name="android:textColorHint">@color/login_edittext_username</item>
+        <item name="android:textColorHint">@color/login_gray</item>
         <item name="android:textColor">@color/login_edittext_username</item>
-        <item name="android:background">@drawable/login_edittext_background</item>
-        <item name="android:paddingLeft">15dp</item>
-        <item name="android:paddingRight">15dp</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">30dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 

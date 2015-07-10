@@ -11,42 +11,32 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingBottom="15dp">
+        android:clipToPadding="false">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="15dp"
             android:orientation="vertical">
 
             <!-- 账号登陆提示 -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/login_account_common"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="15dp"
                 android:textSize="17sp"
-                android:textColor="#7c7e7d"
+                android:textColor="@color/setting_text"
                 android:text="@string/login_account_notice"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/login_ic_dailyplan"
-                    tools:ignore="ContentDescription" />
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="30dp"
-                    android:src="@drawable/login_ic_dailylearn"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
+            <include layout="@layout/login_line"/>
 
             <!-- 用户名 -->
             <EditText
@@ -54,8 +44,13 @@
                 android:inputType="textEmailAddress"
                 android:id="@+id/login_username"
                 android:textColor="@color/login_black"
-                android:hint="@string/login_edittext_username"
-                android:layout_marginTop="15dp" />
+                android:hint="@string/login_edittext_username"/>
+
+            <include layout="@layout/login_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="30dp"
+                tools:ignore="RtlHardcoded" />
 
             <!-- 密码 -->
             <EditText
@@ -63,71 +58,35 @@
                 android:inputType="textPassword"
                 android:id="@+id/login_password"
                 android:textColor="@color/login_black"
-                android:hint="@string/login_edittext_password"
-                android:layout_marginTop="20dp" />
+                android:hint="@string/login_edittext_password"/>
 
             <!-- 登录按钮 -->
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:id="@+id/login_btn"
-                android:layout_marginTop="20dp"
                 android:text="@string/login_button_login"
                 android:textColor="@color/login_white"
-                android:background="@drawable/login_button_login"
+                android:background="@color/blue"
                 android:layout_gravity="center_horizontal" />
 
-            <!-- 图片"or" -->
-            <ImageView
+            <!-- 忘记密码 -->
+            <TextView
+                android:id="@+id/login_forgetpwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="12dp"
-                android:src="@drawable/login_or"
-                tools:ignore="ContentDescription" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" >
-                <!-- 注册按钮 -->
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/login_register"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/login_button_register"
-                    android:textColor="@color/login_white"
-                    android:text="@string/login_button_register" />
-
-                <!-- 忘记密码 -->
-                <TextView
-                    android:id="@+id/login_forgetpwd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:textColor="@color/login_edittext_username"
-                    android:textSize="15sp"
-                    android:text="@string/login_forgetpwd"
-                    android:layout_below="@id/login_register"
-                    android:layout_alignRight="@id/login_register"
-                    tools:ignore="RtlHardcoded" />
-            </RelativeLayout>
-
-            <!-- "绑定以下社交账号" -->
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="12dp"
-                android:src="@drawable/login_binding"
-                tools:ignore="ContentDescription" />
+                android:textColor="@color/login_forget_pwd"
+                android:text="@string/login_forgetpwd"
+                tools:ignore="RtlHardcoded" />
 
             <!-- 第三方登录Button -->
             <TableRow
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal" >
 
                 <!--微博-->

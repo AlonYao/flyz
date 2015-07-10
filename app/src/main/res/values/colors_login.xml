@@ -2,8 +2,10 @@
 <resources>
     <!-- 登录注册模块 color资源-->
     <color name="login_edittext_username">#262B2D</color>
+    <color name="login_forget_pwd">#727677</color>
     <color name="login_white">#FFFFFF</color>
     <color name="login_transparency">#00ffffff</color>
     <color name="login_bg">#1f2229</color>
     <color name="login_black">#262B2D</color>
+    <color name="login_gray">#AEB1B3</color>
 </resources>
