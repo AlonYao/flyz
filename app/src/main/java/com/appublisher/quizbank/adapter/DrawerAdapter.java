@@ -36,7 +36,7 @@ public class DrawerAdapter extends BaseAdapter{
     private int[] mItemImgs = new int[] {
             R.drawable.drawer_homepage,
             R.drawable.drawer_wholepage,
-            R.drawable.drawer_wholepage,
+            R.drawable.drawer_course,
             R.drawable.drawer_wrong,
             R.drawable.drawer_store,
             R.drawable.drawer_record,
