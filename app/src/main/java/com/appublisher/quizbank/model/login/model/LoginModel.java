@@ -21,6 +21,7 @@ import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
+import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
@@ -53,14 +54,14 @@ import java.util.Map;
  */
 public class LoginModel {
 
-    private LoginActivity mActivity;
+    private static LoginActivity mLoginActivity;
 
     /**
      * 构造函数
      * @param activity  登录Activity
      */
     public LoginModel(LoginActivity activity) {
-        this.mActivity = activity;
+        mLoginActivity = activity;
     }
 
     /**
@@ -120,46 +121,49 @@ public class LoginModel {
     public View.OnClickListener weixinOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mActivity.mController.doOauthVerify(mActivity, SHARE_MEDIA.WEIXIN,
+            mLoginActivity.mController.doOauthVerify(mLoginActivity, SHARE_MEDIA.WEIXIN,
                 new SocializeListeners.UMAuthListener() {
                     @Override
                     public void onStart(SHARE_MEDIA share_media) {
-                        ProgressDialogManager.showProgressDialog(mActivity, false);
+                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
                     }
 
                     @Override
                     public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
-                        mActivity.mController.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN,
-                                new SocializeListeners.UMDataListener() {
-                                    @Override
-                                    public void onStart() {
-                                        // 获取数据开始
-                                    }
+                        mLoginActivity.mController.getPlatformInfo(
+                                mLoginActivity, SHARE_MEDIA.WEIXIN,
+                            new SocializeListeners.UMDataListener() {
+                                @Override
+                                public void onStart() {
+                                    // 获取数据开始
+                                }
 
-                                    @Override
-                                    public void onComplete(int status, Map<String, Object> info) {
-                                        if(status == 200 && info != null){
-                                            String login_id = (String) info.get("unionid");
-                                            String nickname = (String) info.get("nickname");
-                                            String avatar = (String) info.get("headimgurl");
+                                @Override
+                                public void onComplete(int status, Map<String, Object> info) {
+                                    if(status == 200 && info != null){
+                                        String login_id = (String) info.get("unionid");
+                                        String nickname = (String) info.get("nickname");
+                                        String avatar = (String) info.get("headimgurl");
 
-                                            if (login_id == null) {
-                                                ProgressDialogManager.closeProgressDialog();
-                                                ToastManager.showToast(mActivity, "登录失败");
-                                                return;
-                                            }
+                                        if (login_id == null) {
+                                            ProgressDialogManager.closeProgressDialog();
+                                            ToastManager.showToast(mLoginActivity, "登录失败");
+                                            return;
+                                        }
 
-                                            mActivity.mSocialLoginType = "WX";
-                                            mActivity.mRequest.socialLogin(ParamBuilder.socialLoginParams("2",
+                                        mLoginActivity.mSocialLoginType = "WX";
+                                        mLoginActivity.mRequest.socialLogin(
+                                                ParamBuilder.socialLoginParams(
+                                                    "2",
                                                     login_id,
                                                     nickname,
                                                     "",
                                                     avatar));
-                                        }else{
-                                            ProgressDialogManager.closeProgressDialog();
-                                        }
+                                    }else{
+                                        ProgressDialogManager.closeProgressDialog();
                                     }
-                                });
+                                }
+                            });
                     }
 
                     @Override
@@ -181,16 +185,17 @@ public class LoginModel {
     public View.OnClickListener weiboOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mActivity.mController.doOauthVerify(mActivity, SHARE_MEDIA.SINA,
+            mLoginActivity.mController.doOauthVerify(mLoginActivity, SHARE_MEDIA.SINA,
                 new SocializeListeners.UMAuthListener() {
                     @Override
                     public void onStart(SHARE_MEDIA share_media) {
-                        ProgressDialogManager.showProgressDialog(mActivity, false);
+                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
                     }
 
                     @Override
                     public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
-                        mActivity.mController.getPlatformInfo(mActivity, SHARE_MEDIA.SINA,
+                        mLoginActivity.mController.getPlatformInfo(
+                                mLoginActivity, SHARE_MEDIA.SINA,
                             new SocializeListeners.UMDataListener() {
                                 @Override
                                 public void onStart() {
@@ -203,12 +208,14 @@ public class LoginModel {
                                         String nickname = info.get("screen_name").toString();
                                         String avatar = info.get("profile_image_url").toString();
 
-                                        mActivity.mSocialLoginType = "WB";
-                                        mActivity.mRequest.socialLogin(ParamBuilder.socialLoginParams("1",
-                                                login_id,
-                                                nickname,
-                                                "",
-                                                avatar));
+                                        mLoginActivity.mSocialLoginType = "WB";
+                                        mLoginActivity.mRequest.socialLogin(
+                                                ParamBuilder.socialLoginParams(
+                                                    "1",
+                                                    login_id,
+                                                    nickname,
+                                                    "",
+                                                    avatar));
                                     }else{
                                         ProgressDialogManager.closeProgressDialog();
                                     }
@@ -482,6 +489,42 @@ public class LoginModel {
                         }, null);
                 mDownloadAsyncTask.execute();
             }
+        }
+    }
+
+    /**
+     * 处理接口回调
+     * @param response 回调数据
+     * @param apiName 接口类别
+     */
+    public static void dealResp(JSONObject response, String apiName, LoginActivity activity) {
+        if (response == null) return;
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        mLoginActivity = activity;
+
+        if ("is_user_exists".equals(apiName)) {
+            IsUserExistsResp isUserExistsResp =
+                    Globals.gson.fromJson(response.toString(), IsUserExistsResp.class);
+            dealIsUserExistsResp(isUserExistsResp, activity);
+        }
+    }
+
+    /**
+     * 处理用户是否存在接口 请求回调
+     * @param isUserExistsResp 回调数据模型
+     * @param activity LoginActivity
+     */
+    public static void dealIsUserExistsResp(IsUserExistsResp isUserExistsResp,
+                                            LoginActivity activity) {
+        if (isUserExistsResp == null || isUserExistsResp.getResponse_code() != 1) return;
+
+        if (isUserExistsResp.isUser_exists()) {
+            ProgressDialogManager.showProgressDialog(activity, false);
+            activity.mRequest.login(
+                    ParamBuilder.loginParams("0", activity.mUsername, "", activity.mPwdEncrypt));
+        } else {
+            // 用户不存在
+            ToastManager.showToast(activity, "该用户不存在");
         }
     }
 }

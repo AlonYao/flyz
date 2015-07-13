@@ -63,6 +63,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     public Request mRequest;
     public UMSocialService mController;
     public String mSocialLoginType;
+    public String mUsername;
+    public String mPwdEncrypt;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -119,9 +121,9 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         // 成员变量初始化
         mRequest = new Request(this, this);
         mGson = new Gson();
-        LoginModel mLoginModel = new LoginModel(this);
         mHomeWatcher = new HomeWatcher(this);
         mHandler = new MsgHandler(this);
+        LoginModel mLoginModel = new LoginModel(this);
 
         // 获取数据
         String from = getIntent().getStringExtra("from");
@@ -136,20 +138,20 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = etUsername.getText().toString();
+                mUsername = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
 
-                if (username.isEmpty()) {
+                if (mUsername.isEmpty()) {
                     ToastManager.showToast(LoginActivity.this,
                             getString(R.string.login_error_username));
                 } else if (password.isEmpty()) {
                     ToastManager.showToast(LoginActivity.this,
                             getString(R.string.login_error_password));
                 } else {
-                    String pwdEncrypt = LoginModel.encrypt(password, "appublisher");
-                    if (!pwdEncrypt.isEmpty()) {
+                    mPwdEncrypt = LoginModel.encrypt(password, "appublisher");
+                    if (!mPwdEncrypt.isEmpty()) {
                         ProgressDialogManager.showProgressDialog(LoginActivity.this, false);
-                        mRequest.login(ParamBuilder.loginParams("0", username, "", pwdEncrypt));
+                        mRequest.isUserExists(mUsername);
                     }
                 }
             }
@@ -278,6 +280,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     @SuppressLint("CommitPrefEdits")
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        LoginModel.dealResp(response, apiName, this);
+
         if (response != null) {
             if (apiName.equals("login")) {
                 LoginResponseModel lrm = mGson.fromJson(response.toString(),

@@ -11,6 +11,7 @@ public interface ApiConstants {
 
     String baseUrlImg = "http://img.edu.appublisher.com/";
 
+    /** 登录注册模块 **/
     // 用户登录
     String userLogin = baseUrl + "common/user_login";
 
@@ -44,6 +45,10 @@ public interface ApiConstants {
     // 忘记密码
     String forgetPwd = baseUrl + "common/reset_password";
 
+    // 检查用户是否注册
+    String isUserExists = baseUrl + "common/is_user_exists";
+
+    /** 天天模考 **/
     // 快速智能练习
     String getAutoTraining = baseUrl + "quizbank/auto_training";
 

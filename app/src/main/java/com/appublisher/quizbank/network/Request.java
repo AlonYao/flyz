@@ -262,6 +262,16 @@ public class Request extends BaseRequest implements ApiConstants{
                 "free_open_course_status", "object");
     }
 
+    /**** 登录注册模块 ****/
+    /**
+     * 检查用户是否存在
+     * @param user_name 用户名
+     */
+    public void isUserExists(String user_name) {
+        asyncRequest(ParamBuilder.finalUrl(isUserExists) + "&user_name=" + user_name,
+                "is_user_exists", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	数据提交接口代码块	 *
