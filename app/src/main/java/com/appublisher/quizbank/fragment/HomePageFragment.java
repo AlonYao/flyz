@@ -211,6 +211,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
+        if (!isAdded()) return;
         ToastManager.showToast(mActivity, getString(R.string.netdata_overtime));
         ProgressBarManager.hideProgressBar();
     }

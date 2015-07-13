@@ -498,15 +498,46 @@ public class LoginModel {
      * @param apiName 接口类别
      */
     public static void dealResp(JSONObject response, String apiName, LoginActivity activity) {
-        if (response == null) return;
+        if (response == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
+
         if (Globals.gson == null) Globals.gson = GsonManager.initGson();
-        mLoginActivity = activity;
 
         if ("is_user_exists".equals(apiName)) {
             IsUserExistsResp isUserExistsResp =
                     Globals.gson.fromJson(response.toString(), IsUserExistsResp.class);
             dealIsUserExistsResp(isUserExistsResp, activity);
+
+        } else if ("login".equals(apiName) || "social_login".equals(apiName)) {
+            LoginResponseModel lrm =
+                    Globals.gson.fromJson(response.toString(), LoginResponseModel.class);
+            dealLoginResp(lrm, activity, apiName);
+
+        } else {
+            ProgressDialogManager.closeProgressDialog();
         }
+    }
+
+    /**
+     * 处理登录接口回调
+     * @param lrm 回调数据模型
+     * @param activity LoginActivity
+     * @param apiName 接口类别
+     */
+    private static void dealLoginResp(LoginResponseModel lrm,
+                                      LoginActivity activity,
+                                      String apiName) {
+        if (lrm == null || lrm.getResponse_code() != 1) {
+            ToastManager.showToast(activity, "密码不正确");
+
+        } else {
+            // 执行成功后的操作
+            setLoginSuccess(lrm, activity, apiName);
+        }
+
+        ProgressDialogManager.closeProgressDialog();
     }
 
     /**
@@ -516,15 +547,68 @@ public class LoginModel {
      */
     public static void dealIsUserExistsResp(IsUserExistsResp isUserExistsResp,
                                             LoginActivity activity) {
-        if (isUserExistsResp == null || isUserExistsResp.getResponse_code() != 1) return;
+        if (isUserExistsResp == null || isUserExistsResp.getResponse_code() != 1) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
 
         if (isUserExistsResp.isUser_exists()) {
-            ProgressDialogManager.showProgressDialog(activity, false);
             activity.mRequest.login(
                     ParamBuilder.loginParams("0", activity.mUsername, "", activity.mPwdEncrypt));
         } else {
             // 用户不存在
+            ProgressDialogManager.closeProgressDialog();
             ToastManager.showToast(activity, "该用户不存在");
+        }
+    }
+
+    /**
+     * 设置登录成功后的操作
+     * @param lrm 用户个人信息数据模型
+     */
+    @SuppressLint("CommitPrefEdits")
+    private static void setLoginSuccess(LoginResponseModel lrm,
+                                        LoginActivity activity,
+                                        String apiName) {
+        if (lrm == null) {
+            ToastManager.showToast(activity, "登录失败");
+            return;
+        }
+
+        UserInfoModel uim = lrm.getUser();
+        UserExamInfoModel ueim = lrm.getExam();
+
+        if (uim.getUser_id() == null || uim.getUser_id().length() == 0) {
+            ToastManager.showToast(activity, "登录失败");
+            return;
+        }
+
+        // 新建或切换数据库
+        LoginModel.setDatabase(uim.getUser_id(), activity);
+
+        // 保存用户信息至数据库
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        UserDAO.save(Globals.gson.toJson(uim), Globals.gson.toJson(ueim));
+
+        // 本地缓存
+        SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+        editor.putString("user_id", uim.getUser_id());
+        editor.putString("user_token", uim.getUser_token());
+        editor.putString("user_mobile", uim.getMobile_num());
+        editor.putString("user_email", uim.getMail());
+        editor.putBoolean("is_login", true);
+        editor.commit();
+
+        // 页面跳转
+        activity.mHandler.sendEmptyMessage(LoginActivity.LOGIN_SUCCESS);
+
+        // Umeng
+        if ("login".equals(apiName)) {
+            UmengManager.sendCountEvent(activity, "RegLog", "Action", "Login");
+            UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
+        } else if ("social_login".equals(apiName)) {
+            UmengManager.sendCountEvent(activity, "RegLog", "Action", activity.mSocialLoginType);
+            if (!lrm.isIs_new()) UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
         }
     }
 }

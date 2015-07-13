@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -54,12 +55,9 @@ import java.lang.ref.WeakReference;
  */
 public class LoginActivity extends ActionBarActivity implements RequestCallback{
 
-    private static final int LOGIN_SUCCESS = 1;
-
-    private Gson mGson;
+    public static final int LOGIN_SUCCESS = 1;
     private HomeWatcher mHomeWatcher;
-    private Handler mHandler;
-
+    public Handler mHandler;
     public Request mRequest;
     public UMSocialService mController;
     public String mSocialLoginType;
@@ -80,8 +78,6 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
             if (activity != null) {
                 switch (msg.what) {
                     case LOGIN_SUCCESS:
-                        ToastManager.showToast(activity, "登录成功");
-
                         if (!LoginModel.hasExamInfo()) {
                             Intent intent = new Intent(activity, ExamChangeActivity.class);
                             intent.putExtra("from", "login");
@@ -92,6 +88,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                         }
 
                         activity.finish();
+                        ToastManager.showToast(activity, "登录成功");
 
                         break;
 
@@ -110,6 +107,9 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         CommonModel.setToolBar(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
+        // 禁止键盘自动弹出
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         // view初始化
         Button btnLogin = (Button) findViewById(R.id.login_btn);
         ImageButton weixinBtn = (ImageButton) findViewById(R.id.login_weixin);
@@ -120,7 +120,6 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
 
         // 成员变量初始化
         mRequest = new Request(this, this);
-        mGson = new Gson();
         mHomeWatcher = new HomeWatcher(this);
         mHandler = new MsgHandler(this);
         LoginModel mLoginModel = new LoginModel(this);
@@ -255,93 +254,10 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         return keyCode == KeyEvent.KEYCODE_BACK;
     }
 
-    /**
-     * 设置登录成功后的操作
-     * @param uim 用户个人信息
-     * @param ueim 用户考试信息
-     */
-    @SuppressLint("CommitPrefEdits")
-    private void setLoginSuccess(UserInfoModel uim, UserExamInfoModel ueim) {
-        // 保存用户信息至数据库
-        UserDAO.save(mGson.toJson(uim), mGson.toJson(ueim));
-
-        // 本地缓存
-        SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
-        editor.putString("user_id", uim.getUser_id());
-        editor.putString("guest_id", "");
-        editor.putString("user_token", uim.getUser_token());
-        editor.putBoolean("is_login", true);
-        editor.commit();
-
-        // 页面跳转
-        mHandler.sendEmptyMessage(LOGIN_SUCCESS);
-    }
-
     @SuppressLint("CommitPrefEdits")
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         LoginModel.dealResp(response, apiName, this);
-
-        if (response != null) {
-            if (apiName.equals("login")) {
-                LoginResponseModel lrm = mGson.fromJson(response.toString(),
-                        LoginResponseModel.class);
-
-                if (lrm != null && lrm.getResponse_code() == 1) {
-                    UserInfoModel uim = lrm.getUser();
-                    UserExamInfoModel ueim = lrm.getExam();
-
-                    if (uim != null) {
-                        String user_id = uim.getUser_id();
-                        if (user_id != null && !user_id.equals("")) {
-                            // 友盟
-                            UmengManager.sendCountEvent(
-                                    LoginActivity.this, "RegLog", "Action", "Login");
-
-                            // 新建||切换数据库
-                            LoginModel.setDatabase(user_id, this);
-
-                            // Umeng 首页访问 统计
-                            UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
-
-                            // 执行成功后的操作
-                            setLoginSuccess(uim, ueim);
-                        }
-                    }
-                } else if (lrm != null && lrm.getResponse_code() == 1106) {
-                    ToastManager.showToast(this, lrm.getResponse_msg());
-                } else {
-                    ToastManager.showToast(this, "登录失败");
-                }
-            }
-
-            if (apiName.equals("social_login")) {
-                LoginResponseModel lrm = mGson.fromJson(response.toString(),
-                        LoginResponseModel.class);
-                if (lrm != null && lrm.getResponse_code() == 1) {
-                    UserInfoModel uim = lrm.getUser();
-                    UserExamInfoModel ueim = lrm.getExam();
-
-                    if (uim != null) {
-                        String user_id = uim.getUser_id();
-                        LoginModel.setDatabase(user_id, this);
-
-                        // Umeng 注册/登陆 统计
-                        UmengManager.sendCountEvent(this, "RegLog", "Action", mSocialLoginType);
-
-                        // Umeng 首页访问 统计
-                        if (!lrm.isIs_new()) {
-                            UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
-                        }
-
-                        // 执行成功后的操作
-                        setLoginSuccess(uim, ueim);
-                    }
-                }
-            }
-        }
-
-        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
