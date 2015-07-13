@@ -2,7 +2,9 @@ package com.appublisher.quizbank.model.login.model;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -15,11 +17,13 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
+import com.appublisher.quizbank.model.login.activity.MobileRegisterActivity;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
@@ -549,6 +553,7 @@ public class LoginModel {
                                             LoginActivity activity) {
         if (isUserExistsResp == null || isUserExistsResp.getResponse_code() != 1) {
             ProgressDialogManager.closeProgressDialog();
+            LoginModel.showUserNonentityAlert(activity);
             return;
         }
 
@@ -558,8 +563,36 @@ public class LoginModel {
         } else {
             // 用户不存在
             ProgressDialogManager.closeProgressDialog();
-            ToastManager.showToast(activity, "该用户不存在");
+            LoginModel.showUserNonentityAlert(activity);
         }
+    }
+
+    /**
+     * 显示用户不存在Alert
+     * @param activity LoginActivity
+     */
+    private static void showUserNonentityAlert(final LoginActivity activity) {
+        new AlertDialog.Builder(activity)
+            .setMessage(R.string.login_alert_usernonentity_msg)
+            .setTitle(R.string.alert_title)
+            .setPositiveButton(R.string.login_alert_usernonentity_p,
+                    new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(activity, MobileRegisterActivity.class);
+                            activity.startActivity(intent);
+                            dialog.dismiss();
+                        }
+                    })
+            .setNegativeButton(R.string.login_alert_usernonentity_n,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+            .create().show();
     }
 
     /**

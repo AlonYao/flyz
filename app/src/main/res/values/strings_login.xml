@@ -17,6 +17,9 @@
     <string name="login_guest">跳过</string>
     <string name="login_default_qq">客服QQ：540922713</string>
     <string name="login_account_notice">腰果账号是通用的哦~</string>
+    <string name="login_alert_usernonentity_msg">账号未注册</string>
+    <string name="login_alert_usernonentity_p">手机注册</string>
+    <string name="login_alert_usernonentity_n">切换账号</string>
 
     <!-- 用户信息模块 string资源 -->
     <string name="userinfo_nickname">昵称：</string>

@@ -54,10 +54,10 @@
         <!-- TalkingData -->
         <meta-data
             android:name="TD_APP_ID"
-            android:value="@string/talkingdata_appid"/>
+            android:value="@string/talkingdata_appid" />
         <meta-data
             android:name="TD_CHANNEL_ID"
-            android:value="@string/market"/>
+            android:value="@string/market" />
 
         <!-- 微信回调Activity -->
         <activity
@@ -227,6 +227,10 @@
         <activity
             android:name=".activity.AppGuideActivity"
             android:label="@string/title_activity_app_guide" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.MobileRegisterActivity"
+            android:label="@string/title_activity_mobile_register" >
         </activity>
     </application>
 
