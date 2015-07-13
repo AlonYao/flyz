@@ -59,6 +59,7 @@ import java.util.Map;
 public class LoginModel {
 
     private static LoginActivity mLoginActivity;
+    public static int mPwdErrorCount;
 
     /**
      * 构造函数
@@ -534,7 +535,12 @@ public class LoginModel {
                                       LoginActivity activity,
                                       String apiName) {
         if (lrm == null || lrm.getResponse_code() != 1) {
-            ToastManager.showToast(activity, "密码不正确");
+            if (mPwdErrorCount == 0) {
+                ToastManager.showToast(activity, "密码不正确");
+                mPwdErrorCount++;
+            } else if (mPwdErrorCount == 1) {
+                LoginModel.showForgetPwdAlert(activity);
+            }
 
         } else {
             // 执行成功后的操作
@@ -576,22 +582,50 @@ public class LoginModel {
             .setMessage(R.string.login_alert_usernonentity_msg)
             .setTitle(R.string.alert_title)
             .setPositiveButton(R.string.login_alert_usernonentity_p,
-                    new DialogInterface.OnClickListener() {
+                new DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(activity, MobileRegisterActivity.class);
-                            activity.startActivity(intent);
-                            dialog.dismiss();
-                        }
-                    })
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(activity, MobileRegisterActivity.class);
+                        activity.startActivity(intent);
+                        dialog.dismiss();
+                    }
+                })
             .setNegativeButton(R.string.login_alert_usernonentity_n,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+            .create().show();
+    }
+
+    /**
+     * 显示忘记密码Alert
+     * @param activity LoginActivity
+     */
+    private static void showForgetPwdAlert(final LoginActivity activity) {
+        new AlertDialog.Builder(activity)
+            .setMessage(R.string.login_alert_forgetpwd_msg)
+            .setTitle(R.string.alert_title)
+            .setPositiveButton(R.string.login_alert_forgetpwd_p,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(activity, MobileRegisterActivity.class);
+                        activity.startActivity(intent);
+                        dialog.dismiss();
+                    }
+                })
+            .setNegativeButton(R.string.login_alert_forgetpwd_n,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
             .create().show();
     }
 

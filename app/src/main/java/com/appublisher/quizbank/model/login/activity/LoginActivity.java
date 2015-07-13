@@ -123,6 +123,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         mHomeWatcher = new HomeWatcher(this);
         mHandler = new MsgHandler(this);
         LoginModel mLoginModel = new LoginModel(this);
+        LoginModel.mPwdErrorCount = 0;
 
         // 获取数据
         String from = getIntent().getStringExtra("from");

@@ -20,6 +20,9 @@
     <string name="login_alert_usernonentity_msg">账号未注册</string>
     <string name="login_alert_usernonentity_p">手机注册</string>
     <string name="login_alert_usernonentity_n">切换账号</string>
+    <string name="login_alert_forgetpwd_msg">想不起密码？</string>
+    <string name="login_alert_forgetpwd_p">找回密码</string>
+    <string name="login_alert_forgetpwd_n">再试试</string>
 
     <!-- 用户信息模块 string资源 -->
     <string name="userinfo_nickname">昵称：</string>
