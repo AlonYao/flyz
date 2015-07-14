@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -230,11 +232,21 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuItemCompat.setShowAsAction(menu.add("注册"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             // 友盟统计
             UmengManager.sendCountEvent(this, "RegLog", "Action", "Quit");
             finish();
+        } else if ("注册".equals(item.getTitle())) {
+            Intent intent = new Intent(this, MobileRegisterActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

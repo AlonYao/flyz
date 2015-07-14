@@ -136,6 +136,9 @@ public class MobileRegisterActivity extends ActionBarActivity
                 Intent intent = new Intent(this, RegisterSmsCodeActivity.class);
                 intent.putExtra("user_phone", mMobile);
                 intent.putExtra("user_pwd", mPwdEncrypt);
+                startActivity(intent);
+
+                ProgressDialogManager.closeProgressDialog();
             }
         } else if ("login".equals(apiName)) {
             // 登录接口
@@ -154,10 +157,15 @@ public class MobileRegisterActivity extends ActionBarActivity
                 if (LoginModel.saveToLocal(lrm, this)) {
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
+                    ToastManager.showToast(this, "手机号已注册");
                 } else {
                     ToastManager.showToast(this, "数据异常");
                 }
             }
+
+            ProgressDialogManager.closeProgressDialog();
+        } else {
+            ProgressDialogManager.closeProgressDialog();
         }
     }
 
