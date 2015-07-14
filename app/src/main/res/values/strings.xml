@@ -137,14 +137,6 @@
     <string name="paper_type_auto">快速智能练习</string>
 
     <!-- Activity -->
-    <!-- 登录注册Activity -->
-    <string name="title_activity_login">登录</string>
-    <string name="title_activity_nickname_change">昵称修改</string>
-    <string name="title_activity_pwd_change">密码修改</string>
-    <string name="title_activity_register">手机号注册</string>
-    <string name="title_activity_setpwd">设置密码</string>
-    <string name="title_activity_user_info">个人信息</string>
-    <string name="title_activity_cannot_get_sms">收不到验证码</string>
     <string name="title_activity_exam_change">考试项目</string>
     <string name="title_activity_system_notice">系统通知</string>
     <string name="title_activity_qa">常见问题</string>
@@ -164,6 +156,5 @@
     <string name="title_activity_open_course_none">查看往期</string>
     <string name="title_activity_web_view"> </string>
     <string name="title_activity_app_guide">AppGuideActivity</string>
-    <string name="title_activity_mobile_register">MobileRegisterActivity</string>
 
 </resources>

@@ -2,10 +2,12 @@ package com.appublisher.quizbank.model.business;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -76,11 +78,37 @@ public class CommonModel {
     }
 
     /**
+     * 设置文字下划线
+     * @param textView TextView
+     */
+    public static void setTextUnderLine(TextView textView) {
+        textView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+    }
+
+    /**
      * 设置Bar标题
      * @param activity ActionBarActivity
      * @param title 标题
      */
     public static void setBarTitle(ActionBarActivity activity, String title) {
         activity.getSupportActionBar().setTitle(title);
+    }
+
+    /**
+     * 设置EditText点击时提示文字隐藏
+     * @param editText EditText
+     * @param pre 之前显示的提示文字
+     */
+    public static void setEditTextHintHideOnFocus(final EditText editText, final String pre) {
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    editText.setHint("");
+                } else {
+                    editText.setHint(pre == null ? "" : pre);
+                }
+            }
+        });
     }
 }

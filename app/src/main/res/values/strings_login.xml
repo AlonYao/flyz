@@ -17,6 +17,12 @@
     <string name="login_guest">跳过</string>
     <string name="login_default_qq">客服QQ：540922713</string>
     <string name="login_account_notice">腰果账号是通用的哦~</string>
+    <string name="login_smscode_error">验证码不正确或已失效</string>
+    <string name="login_reget">重新获取</string>
+    <string name="login_smscode_no_reply">收不到验证码？</string>
+    <string name="login_next">下一步</string>
+
+    <!-- alert -->
     <string name="login_alert_usernonentity_msg">账号未注册</string>
     <string name="login_alert_usernonentity_p">手机注册</string>
     <string name="login_alert_usernonentity_n">切换账号</string>
@@ -42,5 +48,16 @@
 
     <!-- 公开课模块 -->
     <string name="alert_userchange_content">该手机号已经被注册，请切换账号</string>
+
+    <!-- Activity -->
+    <string name="title_activity_login">登录</string>
+    <string name="title_activity_nickname_change">昵称修改</string>
+    <string name="title_activity_pwd_change">密码修改</string>
+    <string name="title_activity_register">手机号注册</string>
+    <string name="title_activity_setpwd">设置密码</string>
+    <string name="title_activity_user_info">个人信息</string>
+    <string name="title_activity_cannot_get_sms">收不到验证码</string>
+    <string name="title_activity_register_sms_code">注册腰果账号</string>
+    <string name="title_activity_mobile_register">MobileRegisterActivity</string>
 
 </resources>

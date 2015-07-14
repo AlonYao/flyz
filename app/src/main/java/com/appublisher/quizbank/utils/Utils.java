@@ -14,6 +14,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 通用工具类
@@ -26,7 +28,7 @@ public class Utils {
      */
     public static boolean isGuest() {
         String guest_id = Globals.sharedPreferences.getString("guest_id", "");
-        return guest_id != null && !guest_id.equals("");
+        return !guest_id.equals("");
     }
 
     /**
@@ -227,5 +229,19 @@ public class Utils {
     public static int sp2px(Context context, float spValue) {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
+     * 判断邮箱是否合法
+     * @param email 邮箱
+     * @return 是否
+     */
+    public static boolean isEmail(String email){
+        if (null == email || "".equals(email)) return false;
+
+        Pattern p =  Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+        Matcher m = p.matcher(email);
+
+        return m.matches();
     }
 }

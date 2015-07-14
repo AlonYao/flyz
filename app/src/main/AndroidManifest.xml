@@ -232,6 +232,10 @@
             android:name=".model.login.activity.MobileRegisterActivity"
             android:label="@string/title_activity_mobile_register" >
         </activity>
+        <activity
+            android:name=".model.login.activity.RegisterSmsCodeActivity"
+            android:label="@string/title_activity_register_sms_code" >
+        </activity>
     </application>
 
 </manifest>

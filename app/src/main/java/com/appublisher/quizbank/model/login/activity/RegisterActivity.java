@@ -92,10 +92,10 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
 
         // view初始化
         mBtnGetSmsCode = (Button) findViewById(R.id.register_getsmscode_btn);
-        ImageButton btnSubmitCode = (ImageButton) findViewById(R.id.register_smscode_btn);
+        ImageButton btnSubmitCode = (ImageButton) findViewById(R.id.register_getsmscode_next);
         TextView tvCannotGet = (TextView) findViewById(R.id.register_cannotget);
         final EditText etPhone = (EditText) findViewById(R.id.register_phone_edittext);
-        final EditText etSmsCode = (EditText) findViewById(R.id.register_smscode_edittext);
+        final EditText etSmsCode = (EditText) findViewById(R.id.register_getsmscode_edittext);
 
         // 成员变量初始化
         mRequest = new Request(RegisterActivity.this, RegisterActivity.this);

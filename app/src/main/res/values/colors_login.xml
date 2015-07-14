@@ -8,4 +8,6 @@
     <color name="login_bg">#1f2229</color>
     <color name="login_black">#262B2D</color>
     <color name="login_gray">#AEB1B3</color>
+    <color name="login_red">#E84E40</color>
+    <color name="login_blue">#4E90F5</color>
 </resources>

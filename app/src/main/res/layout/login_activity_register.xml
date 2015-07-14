@@ -41,7 +41,7 @@
             <!-- 验证码输入框 -->
             <EditText
                 style="@style/Login_EditText"
-                android:id="@+id/register_smscode_edittext"
+                android:id="@+id/register_getsmscode_edittext"
                 android:inputType="number"
                 android:textColor="@color/login_black"
                 android:hint="@string/login_register_smscode_edittext" />
@@ -49,10 +49,10 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/register_smscode_btn"
+                android:id="@+id/register_getsmscode_next"
                 android:src="@drawable/login_smscode"
                 android:layout_centerVertical="true"
-                android:layout_alignRight="@id/register_smscode_edittext"
+                android:layout_alignRight="@id/register_getsmscode_edittext"
                 android:layout_marginRight="15dp"
                 android:background="@color/login_transparency"
                 tools:ignore="ContentDescription,RtlHardcoded" />

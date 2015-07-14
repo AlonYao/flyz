@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    android:orientation="vertical"
+    tools:context="com.appublisher.quizbank.model.login.activity.RegisterSmsCodeActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <TextView
+        android:id="@+id/register_smscode_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:id="@+id/register_smscode_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        android:text="@string/login_smscode_error"
+        android:textColor="@color/login_red"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/setting_line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/register_smscode_code"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:ems="10"
+            android:textColor="@color/login_black"
+            android:background="@android:color/white"
+            android:hint="@string/login_register_smscode_edittext"
+            android:textColorHint="@color/login_gray"
+            android:inputType="number" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/setting_line"/>
+        <TextView
+            android:id="@+id/register_smscode_reget"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:text="@string/login_reget"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/setting_line"/>
+
+    <TextView
+        android:id="@+id/register_smscode_next"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textSize="17sp"
+        android:text="@string/login_next"
+        android:textColor="@android:color/white"
+        android:background="@color/login_blue"/>
+
+    <!-- 收不到验证码 -->
+    <TextView
+        android:id="@+id/register_smscode_noreply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="15dp"
+        android:text="@string/login_smscode_no_reply"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        tools:ignore="RtlHardcoded" />
+
+</LinearLayout>

@@ -25,6 +25,7 @@ import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.activity.MobileRegisterActivity;
 import com.appublisher.quizbank.model.login.activity.RegisterActivity;
+import com.appublisher.quizbank.model.login.activity.RegisterSmsCodeActivity;
 import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;
@@ -38,6 +39,7 @@ import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -586,18 +588,31 @@ public class LoginModel {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(activity, MobileRegisterActivity.class);
+                        Intent intent;
+                        if (Utils.isEmail(activity.mUsername)) {
+                            // 判断用户是否是邮箱用户
+                            intent = new Intent(activity, MobileRegisterActivity.class);
+                        } else {
+                            // 非邮箱用户，暂时全部认定为手机号用户
+                            activity.mRequest.getSmsCode(
+                                    ParamBuilder.phoneNumParams(activity.mUsername, ""));
+
+                            intent = new Intent(activity, RegisterSmsCodeActivity.class);
+                            intent.putExtra("user_phone", activity.mUsername);
+                            intent.putExtra("user_pwd", activity.mPwdEncrypt);
+                        }
+
                         activity.startActivity(intent);
                         dialog.dismiss();
                     }
                 })
             .setNegativeButton(R.string.login_alert_usernonentity_n,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
             .create().show();
     }
 
