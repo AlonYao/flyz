@@ -3,7 +3,6 @@ package com.appublisher.quizbank.model.login.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,25 +17,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.MainActivity;
-import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
-import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
-import com.appublisher.quizbank.model.login.model.netdata.UserExamInfoModel;
-import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
-import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
-import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -242,7 +234,6 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         if(item.getItemId() == android.R.id.home){
             // 友盟统计
             UmengManager.sendCountEvent(this, "RegLog", "Action", "Quit");
-
             finish();
         }
 

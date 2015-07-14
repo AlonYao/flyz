@@ -652,18 +652,38 @@ public class LoginModel {
     private static void setLoginSuccess(LoginResponseModel lrm,
                                         LoginActivity activity,
                                         String apiName) {
-        if (lrm == null) {
+        if (saveToLocal(lrm, activity)) {
+            // 页面跳转
+            activity.mHandler.sendEmptyMessage(LoginActivity.LOGIN_SUCCESS);
+
+            // Umeng
+            if ("login".equals(apiName)) {
+                UmengManager.sendCountEvent(activity, "RegLog", "Action", "Login");
+                UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
+            } else if ("social_login".equals(apiName)) {
+                UmengManager.sendCountEvent(
+                        activity, "RegLog", "Action", activity.mSocialLoginType);
+                if (!lrm.isIs_new())
+                    UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
+            }
+        } else {
             ToastManager.showToast(activity, "登录失败");
-            return;
         }
+    }
+
+    /**
+     * 保存至本地
+     * @param lrm 用户数据模型
+     * @param activity Activity
+     * @return 是否保存成功
+     */
+    public static boolean saveToLocal(LoginResponseModel lrm, Activity activity) {
+        if (lrm == null || lrm.getResponse_code() != 1) return false;
 
         UserInfoModel uim = lrm.getUser();
         UserExamInfoModel ueim = lrm.getExam();
 
-        if (uim.getUser_id() == null || uim.getUser_id().length() == 0) {
-            ToastManager.showToast(activity, "登录失败");
-            return;
-        }
+        if (uim.getUser_id() == null || uim.getUser_id().length() == 0) return false;
 
         // 新建或切换数据库
         LoginModel.setDatabase(uim.getUser_id(), activity);
@@ -681,16 +701,6 @@ public class LoginModel {
         editor.putBoolean("is_login", true);
         editor.commit();
 
-        // 页面跳转
-        activity.mHandler.sendEmptyMessage(LoginActivity.LOGIN_SUCCESS);
-
-        // Umeng
-        if ("login".equals(apiName)) {
-            UmengManager.sendCountEvent(activity, "RegLog", "Action", "Login");
-            UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
-        } else if ("social_login".equals(apiName)) {
-            UmengManager.sendCountEvent(activity, "RegLog", "Action", activity.mSocialLoginType);
-            if (!lrm.isIs_new()) UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
-        }
+        return true;
     }
 }

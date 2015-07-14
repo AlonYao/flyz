@@ -15,8 +15,11 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.CommonResponseModel;
+import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -174,21 +177,43 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
             return;
         }
 
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
         if ("check_sms_code".equals(apiName)) {
-            if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+            /** 短信验证码校验接口 **/
             CommonResponseModel commonResp = Globals.gson.fromJson(response.toString(),
                     CommonResponseModel.class);
 
             if (commonResp != null && commonResp.getResponse_code() == 1) {
                 // 注册成功
-                ToastManager.showToast(this, "验证码正确");
+                mRequest.register(ParamBuilder.register(mUserPhone, mUserPwd));
             } else {
                 // 验证码校验失败
                 ToastManager.showToast(this, getString(R.string.login_smscode_error));
+                ProgressDialogManager.closeProgressDialog();
             }
-        }
 
-        ProgressDialogManager.closeProgressDialog();
+        } else if ("register".equals(apiName)) {
+            /** 注册接口 **/
+            LoginResponseModel lrm =
+                    Globals.gson.fromJson(response.toString(), LoginResponseModel.class);
+
+            if (LoginModel.saveToLocal(lrm, this)) {
+                // 注册成功
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                ToastManager.showToast(this, "注册成功");
+            } else {
+                // 注册失败
+                ToastManager.showToast(this, "注册失败");
+            }
+
+            ProgressDialogManager.closeProgressDialog();
+
+        } else {
+            ProgressDialogManager.closeProgressDialog();
+        }
     }
 
     @Override
