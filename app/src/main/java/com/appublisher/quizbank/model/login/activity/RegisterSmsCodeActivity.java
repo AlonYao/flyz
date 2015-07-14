@@ -15,7 +15,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MainActivity;
+import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.CommonResponseModel;
@@ -200,10 +200,10 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
 
             if (LoginModel.saveToLocal(lrm, this)) {
                 // 注册成功
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, ExamChangeActivity.class);
+                intent.putExtra("from", "reg");
                 startActivity(intent);
                 finish();
-                ToastManager.showToast(this, "注册成功");
             } else {
                 // 注册失败
                 ToastManager.showToast(this, "注册失败");
