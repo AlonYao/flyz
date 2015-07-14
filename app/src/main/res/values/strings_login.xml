@@ -21,6 +21,7 @@
     <string name="login_reget">重新获取</string>
     <string name="login_smscode_no_reply">收不到验证码？</string>
     <string name="login_next">下一步</string>
+    <string name="login_mobile_register_num">手机号</string>
 
     <!-- alert -->
     <string name="login_alert_usernonentity_msg">账号未注册</string>
@@ -58,6 +59,6 @@
     <string name="title_activity_user_info">个人信息</string>
     <string name="title_activity_cannot_get_sms">收不到验证码</string>
     <string name="title_activity_register_sms_code">注册腰果账号</string>
-    <string name="title_activity_mobile_register">MobileRegisterActivity</string>
+    <string name="title_activity_mobile_register">注册腰果账号</string>
 
 </resources>

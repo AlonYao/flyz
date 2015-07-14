@@ -36,29 +36,34 @@
                 android:textColor="@color/setting_text"
                 android:text="@string/login_account_notice"/>
 
-            <include layout="@layout/login_line"/>
-
-            <!-- 用户名 -->
-            <EditText
-                style="@style/Login_EditText"
-                android:inputType="textEmailAddress"
-                android:id="@+id/login_username"
-                android:textColor="@color/login_black"
-                android:hint="@string/login_edittext_username"/>
-
-            <include layout="@layout/login_line"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="30dp"
-                tools:ignore="RtlHardcoded" />
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+                <include layout="@layout/login_line"/>
+                <!-- 用户名 -->
+                <EditText
+                    style="@style/Login_EditText"
+                    android:inputType="textEmailAddress"
+                    android:id="@+id/login_username"
+                    android:textColor="@color/login_black"
+                    android:hint="@string/login_edittext_username"/>
 
-            <!-- 密码 -->
-            <EditText
-                style="@style/Login_EditText"
-                android:inputType="textPassword"
-                android:id="@+id/login_password"
-                android:textColor="@color/login_black"
-                android:hint="@string/login_edittext_password"/>
+                <include layout="@layout/login_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="30dp"
+                    tools:ignore="RtlHardcoded" />
+
+                <!-- 密码 -->
+                <EditText
+                    style="@style/Login_EditText"
+                    android:inputType="textPassword"
+                    android:id="@+id/login_password"
+                    android:textColor="@color/login_black"
+                    android:hint="@string/login_edittext_password"/>
+            </LinearLayout>
 
             <!-- 登录按钮 -->
             <Button
