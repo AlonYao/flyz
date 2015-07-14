@@ -618,9 +618,9 @@ public class LoginModel {
 
     /**
      * 显示忘记密码Alert
-     * @param activity LoginActivity
+     * @param activity Activity
      */
-    private static void showForgetPwdAlert(final LoginActivity activity) {
+    public static void showForgetPwdAlert(final Activity activity) {
         new AlertDialog.Builder(activity)
             .setMessage(R.string.login_alert_forgetpwd_msg)
             .setTitle(R.string.alert_title)

@@ -14,9 +14,11 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
+import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -38,6 +40,7 @@ public class MobileRegisterActivity extends ActionBarActivity
     private Request mRequest;
     private String mMobile;
     private String mPwdEncrypt;
+    private int mPwdErrorCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class MobileRegisterActivity extends ActionBarActivity
 
         // 成员变量初始化
         mRequest = new Request(this, this);
+        mPwdErrorCount = 0;
 
         // View 初始化
         mEtMobile = (EditText) findViewById(R.id.mobile_register_num);
@@ -117,13 +121,14 @@ public class MobileRegisterActivity extends ActionBarActivity
         if (Globals.gson == null) Globals.gson = GsonManager.initGson();
 
         if ("is_user_exists".equals(apiName)) {
+            // 检测用户是否注册 接口
             IsUserExistsResp isUserExistsResp =
                     Globals.gson.fromJson(response.toString(), IsUserExistsResp.class);
 
             if (isUserExistsResp != null && isUserExistsResp.getResponse_code() == 1
                     && isUserExistsResp.isUser_exists()) {
                 // 用户已注册
-                ToastManager.showToast(this, "用户已注册");
+                mRequest.login(ParamBuilder.loginParams("0", mMobile, "", mPwdEncrypt));
             } else {
                 // 用户未注册
                 mRequest.getSmsCode(ParamBuilder.phoneNumParams(mMobile, ""));
@@ -131,6 +136,27 @@ public class MobileRegisterActivity extends ActionBarActivity
                 Intent intent = new Intent(this, RegisterSmsCodeActivity.class);
                 intent.putExtra("user_phone", mMobile);
                 intent.putExtra("user_pwd", mPwdEncrypt);
+            }
+        } else if ("login".equals(apiName)) {
+            // 登录接口
+            LoginResponseModel lrm = Globals.gson.fromJson(
+                    response.toString(), LoginResponseModel.class);
+
+            if (lrm == null || lrm.getResponse_code() != 1) {
+                if (mPwdErrorCount == 0) {
+                    ToastManager.showToast(this, "手机号已存在，密码不正确");
+                    mPwdErrorCount++;
+                } else if (mPwdErrorCount == 1) {
+                    LoginModel.showForgetPwdAlert(this);
+                }
+            } else {
+                // 执行成功后的操作
+                if (LoginModel.saveToLocal(lrm, this)) {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    ToastManager.showToast(this, "数据异常");
+                }
             }
         }
     }
