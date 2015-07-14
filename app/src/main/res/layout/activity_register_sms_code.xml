@@ -12,21 +12,10 @@
         android:id="@+id/register_smscode_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"/>
-
-    <TextView
-        android:id="@+id/register_smscode_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:visibility="invisible"
-        android:text="@string/login_smscode_error"
-        android:textColor="@color/login_red"/>
 
     <View
         android:layout_width="match_parent"

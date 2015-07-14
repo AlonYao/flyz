@@ -44,7 +44,6 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
     private static Timer mTimer;
     private Handler mHandler;
     private Request mRequest;
-    private TextView mTvSmsCodeError;
     private String mUserPhone;
     private String mUserPwd;
     private EditText mEtSmsCode;
@@ -93,7 +92,6 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
         TextView tvNoReply = (TextView) findViewById(R.id.register_smscode_noreply);
         mEtSmsCode = (EditText) findViewById(R.id.register_smscode_code);
         mTvReGet = (TextView) findViewById(R.id.register_smscode_reget);
-        mTvSmsCodeError = (TextView) findViewById(R.id.register_smscode_error);
 
         // 成员变量初始化
         mTimeLimit = 60;
@@ -102,6 +100,7 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
 
         // 获取数据
         mUserPhone = getIntent().getStringExtra("user_phone");
+        mUserPwd = getIntent().getStringExtra("user_pwd");
 
         // 控制EditText点击时提示文字消失
         CommonModel.setEditTextHintHideOnFocus(mEtSmsCode,
@@ -148,7 +147,7 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
                 String smsCode = mEtSmsCode.getText().toString();
 
                 if (smsCode.isEmpty()) {
-                    mTvSmsCodeError.setVisibility(View.VISIBLE);
+                    ToastManager.showToast(this, getString(R.string.login_smscode_error));
                     break;
                 }
 
@@ -184,8 +183,8 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
                 // 注册成功
                 ToastManager.showToast(this, "验证码正确");
             } else {
-                mTvSmsCodeError.setVisibility(View.VISIBLE);
-                ToastManager.showToast(this, "验证码不正确");
+                // 验证码校验失败
+                ToastManager.showToast(this, getString(R.string.login_smscode_error));
             }
         }
 
@@ -221,7 +220,6 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
      */
     private void startTimer() {
         mTvReGet.setClickable(false);
-        mTvSmsCodeError.setVisibility(View.INVISIBLE);
 
         if (mTimer != null) {
             mTimer.cancel();

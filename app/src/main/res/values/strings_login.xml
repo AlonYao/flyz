@@ -17,7 +17,7 @@
     <string name="login_guest">跳过</string>
     <string name="login_default_qq">客服QQ：540922713</string>
     <string name="login_account_notice">腰果账号是通用的哦~</string>
-    <string name="login_smscode_error">验证码不正确或已失效</string>
+    <string name="login_smscode_error">验证码不正确或已过期</string>
     <string name="login_reget">重新获取</string>
     <string name="login_smscode_no_reply">收不到验证码？</string>
     <string name="login_next">下一步</string>
