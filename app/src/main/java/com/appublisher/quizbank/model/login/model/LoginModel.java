@@ -677,6 +677,7 @@ public class LoginModel {
      * @param activity Activity
      * @return 是否保存成功
      */
+    @SuppressLint("CommitPrefEdits")
     public static boolean saveToLocal(LoginResponseModel lrm, Activity activity) {
         if (lrm == null || lrm.getResponse_code() != 1) return false;
 

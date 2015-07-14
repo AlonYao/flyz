@@ -6,15 +6,38 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.android.volley.VolleyError;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
+import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * 手机号注册
  */
-public class MobileRegisterActivity extends ActionBarActivity {
+public class MobileRegisterActivity extends ActionBarActivity
+        implements View.OnClickListener, RequestCallback{
+
+    private EditText mEtMobile;
+    private EditText mEtPwd;
+    private Request mRequest;
+    private String mMobile;
+    private String mPwdEncrypt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +47,15 @@ public class MobileRegisterActivity extends ActionBarActivity {
         // ActionBar
         CommonModel.setToolBar(this);
 
-        // View
+        // 成员变量初始化
+        mRequest = new Request(this, this);
+
+        // View 初始化
+        mEtMobile = (EditText) findViewById(R.id.mobile_register_num);
+        mEtPwd = (EditText) findViewById(R.id.mobile_register_pwd);
+        Button button = (Button) findViewById(R.id.mobile_register_next);
+
+        button.setOnClickListener(this);
 
         // 保存Activity
         QuizBankApp.getInstance().addActivity(this);
@@ -48,5 +79,69 @@ public class MobileRegisterActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.mobile_register_next:
+                mMobile = mEtMobile.getText().toString();
+                String pwd = mEtPwd.getText().toString();
+
+                if (mMobile.isEmpty()) {
+                    ToastManager.showToast(this, "手机号为空");
+                } else if (pwd.isEmpty()) {
+                    ToastManager.showToast(this, "密码为空");
+                } else {
+                    mPwdEncrypt = LoginModel.encrypt(pwd, "appublisher");
+                    if (!mPwdEncrypt.isEmpty()) {
+                        ProgressDialogManager.showProgressDialog(this, false);
+                        mRequest.isUserExists(mMobile);
+                    }
+                }
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if (response == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
+        if ("is_user_exists".equals(apiName)) {
+            IsUserExistsResp isUserExistsResp =
+                    Globals.gson.fromJson(response.toString(), IsUserExistsResp.class);
+
+            if (isUserExistsResp != null && isUserExistsResp.getResponse_code() == 1
+                    && isUserExistsResp.isUser_exists()) {
+                // 用户已注册
+                ToastManager.showToast(this, "用户已注册");
+            } else {
+                // 用户未注册
+                mRequest.getSmsCode(ParamBuilder.phoneNumParams(mMobile, ""));
+
+                Intent intent = new Intent(this, RegisterSmsCodeActivity.class);
+                intent.putExtra("user_phone", mMobile);
+                intent.putExtra("user_pwd", mPwdEncrypt);
+            }
+        }
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        ProgressDialogManager.closeProgressDialog();
     }
 }
