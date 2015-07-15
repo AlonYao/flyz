@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -52,7 +51,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
     private String mPhoneNum;
     private static Timer mTimer;
     private Handler mHandler;
-    private static Button mBtnGetSmsCode;
+    private static TextView mTvGetSmsCode;
 
     public String mFrom;
     public String mOpenCourseId;
@@ -79,8 +78,8 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             if (activity != null) {
                 switch (msg.what) {
                     case TIME_ON:
-                        if (mBtnGetSmsCode != null && mTimeLimit != 0) {
-                            mBtnGetSmsCode.setText(
+                        if (mTvGetSmsCode != null && mTimeLimit != 0) {
+                            mTvGetSmsCode.setText(
                                     "获取验证码(" + String.valueOf(mTimeLimit) + "秒)");
                         }
 
@@ -107,11 +106,11 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
         getSupportActionBar().setTitle("绑定手机号");
 
         // view初始化
-        mBtnGetSmsCode = (Button) findViewById(R.id.register_getsmscode_btn);
-        ImageButton btnSubmitCode = (ImageButton) findViewById(R.id.register_getsmscode_next);
-        TextView tvCannotGet = (TextView) findViewById(R.id.register_cannotget);
-        final EditText etPhone = (EditText) findViewById(R.id.register_phone_edittext);
-        final EditText etSmsCode = (EditText) findViewById(R.id.register_getsmscode_edittext);
+        mTvGetSmsCode = (TextView) findViewById(R.id.binding_mobile_reget);
+        Button btnSubmitCode = (Button) findViewById(R.id.binding_mobile_next);
+        TextView tvCannotGet = (TextView) findViewById(R.id.binding_mobile_none_code);
+        final EditText etPhone = (EditText) findViewById(R.id.binding_mobile_num);
+        final EditText etSmsCode = (EditText) findViewById(R.id.binding_mobile_code);
 
         // 成员变量初始化
         mRequest = new Request(this, this);
@@ -129,15 +128,14 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
         }
 
         // 获取验证码按钮
-        mBtnGetSmsCode.setOnClickListener(new View.OnClickListener() {
+        mTvGetSmsCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPhoneNum = etPhone.getText().toString();
 
                 if (mPhoneNum.isEmpty()) return;
 
-                mBtnGetSmsCode.setBackgroundResource(R.drawable.login_button_wait);
-                mBtnGetSmsCode.setClickable(false);
+                mTvGetSmsCode.setClickable(false);
 
                 if (mTimer != null) {
                     mTimer.cancel();
@@ -261,9 +259,8 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
         }
 
         mTimeLimit = 60;
-        mBtnGetSmsCode.setClickable(true);
-        mBtnGetSmsCode.setBackgroundResource(R.drawable.login_button_login);
-        mBtnGetSmsCode.setText(R.string.login_register_smscode_btn);
+        mTvGetSmsCode.setClickable(true);
+        mTvGetSmsCode.setText(R.string.login_register_smscode_btn);
     }
 
     @Override
@@ -276,11 +273,13 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
         if (Globals.gson == null) Globals.gson = GsonManager.initGson();
 
         if ("is_user_exists".equals(apiName)) {
+            // 手机号是否注册接口
             IsUserExistsResp isUserExistsResp =
                     Globals.gson.fromJson(response.toString(), IsUserExistsResp.class);
             if (isUserExistsResp != null && isUserExistsResp.getResponse_code() == 1
                     && isUserExistsResp.isUser_exists()) {
                 // 手机号已注册
+                setTimeOut();
                 AlertManager.openCourseUserChangeAlert(this);
             } else {
                 // 手机号未注册
@@ -292,6 +291,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             }
 
         } else if ("sms_code".equals(apiName)) {
+            // 获取短信验证码接口
             CommonResponseModel commonResponse = Globals.gson.fromJson(
                     response.toString(), CommonResponseModel.class);
 
@@ -303,6 +303,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             }
 
         } else if ("check_sms_code".equals(apiName)) {
+            // 校验短信验证码接口
             CommonResponseModel crm = Globals.gson.fromJson(response.toString(),
                     CommonResponseModel.class);
 
@@ -323,6 +324,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             }
 
         } else if ("auth_handle".equals(apiName)) {
+            // 改变用户信息接口
             CommonResponseModel crm = Globals.gson.fromJson(response.toString(),
                     CommonResponseModel.class);
             if (crm != null && crm.getResponse_code() == 1) {

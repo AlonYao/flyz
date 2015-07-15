@@ -452,7 +452,7 @@ public class LoginModel {
             }
 
         } else {
-            ToastManager.showToast(activity, "校验失败");
+            ToastManager.showToast(activity, "验证失败");
         }
     }
 

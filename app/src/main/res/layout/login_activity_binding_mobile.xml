@@ -9,66 +9,74 @@
     <include layout="@layout/toolbar"/>
 
     <!-- 手机号 -->
-    <EditText
-        style="@style/Login_EditText"
-        android:id="@+id/register_phone_edittext"
-        android:textColor="@color/login_black"
-        android:hint="@string/login_register_phone"
-        android:layout_marginTop="30dp"
-        android:inputType="phone" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/binding_mobile_num"
+            style="@style/Login_EditText"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/login_black"
+            android:hint="@string/login_mobile_register_num"/>
+
+        <include layout="@layout/login_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="30dp"
+            tools:ignore="RtlHardcoded" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/binding_mobile_code"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                style="@style/Login_EditText"
+                android:textColor="@color/login_black"
+                android:hint="@string/login_register_smscode_edittext"
+                android:inputType="number" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/setting_line"/>
+            <TextView
+                android:id="@+id/binding_mobile_reget"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:text="@string/login_register_smscode_btn"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- 发送验证码 -->
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_getsmscode_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/binding_mobile_next"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
         android:textColor="@color/login_white"
-        android:text="@string/login_register_smscode_btn"
-        android:background="@drawable/login_button_login"/>
+        android:text="@string/login_next"
+        android:background="@color/login_blue"/>
 
-    <!-- 验证码输入框 -->
-    <RelativeLayout
+    <TextView
+        android:id="@+id/binding_mobile_none_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center_horizontal">
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/register_smscode_rl">
-            <!-- 验证码输入框 -->
-            <EditText
-                style="@style/Login_EditText"
-                android:id="@+id/register_getsmscode_edittext"
-                android:inputType="number"
-                android:textColor="@color/login_black"
-                android:hint="@string/login_register_smscode_edittext" />
-            <!-- 验证码提交按钮 -->
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/register_getsmscode_next"
-                android:src="@drawable/login_smscode"
-                android:layout_centerVertical="true"
-                android:layout_alignRight="@id/register_getsmscode_edittext"
-                android:layout_marginRight="15dp"
-                android:background="@color/login_transparency"
-                tools:ignore="ContentDescription,RtlHardcoded" />
-        </RelativeLayout>
-
-        <!-- 收不到验证码 -->
-        <TextView
-            android:id="@+id/register_cannotget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/register_smscode_rl"
-            android:layout_alignRight="@+id/register_smscode_rl"
-            android:layout_marginTop="20dp"
-            android:text="@string/login_register_unablereceive"
-            android:textColor="@color/login_edittext_username"
-            tools:ignore="RtlHardcoded" />
-    </RelativeLayout>
+        android:layout_marginRight="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:layout_gravity="right"
+        android:textColor="@color/login_forget_pwd"
+        android:text="@string/login_register_unablereceive"
+        tools:ignore="RtlHardcoded" />
 
 </LinearLayout>
