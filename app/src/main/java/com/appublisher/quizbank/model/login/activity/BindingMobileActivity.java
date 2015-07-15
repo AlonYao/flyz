@@ -347,7 +347,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
 
         } else if ("login".equals(apiName)) {
             // 处理预约公开课手机号验证部分的回调
-            LoginModel.dealBookOpenCourse(this, response);
+            LoginModel.dealOpenCourseResp(this, response);
         }
 
         ProgressDialogManager.closeProgressDialog();

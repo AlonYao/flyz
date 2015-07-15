@@ -40,6 +40,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     public String mContent;
     public ImageView mIvOldtimey;
 
+    /** Umeng **/
     private long mUmengTimestamp;
     private String mUmengEntry;
     private String mUmengQQ;
@@ -59,6 +60,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         mUmengTimestamp = System.currentTimeMillis();
         mUmengQQ = "0";
         mUmengPreSit = "0";
+        mUmengVideoPlay = "0";
 
         // View 初始化
         mTvName = (TextView) findViewById(R.id.opencourse_name);
@@ -104,6 +106,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         map.put("Entry", mUmengEntry);
         map.put("PreSit", mUmengPreSit);
         map.put("QQ", mUmengQQ);
+        map.put("VideoPlay", mUmengVideoPlay);
         long dur = System.currentTimeMillis() - mUmengTimestamp;
         UmengManager.sendComputeEvent(this, "Reserve", map, (int) (dur/1000));
     }
@@ -112,19 +115,24 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == ActivitySkipConstants.BOOK_OPENCOURSE) {
-            // 预约公开课回调
-            ProgressDialogManager.showProgressDialog(this, false);
-            mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
+        switch (requestCode) {
+            case ActivitySkipConstants.BOOK_OPENCOURSE:
+                // 预约公开课回调
+                ProgressDialogManager.showProgressDialog(this, false);
+                mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
+                break;
+
+            case ActivitySkipConstants.OPENCOURSE_PRE:
+                // 公开课回放
+                mIvOldtimey.performClick();
+                break;
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-
         MenuItemCompat.setShowAsAction(menu.add("咨询"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -133,10 +141,8 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if ("咨询".equals(item.getTitle())) {
-            // Umeng
-            mUmengQQ = "1";
-
             OpenCourseModel.setMarketQQ(this);
+            mUmengQQ = "1"; // Umeng
         }
 
         return super.onOptionsItemSelected(item);

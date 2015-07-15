@@ -396,11 +396,11 @@ public class LoginModel {
     }
 
     /**
-     * 处理预约公开课手机号验证部分的回调
+     * 处理公开课手机号验证部分的回调
      * @param activity BindingMobileActivity
      * @param response 回调数据
      */
-    public static void dealBookOpenCourse(BindingMobileActivity activity, JSONObject response) {
+    public static void dealOpenCourseResp(BindingMobileActivity activity, JSONObject response) {
         if (response == null) return;
 
         Gson gson = GsonManager.initGson();
@@ -408,20 +408,13 @@ public class LoginModel {
 
         if (loginResp != null && loginResp.getResponse_code() == 1) {
             // 获取原有用户的user_id
-            UserInfoModel userInfo = getUserInfoM();
-            String userId = null;
-
-            if (userInfo != null) {
-                userId = userInfo.getUser_id();
-            }
+            String userId = LoginModel.getUserId();
 
             UserInfoModel userInfoOnline = loginResp.getUser();
-
             if (userInfoOnline == null || userInfoOnline.getUser_id() == null) return;
 
             if (userInfoOnline.getUser_id().equals(userId)) {
-                // 手机号不存在，视为绑定手机号
-                // 更新本地数据
+                // 绑定手机号,更新本地数据
                 UserDAO.updateMobileNum(userInfoOnline.getMobile_num());
 
                 if ("book_opencourse".equals(activity.mFrom)) {
@@ -440,6 +433,11 @@ public class LoginModel {
                     intent.putExtra("umeng_entry", activity.mUmengEntry);
                     intent.putExtra("umeng_timestamp", activity.mUmengTimestamp);
                     activity.startActivity(intent);
+                    activity.finish();
+                } else if ("opencourse_pre".equals(activity.mFrom)) {
+                    // 公开课回放
+                    Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
+                    activity.setResult(ActivitySkipConstants.OPENCOURSE_PRE, intent);
                     activity.finish();
                 }
 
