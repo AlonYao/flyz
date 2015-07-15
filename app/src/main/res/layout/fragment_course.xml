@@ -88,6 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/course_belowfilter_line"
         android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
         android:clipToPadding="false"

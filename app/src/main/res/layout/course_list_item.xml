@@ -46,6 +46,8 @@
                 android:text="@string/common_none"
                 android:textSize="15sp"
                 android:textColor="@color/setting_text"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:drawableLeft="@drawable/course_teacher_flag"
                 android:drawablePadding="10dp"
@@ -58,6 +60,8 @@
                 android:text="@string/common_none"
                 android:textColor="@color/setting_text"
                 android:textSize="15sp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:drawableLeft="@drawable/course_time_flag"
                 android:drawablePadding="10dp"
@@ -72,6 +76,8 @@
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:text="@string/common_none"
             android:textColor="@color/setting_text"
             android:textSize="15sp"
@@ -84,8 +90,9 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             tools:ignore="RtlHardcoded">
             <TextView
                 android:id="@+id/courselist_item_status"
