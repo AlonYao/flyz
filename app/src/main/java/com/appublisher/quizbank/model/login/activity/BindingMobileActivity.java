@@ -1,8 +1,10 @@
 package com.appublisher.quizbank.model.login.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.UserDAO;
@@ -19,41 +22,42 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.CommonResponseModel;
+import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
-import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 手机号注册&修改Activity
+ * 绑定手机号
  */
-public class RegisterActivity extends ActionBarActivity implements RequestCallback {
+public class BindingMobileActivity extends ActionBarActivity implements RequestCallback {
 
     private Request mRequest;
     private String mPhoneNum;
-    private Timer mTimer;
-    private Button mBtnGetSmsCode;
-    private String mType;
-    private Gson mGson;
+    private static Timer mTimer;
+    private Handler mHandler;
+    private static Button mBtnGetSmsCode;
 
     public String mFrom;
     public String mOpenCourseId;
 
-    private int mTimeLimit = 60;
+    private static int mTimeLimit;
     private static final int TIME_ON = 1;
     private static final int TIME_OUT = 2;
 
@@ -62,33 +66,45 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     public long mUmengTimestamp;
     public String mUmengEntry;
 
-    private Handler mHandler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-                case TIME_ON:
-                    if (mBtnGetSmsCode != null && mTimeLimit != 0) {
-                        mBtnGetSmsCode.setText("获取验证码(" + String.valueOf(mTimeLimit) + "秒)");
-                    }
+    private static class MsgHandler extends Handler {
+        private WeakReference<Activity> mActivity;
 
-                    break;
+        public MsgHandler(Activity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
 
-                case TIME_OUT:
-                    setTimeOut();
-                    break;
+        @Override
+        public void handleMessage(Message msg) {
+            final Activity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case TIME_ON:
+                        if (mBtnGetSmsCode != null && mTimeLimit != 0) {
+                            mBtnGetSmsCode.setText(
+                                    "获取验证码(" + String.valueOf(mTimeLimit) + "秒)");
+                        }
 
-                default:
-                    break;
+                        break;
+
+                    case TIME_OUT:
+                        setTimeOut();
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity_register);
+        setContentView(R.layout.login_activity_binding_mobile);
 
         // ActionBar
         CommonModel.setToolBar(this);
+        getSupportActionBar().setTitle("绑定手机号");
 
         // view初始化
         mBtnGetSmsCode = (Button) findViewById(R.id.register_getsmscode_btn);
@@ -98,26 +114,18 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
         final EditText etSmsCode = (EditText) findViewById(R.id.register_getsmscode_edittext);
 
         // 成员变量初始化
-        mRequest = new Request(RegisterActivity.this, RegisterActivity.this);
-        mGson = GsonManager.initGson();
+        mRequest = new Request(this, this);
         mUmengTimestamp = System.currentTimeMillis();
         mUmengIsCheckSuccess = false;
+        mHandler = new MsgHandler(this);
+        mTimeLimit = 60;
 
         // 获取数据 & ActionBar标题修改
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         mFrom = getIntent().getStringExtra("from");
-        if ("UserInfoActivity".equals(mFrom)) {
-            mType = getIntent().getStringExtra("type");
-            if (mType == null) mType = "";
-            if (mType.equals("update")) getSupportActionBar().setTitle("更换手机号");
-            if (mType.equals("add")) getSupportActionBar().setTitle("绑定手机号");
-        } else if ("forget_pwd".equals(mFrom)) {
-            getSupportActionBar().setTitle("找回密码");
-        } else if ("book_opencourse".equals(mFrom)
-                || "opencourse_started".equals(mFrom)
-                || "opencourse_pre".equals(mFrom)) {
-            getSupportActionBar().setTitle("验证手机号");
-            mOpenCourseId = getIntent().getStringExtra("content");
+
+        if (mFrom != null && mFrom.contains("opencourse")) {
+            getSupportActionBar().setTitle("短信验证");
         }
 
         // 获取验证码按钮
@@ -149,32 +157,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                     }
                 }, 0, 1000);
 
-                if ("forget_pwd".equals(mFrom)) {
-                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "resetPswd"));
-                    // Umeng
-                    UmengManager.sendCountEvent(
-                            RegisterActivity.this, "CodeReq", "Type", "Forget");
-
-                } else if ("book_opencourse".equals(mFrom)
-                        || "opencourse_started".equals(mFrom)
-                        || "opencourse_pre".equals(mFrom)) {
-                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
-                    // Umeng
-                    UmengManager.sendCountEvent(
-                            RegisterActivity.this, "CodeReq", "Type", "Verify");
-
-                } else if ("UserInfoActivity".equals(mFrom)){
-                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
-                    // Umeng
-                    UmengManager.sendCountEvent(
-                            RegisterActivity.this, "CodeReq", "Type", "Link");
-
-                } else {
-                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
-                    // Umeng
-                    UmengManager.sendCountEvent(
-                            RegisterActivity.this, "CodeReq", "Type", "Reg");
-                }
+                mRequest.isUserExists(mPhoneNum);
             }
         });
 
@@ -185,9 +168,9 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                 String smsCode = etSmsCode.getText().toString();
                 mPhoneNum = etPhone.getText().toString();
                 if (!smsCode.isEmpty() && !mPhoneNum.isEmpty()) {
-                    ProgressDialogManager.showProgressDialog(RegisterActivity.this, false);
+                    ProgressDialogManager.showProgressDialog(BindingMobileActivity.this, false);
 
-                    if ("book_opencourse".equals(mFrom) || "opencourse_started".equals(mFrom)) {
+                    if (mFrom != null && mFrom.contains("opencourse")) {
                         mRequest.login(ParamBuilder.openCourseLoginParams(
                                 "3", mPhoneNum, smsCode));
                     } else {
@@ -195,7 +178,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
                     }
 
                 } else {
-                    ToastManager.showToast(RegisterActivity.this, "手机号或验证码为空");
+                    ToastManager.showToast(BindingMobileActivity.this, "手机号或验证码为空");
                 }
             }
         });
@@ -203,7 +186,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
         tvCannotGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, CannotGetSmsActivity.class);
+                Intent intent = new Intent(BindingMobileActivity.this, CannotGetSmsActivity.class);
                 startActivity(intent);
             }
         });
@@ -215,7 +198,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("RegisterActivity");
+        MobclickAgent.onPageStart("BindingMobileActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
     }
@@ -233,7 +216,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
             UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur/1000));
         }
 
-        MobclickAgent.onPageEnd("RegisterActivity");
+        MobclickAgent.onPageEnd("BindingMobileActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
     }
@@ -271,7 +254,7 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
     /**
      * 设置时间结束的操作
      */
-    private void setTimeOut() {
+    private static void setTimeOut() {
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
@@ -280,15 +263,36 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
         mTimeLimit = 60;
         mBtnGetSmsCode.setClickable(true);
         mBtnGetSmsCode.setBackgroundResource(R.drawable.login_button_login);
-        mBtnGetSmsCode.setText(getString(R.string.login_register_smscode_btn));
+        mBtnGetSmsCode.setText(R.string.login_register_smscode_btn);
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response == null) return;
+        if (response == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
 
-        if ("sms_code".equals(apiName)) {
-            CommonResponseModel commonResponse = mGson.fromJson(
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
+        if ("is_user_exists".equals(apiName)) {
+            IsUserExistsResp isUserExistsResp =
+                    Globals.gson.fromJson(response.toString(), IsUserExistsResp.class);
+            if (isUserExistsResp != null && isUserExistsResp.getResponse_code() == 1
+                    && isUserExistsResp.isUser_exists()) {
+                // 手机号已注册
+                AlertManager.openCourseUserChangeAlert(this);
+            } else {
+                // 手机号未注册
+                if (mFrom != null && mFrom.contains("opencourse")) {
+                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
+                } else {
+                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, ""));
+                }
+            }
+
+        } else if ("sms_code".equals(apiName)) {
+            CommonResponseModel commonResponse = Globals.gson.fromJson(
                     response.toString(), CommonResponseModel.class);
 
             if (commonResponse != null && commonResponse.getResponse_code() == 1102) {
@@ -297,68 +301,50 @@ public class RegisterActivity extends ActionBarActivity implements RequestCallba
 
                 ToastManager.showToast(this, commonResponse.getResponse_msg());
             }
-        }
 
-        if ("check_sms_code".equals(apiName)) {
-            CommonResponseModel crm = mGson.fromJson(response.toString(),
+        } else if ("check_sms_code".equals(apiName)) {
+            CommonResponseModel crm = Globals.gson.fromJson(response.toString(),
                     CommonResponseModel.class);
 
             if (crm != null && crm.getResponse_code() == 1) {
-                if ("UserInfoActivity".equals(mFrom)) {
-                    // 绑定&修改手机号
-                    if (mType != null && !mType.equals("")) {
-                        // 检查是否是第三方登录
-                        if (mType.equals("add") && LoginModel.checkIsSocialUser()) {
-                            Intent intent = new Intent(this, SetpwdActivity.class);
-                            intent.putExtra("phoneNum", mPhoneNum);
-                            intent.putExtra("type", "add");
-                            startActivityForResult(intent, 10);
-                        } else {
-                            mRequest.authHandle(ParamBuilder.authHandle("0", mType, mPhoneNum, ""));
-                        }
-                    }
-                } else if ("forget_pwd".equals(mFrom)) {
-                    // 忘记密码
-                    Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
+
+                if (LoginModel.checkIsSocialUser()) {
+                    // 如果是第三方登录用户，需要提供密码
+                    Intent intent = new Intent(this, SetpwdActivity.class);
                     intent.putExtra("phoneNum", mPhoneNum);
-                    intent.putExtra("type", "forget_pwd");
-                    startActivity(intent);
-                    finish();
+                    intent.putExtra("type", "add");
+                    startActivityForResult(intent, 10);
                 } else {
-                    // 注册
-                    Intent intent = new Intent(RegisterActivity.this, SetpwdActivity.class);
-                    intent.putExtra("phoneNum", mPhoneNum);
-                    startActivity(intent);
+                    mRequest.authHandle(ParamBuilder.authHandle(
+                            "0", "add", mPhoneNum, ""));
                 }
             } else {
                 ToastManager.showToast(this, "验证码不正确");
             }
-        }
 
-        if ("auth_handle".equals(apiName)) {
-            CommonResponseModel crm = mGson.fromJson(response.toString(),
+        } else if ("auth_handle".equals(apiName)) {
+            CommonResponseModel crm = Globals.gson.fromJson(response.toString(),
                     CommonResponseModel.class);
             if (crm != null && crm.getResponse_code() == 1) {
                 // 修改成功
                 User user = UserDAO.findById();
                 if (user != null) {
-                    UserInfoModel userInfo = mGson.fromJson(user.user, UserInfoModel.class);
+                    UserInfoModel userInfo = Globals.gson.fromJson(user.user, UserInfoModel.class);
                     userInfo.setMobile_num(mPhoneNum);
-                    UserDAO.updateUserInfo(mGson.toJson(userInfo));
+                    UserDAO.updateUserInfo(Globals.gson.toJson(userInfo));
 
                     ToastManager.showToast(this, "修改成功");
 
                     Intent intent = new Intent(this, UserInfoActivity.class);
-                    intent.putExtra("user_info", mGson.toJson(userInfo));
+                    intent.putExtra("user_info", Globals.gson.toJson(userInfo));
                     setResult(11, intent);
 
                     finish();
                 }
             }
-        }
 
-        // 处理预约公开课手机号验证部分的回调
-        if ("login".equals(apiName)) {
+        } else if ("login".equals(apiName)) {
+            // 处理预约公开课手机号验证部分的回调
             LoginModel.dealBookOpenCourse(this, response);
         }
 

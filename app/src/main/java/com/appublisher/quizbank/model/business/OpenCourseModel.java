@@ -14,12 +14,9 @@ import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
-import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
-import com.appublisher.quizbank.model.db.User;
-import com.appublisher.quizbank.model.login.activity.RegisterActivity;
+import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
-import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseConsultResp;
@@ -102,7 +99,7 @@ public class OpenCourseModel {
                     String mobileNum = LoginModel.getUserMobile();
                     if (mobileNum == null || mobileNum.length() == 0) {
                         // 没有手机号
-                        Intent intent = new Intent(activity, RegisterActivity.class);
+                        Intent intent = new Intent(activity, BindingMobileActivity.class);
                         intent.putExtra("from", "book_opencourse");
                         activity.startActivityForResult(intent,
                                 ActivitySkipConstants.BOOK_OPENCOURSE);
@@ -124,7 +121,7 @@ public class OpenCourseModel {
                 String mobileNum = LoginModel.getUserMobile();
                 if (mobileNum == null || mobileNum.length() == 0) {
                     // 没有手机号
-                    Intent intent = new Intent(activity, RegisterActivity.class);
+                    Intent intent = new Intent(activity, BindingMobileActivity.class);
                     intent.putExtra("from", "opencourse_pre");
                     activity.startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
 
@@ -400,7 +397,7 @@ public class OpenCourseModel {
 
                 if (mobile == null || mobile.length() == 0) {
                     // 没有手机号
-                    return RegisterActivity.class;
+                    return BindingMobileActivity.class;
                 } else {
                     // 有手机号
                     return WebViewActivity.class;

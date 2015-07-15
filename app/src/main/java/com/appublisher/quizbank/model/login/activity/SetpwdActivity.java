@@ -201,7 +201,7 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
 
                         ToastManager.showToast(this, "修改成功");
 
-                        Intent intent = new Intent(this, RegisterActivity.class);
+                        Intent intent = new Intent(this, BindingMobileActivity.class);
                         intent.putExtra("user_info", mGson.toJson(userInfo));
                         setResult(10, intent);
 

@@ -1,7 +1,5 @@
 package com.appublisher.quizbank.model.business;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,20 +7,12 @@ import android.widget.TextView;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
-import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
-import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
-import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
-import com.appublisher.quizbank.model.login.activity.RegisterActivity;
-import com.appublisher.quizbank.model.login.model.LoginModel;
-import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 

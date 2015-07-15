@@ -88,7 +88,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".model.login.activity.RegisterActivity"
+            android:name=".model.login.activity.BindingMobileActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait" >

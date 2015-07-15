@@ -164,9 +164,8 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
             public void onClick(View v) {
                 if (!mTvPhoneNum.getText().toString().equals("")) return;
 
-                Intent intent = new Intent(UserInfoActivity.this, RegisterActivity.class);
-                intent.putExtra("from", "UserInfoActivity");
-                intent.putExtra("type", "add");
+                Intent intent = new Intent(UserInfoActivity.this, BindingMobileActivity.class);
+                intent.putExtra("from", "userinfo_add");
                 startActivityForResult(intent, 11);
             }
         });

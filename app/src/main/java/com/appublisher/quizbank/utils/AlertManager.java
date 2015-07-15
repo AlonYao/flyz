@@ -19,11 +19,10 @@ import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
-import com.appublisher.quizbank.model.login.activity.RegisterActivity;
+import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -413,9 +412,9 @@ public class AlertManager {
 
     /**
      * 公开课模块提示用户切换账号Alert
-     * @param activity RegisterActivity
+     * @param activity BindingMobileActivity
      */
-    public static void openCourseUserChangeAlert(final RegisterActivity activity) {
+    public static void openCourseUserChangeAlert(final BindingMobileActivity activity) {
         new AlertDialog.Builder(activity)
                 .setMessage(R.string.alert_userchange_content)
                 .setTitle(R.string.alert_logout_title)

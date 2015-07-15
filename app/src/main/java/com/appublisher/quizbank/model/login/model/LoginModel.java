@@ -22,9 +22,9 @@ import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
+import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.activity.MobileRegisterActivity;
-import com.appublisher.quizbank.model.login.activity.RegisterActivity;
 import com.appublisher.quizbank.model.login.activity.RegisterSmsCodeActivity;
 import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
@@ -397,10 +397,10 @@ public class LoginModel {
 
     /**
      * 处理预约公开课手机号验证部分的回调
-     * @param activity RegisterActivity
+     * @param activity BindingMobileActivity
      * @param response 回调数据
      */
-    public static void dealBookOpenCourse(RegisterActivity activity, JSONObject response) {
+    public static void dealBookOpenCourse(BindingMobileActivity activity, JSONObject response) {
         if (response == null) return;
 
         Gson gson = GsonManager.initGson();
