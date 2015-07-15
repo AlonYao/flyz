@@ -34,7 +34,6 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.thirdparty.upyun.UpYunUpload;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -408,7 +407,6 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
             if (apiName.equals("change_userinfo")) {
                 CommonResponseModel commonResponse =
                         mGson.fromJson(response.toString(), CommonResponseModel.class);
-                Logger.i(response.toString());
                 if (commonResponse != null && commonResponse.getResponse_code() == 1) {
                     ToastManager.showToast(this, "上传头像成功");
                 }
