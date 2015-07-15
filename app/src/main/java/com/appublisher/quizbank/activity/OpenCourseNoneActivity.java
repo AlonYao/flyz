@@ -9,9 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
+import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -23,6 +26,9 @@ import java.util.HashMap;
  */
 public class OpenCourseNoneActivity extends ActionBarActivity {
 
+    private ImageView mIvNone;
+
+    /** Umeng **/
     private long mUmengTimestamp;
     private String mUmengEntry;
     private String mUmengQQ;
@@ -37,7 +43,7 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
         CommonModel.setToolBar(this);
 
         // View 初始化
-        ImageView ivNone = (ImageView) findViewById(R.id.opencourse_none_img);
+        mIvNone = (ImageView) findViewById(R.id.opencourse_none_img);
 
         // 成员变量初始化
         mUmengTimestamp = System.currentTimeMillis();
@@ -49,15 +55,25 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         // 视频点击
-        ivNone.setOnClickListener(new View.OnClickListener() {
+        mIvNone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OpenCourseNoneActivity.this, WebViewActivity.class);
-                intent.putExtra("url", content);
-                startActivity(intent);
+                String mobileNum = LoginModel.getUserMobile();
+                if (mobileNum == null || mobileNum.length() == 0) {
+                    // 没有手机号
+                    Intent intent =
+                            new Intent(OpenCourseNoneActivity.this, BindingMobileActivity.class);
+                    intent.putExtra("from", "opencourse_pre");
+                    startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
 
-                // Umeng
-                mUmengVideoPlay = "1";
+                } else {
+                    // 跳转
+                    String content = getIntent().getStringExtra("content");
+                    OpenCourseModel.skipToPreOpenCourse(OpenCourseNoneActivity.this, content);
+
+                    // Umeng
+                    mUmengVideoPlay = "1";
+                }
             }
         });
     }
@@ -99,9 +115,7 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-
         MenuItemCompat.setShowAsAction(menu.add("咨询"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -110,12 +124,20 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if ("咨询".equals(item.getTitle())) {
-            // Umeng
-            mUmengQQ = "1";
-
             OpenCourseModel.setMarketQQ(this);
+            mUmengQQ = "1"; // Umeng
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case ActivitySkipConstants.OPENCOURSE_PRE:
+                mIvNone.performClick();
+                break;
+        }
     }
 }
