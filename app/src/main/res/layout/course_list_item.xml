@@ -1,20 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:paddingBottom="15dp">
+    android:background="@android:color/white">
 
-    <TextView
-        android:id="@+id/courselist_item_title"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <!-- 课程标记&名称 -->
+        <TextView
+            android:id="@+id/courselist_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="@string/common_none"
+            android:textSize="18sp"
+            android:textColor="@color/setting_text"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/course_zhiboke_flag"
+            android:drawablePadding="10dp"
+            tools:ignore="RtlHardcoded" />
+
+        <!-- 直播课描述 -->
+        <LinearLayout
+            android:id="@+id/courselist_item_zhiboke_desc"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+            <TextView
+                android:id="@+id/courselist_item_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/common_none"
+                android:textSize="15sp"
+                android:textColor="@color/setting_text"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/course_teacher_flag"
+                android:drawablePadding="10dp"
+                tools:ignore="RtlHardcoded" />
+            <TextView
+                android:id="@+id/courselist_item_zhiboke_desc_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/common_none"
+                android:textColor="@color/setting_text"
+                android:textSize="15sp"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/course_time_flag"
+                android:drawablePadding="10dp"
+                tools:ignore="RtlHardcoded" />
+        </LinearLayout>
+
+        <!-- 录播课描述 -->
+        <TextView
+            android:id="@+id/courselist_item_luboke_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/common_none"
+            android:textColor="@color/setting_text"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/course_desc_flag"
+            android:drawablePadding="10dp"
+            tools:ignore="RtlHardcoded" />
+
+        <!-- 课程状态 -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            tools:ignore="RtlHardcoded">
+            <TextView
+                android:id="@+id/courselist_item_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textSize="25sp"
+                android:text="@string/common_none"/>
+            <TextView
+                android:id="@+id/courselist_item_persons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:textSize="15sp"
+                android:textColor="@color/setting_text"
+                android:text="@string/common_none"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- 已购标记 -->
+    <ImageView
+        android:id="@+id/courselist_item_buyflag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"/>
+        android:layout_gravity="right|top"
+        android:src="@drawable/course_buy_flag"
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
-    <TextView
-        android:id="@+id/courselist_item_teacher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!-- 分割线 -->
+    <include layout="@layout/login_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="bottom"
+        tools:ignore="RtlHardcoded" />
 
-</LinearLayout>
+</FrameLayout>
