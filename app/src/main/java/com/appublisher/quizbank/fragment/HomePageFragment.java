@@ -34,7 +34,6 @@ import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
-import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -54,11 +53,12 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private LinearLayout mLlMokao;
     private LinearLayout mLlSpecial;
     private TextView mTvQuickTest;
-    private View mView;
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
     private Request mRequest;
 
+    public View mView;
+    public LinearLayout mPromote;
     public TextView mTvZhiboke;
     public Activity mActivity;
 
@@ -86,6 +86,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         mTvZhiboke = (TextView) mView.findViewById(R.id.opencourse_btn);
         mLlMokao = (LinearLayout) mView.findViewById(R.id.homepage_todayexam_ll);
         mLlSpecial = (LinearLayout) mView.findViewById(R.id.homepage_special_ll);
+        mPromote = (LinearLayout) mView.findViewById(R.id.course_promote);
         ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
         ImageView ivSpecial = (ImageView) mView.findViewById(R.id.homepage_special);
         LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
@@ -109,6 +110,13 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         // 全部专项
         ivSpecial.setOnClickListener(this);
+
+        // 获取课程快讯
+        if (Globals.promoteLiveCourseResp == null) {
+            mRequest.getPromoteLiveCourse();
+        } else {
+            HomePageModel.setPromoteLiveCourse(mActivity, mView);
+        }
 
         return mView;
     }
@@ -143,8 +151,8 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
      * @param response 首页数据回调
      */
     private void setContent(JSONObject response) {
-        Gson gson = new Gson();
-        HomePageResp homePageResp = gson.fromJson(response.toString(), HomePageResp.class);
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        HomePageResp homePageResp = Globals.gson.fromJson(response.toString(), HomePageResp.class);
         if (homePageResp == null || homePageResp.getResponse_code() != 1) {
             ProgressBarManager.hideProgressBar();
             return;
@@ -196,11 +204,11 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         if ("entry_data".equals(apiName)) {
             setContent(response);
-        }
-
-        if ("free_open_course_status".equals(apiName)) {
+        } else if ("free_open_course_status".equals(apiName)) {
             OpenCourseModel.dealOpenCourseStatusResp(response);
             OpenCourseModel.setOpenCourseBtn(mActivity, mTvZhiboke);
+        } else if ("promote_live_course".equals(apiName)) {
+            HomePageModel.dealPromoteResp(response, this);
         }
     }
 

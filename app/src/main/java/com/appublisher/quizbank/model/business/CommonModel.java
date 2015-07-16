@@ -78,6 +78,17 @@ public class CommonModel {
     }
 
     /**
+     * 跳转至评价页面
+     */
+    public static void skipToGrade(Activity activity, String packageName) {
+        if (packageName == null || packageName.length() == 0) return;
+
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+        marketIntent.setData(Uri.parse("market://details?id=" + packageName));
+        activity.startActivity(marketIntent);
+    }
+
+    /**
      * 设置文字下划线
      * @param textView TextView
      */

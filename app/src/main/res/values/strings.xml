@@ -43,6 +43,9 @@
     <string name="opencourse_name">免费公开课</string>
     <string name="opencourse_passed_events">往期精彩回放：</string>
 
+    <!-- 快讯 -->
+    <string name="course_promote">快讯</string>
+
     <!-- 设置 -->
     <string name="setting_account">账号设置</string>
     <string name="setting_studentid">我的学号</string>

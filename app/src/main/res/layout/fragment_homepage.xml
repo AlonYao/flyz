@@ -188,6 +188,9 @@
 
             <!-- 公开课按钮 -->
             <include layout="@layout/opencourse_btn"/>
+
+            <!-- 快讯 -->
+            <include layout="@layout/course_promote"/>
         </LinearLayout>
     </ScrollView>
 

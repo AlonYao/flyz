@@ -262,6 +262,13 @@ public class Request extends BaseRequest implements ApiConstants{
                 "free_open_course_status", "object");
     }
 
+    /**
+     * 获取快讯信息
+     */
+    public void getPromoteLiveCourse() {
+        asyncRequest(ParamBuilder.finalUrl(getPromoteLiveCourse), "promote_live_course", "object");
+    }
+
     /**** 登录注册模块 ****/
     /**
      * 检查用户是否存在

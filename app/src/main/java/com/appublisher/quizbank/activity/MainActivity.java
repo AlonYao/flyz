@@ -219,7 +219,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
      * 切换Fragment
      * @param position fragment在侧边栏上的位置
      */
-    private void changeFragment(int position) {
+    public void changeFragment(int position) {
         // 开启一个Fragment事务
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
