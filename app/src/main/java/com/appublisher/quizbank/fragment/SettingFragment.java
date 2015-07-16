@@ -29,10 +29,13 @@ import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
+import com.appublisher.quizbank.model.images.DiskLruImageCache;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
+import com.appublisher.quizbank.network.ApiConstants;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -43,13 +46,15 @@ import java.util.HashMap;
 /**
  * 设置
  */
-public class SettingFragment extends Fragment{
+public class SettingFragment extends Fragment implements ApiConstants{
 
     private Activity mActivity;
     private TextView mTvSno;
     private TextView mTvExam;
+    private TextView mTvCacheSize;
     private ImageView mIvRedPoint;
     private RelativeLayout mRlSno;
+    private DiskLruImageCache mDiskLruImageCache;
 
     /** Umeng */
     private String mUmengAccount;
@@ -75,7 +80,10 @@ public class SettingFragment extends Fragment{
         RelativeLayout rlNotice = (RelativeLayout) view.findViewById(R.id.setting_notice);
         RelativeLayout rlFeedback = (RelativeLayout) view.findViewById(R.id.setting_feedback);
         RelativeLayout rlQa = (RelativeLayout) view.findViewById(R.id.setting_qa);
+        RelativeLayout rlDeleteCache =
+                (RelativeLayout) view.findViewById(R.id.setting_delete_cache);
         CheckBox cbPush = (CheckBox) view.findViewById(R.id.setting_push_cb);
+        mTvCacheSize = (TextView) view.findViewById(R.id.setting_delete_cache_size);
         mIvRedPoint = (ImageView) view.findViewById(R.id.setting_redpoint);
         mTvSno = (TextView) view.findViewById(R.id.setting_sno);
         mTvExam = (TextView) view.findViewById(R.id.setting_exam);
@@ -88,6 +96,12 @@ public class SettingFragment extends Fragment{
         mUmengInforms = "0";
         mUmengFeedback = "0";
         mUmengFAQ = "0";
+        mDiskLruImageCache = new DiskLruImageCache(
+                mActivity,
+                DISK_IMAGECACHE_FOLDER,
+                DISK_IMAGECACHE_SIZE,
+                DISK_IMAGECACHE_COMPRESS_FORMAT,
+                DISK_IMAGECACHE_QUALITY);
 
         // 账号设置
         rlAccount.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +188,16 @@ public class SettingFragment extends Fragment{
             }
         });
 
+        // 手动清理缓存
+        rlDeleteCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgressDialogManager.showProgressDialog(mActivity, false);
+                mDiskLruImageCache.clearCache();
+                ProgressDialogManager.closeProgressDialog();
+            }
+        });
+
         return view;
     }
 
@@ -226,6 +250,10 @@ public class SettingFragment extends Fragment{
         } else {
             mIvRedPoint.setVisibility(View.VISIBLE);
         }
+
+        // 获取缓存大小
+        mTvCacheSize.setText(
+                String.valueOf(mDiskLruImageCache.getCacheSize() / (1024*1024)) + "MB");
 
         // Umeng
         MobclickAgent.onPageStart("SettingFragment");

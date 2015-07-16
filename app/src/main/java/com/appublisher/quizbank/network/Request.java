@@ -462,7 +462,7 @@ public class Request extends BaseRequest implements ApiConstants{
 	 * @param url	图片地址
 	 */
 	public void loadImage(String url, ImageLoader.ImageListener listener) {
-		if (!imageCacheInit || ImageCacheManager.getInstance().minWidth!=0) {
+        if (!imageCacheInit || ImageCacheManager.getInstance().minWidth!=0) {
 			ImageCacheManager.getInstance().minWidth = 0;
 			createImageCache();
 		}
@@ -479,12 +479,13 @@ public class Request extends BaseRequest implements ApiConstants{
 	}
 
 	/**
-	 * Create the image cache. Uses Memory Cache by default. Change to Disk for a Disk based LRU implementation.  
+	 * Create the image cache. Uses Memory Cache by default.
+     * Change to Disk for a Disk based LRU implementation.
 	 */
 	private void createImageCache(){
 		ImageCacheManager icm = ImageCacheManager.getInstance();
 		icm.init(context,
-				context.getPackageCodePath()
+                DISK_IMAGECACHE_FOLDER
 				, DISK_IMAGECACHE_SIZE
 				, DISK_IMAGECACHE_COMPRESS_FORMAT
 				, DISK_IMAGECACHE_QUALITY

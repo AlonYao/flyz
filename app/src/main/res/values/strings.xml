@@ -54,6 +54,7 @@
     <string name="setting_notice">系统通知</string>
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_qa">常见问题</string>
+    <string name="setting_delete_cache">手动清理缓存</string>
 
     <!-- 做题 -->
     <string name="measure_option_a">A</string>

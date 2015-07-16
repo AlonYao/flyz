@@ -39,13 +39,14 @@ public class DiskLruImageCache implements ImageCache {
     public DiskLruImageCache(Context context,String uniqueName, int diskCacheSize,
         CompressFormat compressFormat, int quality ) {
         try {
-                final File diskCacheDir = getDiskCacheDir(context, uniqueName );
-                mDiskCache = DiskLruCache.open(diskCacheDir, APP_VERSION, VALUE_COUNT, diskCacheSize);
-                mCompressFormat = compressFormat;
-                mCompressQuality = quality;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            final File diskCacheDir = getDiskCacheDir(context, uniqueName );
+            if (!diskCacheDir.exists()) diskCacheDir.mkdirs();
+            mDiskCache = DiskLruCache.open(diskCacheDir, APP_VERSION, VALUE_COUNT, diskCacheSize);
+            mCompressFormat = compressFormat;
+            mCompressQuality = quality;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public void setMinWidth(int width) {
@@ -66,7 +67,6 @@ public class DiskLruImageCache implements ImageCache {
     }
 
     private File getDiskCacheDir(Context context, String uniqueName) {
-
         final String cachePath = context.getCacheDir().getPath();
         return new File(cachePath + File.separator + uniqueName);
     }
@@ -150,6 +150,14 @@ public class DiskLruImageCache implements ImageCache {
         return bitmap;
     }
 
+    /**
+     * 获取缓存大小
+     * @return 缓存大小单位：B
+     */
+    public long getCacheSize() {
+        return mDiskCache == null ? 0 : mDiskCache.size();
+    }
+
     public boolean containsKey( String key ) {
 
         boolean contained = false;
@@ -169,6 +177,9 @@ public class DiskLruImageCache implements ImageCache {
 
     }
 
+    /**
+     * 删除缓存
+     */
     public void clearCache() {
         if ( BuildConfig.DEBUG ) {
         	Logger.d("cache_test_DISK_: disk cache CLEARED");

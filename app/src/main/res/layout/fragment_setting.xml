@@ -134,8 +134,7 @@
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
-                <View
-                    style="@style/SettingLine"/>
+                <View style="@style/SettingLine"/>
 
                 <!-- 常见问题 -->
                 <RelativeLayout
@@ -148,8 +147,24 @@
                         style="@style/SettingArrow"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
-            </LinearLayout>
 
+                <View style="@style/SettingLine"/>
+
+                <!-- 手动清理缓存 -->
+                <RelativeLayout
+                    android:id="@+id/setting_delete_cache"
+                    style="@style/SettingRL">
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_delete_cache"/>
+                    <TextView
+                        android:id="@+id/setting_delete_cache_size"
+                        style="@style/SettingTV"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="18dp"
+                        tools:ignore="RtlHardcoded" />
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
