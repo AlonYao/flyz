@@ -7,13 +7,20 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="15dp">
 
+    <View
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@color/homepage_line"/>
+
     <!-- 免费公开课 -->
     <TextView
         android:id="@+id/opencourse_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
         android:maxLines="2"
         android:ellipsize="end"
         android:paddingTop="15dp"

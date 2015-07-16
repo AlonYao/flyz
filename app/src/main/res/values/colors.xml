@@ -10,6 +10,7 @@
 
     <color name="homepage_todayexam">#506183</color>
     <color name="homepage_gongkaike_bg">#E84E40</color>
+    <color name="homepage_item_bg">#ECF5F3</color>
 
     <color name="setting_text">#262B2D</color>
     <color name="setting_line">#D8D8D8</color>

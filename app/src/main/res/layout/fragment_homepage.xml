@@ -20,28 +20,29 @@
             <LinearLayout
                 android:id="@+id/homepage_evaluation"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="105dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:gravity="center_horizontal"
+                android:paddingTop="10dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
                 android:background="@drawable/homepage_black_bg"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
-
                     <!-- 头像 -->
                     <com.makeramen.roundedimageview.RoundedImageView
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/homepage_avatar"
-                        android:layout_width="85dp"
-                        android:layout_height="85dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:src="@drawable/login_avatar"
                         android:scaleType="fitCenter"
+                        android:background="@drawable/homepage_avatar_bg"
                         app:riv_border_width="5dp"
                         app:riv_border_color="#74BFA4"
                         app:riv_oval="true" />
@@ -50,10 +51,10 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="29dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="40dp"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="RtlHardcoded">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -65,8 +66,10 @@
                             android:id="@+id/homepage_estimate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="-6dp"
                             android:textColor="@android:color/white"
-                            android:textSize="43sp"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
                             android:text="@string/homepage_gufen_value"/>
                     </LinearLayout>
 
@@ -74,9 +77,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="22dp"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal">
+                        android:layout_marginLeft="50dp"
+                        android:orientation="horizontal"
+                        tools:ignore="RtlHardcoded">
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -91,9 +94,11 @@
                                 android:id="@+id/homepage_ranking"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="-6dp"
                                 android:layout_gravity="center_horizontal"
                                 android:textColor="@android:color/white"
-                                android:textSize="43sp"
+                                android:textSize="30sp"
+                                android:textStyle="bold"
                                 android:text="@string/practice_report_zero"/>
                         </LinearLayout>
                         <!-- 百分号 -->
@@ -101,12 +106,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:paddingBottom="8dp"
+                            android:paddingBottom="6dp"
                             android:textColor="@android:color/white"
-                            android:textSize="22sp"
+                            android:textSize="15sp"
                             android:text="@string/homepage_percent"/>
                     </LinearLayout>
-
                 </LinearLayout>
 
                 <!-- 考试日期 -->
@@ -114,9 +118,10 @@
                     android:id="@+id/homepage_exam"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="17sp"
+                    android:text="@string/common_none"
+                    android:textSize="15sp"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
 
@@ -128,7 +133,7 @@
                     android:id="@+id/homepage_todayexam_ll"
                     style="@style/HomePageListLL"
                     android:paddingLeft="40dp"
-                    tools:ignore="RtlSymmetry">
+                    tools:ignore="RtlHardcoded,RtlSymmetry">
                     <TextView
                         style="@style/HomePageListTV"
                         android:textSize="17sp"
@@ -139,22 +144,11 @@
                         android:text="@string/homepage_today_exam_value"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@id/homepage_todayexam_ll"
-                    android:orientation="horizontal">
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/setting_line"/>
-                    <ImageView
-                        android:id="@+id/homepage_history"
-                        style="@style/HomePageListIV"
-                        android:src="@drawable/homepage_history"
-                        tools:ignore="ContentDescription" />
-                </LinearLayout>
-
+                <ImageView
+                    android:id="@+id/homepage_history"
+                    style="@style/HomePageListIV"
+                    android:src="@drawable/homepage_history"
+                    tools:ignore="ContentDescription" />
             </RelativeLayout>
 
             <!-- 推荐专项 -->
@@ -165,7 +159,7 @@
                     android:id="@+id/homepage_special_ll"
                     style="@style/HomePageListLL"
                     android:paddingLeft="40dp"
-                    tools:ignore="RtlSymmetry">
+                    tools:ignore="RtlHardcoded,RtlSymmetry">
                     <TextView
                         style="@style/HomePageListTV"
                         android:textSize="17sp"
@@ -176,22 +170,11 @@
                         android:text="@string/homepage_special_value"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@id/homepage_special_ll"
-                    android:orientation="horizontal">
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/setting_line"/>
-
-                    <ImageView
-                        android:id="@+id/homepage_special"
-                        style="@style/HomePageListIV"
-                        android:src="@drawable/homepage_special"
-                        tools:ignore="ContentDescription" />
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/homepage_special"
+                    style="@style/HomePageListIV"
+                    android:src="@drawable/homepage_special"
+                    tools:ignore="ContentDescription" />
             </RelativeLayout>
 
             <!-- 快速练习 -->
@@ -201,14 +184,6 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/homepage_autotest"
                 tools:ignore="RtlSymmetry" />
-
-            <View
-                android:layout_width="300dp"
-                android:layout_height="1dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/homepage_line"/>
 
             <!-- 公开课按钮 -->
             <include layout="@layout/opencourse_btn"/>
