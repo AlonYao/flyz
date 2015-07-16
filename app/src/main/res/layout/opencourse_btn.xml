@@ -11,7 +11,7 @@
         android:layout_width="300dp"
         android:layout_height="1dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:background="@color/homepage_line"/>
 
     <!-- 免费公开课 -->

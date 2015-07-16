@@ -136,7 +136,7 @@
                     tools:ignore="RtlHardcoded,RtlSymmetry">
                     <TextView
                         style="@style/HomePageListTV"
-                        android:textSize="17sp"
+                        android:textSize="16sp"
                         android:text="@string/homepage_today_exam"/>
                     <TextView
                         android:id="@+id/homepage_todayexam_tv"
@@ -162,7 +162,7 @@
                     tools:ignore="RtlHardcoded,RtlSymmetry">
                     <TextView
                         style="@style/HomePageListTV"
-                        android:textSize="17sp"
+                        android:textSize="16sp"
                         android:text="@string/homepage_special"/>
                     <TextView
                         android:id="@+id/homepage_special_tv"
@@ -182,6 +182,7 @@
                 android:id="@+id/homepage_quicktest"
                 style="@style/HomePageAutoTestTv"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
                 android:text="@string/homepage_autotest"
                 tools:ignore="RtlSymmetry" />
 
