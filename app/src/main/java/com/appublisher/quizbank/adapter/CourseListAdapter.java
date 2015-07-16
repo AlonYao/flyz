@@ -115,19 +115,19 @@ public class CourseListAdapter extends BaseAdapter{
                     // 即将开始
                     viewHolder.tvStatus.setText("即将开始");
                     viewHolder.tvStatus.setTextColor(
-                            mActivity.getResources().getColor(R.color.course_price));
+                            mActivity.getResources().getColor(R.color.course_soon));
                 } else if ("replay".equals(course.getStatus())) {
                     // 已结束
                     viewHolder.tvStatus.setText("已结束");
                     viewHolder.tvStatus.setTextColor(
-                            mActivity.getResources().getColor(R.color.course_price));
+                            mActivity.getResources().getColor(R.color.course_end));
                 }
 
             } else if ("vod".equals(course.getType())) {
                 // 录播课
                 viewHolder.tvStatus.setText("观看视频");
                 viewHolder.tvStatus.setTextColor(
-                        mActivity.getResources().getColor(R.color.course_price));
+                        mActivity.getResources().getColor(R.color.course_watch));
             }
 
         } else {
@@ -137,7 +137,7 @@ public class CourseListAdapter extends BaseAdapter{
 
             // 已购人数
             viewHolder.tvPersons.setVisibility(View.VISIBLE);
-            viewHolder.tvPersons.setText(String.valueOf(course.getPersons_num()) + "已购");
+            viewHolder.tvPersons.setText(String.valueOf(course.getPersons_num()) + "人已购");
 
             // 课程价格
             viewHolder.tvStatus.setText("¥ " + String.valueOf(course.getPrice()));
