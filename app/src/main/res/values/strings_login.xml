@@ -60,5 +60,6 @@
     <string name="title_activity_cannot_get_sms">收不到验证码</string>
     <string name="title_activity_register_sms_code">注册腰果账号</string>
     <string name="title_activity_mobile_register">注册腰果账号</string>
+    <string name="title_activity_forget_pwd">找回密码</string>
 
 </resources>

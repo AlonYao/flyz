@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.appublisher.quizbank.model.login.activity.ForgetPwdActivity">
+
+    <!-- 用户名 -->
+    <EditText
+        android:id="@+id/forgetpwd_username"
+        style="@style/Login_EditText"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/login_black"
+        android:hint="@string/login_edittext_username"
+        android:textColorHint="@color/login_gray"
+        android:layout_marginTop="15dp" />
+
+    <!-- 下一步 -->
+    <Button
+        android:id="@+id/forgetpwd_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_next"
+        android:textColor="@color/login_white"
+        android:background="@color/blue"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

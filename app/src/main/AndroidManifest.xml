@@ -236,6 +236,10 @@
             android:name=".model.login.activity.RegisterSmsCodeActivity"
             android:label="@string/title_activity_register_sms_code" >
         </activity>
+        <activity
+            android:name=".model.login.activity.ForgetPwdActivity"
+            android:label="@string/title_activity_forget_pwd" >
+        </activity>
     </application>
 
 </manifest>
