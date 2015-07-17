@@ -161,8 +161,6 @@ public class GlobalSettingDAO {
      */
     public static boolean isGrade() {
         GlobalSetting globalSetting = findById();
-
         return globalSetting != null && globalSetting.is_grade;
-
     }
 }
