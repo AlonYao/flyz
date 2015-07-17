@@ -6,6 +6,8 @@
     android:background="@color/white"
     tools:context="com.appublisher.quizbank.model.login.activity.ForgetPwdActivity">
 
+    <include layout="@layout/toolbar"/>
+
     <!-- 用户名 -->
     <EditText
         android:id="@+id/forgetpwd_username"

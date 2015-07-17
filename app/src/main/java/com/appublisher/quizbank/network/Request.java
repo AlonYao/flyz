@@ -270,6 +270,7 @@ public class Request extends BaseRequest implements ApiConstants{
     }
 
     /**** 登录注册模块 ****/
+
     /**
      * 检查用户是否存在
      * @param user_name 用户名
@@ -277,6 +278,15 @@ public class Request extends BaseRequest implements ApiConstants{
     public void isUserExists(String user_name) {
         asyncRequest(ParamBuilder.finalUrl(isUserExists) + "&user_name=" + user_name,
                 "is_user_exists", "object");
+    }
+
+    /**
+     * 密码重置
+     * @param email	用户邮箱
+     */
+    public void resetPassword(String email) {
+        String url = resetPassUri+"&username=" + email;
+        asyncRequest(url, "resetPassword", "object");
     }
 
 	/*********************

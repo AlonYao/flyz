@@ -22,6 +22,19 @@
     <string name="login_smscode_no_reply">收不到验证码？</string>
     <string name="login_next">下一步</string>
     <string name="login_mobile_register_num">手机号</string>
+    <string name="login_email_no_reply">收不到邮件?</string>
+    <string name="login_relogin">已重置，重新登录</string>
+    <string name="login_cannot_get_email">
+        如果您无法收到邮件，建议您先参考以下解决方法：\n
+        1.查看邮箱中的垃圾邮件，或广告邮件\n
+        2.把noreply@appublisher.com设为白名单，之后再重新发送验证邮件\n
+    </string>
+    <string name="login_cannot_get_smscode">
+        如果您无法收到短信验证码，建议您先参考以下解决方法：\n
+        1.网络通讯异常可能会造成短信丢失，请您耐心等待或稍后尝试重新获取。\n
+        2.解除应用软件的短信拦截，或者更换一个手机。\n
+        3.请核实您的手机是否是正常能够接受短信状态，停机和欠费状态下是不能够收到短信。
+    </string>
 
     <!-- alert -->
     <string name="login_alert_usernonentity_msg">账号未注册</string>

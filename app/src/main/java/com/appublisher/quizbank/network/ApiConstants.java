@@ -48,6 +48,9 @@ public interface ApiConstants {
     // 检查用户是否注册
     String isUserExists = baseUrl + "common/is_user_exists";
 
+    // 密码重置URL
+    String resetPassUri = "http://edu.appublisher.com/api/sendmail/mail.php?app=daily";
+
     /** 天天模考 **/
     // 快速智能练习
     String getAutoTraining = baseUrl + "quizbank/auto_training";

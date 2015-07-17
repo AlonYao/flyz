@@ -240,6 +240,18 @@
             android:name=".model.login.activity.ForgetPwdActivity"
             android:label="@string/title_activity_forget_pwd" >
         </activity>
+        <activity
+            android:name=".model.login.activity.EmailResetPwdActivity"
+            android:label="@string/title_activity_email_reset_pwd" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.CannotGetEmailActivity"
+            android:label="@string/title_activity_cannot_get_email" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.MobileResetPwdActivity"
+            android:label="@string/title_activity_mobile_reset_pwd" >
+        </activity>
     </application>
 
 </manifest>
