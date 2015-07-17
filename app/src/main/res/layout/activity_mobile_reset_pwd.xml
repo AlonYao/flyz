@@ -8,7 +8,7 @@
     <include layout="@layout/toolbar"/>
 
     <TextView
-        android:id="@+id/register_smscode_phone"
+        android:id="@+id/mobile_resetpwd_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -25,13 +25,13 @@
         android:focusable="true"
         android:orientation="horizontal">
         <EditText
-            android:id="@+id/register_smscode_code"
+            android:id="@+id/mobile_resetpwd_smscode"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:ems="10"
             android:textColor="@color/login_black"
             android:background="@android:color/white"
@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:background="@color/setting_line"/>
         <TextView
-            android:id="@+id/register_smscode_reget"
+            android:id="@+id/mobile_resetpwd_reget"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -51,5 +51,63 @@
             android:gravity="center"
             android:text="@string/login_reget"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <include layout="@layout/login_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="30dp"
+            tools:ignore="RtlHardcoded" />
+
+        <!-- 手机号 -->
+        <EditText
+            android:id="@+id/mobile_resetpwd_new"
+            style="@style/Login_EditText"
+            android:inputType="number"
+            android:maxLength="11"
+            android:textColor="@color/login_black"
+            android:hint="@string/login_new_pwd"/>
+
+        <include layout="@layout/login_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="30dp"
+            tools:ignore="RtlHardcoded" />
+
+        <!-- 密码 -->
+        <EditText
+            android:id="@+id/mobile_resetpwd_new_confirm"
+            style="@style/Login_EditText"
+            android:inputType="textPassword"
+            android:textColor="@color/login_black"
+            android:hint="@string/login_confirm_new_pwd"/>
+    </LinearLayout>
+
+    <!-- 登录按钮 -->
+    <Button
+        android:id="@+id/mobile_resetpwd_next"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/login_next"
+        android:textColor="@color/login_white"
+        android:background="@color/blue"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- 收不到验证码 -->
+    <TextView
+        android:id="@+id/mobile_resetpwd_noreply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="15dp"
+        android:text="@string/login_smscode_no_reply"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        tools:ignore="RtlHardcoded" />
 
 </LinearLayout>

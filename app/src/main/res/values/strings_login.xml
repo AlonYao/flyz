@@ -35,6 +35,8 @@
         2.解除应用软件的短信拦截，或者更换一个手机。\n
         3.请核实您的手机是否是正常能够接受短信状态，停机和欠费状态下是不能够收到短信。
     </string>
+    <string name="login_new_pwd">新密码</string>
+    <string name="login_confirm_new_pwd">确认新密码</string>
 
     <!-- alert -->
     <string name="login_alert_usernonentity_msg">账号未注册</string>
