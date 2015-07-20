@@ -5,7 +5,6 @@
     <style name="Login_EditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:ems">10</item>
         <item name="android:textColorHint">@color/login_gray</item>
         <item name="android:textColor">@color/login_edittext_username</item>
         <item name="android:background">@android:color/transparent</item>

@@ -158,8 +158,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
                 // 友盟
                 UmengManager.sendCountEvent(LoginActivity.this, "RegLog", "Action", "Forget");
 
-                Intent intent = new Intent(LoginActivity.this, BindingMobileActivity.class);
-                intent.putExtra("from", "forget_pwd");
+                Intent intent = new Intent(LoginActivity.this, ForgetPwdActivity.class);
                 startActivity(intent);
             }
         });

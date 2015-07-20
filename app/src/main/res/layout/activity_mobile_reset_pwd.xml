@@ -64,12 +64,11 @@
             android:layout_marginLeft="30dp"
             tools:ignore="RtlHardcoded" />
 
-        <!-- 手机号 -->
+        <!-- 新密码 -->
         <EditText
             android:id="@+id/mobile_resetpwd_new"
             style="@style/Login_EditText"
-            android:inputType="number"
-            android:maxLength="11"
+            android:inputType="textPassword"
             android:textColor="@color/login_black"
             android:hint="@string/login_new_pwd"/>
 
@@ -79,7 +78,7 @@
             android:layout_marginLeft="30dp"
             tools:ignore="RtlHardcoded" />
 
-        <!-- 密码 -->
+        <!-- 确认新密码 -->
         <EditText
             android:id="@+id/mobile_resetpwd_new_confirm"
             style="@style/Login_EditText"

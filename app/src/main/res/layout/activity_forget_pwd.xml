@@ -3,20 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/common_bg"
     tools:context="com.appublisher.quizbank.model.login.activity.ForgetPwdActivity">
 
     <include layout="@layout/toolbar"/>
 
-    <!-- 用户名 -->
-    <EditText
-        android:id="@+id/forgetpwd_username"
-        style="@style/Login_EditText"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/login_black"
-        android:hint="@string/login_edittext_username"
-        android:textColorHint="@color/login_gray"
-        android:layout_marginTop="15dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+        <include layout="@layout/login_line"/>
+        <!-- 用户名 -->
+        <EditText
+            android:id="@+id/forgetpwd_username"
+            style="@style/Login_EditText"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/login_black"
+            android:hint="@string/login_edittext_username"
+            android:textColorHint="@color/login_gray"/>
+    </LinearLayout>
 
     <!-- 下一步 -->
     <Button
