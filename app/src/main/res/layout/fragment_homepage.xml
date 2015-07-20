@@ -125,6 +125,32 @@
                     android:textColor="@android:color/white"/>
             </LinearLayout>
 
+            <!-- 模考&估分 -->
+            <LinearLayout
+                android:id="@+id/homepage_mock"
+                android:layout_width="300dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="40dp"
+                android:orientation="vertical"
+                android:background="@drawable/homepage_mokao_bg"
+                android:visibility="gone"
+                tools:ignore="RtlHardcoded,RtlSymmetry">
+                <TextView
+                    android:id="@+id/homepage_mock_title"
+                    style="@style/HomePageListTV"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/common_none"/>
+                <TextView
+                    android:id="@+id/homepage_mock_name"
+                    style="@style/HomePageListTV"
+                    android:textColor="@android:color/white"
+                    android:text="@string/common_none"/>
+            </LinearLayout>
+
             <!-- 今日模考 -->
             <RelativeLayout
                 style="@style/HomePageListRL"

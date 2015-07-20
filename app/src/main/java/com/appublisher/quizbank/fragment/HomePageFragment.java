@@ -20,9 +20,12 @@ import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
+import com.appublisher.quizbank.model.netdata.globalsettings.MockM;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
 import com.appublisher.quizbank.model.netdata.homepage.PaperM;
@@ -50,7 +53,10 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private TextView mTvRanking;
     private TextView mTvTodayExam;
     private TextView mTvSpecial;
-    private LinearLayout mLlMokao;
+    private TextView mTvMockTitle;
+    private TextView mTvMockName;
+    private LinearLayout mLlMiniMokao;
+    private LinearLayout mLlMock;
     private LinearLayout mLlSpecial;
     private TextView mTvQuickTest;
     private PaperTodayM mTodayExam;
@@ -84,9 +90,12 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         mTvTodayExam = (TextView) mView.findViewById(R.id.homepage_todayexam_tv);
         mTvSpecial = (TextView) mView.findViewById(R.id.homepage_special_tv);
         mTvZhiboke = (TextView) mView.findViewById(R.id.opencourse_btn);
-        mLlMokao = (LinearLayout) mView.findViewById(R.id.homepage_todayexam_ll);
+        mLlMiniMokao = (LinearLayout) mView.findViewById(R.id.homepage_todayexam_ll);
         mLlSpecial = (LinearLayout) mView.findViewById(R.id.homepage_special_ll);
         mPromote = (LinearLayout) mView.findViewById(R.id.course_promote);
+        mLlMock = (LinearLayout) mView.findViewById(R.id.homepage_mock);
+        mTvMockTitle = (TextView) mView.findViewById(R.id.homepage_mock_title);
+        mTvMockName = (TextView) mView.findViewById(R.id.homepage_mock_name);
         ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
         ImageView ivSpecial = (ImageView) mView.findViewById(R.id.homepage_special);
         LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
@@ -165,6 +174,27 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             mTvRanking.setText(Utils.rateToString(assessment.getRank()));
         }
 
+        // 模考按钮
+        GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
+        if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+            MockM mock = globalSettingsResp.getMock();
+            if (mock != null) {
+                mLlMock.setVisibility(View.VISIBLE);
+                mLlMock.setOnClickListener(this);
+                if ("mock".equals(mock.getType())) {
+                    mTvMockTitle.setText("模考总动员");
+                } else if ("evaluate".equals(mock.getType())) {
+                    mTvMockTitle.setText("估分总动员");
+                }
+
+                mTvMockName.setText(mock.getName());
+            } else {
+                mLlMock.setVisibility(View.GONE);
+            }
+        } else {
+            mLlMock.setVisibility(View.GONE);
+        }
+
         PaperM pager = homePageResp.getPaper();
         if (pager != null) {
             // 今日模考
@@ -172,7 +202,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             if (mTodayExam != null) {
                 mTvTodayExam.setText("已有" + String.valueOf(
                         mTodayExam.getPersons_num()) + "人参加");
-                mLlMokao.setOnClickListener(this);
+                mLlMiniMokao.setOnClickListener(this);
             }
 
             // 推荐专项训练
@@ -301,6 +331,10 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 intent.putExtra("paper_name", "快速智能练习");
                 intent.putExtra("umeng_entry", "Home");
                 startActivity(intent);
+                break;
+
+            case R.id.homepage_mock:
+                // 模考&估分
                 break;
         }
     }

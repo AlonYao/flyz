@@ -2,7 +2,10 @@ package com.appublisher.quizbank.dao;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.model.db.GlobalSetting;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.Utils;
 
 /**
@@ -162,5 +165,16 @@ public class GlobalSettingDAO {
     public static boolean isGrade() {
         GlobalSetting globalSetting = findById();
         return globalSetting != null && globalSetting.is_grade;
+    }
+
+    /**
+     * 获取全局变量接口回调数据模型
+     * @return GlobalSettingsResp
+     */
+    public static GlobalSettingsResp getGlobalSettingsResp() {
+        GlobalSetting globalSetting = findById();
+        if (globalSetting == null || globalSetting.content == null) return null;
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        return Globals.gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
     }
 }
