@@ -8,22 +8,24 @@
 
     <include layout="@layout/toolbar"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/login_cannotget"
-        tools:ignore="ContentDescription" />
-
     <TextView
-        android:id="@+id/cannotget_sms_serviceqq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_gravity="center_horizontal"
         android:textSize="15sp"
-        android:text="@string/login_default_qq"
-        android:textColor="@color/login_edittext_username"/>
+        android:text="@string/login_cannot_get_smscode"
+        android:textColor="@color/setting_text"/>
+
+    <TextView
+        android:id="@+id/cannotget_smscode_qq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textColor="@color/setting_text"/>
 
 </LinearLayout>

@@ -5,6 +5,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -26,21 +28,28 @@ public class CannotGetSmsActivity extends ActionBarActivity {
         CommonModel.setToolBar(this);
 
         // view初始化
-        TextView tv = (TextView) findViewById(R.id.cannotget_sms_serviceqq);
+        TextView tv = (TextView) findViewById(R.id.cannotget_smscode_qq);
 
         // 获取客服QQ
         GlobalSetting globalSetting = GlobalSettingDAO.findById();
 
         if (globalSetting != null) {
-            Gson gson = GsonManager.initGson();
+            if (Globals.gson == null) Globals.gson = GsonManager.initGson();
             GlobalSettingsResp globalSettingsResp =
-                    gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
+                    Globals.gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
+
+            String qq = getString(R.string.service_qq);
 
             if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
-                String qq = globalSettingsResp.getService_qq();
-                tv.setText("客服QQ号：" + qq);
+                qq = globalSettingsResp.getService_qq();
             }
+
+            tv.setText("如果仍然无法收到短信验证码，请联系客服QQ:\n" + qq);
+            CommonModel.setTextLongClickCopy(tv);
         }
+
+        // 保存Activity
+        QuizBankApp.getInstance().addActivity(this);
     }
 
     @Override

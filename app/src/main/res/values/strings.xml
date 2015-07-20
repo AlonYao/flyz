@@ -160,8 +160,5 @@
     <string name="title_activity_open_course_none">查看往期</string>
     <string name="title_activity_web_view"> </string>
     <string name="title_activity_app_guide">AppGuideActivity</string>
-    <string name="title_activity_email_reset_pwd">EmailResetPwdActivity</string>
-    <string name="title_activity_cannot_get_email">CannotGetEmailActivity</string>
-    <string name="title_activity_mobile_reset_pwd">MobileResetPwdActivity</string>
 
 </resources>

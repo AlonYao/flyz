@@ -14,6 +14,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
+        android:textColor="@color/setting_text"
         android:text="@string/login_cannot_get_email"/>
 
     <TextView
@@ -21,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal"
+        android:textColor="@color/setting_text"/>
 
 </LinearLayout>
