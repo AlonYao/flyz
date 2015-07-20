@@ -2,38 +2,138 @@ package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ListView;
 
+import com.android.volley.VolleyError;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.adapter.MockListAdapter;
+import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.netdata.mock.MockListResp;
+import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
+import com.tendcloud.tenddata.TCAgent;
+import com.umeng.analytics.MobclickAgent;
 
-public class MockActivity extends ActionBarActivity {
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+/**
+ * 模考&估分
+ */
+public class MockActivity extends ActionBarActivity implements RequestCallback{
+
+    private ListView mLvMock;
+    private ImageView mIvNull;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mock);
+
+        // Toolbar
+        CommonModel.setToolBar(this);
+
+        // 获取数据
+        String title = getIntent().getStringExtra("title");
+        CommonModel.setBarTitle(this, title);
+
+        // View 初始化
+        mLvMock = (ListView) findViewById(R.id.mock_lv);
+        mIvNull = (ImageView) findViewById(R.id.quizbank_null);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_mock, menu);
-        return true;
+    protected void onResume() {
+        super.onResume();
+        // 获取数据
+        ProgressDialogManager.showProgressDialog(this, true);
+        new Request(this, this).getMockExerciseList();
+
+        // Umeng
+        MobclickAgent.onPageStart("MockActivity");
+        MobclickAgent.onResume(this);
+
+        // TalkingData
+        TCAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Umeng
+        MobclickAgent.onPageEnd("MockActivity");
+        MobclickAgent.onPause(this);
+
+        // TalkingData
+        TCAgent.onPause(this);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("mock_exercise_list".equals(apiName)) dealMockListResp(response);
+
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        ToastManager.showOvertimeToash(this);
+        ProgressDialogManager.closeProgressDialog();
+    }
+
+    /**
+     * 处理模考&估分列表数据回调
+     * @param response 回调数据
+     */
+    private void dealMockListResp(JSONObject response) {
+        if (response == null) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
+        MockListResp mockListResp = Globals.gson.fromJson(response.toString(), MockListResp.class);
+
+        if (mockListResp == null || mockListResp.getResponse_code() != 1) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        ArrayList<MockPaperM> mockPapers = mockListResp.getPaper_list();
+
+        if (mockPapers == null || mockPapers.size() == 0) {
+            mIvNull.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            mIvNull.setVisibility(View.GONE);
+        }
+
+        MockListAdapter mockListAdapter = new MockListAdapter(this, mockPapers);
+        mLvMock.setAdapter(mockListAdapter);
+    }
+
 }

@@ -188,6 +188,13 @@ public class Request extends BaseRequest implements ApiConstants{
     }
 
     /**
+     * 获取模考&估分试卷列表
+     */
+    public void getMockExerciseList() {
+        asyncRequest(ParamBuilder.finalUrl(getMockExerciseList), "mock_exercise_list", "object");
+    }
+
+    /**
      * 获取通知
      * @param offset 起点
      * @param count 数量

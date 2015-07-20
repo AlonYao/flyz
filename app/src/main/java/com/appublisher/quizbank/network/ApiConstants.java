@@ -122,6 +122,9 @@ public interface ApiConstants {
     // 设置页面QA
     String getQa = baseUrl + "quizbank/get_qa";
 
+    // 获取模考&估分试卷列表
+    String getMockExerciseList = baseUrl + "quizbank/mock_exercise_list";
+
     /** 课程中心 **/
     // Filter:课程标签
     String getCourseFilterTag = baseUrl + "course/course_filter_tag";

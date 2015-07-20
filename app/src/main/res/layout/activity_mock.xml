@@ -1,10 +1,20 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.appublisher.quizbank.activity.MockActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <include layout="@layout/toolbar"/>
 
-</RelativeLayout>
+    <ListView
+        android:id="@+id/mock_lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:clipToPadding="false"/>
+
+    <include layout="@layout/quizbank_null"/>
+
+</LinearLayout>

@@ -56,13 +56,14 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private TextView mTvSpecial;
     private TextView mTvMockTitle;
     private TextView mTvMockName;
+    private TextView mTvQuickTest;
     private LinearLayout mLlMiniMokao;
     private LinearLayout mLlMock;
     private LinearLayout mLlSpecial;
-    private TextView mTvQuickTest;
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
     private Request mRequest;
+    private MockM mMock;
 
     public View mView;
     public LinearLayout mPromote;
@@ -178,17 +179,19 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         // 模考按钮
         GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
         if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
-            MockM mock = globalSettingsResp.getMock();
-            if (mock != null) {
+            mMock = globalSettingsResp.getMock();
+            if (mMock != null) {
                 mLlMock.setVisibility(View.VISIBLE);
                 mLlMock.setOnClickListener(this);
-                if ("mock".equals(mock.getType())) {
+                if ("mock".equals(mMock.getType())) {
                     mTvMockTitle.setText("模考总动员");
-                } else if ("evaluate".equals(mock.getType())) {
-                    mTvMockTitle.setText("估分总动员");
+                } else if ("evaluate".equals(mMock.getType())) {
+                    mTvMockTitle.setText("估分进行时");
+                } else {
+                    mTvMockTitle.setText("模考估分");
                 }
 
-                mTvMockName.setText(mock.getName());
+                mTvMockName.setText(mMock.getName());
             } else {
                 mLlMock.setVisibility(View.GONE);
             }
@@ -337,6 +340,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             case R.id.homepage_mock:
                 // 模考&估分
                 intent = new Intent(mActivity, MockActivity.class);
+                intent.putExtra("title", mTvMockTitle.getText().toString());
                 startActivity(intent);
                 break;
         }

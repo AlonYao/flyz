@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="66dp"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/mock_item_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="18dp"
+        android:src="@drawable/historymokao_done"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/mock_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="52dp"
+        android:layout_centerVertical="true"
+        android:textSize="18sp"
+        android:textColor="@color/setting_text"
+        tools:ignore="RelativeOverlap" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/setting_arrow"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+</RelativeLayout>
