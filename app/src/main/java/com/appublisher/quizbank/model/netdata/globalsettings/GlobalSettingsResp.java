@@ -12,6 +12,11 @@ public class GlobalSettingsResp {
     String market_qq;
     int open_course_heartbeat;
     ArrayList<ExerciseIntroM> exercise_intro;
+    MockM mock;
+
+    public MockM getMock() {
+        return mock;
+    }
 
     public String getMarket_qq() {
         return market_qq;

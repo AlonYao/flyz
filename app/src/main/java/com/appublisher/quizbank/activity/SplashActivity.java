@@ -7,20 +7,26 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * 启动页
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends Activity implements RequestCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,5 +105,20 @@ public class SplashActivity extends Activity {
 
         // TalkingData
         TCAgent.onPause(this);
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        ToastManager.showOvertimeToash(this);
     }
 }
