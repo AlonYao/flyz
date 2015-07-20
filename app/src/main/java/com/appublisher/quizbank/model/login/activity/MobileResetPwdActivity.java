@@ -11,22 +11,32 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 手机号用户重置密码
  */
-public class MobileResetPwdActivity extends ActionBarActivity implements View.OnClickListener{
+public class MobileResetPwdActivity extends ActionBarActivity implements
+        View.OnClickListener, RequestCallback{
 
     private static final int TIME_ON = 1;
     private static final int TIME_OUT = 2;
     private static TextView mTvReGet;
     private static int mTimeLimit;
     private static Timer mTimer;
+    private Handler mHandler;
+    private Request mRequest;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -66,13 +76,20 @@ public class MobileResetPwdActivity extends ActionBarActivity implements View.On
         // ActionBar Set
         CommonModel.setToolBar(this);
 
+        // 成员变量初始化
+        // 成员变量初始化
+        mTimeLimit = 60;
+        mHandler = new MsgHandler(this);
+        mRequest = new Request(this, this);
+
         // View 初始化
         TextView tvPhone = (TextView) findViewById(R.id.mobile_resetpwd_phone);
         TextView tvReSetPwd = (TextView) findViewById(R.id.mobile_resetpwd_next);
-        TextView tvNoReply = (TextView) findViewById(R.id.smscode_noreply);
-        final EditText etSmsCode = (EditText) findViewById(R.id.smscode_code);
-        mTvReGet = (TextView) findViewById(R.id.smscode_reget);
-        mTvSmsCodeError = (TextView) findViewById(R.id.smscode_error);
+        TextView tvNoReply = (TextView) findViewById(R.id.mobile_resetpwd_noreply);
+        final EditText etSmsCode = (EditText) findViewById(R.id.mobile_resetpwd_smscode);
+        EditText etNewPwd = (EditText) findViewById(R.id.mobile_resetpwd_new);
+        EditText etNewPwdConfirm = (EditText) findViewById(R.id.mobile_resetpwd_new_confirm);
+        mTvReGet = (TextView) findViewById(R.id.mobile_resetpwd_reget);
     }
 
     @Override
@@ -88,6 +105,21 @@ public class MobileResetPwdActivity extends ActionBarActivity implements View.On
 
     }
 
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+
+    }
+
     /**
      * 设置时间结束的操作
      */
@@ -100,5 +132,30 @@ public class MobileResetPwdActivity extends ActionBarActivity implements View.On
         mTimeLimit = 60;
         mTvReGet.setClickable(true);
         mTvReGet.setText("重新获取");
+    }
+
+    /**
+     * 开始计时器
+     */
+    private void startTimer() {
+        mTvReGet.setClickable(false);
+
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                mTimeLimit--;
+                mHandler.sendEmptyMessage(TIME_ON);
+                if (mTimeLimit < 0) {
+                    mTimer.cancel();
+                    mHandler.sendEmptyMessage(TIME_OUT);
+                }
+            }
+        }, 0, 1000);
     }
 }
