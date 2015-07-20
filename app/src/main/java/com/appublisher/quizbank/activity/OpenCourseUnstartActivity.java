@@ -115,7 +115,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
+        switch (resultCode) {
             case ActivitySkipConstants.BOOK_OPENCOURSE:
                 // 预约公开课回调
                 ProgressDialogManager.showProgressDialog(this, false);
