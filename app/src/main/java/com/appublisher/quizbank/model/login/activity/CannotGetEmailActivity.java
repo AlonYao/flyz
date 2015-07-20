@@ -1,8 +1,7 @@
 package com.appublisher.quizbank.model.login.activity;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -11,7 +10,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 
 /**
- * 收不到邮件
+ * 收不到邮件页面
  */
 public class CannotGetEmailActivity extends ActionBarActivity {
 
