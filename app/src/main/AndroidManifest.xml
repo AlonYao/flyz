@@ -252,6 +252,10 @@
             android:name=".model.login.activity.MobileResetPwdActivity"
             android:label="@string/title_activity_mobile_reset_pwd" >
         </activity>
+        <activity
+            android:name=".activity.MockActivity"
+            android:label="@string/title_activity_mock" >
+        </activity>
     </application>
 
 </manifest>

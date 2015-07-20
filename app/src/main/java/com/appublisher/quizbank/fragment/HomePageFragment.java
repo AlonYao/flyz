@@ -17,6 +17,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
+import com.appublisher.quizbank.activity.MockActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
@@ -335,6 +336,8 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case R.id.homepage_mock:
                 // 模考&估分
+                intent = new Intent(mActivity, MockActivity.class);
+                startActivity(intent);
                 break;
         }
     }
