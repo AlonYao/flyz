@@ -51,7 +51,6 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
         mUmengVideoPlay = "0";
 
         // 获取数据
-        final String content = getIntent().getStringExtra("content");
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
         // 视频点击
