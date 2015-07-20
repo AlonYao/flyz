@@ -34,6 +34,7 @@ public class MockActivity extends ActionBarActivity implements RequestCallback{
 
     private ListView mLvMock;
     private ImageView mIvNull;
+    private Request mRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,9 @@ public class MockActivity extends ActionBarActivity implements RequestCallback{
         String title = getIntent().getStringExtra("title");
         CommonModel.setBarTitle(this, title);
 
+        // 成员变量初始化
+        mRequest = new Request(this, this);
+
         // View 初始化
         mLvMock = (ListView) findViewById(R.id.mock_lv);
         mIvNull = (ImageView) findViewById(R.id.quizbank_null);
@@ -57,7 +61,7 @@ public class MockActivity extends ActionBarActivity implements RequestCallback{
         super.onResume();
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        new Request(this, this).getMockExerciseList();
+        mRequest.getMockExerciseList();
 
         // Umeng
         MobclickAgent.onPageStart("MockActivity");
