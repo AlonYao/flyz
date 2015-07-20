@@ -53,5 +53,5 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:visibility="gone"
-        android:textColor="@color/setting_text"/>
+        android:textColor="@android:color/white"/>
 </LinearLayout>

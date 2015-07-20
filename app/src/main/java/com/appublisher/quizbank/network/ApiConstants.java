@@ -139,7 +139,7 @@ public interface ApiConstants {
     String getOpenCourseDetail = baseUrl + "course/open_course_detail";
 
     // 获取快讯详情
-    String getPromoteLiveCourse = baseUrl + "course/promote_live_course";
+    String getPromoteLiveCourse = baseUrl + "quizbank/promote_live_course";
 
     /** 图片相关 **/
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
