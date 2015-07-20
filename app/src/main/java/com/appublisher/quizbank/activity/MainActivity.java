@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
@@ -33,8 +33,6 @@ import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -42,11 +40,8 @@ import com.appublisher.quizbank.utils.Utils;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-
-public class MainActivity extends ActionBarActivity implements RequestCallback{
+public class MainActivity extends ActionBarActivity {
 
     /** Fragment **/
     private FragmentManager mFragmentManager;
@@ -110,9 +105,6 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         // 默认选中首页
         if (savedInstanceState == null) changeFragment(0);
 
-        // 获取全局配置
-        new Request(this, this).getGlobalSettings();
-
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
     }
@@ -171,6 +163,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void onBackPressed() {
         if(mDrawerLayout.isDrawerOpen(Gravity.START|Gravity.LEFT)){
@@ -391,19 +384,4 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         if (mSettingFragment != null) transaction.hide(mSettingFragment);
     }
 
-    @Override
-    public void requestCompleted(JSONObject response, String apiName) {
-        if ("global_settings".equals(apiName) && response != null)
-            GlobalSettingDAO.save(response.toString());
-    }
-
-    @Override
-    public void requestCompleted(JSONArray response, String apiName) {
-        // Nothing
-    }
-
-    @Override
-    public void requestEndedWithError(VolleyError error, String apiName) {
-        // Nothing
-    }
 }
