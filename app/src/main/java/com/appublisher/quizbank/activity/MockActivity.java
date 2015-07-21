@@ -1,9 +1,11 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -30,11 +32,13 @@ import java.util.ArrayList;
 /**
  * 模考&估分
  */
-public class MockActivity extends ActionBarActivity implements RequestCallback{
+public class MockActivity extends ActionBarActivity implements
+        RequestCallback, AdapterView.OnItemClickListener{
 
     private ListView mLvMock;
     private ImageView mIvNull;
     private Request mRequest;
+    private ArrayList<MockPaperM> mMockPapers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,17 +131,56 @@ public class MockActivity extends ActionBarActivity implements RequestCallback{
             return;
         }
 
-        ArrayList<MockPaperM> mockPapers = mockListResp.getPaper_list();
+        mMockPapers = mockListResp.getPaper_list();
 
-        if (mockPapers == null || mockPapers.size() == 0) {
+        if (mMockPapers == null || mMockPapers.size() == 0) {
             mIvNull.setVisibility(View.VISIBLE);
             return;
         } else {
             mIvNull.setVisibility(View.GONE);
         }
 
-        MockListAdapter mockListAdapter = new MockListAdapter(this, mockPapers);
+        MockListAdapter mockListAdapter = new MockListAdapter(this, mMockPapers);
         mLvMock.setAdapter(mockListAdapter);
+        mLvMock.setOnItemClickListener(this);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (mMockPapers == null || position >= mMockPapers.size()) return;
+
+        MockPaperM mockPaper = mMockPapers.get(position);
+
+        if (mockPaper == null) return;
+
+        String status = mockPaper.getStatus();
+
+        if ("done".equals(status)) {
+            // 已完成，跳转至练习报告页面
+            Intent intent = new Intent(this, PracticeReportActivity.class);
+            intent.putExtra("exercise_id", mockPaper.getId());
+            intent.putExtra("paper_type", "mock");
+            startActivity(intent);
+
+        } else if ("undone".equals(status)) {
+            // 只做了一部分
+            Intent intent = new Intent(this, MeasureActivity.class);
+            intent.putExtra("paper_type", "mock");
+            intent.putExtra("paper_name", mockPaper.getName());
+            intent.putExtra("umeng_entry", "Home");
+            intent.putExtra("redo", true);
+            intent.putExtra("exercise_id", mockPaper.getExercise_id());
+            startActivity(intent);
+
+        } else {
+            // 未做
+            Intent intent = new Intent(this, PracticeDescriptionActivity.class);
+            intent.putExtra("paper_type", "mock");
+            intent.putExtra("paper_name", mockPaper.getName());
+            intent.putExtra("umeng_entry", "Home");
+            intent.putExtra("redo", false);
+            intent.putExtra("paper_id", mockPaper.getId());
+            startActivity(intent);
+        }
+    }
 }

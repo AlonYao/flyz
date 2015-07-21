@@ -14,17 +14,9 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.db.GlobalSetting;
-import com.appublisher.quizbank.model.netdata.globalsettings.ExerciseIntroM;
-import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-
-import java.util.ArrayList;
 
 /**
  * 练习说明
@@ -67,10 +59,10 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         mNoteType = getIntent().getStringExtra("note_type");
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
+        if (mPaperType == null || mPaperType.length() == 0) finish();
+
         // 设置描述文字
         setDesc();
-
-        if (mPaperType == null || mPaperType.length() == 0) finish();
 
         boolean isHide = Globals.sharedPreferences.getBoolean(mPaperType, false);
 
@@ -171,41 +163,31 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
      * 设置描述文字
      */
     private void setDesc() {
-        GlobalSetting globalSetting = GlobalSettingDAO.findById();
-
-        if (globalSetting == null) return;
-
-        String content = globalSetting.content;
-
-        Gson gson = GsonManager.initGson();
-        GlobalSettingsResp globalSettingsResp = gson.fromJson(content, GlobalSettingsResp.class);
-
-        if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1) return;
-
-        ArrayList<ExerciseIntroM> exerciseIntros = globalSettingsResp.getExercise_intro();
-
-        if (exerciseIntros == null || exerciseIntros.size() == 0) return;
-
-        int size = exerciseIntros.size();
-        for (int i = 0; i < size; i++) {
-            ExerciseIntroM exerciseIntro = exerciseIntros.get(i);
-
-            if (exerciseIntro == null) continue;
-
-            String desc = exerciseIntro.getIntro();
-            String type = exerciseIntro.getType();
-            String name = exerciseIntro.getName();
-
-            if (type == null || desc == null) continue;
-
-            if (type.equals(mPaperType)) {
-                mTvDesc.setText(desc.replaceAll("，", "\n")
-                        .replaceAll("!", "\n")
-                        .replaceAll("！", "\n")
-                        .replaceAll(";", "\n")
-                        .replaceAll("；", "\n"));
-                mTvName.setText(name);
-            }
+        if ("mokao".equals(mPaperType)) {
+            mTvDesc.setText("每天15道精选练习\n老师人工挑选\n经典有代表");
+            mTvName.setText("天天模考");
+        } else if ("note".equals(mPaperType)) {
+            mTvDesc.setText("专注练习专项\n集中突破难点\n针对性攻克弱项");
+            mTvName.setText("专项练习");
+        } else if ("auto".equals(mPaperType)) {
+            mTvDesc.setText("智能组卷随手测\n有空就来刷一组");
+            mTvName.setText("快速练习");
+        } else if ("entire".equals(mPaperType)) {
+            mTvDesc.setText("来一套真题测试下吧！\n要从头到尾认真做完哦！");
+            mTvName.setText("整卷练习");
+        } else if ("error".equals(mPaperType)) {
+            mTvDesc.setText("抽取错题本试题\n看看这次能不能搞定");
+            mTvName.setText("错题练习");
+        } else if ("collect".equals(mPaperType)) {
+            mTvDesc.setText("抽取收藏夹试题\n藏起来的重点题目\n当然要多练练");
+            mTvName.setText("收藏练习");
+        } else if ("evaluate".equals(mPaperType)) {
+            mTvDesc.setText(mPaperName + "\n考场上选什么这里就选什么");
+            mTvName.setText("估分");
+        } else if ("mock".equals(mPaperType)) {
+            mTvDesc.setText("把模考当成正式考\n让正式考变成模考");
+            mTvName.setText("模考");
         }
     }
+
 }
