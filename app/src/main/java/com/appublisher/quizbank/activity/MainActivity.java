@@ -24,7 +24,6 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
-import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -162,12 +161,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getTitle().equals("评价")) {
-            // 保存本地记录
-            GlobalSettingDAO.updateIsGrade(true);
-            GlobalSettingDAO.saveUseCount(0);
-
-            // 跳转
-            CommonModel.skipToGrade(this);
+            AlertManager.showGradeAlert(this);
         }
 
         return super.onOptionsItemSelected(item);

@@ -68,7 +68,7 @@ public class GradeDAO {
     public static boolean isShowGradeAlert(String appVersion) {
         if (appVersion == null) return false;
         Grade item = findByAppVersion(appVersion);
-        if (item == null) return false;
+        if (item == null || item.is_grade == 1) return false;
         long dif = System.currentTimeMillis() - item.timestamp;
         return (dif / 1000 * 60 * 60) > 72;
     }
