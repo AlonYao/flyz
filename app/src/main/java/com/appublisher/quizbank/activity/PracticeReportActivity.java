@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -48,7 +49,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public TextView mTvAll;
     public TextView mTvError;
     public TextView mTvPaperType;
+    public TextView mTvMiniMokaoRank;
     public ImageView mIvNoteNoChange;
+    public RelativeLayout mRlMiniMokao;
 
     public int mRightNum;
     public int mTotalNum;
@@ -85,6 +88,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mTvAll = (TextView) findViewById(R.id.practice_report_all);
         mTvError = (TextView) findViewById(R.id.practice_report_error);
         mTvPaperType = (TextView) findViewById(R.id.practice_report_type);
+        mRlMiniMokao = (RelativeLayout) findViewById(R.id.practice_report_minimokao);
+        mTvMiniMokaoRank = (TextView) findViewById(R.id.practice_report_minimokao_rank);
 
         // 成员变量初始化
         mUmengStatus = "1";
