@@ -26,9 +26,6 @@ public class Globals {
     // 记录最近的系统通知的id
     public static int last_notice_id;
 
-    // 记录是否要弹出评分Alert
-    public static boolean is_show_grade_alert = false;
-
     // 记录公开课状态数据模型
     public static OpenCourseStatusResp openCourseStatus;
 

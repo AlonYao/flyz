@@ -25,6 +25,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
@@ -56,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
 
     private DrawerLayout mDrawerLayout;
     private boolean mDoubleBackToExit;
+    private int mOnResumeCount;
 
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
@@ -74,6 +76,7 @@ public class MainActivity extends ActionBarActivity {
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
+        mOnResumeCount = 0;
 
         /** 侧边栏设置 */
         // 侧边栏按钮列表
@@ -105,6 +108,10 @@ public class MainActivity extends ActionBarActivity {
         // 默认选中首页
         if (savedInstanceState == null) changeFragment(0);
 
+        // 记录用户评价行为
+        if (GradeDAO.findByAppVersion(Globals.appVersion) == null)
+            GradeDAO.insert(Globals.appVersion);
+
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
     }
@@ -113,9 +120,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         // 显示评分Alert
-        int useCount = GlobalSettingDAO.getUseCount();
-        if (!GlobalSettingDAO.isGrade() && Globals.is_show_grade_alert && useCount >= 6)
+        mOnResumeCount++;
+
+        if (mOnResumeCount >= 2 && GradeDAO.isShowGradeAlert(Globals.appVersion)) {
             AlertManager.showGradeAlert(this);
+            GradeDAO.setGrade(Globals.appVersion);
+        }
 
         // Umeng
         MobclickAgent.onResume(this);

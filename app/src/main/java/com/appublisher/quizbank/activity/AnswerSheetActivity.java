@@ -12,11 +12,9 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
-import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.AnswerSheetModel;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
@@ -193,10 +191,6 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         intent.putExtra("total_num", mTotalNum);
         intent.putExtra("category", mCategoryMap);
         setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
-
-        // 判断是否需要显示评分Alert
-        int count = GlobalSettingDAO.getUseCount();
-        if (count >= 6) Globals.is_show_grade_alert = true;
 
         finish();
     }
