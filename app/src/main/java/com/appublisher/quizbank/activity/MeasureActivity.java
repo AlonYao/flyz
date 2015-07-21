@@ -24,6 +24,7 @@ import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
@@ -67,6 +68,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public Gson mGson;
     public Handler mHandler;
     public Timer mTimer;
+    public Request mRequest;
 
     public static Toolbar mToolbar;
     public static int mMins;
@@ -149,6 +151,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mUmengDraft = "0";
         mUmengPause = "0";
         mUmengAnswerSheet = "0";
+        mRequest = new Request(this, this);
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(mToolbar);
@@ -523,29 +526,31 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response == null) {
+        if (response == null || apiName == null) {
             ProgressDialogManager.closeProgressDialog();
             return;
         }
 
-        // 快速智能练习
-        if ("auto_training".equals(apiName) || "note_questions".equals(apiName)) {
-            AutoTrainingResp autoTrainingResp = mGson.fromJson(
-                    response.toString(), AutoTrainingResp.class);
+        switch (apiName) {
+            case "auto_training":
+            case "note_questions":
+                // 快速智能练习&专项练习
+                AutoTrainingResp autoTrainingResp = mGson.fromJson(
+                        response.toString(), AutoTrainingResp.class);
 
-            if (autoTrainingResp != null && autoTrainingResp.getResponse_code() == 1) {
-                dealAutoTrainingResp(autoTrainingResp);
-            } else {
-                ToastManager.showToast(this, getString(R.string.netdata_error));
-            }
+                if (autoTrainingResp != null && autoTrainingResp.getResponse_code() == 1) {
+                    dealAutoTrainingResp(autoTrainingResp);
+                } else {
+                    ToastManager.showToast(this, getString(R.string.netdata_error));
+                }
+                break;
+
+            case "paper_exercise":
+            case "history_exercise_detail":
+                // mini模考、整卷、模考、估分、历史练习
+                MeasureModel.dealExerciseDetailResp(this, response);
+                break;
         }
-
-        // 试卷练习
-        if ("paper_exercise".equals(apiName)) MeasureModel.dealExerciseDetailResp(this, response);
-
-        // 历史练习内容
-        if ("history_exercise_detail".equals(apiName))
-            MeasureModel.dealExerciseDetailResp(this, response);
 
         ProgressDialogManager.closeProgressDialog();
     }

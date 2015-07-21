@@ -20,12 +20,12 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.ScaleImageActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.dao.PaperDAO;
-import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseEntireResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
@@ -39,7 +39,6 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.Utils;
-import com.google.gson.Gson;
 
 import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
@@ -308,21 +307,19 @@ public class MeasureModel {
     public static void getData(MeasureActivity activity) {
         if (activity.mPaperType == null) return;
 
-        Request request = new Request(activity, activity);
-
         if (activity.mRedo) {
             // 重新做题
             // 提交时的字段是paperId，所有这里要统一
             activity.mPaperId = activity.mExerciseId;
 
             ProgressDialogManager.showProgressDialog(activity, true);
-            request.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
+            activity.mRequest.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
         } else {
             // 做新题
             switch (activity.mPaperType) {
                 case "auto":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    request.getAutoTraining();
+                    activity.mRequest.getAutoTraining();
                     break;
 
                 case "note":
@@ -331,31 +328,42 @@ public class MeasureModel {
                     switch (activity.mHierarchyLevel) {
                         case 1:
                             ProgressDialogManager.showProgressDialog(activity, true);
-                            request.getNoteQuestions(String.valueOf(activity.mHierarchyId), "", "",
+                            activity.mRequest.getNoteQuestions(
+                                    String.valueOf(activity.mHierarchyId),
+                                    "",
+                                    "",
                                     activity.mPaperType);
 
                             break;
 
                         case 2:
                             ProgressDialogManager.showProgressDialog(activity, true);
-                            request.getNoteQuestions("", String.valueOf(activity.mHierarchyId), "",
+                            activity.mRequest.getNoteQuestions(
+                                    "",
+                                    String.valueOf(activity.mHierarchyId),
+                                    "",
                                     activity.mPaperType);
 
                             break;
 
                         case 3:
                             ProgressDialogManager.showProgressDialog(activity, true);
-                            request.getNoteQuestions("", "", String.valueOf(activity.mHierarchyId),
+                            activity.mRequest.getNoteQuestions(
+                                    "",
+                                    "",
+                                    String.valueOf(activity.mHierarchyId),
                                     activity.mPaperType);
 
                             break;
                     }
                     break;
 
+                case "evaluate":
+                case "mock":
                 case "entire":
                 case "mokao":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    request.getPaperExercise(activity.mPaperId, activity.mPaperType);
+                    activity.mRequest.getPaperExercise(activity.mPaperId, activity.mPaperType);
                     break;
             }
         }
@@ -367,23 +375,21 @@ public class MeasureModel {
      * @param response 回调数据
      */
     public static void dealExerciseDetailResp(MeasureActivity activity,
-                                                     JSONObject response) {
+                                              JSONObject response) {
         if (response == null) return;
 
-        Gson gson = GsonManager.initGson();
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
 
-        if ("entire".equals(activity.mPaperType)) {
-            // 整卷
-            HistoryExerciseEntireResp historyExerciseEntireResp =
-                    gson.fromJson(response.toString(), HistoryExerciseEntireResp.class);
+        HistoryExerciseResp historyExerciseResp =
+                Globals.gson.fromJson(response.toString(), HistoryExerciseResp.class);
 
-            if (historyExerciseEntireResp == null
-                    || historyExerciseEntireResp.getResponse_code() != 1) return;
+        if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
 
-            ArrayList<CategoryM> categorys = historyExerciseEntireResp.getCategory();
+        ArrayList<CategoryM> categorys = historyExerciseResp.getCategory();
+        ArrayList<QuestionM> questions = historyExerciseResp.getQuestions();
 
-            if (categorys == null || categorys.size() == 0) return;
-
+        if (categorys != null && categorys.size() != 0
+                && historyExerciseResp.getQuestions() == null) {
             // 整卷
             activity.mQuestions = new ArrayList<>();
             activity.mEntirePaperCategory = new ArrayList<>();
@@ -412,32 +418,20 @@ public class MeasureModel {
                 jointUserAnswer(categoryQuestions, answers, activity.mUserAnswerList);
             }
 
-            // 倒计时时间
-            activity.mDuration = historyExerciseEntireResp.getDuration()
-                    - historyExerciseEntireResp.getStart_from();
-
         } else {
             // 非整卷
-            HistoryExerciseResp historyExerciseResp =
-                    gson.fromJson(response.toString(), HistoryExerciseResp.class);
-
-            if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
-
-            activity.mQuestions = historyExerciseResp.getQuestions();
-
             if (activity.mQuestions == null || activity.mQuestions.size() == 0) return;
 
             // 初始化答案
+            activity.mQuestions = questions;
             activity.mUserAnswerList = new ArrayList<>();
             ArrayList<AnswerM> answers = historyExerciseResp.getAnswers();
             jointUserAnswer(activity.mQuestions, answers, activity.mUserAnswerList);
-
-            // 获取时长
-            activity.mDuration =
-                    historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
         }
 
         // 倒计时
+        activity.mDuration =
+                historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
         startTimer(activity);
 
         // 设置ViewPager

@@ -85,17 +85,17 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
 
-        // 根据试卷类型显示不同的页面
-        if ("entire".equals(mPaperType)) {
+        // 整卷、非整卷 显示不同的页面
+        if (mEntirePaperCategory != null && mEntirePaperCategory.size() != 0) {
+            // 整卷
             svEntire.setVisibility(View.VISIBLE);
             sv.setVisibility(View.GONE);
-
             AnswerSheetModel.setEntireContent(this);
 
         } else {
+            // 非整卷
             svEntire.setVisibility(View.GONE);
             sv.setVisibility(View.VISIBLE);
-
             setContent();
         }
 
