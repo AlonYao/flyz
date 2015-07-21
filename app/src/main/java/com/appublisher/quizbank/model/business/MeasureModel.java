@@ -420,7 +420,7 @@ public class MeasureModel {
 
         } else {
             // 非整卷
-            if (activity.mQuestions == null || activity.mQuestions.size() == 0) return;
+            if (questions == null || questions.size() == 0) return;
 
             // 初始化答案
             activity.mQuestions = questions;
