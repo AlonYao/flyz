@@ -125,8 +125,12 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         // 全部专项
         ivSpecial.setOnClickListener(this);
 
-        // 获取全局配置
-        if (GlobalSettingDAO.findById() == null) mRequest.getGlobalSettings();
+        // 如果本地没有全局配置，获取全局配置，保证能获取到模考估分的状态
+        if (GlobalSettingDAO.findById() == null) {
+            mRequest.getGlobalSettings();
+        } else {
+            setMockBtn();
+        }
 
         // 获取课程快讯
         if (Globals.promoteLiveCourseResp == null) {
@@ -216,29 +220,6 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             mTvRanking.setText(Utils.rateToString(assessment.getRank()));
         }
 
-        // 模考按钮
-        GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
-        if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
-            MockM mock = globalSettingsResp.getMock();
-            if (mock != null) {
-                mLlMock.setVisibility(View.VISIBLE);
-                mLlMock.setOnClickListener(this);
-                if ("mock".equals(mock.getType())) {
-                    mTvMockTitle.setText("模考总动员");
-                } else if ("evaluate".equals(mock.getType())) {
-                    mTvMockTitle.setText("估分进行时");
-                } else {
-                    mTvMockTitle.setText("模考估分");
-                }
-
-                mTvMockName.setText(mock.getName());
-            } else {
-                mLlMock.setVisibility(View.GONE);
-            }
-        } else {
-            mLlMock.setVisibility(View.GONE);
-        }
-
         PaperM pager = homePageResp.getPaper();
         if (pager != null) {
             // 今日模考
@@ -269,6 +250,38 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         ProgressBarManager.hideProgressBar();
     }
 
+    /**
+     * 设置模考按钮
+     */
+    private void setMockBtn() {
+        GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
+
+        if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1) {
+            mLlMock.setVisibility(View.GONE);
+            return;
+        }
+
+        MockM mock = globalSettingsResp.getMock();
+
+        if (mock == null) {
+            mLlMock.setVisibility(View.GONE);
+            return;
+        }
+
+        mLlMock.setVisibility(View.VISIBLE);
+        mLlMock.setOnClickListener(this);
+
+        if ("mock".equals(mock.getType())) {
+            mTvMockTitle.setText("模考总动员");
+        } else if ("evaluate".equals(mock.getType())) {
+            mTvMockTitle.setText("估分进行时");
+        } else {
+            mTvMockTitle.setText("模考估分");
+        }
+
+        mTvMockName.setText(mock.getName());
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) {
@@ -285,6 +298,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             HomePageModel.dealPromoteResp(response, this);
         } else if ("global_settings".equals(apiName)) {
             GlobalSettingDAO.save(response.toString());
+            setMockBtn();
         }
     }
 
