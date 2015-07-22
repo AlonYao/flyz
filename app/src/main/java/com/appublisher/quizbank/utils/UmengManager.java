@@ -147,16 +147,20 @@ public class UmengManager {
         mController.setShareMedia(weixinCircle);
 
         // QQ分享
-        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(activity, "101042126",
-                "633535355a03b1218c847291b38898c7");
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(
+                activity,
+                activity.getString(R.string.qq_appid),
+                activity.getString(R.string.qq_appkey));
         qqSsoHandler.addToSocialSDK();
         QQShareContent qq = new QQShareContent();
         qq.setShareContent(content);
         mController.setShareMedia(qq);
 
         // Qzone分享
-        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(activity, "101042126",
-                "633535355a03b1218c847291b38898c7");
+        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(
+                activity,
+                activity.getString(R.string.qq_appid),
+                activity.getString(R.string.qq_appkey));
         qZoneSsoHandler.addToSocialSDK();
         QZoneShareContent qzone = new QZoneShareContent();
         qzone.setShareContent(content);

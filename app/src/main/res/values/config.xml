@@ -26,4 +26,8 @@
     <string name="market_qq">800111154</string>
     <string name="service_qq">3093308892</string>
 
+    <!-- QQ -->
+    <string name="qq_appid">101042126</string>
+    <string name="qq_appkey">633535355a03b1218c847291b38898c7</string>
+
 </resources>
