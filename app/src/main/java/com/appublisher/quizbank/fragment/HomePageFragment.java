@@ -136,18 +136,26 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            // 获取&呈现 数据
+            getData();
+
+            // 显示评分Alert
+            dealGradeAlert();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        // 获取&呈现 数据
-        ProgressBarManager.showProgressBar(mView);
-        mRequest.getEntryData();
-        mRequest.getFreeOpenCourseStatus();
+        if (!isHidden()) {
+            // 获取&呈现 数据
+            getData();
 
-        // 显示评分Alert
-        mOnResumeCount++;
-        if (mOnResumeCount >= 2 && GradeDAO.isShowGradeAlert(Globals.appVersion)) {
-            AlertManager.showGradeAlert(mActivity);
-            GradeDAO.setGrade(Globals.appVersion);
+            // 显示评分Alert
+            dealGradeAlert();
         }
 
         // Umeng
@@ -165,6 +173,25 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         // TalkingData
         TCAgent.onPageEnd(mActivity, "HomePageFragment");
+    }
+
+    /**
+     * 获取数据
+     */
+    private void getData() {
+        ProgressBarManager.showProgressBar(mView);
+        mRequest.getEntryData();
+        mRequest.getFreeOpenCourseStatus();
+    }
+
+    /**
+     * 处理评价Alert的逻辑
+     */
+    private void dealGradeAlert() {
+        mOnResumeCount++;
+        if (mOnResumeCount < 2 || !GradeDAO.isShowGradeAlert(Globals.appVersion)) return;
+        AlertManager.showGradeAlert(mActivity);
+        GradeDAO.setGrade(Globals.appVersion);
     }
 
     /**

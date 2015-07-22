@@ -351,8 +351,6 @@ public class MainActivity extends ActionBarActivity {
         // 首页
         if (mHomePageFragment != null) {
             transaction.hide(mHomePageFragment);
-            transaction.remove(mHomePageFragment);
-            mHomePageFragment = null;
         }
 
         // 真题演练
