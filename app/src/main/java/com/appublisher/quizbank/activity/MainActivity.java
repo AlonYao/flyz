@@ -56,7 +56,6 @@ public class MainActivity extends ActionBarActivity {
 
     private DrawerLayout mDrawerLayout;
     private boolean mDoubleBackToExit;
-    private int mOnResumeCount;
 
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
@@ -75,7 +74,6 @@ public class MainActivity extends ActionBarActivity {
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
-        mOnResumeCount = 0;
 
         /** 侧边栏设置 */
         // 侧边栏按钮列表
@@ -118,14 +116,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // 显示评分Alert
-        mOnResumeCount++;
-
-        if (mOnResumeCount >= 2 && GradeDAO.isShowGradeAlert(Globals.appVersion)) {
-            AlertManager.showGradeAlert(this);
-            GradeDAO.setGrade(Globals.appVersion);
-        }
-
         // Umeng
         MobclickAgent.onResume(this);
 

@@ -22,6 +22,7 @@ import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.model.login.model.LoginModel;
@@ -34,6 +35,7 @@ import com.appublisher.quizbank.model.netdata.homepage.PaperNoteM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -63,7 +65,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
     private Request mRequest;
-    private MockM mMock;
+    private int mOnResumeCount;
 
     public View mView;
     public LinearLayout mPromote;
@@ -106,6 +108,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         // 成员变量初始化
         mRequest = new Request(mActivity, this);
+        mOnResumeCount = 0;
 
         // 设置头像
         LoginModel.setAvatar(mActivity, ivAvatar);
@@ -139,6 +142,13 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         ProgressBarManager.showProgressBar(mView);
         mRequest.getEntryData();
         mRequest.getFreeOpenCourseStatus();
+
+        // 显示评分Alert
+        mOnResumeCount++;
+        if (mOnResumeCount >= 2 && GradeDAO.isShowGradeAlert(Globals.appVersion)) {
+            AlertManager.showGradeAlert(mActivity);
+            GradeDAO.setGrade(Globals.appVersion);
+        }
 
         // Umeng
         MobclickAgent.onPageStart("HomePageFragment");
@@ -179,19 +189,19 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         // 模考按钮
         GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
         if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
-            mMock = globalSettingsResp.getMock();
-            if (mMock != null) {
+            MockM mock = globalSettingsResp.getMock();
+            if (mock != null) {
                 mLlMock.setVisibility(View.VISIBLE);
                 mLlMock.setOnClickListener(this);
-                if ("mock".equals(mMock.getType())) {
+                if ("mock".equals(mock.getType())) {
                     mTvMockTitle.setText("模考总动员");
-                } else if ("evaluate".equals(mMock.getType())) {
+                } else if ("evaluate".equals(mock.getType())) {
                     mTvMockTitle.setText("估分进行时");
                 } else {
                     mTvMockTitle.setText("模考估分");
                 }
 
-                mTvMockName.setText(mMock.getName());
+                mTvMockName.setText(mock.getName());
             } else {
                 mLlMock.setVisibility(View.GONE);
             }
