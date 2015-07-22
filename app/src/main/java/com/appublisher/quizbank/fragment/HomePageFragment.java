@@ -125,6 +125,9 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         // 全部专项
         ivSpecial.setOnClickListener(this);
 
+        // 获取全局配置
+        if (GlobalSettingDAO.findById() == null) mRequest.getGlobalSettings();
+
         // 获取课程快讯
         if (Globals.promoteLiveCourseResp == null) {
             mRequest.getPromoteLiveCourse();
@@ -280,6 +283,8 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             OpenCourseModel.setOpenCourseBtn(mActivity, mTvZhiboke);
         } else if ("promote_live_course".equals(apiName)) {
             HomePageModel.dealPromoteResp(response, this);
+        } else if ("global_settings".equals(apiName)) {
+            GlobalSettingDAO.save(response.toString());
         }
     }
 

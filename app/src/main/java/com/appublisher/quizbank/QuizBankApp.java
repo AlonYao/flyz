@@ -51,6 +51,8 @@ public class QuizBankApp extends Application{
         if (LoginModel.isLogin()) {
             String user_id = Globals.sharedPreferences.getString("user_id", "");
             LoginModel.setDatabase(user_id, this);
+        } else {
+            LoginModel.setDatabase("guest", this);
         }
 
         // 友盟反馈
