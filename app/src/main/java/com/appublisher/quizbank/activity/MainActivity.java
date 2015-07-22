@@ -33,9 +33,9 @@ import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -151,7 +151,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getTitle().equals("评价")) {
-            AlertManager.showGradeAlert(this);
+//            AlertManager.showGradeAlert(this);
+            UmengManager.openShare(this, "content");
         }
 
         return super.onOptionsItemSelected(item);
