@@ -48,19 +48,22 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="36dp"
                 android:paddingRight="36dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@android:color/white">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/common_none"/>
                 <TextView
                     android:id="@+id/practice_report_minimokao_rank"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="@string/common_none"
-                    tools:ignore="RtlHardcoded" />
+                    android:textColor="@color/setting_text"
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/practice_report_minimokao_rank"
+                    android:textColor="@color/setting_text"
+                    android:text="@string/practice_report_minimokaorank"/>
             </RelativeLayout>
 
             <TextView
@@ -128,7 +131,8 @@
                     android:textColor="@color/setting_text"
                     android:layout_marginLeft="36dp"
                     android:layout_marginBottom="10dp"
-                    android:text="@string/practice_report_note"/>
+                    android:text="@string/practice_report_note"
+                    tools:ignore="RtlHardcoded" />
 
             </LinearLayout>
 

@@ -1,6 +1,10 @@
 package com.appublisher.quizbank.model.business;
 
 import android.content.Intent;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,7 @@ import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -70,6 +75,22 @@ public class PracticeReportModel {
         // 如果是今日Mini模考，显示击败信息
         if ("mokao".equals(mActivity.mPaperType)) {
             mActivity.mRlMiniMokao.setVisibility(View.VISIBLE);
+            String defeat = "击败"
+                    + Utils.rateToPercent(mActivity.mMeasureEntity.getDefeat())
+                    + "%的考生";
+            Spannable word = new SpannableString(defeat);
+            word.setSpan(
+                    new AbsoluteSizeSpan(Utils.sp2px(mActivity, 22)),
+                    2,
+                    defeat.indexOf("的考生"),
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            word.setSpan(
+                    new ForegroundColorSpan(
+                            mActivity.getResources().getColor(R.color.practice_report_all)),
+                    2,
+                    defeat.indexOf("的考生"),
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            mActivity.mTvMiniMokaoRank.setText(word);
         } else {
             mActivity.mRlMiniMokao.setVisibility(View.GONE);
         }
