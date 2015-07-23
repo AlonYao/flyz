@@ -66,43 +66,46 @@
                     android:text="@string/practice_report_minimokaorank"/>
             </RelativeLayout>
 
-            <TextView
+            <!-- 做对/全部试题比值 -->
+            <LinearLayout
+                android:id="@+id/practice_report_ratio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:textSize="12sp"
-                android:textColor="@color/practice_report_ratio"
-                android:text="@string/practice_report_ratio"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <!-- 做对的题目 -->
-                <TextView
-                    android:id="@+id/practice_report_rightnum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:textColor="@color/setting_text"
-                    android:text="@string/practice_report_zero"/>
-
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/setting_text"
-                    android:text="@string/practice_report_semicolon"/>
-
-                <!-- 全部的题目 -->
-                <TextView
-                    android:id="@+id/practice_report_totalnum"
+                    android:textSize="12sp"
+                    android:textColor="@color/practice_report_ratio"
+                    android:text="@string/practice_report_ratio"/>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/setting_text"
-                    android:text="@string/practice_report_zero"/>
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <!-- 做对的题目 -->
+                    <TextView
+                        android:id="@+id/practice_report_rightnum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="30sp"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/practice_report_zero"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/practice_report_semicolon"/>
+                    <!-- 全部的题目 -->
+                    <TextView
+                        android:id="@+id/practice_report_totalnum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/practice_report_zero"/>
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 科目 -->
@@ -116,7 +119,7 @@
 
             </LinearLayout>
 
-            <!-- 知识点 -->
+            <!-- 知识点变化 -->
             <LinearLayout
                 android:id="@+id/practice_report_note_container"
                 android:layout_width="match_parent"
@@ -124,7 +127,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="vertical">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,19 +135,107 @@
                     android:layout_marginBottom="10dp"
                     android:text="@string/practice_report_note"
                     tools:ignore="RtlHardcoded" />
-
+                <ImageView
+                    android:id="@+id/practice_report_notenochange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:src="@drawable/practice_report_logo"
+                    tools:ignore="ContentDescription" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/practice_report_notenochange"
-                android:layout_width="wrap_content"
+            <!-- 往年分数线 -->
+            <LinearLayout
+                android:id="@+id/practice_report_borderline"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/practice_report_logo"
-                tools:ignore="ContentDescription" />
-
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/setting_text"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/practice_report_borderline"
+                    tools:ignore="RtlHardcoded" />
+                <!-- 总分 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:gravity="center_vertical"
+                    android:background="@android:color/white">
+                    <TextView
+                        android:id="@+id/practice_report_totalpoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36dp"
+                        android:ems="4"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/practice_report_totalpoints"
+                        android:layout_marginLeft="25dp"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                </RelativeLayout>
+                <!-- 行测 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:gravity="center_vertical"
+                    android:background="@android:color/white">
+                    <TextView
+                        android:id="@+id/practice_report_xingce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36dp"
+                        android:ems="4"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/practice_report_xingce"
+                        android:layout_marginLeft="25dp"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                </RelativeLayout>
+                <!-- 申论 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:gravity="center_vertical"
+                    android:background="@android:color/white">
+                    <TextView
+                        android:id="@+id/practice_report_shenlun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36dp"
+                        android:ems="4"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/practice_report_shenlun"
+                        android:layout_marginLeft="25dp"
+                        android:textColor="@color/setting_text"
+                        android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

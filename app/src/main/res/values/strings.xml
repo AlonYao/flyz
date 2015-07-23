@@ -81,6 +81,7 @@
     <string name="practice_report_note_name">知识点</string>
     <string name="practice_report_name">练习类型</string>
     <string name="practice_report_note">知识点掌握的越好盆栽长得越好哦</string>
+    <string name="practice_report_borderline">往年分数线</string>
     <string name="practice_report_notedesp">你的知识点掌握度没发生变化呦，\n要继续加油呀</string>
     <string name="practice_report_all">全部解析</string>
     <string name="practice_report_error">错题解析</string>
