@@ -56,7 +56,7 @@ public class EvaluationModel {
 
         // 预测分&排名
         activity.mTvScore.setText(String.valueOf(score));
-        activity.mTvRank.setText(Utils.rateToString(rank));
+        activity.mTvRank.setText(Utils.rateToPercent(rank));
 
         // 学习天数
         activity.mTvLearningDays.setText(String.valueOf(learningDays));

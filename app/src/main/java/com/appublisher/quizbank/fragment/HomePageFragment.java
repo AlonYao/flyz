@@ -217,7 +217,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         AssessmentM assessment = homePageResp.getAssessment();
         if (assessment != null) {
             mTvEstimate.setText(String.valueOf(assessment.getScore()));
-            mTvRanking.setText(Utils.rateToString(assessment.getRank()));
+            mTvRanking.setText(Utils.rateToPercent(assessment.getRank()));
         }
 
         PaperM pager = homePageResp.getPaper();
@@ -225,8 +225,9 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             // 今日模考
             mTodayExam = pager.getToday();
             if (mTodayExam != null) {
-                mTvTodayExam.setText("已有" + String.valueOf(
-                        mTodayExam.getPersons_num()) + "人参加");
+                mTvTodayExam.setText(
+                        "已有" + String.valueOf(mTodayExam.getPersons_num()) + "人参加" +
+                        ",击败" + Utils.rateToPercent(mTodayExam.getDefeat()) + "%");
                 mLlMiniMokao.setOnClickListener(this);
             }
 

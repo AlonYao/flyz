@@ -77,7 +77,7 @@ public class HistoryPapersListAdapter extends BaseAdapter{
 
                 if ("done".equals(status)) {
                     viewHolder.tvContent.setText("正确率"
-                            + Utils.rateToString(historyPaper.getAccuracy())
+                            + Utils.rateToPercent(historyPaper.getAccuracy())
                             + "%");
                 } else {
                     viewHolder.tvContent.setText("未完成");

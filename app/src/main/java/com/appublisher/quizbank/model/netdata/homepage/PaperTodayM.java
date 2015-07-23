@@ -6,10 +6,14 @@ package com.appublisher.quizbank.model.netdata.homepage;
 public class PaperTodayM {
 
     int id;
-    boolean done;
     int persons_num;
-    String description;
     String status;
+    float defeat;
+    String description;
+
+    public float getDefeat() {
+        return defeat;
+    }
 
     public String getStatus() {
         return status;
@@ -21,14 +25,6 @@ public class PaperTodayM {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
-    public void setDone(boolean done) {
-        this.done = done;
     }
 
     public int getPersons_num() {

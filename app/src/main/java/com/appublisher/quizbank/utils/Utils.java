@@ -36,7 +36,7 @@ public class Utils {
      * @param rate 比率
      * @return 百分比
      */
-    public static String rateToString(float rate) {
+    public static String rateToPercent(float rate) {
         int rateInt = (int) (Math.round(rate*10000)/100.0);
         return String.valueOf(rateInt);
     }
