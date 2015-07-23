@@ -17,6 +17,7 @@ import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.model.business.AnswerSheetModel;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.entity.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -184,12 +185,16 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
 
         ArrayList<NoteM> notes = submitPaperResp.getNotes();
 
+        MeasureEntity measureEntity = new MeasureEntity();
+        measureEntity.setDefeat(submitPaperResp.getDefeat());
+
         Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
         intent.putExtra("notes", notes);
         intent.putExtra("paper_name", mPaperName);
         intent.putExtra("right_num", mRightNum);
         intent.putExtra("total_num", mTotalNum);
         intent.putExtra("category", mCategoryMap);
+        intent.putExtra("measure_entity", measureEntity);
         setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
 
         finish();

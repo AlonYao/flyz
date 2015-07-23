@@ -12,6 +12,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
+import com.appublisher.quizbank.model.entity.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
@@ -65,6 +66,13 @@ public class PracticeReportModel {
     private static void setContent() {
         mActivity.mTvRightNum.setText(String.valueOf(mActivity.mRightNum));
         mActivity.mTvTotalNum.setText(String.valueOf(mActivity.mTotalNum));
+
+        // 如果是今日Mini模考，显示击败信息
+        if ("mokao".equals(mActivity.mPaperType)) {
+            mActivity.mRlMiniMokao.setVisibility(View.VISIBLE);
+        } else {
+            mActivity.mRlMiniMokao.setVisibility(View.GONE);
+        }
 
         // 添加科目
         addCategory();
@@ -344,19 +352,19 @@ public class PracticeReportModel {
      */
     public static void dealHistoryExerciseDetailResp(PracticeReportActivity activity,
                                                      JSONObject response) {
+        // 解析HistoryExerciseResp模型
         if (response == null) return;
-
         mActivity = activity;
-
         if (Globals.gson == null) Globals.gson = GsonManager.initGson();
-
         HistoryExerciseResp historyExerciseResp =
                 Globals.gson.fromJson(response.toString(), HistoryExerciseResp.class);
-
         if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
 
+        // 成员变量赋值
         activity.mQuestions = historyExerciseResp.getQuestions();
         ArrayList<CategoryM> categorys = historyExerciseResp.getCategory();
+        if (activity.mMeasureEntity == null) activity.mMeasureEntity = new MeasureEntity();
+        activity.mMeasureEntity.setDefeat(historyExerciseResp.getDefeat());
 
         if (activity.mQuestions != null && categorys == null) {
             // 非整卷

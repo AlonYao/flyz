@@ -323,6 +323,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             intent.putExtra("hierarchy_level", mHierarchyLevel);
             intent.putExtra("umeng_entry", mUmengEntry);
             intent.putExtra("umeng_timestamp", mUmengTimestamp);
+            intent.putExtra("measure_entity", data.getSerializableExtra("measure_entity"));
             startActivity(intent);
             finish();
         }

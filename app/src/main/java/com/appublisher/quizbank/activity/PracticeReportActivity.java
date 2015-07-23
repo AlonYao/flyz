@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
+import com.appublisher.quizbank.model.entity.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
@@ -60,6 +61,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public ArrayList<QuestionM> mQuestions;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
+    public MeasureEntity mMeasureEntity;
 
     /** Umeng */
     public boolean mUmengIsPressHome;
@@ -105,6 +107,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mPaperTime = getIntent().getStringExtra("paper_time");
         if (mPaperTime == null) mPaperTime = Utils.DateToString(new Date(), "yyyy/MM/dd");
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", System.currentTimeMillis());
+        mMeasureEntity = (MeasureEntity) getIntent().getSerializableExtra("measure_entity");
 
         // 显示考试类型
         PracticeReportModel.showPaperType(this);
