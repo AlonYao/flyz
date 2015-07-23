@@ -126,7 +126,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
