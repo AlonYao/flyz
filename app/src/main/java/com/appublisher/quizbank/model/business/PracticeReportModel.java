@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
@@ -17,7 +18,6 @@ import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -348,9 +348,10 @@ public class PracticeReportModel {
 
         mActivity = activity;
 
-        Gson gson = GsonManager.initGson();
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
         HistoryExerciseResp historyExerciseResp =
-                gson.fromJson(response.toString(), HistoryExerciseResp.class);
+                Globals.gson.fromJson(response.toString(), HistoryExerciseResp.class);
 
         if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
 

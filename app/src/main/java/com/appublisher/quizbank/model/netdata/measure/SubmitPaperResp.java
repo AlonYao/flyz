@@ -9,6 +9,11 @@ public class SubmitPaperResp {
 
     int response_code;
     ArrayList<NoteM> notes;
+    float defeat;
+
+    public float getDefeat() {
+        return defeat;
+    }
 
     public int getResponse_code() {
         return response_code;
