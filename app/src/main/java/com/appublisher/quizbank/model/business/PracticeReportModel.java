@@ -18,6 +18,7 @@ import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.model.entity.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
+import com.appublisher.quizbank.model.netdata.historyexercise.ScoreM;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
@@ -100,6 +101,9 @@ public class PracticeReportModel {
             mActivity.mLlRatio.setVisibility(View.GONE);
             mActivity.mLlNoteContainer.setVisibility(View.GONE);
             mActivity.mLlBorderLine.setVisibility(View.VISIBLE);
+
+            // 往年分数线
+            setBorderLine();
         } else {
             mActivity.mLlRatio.setVisibility(View.VISIBLE);
             mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
@@ -124,6 +128,29 @@ public class PracticeReportModel {
         } else {
             mActivity.mTvError.setBackgroundResource(R.color.practice_report_error);
             mActivity.mTvError.setOnClickListener(errorOnClick);
+        }
+    }
+
+    /**
+     * 往年分数线
+     */
+    private static void setBorderLine() {
+        if (mActivity.mMeasureEntity == null || mActivity.mMeasureEntity.getScores() == null)
+            return;
+
+        ArrayList<ScoreM> scores = mActivity.mMeasureEntity.getScores();
+        int size = scores.size();
+        for (int i = 0; i < size; i++) {
+            ScoreM score = scores.get(i);
+            if (score == null) continue;
+
+            if ("行测".equals(score.getName())) {
+                mActivity.mTvBorderLineXingce.setText(String.valueOf(score.getScore()));
+            } else if ("申论".equals(score.getName())) {
+                mActivity.mTvBorderLineShenlun.setText(String.valueOf(score.getScore()));
+            } else if ("总分".equals(score.getName())) {
+                mActivity.mTvBorderLineTotal.setText(String.valueOf(score.getScore()));
+            }
         }
     }
 
@@ -396,6 +423,8 @@ public class PracticeReportModel {
         ArrayList<CategoryM> categorys = historyExerciseResp.getCategory();
         if (activity.mMeasureEntity == null) activity.mMeasureEntity = new MeasureEntity();
         activity.mMeasureEntity.setDefeat(historyExerciseResp.getDefeat());
+        activity.mMeasureEntity.setScore(historyExerciseResp.getScore());
+        activity.mMeasureEntity.setScores(historyExerciseResp.getScores());
 
         if (activity.mQuestions != null && categorys == null) {
             // 非整卷

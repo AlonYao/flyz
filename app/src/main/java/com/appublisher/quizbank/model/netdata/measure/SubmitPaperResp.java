@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.model.netdata.measure;
 
+import com.appublisher.quizbank.model.netdata.historyexercise.ScoreM;
+
 import java.util.ArrayList;
 
 /**
@@ -10,6 +12,16 @@ public class SubmitPaperResp {
     int response_code;
     ArrayList<NoteM> notes;
     float defeat;
+    int score;
+    ArrayList<ScoreM> scores;
+
+    public int getScore() {
+        return score;
+    }
+
+    public ArrayList<ScoreM> getScores() {
+        return scores;
+    }
 
     public float getDefeat() {
         return defeat;
