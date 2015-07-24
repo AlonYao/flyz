@@ -125,6 +125,9 @@ public interface ApiConstants {
     // 获取模考&估分试卷列表
     String getMockExerciseList = baseUrl + "quizbank/mock_exercise_list";
 
+    // 获取快讯详情
+    String getPromoteLiveCourse = baseUrl + "quizbank/promote_live_course";
+
     /** 课程中心 **/
     // Filter:课程标签
     String getCourseFilterTag = baseUrl + "course/course_filter_tag";
@@ -141,8 +144,8 @@ public interface ApiConstants {
     // 获取公开课详情
     String getOpenCourseDetail = baseUrl + "course/open_course_detail";
 
-    // 获取快讯详情
-    String getPromoteLiveCourse = baseUrl + "quizbank/promote_live_course";
+    // 评论获取待赠送课程、开课
+    String getRateCourse = baseUrl + "course/get_rate_course";
 
     /** 图片相关 **/
     int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存

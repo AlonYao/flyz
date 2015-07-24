@@ -306,4 +306,17 @@ public class ParamBuilder implements ApiConstants {
         params.put("course_id", course_id);
         return params;
     }
+
+    /**
+     * 预约公开课
+     * @param action 获取课程:getCourse 开通课程:enroll
+     * @param course_id 课程id
+     * @return 参数Map
+     */
+    public static Map<String, String> getRateCourse(String action, String course_id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("action", action);
+        params.put("course_id", course_id);
+        return params;
+    }
 }

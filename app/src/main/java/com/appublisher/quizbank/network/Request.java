@@ -441,6 +441,15 @@ public class Request extends BaseRequest implements ApiConstants{
                 params, "book_open_course", "object");
     }
 
+    /**
+     * 评论获取待赠送课程、开课
+     * @param params 参数
+     */
+    public void getRateCourse(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(getRateCourse),
+                params, "get_rate_course", "object");
+    }
+
 	/*********************
 	 *     				 *
 	 * 	图片加载方法代码块	 *
