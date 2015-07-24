@@ -88,6 +88,8 @@ public class AnswerSheetModel {
      * @param activity AnswerSheetActivity
      */
     public static void submitPaper(AnswerSheetActivity activity) {
+        // 重置数据
+        activity.mRightNum = 0;
         int duration_total = 0;
         HashMap<String, Object> userAnswerMap;
         JSONArray questions = new JSONArray();
