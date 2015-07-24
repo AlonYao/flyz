@@ -42,6 +42,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public LinearLayout mLlNoteContainer;
     public LinearLayout mLlRatio;
     public LinearLayout mLlBorderLine;
+    public LinearLayout mLlEvaluate;
     public String mPaperName;
     public String mPaperType;
     public String mFrom;
@@ -56,6 +57,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public TextView mTvBorderLineTotal;
     public TextView mTvBorderLineXingce;
     public TextView mTvBorderLineShenlun;
+    public TextView mTvEvaluateNum;
     public ImageView mIvNoteNoChange;
     public RelativeLayout mRlMiniMokao;
 
@@ -102,6 +104,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mTvBorderLineTotal = (TextView) findViewById(R.id.practice_report_totalpoints_num);
         mTvBorderLineXingce = (TextView) findViewById(R.id.practice_report_xingce_num);
         mTvBorderLineShenlun = (TextView) findViewById(R.id.practice_report_shenlun_num);
+        mLlEvaluate = (LinearLayout) findViewById(R.id.practice_report_evaluate);
+        mTvEvaluateNum = (TextView) findViewById(R.id.practice_report_evaluate_num);
 
         // 成员变量初始化
         mUmengStatus = "1";

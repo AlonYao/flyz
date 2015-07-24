@@ -86,6 +86,10 @@
     <string name="practice_report_all">全部解析</string>
     <string name="practice_report_error">错题解析</string>
     <string name="practice_report_minimokaorank">本次战绩</string>
+    <string name="practice_report_evaluate">你的估分</string>
+    <string name="practice_report_totalpoints">总分</string>
+    <string name="practice_report_xingce">行测</string>
+    <string name="practice_report_shenlun">申论</string>
 
     <!-- 整卷练习 -->
     <string name="wholepage_province">省份</string>

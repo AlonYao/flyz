@@ -66,6 +66,28 @@
                     android:text="@string/practice_report_minimokaorank"/>
             </RelativeLayout>
 
+            <LinearLayout
+                android:id="@+id/practice_report_evaluate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/setting_text"
+                    android:text="@string/practice_report_evaluate"/>
+                <TextView
+                    android:id="@+id/practice_report_evaluate_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/setting_text"
+                    android:textSize="40sp"/>
+            </LinearLayout>
+
             <!-- 做对/全部试题比值 -->
             <LinearLayout
                 android:id="@+id/practice_report_ratio"
@@ -171,16 +193,16 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:gravity="center_vertical"
                     android:background="@android:color/white">
                     <TextView
                         android:id="@+id/practice_report_totalpoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="36dp"
+                        android:layout_centerVertical="true"
                         android:ems="4"
                         android:textColor="@color/setting_text"
-                        android:text="@string/common_none"
+                        android:text="@string/practice_report_totalpoints"
                         tools:ignore="RtlHardcoded" />
                     <TextView
                         android:id="@+id/practice_report_totalpoints_num"
@@ -188,24 +210,32 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/practice_report_totalpoints"
                         android:layout_marginLeft="25dp"
+                        android:layout_centerVertical="true"
                         android:textColor="@color/setting_text"
                         android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                    <!-- 分割线 -->
+                    <include layout="@layout/login_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="18dp"
+                        android:layout_alignParentBottom="true"
                         tools:ignore="RtlHardcoded" />
                 </RelativeLayout>
                 <!-- 行测 -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:gravity="center_vertical"
                     android:background="@android:color/white">
                     <TextView
                         android:id="@+id/practice_report_xingce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="36dp"
+                        android:layout_centerVertical="true"
                         android:ems="4"
                         android:textColor="@color/setting_text"
-                        android:text="@string/common_none"
+                        android:text="@string/practice_report_xingce"
                         tools:ignore="RtlHardcoded" />
                     <TextView
                         android:id="@+id/practice_report_xingce_num"
@@ -213,8 +243,16 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/practice_report_xingce"
                         android:layout_marginLeft="25dp"
+                        android:layout_centerVertical="true"
                         android:textColor="@color/setting_text"
                         android:text="@string/common_none"
+                        tools:ignore="RtlHardcoded" />
+                    <!-- 分割线 -->
+                    <include layout="@layout/login_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="18dp"
+                        android:layout_alignParentBottom="true"
                         tools:ignore="RtlHardcoded" />
                 </RelativeLayout>
                 <!-- 申论 -->
@@ -230,7 +268,7 @@
                         android:layout_marginLeft="36dp"
                         android:ems="4"
                         android:textColor="@color/setting_text"
-                        android:text="@string/common_none"
+                        android:text="@string/practice_report_shenlun"
                         tools:ignore="RtlHardcoded" />
                     <TextView
                         android:id="@+id/practice_report_shenlun_num"

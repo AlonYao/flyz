@@ -96,11 +96,15 @@ public class PracticeReportModel {
         // 添加科目
         addCategory();
 
-        if ("evaluate".equals(mActivity.mPaperType)) {
+        if ("evaluate".equals(mActivity.mPaperType) || "entire".equals(mActivity.mPaperType)) {
             // 估分：显示往年分数线、你的估分，不显示做对/全部、知识点变化
             mActivity.mLlRatio.setVisibility(View.GONE);
             mActivity.mLlNoteContainer.setVisibility(View.GONE);
             mActivity.mLlBorderLine.setVisibility(View.VISIBLE);
+            mActivity.mLlEvaluate.setVisibility(View.VISIBLE);
+
+            // 预估分
+            mActivity.mTvEvaluateNum.setText(String.valueOf(mActivity.mMeasureEntity.getScore()));
 
             // 往年分数线
             setBorderLine();
@@ -108,6 +112,7 @@ public class PracticeReportModel {
             mActivity.mLlRatio.setVisibility(View.VISIBLE);
             mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
             mActivity.mLlBorderLine.setVisibility(View.GONE);
+            mActivity.mLlEvaluate.setVisibility(View.GONE);
 
             // 正确率
             mActivity.mTvRightNum.setText(String.valueOf(mActivity.mRightNum));
