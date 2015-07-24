@@ -24,6 +24,7 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
 
     private EditText mEditText;
     private String mQuestionId;
+    private String mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
 
         // 获取数据
         mQuestionId = getIntent().getStringExtra("question_id");
+        mType = getIntent().getStringExtra("type");
     }
 
     @Override
@@ -82,7 +84,7 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
                 ToastManager.showToast(this, "字数不够……");
             } else {
                 new Request(this).reportErrorQuestion(ParamBuilder.reportErrorQuestion(
-                        mQuestionId, "4", mEditText.getText().toString()));
+                        mQuestionId, mType, mEditText.getText().toString()));
 
                 ToastManager.showToast(this, "提交成功");
 

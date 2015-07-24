@@ -386,7 +386,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvImageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertManager.reportErrorAlert(MeasureAnalysisActivity.this, "1");
+                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                intent.putExtra("question_id", String.valueOf(mCurQuestionId));
+                intent.putExtra("type", "1");
+                startActivity(intent);
                 mPopupWindow.dismiss();
             }
         });
@@ -395,7 +398,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvAnswerWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertManager.reportErrorAlert(MeasureAnalysisActivity.this, "2");
+                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                intent.putExtra("question_id", String.valueOf(mCurQuestionId));
+                intent.putExtra("type", "2");
+                startActivity(intent);
                 mPopupWindow.dismiss();
             }
         });
@@ -404,7 +410,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         tvAnalysisWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertManager.reportErrorAlert(MeasureAnalysisActivity.this, "3");
+                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                intent.putExtra("question_id", String.valueOf(mCurQuestionId));
+                intent.putExtra("type", "3");
+                startActivity(intent);
                 mPopupWindow.dismiss();
             }
         });
@@ -415,8 +424,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             public void onClick(View v) {
                 Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
+                intent.putExtra("type", "4");
                 startActivity(intent);
-
                 mPopupWindow.dismiss();
             }
         });
