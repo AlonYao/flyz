@@ -40,6 +40,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public int mHierarchyLevel;
     public LinearLayout mLlCategoryContainer;
     public LinearLayout mLlNoteContainer;
+    public LinearLayout mLlRatio;
+    public LinearLayout mLlBorderLine;
     public String mPaperName;
     public String mPaperType;
     public String mFrom;
@@ -51,6 +53,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public TextView mTvError;
     public TextView mTvPaperType;
     public TextView mTvMiniMokaoRank;
+    public TextView mTvBorderLineTotal;
+    public TextView mTvBorderLineXingce;
+    public TextView mTvBorderLineShenlun;
     public ImageView mIvNoteNoChange;
     public RelativeLayout mRlMiniMokao;
 
@@ -92,6 +97,11 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mTvPaperType = (TextView) findViewById(R.id.practice_report_type);
         mRlMiniMokao = (RelativeLayout) findViewById(R.id.practice_report_minimokao);
         mTvMiniMokaoRank = (TextView) findViewById(R.id.practice_report_minimokao_rank);
+        mLlRatio = (LinearLayout) findViewById(R.id.practice_report_ratio);
+        mLlBorderLine = (LinearLayout) findViewById(R.id.practice_report_borderline);
+        mTvBorderLineTotal = (TextView) findViewById(R.id.practice_report_totalpoints_num);
+        mTvBorderLineXingce = (TextView) findViewById(R.id.practice_report_xingce_num);
+        mTvBorderLineShenlun = (TextView) findViewById(R.id.practice_report_shenlun_num);
 
         // 成员变量初始化
         mUmengStatus = "1";

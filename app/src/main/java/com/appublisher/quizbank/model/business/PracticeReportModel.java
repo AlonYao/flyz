@@ -69,9 +69,6 @@ public class PracticeReportModel {
      * 设置内容
      */
     private static void setContent() {
-        mActivity.mTvRightNum.setText(String.valueOf(mActivity.mRightNum));
-        mActivity.mTvTotalNum.setText(String.valueOf(mActivity.mTotalNum));
-
         // 如果是今日Mini模考，显示击败信息
         if ("mokao".equals(mActivity.mPaperType)) {
             mActivity.mRlMiniMokao.setVisibility(View.VISIBLE);
@@ -98,8 +95,23 @@ public class PracticeReportModel {
         // 添加科目
         addCategory();
 
-        // 添加知识点变化
-        addNote();
+        if ("evaluate".equals(mActivity.mPaperType)) {
+            // 估分：显示往年分数线、你的估分，不显示做对/全部、知识点变化
+            mActivity.mLlRatio.setVisibility(View.GONE);
+            mActivity.mLlNoteContainer.setVisibility(View.GONE);
+            mActivity.mLlBorderLine.setVisibility(View.VISIBLE);
+        } else {
+            mActivity.mLlRatio.setVisibility(View.VISIBLE);
+            mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
+            mActivity.mLlBorderLine.setVisibility(View.GONE);
+
+            // 正确率
+            mActivity.mTvRightNum.setText(String.valueOf(mActivity.mRightNum));
+            mActivity.mTvTotalNum.setText(String.valueOf(mActivity.mTotalNum));
+
+            // 知识点变化
+            addNote();
+        }
 
         // 全部解析
         mActivity.mTvAll.setOnClickListener(allOnClick);
@@ -248,10 +260,8 @@ public class PracticeReportModel {
     private static void addNote() {
         if (mActivity.mNotes == null || mActivity.mNotes.size() == 0) {
             mActivity.mIvNoteNoChange.setVisibility(View.VISIBLE);
-            mActivity.mLlNoteContainer.setVisibility(View.GONE);
         } else {
             mActivity.mIvNoteNoChange.setVisibility(View.GONE);
-            mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
 
             int size = mActivity.mNotes.size();
             for (int i = 0; i < size; i++) {

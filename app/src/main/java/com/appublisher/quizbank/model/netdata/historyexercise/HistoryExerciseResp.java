@@ -21,6 +21,16 @@ public class HistoryExerciseResp {
     ArrayList<CategoryM> category;
     ArrayList<NoteM> notes;
     float defeat;
+    int score;
+    ArrayList<ScoreM> scores;
+
+    public int getScore() {
+        return score;
+    }
+
+    public ArrayList<ScoreM> getScores() {
+        return scores;
+    }
 
     public float getDefeat() {
         return defeat;
