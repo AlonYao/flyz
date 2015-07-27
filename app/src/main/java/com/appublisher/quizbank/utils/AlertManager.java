@@ -16,7 +16,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
-import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
@@ -210,8 +210,9 @@ public class AlertManager {
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 保存本地存储
-                GlobalSettingDAO.saveUseCount(0);
+                // 保存时间戳
+                GradeDAO.updateTimestamp(Globals.appVersion, System.currentTimeMillis());
+
                 alertDialog.dismiss();
 
                 // Umeng
@@ -226,6 +227,8 @@ public class AlertManager {
                 // 评价
                 CommonModel.skipToGrade(activity);
 
+                alertDialog.dismiss();
+
                 // Umeng
                 UmengManager.sendCountEvent(activity, "Rating", "Done", "Yes");
             }
@@ -235,8 +238,8 @@ public class AlertManager {
         tvFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 保存本地存储
-                GlobalSettingDAO.saveUseCount(0);
+                // 保存时间戳
+                GradeDAO.updateTimestamp(Globals.appVersion, System.currentTimeMillis());
 
                 // 进入反馈
                 FeedbackAgent agent = new FeedbackAgent(activity);
@@ -261,7 +264,7 @@ public class AlertManager {
         String price = String.valueOf(Globals.rateCourseResp.getCourse_price());
         String name = Globals.rateCourseResp.getCourse_name();
 
-        tvCourse.setText("卖个萌，求好评\n你将获赠价值" + price + "元的\n" + name + "\n直播课一套");
+        tvCourse.setText("卖个萌，求好评\n你将获赠价值" + price + "元的\n\"" + name + "\"\n直播课一套");
     }
 
     /**

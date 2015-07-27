@@ -44,6 +44,22 @@ public class GradeDAO {
     }
 
     /**
+     * 更新时间戳
+     * @param appVersion 版本号
+     * @param timestamp 时间戳
+     */
+    public static void updateTimestamp(String appVersion, long timestamp) {
+        try {
+            new Update(Grade.class)
+                    .set("timestamp = ?", timestamp)
+                    .where("app_version = ?", appVersion)
+                    .execute();
+        } catch (Exception e) {
+            // Empty
+        }
+    }
+
+    /**
      * 记录用户评价
      * @param appVersion 版本号
      */
