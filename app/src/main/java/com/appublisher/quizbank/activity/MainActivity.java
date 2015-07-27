@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
@@ -33,15 +34,24 @@ import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
+import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.LocationManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     /** Fragment **/
     private FragmentManager mFragmentManager;
@@ -76,6 +86,7 @@ public class MainActivity extends ActionBarActivity {
         mFragmentManager = getSupportFragmentManager();
 
         /** 侧边栏设置 */
+
         // 侧边栏按钮列表
         mDrawerAdapter = new DrawerAdapter(this);
         mDrawerList.setAdapter(mDrawerAdapter);
@@ -106,8 +117,12 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null) changeFragment(0);
 
         // 记录用户评价行为
-        if (GradeDAO.findByAppVersion(Globals.appVersion) == null)
+        if (GradeDAO.findByAppVersion(Globals.appVersion) == null) {
             GradeDAO.insert(Globals.appVersion);
+        } else if (GradeDAO.isShowGradeAlert(Globals.appVersion)) {
+            // 提前获取评价课程数据
+            new Request(this, this).getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
+        }
 
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
@@ -377,4 +392,25 @@ public class MainActivity extends ActionBarActivity {
         if (mSettingFragment != null) transaction.hide(mSettingFragment);
     }
 
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if (response == null) return;
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
+        if ("get_rate_course".equals(apiName)) {
+            Globals.rateCourseResp =
+                    Globals.gson.fromJson(response.toString(), RateCourseResp.class);
+        }
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+
+    }
 }
