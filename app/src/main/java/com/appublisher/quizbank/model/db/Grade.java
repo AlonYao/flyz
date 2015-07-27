@@ -19,4 +19,8 @@ public class Grade extends Model{
     // 是否评价过 0:false 1:true
     @Column(name = "is_grade")
     public int is_grade;
+
+    // 用户点击评价时的时间戳
+    @Column(name = "grade_timestamp")
+    public long grade_timestamp;
 }

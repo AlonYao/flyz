@@ -123,6 +123,13 @@
     <string name="alert_grade_grade">给好评</string>
     <string name="alert_grade_feedback">吐个槽~</string>
 
+    <!-- 评价模块 -->
+    <string name="grade_success">谢谢支持\n课程已开通</string>
+    <string name="grade_learn">去学习</string>
+    <string name="grade_fail">咦，没有收到评论挨？</string>
+    <string name="grade_regrade">重新评价</string>
+    <string name="grade_abandon">送课也不要</string>
+
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>
     <string name="evaluation_rank">排在前</string>

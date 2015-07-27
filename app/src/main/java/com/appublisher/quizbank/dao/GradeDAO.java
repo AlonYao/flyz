@@ -72,4 +72,46 @@ public class GradeDAO {
         long dif = System.currentTimeMillis() - item.timestamp;
         return (dif / 1000 * 60 * 60) > 72;
     }
+
+    /**
+     * 保存用户评价时的时间戳
+     * @param appVersion 版本号
+     * @param grade_timestamp 时间戳
+     */
+    public static void saveGradeTimestamp(String appVersion, long grade_timestamp) {
+        if (grade_timestamp == 0) return;
+        Grade item = findByAppVersion(appVersion);
+        if (item == null) return;
+
+        try {
+            new Update(Grade.class)
+                    .set("grade_timestamp = ?", grade_timestamp)
+                    .where("app_version = ?", appVersion)
+                    .execute();
+        } catch (Exception e) {
+            // Empty
+        }
+    }
+
+    /**
+     * 获取评价时间戳
+     * @param appVersion 版本号
+     * @return 时间戳
+     */
+    public static long getGradeTimestamp(String appVersion) {
+        Grade item = findByAppVersion(appVersion);
+        if (item == null) return 0;
+        return item.grade_timestamp;
+    }
+
+    /**
+     * 是否评价过
+     * @param appVersion 版本号
+     * @return 0：false 1：true
+     */
+    public static int isGrade(String appVersion) {
+        Grade item = findByAppVersion(appVersion);
+        if (item == null) return 0;
+        return item.is_grade;
+    }
 }

@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/alert_lastpage_logo"
+        android:src="@drawable/grade_fail"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -38,24 +38,24 @@
             android:textColor="@color/setting_text"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="@string/alert_grade"/>
+            android:text="@string/grade_fail"/>
 
         <TextView
-            android:id="@+id/alert_grade_grade"
+            android:id="@+id/grade_regrade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/alert_grade_grade"
+            android:text="@string/grade_regrade"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:background="@drawable/alert_grade_grade"/>
 
         <TextView
-            android:id="@+id/alert_grade_feedback"
+            android:id="@+id/grade_abandon"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center"
-            android:text="@string/alert_grade_feedback"
+            android:text="@string/grade_abandon"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:background="@drawable/alert_grade_feedback"/>

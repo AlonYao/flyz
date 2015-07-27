@@ -218,14 +218,8 @@ public class AlertManager {
         tvGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 保存本地存储
-                GlobalSettingDAO.updateIsGrade(true);
-                GlobalSettingDAO.saveUseCount(0);
-
                 // 评价
                 CommonModel.skipToGrade(activity);
-
-                alertDialog.dismiss();
 
                 // Umeng
                 UmengManager.sendCountEvent(activity, "Rating", "Done", "Yes");
@@ -247,6 +241,83 @@ public class AlertManager {
 
                 // Umeng
                 UmengManager.sendCountEvent(activity, "Rating", "Done", "No");
+            }
+        });
+    }
+
+    /**
+     * 显示评价成功Alert
+     * @param activity Activity
+     */
+    public static void showGradeSuccessAlert(final Activity activity) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        Window window = alertDialog.getWindow();
+        window.setContentView(R.layout.alert_item_grade_success);
+
+        ImageView ivClose = (ImageView) window.findViewById(R.id.grade_close);
+        TextView tvLearn = (TextView) window.findViewById(R.id.grade_learn);
+
+        // 关闭
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 保存本地存储
+                alertDialog.dismiss();
+            }
+        });
+
+        // 去学习
+        tvLearn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                ToastManager.showToast(activity, "跳转到课程详情页");
+            }
+        });
+    }
+
+    /**
+     * 显示评价失败Alert
+     * @param activity Activity
+     */
+    public static void showGradeFailAlert(final Activity activity) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        Window window = alertDialog.getWindow();
+        window.setContentView(R.layout.alert_item_grade);
+
+        ImageView ivClose = (ImageView) window.findViewById(R.id.alert_grade_close);
+        TextView tvReGrade = (TextView) window.findViewById(R.id.grade_regrade);
+        TextView tvAbandon = (TextView) window.findViewById(R.id.grade_abandon);
+
+        // 关闭
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 保存本地存储
+                alertDialog.dismiss();
+            }
+        });
+
+        // 重新评价
+        tvReGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 评价
+                CommonModel.skipToGrade(activity);
+            }
+        });
+
+        // 送课也不要
+        tvAbandon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
             }
         });
     }

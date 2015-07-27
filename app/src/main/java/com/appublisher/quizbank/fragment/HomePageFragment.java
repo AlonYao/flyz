@@ -195,10 +195,25 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
      * 处理评价Alert的逻辑
      */
     private void dealGradeAlert() {
-        mOnResumeCount++;
-        if (mOnResumeCount < 2 || !GradeDAO.isShowGradeAlert(Globals.appVersion)) return;
-        AlertManager.showGradeAlert(mActivity);
-        GradeDAO.setGrade(Globals.appVersion);
+        if (GradeDAO.isGrade(Globals.appVersion) == 1) return;
+
+        long gradeTimestamp = GradeDAO.getGradeTimestamp(Globals.appVersion);
+        if (gradeTimestamp == 0) {
+            mOnResumeCount++;
+            if (mOnResumeCount < 2 || !GradeDAO.isShowGradeAlert(Globals.appVersion)) return;
+            AlertManager.showGradeAlert(mActivity);
+            GradeDAO.setGrade(Globals.appVersion);
+        } else {
+            long curTimestamp = System.currentTimeMillis();
+            long dex = (curTimestamp - gradeTimestamp) / 1000;
+            if (dex >= 5) {
+                // 视为评价完成
+                AlertManager.showGradeSuccessAlert(mActivity);
+            } else {
+                // 视为未完成评价
+                AlertManager.showGradeFailAlert(mActivity);
+            }
+        }
     }
 
     /**

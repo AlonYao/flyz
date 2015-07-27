@@ -9,22 +9,21 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/alert_lastpage_logo"
+        android:src="@drawable/grade_success"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="276dp"
         android:layout_height="wrap_content"
         android:background="@drawable/alert_grade_bg"
         android:orientation="vertical"
         tools:ignore="UselessParent">
         <ImageView
-            android:id="@+id/alert_grade_close"
+            android:id="@+id/grade_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:paddingTop="18dp"
-            android:paddingBottom="18dp"
             android:paddingRight="18dp"
             android:paddingLeft="18dp"
             android:src="@drawable/alert_grade_close"
@@ -34,28 +33,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="36dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="center_horizontal"
             android:textColor="@color/setting_text"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="@string/alert_grade"/>
+            android:text="@string/grade_success"/>
 
         <TextView
-            android:id="@+id/alert_grade_grade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/alert_grade_grade"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:background="@drawable/alert_grade_grade"/>
-
-        <TextView
-            android:id="@+id/alert_grade_feedback"
+            android:id="@+id/grade_learn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center"
-            android:text="@string/alert_grade_feedback"
+            android:text="@string/grade_learn"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:background="@drawable/alert_grade_feedback"/>
