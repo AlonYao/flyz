@@ -7,7 +7,6 @@ import android.graphics.Matrix;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -99,7 +98,7 @@ public class MeasureModel {
         flowLayout.setGravity(Gravity.CENTER_VERTICAL);
 
         for (final ParseManager.ParsedSegment segment : segments) {
-            if (TextUtils.isEmpty(segment.text)) {
+            if (segment.text == null || segment.text.length() == 0) {
                 continue;
             }
 
@@ -111,6 +110,7 @@ public class MeasureModel {
                 textView.setLayoutParams(p);
 
                 if (rich.toLowerCase().contains(questionPosition.toLowerCase())) {
+                    if (segment.text.length() < questionPosition.length()) continue;
                     Spannable word = new SpannableString(segment.text);
                     word.setSpan(
                             new AbsoluteSizeSpan(Utils.sp2px(activity, 22)),
@@ -224,7 +224,7 @@ public class MeasureModel {
         flowLayout.setGravity(Gravity.CENTER_VERTICAL);
 
         for (final ParseManager.ParsedSegment segment : segments) {
-            if (TextUtils.isEmpty(segment.text)) {
+            if (segment.text == null || segment.text.length() == 0) {
                 continue;
             }
 
