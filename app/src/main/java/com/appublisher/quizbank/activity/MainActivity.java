@@ -38,11 +38,11 @@ import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.LocationManager;
-import com.appublisher.quizbank.utils.Logger;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -66,6 +66,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     private DrawerLayout mDrawerLayout;
     private boolean mDoubleBackToExit;
+    private Request mRequest;
+    private String mFrom;
 
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
@@ -84,6 +86,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
+        mRequest = new Request(this, this);
 
         /** 侧边栏设置 */
 
@@ -119,9 +122,10 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         // 记录用户评价行为
         if (GradeDAO.findByAppVersion(Globals.appVersion) == null) {
             GradeDAO.insert(Globals.appVersion);
-        } else if (GradeDAO.isShowGradeAlert(Globals.appVersion)) {
+        } else if (GradeDAO.isOpenGradeSys(Globals.appVersion)
+                && GradeDAO.isShowGradeAlert(Globals.appVersion)) {
             // 提前获取评价课程数据
-            new Request(this, this).getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
+            mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
         }
 
         // Add Activity
@@ -155,7 +159,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
 
-        if (mCurFragment == mHomePageFragment) {
+        if (mCurFragment == mHomePageFragment && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
             MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(
                     R.drawable.homepage_grade), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
@@ -166,8 +170,15 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getTitle().equals("评价")) {
-//            AlertManager.showGradeAlert(this);
-            UmengManager.openShare(this, "content");
+            if (Globals.rateCourseResp == null) {
+                ProgressDialogManager.showProgressDialog(this, true);
+                mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
+                mFrom = "menu";
+            } else {
+                AlertManager.showGradeAlert(this);
+            }
+
+//            UmengManager.openShare(this, "content");
         }
 
         return super.onOptionsItemSelected(item);
@@ -394,23 +405,29 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response == null) return;
+        if (response == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
 
         if (Globals.gson == null) Globals.gson = GsonManager.initGson();
 
         if ("get_rate_course".equals(apiName)) {
             Globals.rateCourseResp =
                     Globals.gson.fromJson(response.toString(), RateCourseResp.class);
+            if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this);
         }
+
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 }

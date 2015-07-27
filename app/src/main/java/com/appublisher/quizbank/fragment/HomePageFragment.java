@@ -38,6 +38,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -64,10 +65,10 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private LinearLayout mLlSpecial;
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
-    private Request mRequest;
     private int mOnResumeCount;
 
     public View mView;
+    public Request mRequest;
     public LinearLayout mPromote;
     public TextView mTvZhiboke;
     public Activity mActivity;
@@ -202,13 +203,12 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             mOnResumeCount++;
             if (mOnResumeCount < 2 || !GradeDAO.isShowGradeAlert(Globals.appVersion)) return;
             AlertManager.showGradeAlert(mActivity);
-            GradeDAO.setGrade(Globals.appVersion);
         } else {
             long curTimestamp = System.currentTimeMillis();
             long dex = (curTimestamp - gradeTimestamp) / 1000;
             if (dex >= 5) {
-                // 视为评价完成
-                AlertManager.showGradeSuccessAlert(mActivity);
+                // 视为评价完成，开通课程
+                HomePageModel.openupCourse(this);
             } else {
                 // 视为未完成评价
                 AlertManager.showGradeFailAlert(mActivity);
@@ -315,12 +315,16 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         } else if ("global_settings".equals(apiName)) {
             GlobalSettingDAO.save(response.toString());
             setMockBtn();
+        } else if ("get_rate_course".equals(apiName)) {
+            ProgressDialogManager.closeProgressDialog();
+            HomePageModel.dealOpenupCourseResp(response, this);
         }
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
         ProgressBarManager.hideProgressBar();
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
@@ -328,6 +332,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         if (!isAdded()) return;
         ToastManager.showToast(mActivity, getString(R.string.netdata_overtime));
         ProgressBarManager.hideProgressBar();
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override

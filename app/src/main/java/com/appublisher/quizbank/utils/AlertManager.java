@@ -16,6 +16,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -226,6 +227,7 @@ public class AlertManager {
             public void onClick(View v) {
                 // 评价
                 CommonModel.skipToGrade(activity);
+                GradeDAO.saveGradeTimestamp(Globals.appVersion, System.currentTimeMillis());
 
                 alertDialog.dismiss();
 
@@ -270,8 +272,9 @@ public class AlertManager {
     /**
      * 显示评价成功Alert
      * @param activity Activity
+     * @param jump_url 跳转地址（课程详情页面）
      */
-    public static void showGradeSuccessAlert(final Activity activity) {
+    public static void showGradeSuccessAlert(final Activity activity, final String jump_url) {
         final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setCancelable(false);
         alertDialog.show();
@@ -286,7 +289,6 @@ public class AlertManager {
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 保存本地存储
                 alertDialog.dismiss();
             }
         });
@@ -295,8 +297,12 @@ public class AlertManager {
         tvLearn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(activity, WebViewActivity.class);
+                intent.putExtra("url", jump_url
+                        + "&user_id=" + LoginModel.getUserId()
+                        + "&user_token=" + LoginModel.getUserToken());
+                activity.startActivity(intent);
                 alertDialog.dismiss();
-                ToastManager.showToast(activity, "跳转到课程详情页");
             }
         });
     }
@@ -311,7 +317,7 @@ public class AlertManager {
         alertDialog.show();
 
         Window window = alertDialog.getWindow();
-        window.setContentView(R.layout.alert_item_grade);
+        window.setContentView(R.layout.alert_item_grade_fail);
 
         ImageView ivClose = (ImageView) window.findViewById(R.id.alert_grade_close);
         TextView tvReGrade = (TextView) window.findViewById(R.id.grade_regrade);
@@ -321,7 +327,8 @@ public class AlertManager {
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 保存本地存储
+                // 更新时间戳，下次再提醒
+                GradeDAO.updateTimestamp(Globals.appVersion, System.currentTimeMillis());
                 alertDialog.dismiss();
             }
         });
@@ -332,6 +339,9 @@ public class AlertManager {
             public void onClick(View v) {
                 // 评价
                 CommonModel.skipToGrade(activity);
+                GradeDAO.saveGradeTimestamp(Globals.appVersion, System.currentTimeMillis());
+
+                alertDialog.dismiss();
             }
         });
 

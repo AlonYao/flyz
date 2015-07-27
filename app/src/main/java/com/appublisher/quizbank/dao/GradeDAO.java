@@ -130,4 +130,17 @@ public class GradeDAO {
         if (item == null) return 0;
         return item.is_grade;
     }
+
+    /**
+     * 是否应该开启评价系统
+     * @param appVersion 版本号
+     * @return 是否
+     */
+    public static boolean isOpenGradeSys(String appVersion) {
+        Grade item = findByAppVersion(appVersion);
+        if (item == null) return true;
+        if (item.is_grade == 1) return false;
+        long dev = (System.currentTimeMillis() - item.grade_timestamp) / 1000;
+        return dev < 5;
+    }
 }

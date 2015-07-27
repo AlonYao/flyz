@@ -18,16 +18,21 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.model.netdata.course.GradeCourseResp;
 import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.AppDownload;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 
@@ -229,5 +234,35 @@ public class HomePageModel {
                 Globals.gson.fromJson(response.toString(), PromoteLiveCourseResp.class);
 
         setPromoteLiveCourse(homePageFragment.mActivity, homePageFragment.mView);
+    }
+
+    /**
+     * 开通课程
+     * @param homePageFragment 首页
+     */
+    public static void openupCourse(HomePageFragment homePageFragment) {
+        if (Globals.rateCourseResp == null || Globals.rateCourseResp.getResponse_code() != 1)
+            return;
+        ProgressDialogManager.showProgressDialog(homePageFragment.mActivity, false);
+        homePageFragment.mRequest.getRateCourse(ParamBuilder.getRateCourse(
+                "enroll", String.valueOf(Globals.rateCourseResp.getCourse_id())));
+    }
+
+    /**
+     * 处理开通评价课程回调
+     * @param response 回调数据
+     * @param homePageFragment 首页
+     */
+    public static void dealOpenupCourseResp(JSONObject response,
+                                            HomePageFragment homePageFragment) {
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        GradeCourseResp gradeCourseResp =
+                Globals.gson.fromJson(response.toString(), GradeCourseResp.class);
+
+        if (gradeCourseResp == null || gradeCourseResp.getResponse_code() != 1) return;
+
+        AlertManager.showGradeSuccessAlert(
+                homePageFragment.mActivity, gradeCourseResp.getJump_url());
+        GradeDAO.setGrade(Globals.appVersion);
     }
 }
