@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
@@ -200,6 +201,10 @@ public class AlertManager {
         ImageView ivClose = (ImageView) window.findViewById(R.id.alert_grade_close);
         TextView tvGrade = (TextView) window.findViewById(R.id.alert_grade_grade);
         TextView tvFeedback = (TextView) window.findViewById(R.id.alert_grade_feedback);
+        TextView tvCourse = (TextView) window.findViewById(R.id.grade_course);
+
+        // 显示赠送课程详情
+        setGradeCourse(tvCourse);
 
         // 关闭
         ivClose.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +248,20 @@ public class AlertManager {
                 UmengManager.sendCountEvent(activity, "Rating", "Done", "No");
             }
         });
+    }
+
+    /**
+     * 显示评价模块赠送课程信息
+     * @param tvCourse Textview
+     */
+    private static void setGradeCourse(TextView tvCourse) {
+        if (Globals.rateCourseResp == null || Globals.rateCourseResp.getResponse_code() != 1)
+            return;
+
+        String price = String.valueOf(Globals.rateCourseResp.getCourse_price());
+        String name = Globals.rateCourseResp.getCourse_name();
+
+        tvCourse.setText("卖个萌，求好评\n你将获赠价值" + price + "元的\n" + name + "\n直播课一套");
     }
 
     /**
