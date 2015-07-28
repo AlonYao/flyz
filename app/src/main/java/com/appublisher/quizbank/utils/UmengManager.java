@@ -19,8 +19,10 @@ import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.media.QQShareContent;
 import com.umeng.socialize.media.QZoneShareContent;
+import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
@@ -33,7 +35,7 @@ import java.util.HashMap;
  */
 public class UmengManager {
 
-    private static final UMSocialService mController =
+    public static final UMSocialService mController =
             UMServiceFactory.getUMSocialService("com.umeng.share");
 
     /**
@@ -190,6 +192,13 @@ public class UmengManager {
         qzone.setShareContent(content);
         qzone.setShareImage(umImage);
         mController.setShareMedia(qzone);
+
+        // 新浪微博
+        mController.getConfig().setSsoHandler(new SinaSsoHandler());
+        SinaShareContent sina = new SinaShareContent();
+        sina.setShareContent(content);
+        sina.setShareImage(umImage);
+        mController.setShareMedia(sina);
         
         mController.openShare(activity, new SocializeListeners.SnsPostListener() {
             @Override
