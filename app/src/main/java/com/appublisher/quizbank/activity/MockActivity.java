@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * 模考&估分
+ * 模考&估分列表页面
  */
 public class MockActivity extends ActionBarActivity implements
         RequestCallback, AdapterView.OnItemClickListener{
