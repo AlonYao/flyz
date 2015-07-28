@@ -1,19 +1,26 @@
 package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.EvaluationModel;
+import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.db.chart.view.LineChartView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -39,6 +46,11 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
     public TextView mTvCalculationBasis;
     public TextView mTvSummaryDate;
     public LinearLayout mLlHistory;
+    public ScrollView mSvMain;
+
+    public int mLearningDays;
+    public int mScore;
+    public float mRank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +74,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         mTvSummarySource = (TextView) findViewById(R.id.evaluation_summarysource);
         mTvCalculationBasis = (TextView) findViewById(R.id.evaluation_calculationbasis);
         mTvSummaryDate = (TextView) findViewById(R.id.evaluation_summarydate);
+        mSvMain = (ScrollView) findViewById(R.id.evaluation_sv);
 
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
@@ -94,9 +107,32 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuItemCompat.setShowAsAction(menu.add("分享"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if ("分享".equals(item.getTitle())) {
+            // 构造友盟分享实体
+            UmengShareEntity umengShareEntity = new UmengShareEntity();
+            umengShareEntity.setActivity(this);
+            umengShareEntity.setBitmap(Utils.getBitmapByView(mSvMain));
+
+            // 友盟分享文字处理
+            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+            umShareContentEntity.setType("evaluation");
+            umShareContentEntity.setLearningDays(mLearningDays);
+            umShareContentEntity.setExamName(LoginModel.getUserExamName());
+            umShareContentEntity.setScore(mScore);
+            umShareContentEntity.setRank(mRank);
+            umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+
+            UmengManager.openShare(umengShareEntity);
         }
 
         return super.onOptionsItemSelected(item);

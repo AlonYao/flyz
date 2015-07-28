@@ -210,14 +210,14 @@ public class UmengManager {
         mController.openShare(activity, new SocializeListeners.SnsPostListener() {
             @Override
             public void onStart() {
-                ToastManager.showToast(activity, "开始分享");
+                ToastManager.showToast(activity, "分享中……");
             }
 
             @Override
             public void onComplete(SHARE_MEDIA share_media,
                                    int i,
                                    SocializeEntity socializeEntity) {
-                ToastManager.showToast(activity, "分享结束");
+                // Empty
             }
         });
     }
@@ -231,6 +231,7 @@ public class UmengManager {
         if (umShareContentEntity == null) return "";
 
         if ("practice_report".equals(umShareContentEntity.getType())) {
+            // 练习报告
             if ("mokao".equals(umShareContentEntity.getPaperType())) {
                 return "刚刚我在天天模考中打败了全国"
                         + Utils.rateToPercent(umShareContentEntity.getDefeat())
@@ -244,6 +245,34 @@ public class UmengManager {
                 return "刷了一套题，正确率竟然达到了"
                         + umShareContentEntity.getAccuracy()
                         + "，你想PK吗？放马过来吧~";
+            }
+        } else if ("evaluation".equals(umShareContentEntity.getType())) {
+            // 能力评估
+            float rank = umShareContentEntity.getRank();
+            if (rank <= 1 && rank >= 0.75) {
+                // 100%-75%
+                return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
+                        + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
+                        + Utils.rateToPercent(rank) + "%，妈妈再也不用担心我的拖延症啦~~";
+            } else if (rank < 0.75 && rank >= 0.5) {
+                // 75%-50%
+                return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
+                        + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
+                        + Utils.rateToPercent(rank) + "%，上岸指日可待~~";
+            } else if (rank < 0.5 && rank >= 0.25) {
+                // 50%-25%
+                return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
+                        + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
+                        + Utils.rateToPercent(rank) + "%，成公就在眼前啦~";
+            } else {
+                // 25%-1%
+                return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
+                        + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
+                        + Utils.rateToPercent(rank) + "%，排名靠前也是很孤独的，谁来打败我啊？";
             }
         }
 

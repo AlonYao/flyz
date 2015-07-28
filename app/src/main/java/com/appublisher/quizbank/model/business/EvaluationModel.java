@@ -39,9 +39,9 @@ public class EvaluationModel {
         if (evaluationResp == null || evaluationResp.getResponse_code() != 1) return;
 
         // 列表数据
-        int score = evaluationResp.getScore();
-        float rank = evaluationResp.getRank();
-        int learningDays = evaluationResp.getLearning_days();
+        activity.mScore = evaluationResp.getScore();
+        activity.mRank = evaluationResp.getRank();
+        activity.mLearningDays = evaluationResp.getLearning_days();
         int totalTime = evaluationResp.getTotal_time();
         int totalQuestions = evaluationResp.getTotal_questions();
         int avarageQuestions = evaluationResp.getAvarage_questions();
@@ -55,11 +55,11 @@ public class EvaluationModel {
         int avarageAccuracyInt = (int) (Math.round(avarageAccuracy*100)/1.0);
 
         // 预测分&排名
-        activity.mTvScore.setText(String.valueOf(score));
-        activity.mTvRank.setText(Utils.rateToPercent(rank));
+        activity.mTvScore.setText(String.valueOf(activity.mScore));
+        activity.mTvRank.setText(Utils.rateToPercent(activity.mRank));
 
         // 学习天数
-        activity.mTvLearningDays.setText(String.valueOf(learningDays));
+        activity.mTvLearningDays.setText(String.valueOf(activity.mLearningDays));
 
         // 模考时长
         activity.mTvTotalTime.setText(String.valueOf(totalTime / 60));

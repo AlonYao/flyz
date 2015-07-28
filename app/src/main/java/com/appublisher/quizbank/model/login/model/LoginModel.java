@@ -362,6 +362,21 @@ public class LoginModel {
     }
 
     /**
+     * 获取考试项目名称
+     * @return 考试项目名称
+     */
+    public static String getUserExamName() {
+        User user = UserDAO.findById();
+        if (user == null) return "";
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        UserExamInfoModel exam = Globals.gson.fromJson(user.exam, UserExamInfoModel.class);
+        if (exam == null) return "";
+
+        return exam.getName();
+    }
+
+    /**
      * 获取本地存储的用户信息
      * @return 用户信息模型
      */
