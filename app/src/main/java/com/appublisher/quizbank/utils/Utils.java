@@ -2,7 +2,6 @@ package com.appublisher.quizbank.utils;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -253,7 +252,7 @@ public class Utils {
      * ScrollView截屏
      * @return Bitmap
      */
-    public static Bitmap getBitmapByView(ScrollView scrollView, Activity activity) {
+    public static Bitmap getBitmapByView(ScrollView scrollView) {
         try {
             int h = 0;
             Bitmap bitmap;
@@ -266,32 +265,33 @@ public class Utils {
                     Bitmap.Config.ARGB_8888);
             final Canvas canvas = new Canvas(bitmap);
             scrollView.draw(canvas);
+
+//            // 测试输出，这部分代码预留，方便测试
+//            FileOutputStream out = null;
+//            try {
+//                // 音频本地缓存文件夹
+//                String folder = activity.getApplicationContext().getFilesDir().getAbsolutePath()
+//                        + "/pic/";
+//                FileMange.mkDir(folder);
+//
+//                out = new FileOutputStream(folder + "test.png");
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                if (null != out) {
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+//                    out.flush();
+//                    out.close();
+//                }
+//            } catch (IOException e) {
+//                // Empty
+//            }
+
             return bitmap;
         } catch (OutOfMemoryError e) {
             return null;
         }
-
-//        // 测试输出
-//        FileOutputStream out = null;
-//        try {
-//            // 音频本地缓存文件夹
-//            String folder = activity.getApplicationContext().getFilesDir().getAbsolutePath()
-//                    + "/pic/";
-//            FileMange.mkDir(folder);
-//
-//            out = new FileOutputStream(folder + "test.png");
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            if (null != out) {
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-//                out.flush();
-//                out.close();
-//            }
-//        } catch (IOException e) {
-//            // Empty
-//        }
     }
 }

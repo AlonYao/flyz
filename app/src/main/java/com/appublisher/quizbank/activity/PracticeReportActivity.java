@@ -17,6 +17,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.MeasureEntity;
+import com.appublisher.quizbank.model.entity.UmengShareEntity;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
@@ -227,8 +228,11 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
             UmengManager.sendToUmeng(this, "Back");
             finish();
         } else if ("分享".equals(item.getTitle())) {
-            Bitmap bitmap = Utils.getBitmapByView(mSvMain, this);
-            UmengManager.openShare(this, "测试", bitmap);
+            Bitmap bitmap = Utils.getBitmapByView(mSvMain);
+            UmengShareEntity umengShareEntity = new UmengShareEntity();
+            umengShareEntity.setActivity(this);
+            umengShareEntity.setBitmap(bitmap);
+            UmengManager.openShare(umengShareEntity);
         }
 
         return super.onOptionsItemSelected(item);

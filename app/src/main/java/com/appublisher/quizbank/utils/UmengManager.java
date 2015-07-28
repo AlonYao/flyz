@@ -9,10 +9,13 @@ import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
+import com.appublisher.quizbank.model.entity.UmengShareEntity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.media.QQShareContent;
 import com.umeng.socialize.media.QZoneShareContent;
 import com.umeng.socialize.media.UMImage;
@@ -121,14 +124,26 @@ public class UmengManager {
 
     /**
      * 打开分享列表
-     * @param activity Activity
-     * @param content 分享文字
-     * @param bitmap bitmap
+     * @param umengShareEntity 友盟分享实体类
      */
-    public static void openShare(Activity activity, String content, Bitmap bitmap) {
+    public static void openShare(UmengShareEntity umengShareEntity) {
         mController.getConfig().removePlatform(SHARE_MEDIA.TENCENT);
 
-        UMImage umImage = new UMImage(activity, bitmap);
+        final Activity activity = umengShareEntity.getActivity();
+
+        // 初始化文字
+        String content = umengShareEntity.getContent();
+        if (content == null || content.length() == 0)
+            content = activity.getString(R.string.app_name);
+
+        // 初始化图片
+        UMImage umImage;
+        Bitmap bitmap = umengShareEntity.getBitmap();
+        if (bitmap == null) {
+            umImage = new UMImage(activity, R.drawable.login_ic_quizbank);
+        } else {
+            umImage = new UMImage(activity, bitmap);
+        }
 
         // 微信分享
         UMWXHandler wxHandler = new UMWXHandler(
@@ -172,6 +187,22 @@ public class UmengManager {
         qzone.setShareContent(content);
         mController.setShareMedia(qzone);
         
-        mController.openShare(activity, false);
+        mController.openShare(activity, new SocializeListeners.SnsPostListener() {
+            @Override
+            public void onStart() {
+                ToastManager.showToast(activity, "开始分享");
+            }
+
+            @Override
+            public void onComplete(SHARE_MEDIA share_media,
+                                   int i,
+                                   SocializeEntity socializeEntity) {
+                ToastManager.showToast(activity, "分享结束");
+            }
+        });
+    }
+
+    public static String getPracticeReportContent() {
+        return "";
     }
 }

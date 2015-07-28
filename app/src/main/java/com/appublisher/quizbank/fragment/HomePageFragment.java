@@ -201,8 +201,9 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         long gradeTimestamp = GradeDAO.getGradeTimestamp(Globals.appVersion);
         if (gradeTimestamp == 0) {
             mOnResumeCount++;
-            if (mOnResumeCount < 2 || !GradeDAO.isShowGradeAlert(Globals.appVersion)) return;
-            AlertManager.showGradeAlert(mActivity);
+            if (mOnResumeCount >= 2 && GradeDAO.isShowGradeAlert(Globals.appVersion)) {
+                AlertManager.showGradeAlert(mActivity);
+            }
         } else {
             long curTimestamp = System.currentTimeMillis();
             long dex = (curTimestamp - gradeTimestamp) / 1000;
