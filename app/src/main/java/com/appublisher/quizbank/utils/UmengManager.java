@@ -29,6 +29,7 @@ import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * 友盟管理
@@ -246,6 +247,7 @@ public class UmengManager {
                         + umShareContentEntity.getAccuracy()
                         + "，你想PK吗？放马过来吧~";
             }
+
         } else if ("evaluation".equals(umShareContentEntity.getType())) {
             // 能力评估
             float rank = umShareContentEntity.getRank();
@@ -274,6 +276,15 @@ public class UmengManager {
                         + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
                         + Utils.rateToPercent(rank) + "%，排名靠前也是很孤独的，谁来打败我啊？";
             }
+
+        } else if ("measure_analysis".equals(umShareContentEntity.getType())) {
+            // 单题解析
+            String[] content = {"检验学霸的唯一标准就是做对题目，我出一道考考你？接招吗？",
+                                "发现一道比较难的题目，我可是做对了哦，你呢？",
+                                "长得美的这道题都做对了，比如我~~",
+                                "这道题我用时不到一分钟哦，看看你是不是比我快？"};
+            int random = new Random().nextInt(content.length);
+            return content[random];
         }
 
         return "";
