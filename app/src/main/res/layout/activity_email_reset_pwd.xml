@@ -37,7 +37,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/login_relogin"
         android:textColor="@color/login_white"
-        android:background="@color/blue"
+        android:background="@color/login_green"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

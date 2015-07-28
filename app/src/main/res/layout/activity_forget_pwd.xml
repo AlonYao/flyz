@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="@string/login_next"
         android:textColor="@color/login_white"
-        android:background="@color/blue"
+        android:background="@color/login_green"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

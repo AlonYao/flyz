@@ -72,7 +72,7 @@
                 android:id="@+id/login_btn"
                 android:text="@string/login_button_login"
                 android:textColor="@color/login_white"
-                android:background="@color/blue"
+                android:background="@color/login_green"
                 android:layout_gravity="center_horizontal" />
 
             <!-- 忘记密码 -->

@@ -65,7 +65,7 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/login_white"
         android:text="@string/login_next"
-        android:background="@color/login_blue"/>
+        android:background="@color/login_green"/>
 
     <TextView
         android:id="@+id/binding_mobile_none_code"
