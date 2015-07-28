@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.ScrollView;
 
@@ -290,6 +291,24 @@ public class Utils {
 //                // Empty
 //            }
 
+            return bitmap;
+        } catch (OutOfMemoryError e) {
+            return null;
+        }
+    }
+
+    /**
+     * ViewPager截屏
+     * @return Bitmap
+     */
+    public static Bitmap getBitmapByView(ViewPager viewPager) {
+        try {
+            Bitmap bitmap;
+            // 创建对应大小的bitmap
+            bitmap = Bitmap.createBitmap(viewPager.getWidth(), viewPager.getHeight(),
+                    Bitmap.Config.ARGB_8888);
+            final Canvas canvas = new Canvas(bitmap);
+            viewPager.draw(canvas);
             return bitmap;
         } catch (OutOfMemoryError e) {
             return null;

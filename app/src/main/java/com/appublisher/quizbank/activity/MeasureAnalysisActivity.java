@@ -22,6 +22,8 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
@@ -33,6 +35,7 @@ import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -255,6 +258,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
+        MenuItemCompat.setShowAsAction(menu.add("分享"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -313,6 +318,18 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             mUmengDelete = "1";
         } else if (item.getTitle().equals("答题卡")) {
             skipToAnswerSheet();
+        } else if ("分享".equals(item.getTitle())) {
+            // 构造友盟分享实体
+            UmengShareEntity umengShareEntity = new UmengShareEntity();
+            umengShareEntity.setActivity(this);
+            umengShareEntity.setBitmap(Utils.getBitmapByView(mViewPager));
+
+            // 友盟分享文字处理
+            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+            umShareContentEntity.setType("measure_analysis");
+            umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+
+            UmengManager.openShare(umengShareEntity);
         }
 
         return super.onOptionsItemSelected(item);
