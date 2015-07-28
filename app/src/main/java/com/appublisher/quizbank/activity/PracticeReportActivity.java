@@ -1,11 +1,15 @@
 package com.appublisher.quizbank.activity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -60,6 +64,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public TextView mTvEvaluateNum;
     public ImageView mIvNoteNoChange;
     public RelativeLayout mRlMiniMokao;
+    public ScrollView mSvMain;
 
     public int mRightNum;
     public int mTotalNum;
@@ -106,6 +111,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mTvBorderLineShenlun = (TextView) findViewById(R.id.practice_report_shenlun_num);
         mLlEvaluate = (LinearLayout) findViewById(R.id.practice_report_evaluate);
         mTvEvaluateNum = (TextView) findViewById(R.id.practice_report_evaluate_num);
+        mSvMain = (ScrollView) findViewById(R.id.practice_report_sv);
 
         // 成员变量初始化
         mUmengStatus = "1";
@@ -208,12 +214,21 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuItemCompat.setShowAsAction(menu.add("分享"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // Umeng
             UmengManager.sendToUmeng(this, "Back");
-
             finish();
+        } else if ("分享".equals(item.getTitle())) {
+            Bitmap bitmap = Utils.getBitmapByView(mSvMain, this);
+            UmengManager.openShare(this, "测试", bitmap);
         }
 
         return super.onOptionsItemSelected(item);

@@ -2,6 +2,7 @@ package com.appublisher.quizbank.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
@@ -14,6 +15,7 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.media.QQShareContent;
 import com.umeng.socialize.media.QZoneShareContent;
+import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
@@ -121,9 +123,12 @@ public class UmengManager {
      * 打开分享列表
      * @param activity Activity
      * @param content 分享文字
+     * @param bitmap bitmap
      */
-    public static void openShare(Activity activity, String content) {
+    public static void openShare(Activity activity, String content, Bitmap bitmap) {
         mController.getConfig().removePlatform(SHARE_MEDIA.TENCENT);
+
+        UMImage umImage = new UMImage(activity, bitmap);
 
         // 微信分享
         UMWXHandler wxHandler = new UMWXHandler(
@@ -154,6 +159,7 @@ public class UmengManager {
         qqSsoHandler.addToSocialSDK();
         QQShareContent qq = new QQShareContent();
         qq.setShareContent(content);
+        qq.setShareImage(umImage);
         mController.setShareMedia(qq);
 
         // Qzone分享

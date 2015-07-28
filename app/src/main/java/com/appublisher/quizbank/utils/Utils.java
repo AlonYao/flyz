@@ -2,8 +2,12 @@ package com.appublisher.quizbank.utils;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.ScrollView;
 
 import com.appublisher.quizbank.Globals;
 
@@ -243,5 +247,51 @@ public class Utils {
         Matcher m = p.matcher(email);
 
         return m.matches();
+    }
+
+    /**
+     * ScrollView截屏
+     * @return Bitmap
+     */
+    public static Bitmap getBitmapByView(ScrollView scrollView, Activity activity) {
+        try {
+            int h = 0;
+            Bitmap bitmap;
+            // 获取listView实际高度
+            for (int i = 0; i < scrollView.getChildCount(); i++) {
+                h += scrollView.getChildAt(i).getHeight();
+            }
+            // 创建对应大小的bitmap
+            bitmap = Bitmap.createBitmap(scrollView.getWidth(), h,
+                    Bitmap.Config.ARGB_8888);
+            final Canvas canvas = new Canvas(bitmap);
+            scrollView.draw(canvas);
+            return bitmap;
+        } catch (OutOfMemoryError e) {
+            return null;
+        }
+
+//        // 测试输出
+//        FileOutputStream out = null;
+//        try {
+//            // 音频本地缓存文件夹
+//            String folder = activity.getApplicationContext().getFilesDir().getAbsolutePath()
+//                    + "/pic/";
+//            FileMange.mkDir(folder);
+//
+//            out = new FileOutputStream(folder + "test.png");
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            if (null != out) {
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+//                out.flush();
+//                out.close();
+//            }
+//        } catch (IOException e) {
+//            // Empty
+//        }
     }
 }

@@ -11,6 +11,7 @@
         android:id="@+id/toolbar"/>
 
     <ScrollView
+        android:id="@+id/practice_report_sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
