@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:layout_marginBottom="44dp"
+        android:scrollbars="none"
         android:background="@color/common_bg">
 
         <LinearLayout
