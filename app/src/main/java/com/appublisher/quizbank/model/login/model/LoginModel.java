@@ -312,6 +312,22 @@ public class LoginModel {
     }
 
     /**
+     * 获取用户学号
+     * @return 学号
+     */
+    public static String getSno() {
+        User user = UserDAO.findById();
+        if (user == null) return "";
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
+        UserInfoModel userInfo = Globals.gson.fromJson(user.user, UserInfoModel.class);
+        if (userInfo == null) return "";
+
+        return String.valueOf(userInfo.getSno());
+    }
+
+    /**
      * 判断是否有考试项目
      * @return 是或否
      */
