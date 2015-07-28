@@ -73,8 +73,9 @@ public class PracticeReportModel {
         // 如果是今日Mini模考，显示击败信息
         if ("mokao".equals(mActivity.mPaperType)) {
             mActivity.mRlMiniMokao.setVisibility(View.VISIBLE);
+            mActivity.mDefeat = mActivity.mMeasureEntity.getDefeat();
             String defeat = "击败"
-                    + Utils.rateToPercent(mActivity.mMeasureEntity.getDefeat())
+                    + Utils.rateToPercent(mActivity.mDefeat)
                     + "%的考生";
             Spannable word = new SpannableString(defeat);
             word.setSpan(
@@ -104,7 +105,8 @@ public class PracticeReportModel {
             mActivity.mLlEvaluate.setVisibility(View.VISIBLE);
 
             // 预估分
-            mActivity.mTvEvaluateNum.setText(String.valueOf(mActivity.mMeasureEntity.getScore()));
+            mActivity.mScore = mActivity.mMeasureEntity.getScore();
+            mActivity.mTvEvaluateNum.setText(String.valueOf(mActivity.mScore));
 
             // 往年分数线
             setBorderLine();

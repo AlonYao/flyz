@@ -13,6 +13,7 @@ import com.appublisher.quizbank.Globals;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -293,5 +294,21 @@ public class Utils {
         } catch (OutOfMemoryError e) {
             return null;
         }
+    }
+
+    /**
+     * 获取百分比
+     * @param x 分子
+     * @param y 分母
+     * @return 比率（保留1位小数）
+     */
+    public static String getPercent1(int x, int y) {
+        if (y == 0 || x == 0) return "0%";
+
+        double baix = x * 1.0;
+        double baiy = y * 1.0;
+        double fen = baix / baiy;
+        DecimalFormat df1 = new DecimalFormat("##.0%"); // ##.00%,百分比格式，后面不足2位的用0补齐
+        return df1.format(fen);
     }
 }

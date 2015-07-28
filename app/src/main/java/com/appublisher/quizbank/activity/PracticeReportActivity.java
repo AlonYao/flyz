@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.activity;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -17,6 +16,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
@@ -69,7 +69,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
     public int mRightNum;
     public int mTotalNum;
+    public int mScore;
     public boolean mIsFromError;
+    public float mDefeat;
     public ArrayList<NoteM> mNotes;
     public ArrayList<QuestionM> mQuestions;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
@@ -228,10 +230,22 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
             UmengManager.sendToUmeng(this, "Back");
             finish();
         } else if ("分享".equals(item.getTitle())) {
-            Bitmap bitmap = Utils.getBitmapByView(mSvMain);
+            // 构造友盟分享实体
             UmengShareEntity umengShareEntity = new UmengShareEntity();
             umengShareEntity.setActivity(this);
-            umengShareEntity.setBitmap(bitmap);
+            umengShareEntity.setBitmap(Utils.getBitmapByView(mSvMain));
+
+            // 友盟分享文字处理
+            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+            umShareContentEntity.setType("practice_report");
+            umShareContentEntity.setPaperType(mPaperType);
+            umShareContentEntity.setDefeat(mDefeat);
+            umShareContentEntity.setAccuracy(Utils.getPercent1(mRightNum, mTotalNum));
+            umShareContentEntity.setScore(mScore);
+            umShareContentEntity.setExamName(mPaperName);
+
+            umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+
             UmengManager.openShare(umengShareEntity);
         }
 

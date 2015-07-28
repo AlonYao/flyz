@@ -9,6 +9,7 @@ import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -202,7 +203,31 @@ public class UmengManager {
         });
     }
 
-    public static String getPracticeReportContent() {
+    /**
+     * 获取分享文字
+     * @param umShareContentEntity 分享文字实体类
+     * @return 分享文字
+     */
+    public static String getShareContent(UMShareContentEntity umShareContentEntity) {
+        if (umShareContentEntity == null) return "";
+
+        if ("practice_report".equals(umShareContentEntity.getType())) {
+            if ("mokao".equals(umShareContentEntity.getPaperType())) {
+                return "刚刚我在天天模考中打败了全国"
+                        + Utils.rateToPercent(umShareContentEntity.getDefeat())
+                        + "%的小伙伴，学霸非我莫属！你也想试试？";
+            } else if ("evaluate".equals(umShareContentEntity.getPaperType())) {
+                return umShareContentEntity.getExamName()
+                        + "可以估分了呢，我的预测分是"
+                        + umShareContentEntity.getScore()
+                        + "分，小伙伴们快来看看~";
+            } else {
+                return "刷了一套题，正确率竟然达到了"
+                        + umShareContentEntity.getAccuracy()
+                        + "，你想PK吗？放马过来吧~";
+            }
+        }
+
         return "";
     }
 }
