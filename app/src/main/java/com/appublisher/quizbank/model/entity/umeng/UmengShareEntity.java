@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.entity;
+package com.appublisher.quizbank.model.entity.umeng;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

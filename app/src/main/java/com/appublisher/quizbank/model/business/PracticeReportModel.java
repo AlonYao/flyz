@@ -16,7 +16,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
-import com.appublisher.quizbank.model.entity.MeasureEntity;
+import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.ScoreM;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;

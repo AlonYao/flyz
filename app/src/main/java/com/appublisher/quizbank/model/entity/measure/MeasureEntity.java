@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.entity;
+package com.appublisher.quizbank.model.entity.measure;
 
 import com.appublisher.quizbank.model.netdata.historyexercise.ScoreM;
 
