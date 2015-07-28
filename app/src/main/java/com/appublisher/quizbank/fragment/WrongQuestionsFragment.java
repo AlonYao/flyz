@@ -63,9 +63,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
     public void onResume() {
         super.onResume();
         // 获取数据
-        mContainer.removeAllViews();
-        ProgressBarManager.showProgressBar(mView);
-        new Request(mActivity, this).getNoteHierarchy("error");
+        if (!isHidden()) getData();
 
         // Umeng
         MobclickAgent.onPageStart("WrongQuestionsFragment");
@@ -82,6 +80,22 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
         // TalkingData
         TCAgent.onPageEnd(mActivity, "WrongQuestionsFragment");
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        // 获取数据
+        if (!hidden) getData();
+    }
+
+    /**
+     * 获取数据
+     */
+    private void getData() {
+        mContainer.removeAllViews();
+        ProgressBarManager.showProgressBar(mView);
+        new Request(mActivity, this).getNoteHierarchy("error");
     }
 
     /**

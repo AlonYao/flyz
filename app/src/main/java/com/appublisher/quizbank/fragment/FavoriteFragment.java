@@ -54,9 +54,7 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
     public void onResume() {
         super.onResume();
         // 获取数据
-        mContainer.removeAllViews();
-        ProgressBarManager.showProgressBar(mView);
-        new Request(mActivity, this).getNoteHierarchy("collect");
+        if (!isHidden()) getData();
 
         // Umeng
         MobclickAgent.onPageStart("FavoriteFragment");
@@ -76,6 +74,13 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        // 获取数据
+        if (!hidden) getData();
+    }
+
+    @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("note_hierarchy".equals(apiName))
             FavoriteModel.dealNoteHierarchyResp(this, response);
@@ -91,5 +96,14 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         ProgressBarManager.hideProgressBar();
+    }
+
+    /**
+     * 获取数据
+     */
+    private void getData() {
+        mContainer.removeAllViews();
+        ProgressBarManager.showProgressBar(mView);
+        new Request(mActivity, this).getNoteHierarchy("collect");
     }
 }
