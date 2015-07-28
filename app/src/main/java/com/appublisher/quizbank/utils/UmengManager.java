@@ -154,6 +154,7 @@ public class UmengManager {
         wxHandler.addToSocialSDK();
         WeiXinShareContent weixin = new WeiXinShareContent();
         weixin.setShareContent(content);
+        weixin.setShareImage(umImage);
         mController.setShareMedia(weixin);
 
         // 微信朋友圈分享
@@ -165,6 +166,7 @@ public class UmengManager {
         wxCircleHandler.addToSocialSDK();
         CircleShareContent weixinCircle = new CircleShareContent();
         weixinCircle.setShareContent(content);
+        weixinCircle.setShareImage(umImage);
         mController.setShareMedia(weixinCircle);
 
         // QQ分享
@@ -186,6 +188,7 @@ public class UmengManager {
         qZoneSsoHandler.addToSocialSDK();
         QZoneShareContent qzone = new QZoneShareContent();
         qzone.setShareContent(content);
+        qzone.setShareImage(umImage);
         mController.setShareMedia(qzone);
         
         mController.openShare(activity, new SocializeListeners.SnsPostListener() {
