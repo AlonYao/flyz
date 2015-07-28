@@ -139,6 +139,9 @@ public class UmengManager {
         if (content == null || content.length() == 0)
             content = activity.getString(R.string.app_name);
 
+        // 初始化跳转地址
+        String url = umengShareEntity.getUrl() == null ? "" : umengShareEntity.getUrl();
+
         // 初始化图片
         UMImage umImage;
         Bitmap bitmap = umengShareEntity.getBitmap();
@@ -157,6 +160,7 @@ public class UmengManager {
         WeiXinShareContent weixin = new WeiXinShareContent();
         weixin.setShareContent(content);
         weixin.setShareImage(umImage);
+        weixin.setTargetUrl(url);
         mController.setShareMedia(weixin);
 
         // 微信朋友圈分享
@@ -169,6 +173,7 @@ public class UmengManager {
         CircleShareContent weixinCircle = new CircleShareContent();
         weixinCircle.setShareContent(content);
         weixinCircle.setShareImage(umImage);
+        weixinCircle.setTargetUrl(url);
         mController.setShareMedia(weixinCircle);
 
         // QQ分享
@@ -180,6 +185,7 @@ public class UmengManager {
         QQShareContent qq = new QQShareContent();
         qq.setShareContent(content);
         qq.setShareImage(umImage);
+        qq.setTargetUrl(url);
         mController.setShareMedia(qq);
 
         // Qzone分享
@@ -191,12 +197,13 @@ public class UmengManager {
         QZoneShareContent qzone = new QZoneShareContent();
         qzone.setShareContent(content);
         qzone.setShareImage(umImage);
+        qzone.setTargetUrl(url);
         mController.setShareMedia(qzone);
 
         // 新浪微博
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
         SinaShareContent sina = new SinaShareContent();
-        sina.setShareContent(content);
+        sina.setShareContent("#天天模考#" + content + url + "(分享自@腰果公务员)#公考要过，就用腰果#");
         sina.setShareImage(umImage);
         mController.setShareMedia(sina);
         
