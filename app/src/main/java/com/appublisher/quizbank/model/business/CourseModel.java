@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -32,7 +31,6 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * 课程中心
@@ -53,7 +51,7 @@ public class CourseModel {
     public static CourseListAdapter mCourseListAdapter;
 
     /**
-     * 处理课程标签回调
+     * 处理课程标签回调（科目）
      * @param response 回调数据
      * @param courseFragment 课程中心页面
      */
@@ -138,7 +136,7 @@ public class CourseModel {
     }
 
     /**
-     * 初始化Filter课程标签
+     * 初始化Filter课程标签（科目）
      */
     private static void initPwTag() {
         // 初始化PopupWindow控件
@@ -159,7 +157,7 @@ public class CourseModel {
 
         ExpandableHeightGridView gvTag =
                 (ExpandableHeightGridView) view.findViewById(R.id.filter_course_ehgv);
-        gvTag.setNumColumns(2);
+        gvTag.setNumColumns(3);
         TextView tvConfirm = (TextView) view.findViewById(R.id.course_filter_confirm);
         TextView tvCancel = (TextView) view.findViewById(R.id.course_filter_cancel);
 
