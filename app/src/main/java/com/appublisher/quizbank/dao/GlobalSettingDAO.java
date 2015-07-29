@@ -145,6 +145,7 @@ public class GlobalSettingDAO {
     /**
      * 更新是否评价过的状态
      * @param is_grade  是否评价过
+     * @deprecated
      */
     public static void updateIsGrade(boolean is_grade) {
         try {
@@ -161,6 +162,7 @@ public class GlobalSettingDAO {
     /**
      * 获取是否评价过
      * @return 是否
+     * @deprecated
      */
     public static boolean isGrade() {
         GlobalSetting globalSetting = findById();

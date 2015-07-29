@@ -9,9 +9,11 @@ import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
 import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -300,7 +302,16 @@ public class UmengManager {
         if (urlEntity == null) return "";
 
         if ("practice_report".equals(urlEntity.getType())) {
-
+            GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
+            String baseUrl = "http://m.zhiboke.net/#/live/practiceReport?";
+            if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+                baseUrl = globalSettingsResp.getReport_share_url();
+            }
+            return baseUrl + "user_id=" + urlEntity.getUser_id()
+                    + "&user_token=" + urlEntity.getUser_token()
+                    + "&exercise_id=" + urlEntity.getExercise_id()
+                    + "&paper_type=" + urlEntity.getPaper_type()
+                    + "&name=" + urlEntity.getName();
         }
 
         return "";

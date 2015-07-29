@@ -13,6 +13,16 @@ public class GlobalSettingsResp {
     int open_course_heartbeat;
     ArrayList<ExerciseIntroM> exercise_intro;
     MockM mock;
+    String report_share_url;
+    String evaluate_share_url;
+
+    public String getReport_share_url() {
+        return report_share_url;
+    }
+
+    public String getEvaluate_share_url() {
+        return evaluate_share_url;
+    }
 
     public MockM getMock() {
         return mock;
