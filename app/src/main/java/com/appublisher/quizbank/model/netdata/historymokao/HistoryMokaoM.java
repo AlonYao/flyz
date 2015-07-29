@@ -11,6 +11,19 @@ public class HistoryMokaoM {
     String date;
     int persons_num;
     String status;
+    float defeat;
+
+    public void setExercise_id(int exercise_id) {
+        this.exercise_id = exercise_id;
+    }
+
+    public float getDefeat() {
+        return defeat;
+    }
+
+    public void setDefeat(float defeat) {
+        this.defeat = defeat;
+    }
 
     public int getExercise_id() {
         return exercise_id;

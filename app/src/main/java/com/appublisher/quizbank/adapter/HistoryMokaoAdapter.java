@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
+import com.appublisher.quizbank.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -69,7 +70,8 @@ public class HistoryMokaoAdapter extends BaseAdapter{
                 String status = historyMokao.getStatus();
 
                 viewHolder.tvName.setText(historyMokao.getName());
-                viewHolder.tvNum.setText(String.valueOf(num) + "人参加");
+                viewHolder.tvNum.setText(String.valueOf(num)
+                        + "人参加,击败" + Utils.rateToPercent(historyMokao.getDefeat()) + "%");
 
                 if ("done".equals(status)) {
                     viewHolder.ivStatus.setImageResource(R.drawable.historymokao_done);
