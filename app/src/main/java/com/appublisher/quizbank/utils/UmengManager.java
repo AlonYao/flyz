@@ -10,6 +10,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -285,6 +286,21 @@ public class UmengManager {
                                 "这道题我用时不到一分钟哦，看看你是不是比我快？"};
             int random = new Random().nextInt(content.length);
             return content[random];
+        }
+
+        return "";
+    }
+
+    /**
+     * 获取友盟跳转链接
+     * @param urlEntity 实体类
+     * @return 地址
+     */
+    public static String getUrl(UMShareUrlEntity urlEntity) {
+        if (urlEntity == null) return "";
+
+        if ("practice_report".equals(urlEntity.getType())) {
+
         }
 
         return "";

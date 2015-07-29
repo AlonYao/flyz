@@ -18,7 +18,9 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
@@ -72,6 +74,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public int mRightNum;
     public int mTotalNum;
     public int mScore;
+    public int mPaperId;
+    public int mExerciseId;
     public boolean mIsFromError;
     public float mDefeat;
     public ArrayList<NoteM> mNotes;
@@ -133,6 +137,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         if (mPaperTime == null) mPaperTime = Utils.DateToString(new Date(), "yyyy/MM/dd");
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", System.currentTimeMillis());
         mMeasureEntity = (MeasureEntity) getIntent().getSerializableExtra("measure_entity");
+        mPaperId = getIntent().getIntExtra("paper_id", 0);
+        mExerciseId = getIntent().getIntExtra("exercise_id", 0);
 
         // 显示考试类型
         PracticeReportModel.showPaperType(this);
@@ -144,10 +150,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
                 || "mokao_homepage".equals(mFrom)
                 || "mokao_history_list".equals(mFrom)) {
             // 从学习记录、mini模考、历史模考进入，需要重新获取数据
-            int exerciseId = getIntent().getIntExtra("exercise_id", 0);
-
             ProgressDialogManager.showProgressDialog(this, true);
-            new Request(this, this).getHistoryExerciseDetail(exerciseId, mPaperType);
+            new Request(this, this).getHistoryExerciseDetail(mExerciseId, mPaperType);
         } else {
             PracticeReportModel.getData(this);
         }
@@ -238,15 +242,24 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
             umengShareEntity.setBitmap(Utils.getBitmapByView(mSvMain));
 
             // 友盟分享文字处理
-            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
-            umShareContentEntity.setType("practice_report");
-            umShareContentEntity.setPaperType(mPaperType);
-            umShareContentEntity.setDefeat(mDefeat);
-            umShareContentEntity.setAccuracy(Utils.getPercent1(mRightNum, mTotalNum));
-            umShareContentEntity.setScore(mScore);
-            umShareContentEntity.setExamName(mPaperName);
+            UMShareContentEntity contentEntity = new UMShareContentEntity();
+            contentEntity.setType("practice_report");
+            contentEntity.setPaperType(mPaperType);
+            contentEntity.setDefeat(mDefeat);
+            contentEntity.setAccuracy(Utils.getPercent1(mRightNum, mTotalNum));
+            contentEntity.setScore(mScore);
+            contentEntity.setExamName(mPaperName);
+            umengShareEntity.setContent(UmengManager.getShareContent(contentEntity));
 
-            umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+            // 友盟分享跳转链接处理
+            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+            urlEntity.setType("practice_report");
+            urlEntity.setUser_id(LoginModel.getUserId());
+            urlEntity.setUser_token(LoginModel.getUserToken());
+            urlEntity.setPaper_type(mPaperType);
+            urlEntity.setName(mPaperName);
+            urlEntity.setExercise_id(mExerciseId == 0 ? mPaperId : mExerciseId);
+            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
 
             UmengManager.openShare(umengShareEntity);
         }
