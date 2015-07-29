@@ -257,7 +257,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
             urlEntity.setUser_id(LoginModel.getUserId());
             urlEntity.setUser_token(LoginModel.getUserToken());
             urlEntity.setPaper_type(mPaperType);
-            urlEntity.setName(mPaperName);
+            urlEntity.setName(
+                    mTvPaperName.getText() == null ? "" : mTvPaperName.getText().toString());
             urlEntity.setExercise_id(mExerciseId == 0 ? mPaperId : mExerciseId);
             umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
 

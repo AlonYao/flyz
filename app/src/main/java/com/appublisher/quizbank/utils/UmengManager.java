@@ -144,6 +144,7 @@ public class UmengManager {
             content = activity.getString(R.string.app_name);
 
         // 初始化跳转地址
+        Logger.e(umengShareEntity.getUrl());
         String url = umengShareEntity.getUrl() == null ? "" : umengShareEntity.getUrl();
 
         // 初始化图片
