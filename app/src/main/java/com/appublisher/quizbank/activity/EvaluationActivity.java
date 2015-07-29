@@ -14,6 +14,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.EvaluationModel;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.Request;
@@ -131,6 +132,13 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
             umShareContentEntity.setScore(mScore);
             umShareContentEntity.setRank(mRank);
             umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+
+            // 友盟分享跳转链接处理
+            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+            urlEntity.setType("evaluation");
+            urlEntity.setUser_id(LoginModel.getUserId());
+            urlEntity.setUser_token(LoginModel.getUserToken());
+            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
 
             UmengManager.openShare(umengShareEntity);
         }

@@ -23,6 +23,7 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
@@ -328,6 +329,12 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
             umShareContentEntity.setType("measure_analysis");
             umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+
+            // 友盟分享跳转链接处理
+            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+            urlEntity.setType("measure_analysis");
+            urlEntity.setQuestion_id(mCurQuestionId);
+            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
 
             UmengManager.openShare(umengShareEntity);
         }

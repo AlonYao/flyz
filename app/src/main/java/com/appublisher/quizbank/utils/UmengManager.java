@@ -144,7 +144,6 @@ public class UmengManager {
             content = activity.getString(R.string.app_name);
 
         // 初始化跳转地址
-        Logger.e(umengShareEntity.getUrl());
         String url = umengShareEntity.getUrl() == null ? "" : umengShareEntity.getUrl();
 
         // 初始化图片
@@ -303,6 +302,7 @@ public class UmengManager {
         if (urlEntity == null) return "";
 
         if ("practice_report".equals(urlEntity.getType())) {
+            // 练习报告
             GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
             String baseUrl = "http://m.zhiboke.net/#/live/practiceReport?";
             if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
@@ -313,6 +313,20 @@ public class UmengManager {
                     + "&exercise_id=" + urlEntity.getExercise_id()
                     + "&paper_type=" + urlEntity.getPaper_type()
                     + "&name=" + urlEntity.getName();
+
+        } else if ("evaluation".equals(urlEntity.getType())) {
+            // 能力评估
+            GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
+            String baseUrl = "http://m.zhiboke.net/#/live/assessment?";
+            if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+                baseUrl = globalSettingsResp.getEvaluate_share_url();
+            }
+            return baseUrl + "user_id=" + urlEntity.getUser_id()
+                    + "&user_token=" + urlEntity.getUser_token();
+        } else if ("measure_analysis".equals(urlEntity.getType())) {
+            // 单题解析
+            return "http://share.zhiboke.net/question.php?question_id="
+                    + urlEntity.getQuestion_id();
         }
 
         return "";

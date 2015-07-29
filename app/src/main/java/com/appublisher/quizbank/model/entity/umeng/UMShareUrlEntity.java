@@ -11,6 +11,15 @@ public class UMShareUrlEntity {
     int exercise_id; // 试卷id
     String paper_type; // 练习类型：mini模考、快速智能练习等等
     String name; // 试卷名称
+    int question_id; // 题目id
+
+    public int getQuestion_id() {
+        return question_id;
+    }
+
+    public void setQuestion_id(int question_id) {
+        this.question_id = question_id;
+    }
 
     public String getType() {
         return type;
