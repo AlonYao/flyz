@@ -160,8 +160,10 @@ public class MockActivity extends ActionBarActivity implements
         if ("done".equals(status)) {
             // 已完成，跳转至练习报告页面
             Intent intent = new Intent(this, PracticeReportActivity.class);
-            intent.putExtra("exercise_id", mockPaper.getId());
+            intent.putExtra("exercise_id", mockPaper.getExercise_id());
             intent.putExtra("paper_type", mType);
+            intent.putExtra("from", "mock_list");
+            intent.putExtra("paper_name", mockPaper.getName());
             startActivity(intent);
 
         } else if ("undone".equals(status)) {

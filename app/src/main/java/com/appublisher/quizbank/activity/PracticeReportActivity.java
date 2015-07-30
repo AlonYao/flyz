@@ -148,8 +148,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
         if ("study_record".equals(mFrom)
                 || "mokao_homepage".equals(mFrom)
-                || "mokao_history_list".equals(mFrom)) {
-            // 从学习记录、mini模考、历史模考进入，需要重新获取数据
+                || "mokao_history_list".equals(mFrom)
+                || "mock_list".equals(mFrom)) {
+            // 从学习记录、mini模考、历史模考、估分模考进入，需要重新获取数据
             ProgressDialogManager.showProgressDialog(this, true);
             new Request(this, this).getHistoryExerciseDetail(mExerciseId, mPaperType);
         } else {

@@ -596,6 +596,10 @@ public class PracticeReportModel {
             sPaperType = "错题本练习";
         } else if ("entire".equals(activity.mPaperType)) {
             sPaperType = "真题演练";
+        } else if ("evaluate".equals(activity.mPaperType)) {
+            sPaperType = "估分";
+        } else if ("mock".equals(activity.mPaperType)) {
+            sPaperType = "模考";
         }
 
         activity.mTvPaperType.setText(sPaperType);
