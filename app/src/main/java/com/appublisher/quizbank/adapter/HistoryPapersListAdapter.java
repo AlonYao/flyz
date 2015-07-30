@@ -111,6 +111,8 @@ public class HistoryPapersListAdapter extends BaseAdapter{
             ivLogo.setImageResource(R.drawable.studyrecord_collect);
         } else if ("evaluate".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_estimate);
+        } else if ("mock".equals(paperType)) {
+            ivLogo.setImageResource(R.drawable.studyrecord_mock);
         } else {
             ivLogo.setVisibility(View.GONE);
         }

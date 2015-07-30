@@ -39,6 +39,7 @@ public class MockActivity extends ActionBarActivity implements
     private ImageView mIvNull;
     private Request mRequest;
     private ArrayList<MockPaperM> mMockPapers;
+    private String mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class MockActivity extends ActionBarActivity implements
         }
 
         mMockPapers = mockListResp.getPaper_list();
+        mType = mockListResp.getType();
 
         if (mMockPapers == null || mMockPapers.size() == 0) {
             mIvNull.setVisibility(View.VISIBLE);
@@ -159,13 +161,13 @@ public class MockActivity extends ActionBarActivity implements
             // 已完成，跳转至练习报告页面
             Intent intent = new Intent(this, PracticeReportActivity.class);
             intent.putExtra("exercise_id", mockPaper.getId());
-            intent.putExtra("paper_type", "mock");
+            intent.putExtra("paper_type", mType);
             startActivity(intent);
 
         } else if ("undone".equals(status)) {
             // 只做了一部分
             Intent intent = new Intent(this, MeasureActivity.class);
-            intent.putExtra("paper_type", "mock");
+            intent.putExtra("paper_type", mType);
             intent.putExtra("paper_name", mockPaper.getName());
             intent.putExtra("umeng_entry", "Home");
             intent.putExtra("redo", true);
@@ -175,7 +177,7 @@ public class MockActivity extends ActionBarActivity implements
         } else {
             // 未做
             Intent intent = new Intent(this, PracticeDescriptionActivity.class);
-            intent.putExtra("paper_type", "mock");
+            intent.putExtra("paper_type", mType);
             intent.putExtra("paper_name", mockPaper.getName());
             intent.putExtra("umeng_entry", "Home");
             intent.putExtra("redo", false);
