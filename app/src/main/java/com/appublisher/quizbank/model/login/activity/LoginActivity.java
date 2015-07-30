@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -57,6 +58,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     public String mSocialLoginType;
     public String mUsername;
     public String mPwdEncrypt;
+    public ImageView mIvWeiboPre;
+    public ImageView mIvWeixinPre;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -111,6 +114,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         TextView tvForgetPwd = (TextView) findViewById(R.id.login_forgetpwd);
         final EditText etUsername = (EditText) findViewById(R.id.login_username);
         final EditText etPassword = (EditText) findViewById(R.id.login_password);
+        mIvWeiboPre = (ImageView) findViewById(R.id.login_weibo_pre);
+        mIvWeixinPre = (ImageView) findViewById(R.id.login_weixin_pre);
 
         // 成员变量初始化
         mRequest = new Request(this, this);
@@ -127,6 +132,9 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         if (from.equals("collect") || from.equals("mine") || from.equals("setting")) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        // 获取上一次登录的用户名
+        etUsername.setText(LoginModel.getPreLoginName());
 
         // 登录按钮
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +184,9 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
         mController.getConfig().setSinaCallbackUrl("http://sns.whalecloud.com/sina2/callback");
         weiboBtn.setOnClickListener(mLoginModel.weiboOnClick);
+
+        // 检查上次登录情况（联合登录）
+        LoginModel.checkPreOAuthLoginType(this);
 
         // 保存Activity
         QuizBankApp.getInstance().addActivity(this);

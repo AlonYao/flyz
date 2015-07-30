@@ -95,22 +95,49 @@
                 android:layout_gravity="center_horizontal" >
 
                 <!--微博-->
-                <ImageButton
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/login_weibo"
-                    android:src="@drawable/login_weibo"
-                    android:background="@color/login_transparency"
-                    tools:ignore="ContentDescription" />
+                    android:layout_height="wrap_content">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/login_weibo"
+                        android:src="@drawable/login_weibo"
+                        android:background="@color/login_transparency"
+                        tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:id="@+id/login_weibo_pre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="invisible"
+                        android:src="@drawable/login_prelog"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
 
-                <ImageButton
+                <!-- 微信 -->
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/login_weixin"
-                    android:src="@drawable/login_weixin"
-                    android:background="@color/login_transparency"
-                    android:layout_marginLeft="40dp"
-                    tools:ignore="ContentDescription,RtlHardcoded" />
+                    android:layout_height="wrap_content">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/login_weixin"
+                        android:src="@drawable/login_weixin"
+                        android:background="@color/login_transparency"
+                        android:layout_marginLeft="40dp"
+                        tools:ignore="ContentDescription,RtlHardcoded" />
+                    <ImageView
+                        android:id="@+id/login_weixin_pre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="invisible"
+                        android:src="@drawable/login_prelog"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
             </TableRow>
 
         </LinearLayout>

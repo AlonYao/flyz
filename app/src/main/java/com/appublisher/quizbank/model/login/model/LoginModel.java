@@ -728,9 +728,50 @@ public class LoginModel {
         editor.putString("user_token", uim.getUser_token());
         editor.putString("user_mobile", uim.getMobile_num());
         editor.putString("user_email", uim.getMail());
+        editor.putString("user_wb_id", uim.getWeibo());
+        editor.putString("user_wx_id", uim.getWeixin());
         editor.putBoolean("is_login", true);
         editor.commit();
 
         return true;
+    }
+
+    /**
+     * 获取之前的用户名
+     * @return 用户名
+     */
+    public static String getPreLoginName() {
+        String mobile = Globals.sharedPreferences.getString("user_mobile", "");
+        String email = Globals.sharedPreferences.getString("user_email", "");
+
+        if (!"".equals(mobile)) {
+            return mobile;
+        } else if (!"".equals(email)) {
+            return email;
+        }
+
+        return "";
+    }
+
+    /**
+     * 检查上次第三方登录的类型
+     * @param activity LoginActivity
+     */
+    public static void checkPreOAuthLoginType(LoginActivity activity) {
+        String preWeiboId = Globals.sharedPreferences.getString("user_wb_id", "");
+        String preWeiXinId = Globals.sharedPreferences.getString("user_wx_id", "");
+        String preUserEmail = Globals.sharedPreferences.getString("user_email", "");
+        String preUserMobile = Globals.sharedPreferences.getString("user_mobile", "");
+
+        if (!"".equals(preUserEmail) || !"".equals(preUserMobile)) return;
+
+        if (!"".equals(preWeiXinId)) {
+            // 微信用户
+            activity.mIvWeixinPre.setVisibility(View.VISIBLE);
+
+        } else if (!"".equals(preWeiboId)) {
+            // 微博用户
+            activity.mIvWeiboPre.setVisibility(View.VISIBLE);
+        }
     }
 }
