@@ -185,6 +185,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/setting_text</item>
         <item name="android:maxEms">4</item>
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
     <style name="WholePagePopupMenuIv">

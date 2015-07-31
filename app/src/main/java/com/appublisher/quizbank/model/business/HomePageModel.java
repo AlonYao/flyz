@@ -3,8 +3,10 @@ package com.appublisher.quizbank.model.business;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.ImageView;
@@ -164,6 +166,7 @@ public class HomePageModel {
                 int start = displayContent.lastIndexOf("点");
                 int end = displayContent.length();
                 text.setSpan(new URLSpan(displayContent), start, end, 0);
+                text.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, 0);
                 tvPromote.setText(text);
             }
         }
