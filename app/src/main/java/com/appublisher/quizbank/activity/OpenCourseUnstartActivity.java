@@ -6,6 +6,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     public ImageView mIvOpenCourse;
     public LinearLayout mLlOldtimey;
     public MultiListView mLvOldtimey;
+    public View mCurOldtimey;
 
     /** Umeng **/
     private long mUmengTimestamp;
@@ -130,7 +132,8 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
 
             case ActivitySkipConstants.OPENCOURSE_PRE:
                 // 公开课回放
-//                mIvOldtimey.performClick();
+                if (mCurOldtimey == null) break;
+                mCurOldtimey.performClick();
                 break;
         }
     }

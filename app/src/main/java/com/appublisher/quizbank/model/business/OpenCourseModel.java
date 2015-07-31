@@ -122,7 +122,7 @@ public class OpenCourseModel {
         }
 
         // 往期内容
-        ArrayList<StaticCourseM> staticCourses = openCourseDetailResp.getStaticCourses();
+        final ArrayList<StaticCourseM> staticCourses = openCourseDetailResp.getStaticCourses();
 
         if (staticCourses != null && staticCourses.size() != 0) {
             activity.mLlOldtimey.setVisibility(View.VISIBLE);
@@ -132,36 +132,35 @@ public class OpenCourseModel {
 
             activity.mLvOldtimey.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position >= staticCourses.size()) return;
 
+                    activity.mCurOldtimey = view;
+                    String mobileNum = LoginModel.getUserMobile();
+                    if (mobileNum == null || mobileNum.length() == 0) {
+                        // 没有手机号
+                        Intent intent = new Intent(activity, BindingMobileActivity.class);
+                        intent.putExtra("from", "opencourse_pre");
+                        activity.startActivityForResult(
+                                intent, ActivitySkipConstants.OPENCOURSE_PRE);
+
+                    } else {
+                        // 跳转
+                        StaticCourseM staticCourse = staticCourses.get(position);
+                        String url = staticCourse.getCourse_url()
+                                + "&user_id=" + LoginModel.getUserId()
+                                + "&user_token=" + LoginModel.getUserToken();
+                        OpenCourseModel.skipToPreOpenCourse(activity, url, staticCourse.getName());
+                    }
+
+                    // Umeng
+                    activity.mUmengVideoPlay = "1";
                 }
             });
 
         } else {
             activity.mLlOldtimey.setVisibility(View.GONE);
         }
-
-//        activity.mIvOldtimey.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String mobileNum = LoginModel.getUserMobile();
-//                if (mobileNum == null || mobileNum.length() == 0) {
-//                    // 没有手机号
-//                    Intent intent = new Intent(activity, BindingMobileActivity.class);
-//                    intent.putExtra("from", "opencourse_pre");
-//                    activity.startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
-//
-//                } else {
-//                    // 跳转
-//                    String url = openCourseDetailResp.getStaticCourseUrl();
-//                    OpenCourseModel.skipToPreOpenCourse(activity, url);
-//                }
-//
-//                // Umeng
-//                activity.mUmengVideoPlay = "1";
-//            }
-//        });
-
     }
 
     /**
@@ -169,10 +168,11 @@ public class OpenCourseModel {
      * @param activity Activity
      * @param url url
      */
-    public static void skipToPreOpenCourse(Activity activity, String url) {
+    public static void skipToPreOpenCourse(Activity activity, String url, String name) {
         Intent intent = new Intent(activity, WebViewActivity.class);
         intent.putExtra("from", "opencourse_pre");
         intent.putExtra("url", url);
+        intent.putExtra("bar_title", name);
         intent.putExtra("umeng_entry", "Home");
         activity.startActivity(intent);
     }

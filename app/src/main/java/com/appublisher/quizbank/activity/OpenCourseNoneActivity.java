@@ -68,7 +68,7 @@ public class OpenCourseNoneActivity extends ActionBarActivity {
                 } else {
                     // 跳转
                     String content = getIntent().getStringExtra("content");
-                    OpenCourseModel.skipToPreOpenCourse(OpenCourseNoneActivity.this, content);
+                    OpenCourseModel.skipToPreOpenCourse(OpenCourseNoneActivity.this, content, "");
 
                     // Umeng
                     mUmengVideoPlay = "1";
