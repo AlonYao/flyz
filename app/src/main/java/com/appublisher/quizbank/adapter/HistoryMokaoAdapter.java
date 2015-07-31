@@ -70,8 +70,13 @@ public class HistoryMokaoAdapter extends BaseAdapter{
                 String status = historyMokao.getStatus();
 
                 viewHolder.tvName.setText(historyMokao.getName());
-                viewHolder.tvNum.setText(String.valueOf(num)
-                        + "人参加,击败" + Utils.rateToPercent(historyMokao.getDefeat()) + "%");
+
+                if (historyMokao.getDefeat() == 0) {
+                    viewHolder.tvNum.setText(String.valueOf(num) + "人参加");
+                } else {
+                    viewHolder.tvNum.setText(String.valueOf(num)
+                            + "人参加，击败" + Utils.rateToPercent(historyMokao.getDefeat()) + "%");
+                }
 
                 if ("done".equals(status)) {
                     viewHolder.ivStatus.setImageResource(R.drawable.historymokao_done);
