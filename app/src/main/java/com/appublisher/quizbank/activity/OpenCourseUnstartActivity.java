@@ -7,11 +7,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.customui.MultiListView;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -38,7 +40,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
     public TextView mTvLector;
     public TextView mTvNotice;
     public String mContent;
-    public ImageView mIvOldtimey;
+    public ImageView mIvOpenCourse;
+    public LinearLayout mLlOldtimey;
+    public MultiListView mLvOldtimey;
 
     /** Umeng **/
     private long mUmengTimestamp;
@@ -67,7 +71,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
         mTvTime = (TextView) findViewById(R.id.opencourse_time);
         mTvLector = (TextView) findViewById(R.id.opencourse_lector);
         mTvNotice = (TextView) findViewById(R.id.opencourse_notice);
-        mIvOldtimey = (ImageView) findViewById(R.id.opencourse_oldtimey);
+        mIvOpenCourse = (ImageView) findViewById(R.id.opencourse_img);
+        mLlOldtimey = (LinearLayout) findViewById(R.id.opencourse_oldtimey_ll);
+        mLvOldtimey = (MultiListView) findViewById(R.id.opencourse_oldtimey_lv);
 
         // 获取数据
         mContent = getIntent().getStringExtra("content");
@@ -124,7 +130,7 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
 
             case ActivitySkipConstants.OPENCOURSE_PRE:
                 // 公开课回放
-                mIvOldtimey.performClick();
+//                mIvOldtimey.performClick();
                 break;
         }
     }

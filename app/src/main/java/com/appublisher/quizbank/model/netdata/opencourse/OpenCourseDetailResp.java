@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.model.netdata.opencourse;
 
+import java.util.ArrayList;
+
 /**
  * 获取公开课详情回调 数据模型
  */
@@ -9,6 +11,11 @@ public class OpenCourseDetailResp {
     OpenCourseM course;
     boolean booked;
     String staticCourseUrl;
+    ArrayList<StaticCourseM> staticCourses;
+
+    public ArrayList<StaticCourseM> getStaticCourses() {
+        return staticCourses;
+    }
 
     public int getResponse_code() {
         return response_code;

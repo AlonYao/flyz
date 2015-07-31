@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/item_oldtimey_img"
+        android:layout_width="190dp"
+        android:layout_height="115dp"
+        android:src="@drawable/opencourse_unstart"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/item_oldtimey_img"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
+        <TextView
+            android:id="@+id/item_oldtimey_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/common_none"
+            android:textColor="@color/setting_text"/>
+        <TextView
+            android:id="@+id/item_oldtimey_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/common_none"
+            android:textColor="@color/setting_text"/>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

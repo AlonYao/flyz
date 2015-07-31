@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -13,6 +14,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
+import com.appublisher.quizbank.adapter.OldtimeyListAdapter;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
@@ -24,6 +26,7 @@ import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseDetailResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseM;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseStatusResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseUrlResp;
+import com.appublisher.quizbank.model.netdata.opencourse.StaticCourseM;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -31,6 +34,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -57,6 +61,9 @@ public class OpenCourseModel {
         OpenCourseM openCourse = openCourseDetailResp.getCourse();
 
         if (openCourse == null) return;
+
+        // 公开课图片
+        activity.mRequest.loadImage(openCourse.getCover_pic(), activity.mIvOpenCourse);
 
         // 公开课名字
         activity.mTvName.setText("公开课：" + openCourse.getName());
@@ -115,26 +122,46 @@ public class OpenCourseModel {
         }
 
         // 往期内容
-        activity.mIvOldtimey.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mobileNum = LoginModel.getUserMobile();
-                if (mobileNum == null || mobileNum.length() == 0) {
-                    // 没有手机号
-                    Intent intent = new Intent(activity, BindingMobileActivity.class);
-                    intent.putExtra("from", "opencourse_pre");
-                    activity.startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
+        ArrayList<StaticCourseM> staticCourses = openCourseDetailResp.getStaticCourses();
 
-                } else {
-                    // 跳转
-                    String url = openCourseDetailResp.getStaticCourseUrl();
-                    OpenCourseModel.skipToPreOpenCourse(activity, url);
+        if (staticCourses != null && staticCourses.size() != 0) {
+            activity.mLlOldtimey.setVisibility(View.VISIBLE);
+            OldtimeyListAdapter oldtimeyListAdapter =
+                    new OldtimeyListAdapter(activity, openCourseDetailResp.getStaticCourses());
+            activity.mLvOldtimey.setAdapter(oldtimeyListAdapter);
+
+            activity.mLvOldtimey.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 }
+            });
 
-                // Umeng
-                activity.mUmengVideoPlay = "1";
-            }
-        });
+        } else {
+            activity.mLlOldtimey.setVisibility(View.GONE);
+        }
+
+//        activity.mIvOldtimey.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String mobileNum = LoginModel.getUserMobile();
+//                if (mobileNum == null || mobileNum.length() == 0) {
+//                    // 没有手机号
+//                    Intent intent = new Intent(activity, BindingMobileActivity.class);
+//                    intent.putExtra("from", "opencourse_pre");
+//                    activity.startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
+//
+//                } else {
+//                    // 跳转
+//                    String url = openCourseDetailResp.getStaticCourseUrl();
+//                    OpenCourseModel.skipToPreOpenCourse(activity, url);
+//                }
+//
+//                // Umeng
+//                activity.mUmengVideoPlay = "1";
+//            }
+//        });
+
     }
 
     /**
