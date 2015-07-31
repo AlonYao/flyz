@@ -81,7 +81,7 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
 
         } else if ("提交".equals(item.getTitle())) {
             if (mEditText.getText().toString().length() < 3) {
-                ToastManager.showToast(this, "字数不够……");
+                ToastManager.showToast(this, "字数不够……最少输入三个字");
             } else {
                 new Request(this).reportErrorQuestion(ParamBuilder.reportErrorQuestion(
                         mQuestionId, mType, mEditText.getText().toString()));

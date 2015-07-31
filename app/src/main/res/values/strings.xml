@@ -150,7 +150,7 @@
     <string name="practicedesc_hide">以后不再显示</string>
 
     <!-- 其他解析 -->
-    <string name="myanalysis_hint">最少输入十个字……</string>
+    <string name="myanalysis_hint">最少输入三个字……</string>
 
     <!-- 试卷类型 -->
     <string name="paper_type_auto">快速智能练习</string>
