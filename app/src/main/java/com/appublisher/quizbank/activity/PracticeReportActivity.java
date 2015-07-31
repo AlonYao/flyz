@@ -63,9 +63,6 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public TextView mTvError;
     public TextView mTvPaperType;
     public TextView mTvMiniMokaoRank;
-    public TextView mTvBorderLineTotal;
-    public TextView mTvBorderLineXingce;
-    public TextView mTvBorderLineShenlun;
     public TextView mTvEvaluateNum;
     public ImageView mIvNoteNoChange;
     public RelativeLayout mRlMiniMokao;
@@ -115,9 +112,6 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mTvMiniMokaoRank = (TextView) findViewById(R.id.practice_report_minimokao_rank);
         mLlRatio = (LinearLayout) findViewById(R.id.practice_report_ratio);
         mLlBorderLine = (LinearLayout) findViewById(R.id.practice_report_borderline);
-        mTvBorderLineTotal = (TextView) findViewById(R.id.practice_report_totalpoints_num);
-        mTvBorderLineXingce = (TextView) findViewById(R.id.practice_report_xingce_num);
-        mTvBorderLineShenlun = (TextView) findViewById(R.id.practice_report_shenlun_num);
         mLlEvaluate = (LinearLayout) findViewById(R.id.practice_report_evaluate);
         mTvEvaluateNum = (TextView) findViewById(R.id.practice_report_evaluate_num);
         mSvMain = (ScrollView) findViewById(R.id.practice_report_sv);

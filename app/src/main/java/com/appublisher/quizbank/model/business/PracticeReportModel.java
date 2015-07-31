@@ -151,13 +151,26 @@ public class PracticeReportModel {
             ScoreM score = scores.get(i);
             if (score == null) continue;
 
-            if ("行测".equals(score.getName())) {
-                mActivity.mTvBorderLineXingce.setText(String.valueOf(score.getScore()));
-            } else if ("申论".equals(score.getName())) {
-                mActivity.mTvBorderLineShenlun.setText(String.valueOf(score.getScore()));
-            } else if ("总分".equals(score.getName())) {
-                mActivity.mTvBorderLineTotal.setText(String.valueOf(score.getScore()));
+            View child = LayoutInflater.from(mActivity).inflate(
+                    R.layout.practice_report_borderline_item,
+                    mActivity.mLlBorderLine, false);
+
+            TextView tvName =
+                    (TextView) child.findViewById(R.id.item_borderline_name);
+            TextView tvNum =
+                    (TextView) child.findViewById(R.id.item_borderline_num);
+            View line = child.findViewById(R.id.item_borderline_line);
+
+            tvName.setText(score.getName());
+            tvNum.setText(String.valueOf(score.getScore()));
+
+            if (i == size - 1) {
+                line.setVisibility(View.GONE);
+            } else {
+                line.setVisibility(View.VISIBLE);
             }
+
+            mActivity.mLlBorderLine.addView(child);
         }
     }
 
