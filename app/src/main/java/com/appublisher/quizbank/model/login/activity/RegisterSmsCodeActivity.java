@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -109,7 +112,14 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
         CommonModel.setEditTextHintHideOnFocus(mEtSmsCode,
                 getString(R.string.login_register_smscode_edittext));
 
-        tvPhone.setText("请输入手机号" + mUserPhone + "收到的短信校验码");
+        if (mUserPhone == null) mUserPhone = "";
+        Spannable word = new SpannableString("请输入手机号" + mUserPhone + "收到的短信校验码");
+        word.setSpan(
+                new ForegroundColorSpan(getResources().getColor(R.color.login_red)),
+                6,
+                word.toString().indexOf("收"),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        tvPhone.setText(word);
 
         // 重新获取验证码
         mTvReGet.setOnClickListener(this);
