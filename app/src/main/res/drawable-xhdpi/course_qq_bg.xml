@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/course_filter_selected" />
+
+    <corners
+        android:radius="8px"
+        android:bottomLeftRadius="8px"
+        android:bottomRightRadius="8px"
+        android:topLeftRadius="8px"
+        android:topRightRadius="8px" />
+</shape>

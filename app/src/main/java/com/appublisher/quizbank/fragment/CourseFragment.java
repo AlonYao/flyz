@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,13 +15,10 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.business.CourseModel;
-import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
 
@@ -50,6 +48,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
 
     /** 课程中心列表 **/
     public ListView mLvCourse;
+    public LinearLayout mCourseNull;
 
     @Override
     public void onAttach(Activity activity) {
@@ -77,6 +76,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mRlPurchase = (RelativeLayout) mMainView.findViewById(R.id.course_purchase_rl);
         mTvFilterPurchase = (TextView) mMainView.findViewById(R.id.course_purchase_tv);
         mLvCourse = (ListView) mMainView.findViewById(R.id.course_listview);
+        mCourseNull = (LinearLayout) mMainView.findViewById(R.id.course_null);
 
         // 成员变量初始化
         mCurTagId = 0;

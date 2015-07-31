@@ -101,6 +101,8 @@
     <string name="course_filter_tag">科目</string>
     <string name="course_filter_purchase">已/未购</string>
     <string name="course_filter_area">地区</string>
+    <string name="course_null">没有合适的课程？\n联系在线客服，获取更多信息</string>
+    <string name="course_qq">咨询客服</string>
 
     <!-- 知识点层级 -->
     <string name="hierarchy_name">知识点层级</string>

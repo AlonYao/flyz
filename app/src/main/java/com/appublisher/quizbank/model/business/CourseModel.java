@@ -106,7 +106,7 @@ public class CourseModel {
      */
     public static void dealCourseListResp(JSONObject response, CourseFragment courseFragment) {
         if (response == null) {
-            ProgressBarManager.hideProgressBar();
+            showCourseNone(courseFragment);
             return;
         }
 
@@ -115,8 +115,9 @@ public class CourseModel {
         CourseListResp courseListResp = courseFragment.mGson.fromJson(
                 response.toString(), CourseListResp.class);
 
-        if (courseListResp == null || courseListResp.getResponse_code() != 1) {
-            ProgressBarManager.hideProgressBar();
+        if (courseListResp == null || courseListResp.getResponse_code() != 1
+                || courseListResp.getCourses() == null || courseListResp.getCourses().size() == 0) {
+            showCourseNone(courseFragment);
             return;
         }
 
@@ -133,6 +134,16 @@ public class CourseModel {
         mCourseFragment.mLvCourse.setOnItemClickListener(onItemClickListener);
 
         ProgressBarManager.hideProgressBar();
+    }
+
+    /**
+     * 显示没有课程
+     * @param courseFragment 课程中心页面
+     */
+    private static void showCourseNone(CourseFragment courseFragment) {
+        ProgressBarManager.hideProgressBar();
+        courseFragment.mCourseNull.setVisibility(View.VISIBLE);
+        courseFragment.mLvCourse.setVisibility(View.GONE);
     }
 
     /**

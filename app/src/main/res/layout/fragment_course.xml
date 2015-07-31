@@ -82,17 +82,55 @@
         android:background="@color/setting_line"/>
 
     <!-- 课程列表 -->
-    <ListView
-        android:id="@+id/course_listview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/course_belowfilter_line"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:clipToPadding="false"
-        tools:ignore="RtlHardcoded" />
+        android:layout_below="@id/course_belowfilter_line">
+        <ListView
+            android:id="@+id/course_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:clipToPadding="false"
+            tools:ignore="RtlHardcoded" />
+        <!-- 课程中心列表没有内容时显示的内容 -->
+        <LinearLayout
+            android:id="@+id/course_null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:layout_marginBottom="38dp"
+                android:src="@drawable/course_null"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:textColor="@color/setting_text"
+                android:text="@string/course_null"/>
+            <TextView
+                android:id="@+id/course_qq"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="18dp"
+                android:gravity="center"
+                android:background="@drawable/course_qq_bg"
+                android:text="@string/course_qq"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+    </RelativeLayout>
+
 
     <!-- Loading页面 -->
     <include layout="@layout/progressbar"/>
