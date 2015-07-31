@@ -76,17 +76,7 @@ public class MockListAdapter extends BaseAdapter{
 
         if (mockPaper == null) return;
 
-        String status = mockPaper.getStatus();
-
         viewHolder.tvName.setText(mockPaper.getName());
-
-        if ("done".equals(status)) {
-            viewHolder.ivStatus.setImageResource(R.drawable.historymokao_done);
-        } else if ("undone".equals(status)) {
-            viewHolder.ivStatus.setImageResource(R.drawable.historymokao_undone);
-        } else {
-            viewHolder.ivStatus.setImageResource(R.color.transparency);
-        }
     }
 
     private class ViewHolder {

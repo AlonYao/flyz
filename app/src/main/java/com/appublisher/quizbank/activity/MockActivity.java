@@ -59,15 +59,15 @@ public class MockActivity extends ActionBarActivity implements
         // View 初始化
         mLvMock = (ListView) findViewById(R.id.mock_lv);
         mIvNull = (ImageView) findViewById(R.id.quizbank_null);
+
+        // 获取数据
+        ProgressDialogManager.showProgressDialog(this, true);
+        mRequest.getMockExerciseList();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // 获取数据
-        ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getMockExerciseList();
-
         // Umeng
         MobclickAgent.onPageStart("MockActivity");
         MobclickAgent.onResume(this);
@@ -113,6 +113,22 @@ public class MockActivity extends ActionBarActivity implements
         ProgressDialogManager.closeProgressDialog();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (mMockPapers == null || position >= mMockPapers.size()) return;
+
+        MockPaperM mockPaper = mMockPapers.get(position);
+
+        if (mockPaper == null) return;
+
+        Intent intent = new Intent(this, PracticeDescriptionActivity.class);
+        intent.putExtra("paper_type", mType);
+        intent.putExtra("paper_name", mockPaper.getName());
+        intent.putExtra("redo", false);
+        intent.putExtra("paper_id", mockPaper.getId());
+        startActivity(intent);
+    }
+
     /**
      * 处理模考&估分列表数据回调
      * @param response 回调数据
@@ -147,44 +163,4 @@ public class MockActivity extends ActionBarActivity implements
         mLvMock.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (mMockPapers == null || position >= mMockPapers.size()) return;
-
-        MockPaperM mockPaper = mMockPapers.get(position);
-
-        if (mockPaper == null) return;
-
-        String status = mockPaper.getStatus();
-
-        if ("done".equals(status)) {
-            // 已完成，跳转至练习报告页面
-            Intent intent = new Intent(this, PracticeReportActivity.class);
-            intent.putExtra("exercise_id", mockPaper.getExercise_id());
-            intent.putExtra("paper_type", mType);
-            intent.putExtra("from", "mock_list");
-            intent.putExtra("paper_name", mockPaper.getName());
-            startActivity(intent);
-
-        } else if ("undone".equals(status)) {
-            // 只做了一部分
-            Intent intent = new Intent(this, MeasureActivity.class);
-            intent.putExtra("paper_type", mType);
-            intent.putExtra("paper_name", mockPaper.getName());
-            intent.putExtra("umeng_entry", "Home");
-            intent.putExtra("redo", true);
-            intent.putExtra("exercise_id", mockPaper.getExercise_id());
-            startActivity(intent);
-
-        } else {
-            // 未做
-            Intent intent = new Intent(this, PracticeDescriptionActivity.class);
-            intent.putExtra("paper_type", mType);
-            intent.putExtra("paper_name", mockPaper.getName());
-            intent.putExtra("umeng_entry", "Home");
-            intent.putExtra("redo", false);
-            intent.putExtra("paper_id", mockPaper.getId());
-            startActivity(intent);
-        }
-    }
 }

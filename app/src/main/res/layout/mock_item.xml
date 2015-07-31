@@ -13,6 +13,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="18dp"
         android:src="@drawable/historymokao_done"
+        android:visibility="invisible"
         tools:ignore="ContentDescription,RtlHardcoded" />
 
     <TextView
