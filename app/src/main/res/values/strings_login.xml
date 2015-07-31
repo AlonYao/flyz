@@ -37,6 +37,8 @@
     </string>
     <string name="login_new_pwd">新密码</string>
     <string name="login_confirm_new_pwd">确认新密码</string>
+    <string name="login_binding_mobile">请填写手机号，一定保护你的隐私</string>
+    <string name="login_binding_mobile_opencourse">为了保证免费公开课的流畅播放，请先验证手机号</string>
 
     <!-- alert -->
     <string name="login_alert_usernonentity_msg">账号未注册</string>
@@ -79,5 +81,6 @@
     <string name="title_activity_email_reset_pwd">找回密码</string>
     <string name="title_activity_cannot_get_email">收不到邮件</string>
     <string name="title_activity_mobile_reset_pwd">找回密码</string>
+    <string name="title_activity_binding_sms_code">短信验证码</string>
 
 </resources>

@@ -12,8 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <!--suppress DeprecatedClassUsageInspection -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name=".QuizBankApp"
@@ -48,7 +46,7 @@
 
         <!-- 友盟分享 -->
         <!-- ###################注册SDK使用的Activity###################### -->
-        <!--分享编辑页-->
+        <!-- 分享编辑页 -->
         <activity
             android:name="com.umeng.socialize.view.ShareActivity"
             android:configChanges="orientation|keyboard"
@@ -68,13 +66,14 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID-->
+                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID -->
                 <data android:scheme="tencent1104655578" />
             </intent-filter>
         </activity>
-        <activity android:name="com.tencent.connect.common.AssistActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait">
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
 
         <meta-data
@@ -288,6 +287,10 @@
         <activity
             android:name=".activity.MockActivity"
             android:label="@string/title_activity_mock" >
+        </activity>
+        <activity
+            android:name=".model.login.activity.BindingSmsCodeActivity"
+            android:label="@string/title_activity_binding_sms_code" >
         </activity>
     </application>
 

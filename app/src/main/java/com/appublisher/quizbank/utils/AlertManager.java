@@ -23,7 +23,6 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
-import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -511,9 +510,9 @@ public class AlertManager {
 
     /**
      * 公开课模块提示用户切换账号Alert
-     * @param activity BindingMobileActivity
+     * @param activity Activity
      */
-    public static void openCourseUserChangeAlert(final BindingMobileActivity activity) {
+    public static void openCourseUserChangeAlert(final Activity activity) {
         new AlertDialog.Builder(activity)
                 .setMessage(R.string.alert_userchange_content)
                 .setTitle(R.string.alert_logout_title)
