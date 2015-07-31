@@ -135,7 +135,8 @@ public class OpenCourseModel {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (position >= staticCourses.size()) return;
 
-                    activity.mCurOldtimey = view;
+                    activity.mCurOldtimeyPosition = position;
+
                     String mobileNum = LoginModel.getUserMobile();
                     if (mobileNum == null || mobileNum.length() == 0) {
                         // 没有手机号
