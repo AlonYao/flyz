@@ -3,6 +3,7 @@ package com.appublisher.quizbank.model.business;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -438,9 +439,17 @@ public class CourseModel {
 
         } else if ("vod".equals(type)) {
             // 录播课
-            courseUrl = "http://daily.edu.appublisher.com/buy/detail.php?courseid="
-                    + String.valueOf(courseId)
-                    + "&uid=" + LoginModel.getUserId();
+            if (course.is_purchased()) {
+                // 已购
+                courseUrl = "http://daily.edu.appublisher.com/buy/detail.php?courseid="
+                        + String.valueOf(courseId)
+                        + "&uid=" + LoginModel.getUserId();
+            } else {
+                // 未购
+                courseUrl = "http://daily.edu.appublisher.com/buy/info.php?courseid="
+                        + String.valueOf(courseId)
+                        + "&uid=" + LoginModel.getUserId();
+            }
         }
 
         Intent intent = new Intent(mCourseFragment.mActivity, WebViewActivity.class);
@@ -476,6 +485,12 @@ public class CourseModel {
      * @param name 名称
      */
     private static void changeFilterText(TextView textView, String name) {
+        if (name != null && name.length() >= 5) {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        } else {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        }
+
         textView.setText(name);
         textView.setTextColor(
                 mCourseFragment.mActivity.getResources().getColor(R.color.course_filter_selected));

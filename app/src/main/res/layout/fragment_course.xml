@@ -124,7 +124,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="18dp"
                 android:gravity="center"
-                android:background="@drawable/course_qq_bg"
+                android:background="@color/course_filter_selected"
                 android:text="@string/course_qq"
                 android:textSize="18sp"
                 android:textColor="@android:color/white"/>
