@@ -47,5 +47,6 @@
     <color name="course_soon">#4E90F5</color>
     <color name="course_end">#DC514A</color>
     <color name="course_watch">#52B05C</color>
+    <color name="course_filter_selected">#3AAC7F</color>
 
 </resources>

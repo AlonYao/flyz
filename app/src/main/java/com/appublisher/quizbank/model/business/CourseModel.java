@@ -466,7 +466,8 @@ public class CourseModel {
      */
     private static void changeFilterText(TextView textView, String name) {
         textView.setText(name);
-        textView.setTextColor(mCourseFragment.mActivity.getResources().getColor(R.color.blue));
+        textView.setTextColor(
+                mCourseFragment.mActivity.getResources().getColor(R.color.course_filter_selected));
     }
 
     /**
