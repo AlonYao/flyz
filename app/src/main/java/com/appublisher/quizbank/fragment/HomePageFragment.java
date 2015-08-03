@@ -381,14 +381,15 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
                 } else {
                     intent = new Intent(mActivity, PracticeDescriptionActivity.class);
-                    intent.putExtra("paper_id", mTodayExam.getId());
                     intent.putExtra("paper_type", "mokao");
                     intent.putExtra("paper_name", "今日模考");
                     intent.putExtra("umeng_entry", "Home");
 
                     if ("fresh".equals(status)) {
+                        intent.putExtra("paper_id", mTodayExam.getId());
                         intent.putExtra("redo", false);
                     } else {
+                        intent.putExtra("exercise_id", mTodayExam.getId());
                         intent.putExtra("redo", true);
                     }
 

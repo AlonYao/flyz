@@ -119,10 +119,11 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if ("分享".equals(item.getTitle())) {
-            // 构造友盟分享实体
+            /** 构造友盟分享实体 **/
             UmengShareEntity umengShareEntity = new UmengShareEntity();
             umengShareEntity.setActivity(this);
             umengShareEntity.setBitmap(Utils.getBitmapByView(mSvMain));
+            umengShareEntity.setFrom("evaluation");
 
             // 友盟分享文字处理
             UMShareContentEntity umShareContentEntity = new UMShareContentEntity();

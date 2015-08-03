@@ -28,6 +28,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
     private TextView mTvDesc;
     private TextView mTvName;
     private int mPaperId;
+    private int mExerciseId;
     private boolean mRedo;
     private int mHierarchyId;
     private int mHierarchyLevel;
@@ -58,6 +59,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mNoteType = getIntent().getStringExtra("note_type");
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+        mExerciseId = getIntent().getIntExtra("exercise_id", 0);
 
         if (mPaperType == null || mPaperType.length() == 0) finish();
 
@@ -142,6 +144,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         intent.putExtra("hierarchy_level", mHierarchyLevel);
         intent.putExtra("note_type", mNoteType);
         intent.putExtra("umeng_entry", mUmengEntry);
+        intent.putExtra("exercise_id", mExerciseId);
         startActivity(intent);
         finish();
     }

@@ -231,10 +231,11 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
             UmengManager.sendToUmeng(this, "Back");
             finish();
         } else if ("分享".equals(item.getTitle())) {
-            // 构造友盟分享实体
+            /** 构造友盟分享实体 **/
             UmengShareEntity umengShareEntity = new UmengShareEntity();
             umengShareEntity.setActivity(this);
             umengShareEntity.setBitmap(Utils.getBitmapByView(mSvMain));
+            umengShareEntity.setFrom("practice_report");
 
             // 友盟分享文字处理
             UMShareContentEntity contentEntity = new UMShareContentEntity();

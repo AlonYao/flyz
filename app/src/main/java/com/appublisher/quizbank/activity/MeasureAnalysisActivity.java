@@ -320,10 +320,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         } else if (item.getTitle().equals("答题卡")) {
             skipToAnswerSheet();
         } else if ("分享".equals(item.getTitle())) {
-            // 构造友盟分享实体
+            /** 构造友盟分享实体 **/
             UmengShareEntity umengShareEntity = new UmengShareEntity();
             umengShareEntity.setActivity(this);
             umengShareEntity.setBitmap(Utils.getBitmapByView(mViewPager));
+            umengShareEntity.setFrom("measure_analysis");
 
             // 友盟分享文字处理
             UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
@@ -390,6 +391,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         mPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setFocusable(false);
+        //noinspection deprecation
         mPopupWindow.setBackgroundDrawable(
                 getResources().getDrawable(R.color.transparency));
 

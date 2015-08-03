@@ -11,6 +11,15 @@ public class UmengShareEntity {
     Bitmap bitmap;
     String content;
     String url;
+    String from;
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
 
     public String getContent() {
         return content;

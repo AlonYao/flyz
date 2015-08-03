@@ -41,6 +41,7 @@ public class UmengManager {
 
     public static final UMSocialService mController =
             UMServiceFactory.getUMSocialService("com.umeng.share");
+    private static boolean isSendToUmeng;
 
     /**
      * 发送计数事件
@@ -133,7 +134,9 @@ public class UmengManager {
      * 打开分享列表
      * @param umengShareEntity 友盟分享实体类
      */
-    public static void openShare(UmengShareEntity umengShareEntity) {
+    public static void openShare(final UmengShareEntity umengShareEntity) {
+        if (umengShareEntity == null) return;
+
         mController.getConfig().removePlatform(SHARE_MEDIA.TENCENT);
 
         final Activity activity = umengShareEntity.getActivity();
@@ -210,10 +213,11 @@ public class UmengManager {
         sina.setShareContent("#天天模考#" + content + url + "(分享自@腰果公务员)#公考要过，就用腰果#");
         sina.setShareImage(umImage);
         mController.setShareMedia(sina);
-        
+
         mController.openShare(activity, new SocializeListeners.SnsPostListener() {
             @Override
             public void onStart() {
+                isSendToUmeng = false;
                 ToastManager.showToast(activity, "分享中……");
             }
 
@@ -221,7 +225,32 @@ public class UmengManager {
             public void onComplete(SHARE_MEDIA share_media,
                                    int i,
                                    SocializeEntity socializeEntity) {
-                // Empty
+                if (isSendToUmeng) return;
+
+                /** Umeng统计 **/
+
+                // 来源
+                String type = null;
+                if ("measure_analysis".equals(umengShareEntity.getFrom())) {
+                    type = "0";
+                } else if ("practice_report".equals(umengShareEntity.getFrom())) {
+                    type = "1";
+                } else if ("evaluation".equals(umengShareEntity.getFrom())) {
+                    type = "2";
+                }
+
+                // 是否成功
+                String action = "0";
+                if (i == 200) action = "1";
+
+                // 发送到Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Type", type);
+                map.put("Action", action);
+                map.put("SNS", share_media.name());
+                MobclickAgent.onEvent(umengShareEntity.getActivity(), "Share", map);
+
+                isSendToUmeng = true;
             }
         });
     }
