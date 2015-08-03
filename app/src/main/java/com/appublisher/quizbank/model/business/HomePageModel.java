@@ -37,8 +37,11 @@ import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * HomePageFragment Model
@@ -215,6 +218,21 @@ public class HomePageModel {
                                     + "&user_id=" + LoginModel.getUserId()
                                     + "&user_token=" + LoginModel.getUserToken());
                             mActivity.startActivity(intent);
+
+                            // Umeng统计
+                            try {
+                                String courseId =
+                                        targetContent.substring(
+                                                targetContent.indexOf("course_id=") + 10,
+                                                targetContent.indexOf("&user_id="));
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("CourseID", courseId);
+                                map.put("Entry", "KX");
+                                map.put("Status", "");
+                                MobclickAgent.onEvent(mActivity, "EnterCourse", map);
+                            } catch (Exception e) {
+                                // Empty
+                            }
                         }
 
                     } else if ("apk".equals(targetType)) {
