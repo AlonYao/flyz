@@ -41,7 +41,6 @@ public class UmengManager {
 
     public static final UMSocialService mController =
             UMServiceFactory.getUMSocialService("com.umeng.share");
-    private static boolean isSendToUmeng;
 
     /**
      * 发送计数事件
@@ -214,10 +213,11 @@ public class UmengManager {
         sina.setShareImage(umImage);
         mController.setShareMedia(sina);
 
+        mController.getConfig().cleanListeners();
+
         mController.openShare(activity, new SocializeListeners.SnsPostListener() {
             @Override
             public void onStart() {
-                isSendToUmeng = false;
                 ToastManager.showToast(activity, "分享中……");
             }
 
@@ -225,8 +225,6 @@ public class UmengManager {
             public void onComplete(SHARE_MEDIA share_media,
                                    int i,
                                    SocializeEntity socializeEntity) {
-                if (isSendToUmeng) return;
-
                 /** Umeng统计 **/
 
                 // 来源
@@ -249,8 +247,6 @@ public class UmengManager {
                 map.put("Action", action);
                 map.put("SNS", share_media.name());
                 MobclickAgent.onEvent(umengShareEntity.getActivity(), "Share", map);
-
-                isSendToUmeng = true;
             }
         });
     }
