@@ -473,7 +473,8 @@ public class LoginModel {
                 }
 
                 // Umeng
-                UmengManager.sendCountEvent(activity, "CodeVerified", "", "");
+                UmengManager.sendCountEvent(
+                        activity, "CodeVerified", "CodeVerified", "CodeVerified");
 
             } else {
                 // 手机号存在，提示用户切换账号
