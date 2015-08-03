@@ -27,9 +27,12 @@ import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
 import org.json.JSONArray;
+
+import java.util.HashMap;
 
 /**
  * Alert管理
@@ -190,7 +193,7 @@ public class AlertManager {
      * 显示评分Alert
      * @param activity Activity
      */
-    public static void showGradeAlert(final Activity activity) {
+    public static void showGradeAlert(final Activity activity, final String umengEntry) {
         final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setCancelable(false);
         alertDialog.show();
@@ -215,8 +218,11 @@ public class AlertManager {
 
                 alertDialog.dismiss();
 
-                // Umeng
-                UmengManager.sendCountEvent(activity, "Rating", "Done", "No");
+                // Umeng统计
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Type", umengEntry);
+                map.put("Action", "0");
+                MobclickAgent.onEvent(activity, "Rating", map);
             }
         });
 
@@ -230,8 +236,11 @@ public class AlertManager {
 
                 alertDialog.dismiss();
 
-                // Umeng
-                UmengManager.sendCountEvent(activity, "Rating", "Done", "Yes");
+                // Umeng统计
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Type", umengEntry);
+                map.put("Action", "2");
+                MobclickAgent.onEvent(activity, "Rating", map);
             }
         });
 
@@ -248,8 +257,11 @@ public class AlertManager {
 
                 alertDialog.dismiss();
 
-                // Umeng
-                UmengManager.sendCountEvent(activity, "Rating", "Done", "No");
+                // Umeng统计
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Type", umengEntry);
+                map.put("Action", "1");
+                MobclickAgent.onEvent(activity, "Rating", map);
             }
         });
     }

@@ -176,7 +176,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
                 mFrom = "menu";
             } else {
-                AlertManager.showGradeAlert(this);
+                AlertManager.showGradeAlert(this, "Click");
             }
         }
 
@@ -418,7 +418,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         if ("get_rate_course".equals(apiName)) {
             Globals.rateCourseResp =
                     Globals.gson.fromJson(response.toString(), RateCourseResp.class);
-            if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this);
+            if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this, "Click");
         }
 
         ProgressDialogManager.closeProgressDialog();
