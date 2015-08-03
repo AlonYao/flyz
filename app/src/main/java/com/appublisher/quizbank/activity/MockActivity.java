@@ -126,6 +126,7 @@ public class MockActivity extends ActionBarActivity implements
         intent.putExtra("paper_name", mockPaper.getName());
         intent.putExtra("redo", false);
         intent.putExtra("paper_id", mockPaper.getId());
+        intent.putExtra("umeng_entry", "Home");
         startActivity(intent);
     }
 
