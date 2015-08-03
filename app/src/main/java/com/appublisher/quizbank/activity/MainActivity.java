@@ -177,8 +177,6 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
             } else {
                 AlertManager.showGradeAlert(this);
             }
-
-//            UmengManager.openShare(this, "content");
         }
 
         return super.onOptionsItemSelected(item);
