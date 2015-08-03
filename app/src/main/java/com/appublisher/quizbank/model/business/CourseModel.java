@@ -28,10 +28,13 @@ import com.appublisher.quizbank.model.netdata.course.FilterAreaResp;
 import com.appublisher.quizbank.model.netdata.course.FilterTagM;
 import com.appublisher.quizbank.model.netdata.course.FilterTagResp;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.appublisher.quizbank.utils.UmengManager;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 课程中心
@@ -162,6 +165,7 @@ public class CourseModel {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 true);
         mPwTag.setOutsideTouchable(true);
+        //noinspection deprecation
         mPwTag.setBackgroundDrawable(
                 mCourseFragment.mActivity.getResources().getDrawable(R.color.transparency));
 
@@ -197,6 +201,7 @@ public class CourseModel {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 true);
         mPwPurchase.setOutsideTouchable(true);
+        //noinspection deprecation
         mPwPurchase.setBackgroundDrawable(
                 mCourseFragment.mActivity.getResources().getDrawable(R.color.transparency));
 
@@ -235,6 +240,7 @@ public class CourseModel {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 true);
         mPwArea.setOutsideTouchable(true);
+        //noinspection deprecation
         mPwArea.setBackgroundDrawable(
                 mCourseFragment.mActivity.getResources().getDrawable(R.color.transparency));
 
@@ -369,6 +375,10 @@ public class CourseModel {
                         // 记录当前的课程标签
                         recordCurTag(position);
 
+                        // Umeng统计
+                        UmengManager.sendCountEvent(
+                                mCourseFragment.mActivity, "Filter", "Type", "Course");
+
                         break;
 
                     case R.id.course_filter_purchase_ehgv:
@@ -387,6 +397,10 @@ public class CourseModel {
                         // 记录当前的课程购买状态
                         recordCurPurchase(position);
 
+                        // Umeng统计
+                        UmengManager.sendCountEvent(
+                                mCourseFragment.mActivity, "Filter", "Type", "Buy");
+
                         break;
 
                     case R.id.course_filter_area_ehgv:
@@ -404,6 +418,10 @@ public class CourseModel {
 
                         // 记录当前的课程标签
                         recordCurArea(position);
+
+                        // Umeng统计
+                        UmengManager.sendCountEvent(
+                                mCourseFragment.mActivity, "Filter", "Type", "Province");
 
                         break;
 
@@ -457,6 +475,13 @@ public class CourseModel {
         intent.putExtra("bar_title", title == null ? "" : title);
         intent.putExtra("from", "course");
         mCourseFragment.startActivityForResult(intent, ActivitySkipConstants.COURSE);
+
+        // Umeng统计
+        HashMap<String, String> map = new HashMap<>();
+        map.put("CourseID", String.valueOf(courseId));
+        map.put("Entry", "Cell");
+        map.put("Status", course.is_purchased() ? "1" : "0");
+        MobclickAgent.onEvent(mCourseFragment.mActivity, "EnterCourse", map);
     }
 
     /**

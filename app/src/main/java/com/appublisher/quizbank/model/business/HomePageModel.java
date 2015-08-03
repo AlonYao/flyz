@@ -209,6 +209,7 @@ public class HomePageModel {
                                 ((MainActivity) mActivity).changeFragment(2);
 
                         } else if (targetContent.contains("zhiboke@")) {
+                            // 跳转至课程详情页面
                             Intent intent = new Intent(mActivity, WebViewActivity.class);
                             intent.putExtra("url", targetContent.replace("zhiboke@", "")
                                     + "&user_id=" + LoginModel.getUserId()

@@ -43,6 +43,7 @@ import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -224,6 +225,10 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
             if (position == 5) {
                 mIvDrawerRedPoint.setVisibility(View.GONE);
             }
+
+            // Umeng统计
+            if (position == 2)
+                UmengManager.sendCountEvent(MainActivity.this, "CourseCenter", "Entry", "Drawer");
         }
     };
 

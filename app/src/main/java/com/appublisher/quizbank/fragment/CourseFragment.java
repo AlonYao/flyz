@@ -35,7 +35,6 @@ public class CourseFragment extends Fragment implements RequestCallback{
     public Activity mActivity;
     public Request mRequest;
     public Gson mGson;
-    private TextView mCourseQQ;
 
     /** Filter **/
     public RelativeLayout mRlTag;
@@ -79,7 +78,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mTvFilterPurchase = (TextView) mMainView.findViewById(R.id.course_purchase_tv);
         mLvCourse = (ListView) mMainView.findViewById(R.id.course_listview);
         mCourseNull = (LinearLayout) mMainView.findViewById(R.id.course_null);
-        mCourseQQ = (TextView) mMainView.findViewById(R.id.course_qq);
+        TextView courseQQ = (TextView) mMainView.findViewById(R.id.course_qq);
 
         // 成员变量初始化
         mCurTagId = 0;
@@ -95,7 +94,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mRequest.getCourseFilterTag();
 
         // 客服QQ
-        mCourseQQ.setOnClickListener(new View.OnClickListener() {
+        courseQQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 OpenCourseModel.setMarketQQ(mActivity);
