@@ -13,7 +13,7 @@
         tools:ignore="ContentDescription" />
 
     <LinearLayout
-        android:layout_width="276dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:background="@drawable/alert_grade_bg"
         android:orientation="vertical"
@@ -33,21 +33,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center_horizontal"
             android:textColor="@color/setting_text"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:text="@string/grade_success"/>
 
         <TextView
             android:id="@+id/grade_learn"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="46dp"
             android:gravity="center"
             android:text="@string/grade_learn"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@drawable/alert_grade_feedback"/>
     </LinearLayout>
 

@@ -200,6 +200,7 @@ public class AlertManager {
 
         Window window = alertDialog.getWindow();
         window.setContentView(R.layout.alert_item_grade);
+        window.setBackgroundDrawableResource(R.color.transparency);
 
         ImageView ivClose = (ImageView) window.findViewById(R.id.alert_grade_close);
         TextView tvGrade = (TextView) window.findViewById(R.id.alert_grade_grade);
@@ -292,6 +293,7 @@ public class AlertManager {
 
         Window window = alertDialog.getWindow();
         window.setContentView(R.layout.alert_item_grade_success);
+        window.setBackgroundDrawableResource(R.color.transparency);
 
         ImageView ivClose = (ImageView) window.findViewById(R.id.grade_close);
         TextView tvLearn = (TextView) window.findViewById(R.id.grade_learn);
@@ -329,6 +331,7 @@ public class AlertManager {
 
         Window window = alertDialog.getWindow();
         window.setContentView(R.layout.alert_item_grade_fail);
+        window.setBackgroundDrawableResource(R.color.transparency);
 
         ImageView ivClose = (ImageView) window.findViewById(R.id.alert_grade_close);
         TextView tvReGrade = (TextView) window.findViewById(R.id.grade_regrade);

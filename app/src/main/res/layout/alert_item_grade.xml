@@ -13,7 +13,7 @@
         tools:ignore="ContentDescription" />
 
     <LinearLayout
-        android:layout_width="280dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:background="@drawable/alert_grade_bg"
         android:orientation="vertical"
@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:paddingTop="18dp"
-            android:paddingBottom="18dp"
             android:paddingRight="18dp"
             android:paddingLeft="18dp"
             android:src="@drawable/alert_grade_close"
@@ -35,33 +34,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
             android:textColor="@color/setting_text"
-            android:textSize="20sp"
             android:textStyle="bold"
+            android:textSize="15sp"
             android:text="@string/alert_grade"/>
 
         <TextView
             android:id="@+id/alert_grade_grade"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:gravity="center"
             android:text="@string/alert_grade_grade"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@drawable/alert_grade_grade"/>
 
         <TextView
             android:id="@+id/alert_grade_feedback"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="46dp"
             android:gravity="center"
             android:text="@string/alert_grade_feedback"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@drawable/alert_grade_feedback"/>
     </LinearLayout>
 
