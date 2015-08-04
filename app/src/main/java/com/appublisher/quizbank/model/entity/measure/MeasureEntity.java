@@ -13,6 +13,15 @@ public class MeasureEntity implements Serializable{
     float defeat;
     int score;
     ArrayList<ScoreM> scores;
+    int exercise_id;
+
+    public int getExercise_id() {
+        return exercise_id;
+    }
+
+    public void setExercise_id(int exercise_id) {
+        this.exercise_id = exercise_id;
+    }
 
     public int getScore() {
         return score;

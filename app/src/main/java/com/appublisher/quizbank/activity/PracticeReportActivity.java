@@ -132,7 +132,12 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", System.currentTimeMillis());
         mMeasureEntity = (MeasureEntity) getIntent().getSerializableExtra("measure_entity");
         mPaperId = getIntent().getIntExtra("paper_id", 0);
+
+        // 获取exercise_id，现在有两个来源，后续版本会统一整理到MeasureEntity中
         mExerciseId = getIntent().getIntExtra("exercise_id", 0);
+        if (mExerciseId == 0 && mMeasureEntity != null) {
+            mExerciseId = mMeasureEntity.getExercise_id();
+        }
 
         // 显示考试类型
         PracticeReportModel.showPaperType(this);
