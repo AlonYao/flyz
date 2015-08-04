@@ -162,6 +162,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
                             PracticeReportActivity.class);
                     intent.putExtra("exercise_id", historyMokao.getExercise_id());
                     intent.putExtra("paper_type", "mokao");
+                    intent.putExtra("paper_name", historyMokao.getName());
                     intent.putExtra("from", "mokao_history_list");
                     intent.putExtra("paper_time", historyMokao.getDate());
                     startActivity(intent);

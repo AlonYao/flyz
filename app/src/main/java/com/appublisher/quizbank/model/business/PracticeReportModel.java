@@ -623,7 +623,7 @@ public class PracticeReportModel {
      * @param activity PracticeReportActivity
      */
     public static void showPaperDesc(PracticeReportActivity activity) {
-        if ("auto".equals(activity.mPaperType) || "mokao".equals(activity.mPaperType)) {
+        if ("auto".equals(activity.mPaperType)) {
             // 显示日期
             if (activity.mPaperTime != null && activity.mPaperTime.length() > 10) {
                 activity.mTvPaperName.setText(

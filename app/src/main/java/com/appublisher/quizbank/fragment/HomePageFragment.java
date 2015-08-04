@@ -376,6 +376,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                     intent = new Intent(mActivity, PracticeReportActivity.class);
                     intent.putExtra("exercise_id", mTodayExam.getId());
                     intent.putExtra("paper_type", "mokao");
+                    intent.putExtra("paper_name", mTodayExam.getName());
                     intent.putExtra("from", "mokao_homepage");
                     startActivity(intent);
 

@@ -10,6 +10,11 @@ public class PaperTodayM {
     String status;
     float defeat;
     String description;
+    String name;
+
+    public String getName() {
+        return name;
+    }
 
     public float getDefeat() {
         return defeat;
