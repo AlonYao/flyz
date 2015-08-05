@@ -272,7 +272,7 @@ public class BindingSmsCodeActivity extends ActionBarActivity
                             "0", "add", mUserPhone, ""));
                 }
             } else {
-                ToastManager.showToast(this, "验证码不正确");
+                ToastManager.showToast(this, getString(R.string.login_smscode_error));
             }
 
         } else if ("auth_handle".equals(apiName)) {
