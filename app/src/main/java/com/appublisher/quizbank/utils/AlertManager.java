@@ -529,9 +529,9 @@ public class AlertManager {
      */
     public static void openCourseUserChangeAlert(final Activity activity) {
         new AlertDialog.Builder(activity)
-                .setMessage(R.string.alert_userchange_content)
+                .setMessage(R.string.alert_userexist_content)
                 .setTitle(R.string.alert_logout_title)
-                .setPositiveButton(R.string.alert_logout_positive,
+                .setPositiveButton(R.string.alert_userexist_p,
                         new DialogInterface.OnClickListener() {
 
                             @Override
@@ -540,7 +540,7 @@ public class AlertManager {
                                 dialog.dismiss();
                             }
                         })
-                .setNegativeButton(R.string.alert_logout_negative,
+                .setNegativeButton(R.string.alert_userexist_n,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -554,6 +554,7 @@ public class AlertManager {
      * 报告错题Alert
      * @param activity MeasureAnalysisActivity
      * @param type 类型
+     * @deprecated
      */
     public static void reportErrorAlert(final MeasureAnalysisActivity activity,
                                         final String type) {
