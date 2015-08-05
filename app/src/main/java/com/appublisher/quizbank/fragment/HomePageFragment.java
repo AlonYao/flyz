@@ -285,7 +285,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         MockM mock = globalSettingsResp.getMock();
 
-        if (mock == null) {
+        if (mock == null || mock.getType() == null) {
             mLlMock.setVisibility(View.GONE);
             return;
         }
