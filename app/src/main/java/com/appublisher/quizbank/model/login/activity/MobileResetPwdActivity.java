@@ -2,11 +2,13 @@ package com.appublisher.quizbank.model.login.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -107,10 +109,21 @@ public class MobileResetPwdActivity extends ActionBarActivity implements
         mEtNewPwdConfirm = (EditText) findViewById(R.id.mobile_resetpwd_new_confirm);
         mTvReGet = (TextView) findViewById(R.id.mobile_resetpwd_reget);
 
-        tvPhone.setText("已向手机" + mUserPhone + "发送短信\n请输入您收到的验证码");
+        if (mUserPhone == null) mUserPhone = "";
+        Spannable word = new SpannableString("请输入手机号" + mUserPhone + "收到的短信校验码");
+        word.setSpan(
+                new ForegroundColorSpan(getResources().getColor(R.color.login_red)),
+                6,
+                word.toString().indexOf("收"),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        tvPhone.setText(word);
+
         tvNext.setOnClickListener(this);
         tvNoReply.setOnClickListener(this);
         mTvReGet.setOnClickListener(this);
+
+        // 开始计时
+        startTimer();
 
         // 保存Activity
         QuizBankApp.getInstance().addActivity(this);
