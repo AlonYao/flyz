@@ -81,13 +81,6 @@ public class MeasureModel {
 
         Request request = new Request(activity);
 
-        // 通过迭代装饰方式构造解析器
-        IParser parser = new ImageParser(activity);
-
-        // 执行解析并返回解析文本段队列
-        ParseManager manager = new ParseManager();
-        ArrayList<ParseManager.ParsedSegment> segments = manager.parse(parser, rich);
-
         // 用 Holder 模式更新列表数据
         FlowLayout flowLayout = new FlowLayout(activity);
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(
@@ -96,39 +89,44 @@ public class MeasureModel {
         flowLayout.setLayoutParams(params);
         flowLayout.setGravity(Gravity.CENTER_VERTICAL);
 
+        // 修改题号的样式
+        String qNum = rich.substring(0, rich.indexOf("#%")) + "  ";
+        TextView textView = new TextView(activity);
+        Spannable word = new SpannableString(qNum);
+        word.setSpan(
+                new AbsoluteSizeSpan(Utils.sp2px(activity, 22)),
+                0,
+                qNum.length(),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
+        textView.setText(word);
+        flowLayout.addView(textView);
+
+        // 分离题号
+        rich = rich.substring(rich.indexOf("#%") + 2, rich.length());
+        if (rich.length() == 0) return;
+
+        // 通过迭代装饰方式构造解析器
+        IParser parser = new ImageParser(activity);
+
+        // 执行解析并返回解析文本段队列
+        ParseManager manager = new ParseManager();
+        ArrayList<ParseManager.ParsedSegment> segments = manager.parse(parser, rich);
+
         for (final ParseManager.ParsedSegment segment : segments) {
             if (segment.text == null || segment.text.length() == 0) {
                 continue;
             }
 
             if (MatchInfo.MatchType.None == segment.type) {
-                TextView textView = new TextView(activity);
+                textView = new TextView(activity);
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 textView.setLayoutParams(p);
-
-                if (rich.toLowerCase().contains(questionPosition.toLowerCase())) {
-                    if (segment.text.length() < questionPosition.length()) continue;
-                    Spannable word = new SpannableString(segment.text);
-                    word.setSpan(
-                            new AbsoluteSizeSpan(Utils.sp2px(activity, 22)),
-                            0,
-                            questionPosition.length() - 1,
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    word.setSpan(
-                            new AbsoluteSizeSpan(Utils.sp2px(activity, 17)),
-                            questionPosition.length(),
-                            segment.text.length(),
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
-                    textView.setText(word);
-                } else {
-                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-                    textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
-                    textView.setText(segment.text);
-                }
-
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+                textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
+                textView.setText(segment.text);
                 flowLayout.addView(textView);
 
                 // text长按复制

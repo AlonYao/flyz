@@ -159,7 +159,7 @@ public class MeasureAdapter extends PagerAdapter{
 
         String questionContent = question.getQuestion();
         String questionPosition = String.valueOf(position + 1)
-                + "/" + String.valueOf(mActivity.mUserAnswerList.size()) + "  ";
+                + "/" + String.valueOf(mActivity.mUserAnswerList.size()) + "#%";
         questionContent = questionPosition + (questionContent == null ? "" : questionContent);
 
         MeasureModel.addRichTextToContainer(
