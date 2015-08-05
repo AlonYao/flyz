@@ -7,23 +7,33 @@
     tools:context="com.appublisher.dailyplan.model.login.activity.SetpwdActivity">
 
     <include layout="@layout/toolbar"/>
-    
-    <!-- 输入密码 -->
-    <EditText
-        style="@style/Login_EditText"
-        android:id="@+id/setpwd_et"
-        android:inputType="textPassword"
-        android:textColor="@color/login_edittext_username"
-        android:layout_marginTop="30dp"
-        android:hint="@string/login_setpwd_edittext"/>
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/setpwd_btn"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/login_white"
-        android:background="@color/login_green"
-        android:text="@string/login_setpwd_submit"/>
+        android:layout_marginTop="30dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_line"/>
+        <!-- 输入密码 -->
+        <EditText
+            style="@style/Login_EditText"
+            android:id="@+id/setpwd_et"
+            android:inputType="textPassword"
+            android:textColor="@color/login_edittext_username"
+            android:hint="@string/login_setpwd_edittext"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/setpwd_btn"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/login_white"
+            android:background="@color/login_green"
+            android:text="@string/login_setpwd_submit"/>
+    </LinearLayout>
+
 </LinearLayout>

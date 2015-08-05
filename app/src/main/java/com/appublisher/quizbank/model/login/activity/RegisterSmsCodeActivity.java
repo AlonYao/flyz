@@ -69,6 +69,7 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
                     case TIME_ON:
                         if (mTvReGet != null && mTimeLimit != 0) {
                             mTvReGet.setText("重新获取(" + String.valueOf(mTimeLimit) + "s)");
+                            mTvReGet.setBackgroundResource(R.color.login_reget_smscode);
                         }
 
                         break;
@@ -248,6 +249,7 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
         mTimeLimit = 60;
         mTvReGet.setClickable(true);
         mTvReGet.setText("重新获取");
+        mTvReGet.setBackgroundResource(R.color.white);
     }
 
     /**
