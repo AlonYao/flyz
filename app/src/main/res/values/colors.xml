@@ -10,7 +10,7 @@
 
     <!-- 首页 -->
     <color name="homepage_todayexam">#506183</color>
-    <color name="homepage_gongkaike_bg">#E84E40</color>
+    <color name="homepage_gongkaike_bg">#DC514A</color>
     <color name="homepage_item_bg">#ECF5F3</color>
     <color name="homepage_mokao">#EE9900</color>
 
