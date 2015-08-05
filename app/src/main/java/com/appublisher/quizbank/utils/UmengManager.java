@@ -149,13 +149,7 @@ public class UmengManager {
         String url = umengShareEntity.getUrl() == null ? "" : umengShareEntity.getUrl();
 
         // 初始化图片
-        UMImage umImage;
-        Bitmap bitmap = umengShareEntity.getBitmap();
-        if (bitmap == null) {
-            umImage = new UMImage(activity, R.drawable.login_ic_quizbank);
-        } else {
-            umImage = new UMImage(activity, bitmap);
-        }
+        UMImage umImage = new UMImage(activity, R.drawable.umeng_share);
 
         // 微信分享
         UMWXHandler wxHandler = new UMWXHandler(
@@ -209,8 +203,33 @@ public class UmengManager {
         // 新浪微博
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
         SinaShareContent sina = new SinaShareContent();
-        sina.setShareContent("#天天模考#" + content + url + "(分享自@腰果公务员)#公考要过，就用腰果#");
+
+        // 新浪微博文字部分---获取ios&Android的下载地址
+        String ios = "";
+        String android = "";
+        GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
+        if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+            ios = globalSettingsResp.getApp_ios_url();
+            android = globalSettingsResp.getApp_android_url();
+        }
+
+        // 新浪微博文字部分---单题解析特殊处理
+        if ("measure_analysis".equals(umengShareEntity.getFrom())) {
+            content = content + "戳右看看：";
+        }
+
+        sina.setShareContent("#天天模考#" + content + url + "(分享自@腰果公务员)ios："
+                + ios + "安卓：" + android + "#公考要过，就用腰果#");
+
+        // 新浪微博图片部分---特殊处理
+        Bitmap bitmap = umengShareEntity.getBitmap();
+        if (!"measure_analysis".equals(umengShareEntity.getFrom()) && bitmap != null) {
+            umImage = new UMImage(activity, bitmap);
+        } else {
+            umImage = new UMImage(activity, R.drawable.umeng_share);
+        }
         sina.setShareImage(umImage);
+
         mController.setShareMedia(sina);
 
         mController.getConfig().cleanListeners();
@@ -267,7 +286,7 @@ public class UmengManager {
                         + "%的小伙伴，学霸非我莫属！你也想试试？";
             } else if ("evaluate".equals(umShareContentEntity.getPaperType())) {
                 return umShareContentEntity.getExamName()
-                        + "可以估分了呢，我的预测分是"
+                        + "考试可以估分了呢，我的预测分是"
                         + umShareContentEntity.getScore()
                         + "分，小伙伴们快来看看~";
             } else {

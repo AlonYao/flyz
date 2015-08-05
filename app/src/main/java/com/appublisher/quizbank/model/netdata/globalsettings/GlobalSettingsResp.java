@@ -15,6 +15,16 @@ public class GlobalSettingsResp {
     MockM mock;
     String report_share_url;
     String evaluate_share_url;
+    String app_ios_url;
+    String app_android_url;
+
+    public String getApp_ios_url() {
+        return app_ios_url;
+    }
+
+    public String getApp_android_url() {
+        return app_android_url;
+    }
 
     public String getReport_share_url() {
         return report_share_url;
