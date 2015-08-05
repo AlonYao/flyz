@@ -23,8 +23,10 @@ import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.login.activity.BindingSmsCodeActivity;
+import com.appublisher.quizbank.model.login.activity.EmailResetPwdActivity;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
 import com.appublisher.quizbank.model.login.activity.MobileRegisterActivity;
+import com.appublisher.quizbank.model.login.activity.MobileResetPwdActivity;
 import com.appublisher.quizbank.model.login.activity.RegisterSmsCodeActivity;
 import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.model.login.model.netdata.LoginResponseModel;
@@ -571,7 +573,7 @@ public class LoginModel {
                 ToastManager.showToast(activity, "密码不正确");
                 mPwdErrorCount++;
             } else if (mPwdErrorCount == 1) {
-                LoginModel.showForgetPwdAlert(activity);
+                LoginModel.showForgetPwdAlert(activity, activity.mUsername);
             }
 
         } else {
@@ -650,7 +652,7 @@ public class LoginModel {
      * 显示忘记密码Alert
      * @param activity Activity
      */
-    public static void showForgetPwdAlert(final Activity activity) {
+    public static void showForgetPwdAlert(final Activity activity, final String userName) {
         new AlertDialog.Builder(activity)
             .setMessage(R.string.login_alert_forgetpwd_msg)
             .setTitle(R.string.alert_title)
@@ -659,8 +661,24 @@ public class LoginModel {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(activity, MobileRegisterActivity.class);
-                        activity.startActivity(intent);
+                        if (userName == null || userName.length() == 0) return;
+
+                        if (Utils.isEmail(userName)) {
+                            // 邮箱用户
+                            new Request(activity).resetPassword(userName);
+                            Intent intent = new Intent(activity, EmailResetPwdActivity.class);
+                            intent.putExtra("user_email", userName);
+                            activity.startActivity(intent);
+
+                        } else {
+                            // 手机号用户
+                            new Request(activity).getSmsCode(
+                                    ParamBuilder.phoneNumParams(userName, "resetPswd"));
+                            Intent intent = new Intent(activity, MobileResetPwdActivity.class);
+                            intent.putExtra("user_phone", userName);
+                            activity.startActivity(intent);
+                        }
+
                         dialog.dismiss();
                     }
                 })

@@ -150,7 +150,7 @@ public class MobileRegisterActivity extends ActionBarActivity
                     ToastManager.showToast(this, "手机号已存在，密码不正确");
                     mPwdErrorCount++;
                 } else if (mPwdErrorCount == 1) {
-                    LoginModel.showForgetPwdAlert(this);
+                    LoginModel.showForgetPwdAlert(this, mMobile);
                 }
             } else {
                 // 执行成功后的操作
