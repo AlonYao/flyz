@@ -15,7 +15,6 @@ import com.appublisher.quizbank.model.login.model.netdata.CommonResponseModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -94,9 +93,6 @@ public class PwdChangeActivity extends ActionBarActivity implements RequestCallb
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response != null) {
-
-            Logger.i(response.toString());
-
             Gson gson = new Gson();
             if (apiName.equals("change_password")) {
                 CommonResponseModel commonResponse = gson.fromJson(
@@ -105,7 +101,7 @@ public class PwdChangeActivity extends ActionBarActivity implements RequestCallb
                     finish();
                     ToastManager.showToast(this, "修改成功");
                 } else {
-                    ToastManager.showToast(this, "修改密码失败");
+                    ToastManager.showToast(this, "旧密码不正确");
                 }
             }
         }
