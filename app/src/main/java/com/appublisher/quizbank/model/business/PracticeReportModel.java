@@ -287,7 +287,6 @@ public class PracticeReportModel {
         intent.putExtra("hierarchy_id", mActivity.mHierarchyId);
         intent.putExtra("hierarchy_level", mActivity.mHierarchyLevel);
         intent.putExtra("from", mActivity.mFrom);
-        intent.putExtra("is_from_error", mActivity.mIsFromError);
 
         // Umeng
         intent.putExtra("umeng_entry", mActivity.mUmengEntry);
