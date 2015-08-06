@@ -18,10 +18,10 @@ import com.activeandroid.Configuration;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
+import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.model.login.activity.BindingSmsCodeActivity;
 import com.appublisher.quizbank.model.login.activity.EmailResetPwdActivity;
 import com.appublisher.quizbank.model.login.activity.LoginActivity;
@@ -452,7 +452,7 @@ public class LoginModel {
 
                 if ("book_opencourse".equals(activity.mFrom)) {
                     // 预约公开课
-                    Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
+                    Intent intent = new Intent(activity, BindingMobileActivity.class);
                     activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
                     activity.finish();
 
@@ -471,7 +471,7 @@ public class LoginModel {
 
                 } else if ("opencourse_pre".equals(activity.mFrom)) {
                     // 公开课回放
-                    Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
+                    Intent intent = new Intent(activity, BindingMobileActivity.class);
                     activity.setResult(ActivitySkipConstants.OPENCOURSE_PRE, intent);
                     activity.finish();
                 }

@@ -158,10 +158,16 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
                 intent.putExtra("from", mFrom);
                 intent.putExtra("umeng_entry", getIntent().getStringExtra("umeng_entry"));
                 intent.putExtra("opencourse_id", getIntent().getStringExtra("content"));
-                startActivity(intent);
 
                 // 如果正在开始，不需要回调，直接关闭Activity
-                if (mFrom != null && "opencourse_started".equals(mFrom)) finish();
+                if ("opencourse_started".equals(mFrom)) {
+                    startActivity(intent);
+                    finish();
+                } else if ("book_opencourse".equals(mFrom)) {
+                    startActivityForResult(intent, ActivitySkipConstants.BOOK_OPENCOURSE);
+                } else if ("opencourse_pre".equals(mFrom)) {
+                    startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
+                }
             }
         }
 
