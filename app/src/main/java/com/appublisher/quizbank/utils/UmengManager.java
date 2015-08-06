@@ -385,11 +385,11 @@ public class UmengManager {
 
     /**
      * 检查当天是否进行友盟分享
-     * @param activity Activity
+     * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
      */
     public static void checkUmengShare(Activity activity) {
         // 获取上次记录的离开日期
-        String firstLeaveDate = GradeDAO.getFirstLeaveDate(Globals.appVersion);
+        String firstLeaveDate = GradeDAO.getFirstLeaveDate(Globals.appVersion, activity);
 
         if (firstLeaveDate != null && firstLeaveDate.equals(Utils.getCurDate())) {
             // 如果是同一天发生的
@@ -405,12 +405,12 @@ public class UmengManager {
         }
 
         // 更新离开日期
-        GradeDAO.updateFirstLeaveDate(Globals.appVersion, Utils.getCurDate());
+        GradeDAO.updateFirstLeaveDate(Globals.appVersion, Utils.getCurDate(), activity);
     }
 
     /**
      * 展示每天友盟分享提醒Alert
-     * @param activity Activity
+     * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
      */
     private static void showEveryDayShareAlert(final Activity activity) {
         new AlertDialog.Builder(activity)

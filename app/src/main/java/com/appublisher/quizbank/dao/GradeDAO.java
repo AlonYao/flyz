@@ -1,7 +1,11 @@
 package com.appublisher.quizbank.dao;
 
+import android.app.Activity;
+
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.appublisher.quizbank.activity.EvaluationActivity;
+import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.model.db.Grade;
 
 /**
@@ -147,30 +151,46 @@ public class GradeDAO {
     }
 
     /**
-     * 获取用户当天第一次离开练习报告页或者能力评估页的日期
+     * 获取用户当天第一次离开页面的日期
      * @param appVersion 版本号
+     * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
      * @return 日期
      */
-    public static String getFirstLeaveDate(String appVersion) {
+    public static String getFirstLeaveDate(String appVersion, Activity activity) {
         Grade item = findByAppVersion(appVersion);
         if (item == null) return null;
-        return item.first_leave;
+
+        if (activity instanceof EvaluationActivity) {
+            return item.first_leave_evaluation;
+        } else if (activity instanceof PracticeReportActivity) {
+            return item.first_leave_practicereport;
+        }
+
+        return null;
     }
 
     /**
      * 更新用户当天第一次离开练习报告页或者能力评估页的日期
      * @param appVersion 版本号
+     * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
      * @param date 日期
      */
-    public static void updateFirstLeaveDate(String appVersion, String date) {
+    public static void updateFirstLeaveDate(String appVersion, String date, Activity activity) {
         Grade item = findByAppVersion(appVersion);
         if (item == null) return;
 
         try {
-            new Update(Grade.class)
-                    .set("first_leave = ?", date)
-                    .where("app_version = ?", appVersion)
-                    .execute();
+            if (activity instanceof EvaluationActivity) {
+                new Update(Grade.class)
+                        .set("first_leave_evaluation = ?", date)
+                        .where("app_version = ?", appVersion)
+                        .execute();
+            } else if (activity instanceof PracticeReportActivity) {
+                new Update(Grade.class)
+                        .set("first_leave_practicereport = ?", date)
+                        .where("app_version = ?", appVersion)
+                        .execute();
+            }
         } catch (Exception e) {
             // Empty
         }

@@ -24,7 +24,11 @@ public class Grade extends Model{
     @Column(name = "grade_timestamp")
     public long grade_timestamp;
 
-    // 记录用户当天第一次离开练习报告页或者能力评估页的日期
-    @Column(name = "first_leave")
-    public String first_leave;
+    // 记录用户当天第一次离开能力评估页的日期
+    @Column(name = "first_leave_evaluation")
+    public String first_leave_evaluation;
+
+    // 记录用户当天第一次离开练习报告页的日期
+    @Column(name = "first_leave_practicereport")
+    public String first_leave_practicereport;
 }
