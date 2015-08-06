@@ -606,7 +606,7 @@ public class PracticeReportModel {
         } else if ("note".equals(activity.mPaperType)) {
             sPaperType = "专项练习";
         } else if ("mokao".equals(activity.mPaperType)) {
-            sPaperType = "天天模考";
+            sPaperType = "mini模考";
         } else if ("collect".equals(activity.mPaperType)) {
             sPaperType = "收藏夹练习";
         } else if ("error".equals(activity.mPaperType)) {
