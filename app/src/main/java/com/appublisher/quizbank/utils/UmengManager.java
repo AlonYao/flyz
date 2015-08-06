@@ -147,6 +147,9 @@ public class UmengManager {
 
         final Activity activity = umengShareEntity.getActivity();
 
+        // 初始化标题
+        String title = "我的天天模考";
+
         // 初始化文字
         String content = umengShareEntity.getContent();
         if (content == null || content.length() == 0)
@@ -168,6 +171,7 @@ public class UmengManager {
         weixin.setShareContent(content);
         weixin.setShareImage(umImage);
         weixin.setTargetUrl(url);
+        weixin.setTitle(title);
         mController.setShareMedia(weixin);
 
         // 微信朋友圈分享
@@ -181,6 +185,7 @@ public class UmengManager {
         weixinCircle.setShareContent(content);
         weixinCircle.setShareImage(umImage);
         weixinCircle.setTargetUrl(url);
+        weixinCircle.setTitle(title);
         mController.setShareMedia(weixinCircle);
 
         // QQ分享
@@ -193,6 +198,7 @@ public class UmengManager {
         qq.setShareContent(content);
         qq.setShareImage(umImage);
         qq.setTargetUrl(url);
+        qq.setTitle(title);
         mController.setShareMedia(qq);
 
         // Qzone分享
@@ -205,11 +211,14 @@ public class UmengManager {
         qzone.setShareContent(content);
         qzone.setShareImage(umImage);
         qzone.setTargetUrl(url);
+        qzone.setTitle(title);
         mController.setShareMedia(qzone);
 
         // 新浪微博
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
         SinaShareContent sina = new SinaShareContent();
+
+        sina.setTitle(title);
 
         // 新浪微博文字部分---获取ios&Android的下载地址
         String ios = "";
@@ -239,8 +248,8 @@ public class UmengManager {
 
         mController.setShareMedia(sina);
 
+        // 友盟分享监听
         mController.getConfig().cleanListeners();
-
         mController.openShare(activity, new SocializeListeners.SnsPostListener() {
             @Override
             public void onStart() {
