@@ -10,9 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -109,6 +111,24 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case ActivitySkipConstants.BOOK_OPENCOURSE:
+                Intent intent = new Intent(this, OpenCourseUnstartActivity.class);
+                setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
+                finish();
+                break;
+
+            case ActivitySkipConstants.OPENCOURSE_PRE:
+                intent = new Intent(this, OpenCourseUnstartActivity.class);
+                setResult(ActivitySkipConstants.OPENCOURSE_PRE, intent);
+                finish();
+                break;
+        }
+    }
+
+    @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) {
             ProgressDialogManager.closeProgressDialog();
@@ -139,6 +159,9 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
                 intent.putExtra("umeng_entry", getIntent().getStringExtra("umeng_entry"));
                 intent.putExtra("opencourse_id", getIntent().getStringExtra("content"));
                 startActivity(intent);
+
+                // 如果正在开始，不需要回调，直接关闭Activity
+                if (mFrom != null && "opencourse_started".equals(mFrom)) finish();
             }
         }
 

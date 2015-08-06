@@ -455,6 +455,7 @@ public class LoginModel {
                     Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
                     activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
                     activity.finish();
+
                 } else if ("opencourse_started".equals(activity.mFrom)) {
                     // Umeng
                     activity.mUmengIsCheckSuccess = true;
@@ -467,6 +468,7 @@ public class LoginModel {
                     intent.putExtra("umeng_timestamp", activity.mUmengTimestamp);
                     activity.startActivity(intent);
                     activity.finish();
+
                 } else if ("opencourse_pre".equals(activity.mFrom)) {
                     // 公开课回放
                     Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
