@@ -161,6 +161,10 @@ public class MobileResetPwdActivity extends ActionBarActivity implements
                     ToastManager.showToast(this, "新密码不能为空");
                     break;
 
+                } else if (newPwd.length() < 6 || newPwd.length() > 16) {
+                    ToastManager.showToast(this, "密码长度为6-16位");
+                    break;
+
                 } else if (newPwdConfirm.isEmpty()) {
                     ToastManager.showToast(this, "确认新密码不能为空");
                     break;

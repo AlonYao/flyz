@@ -96,6 +96,8 @@ public class MobileRegisterActivity extends ActionBarActivity
                     ToastManager.showToast(this, "手机号为空");
                 } else if (pwd.isEmpty()) {
                     ToastManager.showToast(this, "密码为空");
+                } else if (pwd.length() < 6 || pwd.length() > 16) {
+                    ToastManager.showToast(this, "密码长度为6-16位");
                 } else {
                     mPwdEncrypt = LoginModel.encrypt(pwd, "appublisher");
                     if (!mPwdEncrypt.isEmpty()) {

@@ -48,7 +48,15 @@ public class PwdChangeActivity extends ActionBarActivity implements RequestCallb
                 String prePwd = etPrePwd.getText().toString();
                 String newPwd = etNewPwd.getText().toString();
 
-                if (!prePwd.isEmpty() && !newPwd.isEmpty() && !prePwd.equals(newPwd)) {
+                if (prePwd.isEmpty()) {
+                    ToastManager.showToast(PwdChangeActivity.this, "旧密码为空");
+                } else if (newPwd.isEmpty()) {
+                    ToastManager.showToast(PwdChangeActivity.this, "新密码为空");
+                } else if (newPwd.length() < 6 || newPwd.length() > 16) {
+                    ToastManager.showToast(PwdChangeActivity.this, "密码长度为6-16位");
+                } else if (prePwd.equals(newPwd)) {
+                    ToastManager.showToast(PwdChangeActivity.this, "新旧密码相同");
+                } else {
                     String prePwdEncrypt = LoginModel.encrypt(prePwd, "appublisher");
                     String newPwdEncrypt = LoginModel.encrypt(newPwd, "appublisher");
 
@@ -58,8 +66,6 @@ public class PwdChangeActivity extends ActionBarActivity implements RequestCallb
                                 ParamBuilder.changePwd(prePwdEncrypt, newPwdEncrypt)
                         );
                     }
-                } else {
-                    ToastManager.showToast(PwdChangeActivity.this, "密码为空或者密码相同");
                 }
             }
         });

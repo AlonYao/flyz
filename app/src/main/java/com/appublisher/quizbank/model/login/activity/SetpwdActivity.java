@@ -93,29 +93,37 @@ public class SetpwdActivity extends ActionBarActivity implements RequestCallback
             public void onClick(View v) {
                 String pwd = etPwd.getText().toString();
 
-                if (!pwd.isEmpty()) {
+                if (pwd.isEmpty()) {
+                    ToastManager.showToast(SetpwdActivity.this, "密码为空");
+                } else if (pwd.length() < 6 || pwd.length() > 16) {
+                    ToastManager.showToast(SetpwdActivity.this, "密码长度为6-16位");
+                } else {
                     String phoneNum = getIntent().getStringExtra("phoneNum");
-                    if (phoneNum != null && !phoneNum.equals("")) {
-                        String pwdEncrypt = LoginModel.encrypt(pwd, "appublisher");
-                        if (!pwdEncrypt.isEmpty()) {
-                            // 获取数据
-                            String type = getIntent().getStringExtra("type");
-                            if (type != null && type.equals("add")) {
-                                // 第三方登录用户绑定手机号需要提供密码
-                                mPhoneNum = getIntent().getStringExtra("phoneNum");
-                                if (mPhoneNum != null && !mPhoneNum.equals("")) {
-                                    ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
-                                    request.authHandle(ParamBuilder.authHandle(
-                                            "0", type, mPhoneNum, pwdEncrypt));
-                                }
-                            } else if (type != null && type.equals("forget_pwd")) {
-                                ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
-                                request.forgetPwd(ParamBuilder.forgetPwd(phoneNum, pwdEncrypt));
-                            } else {
-                                ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
-                                request.register(ParamBuilder.register(phoneNum, pwdEncrypt));
-                            }
+
+                    if (phoneNum == null || phoneNum.length() == 0) {
+                        ToastManager.showToast(SetpwdActivity.this, "手机号为空");
+                    }
+
+                    String pwdEncrypt = LoginModel.encrypt(pwd, "appublisher");
+
+                    if (pwdEncrypt.isEmpty()) return;
+
+                    // 获取数据
+                    String type = getIntent().getStringExtra("type");
+                    if (type != null && type.equals("add")) {
+                        // 第三方登录用户绑定手机号需要提供密码
+                        mPhoneNum = getIntent().getStringExtra("phoneNum");
+                        if (mPhoneNum != null && !mPhoneNum.equals("")) {
+                            ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
+                            request.authHandle(ParamBuilder.authHandle(
+                                    "0", type, mPhoneNum, pwdEncrypt));
                         }
+                    } else if (type != null && type.equals("forget_pwd")) {
+                        ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
+                        request.forgetPwd(ParamBuilder.forgetPwd(phoneNum, pwdEncrypt));
+                    } else {
+                        ProgressDialogManager.showProgressDialog(SetpwdActivity.this, false);
+                        request.register(ParamBuilder.register(phoneNum, pwdEncrypt));
                     }
                 }
             }

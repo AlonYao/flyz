@@ -626,6 +626,12 @@ public class LoginModel {
                             intent = new Intent(activity, MobileRegisterActivity.class);
                         } else {
                             // 非邮箱用户，暂时全部认定为手机号用户
+                            if (activity.mPwd.length() < 6 || activity.mPwd.length() > 16) {
+                                ToastManager.showToast(activity, "密码长度为6-16位");
+                                dialog.dismiss();
+                                return;
+                            }
+
                             activity.mRequest.getSmsCode(
                                     ParamBuilder.phoneNumParams(activity.mUsername, ""));
 

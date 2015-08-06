@@ -60,6 +60,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     public String mPwdEncrypt;
     public ImageView mIvWeiboPre;
     public ImageView mIvWeixinPre;
+    public String mPwd;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -141,16 +142,16 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
             @Override
             public void onClick(View v) {
                 mUsername = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                mPwd = etPassword.getText().toString();
 
                 if (mUsername.isEmpty()) {
                     ToastManager.showToast(LoginActivity.this,
                             getString(R.string.login_error_username));
-                } else if (password.isEmpty()) {
+                } else if (mPwd.isEmpty()) {
                     ToastManager.showToast(LoginActivity.this,
                             getString(R.string.login_error_password));
                 } else {
-                    mPwdEncrypt = LoginModel.encrypt(password, "appublisher");
+                    mPwdEncrypt = LoginModel.encrypt(mPwd, "appublisher");
                     if (!mPwdEncrypt.isEmpty()) {
                         ProgressDialogManager.showProgressDialog(LoginActivity.this, false);
                         mRequest.isUserExists(mUsername);
