@@ -17,6 +17,10 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
+import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.ScoreM;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
@@ -24,6 +28,7 @@ import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 
 import org.json.JSONObject;
@@ -635,5 +640,41 @@ public class PracticeReportModel {
             // 显示试卷名称
             activity.mTvPaperName.setText(activity.mPaperName);
         }
+    }
+
+    /**
+     * 设置友盟分享
+     * @param activity PracticeReportActivity
+     */
+    public static void setUmengShare(PracticeReportActivity activity) {
+        UmengShareEntity umengShareEntity = new UmengShareEntity();
+        umengShareEntity.setActivity(activity);
+        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
+        umengShareEntity.setFrom("practice_report");
+
+        // 友盟分享文字处理
+        UMShareContentEntity contentEntity = new UMShareContentEntity();
+        contentEntity.setType("practice_report");
+        contentEntity.setPaperType(activity.mPaperType);
+        contentEntity.setDefeat(activity.mDefeat);
+        contentEntity.setAccuracy(Utils.getPercent1(activity.mRightNum, activity.mTotalNum));
+        contentEntity.setScore(activity.mScore);
+        contentEntity.setExamName(activity.mPaperName);
+        umengShareEntity.setContent(UmengManager.getShareContent(contentEntity));
+
+        // 友盟分享跳转链接处理
+        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+        urlEntity.setType("practice_report");
+        urlEntity.setUser_id(LoginModel.getUserId());
+        urlEntity.setUser_token(LoginModel.getUserToken());
+        urlEntity.setPaper_type(activity.mPaperType);
+        urlEntity.setName(
+                activity.mTvPaperName.getText() == null
+                        ? "" : activity.mTvPaperName.getText().toString());
+        urlEntity.setExercise_id(
+                activity.mExerciseId == 0 ? activity.mPaperId : activity.mExerciseId);
+        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+
+        UmengManager.openShare(umengShareEntity);
     }
 }

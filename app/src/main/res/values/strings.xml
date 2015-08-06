@@ -131,6 +131,9 @@
     <string name="grade_fail">咦，没有收到评论挨？</string>
     <string name="grade_regrade">重新评价</string>
     <string name="grade_abandon">送课也不要</string>
+    <string name="grade_everydayshare_alert_msg">这么辛苦，晒个成绩吧</string>
+    <string name="grade_everydayshare_alert_p">去分享</string>
+    <string name="grade_everydayshare_alert_n">不要</string>
 
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>

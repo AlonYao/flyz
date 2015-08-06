@@ -17,10 +17,6 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
-import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
-import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
-import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
-import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
@@ -216,10 +212,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
     @Override
     public void onBackPressed() {
-        // Umeng
-        UmengManager.sendToUmeng(this, "Back");
-
-        super.onBackPressed();
+        UmengManager.checkUmengShare(this);
     }
 
     @Override
@@ -232,38 +225,9 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // Umeng
-            UmengManager.sendToUmeng(this, "Back");
-            finish();
+            UmengManager.checkUmengShare(this);
         } else if ("分享".equals(item.getTitle())) {
-            /** 构造友盟分享实体 **/
-            UmengShareEntity umengShareEntity = new UmengShareEntity();
-            umengShareEntity.setActivity(this);
-            umengShareEntity.setBitmap(Utils.getBitmapByView(mSvMain));
-            umengShareEntity.setFrom("practice_report");
-
-            // 友盟分享文字处理
-            UMShareContentEntity contentEntity = new UMShareContentEntity();
-            contentEntity.setType("practice_report");
-            contentEntity.setPaperType(mPaperType);
-            contentEntity.setDefeat(mDefeat);
-            contentEntity.setAccuracy(Utils.getPercent1(mRightNum, mTotalNum));
-            contentEntity.setScore(mScore);
-            contentEntity.setExamName(mPaperName);
-            umengShareEntity.setContent(UmengManager.getShareContent(contentEntity));
-
-            // 友盟分享跳转链接处理
-            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-            urlEntity.setType("practice_report");
-            urlEntity.setUser_id(LoginModel.getUserId());
-            urlEntity.setUser_token(LoginModel.getUserToken());
-            urlEntity.setPaper_type(mPaperType);
-            urlEntity.setName(
-                    mTvPaperName.getText() == null ? "" : mTvPaperName.getText().toString());
-            urlEntity.setExercise_id(mExerciseId == 0 ? mPaperId : mExerciseId);
-            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
-
-            UmengManager.openShare(umengShareEntity);
+            PracticeReportModel.setUmengShare(this);
         }
 
         return super.onOptionsItemSelected(item);

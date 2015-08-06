@@ -23,4 +23,8 @@ public class Grade extends Model{
     // 用户点击评价时的时间戳
     @Column(name = "grade_timestamp")
     public long grade_timestamp;
+
+    // 记录用户当天第一次离开练习报告页或者能力评估页的日期
+    @Column(name = "first_leave")
+    public String first_leave;
 }

@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -115,6 +116,16 @@ public class Utils {
         dBefore = calendar.getTime();   //得到前一天的时间
 
         return dBefore;
+    }
+
+    /**
+     * 获取当前日期(yyyy-MM-dd)
+     * @return 当前日期
+     */
+    public static String getCurDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        Date curDate = new Date(System.currentTimeMillis());
+        return format.format(curDate);
     }
 
     /**

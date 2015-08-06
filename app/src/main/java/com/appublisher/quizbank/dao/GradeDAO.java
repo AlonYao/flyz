@@ -145,4 +145,34 @@ public class GradeDAO {
         long dev = (System.currentTimeMillis() - item.grade_timestamp) / 1000;
         return dev < 5;
     }
+
+    /**
+     * 获取用户当天第一次离开练习报告页或者能力评估页的日期
+     * @param appVersion 版本号
+     * @return 日期
+     */
+    public static String getFirstLeaveDate(String appVersion) {
+        Grade item = findByAppVersion(appVersion);
+        if (item == null) return null;
+        return item.first_leave;
+    }
+
+    /**
+     * 更新用户当天第一次离开练习报告页或者能力评估页的日期
+     * @param appVersion 版本号
+     * @param date 日期
+     */
+    public static void updateFirstLeaveDate(String appVersion, String date) {
+        Grade item = findByAppVersion(appVersion);
+        if (item == null) return;
+
+        try {
+            new Update(Grade.class)
+                    .set("first_leave = ?", date)
+                    .where("app_version = ?", appVersion)
+                    .execute();
+        } catch (Exception e) {
+            // Empty
+        }
+    }
 }

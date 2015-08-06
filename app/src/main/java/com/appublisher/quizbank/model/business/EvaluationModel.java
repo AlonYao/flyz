@@ -5,9 +5,14 @@ import android.view.View;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
+import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.evaluation.EvaluationResp;
 import com.appublisher.quizbank.model.netdata.evaluation.HistoryScoreM;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
@@ -136,5 +141,34 @@ public class EvaluationModel {
                 .show();
 
         activity.mLlHistory.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 设置友盟分享
+     * @param activity EvaluationActivity
+     */
+    public static void setUmengShare(EvaluationActivity activity) {
+        UmengShareEntity umengShareEntity = new UmengShareEntity();
+        umengShareEntity.setActivity(activity);
+        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
+        umengShareEntity.setFrom("evaluation");
+
+        // 友盟分享文字处理
+        UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+        umShareContentEntity.setType("evaluation");
+        umShareContentEntity.setLearningDays(activity.mLearningDays);
+        umShareContentEntity.setExamName(LoginModel.getUserExamName());
+        umShareContentEntity.setScore(activity.mScore);
+        umShareContentEntity.setRank(activity.mRank);
+        umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+
+        // 友盟分享跳转链接处理
+        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+        urlEntity.setType("evaluation");
+        urlEntity.setUser_id(LoginModel.getUserId());
+        urlEntity.setUser_token(LoginModel.getUserToken());
+        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+
+        UmengManager.openShare(umengShareEntity);
     }
 }
