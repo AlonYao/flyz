@@ -395,15 +395,12 @@ public class OpenCourseModel {
 
         Intent intent = new Intent(activity, cls);
 
-        if (Globals.openCourseStatus.getType() == 0) {
-            // 如果是查看往期
-            intent.putExtra("from", "opencourse_pre");
-            intent.putExtra("url", Globals.openCourseStatus.getContent());
-        } else {
+        if (Globals.openCourseStatus.getType() == 1) {
             intent.putExtra("from", "opencourse_started");
-            intent.putExtra("content", Globals.openCourseStatus.getContent());
+            intent.putExtra("bar_title", Globals.openCourseStatus.getCourse_name());
         }
 
+        intent.putExtra("content", Globals.openCourseStatus.getContent());
         intent.putExtra("umeng_entry", umengEntry);
         activity.startActivity(intent);
     }
