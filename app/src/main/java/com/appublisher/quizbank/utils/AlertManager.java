@@ -52,6 +52,7 @@ public class AlertManager {
 
         Window window = alertDialog.getWindow();
         window.setContentView(R.layout.alert_item_pause);
+        window.setBackgroundDrawableResource(R.color.transparency);
 
         TextView textView = (TextView) window.findViewById(R.id.alert_pause_tv);
 
