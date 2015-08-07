@@ -60,6 +60,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private TextView mTvMockTitle;
     private TextView mTvMockName;
     private TextView mTvQuickTest;
+    private TextView mTvExam;
     private LinearLayout mLlMiniMokao;
     private LinearLayout mLlMock;
     private LinearLayout mLlSpecial;
@@ -101,10 +102,10 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         mLlMock = (LinearLayout) mView.findViewById(R.id.homepage_mock);
         mTvMockTitle = (TextView) mView.findViewById(R.id.homepage_mock_title);
         mTvMockName = (TextView) mView.findViewById(R.id.homepage_mock_name);
+        mTvExam = (TextView) mView.findViewById(R.id.homepage_exam);
         ImageView ivHistoryMokao = (ImageView) mView.findViewById(R.id.homepage_history);
         ImageView ivSpecial = (ImageView) mView.findViewById(R.id.homepage_special);
         LinearLayout llEvaluation = (LinearLayout) mView.findViewById(R.id.homepage_evaluation);
-        TextView tvExam = (TextView) mView.findViewById(R.id.homepage_exam);
         RoundedImageView ivAvatar = (RoundedImageView) mView.findViewById(R.id.homepage_avatar);
 
         // 成员变量初始化
@@ -113,9 +114,6 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         // 设置头像
         LoginModel.setAvatar(mActivity, ivAvatar);
-
-        // 考试项目倒计时
-        HomePageModel.setExamCountDown(tvExam);
 
         // 历史模考
         ivHistoryMokao.setOnClickListener(this);
@@ -147,11 +145,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            // 获取&呈现 数据
-            getData();
-
-            // 显示评分Alert
-            dealGradeAlert();
+            refreshData();
         }
     }
 
@@ -159,11 +153,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     public void onResume() {
         super.onResume();
         if (!isHidden()) {
-            // 获取&呈现 数据
-            getData();
-
-            // 显示评分Alert
-            dealGradeAlert();
+            refreshData();
         }
 
         // Umeng
@@ -215,6 +205,20 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 AlertManager.showGradeFailAlert(mActivity);
             }
         }
+    }
+
+    /**
+     * 更新数据
+     */
+    private void refreshData() {
+        // 获取&呈现 数据
+        getData();
+
+        // 显示评分Alert
+        dealGradeAlert();
+
+        // 考试项目倒计时
+        HomePageModel.setExamCountDown(mTvExam);
     }
 
     /**
