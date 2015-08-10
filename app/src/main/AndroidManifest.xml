@@ -258,38 +258,56 @@
         </activity>
         <activity
             android:name=".activity.AppGuideActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_app_guide" >
         </activity>
         <activity
             android:name=".model.login.activity.MobileRegisterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_mobile_register" >
         </activity>
         <activity
             android:name=".model.login.activity.RegisterSmsCodeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_register_sms_code" >
         </activity>
         <activity
             android:name=".model.login.activity.ForgetPwdActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_forget_pwd" >
         </activity>
         <activity
             android:name=".model.login.activity.EmailResetPwdActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_email_reset_pwd" >
         </activity>
         <activity
             android:name=".model.login.activity.CannotGetEmailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_cannot_get_email" >
         </activity>
         <activity
             android:name=".model.login.activity.MobileResetPwdActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_mobile_reset_pwd" >
         </activity>
         <activity
             android:name=".activity.MockActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_mock" >
         </activity>
         <activity
             android:name=".model.login.activity.BindingSmsCodeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_binding_sms_code" >
         </activity>
     </application>
