@@ -159,7 +159,7 @@ public class MobileRegisterActivity extends ActionBarActivity
                 if (LoginModel.saveToLocal(lrm, this)) {
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
-                    ToastManager.showToast(this, "手机号已注册");
+                    ToastManager.showToast(this, "手机号已注册，直接登录");
                 } else {
                     ToastManager.showToast(this, "数据异常");
                 }
