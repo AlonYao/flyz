@@ -63,7 +63,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     private FavoriteFragment mFavoriteFragment;
     private StudyRecordFragment mStudyRecordFragment;
     private SettingFragment mSettingFragment;
-    private Fragment mCurFragment;
+    private static Fragment mCurFragment;
+    private static int mCurFragmentPosition;
 
     private DrawerLayout mDrawerLayout;
     private boolean mDoubleBackToExit;
@@ -73,6 +74,13 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
     public static DrawerAdapter mDrawerAdapter;
+    private static final String HOMEPAGE = "Home";
+    private static final String WHOLEPAGE = "Whole";
+    private static final String COURSE = "Course";
+    private static final String WRONGQUESTIONS = "Wrong";
+    private static final String FAVORITE = "Favorite";
+    private static final String STUDYRECORD = "Study";
+    private static final String SETTING = "Setting";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +125,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         mDrawerLayout.setDrawerListener(drawerToggle);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        // 默认选中首页
-        if (savedInstanceState == null) changeFragment(0);
+        // 页面切换，默认首页
+        changeFragment(mCurFragmentPosition);
 
         // 记录用户评价行为
         if (GradeDAO.findByAppVersion(Globals.appVersion) == null) {
@@ -160,7 +168,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
 
-        if (mCurFragment == mHomePageFragment && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
+        if (mCurFragment instanceof HomePageFragment
+                && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
             MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(
                     R.drawable.homepage_grade), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
@@ -237,6 +246,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
      * @param position fragment在侧边栏上的位置
      */
     public void changeFragment(int position) {
+        mCurFragmentPosition = position;
+
         // 开启一个Fragment事务
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
@@ -248,7 +259,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 if (mHomePageFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mHomePageFragment = new HomePageFragment();
-                    transaction.add(R.id.drawer_frame, mHomePageFragment);
+                    transaction.add(R.id.drawer_frame, mHomePageFragment, HOMEPAGE);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mHomePageFragment);
@@ -265,7 +276,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 if (mWholePageFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mWholePageFragment = new WholePageFragment();
-                    transaction.add(R.id.drawer_frame, mWholePageFragment);
+                    transaction.add(R.id.drawer_frame, mWholePageFragment, WHOLEPAGE);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mWholePageFragment);
@@ -282,7 +293,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 if (mCourseFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mCourseFragment = new CourseFragment();
-                    transaction.add(R.id.drawer_frame, mCourseFragment);
+                    transaction.add(R.id.drawer_frame, mCourseFragment, COURSE);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mCourseFragment);
@@ -299,7 +310,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 if (mWrongQuestionsFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mWrongQuestionsFragment = new WrongQuestionsFragment();
-                    transaction.add(R.id.drawer_frame, mWrongQuestionsFragment);
+                    transaction.add(R.id.drawer_frame, mWrongQuestionsFragment, WRONGQUESTIONS);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mWrongQuestionsFragment);
@@ -316,7 +327,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 if (mFavoriteFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mFavoriteFragment = new FavoriteFragment();
-                    transaction.add(R.id.drawer_frame, mFavoriteFragment);
+                    transaction.add(R.id.drawer_frame, mFavoriteFragment, FAVORITE);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mFavoriteFragment);
@@ -333,7 +344,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 if (mStudyRecordFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mStudyRecordFragment = new StudyRecordFragment();
-                    transaction.add(R.id.drawer_frame, mStudyRecordFragment);
+                    transaction.add(R.id.drawer_frame, mStudyRecordFragment, STUDYRECORD);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mStudyRecordFragment);
@@ -350,7 +361,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 if (mSettingFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mSettingFragment = new SettingFragment();
-                    transaction.add(R.id.drawer_frame, mSettingFragment);
+                    transaction.add(R.id.drawer_frame, mSettingFragment, SETTING);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mSettingFragment);
@@ -379,23 +390,29 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
      */
     private void hideFragments(FragmentTransaction transaction) {
         // 首页
-        if (mHomePageFragment != null) {
-            transaction.hide(mHomePageFragment);
-        }
+        mHomePageFragment = (HomePageFragment) mFragmentManager.findFragmentByTag(HOMEPAGE);
+        if (mHomePageFragment != null) transaction.hide(mHomePageFragment);
 
         // 真题演练
+        mWholePageFragment = (WholePageFragment) mFragmentManager.findFragmentByTag(WHOLEPAGE);
         if (mWholePageFragment != null) transaction.hide(mWholePageFragment);
 
         // 课程中心
+        mCourseFragment = (CourseFragment) mFragmentManager.findFragmentByTag(COURSE);
         if (mCourseFragment != null) transaction.hide(mCourseFragment);
 
         // 错题本
+        mWrongQuestionsFragment =
+                (WrongQuestionsFragment) mFragmentManager.findFragmentByTag(WRONGQUESTIONS);
         if (mWrongQuestionsFragment != null) transaction.hide(mWrongQuestionsFragment);
 
         // 收藏夹
+        mFavoriteFragment = (FavoriteFragment) mFragmentManager.findFragmentByTag(FAVORITE);
         if (mFavoriteFragment != null) transaction.hide(mFavoriteFragment);
 
         // 学习记录
+        mStudyRecordFragment =
+                (StudyRecordFragment) mFragmentManager.findFragmentByTag(STUDYRECORD);
         if (mStudyRecordFragment != null) {
             transaction.hide(mStudyRecordFragment);
             transaction.remove(mStudyRecordFragment);
@@ -403,6 +420,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         }
 
         // 设置
+        mSettingFragment = (SettingFragment) mFragmentManager.findFragmentByTag(SETTING);
         if (mSettingFragment != null) transaction.hide(mSettingFragment);
     }
 
