@@ -224,6 +224,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
         // TalkingData
         TCAgent.onPause(this);
+
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
