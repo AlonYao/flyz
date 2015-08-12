@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -200,6 +201,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             if (dex >= 5) {
                 // 视为评价完成，开通课程
                 HomePageModel.openupCourse(this);
+                Utils.updateMenu((ActionBarActivity) mActivity);
             } else {
                 // 视为未完成评价
                 AlertManager.showGradeFailAlert(mActivity);
