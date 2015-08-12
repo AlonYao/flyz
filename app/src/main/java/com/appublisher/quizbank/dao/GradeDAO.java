@@ -145,9 +145,9 @@ public class GradeDAO {
         if (item == null) return true;
         if (item.is_grade == 1) return false;
         if (item.grade_timestamp == 0) return true;
-        // 如果系统未检测到用户做出评价，但是评价动作已经超过了5秒，则默认视为完成评价
+        // 如果系统未检测到用户做出评价，但是评价动作已经超过了10秒，则默认视为完成评价
         long dev = (System.currentTimeMillis() - item.grade_timestamp) / 1000;
-        return dev < 5;
+        return dev < 10;
     }
 
     /**
