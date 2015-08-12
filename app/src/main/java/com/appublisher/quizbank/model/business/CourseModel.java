@@ -49,9 +49,9 @@ public class CourseModel {
     private static ArrayList<FilterAreaM> mFilterAreas;
     private static ArrayList<String> mFilterPurchase;
     private static ArrayList<CourseM> mCourses;
-    private static TextView mTvLastTag;
-    private static TextView mTvLastArea;
-    private static TextView mTvLastPurchase;
+    public static TextView mTvLastTag;
+    public static TextView mTvLastArea;
+    public static TextView mTvLastPurchase;
     public static CourseListAdapter mCourseListAdapter;
 
     /**
@@ -127,15 +127,17 @@ public class CourseModel {
 
         if (mCourseListAdapter == null) {
             mCourses = courseListResp.getCourses();
-            mCourseListAdapter = new CourseListAdapter(mCourseFragment.mActivity, mCourses);
-            mCourseFragment.mLvCourse.setAdapter(mCourseListAdapter);
+            mCourseListAdapter = new CourseListAdapter(courseFragment.mActivity, mCourses);
+            courseFragment.mLvCourse.setAdapter(mCourseListAdapter);
         } else {
             mCourses.clear();
             mCourses.addAll(courseListResp.getCourses());
             mCourseListAdapter.notifyDataSetChanged();
         }
 
-        mCourseFragment.mLvCourse.setOnItemClickListener(onItemClickListener);
+        courseFragment.mCourseNull.setVisibility(View.GONE);
+        courseFragment.mLvCourse.setVisibility(View.VISIBLE);
+        courseFragment.mLvCourse.setOnItemClickListener(onItemClickListener);
 
         ProgressBarManager.hideProgressBar();
     }
@@ -271,7 +273,7 @@ public class CourseModel {
 
         if (filterTag == null) return;
 
-        mCourseFragment.mCurTagId = filterTag.getId();
+        CourseFragment.mCurTagId = filterTag.getId();
 
         // 更新Filter文字
         changeFilterText(mCourseFragment.mTvFilterTag, filterTag.getCategory_name());
@@ -285,12 +287,12 @@ public class CourseModel {
         if (mFilterPurchase == null || position >= mFilterPurchase.size()) return;
 
         String curPurchase = mFilterPurchase.get(position);
-        mCourseFragment.mCurPurchaseId = 2;
+        CourseFragment.mCurPurchaseId = 2;
 
         if ("未购".equals(curPurchase)) {
-            mCourseFragment.mCurPurchaseId = 0;
+            CourseFragment.mCurPurchaseId = 0;
         } else if ("已购".equals(curPurchase)) {
-            mCourseFragment.mCurPurchaseId = 1;
+            CourseFragment.mCurPurchaseId = 1;
         }
 
         // 更新Filter文字
@@ -308,7 +310,7 @@ public class CourseModel {
 
         if (filterArea == null) return;
 
-        mCourseFragment.mCurAreaId = filterArea.getCode();
+        CourseFragment.mCurAreaId = filterArea.getCode();
 
         // 更新Filter文字
         changeFilterText(mCourseFragment.mTvFilterArea, filterArea.getName());
@@ -509,7 +511,7 @@ public class CourseModel {
      * @param textView 控件
      * @param name 名称
      */
-    private static void changeFilterText(TextView textView, String name) {
+    public static void changeFilterText(TextView textView, String name) {
         if (name != null && name.length() >= 5) {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         } else {
@@ -557,8 +559,8 @@ public class CourseModel {
     public static void getCourseList(CourseFragment courseFragment) {
         ProgressBarManager.showProgressBar(courseFragment.mMainView);
         courseFragment.mRequest.getCourseList(
-                courseFragment.mCurTagId,
-                courseFragment.mCurAreaId,
-                courseFragment.mCurPurchaseId);
+                CourseFragment.mCurTagId,
+                CourseFragment.mCurAreaId,
+                CourseFragment.mCurPurchaseId);
     }
 }

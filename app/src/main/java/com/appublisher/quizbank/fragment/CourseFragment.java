@@ -43,9 +43,9 @@ public class CourseFragment extends Fragment implements RequestCallback{
     public TextView mTvFilterTag;
     public TextView mTvFilterArea;
     public TextView mTvFilterPurchase;
-    public String mCurAreaId;
-    public int mCurTagId;
-    public int mCurPurchaseId;
+    public static String mCurAreaId;
+    public static int mCurTagId;
+    public static int mCurPurchaseId;
 
     /** 课程中心列表 **/
     public ListView mLvCourse;
@@ -81,9 +81,14 @@ public class CourseFragment extends Fragment implements RequestCallback{
         TextView courseQQ = (TextView) mMainView.findViewById(R.id.course_qq);
 
         // 成员变量初始化
-        mCurTagId = 0;
-        mCurPurchaseId = 2;
-        mCurAreaId = "ALL";
+        if (savedInstanceState == null) {
+            mCurTagId = 0;
+            mCurPurchaseId = 2;
+            mCurAreaId = "ALL";
+        } else {
+            restoreFilterTextView();
+        }
+
         CourseModel.mCourseListAdapter = null;
 
         // 已购/未购
@@ -132,6 +137,29 @@ public class CourseFragment extends Fragment implements RequestCallback{
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         CourseModel.dealRespError(apiName, this);
+    }
+
+    /**
+     * 恢复课程Filter
+     */
+    private void restoreFilterTextView() {
+        // 课程分类
+        if (CourseModel.mTvLastTag != null) {
+            CourseModel.changeFilterText(
+                    mTvFilterTag, CourseModel.mTvLastTag.getText().toString());
+        }
+
+        // 是否购买
+        if (CourseModel.mTvLastPurchase != null) {
+            CourseModel.changeFilterText(
+                    mTvFilterPurchase, CourseModel.mTvLastPurchase.getText().toString());
+        }
+
+        // 地区
+        if (CourseModel.mTvLastArea != null) {
+            CourseModel.changeFilterText(
+                    mTvFilterArea, CourseModel.mTvLastArea.getText().toString());
+        }
     }
 
 }
