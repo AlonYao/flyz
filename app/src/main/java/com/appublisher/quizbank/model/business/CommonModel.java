@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.utils.ToastManager;
 
 /**
  * 通用模型
@@ -26,6 +27,7 @@ public class CommonModel {
     public static void setToolBar(ActionBarActivity activity) {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
+        //noinspection deprecation
         activity.getSupportActionBar().setBackgroundDrawable(
                 activity.getResources().getDrawable(R.drawable.actionbar_bg));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,7 +76,12 @@ public class CommonModel {
     public static void skipToGrade(Activity activity) {
         Intent marketIntent = new Intent(Intent.ACTION_VIEW);
         marketIntent.setData(Uri.parse("market://details?id=" + activity.getPackageName()));
-        activity.startActivity(marketIntent);
+
+        if (marketIntent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(marketIntent);
+        } else {
+            ToastManager.showToast(activity, "请安装应用市场……");
+        }
     }
 
     /**
@@ -85,7 +92,12 @@ public class CommonModel {
 
         Intent marketIntent = new Intent(Intent.ACTION_VIEW);
         marketIntent.setData(Uri.parse("market://details?id=" + packageName));
-        activity.startActivity(marketIntent);
+
+        if (marketIntent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(marketIntent);
+        } else {
+            ToastManager.showToast(activity, "请安装应用市场……");
+        }
     }
 
     /**
