@@ -194,6 +194,7 @@ public class SettingFragment extends Fragment implements ApiConstants{
                 ProgressDialogManager.showProgressDialog(mActivity, false);
                 mDiskLruImageCache.clearCache();
                 ProgressDialogManager.closeProgressDialog();
+                mTvCacheSize.setText("0MB");
             }
         });
 
