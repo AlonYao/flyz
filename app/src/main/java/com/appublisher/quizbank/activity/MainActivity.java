@@ -162,6 +162,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         // TalkingData
         TCAgent.onPause(this);
+
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
@@ -180,13 +182,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getTitle().equals("评价")) {
-            if (Globals.rateCourseResp == null) {
-                ProgressDialogManager.showProgressDialog(this, true);
-                mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
-                mFrom = "menu";
-            } else {
-                AlertManager.showGradeAlert(this, "Click");
-            }
+            ProgressDialogManager.showProgressDialog(this, true);
+            mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
+            mFrom = "menu";
         }
 
         return super.onOptionsItemSelected(item);

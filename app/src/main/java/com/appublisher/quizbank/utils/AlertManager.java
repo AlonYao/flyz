@@ -195,6 +195,8 @@ public class AlertManager {
      * @param activity Activity
      */
     public static void showGradeAlert(final Activity activity, final String umengEntry) {
+        if (activity.isFinishing()) return;
+
         final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setCancelable(false);
         alertDialog.show();
