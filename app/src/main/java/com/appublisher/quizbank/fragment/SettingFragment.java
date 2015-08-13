@@ -26,12 +26,12 @@ import com.appublisher.quizbank.activity.QaActivity;
 import com.appublisher.quizbank.activity.SystemNoticeActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.UserDAO;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.images.DiskLruImageCache;
 import com.appublisher.quizbank.model.login.activity.UserInfoActivity;
-import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.network.ApiConstants;
@@ -40,11 +40,8 @@ import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.fb.FeedbackAgent;
-import com.umeng.fb.model.UserInfo;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 设置
@@ -171,10 +168,7 @@ public class SettingFragment extends Fragment implements ApiConstants{
         rlFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final FeedbackAgent agent = new FeedbackAgent(mActivity);
-                agent.startFeedbackActivity();
-
-                postUserInfo(agent);
+                CommonModel.skipToUmengFeedback(mActivity);
 
                 // Umeng
                 mUmengFeedback = "1";
@@ -258,7 +252,7 @@ public class SettingFragment extends Fragment implements ApiConstants{
 
         // 获取缓存大小
         mTvCacheSize.setText(
-                String.valueOf(mDiskLruImageCache.getCacheSize() / (1024*1024)) + "MB");
+                String.valueOf(mDiskLruImageCache.getCacheSize() / (1024 * 1024)) + "MB");
 
         // Umeng
         MobclickAgent.onPageStart("SettingFragment");
@@ -291,36 +285,4 @@ public class SettingFragment extends Fragment implements ApiConstants{
         MobclickAgent.onEvent(mActivity, "Setting", map);
     }
 
-    /**
-     * 发送用户信息
-     * @param agent FeedbackAgent
-     */
-    private void postUserInfo(final FeedbackAgent agent) {
-        UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-
-        if (userInfoModel == null) return;
-
-        UserInfo info = agent.getUserInfo();
-        if (info == null)
-            info = new UserInfo();
-        Map<String, String> contact = info.getContact();
-        if (contact == null)
-            contact = new HashMap<>();
-
-        contact.put("plain",
-                "userId:" + userInfoModel.getUser_id()
-                        + ",sno:" + userInfoModel.getSno()
-                        + ",userMobile:" + userInfoModel.getMobile_num()
-                        + ",userName:" + userInfoModel.getNickname());
-        info.setContact(contact);
-
-        agent.setUserInfo(info);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                agent.updateUserInfo();
-            }
-        }).start();
-    }
 }

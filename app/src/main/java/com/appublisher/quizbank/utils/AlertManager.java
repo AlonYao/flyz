@@ -28,7 +28,6 @@ import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.fb.FeedbackAgent;
 
 import org.json.JSONArray;
 
@@ -256,8 +255,7 @@ public class AlertManager {
                 GradeDAO.updateTimestamp(Globals.appVersion, System.currentTimeMillis());
 
                 // 进入反馈
-                FeedbackAgent agent = new FeedbackAgent(activity);
-                agent.startFeedbackActivity();
+                CommonModel.skipToUmengFeedback(activity);
 
                 alertDialog.dismiss();
 
