@@ -99,7 +99,6 @@ public class GradeDAO {
      * @param grade_timestamp 时间戳
      */
     public static void saveGradeTimestamp(String appVersion, long grade_timestamp) {
-        if (grade_timestamp == 0) return;
         Grade item = findByAppVersion(appVersion);
         if (item == null) return;
 

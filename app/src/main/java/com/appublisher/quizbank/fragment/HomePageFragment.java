@@ -198,12 +198,13 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         } else {
             long curTimestamp = System.currentTimeMillis();
             long dex = (curTimestamp - gradeTimestamp) / 1000;
-            if (dex >= 5) {
+            if (dex >= 10) {
                 // 视为评价完成，开通课程
                 HomePageModel.openupCourse(this);
                 Utils.updateMenu((ActionBarActivity) mActivity);
             } else {
                 // 视为未完成评价
+                GradeDAO.saveGradeTimestamp(Globals.appVersion, 0);
                 AlertManager.showGradeFailAlert(mActivity);
             }
         }
