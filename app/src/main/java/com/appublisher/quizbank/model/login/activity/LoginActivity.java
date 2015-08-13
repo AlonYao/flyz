@@ -229,6 +229,8 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         MobclickAgent.onPageEnd("LoginActivity");
         MobclickAgent.onPause(this);
         TCAgent.onPause(this);
+
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
