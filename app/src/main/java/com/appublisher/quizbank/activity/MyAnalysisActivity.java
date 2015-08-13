@@ -33,6 +33,7 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
 
         // Toolbar
         CommonModel.setToolBar(this);
+        CommonModel.setBarTitle(this, getIntent().getStringExtra("bar_title"));
 
         // View 初始化
         mEditText = (EditText) findViewById(R.id.myanalysis_text);

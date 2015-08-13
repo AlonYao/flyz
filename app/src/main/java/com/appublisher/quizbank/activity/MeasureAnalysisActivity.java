@@ -403,10 +403,10 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         });
 
         // 菜单
-        TextView tvImageText = (TextView) view.findViewById(R.id.fb_menu_imagetext);
-        TextView tvAnswerWrong = (TextView) view.findViewById(R.id.fb_menu_answerwrong);
-        TextView tvAnalysisWrong = (TextView) view.findViewById(R.id.fb_menu_analysiswrong);
-        TextView tvBetterAnalysis = (TextView) view.findViewById(R.id.fb_menu_betteranalysis);
+        final TextView tvImageText = (TextView) view.findViewById(R.id.fb_menu_imagetext);
+        final TextView tvAnswerWrong = (TextView) view.findViewById(R.id.fb_menu_answerwrong);
+        final TextView tvAnalysisWrong = (TextView) view.findViewById(R.id.fb_menu_analysiswrong);
+        final TextView tvBetterAnalysis = (TextView) view.findViewById(R.id.fb_menu_betteranalysis);
 
         // 图文问题
         tvImageText.setOnClickListener(new View.OnClickListener() {
@@ -415,6 +415,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "1");
+                intent.putExtra("bar_title", tvImageText.getText().toString());
                 startActivity(intent);
                 mPopupWindow.dismiss();
             }
@@ -427,6 +428,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "2");
+                intent.putExtra("bar_title", tvAnswerWrong.getText().toString());
                 startActivity(intent);
                 mPopupWindow.dismiss();
             }
@@ -439,6 +441,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "3");
+                intent.putExtra("bar_title", tvAnalysisWrong.getText().toString());
                 startActivity(intent);
                 mPopupWindow.dismiss();
             }
@@ -451,6 +454,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "4");
+                intent.putExtra("bar_title", tvBetterAnalysis.getText().toString());
                 startActivity(intent);
                 mPopupWindow.dismiss();
             }
