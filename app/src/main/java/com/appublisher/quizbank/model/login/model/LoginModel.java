@@ -139,6 +139,7 @@ public class LoginModel {
 
                     @Override
                     public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
+                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
                         mLoginActivity.mController.getPlatformInfo(
                                 mLoginActivity, SHARE_MEDIA.WEIXIN,
                             new SocializeListeners.UMDataListener() {
@@ -203,6 +204,7 @@ public class LoginModel {
 
                     @Override
                     public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
+                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
                         mLoginActivity.mController.getPlatformInfo(
                                 mLoginActivity, SHARE_MEDIA.SINA,
                             new SocializeListeners.UMDataListener() {
