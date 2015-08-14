@@ -176,6 +176,7 @@ public class HomePageModel {
 
         // 设置跳转
         mActivity = activity;
+        llPromote.setVisibility(View.VISIBLE);
         llPromote.setOnClickListener(onClickListener);
     }
 
