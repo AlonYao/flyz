@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
@@ -273,8 +272,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     @SuppressLint("SetJavaScriptEnabled")
     public void showWebView(String url) {
         if (url == null) return;
-
-        if (!url.contains("http://")) url = "http://" + url;
 
         mProgressBar.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
