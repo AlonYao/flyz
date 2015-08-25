@@ -26,6 +26,8 @@ public class FavoriteModel {
     private static FavoriteFragment mFragment;
 
     public static void dealNoteHierarchyResp(FavoriteFragment fragment, JSONObject response) {
+        fragment.mContainer.removeAllViews();
+
         if (response == null) {
             fragment.mIvNull.setVisibility(View.VISIBLE);
             return;

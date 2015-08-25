@@ -102,7 +102,6 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
      * 获取数据
      */
     private void getData() {
-        mContainer.removeAllViews();
         ProgressBarManager.showProgressBar(mView);
         new Request(mActivity, this).getNoteHierarchy("collect");
     }

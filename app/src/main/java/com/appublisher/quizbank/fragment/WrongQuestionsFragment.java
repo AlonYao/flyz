@@ -93,7 +93,6 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
      * 获取数据
      */
     private void getData() {
-        mContainer.removeAllViews();
         ProgressBarManager.showProgressBar(mView);
         new Request(mActivity, this).getNoteHierarchy("error");
     }
@@ -103,6 +102,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
      * @param response 回调对象
      */
     private void dealNoteHierarchyResp(JSONObject response) {
+        mContainer.removeAllViews();
+
         if (response == null) {
             mIvNull.setVisibility(View.VISIBLE);
             return;
@@ -127,6 +128,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
             mIvNull.setVisibility(View.VISIBLE);
         } else {
             mIvNull.setVisibility(View.GONE);
+
             for (int i = 0; i < hierarchysSize; i++) {
                 HierarchyM hierarchy = hierarchys.get(i);
 
