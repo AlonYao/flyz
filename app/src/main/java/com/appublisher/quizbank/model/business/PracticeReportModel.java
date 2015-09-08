@@ -457,24 +457,21 @@ public class PracticeReportModel {
         } else if (activity.mQuestions == null && categorys != null) {
             // 整卷
             activity.mQuestions = new ArrayList<>();
+            ArrayList<AnswerM> answers = new ArrayList<>();
 
             int size = categorys.size();
             for (int i = 0; i < size; i++) {
                 CategoryM category = categorys.get(i);
-
                 if (category == null) continue;
 
                 ArrayList<QuestionM> categoryQuestions = category.getQuestions();
-//                String categoryName = category.getName();
-
                 if (categoryQuestions == null || categoryQuestions.size() == 0) continue;
 
                 activity.mQuestions.addAll(categoryQuestions);
-
-                // 拼接用户答案
-                ArrayList<AnswerM> answers = category.getAnswers();
-                jointUserAnswer(answers);
+                answers.addAll(category.getAnswers());
             }
+
+            jointUserAnswer(answers);
         }
 
         // 知识点变化
@@ -560,7 +557,8 @@ public class PracticeReportModel {
      * @param answers 用户答案
      */
     private static void jointUserAnswer(ArrayList<AnswerM> answers) {
-        mActivity.mUserAnswerList = new ArrayList<>();
+        if (mActivity.mUserAnswerList == null)
+            mActivity.mUserAnswerList = new ArrayList<>();
 
         int size = mActivity.mQuestions.size();
         for (int i = 0; i < size; i++) {
