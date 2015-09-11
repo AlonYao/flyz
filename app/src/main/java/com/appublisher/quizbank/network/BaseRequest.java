@@ -111,7 +111,7 @@ public class BaseRequest {
      */
     protected void asyncRequest(final String url, final String name, String type) {
         if (Globals.IS_DEBUG) {
-            Logger.i("\n======================================="
+            Logger.i("======================================="
                     + "\nGET Url-> " + url
                     + "\nGET Name-> " + name
                     + "\nGET Type-> " + type);
@@ -220,7 +220,7 @@ public class BaseRequest {
     public void postRequest(final String url, final Map<String, String> params,
                             final String name, String type) {
         if (Globals.IS_DEBUG) {
-            Logger.i("\n======================================="
+            Logger.i("======================================="
                     + "\nPOST Url-> " + url
                     + "\nPOST Name-> " + name
                     + "\nPOST Type-> " + type
