@@ -219,7 +219,7 @@ public class BindingSmsCodeActivity extends ActionBarActivity
                 // 下一步（校验验证码）
                 String smsCode = mEtSmsCode.getText().toString();
 
-                if (mUserPhone == null || mUserPhone.length() == 0) return;
+                if (mUserPhone == null || mUserPhone.length() == 0 || smsCode.length() == 0) return;
 
                 ProgressDialogManager.showProgressDialog(this, false);
 
@@ -277,7 +277,7 @@ public class BindingSmsCodeActivity extends ActionBarActivity
             }
 
         } else if ("auth_handle".equals(apiName)) {
-            // 改变用户信息接口
+            // 改变用户信息接口（绑定手机号）
             CommonResponseModel crm = Globals.gson.fromJson(response.toString(),
                     CommonResponseModel.class);
             if (crm != null && crm.getResponse_code() == 1) {
@@ -289,10 +289,6 @@ public class BindingSmsCodeActivity extends ActionBarActivity
                     UserDAO.updateUserInfo(Globals.gson.toJson(userInfo));
 
                     ToastManager.showToast(this, "修改成功");
-
-                    Intent intent = new Intent(this, UserInfoActivity.class);
-                    intent.putExtra("user_info", Globals.gson.toJson(userInfo));
-                    setResult(11, intent);
 
                     finish();
                 }
