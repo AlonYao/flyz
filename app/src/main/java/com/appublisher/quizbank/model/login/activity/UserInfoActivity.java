@@ -117,6 +117,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
                 // 昵称&手机号
                 mTvNickName.setText(mUserInfoModel.getNickname());
                 mTvPhoneNum.setText(mUserInfoModel.getMobile_num());
+
                 // 判断是否绑定第三方账号
                 String weibo = mUserInfoModel.getWeibo();
                 if (weibo != null && !weibo.equals("")) {
@@ -164,8 +165,7 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
                 if (!mTvPhoneNum.getText().toString().equals("")) return;
 
                 Intent intent = new Intent(UserInfoActivity.this, BindingMobileActivity.class);
-                intent.putExtra("from", "userinfo_add");
-                startActivityForResult(intent, 11);
+                startActivity(intent);
             }
         });
 
@@ -228,6 +228,10 @@ public class UserInfoActivity extends ActionBarActivity implements RequestCallba
     @Override
     protected void onResume() {
         super.onResume();
+
+        // 手机号
+        mTvPhoneNum.setText(LoginModel.getUserMobile());
+
         MobclickAgent.onPageStart("UserInfoActivity");
         MobclickAgent.onResume(this);
         TCAgent.onResume(this);
