@@ -41,6 +41,7 @@
     <color name="alert_lastpage_has_zhibo">#64BE88</color>
     <color name="alert_lastpage_without_zhibo">#C7C7CC</color>
 
+
     <!-- 课程中心 -->
     <color name="course_price">#FB622D</color>
     <color name="course_inprogress">#52B05C</color>
@@ -49,4 +50,7 @@
     <color name="course_watch">#52B05C</color>
     <color name="course_filter_selected">#3AAC7F</color>
 
+
+    <color name="mock_card_round">#ECEDEF</color>
+    <color name="apptheme">#4EB48A</color>
 </resources>

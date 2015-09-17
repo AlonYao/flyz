@@ -1,12 +1,98 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/mock_card_round"
     tools:context="com.appublisher.quizbank.activity.MockPreActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <include layout="@layout/toolbar" />
+    <!--
+        模考报名获奖等说明
+    -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mockpre_bottom"
+        android:layout_below="@+id/toolbar"
+        android:clipToPadding="false"
+        android:paddingTop="20dp"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        android:paddingBottom="20dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:paddingTop="20dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="考试时间"
+                android:textColor="@color/setting_text"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/examdetailcontainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"></LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="19dp"
+                android:background="@color/homepage_line" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="排名及奖励说明"
+                android:textColor="@color/setting_text"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/rankingcontainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/mockpre_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/mockpre_bottom_left"
+            style="@style/PracticeReportTv"
+            android:background="@color/practice_report_all"
+            android:text="@string/mockpre_join_exam" />
+
+        <TextView
+            android:id="@+id/mockpre_bottom_right"
+            style="@style/PracticeReportTv"
+            android:background="@color/practice_report_error"
+            android:text="@string/mockpre_exam_join" />
+    </LinearLayout>
 
 </RelativeLayout>

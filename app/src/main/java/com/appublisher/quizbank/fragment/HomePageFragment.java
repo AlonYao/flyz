@@ -18,7 +18,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
-import com.appublisher.quizbank.activity.MockActivity;
+import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
@@ -284,16 +284,16 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
      */
     private void setMockBtn() {
         GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
-
+        mLlMock.setOnClickListener(this);
         if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1) {
-            mLlMock.setVisibility(View.GONE);
+            mLlMock.setVisibility(View.VISIBLE);
             return;
         }
 
         MockM mock = globalSettingsResp.getMock();
 
         if (mock == null || mock.getType() == null) {
-            mLlMock.setVisibility(View.GONE);
+            mLlMock.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -431,9 +431,10 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case R.id.homepage_mock:
                 // 模考&估分
-                intent = new Intent(mActivity, MockActivity.class);
-                intent.putExtra("title", mTvMockTitle.getText().toString());
+                intent = new Intent(mActivity, MockPreActivity.class);
+//                intent.putExtra("title", mTvMockTitle.getText().toString());
                 startActivity(intent);
+//                ToastManager.showToast(getActivity(),"点击了");
                 break;
         }
     }

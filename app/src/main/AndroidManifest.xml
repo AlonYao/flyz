@@ -312,10 +312,11 @@
         </activity>
         <activity
             android:name=".activity.MockPreActivity"
-            android:label="@string/title_activity_mock_pre"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_mock_pre"
+            android:screenOrientation="portrait" >
         </activity>
+
     </application>
 
 </manifest>

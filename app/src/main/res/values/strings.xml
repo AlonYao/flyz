@@ -91,6 +91,10 @@
     <string name="practice_report_xingce">行测</string>
     <string name="practice_report_shenlun">申论</string>
 
+    <!--模考总动员  -->
+    <string name="mockpre_exam_join">课程报名</string>
+    <string name="mockpre_join_exam">进入考试</string>
+
     <!-- 整卷练习 -->
     <string name="wholepage_province">省份</string>
     <string name="wholepage_year">年份</string>
