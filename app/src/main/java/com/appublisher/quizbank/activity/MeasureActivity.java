@@ -12,8 +12,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -21,16 +23,20 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -47,7 +53,7 @@ import java.util.TimerTask;
 /**
  * 做题
  */
-public class MeasureActivity extends ActionBarActivity implements RequestCallback{
+public class MeasureActivity extends ActionBarActivity implements RequestCallback {
 
     public int mScreenHeight;
     public int mCurPosition;
@@ -66,18 +72,20 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public String mPaperName;
     public String mFrom;
     public Gson mGson;
-    public Handler mHandler;
+    public MsgHandler mHandler;
     public Timer mTimer;
     public Request mRequest;
+    public String mock_time;
 
     public static Toolbar mToolbar;
-    public static int mMins;
-    public static int mSec;
-
+    public static int mMins;//分钟
+    public static int mSec;//秒数
     public static final int TIME_ON = 0;
     public static final int TIME_OUT = 1;
 
-    /** Umeng */
+    /**
+     * Umeng
+     */
     public long mUmengTimestamp;
     public boolean mUmengIsPressHome;
     public String mUmengEntry;
@@ -86,8 +94,17 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private String mUmengAnswerSheet; // 答题卡
 
     private HomeWatcher mHomeWatcher;
+    public static boolean mockpre = false;
 
-    private static class MsgHandler extends Handler {
+    /**
+     * 直接交卷获取参数
+     */
+    public int mTotalNum;
+    public int mRightNum;
+    public LinearLayout mLlEntireContainer;
+    public HashMap<String, HashMap<String, Object>> mCategoryMap;
+
+    public static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
 
         public MsgHandler(Activity activity) {
@@ -118,8 +135,12 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         break;
 
                     case TIME_OUT:
+                        //判断是否是模考
+                        if (mockpre) {
+                            //弹出提示交卷
+                            AlertManager.mockTimeOutAlert(activity);
+                        }
                         activity.getSupportActionBar().setTitle("00:00");
-
                         break;
 
                     default:
@@ -136,7 +157,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
         // ToolBar
         CommonModel.setToolBar(this);
-
         // View 初始化
         mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -170,7 +190,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         mFrom = getIntent().getStringExtra("from");
-
+        //判断是否是模考介绍页
+        if (mFrom != null && mFrom.equals("mockpre")) {
+            mockpre = true;
+            mock_time = getIntent().getStringExtra("mock_time");
+        }
         MeasureModel.getData(this);
     }
 
@@ -255,8 +279,13 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
-        MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(
-                R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        if (mockpre) {
+
+        } else {
+            MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(
+                    R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
+
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -264,8 +293,16 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            saveTest();
-
+            if (mockpre) {
+                long curTime = Utils.getSeconds(mock_time);
+                if (curTime > -(30 * 60)) {
+                    ToastManager.showToast(this, "开考30分钟后才可以交卷");
+                } else {
+                    saveTest();
+                }
+            } else {
+                saveTest();
+            }
         } else if (item.getTitle().equals("暂停")) {
             if (mTimer != null) mTimer.cancel();
             saveQuestionTime();
@@ -351,6 +388,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         intent.putExtra("category", mEntirePaperCategory);
         intent.putExtra("umeng_entry", mUmengEntry);
         intent.putExtra("umeng_timestamp", mUmengTimestamp);
+        intent.putExtra("from", mFrom);
+        intent.putExtra("mock_time", mock_time);
         startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
     }
 
@@ -372,6 +411,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     /**
      * 处理快速智能练习回调
+     *
      * @param autoTrainingResp 快速智能练习回调
      */
     private void dealAutoTrainingResp(AutoTrainingResp autoTrainingResp) {
@@ -507,26 +547,88 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * 是否记录本次练习
      */
     private void saveTest() {
-        boolean isSave = false;
-
-        if (mUserAnswerList != null) {
-            int size = mUserAnswerList.size();
-            for (int i = 0; i < size; i++) {
-                HashMap<String, Object> map = mUserAnswerList.get(i);
-                if (map != null && map.containsKey("answer")
-                        && !"".equals(map.get("answer"))) {
-                    isSave = true;
-                    break;
+        if (mockpre) {
+            AlertManager.saveTestAlert(this);
+        } else {
+            boolean isSave = false;
+            if (mUserAnswerList != null) {
+                int size = mUserAnswerList.size();
+                for (int i = 0; i < size; i++) {
+                    HashMap<String, Object> map = mUserAnswerList.get(i);
+                    if (map != null && map.containsKey("answer")
+                            && !"".equals(map.get("answer"))) {
+                        isSave = true;
+                        break;
+                    }
                 }
+            }
+
+            if (isSave) {
+                AlertManager.saveTestAlert(this);
+            } else {
+                UmengManager.sendToUmeng(MeasureActivity.this, "0");
+                finish();
             }
         }
 
-        if (isSave) {
-            AlertManager.saveTestAlert(this);
-        } else {
-            UmengManager.sendToUmeng(MeasureActivity.this, "0");
-            finish();
-        }
+    }
+
+    /**
+     * 处理提交试卷的回调
+     *
+     * @param response 回调
+     */
+    private void dealSubmitPaperResp(JSONObject response) {
+        Log.i("mockauto", response.toString());
+        if (response == null) return;
+
+        SubmitPaperResp submitPaperResp =
+                GsonManager.getObejctFromJSON(response.toString(), SubmitPaperResp.class);
+
+        if (submitPaperResp == null || submitPaperResp.getResponse_code() != 1) return;
+
+        ArrayList<NoteM> notes = submitPaperResp.getNotes();
+
+        MeasureEntity measureEntity = new MeasureEntity();
+        measureEntity.setDefeat(submitPaperResp.getDefeat());
+        measureEntity.setScore(submitPaperResp.getScore());
+        measureEntity.setScores(submitPaperResp.getScores());
+        measureEntity.setExercise_id(submitPaperResp.getExercise_id());
+
+//        Intent intent = new Intent(this, MeasureActivity.class);
+//        intent.putExtra("notes", notes);
+//        intent.putExtra("paper_name", mPaperName);
+//        intent.putExtra("right_num", mRightNum);
+//        intent.putExtra("total_num", mTotalNum);
+//        intent.putExtra("category", mCategoryMap);
+//        intent.putExtra("measure_entity", measureEntity);
+//        setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
+//
+//        finish();
+
+
+        // 跳转到练习报告页面
+        Intent intent = new Intent(this, PracticeReportActivity.class);
+        intent.putExtra("notes", notes);
+        intent.putExtra("paper_name", mPaperName);
+        intent.putExtra("paper_type", mPaperType);
+        intent.putExtra("right_num", mRightNum);
+        intent.putExtra("total_num", mTotalNum);
+        intent.putExtra("category", mCategoryMap);
+        intent.putExtra("questions", mQuestions);
+        intent.putExtra("user_answer", mUserAnswerList);
+        intent.putExtra("hierarchy_id", mHierarchyId);
+        intent.putExtra("hierarchy_level", mHierarchyLevel);
+        intent.putExtra("umeng_entry", mUmengEntry);
+        intent.putExtra("umeng_timestamp", mUmengTimestamp);
+        intent.putExtra("measure_entity", measureEntity);
+        intent.putExtra("from", "mock");
+        intent.putExtra("exercise_id", measureEntity.getExercise_id());
+        intent.putExtra("paper_id", mPaperId);
+        startActivity(intent);
+        finish();
+
+
     }
 
     @Override
@@ -537,6 +639,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         }
 
         switch (apiName) {
+            case "submit_paper":
+                dealSubmitPaperResp(response);
+                break;
             case "auto_training":
             case "note_questions":
                 // 快速智能练习&专项练习
@@ -555,6 +660,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 // mini模考、整卷、模考、估分、历史练习
                 MeasureModel.dealExerciseDetailResp(this, response);
                 break;
+
         }
 
         ProgressDialogManager.closeProgressDialog();

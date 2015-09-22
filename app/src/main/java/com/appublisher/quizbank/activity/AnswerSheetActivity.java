@@ -78,6 +78,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                 getIntent().getSerializableExtra("user_answer");
         mPaperName = getIntent().getStringExtra("paper_name");
         mPaperType = getIntent().getStringExtra("paper_type");
+        mPaperId = getIntent().getIntExtra("paper_id", 0);
         mEntirePaperCategory = (ArrayList<HashMap<String, Integer>>)
                 getIntent().getSerializableExtra("category");
         mFrom = getIntent().getStringExtra("from");
@@ -190,7 +191,6 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         measureEntity.setScore(submitPaperResp.getScore());
         measureEntity.setScores(submitPaperResp.getScores());
         measureEntity.setExercise_id(submitPaperResp.getExercise_id());
-
         Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
         intent.putExtra("notes", notes);
         intent.putExtra("paper_name", mPaperName);

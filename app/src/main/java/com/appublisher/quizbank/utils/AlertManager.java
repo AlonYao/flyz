@@ -42,6 +42,7 @@ public class AlertManager {
 
     /**
      * 暂停Alert
+     *
      * @param activity MeasureActivity
      */
     public static void pauseAlert(final MeasureActivity activity) {
@@ -67,47 +68,86 @@ public class AlertManager {
 
     /**
      * 保存测验Alert
+     *
      * @param activity MeasureActivity
      */
     public static void saveTestAlert(final MeasureActivity activity) {
-        new AlertDialog.Builder(activity)
-                .setTitle(R.string.alert_savetest_title)
-                .setMessage(R.string.alert_savetest_msg)
-                .setNegativeButton(R.string.alert_n,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                .setPositiveButton(R.string.alert_p,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 如果在第一页退出，更新第一页的时长
-                                if (activity.mCurPosition == 0)
-                                    MeasureModel.saveQuestionTime(activity);
+        if (activity.mockpre) {
+            new AlertDialog.Builder(activity)
+                    .setTitle(R.string.alert_savetest_title)
+                    .setMessage(R.string.alert_mock_back)
+                    .setNegativeButton(R.string.alert_mock_n,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                    .setPositiveButton(R.string.alert_mock_p,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // 如果在第一页退出，更新第一页的时长
+                                    if (activity.mCurPosition == 0)
+                                        MeasureModel.saveQuestionTime(activity);
 
-                                // 保存至本地
-                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
+                                    // 保存至本地
+                                    PaperDAO.save(activity.mPaperId, activity.mCurPosition);
 
-                                // 提交数据
-                                MeasureModel.submitPaper(activity);
+                                    // 提交数据
+                                    MeasureModel.submitPaper(activity);
 
-                                // 保存练习
-                                ToastManager.showToast(activity, "保存成功");
-                                dialog.dismiss();
+                                    // 保存练习
+                                    ToastManager.showToast(activity, "保存成功");
+                                    dialog.dismiss();
 
-                                // Umeng 练习统计
-                                UmengManager.sendToUmeng(activity, "0");
+                                    // Umeng 练习统计
+                                    UmengManager.sendToUmeng(activity, "0");
 
-                                activity.finish();
-                            }
-                        }).show();
+                                    activity.finish();
+                                }
+                            }).show();
+        } else {
+            new AlertDialog.Builder(activity)
+                    .setTitle(R.string.alert_savetest_title)
+                    .setMessage(R.string.alert_savetest_msg)
+                    .setNegativeButton(R.string.alert_n,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                    .setPositiveButton(R.string.alert_p,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // 如果在第一页退出，更新第一页的时长
+                                    if (activity.mCurPosition == 0)
+                                        MeasureModel.saveQuestionTime(activity);
+
+                                    // 保存至本地
+                                    PaperDAO.save(activity.mPaperId, activity.mCurPosition);
+
+                                    // 提交数据
+                                    MeasureModel.submitPaper(activity);
+
+                                    // 保存练习
+                                    ToastManager.showToast(activity, "保存成功");
+                                    dialog.dismiss();
+
+                                    // Umeng 练习统计
+                                    UmengManager.sendToUmeng(activity, "0");
+
+                                    activity.finish();
+                                }
+                            }).show();
+        }
     }
 
     /**
      * 末题引导Alert
+     *
      * @param activity MeasureAnalysisActivity
      */
     public static void lastPageAlert(final MeasureAnalysisActivity activity) {
@@ -191,6 +231,7 @@ public class AlertManager {
 
     /**
      * 显示评分Alert
+     *
      * @param activity Activity
      */
     public static void showGradeAlert(final Activity activity, final String umengEntry) {
@@ -270,6 +311,7 @@ public class AlertManager {
 
     /**
      * 显示评价模块赠送课程信息
+     *
      * @param tvCourse Textview
      */
     private static void setGradeCourse(TextView tvCourse) {
@@ -284,6 +326,7 @@ public class AlertManager {
 
     /**
      * 显示评价成功Alert
+     *
      * @param activity Activity
      * @param jump_url 跳转地址（课程详情页面）
      */
@@ -323,6 +366,7 @@ public class AlertManager {
 
     /**
      * 显示评价失败Alert
+     *
      * @param activity Activity
      */
     public static void showGradeFailAlert(final Activity activity) {
@@ -371,6 +415,7 @@ public class AlertManager {
 
     /**
      * 关闭Activity
+     *
      * @param activity Activity
      */
     private static void finishActivity(Activity activity) {
@@ -383,6 +428,7 @@ public class AlertManager {
 
     /**
      * 显示登出Alert
+     *
      * @param userInfoActivity 用户个人信息Activity
      */
     public static void showLogoutAlert(final UserInfoActivity userInfoActivity) {
@@ -410,6 +456,7 @@ public class AlertManager {
 
     /**
      * 显示登出Alert
+     *
      * @param activity MeasureAnalysisActivity
      */
     public static void deleteErrorQuestionAlert(final MeasureAnalysisActivity activity) {
@@ -451,10 +498,11 @@ public class AlertManager {
 
     /**
      * 如果有未完成题目时的提示
-     * @param activity AnswerSheetActivity
-     * @param redoSubmit 是否是重做
+     *
+     * @param activity       AnswerSheetActivity
+     * @param redoSubmit     是否是重做
      * @param duration_total 总做题时间
-     * @param questions 用户答案信息
+     * @param questions      用户答案信息
      */
     public static void answerSheetNoticeAlert(final AnswerSheetActivity activity,
                                               final String redoSubmit,
@@ -494,6 +542,7 @@ public class AlertManager {
 
     /**
      * 预约直播课
+     *
      * @param activity OpenCourseUnstartActivity
      */
     public static void bookOpenCourseAlert(final OpenCourseUnstartActivity activity,
@@ -526,6 +575,7 @@ public class AlertManager {
 
     /**
      * 公开课模块提示用户切换账号Alert
+     *
      * @param activity Activity
      */
     public static void openCourseUserChangeAlert(final Activity activity) {
@@ -553,8 +603,9 @@ public class AlertManager {
 
     /**
      * 报告错题Alert
+     *
      * @param activity MeasureAnalysisActivity
-     * @param type 类型
+     * @param type     类型
      * @deprecated
      */
     public static void reportErrorAlert(final MeasureAnalysisActivity activity,
@@ -569,7 +620,7 @@ public class AlertManager {
                             public void onClick(DialogInterface dialog, int which) {
                                 new Request(activity).reportErrorQuestion(
                                         ParamBuilder.reportErrorQuestion(
-                                        String.valueOf(activity.mCurQuestionId), type, ""));
+                                                String.valueOf(activity.mCurQuestionId), type, ""));
 
                                 ToastManager.showToast(activity, "提交成功");
 
@@ -584,5 +635,20 @@ public class AlertManager {
                             }
                         })
                 .create().show();
+    }
+
+    public static void mockTimeOutAlert(final MeasureActivity activity) {
+        new AlertDialog.Builder(activity)
+                .setMessage("时间到了要交卷啦！")
+                .setTitle("提示")
+                .setPositiveButton("好的",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //交卷
+                                MeasureModel.autoSubmitPaper(activity);
+                            }
+                        }).create().show();
     }
 }

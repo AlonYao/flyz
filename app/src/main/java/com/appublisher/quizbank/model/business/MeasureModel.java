@@ -37,6 +37,7 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -56,6 +57,7 @@ public class MeasureModel {
 
     /**
      * 获取View高度
+     *
      * @param view View控件
      * @return 高度
      */
@@ -68,9 +70,10 @@ public class MeasureModel {
 
     /**
      * 动态添加富文本(包含题号)
-     * @param activity Activity
+     *
+     * @param activity  Activity
      * @param container 富文本控件容器
-     * @param rich 富文本
+     * @param rich      富文本
      */
     public static void addRichTextToContainer(final Activity activity,
                                               LinearLayout container,
@@ -147,7 +150,7 @@ public class MeasureModel {
 
                 // 异步加载图片
                 DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                final float minHeight = (float) ((dm.heightPixels - 50)*0.2); // 50是状态栏高度
+                final float minHeight = (float) ((dm.heightPixels - 50) * 0.2); // 50是状态栏高度
 
                 ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
                     @Override
@@ -162,7 +165,7 @@ public class MeasureModel {
                         if (height < minHeight) {
                             Matrix matrix = new Matrix();
                             matrix.postScale(2.0f, 2.0f);
-                            data = Bitmap.createBitmap(data, 0, 0 ,width, height, matrix, true);
+                            data = Bitmap.createBitmap(data, 0, 0, width, height, matrix, true);
                         }
 
                         imgView.setImageBitmap(data);
@@ -193,9 +196,10 @@ public class MeasureModel {
 
     /**
      * 动态添加富文本
-     * @param activity Activity
+     *
+     * @param activity  Activity
      * @param container 富文本控件容器
-     * @param rich 富文本
+     * @param rich      富文本
      */
     public static void addRichTextToContainer(final Activity activity,
                                               LinearLayout container,
@@ -254,7 +258,7 @@ public class MeasureModel {
 
                 // 异步加载图片
                 DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                final float minHeight = (float) ((dm.heightPixels - 50)*0.2); // 50是状态栏高度
+                final float minHeight = (float) ((dm.heightPixels - 50) * 0.2); // 50是状态栏高度
 
                 ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
                     @Override
@@ -269,7 +273,7 @@ public class MeasureModel {
                         if (height < minHeight) {
                             Matrix matrix = new Matrix();
                             matrix.postScale(2.0f, 2.0f);
-                            data = Bitmap.createBitmap(data, 0, 0 ,width, height, matrix, true);
+                            data = Bitmap.createBitmap(data, 0, 0, width, height, matrix, true);
                         }
 
                         imgView.setImageBitmap(data);
@@ -300,6 +304,7 @@ public class MeasureModel {
 
     /**
      * 获取数据
+     *
      * @param activity MeasureActivity
      */
     public static void getData(MeasureActivity activity) {
@@ -369,6 +374,7 @@ public class MeasureModel {
 
     /**
      * 处理历史练习回调(用户已经做过一次后，请求的接口)
+     *
      * @param activity MeasureActivity
      * @param response 回调数据
      */
@@ -430,8 +436,13 @@ public class MeasureModel {
         // 倒计时
         activity.mDuration =
                 historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
+        if (activity.mockpre) {//如果是模考则计算剩余时间
+            if (activity.mock_time != null) {
+                activity.mDuration = (int) Utils.getSeconds(activity.mock_time) + activity.mDuration;
+                activity.startTimer();
+            }
+        }
         startTimer(activity);
-
         // 设置ViewPager
         setViewPager(activity);
     }
@@ -514,6 +525,11 @@ public class MeasureModel {
                         activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_OUT);
                     }
                 } else {
+                    if (MeasureActivity.mMins == 15 && MeasureActivity.mSec == 0) {
+                        if (MeasureActivity.mockpre) {
+                            ToastManager.showToast(activity, "距离考试结束还有15分钟");
+                        }
+                    }
                     activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
                 }
             }
@@ -522,13 +538,14 @@ public class MeasureModel {
 
     /**
      * 提交答案(从做题页面Alert处的提交)
+     *
      * @param activity MeasureActivity
      */
     public static void submitPaper(MeasureActivity activity) {
         int duration_total = 0;
         HashMap<String, Object> userAnswerMap;
         JSONArray questions = new JSONArray();
-
+        String status;
         String redoSubmit;
         if (activity.mRedo) {
             redoSubmit = "true";
@@ -573,6 +590,11 @@ public class MeasureModel {
                 e.printStackTrace();
             }
         }
+        if (MeasureActivity.mockpre) {
+            status = "done";
+        } else {
+            status = "undone";
+        }
 
         new Request(activity).submitPaper(
                 ParamBuilder.submitPaper(
@@ -581,19 +603,21 @@ public class MeasureModel {
                         redoSubmit,
                         String.valueOf(duration_total),
                         questions.toString(),
-                        "undone")
+                        status)
         );
+        ToastManager.showToast(activity, "交卷啦");
     }
 
     /**
      * 拼接用户答案
-     * @param questions 题目
-     * @param answers 用户答案
+     *
+     * @param questions      题目
+     * @param answers        用户答案
      * @param userAnswerList 用户答案List
      */
     public static void jointUserAnswer(ArrayList<QuestionM> questions,
-                                 ArrayList<AnswerM> answers,
-                                 ArrayList<HashMap<String, Object>> userAnswerList) {
+                                       ArrayList<AnswerM> answers,
+                                       ArrayList<HashMap<String, Object>> userAnswerList) {
         int size = questions.size();
         for (int i = 0; i < size; i++) {
             HashMap<String, Object> map = new HashMap<>();
@@ -624,5 +648,127 @@ public class MeasureModel {
 
             if (userAnswerList != null) userAnswerList.add(map);
         }
+    }
+
+    /**
+     * 直接提交答案
+     *
+     * @param activity AnswerSheetActivity
+     */
+    public static void autoSubmitPaper(MeasureActivity activity) {
+        // 重置数据
+        activity.mRightNum = 0;
+        int duration_total = 0;
+        HashMap<String, Object> userAnswerMap;
+        JSONArray questions = new JSONArray();
+
+        boolean redo = activity.getIntent().getBooleanExtra("redo", false);
+        // 标记有没有未做的题
+        boolean hasNoAnswer = false;
+
+        String redoSubmit;
+        if (redo) {
+            redoSubmit = "true";
+        } else {
+            redoSubmit = "false";
+        }
+
+        activity.mCategoryMap = new HashMap<>();
+
+        if (activity.mUserAnswerList == null) return;
+
+        activity.mTotalNum = activity.mUserAnswerList.size();
+        for (int i = 0; i < activity.mTotalNum; i++) {
+            try {
+                userAnswerMap = activity.mUserAnswerList.get(i);
+
+                int id = (int) userAnswerMap.get("id");
+                String answer = (String) userAnswerMap.get("answer");
+                boolean is_right = false;
+                int category = (int) userAnswerMap.get("category_id");
+                String category_name = (String) userAnswerMap.get("category_name");
+                int note_id = (int) userAnswerMap.get("note_id");
+                int duration = (int) userAnswerMap.get("duration");
+                String right_answer = (String) userAnswerMap.get("right_answer");
+
+                // 判断对错
+                if (answer != null && right_answer != null
+                        && !"".equals(answer) && answer.equals(right_answer)) {
+                    is_right = true;
+                    activity.mRightNum++;
+                }
+
+                // 标记有没有未做的题
+                if (answer == null || answer.length() == 0) hasNoAnswer = true;
+
+                // 统计总时长
+                duration_total = duration_total + duration;
+
+                JSONObject joQuestion = new JSONObject();
+                joQuestion.put("id", id);
+                joQuestion.put("answer", answer);
+                joQuestion.put("is_right", is_right);
+                joQuestion.put("category", category);
+                joQuestion.put("note_id", note_id);
+                joQuestion.put("duration", duration);
+                questions.put(joQuestion);
+
+                // 统计科目信息
+                if (category_name != null
+                        && activity.mCategoryMap.containsKey(category_name)) {
+                    // 更新Map
+                    HashMap<String, Object> map = activity.mCategoryMap.get(category_name);
+
+                    int medium;
+
+                    // 正确题目的数量
+                    if (is_right) {
+                        medium = (int) map.get("right_num");
+                        medium++;
+                        map.put("right_num", medium);
+                    }
+
+                    // 总数
+                    medium = (int) map.get("total_num");
+                    medium++;
+                    map.put("total_num", medium);
+
+                    // 总时长
+                    medium = (int) map.get("duration_total");
+                    medium = medium + duration;
+                    map.put("duration_total", medium);
+
+                    // 保存
+                    activity.mCategoryMap.put(category_name, map);
+                } else {
+                    HashMap<String, Object> map = new HashMap<>();
+                    if (is_right) {
+                        map.put("right_num", 1);
+                    } else {
+                        map.put("right_num", 0);
+                    }
+                    map.put("total_num", 1);
+                    map.put("duration_total", duration);
+                    activity.mCategoryMap.put(category_name, map);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        activity.mPaperId = activity.getIntent().getIntExtra("paper_id", 0);
+
+
+        ProgressDialogManager.showProgressDialog(activity, false);
+        new Request(activity, activity).submitPaper(
+                ParamBuilder.submitPaper(
+                        String.valueOf(activity.mPaperId),
+                        String.valueOf(activity.mPaperType),
+                        redoSubmit,
+                        String.valueOf(duration_total),
+                        questions.toString(),
+                        "done")
+        );
     }
 }

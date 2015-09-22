@@ -12,6 +12,8 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +29,7 @@ public class AnswerSheetModel {
 
     /**
      * 设置整卷答题卡
+     *
      * @param activity AnswerSheetActivity
      */
     @SuppressWarnings({"unchecked", "Annotator"})
@@ -85,6 +88,7 @@ public class AnswerSheetModel {
 
     /**
      * 提交答案
+     *
      * @param activity AnswerSheetActivity
      */
     public static void submitPaper(AnswerSheetActivity activity) {
@@ -189,22 +193,31 @@ public class AnswerSheetModel {
             }
         }
 
-        activity.mPaperId = activity.getIntent().getIntExtra("paper_id", 0);
-
-        if (hasNoAnswer) {
-            // 提示用户是否提交
-            AlertManager.answerSheetNoticeAlert(activity, redoSubmit, duration_total, questions);
+        if (activity.mFrom.equals("mockpre")) {
+            String mock_time = activity.getIntent().getStringExtra("mock_time");
+            long curTime = Utils.getSeconds(mock_time);
+            if (curTime > -(30 * 60)) {
+                ToastManager.showToast(activity, "开考30分钟后才可以交卷");
+                return;
+            }
         } else {
-            ProgressDialogManager.showProgressDialog(activity, false);
-            new Request(activity, activity).submitPaper(
-                    ParamBuilder.submitPaper(
-                            String.valueOf(activity.mPaperId),
-                            String.valueOf(activity.mPaperType),
-                            redoSubmit,
-                            String.valueOf(duration_total),
-                            questions.toString(),
-                            "done")
-            );
+            if (hasNoAnswer) {
+                // 提示用户是否提交
+                AlertManager.answerSheetNoticeAlert(activity, redoSubmit, duration_total, questions);
+            } else {
+
+                ProgressDialogManager.showProgressDialog(activity, false);
+                new Request(activity, activity).submitPaper(
+                        ParamBuilder.submitPaper(
+                                String.valueOf(activity.mPaperId),
+                                String.valueOf(activity.mPaperType),
+                                redoSubmit,
+                                String.valueOf(duration_total),
+                                questions.toString(),
+                                "done")
+                );
+            }
         }
+
     }
 }

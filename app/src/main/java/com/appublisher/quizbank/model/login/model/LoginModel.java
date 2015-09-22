@@ -258,7 +258,7 @@ public class LoginModel {
 
         Configuration.Builder builder = new Configuration.Builder(context);
         builder.setDatabaseName(databaseName);
-        builder.setDatabaseVersion(2);
+        builder.setDatabaseVersion(3);
         ActiveAndroid.initialize(builder.create());
         Globals.db_initialize = true;
     }
@@ -475,6 +475,10 @@ public class LoginModel {
                     // 公开课回放
                     Intent intent = new Intent(activity, BindingMobileActivity.class);
                     activity.setResult(ActivitySkipConstants.OPENCOURSE_PRE, intent);
+                    activity.finish();
+                } else if("mock_openopencourse".equals(activity.mFrom)){
+                    Intent intent = new Intent(activity, BindingMobileActivity.class);
+                    activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
                     activity.finish();
                 }
 

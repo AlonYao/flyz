@@ -12,8 +12,9 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 拼接通用参数
-     * @param url  拼接前的url
-     * @return  拼接后的url
+     *
+     * @param url 拼接前的url
+     * @return 拼接后的url
      */
     public static String finalUrl(String url) {
         //noinspection StringBufferReplaceableByString
@@ -47,10 +48,11 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 用户登录参数
-     * @param login_type  登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
-     * @param login_id  登录的id  手机号/邮箱，或者是第三方的open_id
-     * @param nickname  用户的昵称  第三方注册时对服务端有效，没有时传空
-     * @param password  用户密码
+     *
+     * @param login_type 登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
+     * @param login_id   登录的id  手机号/邮箱，或者是第三方的open_id
+     * @param nickname   用户的昵称  第三方注册时对服务端有效，没有时传空
+     * @param password   用户密码
      * @return params  用户登录参数
      */
     public static Map<String, String> loginParams(String login_type, String login_id,
@@ -66,13 +68,14 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 公开课模块用户登录参数
-     * @param login_type  登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
-     * @param login_id  登录的id  手机号/邮箱，或者是第三方的open_id
-     * @param mobile_token  短信验证码
+     *
+     * @param login_type   登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
+     * @param login_id     登录的id  手机号/邮箱，或者是第三方的open_id
+     * @param mobile_token 短信验证码
      * @return params  用户登录参数
      */
     public static Map<String, String> openCourseLoginParams(String login_type, String login_id,
-                                                  String mobile_token) {
+                                                            String mobile_token) {
         Map<String, String> params = new HashMap<>();
         params.put("login_type", login_type);
         params.put("login_id", login_id);
@@ -83,15 +86,16 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 第三方用户登录参数
-     * @param login_type  登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
-     * @param login_id  登录的id  手机号/邮箱，或者是第三方的open_id
-     * @param nickname  用户的昵称  第三方注册时对服务端有效，没有时传空
-     * @param password  用户密码
-     * @param avatar 用户头像
+     *
+     * @param login_type 登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
+     * @param login_id   登录的id  手机号/邮箱，或者是第三方的open_id
+     * @param nickname   用户的昵称  第三方注册时对服务端有效，没有时传空
+     * @param password   用户密码
+     * @param avatar     用户头像
      * @return params  用户登录参数
      */
     public static Map<String, String> socialLoginParams(String login_type, String login_id,
-                                                  String nickname, String password, String avatar) {
+                                                        String nickname, String password, String avatar) {
         Map<String, String> params = new HashMap<>();
         params.put("login_type", login_type);
         params.put("login_id", login_id);
@@ -104,8 +108,9 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 手机号信息
-     * @param mobile_num  手机号
-     * @return  手机号信息
+     *
+     * @param mobile_num 手机号
+     * @return 手机号信息
      */
     public static Map<String, String> phoneNumParams(String mobile_num, String action) {
         Map<String, String> params = new HashMap<>();
@@ -116,9 +121,10 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 验证码校验参数
-     * @param mobile_num  手机号
-     * @param mobile_token  验证码
-     * @return  参数
+     *
+     * @param mobile_num   手机号
+     * @param mobile_token 验证码
+     * @return 参数
      */
     public static Map<String, String> checkSmsCodeParams(String mobile_num, String mobile_token) {
         Map<String, String> params = new HashMap<>();
@@ -129,9 +135,10 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 用户注册参数
-     * @param mobile_num  手机号
-     * @param password  密码
-     * @return  用户注册参数
+     *
+     * @param mobile_num 手机号
+     * @param password   密码
+     * @return 用户注册参数
      */
     public static Map<String, String> register(String mobile_num, String password) {
         Map<String, String> params = new HashMap<>();
@@ -142,9 +149,10 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 忘记密码参数
-     * @param mobile_num  手机号
-     * @param password  密码
-     * @return  用户注册参数
+     *
+     * @param mobile_num 手机号
+     * @param password   密码
+     * @return 用户注册参数
      */
     public static Map<String, String> forgetPwd(String mobile_num, String password) {
         Map<String, String> params = new HashMap<>();
@@ -155,9 +163,10 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 修改个人信息参数
+     *
      * @param info_type  类型：avatar,nickname
-     * @param info_value  新的信息
-     * @return  个人信息参数
+     * @param info_value 新的信息
+     * @return 个人信息参数
      */
     public static Map<String, String> changeUserInfo(String info_type, String info_value) {
         Map<String, String> params = new HashMap<>();
@@ -168,10 +177,11 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 登录信息授权参数
-     * @param auth_type  授权类型：0:手机，1:新浪微博，2:微信，3:人人
-     * @param handle_type  授权行为的类别：delete:删除，add:新增，update:更新
-     * @param auth_id  授权的id：手机号，或者是第三方的open_id
-     * @return  参数
+     *
+     * @param auth_type   授权类型：0:手机，1:新浪微博，2:微信，3:人人
+     * @param handle_type 授权行为的类别：delete:删除，add:新增，update:更新
+     * @param auth_id     授权的id：手机号，或者是第三方的open_id
+     * @return 参数
      */
     public static Map<String, String> authHandle(String auth_type, String handle_type,
                                                  String auth_id, String password) {
@@ -186,9 +196,10 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 修改密码参数
-     * @param old_pswd  旧密码
-     * @param new_pswd  新密码
-     * @return  参数
+     *
+     * @param old_pswd 旧密码
+     * @param new_pswd 新密码
+     * @return 参数
      */
     public static Map<String, String> changePwd(String old_pswd, String new_pswd) {
         Map<String, String> params = new HashMap<>();
@@ -205,6 +216,7 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 又拍云上传头像地址生成
+     *
      * @return 地址
      */
     public static String upyunInterviewVideoPath() {
@@ -220,13 +232,14 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 提交试卷参数
-     * @param paper_id 试卷id
+     *
+     * @param paper_id   试卷id
      * @param paper_type 试卷类型
-     * @param redo 是否为重新做题
-     * @param duration 答题总时长（秒）
-     * @param questions 序列化json，同上岸计划，额外增加每道题的时间
-     * @param status 完成状态
-     * @return  参数
+     * @param redo       是否为重新做题
+     * @param duration   答题总时长（秒）
+     * @param questions  序列化json，同上岸计划，额外增加每道题的时间
+     * @param status     完成状态
+     * @return 参数
      */
     public static Map<String, String> submitPaper(String paper_id, String paper_type,
                                                   String redo, String duration,
@@ -244,8 +257,9 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 收藏&取消收藏题目
+     *
      * @param question_id 题目id
-     * @param type collect：收藏 cancel：取消收藏
+     * @param type        collect：收藏 cancel：取消收藏
      * @return 参数Map
      */
     public static Map<String, String> collectQuestion(String question_id, String type) {
@@ -258,14 +272,15 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 错题反馈
+     *
      * @param question_id 题目id
-     * @param error_type 1：图/文有错 2：答案有错 3：解析有错 4：我有更好的解析
+     * @param error_type  1：图/文有错 2：答案有错 3：解析有错 4：我有更好的解析
      * @param my_analysis error_type为4时，更好的解析
      * @return 参数Map
      */
     public static Map<String, String> reportErrorQuestion(String question_id,
-                                                      String error_type,
-                                                      String my_analysis) {
+                                                          String error_type,
+                                                          String my_analysis) {
         Map<String, String> params = new Hashtable<>();
         params.put("question_id", question_id);
         params.put("error_type", error_type);
@@ -276,6 +291,7 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 删除错题
+     *
      * @param question_id 题目id
      * @return 参数Map
      */
@@ -287,6 +303,7 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 标记通知已读
+     *
      * @param notification_id 题目id
      * @return 参数Map
      */
@@ -298,6 +315,7 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 预约公开课
+     *
      * @param course_id 课程id
      * @return 参数Map
      */
@@ -309,7 +327,8 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 预约公开课
-     * @param action 获取课程:getCourse 开通课程:enroll
+     *
+     * @param action    获取课程:getCourse 开通课程:enroll
      * @param course_id 课程id
      * @return 参数Map
      */
@@ -317,6 +336,29 @@ public class ParamBuilder implements ApiConstants {
         Map<String, String> params = new HashMap<>();
         params.put("action", action);
         params.put("course_id", course_id);
+        return params;
+    }
+
+    /**
+     * 模考解析直播课报名
+     *
+     * @param course_id 课程id
+     * @return
+     */
+    public static Map<String, String> getSignUpMockCourse(String course_id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("course_id", course_id);
+        return params;
+    }
+
+    /**
+     * 预约模考
+     * @param mock_id
+     * @return
+     */
+    public static Map<String,String> getBookMock(String mock_id){
+        Map<String,String> params = new HashMap<>();
+        params.put("mock_id",mock_id);
         return params;
     }
 }

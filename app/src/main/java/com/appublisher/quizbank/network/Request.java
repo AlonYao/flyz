@@ -193,7 +193,12 @@ public class Request extends BaseRequest implements ApiConstants{
     public void getMockExerciseList() {
         asyncRequest(ParamBuilder.finalUrl(getMockExerciseList), "mock_exercise_list", "object");
     }
-
+    /**
+     * 获取模考总动员
+     */
+    public void getMockPreExamInfo(String mock_id) {
+        asyncRequest(ParamBuilder.finalUrl(getMockPreExamInfo) + "&mock_id=" + mock_id, "mockpre_exam_info", "object");
+    }
     /**
      * 获取通知
      * @param offset 起点
@@ -440,6 +445,14 @@ public class Request extends BaseRequest implements ApiConstants{
         postRequest(ParamBuilder.finalUrl(bookOpenCourse),
                 params, "book_open_course", "object");
     }
+    /**
+     * 预约模考
+     * @param params 参数
+     */
+    public void bookMock(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(bookMcok),
+                params, "book_mock", "object");
+    }
 
     /**
      * 评论获取待赠送课程、开课
@@ -448,6 +461,13 @@ public class Request extends BaseRequest implements ApiConstants{
     public void getRateCourse(Map<String, String> params) {
         postRequest(ParamBuilder.finalUrl(getRateCourse),
                 params, "get_rate_course", "object");
+    }
+
+    /**
+     * 模考解析直播课报名
+     */
+    public void mockSignUp(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(mockSignUp), params, "mock_signup", "object");
     }
 
 	/*********************

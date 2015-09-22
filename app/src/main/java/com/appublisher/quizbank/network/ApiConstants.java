@@ -3,15 +3,17 @@ package com.appublisher.quizbank.network;
 import android.graphics.Bitmap.CompressFormat;
 
 public interface ApiConstants {
-	// 服务器切换：dev为测试服务器，api为正式服务器
-//    String base = "dev";
-    String base = "spark";
+    // 服务器切换：dev为测试服务器，api为正式服务器
+    String base = "dev";
+//    String base = "spark";
 
-	String baseUrl = "http://api." + base + ".appublisher.com/";
+    String baseUrl = "http://api." + base + ".appublisher.com/";
 
     String baseUrlImg = "http://img.edu.appublisher.com/";
 
-    /** 登录注册模块 **/
+    /**
+     * 登录注册模块
+     **/
     // 用户登录
     String userLogin = baseUrl + "common/user_login";
 
@@ -51,7 +53,9 @@ public interface ApiConstants {
     // 密码重置URL
     String resetPassUri = "http://edu.appublisher.com/api/sendmail/mail.php?app=daily";
 
-    /** 天天模考 **/
+    /**
+     * 天天模考
+     **/
     // 快速智能练习
     String getAutoTraining = baseUrl + "quizbank/auto_training";
 
@@ -113,6 +117,9 @@ public interface ApiConstants {
     // 预约公开课
     String bookOpenCourse = baseUrl + "quizbank/book_open_course";
 
+    // 预约模考
+    String bookMcok = baseUrl + "quizbank/book_mock";
+
     // 获取公开课播放地址
     String getOpenCourseUrl = baseUrl + "quizbank/open_course_url";
 
@@ -125,10 +132,15 @@ public interface ApiConstants {
     // 获取模考&估分试卷列表
     String getMockExerciseList = baseUrl + "quizbank/mock_exercise_list";
 
+    // 获取模考信息
+    String getMockPreExamInfo = baseUrl + "quizbank/get_mock_tutorial";
+
     // 获取快讯详情
     String getPromoteLiveCourse = baseUrl + "quizbank/promote_live_course";
 
-    /** 课程中心 **/
+    /**
+     * 课程中心
+     **/
     // Filter:课程标签
     String getCourseFilterTag = baseUrl + "course/course_filter_tag";
 
@@ -146,10 +158,14 @@ public interface ApiConstants {
 
     // 评论获取待赠送课程、开课
     String getRateCourse = baseUrl + "course/get_rate_course";
+    //模考直播课报名
+    String mockSignUp = baseUrl + "quizbank/enroll_mock_course";
 
-    /** 图片相关 **/
-    int DISK_IMAGECACHE_SIZE = 1024*1024*10; //设置10M的图片缓存
-	CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
+    /**
+     * 图片相关
+     **/
+    int DISK_IMAGECACHE_SIZE = 1024 * 1024 * 10; //设置10M的图片缓存
+    CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
     //PNG is lossless so quality is ignored but must be provided
     int DISK_IMAGECACHE_QUALITY = 100;
     String DISK_IMAGECACHE_FOLDER = "url_img";
