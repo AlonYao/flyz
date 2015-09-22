@@ -93,10 +93,12 @@ public class AlertManager {
 
                                     // 保存至本地
                                     PaperDAO.save(activity.mPaperId, activity.mCurPosition);
-
                                     // 提交数据
-                                    MeasureModel.submitPaper(activity);
-
+                                    if(activity.mFrom.equals("mockpre")){
+                                        MeasureModel.autoSubmitPaper(activity);
+                                    }else{
+                                        MeasureModel.submitPaper(activity);
+                                    }
                                     // 保存练习
                                     ToastManager.showToast(activity, "保存成功");
                                     dialog.dismiss();
@@ -165,7 +167,7 @@ public class AlertManager {
         TextView tvZhibo = (TextView) window.findViewById(R.id.alert_lastpage_zhibo);
 
         // 再来一发
-        if ("mokao".equals(activity.mAnalysisType) || "entire".equals(activity.mAnalysisType)) {
+        if ("mokao".equals(activity.mAnalysisType) || "entire".equals(activity.mAnalysisType) || "mock".equals(activity.mAnalysisType)) {
             tvAnother.setVisibility(View.GONE);
         } else {
             tvAnother.setVisibility(View.VISIBLE);
