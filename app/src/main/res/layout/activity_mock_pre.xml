@@ -86,7 +86,7 @@
             android:id="@+id/mockpre_bottom_left"
             style="@style/PracticeReportTv"
             android:background="@color/practice_report_all"
-            android:text="@string/mockpre_join_exam" />
+            android:text="" />
 
         <TextView
             android:id="@+id/mockpre_bottom_right"

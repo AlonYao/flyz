@@ -65,7 +65,11 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             getSupportActionBar().setTitle("验证手机号");
             tvOpenCourse.setVisibility(View.GONE);
         }
-
+        //模考介绍页
+        if (mFrom.equals("mockpre")) {
+            tvOpenCourse.setText("考试前会收到短信提示哦");
+            tvOpenCourse.setVisibility(View.VISIBLE);
+        }
         // 下一步
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +171,8 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
                     startActivityForResult(intent, ActivitySkipConstants.BOOK_OPENCOURSE);
                 } else if ("opencourse_pre".equals(mFrom)) {
                     startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
+                } else if("mock_openopencourse".equals(mFrom)){
+                    startActivityForResult(intent, ActivitySkipConstants.BOOK_OPENCOURSE);
                 }
             }
         }

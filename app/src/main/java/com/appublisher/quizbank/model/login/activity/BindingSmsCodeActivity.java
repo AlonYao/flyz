@@ -46,7 +46,7 @@ import java.util.TimerTask;
  * 绑定手机号短信验证码页面
  */
 public class BindingSmsCodeActivity extends ActionBarActivity
-        implements RequestCallback, View.OnClickListener{
+        implements RequestCallback, View.OnClickListener {
 
     private static final int TIME_ON = 1;
     private static final int TIME_OUT = 2;
@@ -61,7 +61,9 @@ public class BindingSmsCodeActivity extends ActionBarActivity
     public String mOpenCourseId;
     public String mFrom;
 
-    /** Umeng */
+    /**
+     * Umeng
+     */
     public boolean mUmengIsCheckSuccess;
     public long mUmengTimestamp;
     public String mUmengEntry;

@@ -16,6 +16,7 @@ import org.json.JSONException;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class Utils {
 
     /**
      * 判断是否是游客身份
+     *
      * @return 是与否
      */
     public static boolean isGuest() {
@@ -39,19 +41,21 @@ public class Utils {
 
     /**
      * 转换成百分比(保留2位小数点)
+     *
      * @param rate 比率
      * @return 百分比
      */
     public static String rateToPercent(float rate) {
-        int rateInt = (int) (Math.round(rate*10000)/100.0);
+        int rateInt = (int) (Math.round(rate * 10000) / 100.0);
         return String.valueOf(rateInt);
     }
 
     /**
      * JSONArray拼接方法
-     * @param ja1  旧的JSONArray
-     * @param ja2  新的JSONArray
-     * @return  ja1 + ja2
+     *
+     * @param ja1 旧的JSONArray
+     * @param ja2 新的JSONArray
+     * @return ja1 + ja2
      */
     public static JSONArray jointJSONArray(JSONArray ja1, JSONArray ja2) {
         if (ja1 != null && ja2 != null) {
@@ -84,9 +88,10 @@ public class Utils {
 
     /**
      * 日期转换 Date To String
-     * @param date  日期
-     * @param format  日期格式
-     * @return  String类型的日期
+     *
+     * @param date   日期
+     * @param format 日期格式
+     * @return String类型的日期
      */
     public static String DateToString(Date date, String format) {
         if (date != null && format != null) {
@@ -104,7 +109,8 @@ public class Utils {
 
     /**
      * 获取当前时间的前一天
-     * @return  昨天的时间
+     *
+     * @return 昨天的时间
      */
     public static Date getYesterdayDate() {
         Date dNow = new Date();   //当前时间
@@ -120,6 +126,7 @@ public class Utils {
 
     /**
      * 获取当前日期(yyyy-MM-dd)
+     *
      * @return 当前日期
      */
     public static String getCurDate() {
@@ -130,8 +137,9 @@ public class Utils {
 
     /**
      * boolean类型数据转换成int类型数据（用于数据库保存）
-     * @param booleanValue  boolean数据
-     * @return  int数据 0：false 1：true
+     *
+     * @param booleanValue boolean数据
+     * @return int数据 0：false 1：true
      */
     public static int booleanToInt(boolean booleanValue) {
         int intValue = 0;
@@ -145,6 +153,7 @@ public class Utils {
 
     /**
      * 计算指定日期与当前日期的日期差
+     *
      * @param date 指定日期
      * @return 日期差
      */
@@ -154,21 +163,21 @@ public class Utils {
         if (date != null && !date.equals("")) {
             try {
                 @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
                 Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY,0);
-                cal.set(Calendar.MINUTE,0);
-                cal.set(Calendar.SECOND,0);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
                 Date finalD;
                 finalD = formatter.parse(date);
                 Calendar finalCal = Calendar.getInstance();
                 finalCal.setTime(finalD);
-                finalCal.set(Calendar.HOUR_OF_DAY,0);
-                finalCal.set(Calendar.MINUTE,0);
-                finalCal.set(Calendar.SECOND,0);
-
-                day = (finalCal.getTimeInMillis()/1000 - cal.getTimeInMillis()/1000)/(24*60*60);
+                finalCal.set(Calendar.HOUR_OF_DAY, 0);
+                finalCal.set(Calendar.MINUTE, 0);
+                finalCal.set(Calendar.SECOND, 0);
+                //指定日期－当前日期
+                day = (finalCal.getTimeInMillis() / 1000 - cal.getTimeInMillis() / 1000) / (24 * 60 * 60);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -178,8 +187,32 @@ public class Utils {
     }
 
     /**
+     * 计算指定日期与当前日期的秒数差
+     *
+     * @param date 指定日期
+     * @return 秒数差
+     */
+    public static long getSeconds(String date) {
+        long seconds = 0;
+        if (date != null && !date.equals("")) {
+            try {
+                @SuppressLint("SimpleDateFormat")
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                ParsePosition parsePosition = new ParsePosition(0);
+                Date time = formatter.parse(date, parsePosition);
+                seconds = time.getTime() - new Date().getTime();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return seconds / 1000;
+    }
+
+    /**
      * 日期转换
-     * @param date 原日期
+     *
+     * @param date       原日期
      * @param targetType 转换后的日期类型
      * @return 转换后的日期
      */
@@ -199,11 +232,12 @@ public class Utils {
 
     /**
      * 更新Menu
+     *
      * @param activity Activity
      */
     public static void updateMenu(ActionBarActivity activity) {
-        if(android.os.Build.VERSION.SDK_INT >= 11) {
-            activity.invalidateOptionsMenu();	// 改变menu的状态
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            activity.invalidateOptionsMenu();    // 改变menu的状态
         } else {
             activity.supportInvalidateOptionsMenu();
         }
@@ -249,13 +283,14 @@ public class Utils {
 
     /**
      * 判断邮箱是否合法
+     *
      * @param email 邮箱
      * @return 是否
      */
-    public static boolean isEmail(String email){
+    public static boolean isEmail(String email) {
         if (null == email || "".equals(email)) return false;
 
-        Pattern p =  Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+        Pattern p = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
         Matcher m = p.matcher(email);
 
         return m.matches();
@@ -263,6 +298,7 @@ public class Utils {
 
     /**
      * ScrollView截屏
+     *
      * @return Bitmap
      */
     public static Bitmap getBitmapByView(ScrollView scrollView) {
@@ -310,6 +346,7 @@ public class Utils {
 
     /**
      * ViewPager截屏
+     *
      * @return Bitmap
      */
     public static Bitmap getBitmapByView(ViewPager viewPager) {
@@ -328,6 +365,7 @@ public class Utils {
 
     /**
      * 获取百分比
+     *
      * @param x 分子
      * @param y 分母
      * @return 比率（保留1位小数）
