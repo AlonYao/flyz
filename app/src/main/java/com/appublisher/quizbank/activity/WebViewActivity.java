@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -109,6 +110,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mHomeWatcher = new HomeWatcher(this);
         mIsFromQQ = false;
 
+
         // 获取数据
         mUrl = getIntent().getStringExtra("url");
         mFrom = getIntent().getStringExtra("from");
@@ -120,6 +122,8 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
         // 设置Bar Name
         CommonModel.setBarTitle(this, barTitle == null ? "" : barTitle);
+        //设置屏幕常亮
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
@@ -231,6 +235,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (mWebView != null) mWebView.loadUrl("");
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             finish();
         } else if ("刷新".equals(item.getTitle())) {
             mWebView.reload();
