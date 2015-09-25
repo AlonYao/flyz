@@ -51,10 +51,11 @@ public class UmengManager {
 
     /**
      * 发送计数事件
-     * @param context 引用
+     *
+     * @param context  引用
      * @param event_id 事件id
-     * @param param 事件Action
-     * @param desc 事件描述
+     * @param param    事件Action
+     * @param desc     事件描述
      */
     public static void sendCountEvent(Context context,
                                       String event_id,
@@ -67,9 +68,10 @@ public class UmengManager {
 
     /**
      * 发送计算事件
-     * @param context 引用
+     *
+     * @param context  引用
      * @param event_id 事件id
-     * @param map 事件Map
+     * @param map      事件Map
      * @param duration 时长（单位：秒）
      */
     public static void sendComputeEvent(Context context,
@@ -81,8 +83,9 @@ public class UmengManager {
 
     /**
      * 练习部分统计结构
+     *
      * @param entry param-起
-     * @param done param-终
+     * @param done  param-终
      * @return map
      */
     public static HashMap<String, String> umengMeasureMap(String entry, String done) {
@@ -94,8 +97,9 @@ public class UmengManager {
 
     /**
      * 练习统计发送到Umeng(练习页面)
+     *
      * @param activity MeasureActivity
-     * @param done 离开练习的状态
+     * @param done     离开练习的状态
      */
     public static void sendToUmeng(MeasureActivity activity, String done) {
         long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
@@ -105,8 +109,9 @@ public class UmengManager {
 
     /**
      * 练习统计发送到Umeng(练习解析页面)
+     *
      * @param activity MeasureActivity
-     * @param done 离开练习的状态
+     * @param done     离开练习的状态
      */
     public static void sendToUmeng(MeasureAnalysisActivity activity, String done) {
         long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
@@ -116,8 +121,9 @@ public class UmengManager {
 
     /**
      * 练习统计发送到Umeng(答题卡页面)
+     *
      * @param activity AnswerSheetActivity
-     * @param done 离开练习的状态
+     * @param done     离开练习的状态
      */
     public static void sendToUmeng(AnswerSheetActivity activity, String done) {
         long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
@@ -127,8 +133,9 @@ public class UmengManager {
 
     /**
      * 练习统计发送到Umeng(练习报告页面)
+     *
      * @param activity PracticeReportActivity
-     * @param done 离开练习的状态
+     * @param done     离开练习的状态
      */
     public static void sendToUmeng(PracticeReportActivity activity, String done) {
         long dur = System.currentTimeMillis() - activity.mUmengTimestamp;
@@ -138,6 +145,7 @@ public class UmengManager {
 
     /**
      * 打开分享列表
+     *
      * @param umengShareEntity 友盟分享实体类
      */
     public static void openShare(final UmengShareEntity umengShareEntity) {
@@ -288,6 +296,7 @@ public class UmengManager {
 
     /**
      * 获取分享文字
+     *
      * @param umShareContentEntity 分享文字实体类
      * @return 分享文字
      */
@@ -305,6 +314,12 @@ public class UmengManager {
                         + "考试可以估分了呢，我的预测分是"
                         + umShareContentEntity.getScore()
                         + "分，小伙伴们快来看看~";
+            } else if ("mock".equals(umShareContentEntity.getPaperType())) {
+                return "我在考试"
+                        + umShareContentEntity.getExamName()
+                        + "中拿了"
+                        + umShareContentEntity.getScore()
+                        + "分，上考场前不模考几次怎么行！";
             } else {
                 return "刷了一套题，正确率竟然达到了"
                         + umShareContentEntity.getAccuracy()
@@ -343,9 +358,9 @@ public class UmengManager {
         } else if ("measure_analysis".equals(umShareContentEntity.getType())) {
             // 单题解析
             String[] content = {"检验学霸的唯一标准就是做对题目，我出一道考考你？接招吗？",
-                                "发现一道比较难的题目，我可是做对了哦，你呢？",
-                                "长得美的这道题都做对了，比如我~~",
-                                "这道题我用时不到一分钟哦，看看你是不是比我快？"};
+                    "发现一道比较难的题目，我可是做对了哦，你呢？",
+                    "长得美的这道题都做对了，比如我~~",
+                    "这道题我用时不到一分钟哦，看看你是不是比我快？"};
             int random = new Random().nextInt(content.length);
             return content[random];
         }
@@ -355,6 +370,7 @@ public class UmengManager {
 
     /**
      * 获取友盟跳转链接
+     *
      * @param urlEntity 实体类
      * @return 地址
      */
@@ -394,6 +410,7 @@ public class UmengManager {
 
     /**
      * 检查当天是否进行友盟分享
+     *
      * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
      */
     public static void checkUmengShare(Activity activity) {
@@ -419,6 +436,7 @@ public class UmengManager {
 
     /**
      * 展示每天友盟分享提醒Alert
+     *
      * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
      */
     private static void showEveryDayShareAlert(final Activity activity) {

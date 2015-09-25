@@ -23,6 +23,7 @@
         <!-- background of the  -->
         <!-- <item name="android:background">@color/color_primary</item> -->
     </style>
+
     <style name="WhiteDrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
@@ -30,9 +31,13 @@
 
     <!-- ActivityTransparent -->
     <style name="ActivityTransparent" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:windowBackground">@color/scratch_paper_bg</item> 　　
-    　　<item name="android:windowIsTranslucent">true</item> 　　
-    　　<item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+        <item name="android:windowBackground">@color/scratch_paper_bg</item>
+        　　
+        　　
+        <item name="android:windowIsTranslucent">true</item>
+        　　
+        　　
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
         <item name="windowActionBar">false</item>
     </style>
 
@@ -280,5 +285,6 @@
         <item name="android:text">@string/common_none</item>
         <item name="android:textColor">@color/setting_text</item>
     </style>
+
 
 </resources>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,14 +69,13 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
     private int mOnResumeCount;
-
     public View mView;
     public Request mRequest;
     public LinearLayout mPromote;
     public TextView mTvZhiboke;
     public Activity mActivity;
     private String type = "evaluate";
-    public int mock_id;
+    public int mock_id = 0;
     private String mock_name;
 
     @Override
@@ -441,18 +439,22 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case R.id.homepage_mock:
                 // 模考&估分
-                Class<?> cls;
-                if (type == "mock") {
-                    cls = MockPreActivity.class;
+                if (mock_id > 0) {
+                    ToastManager.showToast(getActivity(), "没有相应的模考");
                 } else {
-                    cls = MockActivity.class;
+                    Class<?> cls;
+                    if (type == "mock") {
+                        cls = MockPreActivity.class;
+                    } else {
+                        cls = MockActivity.class;
+                    }
+                    intent = new Intent(mActivity, cls);
+                    intent.putExtra("title", mTvMockTitle.getText().toString());
+                    intent.putExtra("mock_id", mock_id);
+                    intent.putExtra("type", type);
+                    intent.putExtra("paper_name", mock_name);
+                    startActivity(intent);
                 }
-                intent = new Intent(mActivity, cls);
-                intent.putExtra("title", mTvMockTitle.getText().toString());
-                intent.putExtra("mock_id", mock_id);
-                intent.putExtra("type", type);
-                intent.putExtra("paper_name", mock_name);
-                startActivity(intent);
                 break;
         }
     }

@@ -67,7 +67,8 @@ public class LoginModel {
 
     /**
      * 构造函数
-     * @param activity  登录Activity
+     *
+     * @param activity 登录Activity
      */
     public LoginModel(LoginActivity activity) {
         mLoginActivity = activity;
@@ -76,9 +77,9 @@ public class LoginModel {
     /**
      * 加密字符串
      *
-     * @param str  待加密的字符串
-     * @param key  密钥
-     * @return  加密后的字符串
+     * @param str 待加密的字符串
+     * @param key 密钥
+     * @return 加密后的字符串
      */
     public static String encrypt(String str, String key) {
         MessageDigest mdEnc;
@@ -90,23 +91,23 @@ public class LoginModel {
 
             md5 = new BigInteger(1, mdEnc.digest()).toString(16);
             while (md5.length() < 32) {
-                md5 = "0"+md5;
+                md5 = "0" + md5;
             }
 
-            int x = 0, strLen=str.length(), keyLen = md5.length();
+            int x = 0, strLen = str.length(), keyLen = md5.length();
             StringBuilder ch = new StringBuilder();
             for (int i = 0; i < strLen; i++) {
-                if (x==keyLen) {
+                if (x == keyLen) {
                     x = 0;
                 }
                 ch.append(md5.charAt(x));
                 x++;
             }
 
-            String result="";
+            String result = "";
             for (int i = 0; i < strLen; i++) {
-                int asc1 = (int)(str.charAt(i)), asc2 = (int)(ch.charAt(i));
-                result += Character.toString( (char)((asc1+asc2)%256) );
+                int asc1 = (int) (str.charAt(i)), asc2 = (int) (ch.charAt(i));
+                result += Character.toString((char) ((asc1 + asc2) % 256));
             }
 
             byte[] data;
@@ -131,61 +132,61 @@ public class LoginModel {
         @Override
         public void onClick(View v) {
             mLoginActivity.mController.doOauthVerify(mLoginActivity, SHARE_MEDIA.WEIXIN,
-                new SocializeListeners.UMAuthListener() {
-                    @Override
-                    public void onStart(SHARE_MEDIA share_media) {
-                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
-                    }
+                    new SocializeListeners.UMAuthListener() {
+                        @Override
+                        public void onStart(SHARE_MEDIA share_media) {
+                            ProgressDialogManager.showProgressDialog(mLoginActivity, false);
+                        }
 
-                    @Override
-                    public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
-                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
-                        mLoginActivity.mController.getPlatformInfo(
-                                mLoginActivity, SHARE_MEDIA.WEIXIN,
-                            new SocializeListeners.UMDataListener() {
-                                @Override
-                                public void onStart() {
-                                    // 获取数据开始
-                                }
-
-                                @Override
-                                public void onComplete(int status, Map<String, Object> info) {
-                                    if(status == 200 && info != null){
-                                        String login_id = (String) info.get("unionid");
-                                        String nickname = (String) info.get("nickname");
-                                        String avatar = (String) info.get("headimgurl");
-
-                                        if (login_id == null) {
-                                            ProgressDialogManager.closeProgressDialog();
-                                            ToastManager.showToast(mLoginActivity, "登录失败");
-                                            return;
+                        @Override
+                        public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
+                            ProgressDialogManager.showProgressDialog(mLoginActivity, false);
+                            mLoginActivity.mController.getPlatformInfo(
+                                    mLoginActivity, SHARE_MEDIA.WEIXIN,
+                                    new SocializeListeners.UMDataListener() {
+                                        @Override
+                                        public void onStart() {
+                                            // 获取数据开始
                                         }
 
-                                        mLoginActivity.mSocialLoginType = "WX";
-                                        mLoginActivity.mRequest.socialLogin(
-                                                ParamBuilder.socialLoginParams(
-                                                    "2",
-                                                    login_id,
-                                                    nickname,
-                                                    "",
-                                                    avatar));
-                                    }else{
-                                        ProgressDialogManager.closeProgressDialog();
-                                    }
-                                }
-                            });
-                    }
+                                        @Override
+                                        public void onComplete(int status, Map<String, Object> info) {
+                                            if (status == 200 && info != null) {
+                                                String login_id = (String) info.get("unionid");
+                                                String nickname = (String) info.get("nickname");
+                                                String avatar = (String) info.get("headimgurl");
 
-                    @Override
-                    public void onError(SocializeException e, SHARE_MEDIA share_media) {
-                        ProgressDialogManager.closeProgressDialog();
-                    }
+                                                if (login_id == null) {
+                                                    ProgressDialogManager.closeProgressDialog();
+                                                    ToastManager.showToast(mLoginActivity, "登录失败");
+                                                    return;
+                                                }
 
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media) {
-                        ProgressDialogManager.closeProgressDialog();
-                    }
-                });
+                                                mLoginActivity.mSocialLoginType = "WX";
+                                                mLoginActivity.mRequest.socialLogin(
+                                                        ParamBuilder.socialLoginParams(
+                                                                "2",
+                                                                login_id,
+                                                                nickname,
+                                                                "",
+                                                                avatar));
+                                            } else {
+                                                ProgressDialogManager.closeProgressDialog();
+                                            }
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onError(SocializeException e, SHARE_MEDIA share_media) {
+                            ProgressDialogManager.closeProgressDialog();
+                        }
+
+                        @Override
+                        public void onCancel(SHARE_MEDIA share_media) {
+                            ProgressDialogManager.closeProgressDialog();
+                        }
+                    });
         }
     };
 
@@ -196,59 +197,61 @@ public class LoginModel {
         @Override
         public void onClick(View v) {
             mLoginActivity.mController.doOauthVerify(mLoginActivity, SHARE_MEDIA.SINA,
-                new SocializeListeners.UMAuthListener() {
-                    @Override
-                    public void onStart(SHARE_MEDIA share_media) {
-                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
-                    }
+                    new SocializeListeners.UMAuthListener() {
+                        @Override
+                        public void onStart(SHARE_MEDIA share_media) {
+                            ProgressDialogManager.showProgressDialog(mLoginActivity, false);
+                        }
 
-                    @Override
-                    public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
-                        ProgressDialogManager.showProgressDialog(mLoginActivity, false);
-                        mLoginActivity.mController.getPlatformInfo(
-                                mLoginActivity, SHARE_MEDIA.SINA,
-                            new SocializeListeners.UMDataListener() {
-                                @Override
-                                public void onStart() {
-                                    // 获取平台数据开始
-                                }
-                                @Override
-                                public void onComplete(int status, Map<String, Object> info) {
-                                    if(status == 200 && info != null){
-                                        String login_id = info.get("uid").toString();
-                                        String nickname = info.get("screen_name").toString();
-                                        String avatar = info.get("profile_image_url").toString();
+                        @Override
+                        public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
+                            ProgressDialogManager.showProgressDialog(mLoginActivity, false);
+                            mLoginActivity.mController.getPlatformInfo(
+                                    mLoginActivity, SHARE_MEDIA.SINA,
+                                    new SocializeListeners.UMDataListener() {
+                                        @Override
+                                        public void onStart() {
+                                            // 获取平台数据开始
+                                        }
 
-                                        mLoginActivity.mSocialLoginType = "WB";
-                                        mLoginActivity.mRequest.socialLogin(
-                                                ParamBuilder.socialLoginParams(
-                                                    "1",
-                                                    login_id,
-                                                    nickname,
-                                                    "",
-                                                    avatar));
-                                    }else{
-                                        ProgressDialogManager.closeProgressDialog();
-                                    }
-                                }
-                            });
-                    }
+                                        @Override
+                                        public void onComplete(int status, Map<String, Object> info) {
+                                            if (status == 200 && info != null) {
+                                                String login_id = info.get("uid").toString();
+                                                String nickname = info.get("screen_name").toString();
+                                                String avatar = info.get("profile_image_url").toString();
 
-                    @Override
-                    public void onError(SocializeException e, SHARE_MEDIA share_media) {
-                        ProgressDialogManager.closeProgressDialog();
-                    }
+                                                mLoginActivity.mSocialLoginType = "WB";
+                                                mLoginActivity.mRequest.socialLogin(
+                                                        ParamBuilder.socialLoginParams(
+                                                                "1",
+                                                                login_id,
+                                                                nickname,
+                                                                "",
+                                                                avatar));
+                                            } else {
+                                                ProgressDialogManager.closeProgressDialog();
+                                            }
+                                        }
+                                    });
+                        }
 
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media) {
-                        ProgressDialogManager.closeProgressDialog();
-                    }
-                });
+                        @Override
+                        public void onError(SocializeException e, SHARE_MEDIA share_media) {
+                            ProgressDialogManager.closeProgressDialog();
+                        }
+
+                        @Override
+                        public void onCancel(SHARE_MEDIA share_media) {
+                            ProgressDialogManager.closeProgressDialog();
+                        }
+                    });
         }
     };
 
     /**
      * 新建数据库（如果已存在则将该数据库设置为当前可操作的数据库）
+     *
      * @param databaseName 数据库名
      */
     public static void setDatabase(String databaseName, Context context) {
@@ -285,6 +288,7 @@ public class LoginModel {
 
     /**
      * 获取用户id
+     *
      * @return 用户id
      */
     public static String getUserId() {
@@ -293,6 +297,7 @@ public class LoginModel {
 
     /**
      * 获取用户Token
+     *
      * @return 用户Token
      */
     public static String getUserToken() {
@@ -301,6 +306,7 @@ public class LoginModel {
 
     /**
      * 获取用户手机号
+     *
      * @return 手机号
      */
     public static String getUserMobile() {
@@ -317,6 +323,7 @@ public class LoginModel {
 
     /**
      * 获取用户学号
+     *
      * @return 学号
      */
     public static String getSno() {
@@ -333,6 +340,7 @@ public class LoginModel {
 
     /**
      * 判断是否有考试项目
+     *
      * @return 是或否
      */
     public static boolean hasExamInfo() {
@@ -349,6 +357,7 @@ public class LoginModel {
 
     /**
      * 获取考试项目
+     *
      * @return 考试项目
      */
     public static UserExamInfoModel getExamInfo() {
@@ -367,6 +376,7 @@ public class LoginModel {
 
     /**
      * 获取考试项目名称
+     *
      * @return 考试项目名称
      */
     public static String getUserExamName() {
@@ -382,6 +392,7 @@ public class LoginModel {
 
     /**
      * 获取本地存储的用户信息
+     *
      * @return 用户信息模型
      */
     public static UserInfoModel getUserInfoM() {
@@ -395,6 +406,7 @@ public class LoginModel {
 
     /**
      * 判断是否登录
+     *
      * @return 是或否
      */
     public static boolean isLogin() {
@@ -403,6 +415,7 @@ public class LoginModel {
 
     /**
      * 执行登录
+     *
      * @param activity Activity
      */
     public static void setLogout(Activity activity) {
@@ -432,6 +445,7 @@ public class LoginModel {
 
     /**
      * 处理公开课手机号验证部分的回调
+     *
      * @param activity BindingSmsCodeActivity
      * @param response 回调数据
      */
@@ -476,9 +490,9 @@ public class LoginModel {
                     Intent intent = new Intent(activity, BindingMobileActivity.class);
                     activity.setResult(ActivitySkipConstants.OPENCOURSE_PRE, intent);
                     activity.finish();
-                } else if("mock_openopencourse".equals(activity.mFrom)){
+                } else if ("mock_openopencourse".equals(activity.mFrom)) {
                     Intent intent = new Intent(activity, BindingMobileActivity.class);
-                    activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
+                    activity.setResult(ActivitySkipConstants.BOOK_MOCK_RESULT, intent);
                     activity.finish();
                 }
 
@@ -487,8 +501,14 @@ public class LoginModel {
                         activity, "CodeVerified", "CodeVerified", "CodeVerified");
 
             } else {
-                // 手机号存在，提示用户切换账号
-                AlertManager.openCourseUserChangeAlert(activity);
+                if (activity.mFrom.equals("mock_openopencourse")) {
+                    //给用户预约课
+                    int mock_id = activity.getIntent().getIntExtra("mock_id", 0);
+                    activity.mRequest.mobileBookMock(ParamBuilder.getBookMock(mock_id + ""), userInfoOnline.getUser_id(), userInfoOnline.getUser_token());
+                } else {
+                    // 手机号存在，提示用户切换账号
+                    AlertManager.openCourseUserChangeAlert(activity);
+                }
             }
 
         } else {
@@ -498,8 +518,9 @@ public class LoginModel {
 
     /**
      * 设置头像
+     *
      * @param activity Activity
-     * @param avatar 头像
+     * @param avatar   头像
      */
     public static void setAvatar(Activity activity, final RoundedImageView avatar) {
         String avatarFolder = activity.getApplicationContext().getFilesDir().getAbsolutePath() + "/"
@@ -541,8 +562,9 @@ public class LoginModel {
 
     /**
      * 处理接口回调
+     *
      * @param response 回调数据
-     * @param apiName 接口类别
+     * @param apiName  接口类别
      */
     public static void dealResp(JSONObject response, String apiName, LoginActivity activity) {
         if (response == null) {
@@ -569,9 +591,10 @@ public class LoginModel {
 
     /**
      * 处理登录接口回调
-     * @param lrm 回调数据模型
+     *
+     * @param lrm      回调数据模型
      * @param activity LoginActivity
-     * @param apiName 接口类别
+     * @param apiName  接口类别
      */
     private static void dealLoginResp(LoginResponseModel lrm,
                                       LoginActivity activity,
@@ -594,8 +617,9 @@ public class LoginModel {
 
     /**
      * 处理用户是否存在接口 请求回调
+     *
      * @param isUserExistsResp 回调数据模型
-     * @param activity LoginActivity
+     * @param activity         LoginActivity
      */
     public static void dealIsUserExistsResp(IsUserExistsResp isUserExistsResp,
                                             LoginActivity activity) {
@@ -617,97 +641,100 @@ public class LoginModel {
 
     /**
      * 显示用户不存在Alert
+     *
      * @param activity LoginActivity
      */
     private static void showUserNonentityAlert(final LoginActivity activity) {
         new AlertDialog.Builder(activity)
-            .setMessage(R.string.login_alert_usernonentity_msg)
-            .setTitle(R.string.alert_title)
-            .setPositiveButton(R.string.login_alert_usernonentity_p,
-                new DialogInterface.OnClickListener() {
+                .setMessage(R.string.login_alert_usernonentity_msg)
+                .setTitle(R.string.alert_title)
+                .setPositiveButton(R.string.login_alert_usernonentity_p,
+                        new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent;
-                        if (Utils.isEmail(activity.mUsername)) {
-                            // 判断用户是否是邮箱用户
-                            intent = new Intent(activity, MobileRegisterActivity.class);
-                        } else {
-                            // 非邮箱用户，暂时全部认定为手机号用户
-                            if (activity.mPwd.length() < 6 || activity.mPwd.length() > 16) {
-                                ToastManager.showToast(activity, "密码长度为6-16位");
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent;
+                                if (Utils.isEmail(activity.mUsername)) {
+                                    // 判断用户是否是邮箱用户
+                                    intent = new Intent(activity, MobileRegisterActivity.class);
+                                } else {
+                                    // 非邮箱用户，暂时全部认定为手机号用户
+                                    if (activity.mPwd.length() < 6 || activity.mPwd.length() > 16) {
+                                        ToastManager.showToast(activity, "密码长度为6-16位");
+                                        dialog.dismiss();
+                                        return;
+                                    }
+
+                                    activity.mRequest.getSmsCode(
+                                            ParamBuilder.phoneNumParams(activity.mUsername, ""));
+
+                                    intent = new Intent(activity, RegisterSmsCodeActivity.class);
+                                    intent.putExtra("user_phone", activity.mUsername);
+                                    intent.putExtra("user_pwd", activity.mPwdEncrypt);
+                                }
+
+                                activity.startActivity(intent);
                                 dialog.dismiss();
-                                return;
                             }
-
-                            activity.mRequest.getSmsCode(
-                                    ParamBuilder.phoneNumParams(activity.mUsername, ""));
-
-                            intent = new Intent(activity, RegisterSmsCodeActivity.class);
-                            intent.putExtra("user_phone", activity.mUsername);
-                            intent.putExtra("user_pwd", activity.mPwdEncrypt);
-                        }
-
-                        activity.startActivity(intent);
-                        dialog.dismiss();
-                    }
-                })
-            .setNegativeButton(R.string.login_alert_usernonentity_n,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-            .create().show();
+                        })
+                .setNegativeButton(R.string.login_alert_usernonentity_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
     }
 
     /**
      * 显示忘记密码Alert
+     *
      * @param activity Activity
      */
     public static void showForgetPwdAlert(final Activity activity, final String userName) {
         new AlertDialog.Builder(activity)
-            .setMessage(R.string.login_alert_forgetpwd_msg)
-            .setTitle(R.string.alert_title)
-            .setPositiveButton(R.string.login_alert_forgetpwd_p,
-                new DialogInterface.OnClickListener() {
+                .setMessage(R.string.login_alert_forgetpwd_msg)
+                .setTitle(R.string.alert_title)
+                .setPositiveButton(R.string.login_alert_forgetpwd_p,
+                        new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (userName == null || userName.length() == 0) return;
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (userName == null || userName.length() == 0) return;
 
-                        if (Utils.isEmail(userName)) {
-                            // 邮箱用户
-                            new Request(activity).resetPassword(userName);
-                            Intent intent = new Intent(activity, EmailResetPwdActivity.class);
-                            intent.putExtra("user_email", userName);
-                            activity.startActivity(intent);
+                                if (Utils.isEmail(userName)) {
+                                    // 邮箱用户
+                                    new Request(activity).resetPassword(userName);
+                                    Intent intent = new Intent(activity, EmailResetPwdActivity.class);
+                                    intent.putExtra("user_email", userName);
+                                    activity.startActivity(intent);
 
-                        } else {
-                            // 手机号用户
-                            new Request(activity).getSmsCode(
-                                    ParamBuilder.phoneNumParams(userName, "resetPswd"));
-                            Intent intent = new Intent(activity, MobileResetPwdActivity.class);
-                            intent.putExtra("user_phone", userName);
-                            activity.startActivity(intent);
-                        }
+                                } else {
+                                    // 手机号用户
+                                    new Request(activity).getSmsCode(
+                                            ParamBuilder.phoneNumParams(userName, "resetPswd"));
+                                    Intent intent = new Intent(activity, MobileResetPwdActivity.class);
+                                    intent.putExtra("user_phone", userName);
+                                    activity.startActivity(intent);
+                                }
 
-                        dialog.dismiss();
-                    }
-                })
-            .setNegativeButton(R.string.login_alert_forgetpwd_n,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-            .create().show();
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.login_alert_forgetpwd_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
     }
 
     /**
      * 设置登录成功后的操作
+     *
      * @param lrm 用户个人信息数据模型
      */
     @SuppressLint("CommitPrefEdits")
@@ -735,7 +762,8 @@ public class LoginModel {
 
     /**
      * 保存至本地
-     * @param lrm 用户数据模型
+     *
+     * @param lrm      用户数据模型
      * @param activity Activity
      * @return 是否保存成功
      */
@@ -771,6 +799,7 @@ public class LoginModel {
 
     /**
      * 获取之前的用户名
+     *
      * @return 用户名
      */
     public static String getPreLoginName() {
@@ -788,6 +817,7 @@ public class LoginModel {
 
     /**
      * 检查上次第三方登录的类型
+     *
      * @param activity LoginActivity
      */
     public static void checkPreOAuthLoginType(LoginActivity activity) {

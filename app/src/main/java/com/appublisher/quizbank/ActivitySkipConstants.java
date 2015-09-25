@@ -22,4 +22,12 @@ public class ActivitySkipConstants {
 
     // 课程中心跳转至详情页面
     public static final int COURSE = 1005;
+
+    //已存在用户预约模考
+    public static final int MOBILE_BOOK_MOCK_ASK = 1006;
+    public static final int MOBILE_BOOK_MOCK_RESULT = 1007;
+
+    //预约模考
+    public static final int BOOK_MOCK_ASK = 1008;
+    public static final int BOOK_MOCK_RESULT = 1009;
 }

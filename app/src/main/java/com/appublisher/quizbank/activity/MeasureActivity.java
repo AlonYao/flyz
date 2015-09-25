@@ -57,7 +57,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     public int mScreenHeight;
     public int mCurPosition;
-    public int mDuration;
+    public static int mDuration;
     public int mPaperId;
     public int mExerciseId;
     public int mHierarchyId;
@@ -72,7 +72,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public String mPaperName;
     public String mFrom;
     public Gson mGson;
-    public MsgHandler mHandler;
+    public static Handler mHandler;
     public Timer mTimer;
     public Request mRequest;
     public String mock_time;
@@ -82,7 +82,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public static int mSec;//秒数
     public static final int TIME_ON = 0;
     public static final int TIME_OUT = 1;
-
+    public static final int ON_TIME = 3;
     /**
      * Umeng
      */
@@ -131,18 +131,34 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         if (mMins < 1) {
                             mToolbar.setTitleTextColor(Color.parseColor("#FFCD02"));
                         }
-
                         break;
-
                     case TIME_OUT:
-                        //判断是否是模考
-                        if (mockpre) {
-                            //弹出提示交卷
-                            AlertManager.mockTimeOutAlert(activity);
-                        }
                         activity.getSupportActionBar().setTitle("00:00");
                         break;
-
+                    case ON_TIME:
+                        mDuration--;
+                        MeasureActivity.mMins = activity.mDuration / 60;
+                        MeasureActivity.mSec = activity.mDuration % 60;
+                        mins = String.valueOf(mMins);
+                        sec = String.valueOf(mSec);
+                        if (mins.length() == 1) mins = "0" + mins;
+                        if (sec.length() == 1) sec = "0" + sec;
+                        time = mins + ":" + sec;
+                        activity.getSupportActionBar().setTitle(time);
+                        if (mMins == 15 && mSec == 0) {
+                            ToastManager.showToast(activity, "距离考试结束还有15分钟");
+                        }
+                        if (mDuration == 0) {//停止发消息
+                            if (mockpre) {
+                                //弹出提示交卷
+                                AlertManager.mockTimeOutAlert(activity);
+                            }
+                            activity.getSupportActionBar().setTitle("00:00");
+                        } else {
+                            Message message = mHandler.obtainMessage(ON_TIME);
+                            mHandler.sendMessageDelayed(message, 1000);
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -548,7 +564,12 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      */
     private void saveTest() {
         if (mockpre) {
-            AlertManager.saveTestAlert(this);
+            long curTime = Utils.getSeconds(mock_time);
+            if (curTime > -(30 * 60)) {
+                ToastManager.showToast(this, "开考30分钟后才可以交卷");
+            } else {
+                AlertManager.saveTestAlert(this);
+            }
         } else {
             boolean isSave = false;
             if (mUserAnswerList != null) {
@@ -675,4 +696,5 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public void requestEndedWithError(VolleyError error, String apiName) {
         ProgressDialogManager.closeProgressDialog();
     }
+
 }

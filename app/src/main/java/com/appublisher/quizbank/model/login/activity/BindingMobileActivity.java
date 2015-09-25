@@ -38,6 +38,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
     private Request mRequest;
     private String mPhoneNum;
     public String mFrom;
+    public int mock_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
 
         // 获取数据 & ActionBar标题修改
         mFrom = getIntent().getStringExtra("from");
+        mock_id = getIntent().getIntExtra("mock_id", 0);
 
         if (mFrom != null && mFrom.contains("opencourse")) {
             getSupportActionBar().setTitle("短信验证");
@@ -66,7 +68,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             tvOpenCourse.setVisibility(View.GONE);
         }
         //模考介绍页
-        if (mFrom.equals("mockpre")) {
+        if (mFrom.equals("mock_openopencourse")) {
             tvOpenCourse.setText("考试前会收到短信提示哦");
             tvOpenCourse.setVisibility(View.VISIBLE);
         }
@@ -129,6 +131,14 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
                 setResult(ActivitySkipConstants.OPENCOURSE_PRE, intent);
                 finish();
                 break;
+            case ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT:
+                setResult(ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT);
+                finish();
+                break;
+            case ActivitySkipConstants.BOOK_MOCK_RESULT:
+                setResult(ActivitySkipConstants.BOOK_MOCK_RESULT);
+                finish();
+                break;
         }
     }
 
@@ -148,7 +158,18 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             if (isUserExistsResp != null && isUserExistsResp.getResponse_code() == 1
                     && isUserExistsResp.isUser_exists()) {
                 // 手机号已注册
-                AlertManager.openCourseUserChangeAlert(this);
+                if ("mock_openopencourse".equals(mFrom)) {
+                    mRequest.getSmsCode(ParamBuilder.phoneNumParams(mPhoneNum, "token_login"));
+                    Intent intent = new Intent(this, BindingSmsCodeActivity.class);
+                    intent.putExtra("user_phone", mPhoneNum);
+                    intent.putExtra("from", mFrom);
+                    intent.putExtra("mock_id", mock_id);
+                    intent.putExtra("umeng_entry", getIntent().getStringExtra("umeng_entry"));
+                    intent.putExtra("opencourse_id", getIntent().getStringExtra("content"));
+                    startActivityForResult(intent, ActivitySkipConstants.MOBILE_BOOK_MOCK_ASK);
+                } else {
+                    AlertManager.openCourseUserChangeAlert(this);
+                }
             } else {
                 // 手机号未注册
                 if (mFrom != null && mFrom.contains("opencourse")) {
@@ -171,7 +192,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
                     startActivityForResult(intent, ActivitySkipConstants.OPENCOURSE_PRE);
                 } else if ("mock_openopencourse".equals(mFrom)) {
                     //模考
-                    startActivityForResult(intent, ActivitySkipConstants.BOOK_OPENCOURSE);
+                    startActivityForResult(intent, ActivitySkipConstants.BOOK_MOCK_ASK);
                 } else {
                     startActivity(intent);
                     finish();

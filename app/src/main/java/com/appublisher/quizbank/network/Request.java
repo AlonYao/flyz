@@ -453,7 +453,14 @@ public class Request extends BaseRequest implements ApiConstants{
         postRequest(ParamBuilder.finalUrl(bookMcok),
                 params, "book_mock", "object");
     }
-
+    /**
+     * 给已是用户的手机用户预约模考
+     * @param params 参数
+     */
+    public void mobileBookMock(Map<String, String> params,String user_id,String user_token) {
+        postRequest(ParamBuilder.finalUserUrl(bookMcok,user_id,user_token),
+                params, "book_mock", "object");
+    }
     /**
      * 评论获取待赠送课程、开课
      * @param params 参数

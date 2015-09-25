@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -439,10 +440,11 @@ public class MeasureModel {
         if (activity.mockpre) {//如果是模考则计算剩余时间
             if (activity.mock_time != null) {
                 activity.mDuration = (int) Utils.getSeconds(activity.mock_time) + activity.mDuration;
-                activity.startTimer();
+                time(activity);
             }
+        } else {
+            startTimer(activity);
         }
-        startTimer(activity);
         // 设置ViewPager
         setViewPager(activity);
     }
@@ -525,15 +527,18 @@ public class MeasureModel {
                         activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_OUT);
                     }
                 } else {
-                    if (MeasureActivity.mMins == 15 && MeasureActivity.mSec == 0) {
-                        if (MeasureActivity.mockpre) {
-                            ToastManager.showToast(activity, "距离考试结束还有15分钟");
-                        }
-                    }
                     activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
                 }
             }
         }, 0, 1000);
+    }
+
+    /**
+     * 倒计时2
+     */
+    private static void time(final MeasureActivity activity) {
+        Message message = activity.mHandler.obtainMessage(MeasureActivity.ON_TIME);
+        activity.mHandler.sendMessage(message);
     }
 
     /**

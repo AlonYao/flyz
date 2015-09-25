@@ -137,7 +137,8 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             } else if ("opencourse_pre".equals(mFrom)) {
                 showWebView(mUrl
                         + "&user_id=" + LoginModel.getUserId()
-                        + "&user_token=" + LoginModel.getUserToken());
+                        + "&user_token=" + LoginModel.getUserToken()
+                        + "&timestamp=" + System.currentTimeMillis());
             } else {
                 showWebView(mUrl);
             }

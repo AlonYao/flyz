@@ -45,7 +45,40 @@ public class ParamBuilder implements ApiConstants {
 
         return finalUrl.toString();
     }
+    /**
+     * 非本地用户 动态指定user_id , user_token
+     * @param url 拼接前的url
+     * @return 拼接后的url
+     */
+    public static String finalUserUrl(String url,String user_id,String user_token) {
+        //noinspection StringBufferReplaceableByString
+        StringBuilder finalUrl = new StringBuilder();
 
+        // 参数说明
+        // terminal_type  终端类别,目前包括iOS_phone/iOS_pad/android_phone/android_pad/pc,必需
+        // app_type  应用的类别,目前landing_plan,必需
+        // app_version  应用的版本号,必需
+        // uuid	 唯一标识符,可以没有或null
+        // user_id  用户id,可以没有或－1
+        // user_token  用户授权token,和user_id关联校验用户授权,可为空
+        // timestamp  客户端时间戳
+
+        finalUrl.append(url)
+                .append("?terminal_type=android_phone")
+                .append("&app_type=quizbank")
+                .append("&app_version=")
+                .append(Globals.appVersion)
+                .append("&uuid=")
+                .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
+                .append("&user_id=")
+                .append(user_id)
+                .append("&user_token=")
+                .append(user_token)
+                .append("&timestamp=")
+                .append(System.currentTimeMillis());
+
+        return finalUrl.toString();
+    }
     /**
      * 用户登录参数
      *

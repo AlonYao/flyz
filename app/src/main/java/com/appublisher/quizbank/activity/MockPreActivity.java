@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -166,6 +167,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 int response_code = response.getInt("response_code");
                 if (response_code == 1) {
                     ToastManager.showToast(this, "报名成功");
+                    bottom_right.setText("查看详情");
+                    courseDetailLink = courseDetailLink.replace("unpurchased", "purchased");
+                    is_purchased = true;
                 } else {
                     ToastManager.showToast(this, "报名失败");
                 }
@@ -211,7 +215,6 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         detail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         detail.setTextSize(17);
         detail.setTextColor(getResources().getColor(R.color.setting_text));
-
         if (isLast) {
             int start = detailString.length() + 2;
             int end = start + 4;
@@ -228,7 +231,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
             });
             examdeailContainer.addView(exam);
         } else {
-            detail.setText(detailString);
+            detail.setText(Html.fromHtml(detailString));
             exam.addView(detail);
             examdeailContainer.addView(exam);
         }
@@ -299,10 +302,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
             } else if (mock_status.equals("end")) {//开考30分钟后
                 if (time < -(30 * 60)) {
                     bottom_left.setText("来晚啦");
+                    bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
                 }
-
             } else if (mock_status.equals("finish")) {
                 bottom_left.setText("来晚啦");
+                bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
             }
         }
         //是否已报名
@@ -361,6 +365,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     if (mobileNum == null || mobileNum.length() == 0) {
                         Intent intent = new Intent(this, BindingMobileActivity.class);
                         intent.putExtra("from", "mock_openopencourse");
+                        intent.putExtra("mock_id", mock_id);
                         startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
                     } else {
                         mRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
@@ -456,8 +461,10 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == ActivitySkipConstants.BOOK_OPENCOURSE) {//绑定成功
+        if (resultCode == ActivitySkipConstants.BOOK_MOCK_RESULT) {//绑定成功
             mRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
+        } else if (resultCode == ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT) {//已经预约成功
+            dealBookMockSuccess();
         }
     }
 

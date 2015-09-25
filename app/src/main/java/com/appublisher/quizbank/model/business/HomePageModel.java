@@ -267,7 +267,7 @@ public class HomePageModel {
     public static void dealMockListResp(JSONObject jsonObject, HomePageFragment homePageFragment) {
         MockListResp mockListResp = GsonManager.getObejctFromJSON(jsonObject.toString(), MockListResp.class);
         ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
-        if(mockPaperMs != null){
+        if(mockPaperMs != null && mockPaperMs.size() != 0){
             MockPaperM mockPaperM = mockPaperMs.get(0);
             homePageFragment.mock_id = mockPaperM.getId();
         }

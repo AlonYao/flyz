@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
@@ -54,7 +55,7 @@ public class BindingSmsCodeActivity extends ActionBarActivity
     private static int mTimeLimit;
     private static Timer mTimer;
     private Handler mHandler;
-    private Request mRequest;
+    public Request mRequest;
     private String mUserPhone;
     private EditText mEtSmsCode;
 
@@ -118,11 +119,11 @@ public class BindingSmsCodeActivity extends ActionBarActivity
         mTimeLimit = 60;
         mHandler = new MsgHandler(this);
         mRequest = new Request(this, this);
-        mFrom = getIntent().getStringExtra("from");
 
         // 获取数据
         mUserPhone = getIntent().getStringExtra("user_phone");
         mOpenCourseId = getIntent().getStringExtra("opencourse_id");
+        mFrom = getIntent().getStringExtra("from");
 
         // Umeng
         mUmengTimestamp = System.currentTimeMillis();
@@ -299,6 +300,10 @@ public class BindingSmsCodeActivity extends ActionBarActivity
         } else if ("login".equals(apiName)) {
             // 处理预约公开课手机号验证部分的回调
             LoginModel.dealOpenCourseResp(this, response);
+        } else if (apiName.equals("book_mock")) {
+            Intent intent = new Intent(this, BindingMobileActivity.class);
+            setResult(ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT, intent);
+            finish();
         }
 
         ProgressDialogManager.closeProgressDialog();
