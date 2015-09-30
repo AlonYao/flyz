@@ -439,7 +439,7 @@ public class MeasureModel {
                 historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
         if (activity.mockpre) {//如果是模考则计算剩余时间
             if (activity.mock_time != null) {
-                activity.mDuration = (int) Utils.getSeconds(activity.mock_time) + activity.mDuration;
+//                activity.mDuration = (int) Utils.getSeconds(activity.mock_time) + activity.mDuration;
                 time(activity);
             }
         } else {

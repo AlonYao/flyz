@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -41,7 +43,7 @@ import java.util.Timer;
 /**
  * WebView
  */
-public class WebViewActivity extends ActionBarActivity implements RequestCallback{
+public class WebViewActivity extends ActionBarActivity implements RequestCallback {
 
     private RelativeLayout mProgressBar;
     private WebView mWebView;
@@ -194,7 +196,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             map.put("EnterLive", "1");
             map.put("QQ", mUmengQQ);
             long dur = System.currentTimeMillis() - mUmengTimestamp;
-            UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur/1000));
+            UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur / 1000));
         }
 
         // 关闭定时器
@@ -273,6 +275,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
     /**
      * 展示WebView
+     *
      * @param url url
      */
     @SuppressLint("SetJavaScriptEnabled")
@@ -281,7 +284,15 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
         mProgressBar.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.loadUrl(url);
+        //解决部分安卓机不弹出alert
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                return super.onJsAlert(view, url, message, result);
+            }
+        });
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {

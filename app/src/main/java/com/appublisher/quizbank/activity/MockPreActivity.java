@@ -166,7 +166,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
             try {
                 int response_code = response.getInt("response_code");
                 if (response_code == 1) {
-                    ToastManager.showToast(this, "报名成功");
+                    ToastManager.showToast(this, "课程已开通，详情见侧边栏课程中心");
                     bottom_right.setText("查看详情");
                     courseDetailLink = courseDetailLink.replace("unpurchased", "purchased");
                     is_purchased = true;
@@ -284,27 +284,17 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         } else {
             if (mock_status.equals("unstart")) {//未开始
                 mDuration = time;
-                if (time > 0) {
-                    if (date == 0) {//未预约过
-                        bottom_left.setText("预约考试");
-                        isDate = true;
-                        startTimeBackground();
-                    } else {//倒计时
-                        startTimer();
-                    }
+                if (date == 0) {//未预约过
+                    bottom_left.setText("预约考试");
+                    isDate = true;
+                    startTimeBackground();
+                } else {//倒计时
+                    startTimer();
                 }
             } else if (mock_status.equals("on_going")) {//开考30分钟内
-                if (time <= 0 && time > -(30 * 60)) {
-                    bottom_left.setText("点击进入");
-                    beginMock = true;
-                }
-
-            } else if (mock_status.equals("end")) {//开考30分钟后
-                if (time < -(30 * 60)) {
-                    bottom_left.setText("来晚啦");
-                    bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
-                }
-            } else if (mock_status.equals("finish")) {
+                bottom_left.setText("点击进入");
+                beginMock = true;
+            } else if (mock_status.equals("end") || mock_status.equals("finish")) {//开考30分钟后
                 bottom_left.setText("来晚啦");
                 bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
             }
@@ -471,6 +461,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     public void dealBookMockSuccess() {
         //绑定成功后操作
         MockDAO.save(mock_id, 1);
+        ToastManager.showToast(this, "考试前会收到短信提示哦");
         mDuration = Utils.getSeconds(mock_time);
         startTimer();
         isDate = false;

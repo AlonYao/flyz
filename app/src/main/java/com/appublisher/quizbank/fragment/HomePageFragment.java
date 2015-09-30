@@ -439,7 +439,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case R.id.homepage_mock:
                 // 模考&估分
-                if (mock_id > 0) {
+                if (mock_id == 0) {
                     ToastManager.showToast(getActivity(), "没有相应的模考");
                 } else {
                     Class<?> cls;

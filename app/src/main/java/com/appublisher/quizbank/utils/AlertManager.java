@@ -645,11 +645,8 @@ public class AlertManager {
                 .setTitle("提示")
                 .setPositiveButton("好的",
                         new DialogInterface.OnClickListener() {
-
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //交卷
-                                MeasureModel.autoSubmitPaper(activity);
                             }
                         }).create().show();
     }

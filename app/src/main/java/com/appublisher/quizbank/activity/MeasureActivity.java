@@ -58,6 +58,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public int mScreenHeight;
     public int mCurPosition;
     public static int mDuration;
+    public static int mock_duration;
     public int mPaperId;
     public int mExerciseId;
     public int mHierarchyId;
@@ -75,7 +76,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public static Handler mHandler;
     public Timer mTimer;
     public Request mRequest;
-    public String mock_time;
+    public static String mock_time;
 
     public static Toolbar mToolbar;
     public static int mMins;//分钟
@@ -136,9 +137,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         activity.getSupportActionBar().setTitle("00:00");
                         break;
                     case ON_TIME:
-                        mDuration--;
-                        MeasureActivity.mMins = activity.mDuration / 60;
-                        MeasureActivity.mSec = activity.mDuration % 60;
+                        mock_duration = (int) Utils.getSeconds(activity.mock_time) + activity.mDuration;
+                        MeasureActivity.mMins = activity.mock_duration / 60;
+                        MeasureActivity.mSec = activity.mock_duration % 60;
                         mins = String.valueOf(mMins);
                         sec = String.valueOf(mSec);
                         if (mins.length() == 1) mins = "0" + mins;
@@ -148,10 +149,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         if (mMins == 15 && mSec == 0) {
                             ToastManager.showToast(activity, "距离考试结束还有15分钟");
                         }
-                        if (mDuration == 0) {//停止发消息
+                        if (mock_duration == 0) {//停止发消息
                             if (mockpre) {
                                 //弹出提示交卷
                                 AlertManager.mockTimeOutAlert(activity);
+                                MeasureModel.autoSubmitPaper(activity);
                             }
                             activity.getSupportActionBar().setTitle("00:00");
                         } else {
