@@ -193,12 +193,11 @@ public class AnswerSheetModel {
             }
         }
 
-        if (activity.mFrom.equals("mockpre")) {
+        if ("mockpre".equals(activity.mFrom)) {
             String mock_time = activity.getIntent().getStringExtra("mock_time");
             long curTime = Utils.getSeconds(mock_time);
             if (curTime > -(30 * 60)) {
                 ToastManager.showToast(activity, "开考30分钟后才可以交卷");
-                return;
             }
         } else {
             if (hasNoAnswer) {
