@@ -124,7 +124,7 @@ public class OpenUDID_manager implements ServiceConnection{
             i.setComponent(new ComponentName(servInfo.applicationInfo.packageName, servInfo.name));
             mContext.bindService(i, this,  Context.BIND_AUTO_CREATE);
             mMatchingIntents.remove(0);
-		} else { //No more service to test
+		} else { //No more service to Test
 			
 			getMostFrequentOpenUDID(); //Choose the most frequent
 	

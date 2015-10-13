@@ -323,7 +323,7 @@ public class Utils {
 //                        + "/pic/";
 //                FileMange.mkDir(folder);
 //
-//                out = new FileOutputStream(folder + "test.png");
+//                out = new FileOutputStream(folder + "Test.png");
 //
 //            } catch (FileNotFoundException e) {
 //                e.printStackTrace();

@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.model.offline.network.OfflineRequest;
 import com.appublisher.quizbank.network.RequestCallback;
 
 import org.json.JSONArray;
@@ -27,7 +27,7 @@ public class OfflineActivity extends AppCompatActivity implements RequestCallbac
         CommonModel.setToolBar(this);
         CommonModel.setBarTitle(this, "离线视频");
 
-        Request request = new Request(this, this);
+        OfflineRequest request = new OfflineRequest(this, this);
         request.getPurchasedCourses();
     }
 

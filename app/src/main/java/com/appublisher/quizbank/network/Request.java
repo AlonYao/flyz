@@ -281,13 +281,6 @@ public class Request extends BaseRequest implements ApiConstants{
         asyncRequest(ParamBuilder.finalUrl(getPromoteLiveCourse), "promote_live_course", "object");
     }
 
-    /**
-     * 获取已购课程列表
-     */
-    public void getPurchasedCourses() {
-        asyncRequest(ParamBuilder.finalUrl(getPurchasedCourses), "purchased_courses", "object");
-    }
-
     /**** 登录注册模块 ****/
 
     /**
