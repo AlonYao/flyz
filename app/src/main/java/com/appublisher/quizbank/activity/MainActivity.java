@@ -200,7 +200,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     @SuppressLint("RtlHardcoded")
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(Gravity.START|Gravity.LEFT)){
+        if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
             mDrawerLayout.closeDrawers();
             return;
         }
