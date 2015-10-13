@@ -134,6 +134,17 @@ public class CommonModel {
      * @param title 标题
      */
     public static void setBarTitle(ActionBarActivity activity, String title) {
+        assert activity.getSupportActionBar() != null;
+        activity.getSupportActionBar().setTitle(title);
+    }
+
+    /**
+     * 设置Bar标题
+     * @param activity ActionBarActivity
+     * @param title 标题
+     */
+    public static void setBarTitle(AppCompatActivity activity, String title) {
+        assert activity.getSupportActionBar() != null;
         activity.getSupportActionBar().setTitle(title);
     }
 

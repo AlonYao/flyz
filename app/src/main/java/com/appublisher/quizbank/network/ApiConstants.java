@@ -158,8 +158,12 @@ public interface ApiConstants {
 
     // 评论获取待赠送课程、开课
     String getRateCourse = baseUrl + "course/get_rate_course";
-    //模考直播课报名
+
+    // 模考直播课报名
     String mockSignUp = baseUrl + "quizbank/enroll_mock_course";
+
+    // 获取已购课程列表
+    String getPurchasedCourses = baseUrl + "course/get_purchased_courses";
 
     /**
      * 图片相关
