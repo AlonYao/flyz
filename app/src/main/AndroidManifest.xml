@@ -316,7 +316,8 @@
             android:label="@string/title_activity_mock_pre"
             android:screenOrientation="portrait" >
         </activity>
-
+        <activity android:name=".activity.OfflineActivity" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -174,6 +175,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
                 && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
             MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(
                     R.drawable.homepage_grade), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        } else if (mCurFragment instanceof CourseFragment) {
+            MenuItemCompat.setShowAsAction(menu.add("离线视频"),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -181,10 +185,13 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle().equals("评价")) {
+        if ("评价".equals(item.getTitle())) {
             ProgressDialogManager.showProgressDialog(this, true);
             mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
             mFrom = "menu";
+        } else if ("离线视频".equals(item.getTitle())) {
+            Intent intent = new Intent(this, OfflineActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

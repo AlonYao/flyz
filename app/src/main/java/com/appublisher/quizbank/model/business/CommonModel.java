@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
@@ -34,9 +35,21 @@ public class CommonModel {
     public static void setToolBar(ActionBarActivity activity) {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
-        //noinspection deprecation
+        assert activity.getSupportActionBar() != null;
         activity.getSupportActionBar().setBackgroundDrawable(
                 activity.getResources().getDrawable(R.drawable.actionbar_bg));
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * 设置Toolbar
+     * @param activity Activity
+     */
+    public static void setToolBar(AppCompatActivity activity) {
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        toolbar.setBackgroundResource(R.drawable.actionbar_bg);
+        activity.setSupportActionBar(toolbar);
+        assert activity.getSupportActionBar() != null;
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
