@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.offline;
+package com.appublisher.quizbank.model.offline.netdata;
 
 import java.util.ArrayList;
 
