@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class FileMange {
+public class FileManager {
 	
 	/**
 	 * 创建目录（支持多级目录）

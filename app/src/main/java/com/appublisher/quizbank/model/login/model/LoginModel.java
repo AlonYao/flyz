@@ -36,7 +36,7 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.DownloadAsyncTask;
-import com.appublisher.quizbank.utils.FileMange;
+import com.appublisher.quizbank.utils.FileManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -525,7 +525,7 @@ public class LoginModel {
     public static void setAvatar(Activity activity, final RoundedImageView avatar) {
         String avatarFolder = activity.getApplicationContext().getFilesDir().getAbsolutePath() + "/"
                 + LoginModel.getUserId();
-        FileMange.mkDir(avatarFolder);
+        FileManager.mkDir(avatarFolder);
         final String filePath = avatarFolder + "/avatar.png";
         File yourAvatarFile = new File(filePath);
         if (yourAvatarFile.exists()) {

@@ -321,7 +321,7 @@ public class Utils {
 //                // 音频本地缓存文件夹
 //                String folder = activity.getApplicationContext().getFilesDir().getAbsolutePath()
 //                        + "/pic/";
-//                FileMange.mkDir(folder);
+//                FileManager.mkDir(folder);
 //
 //                out = new FileOutputStream(folder + "Test.png");
 //
