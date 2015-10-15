@@ -7,4 +7,38 @@
 
     <include layout="@layout/toolbar"/>
 
+    <LinearLayout
+        android:id="@+id/offline_button_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/offline_local_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/offline_local"
+            tools:ignore="ContentDescription" />
+        <Button
+            android:id="@+id/offline_all_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/offline_all"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/offline_local_lv"
+        style="@style/CommonListView"
+        android:layout_below="@id/offline_button_ll"/>
+
+    <ListView
+        android:id="@+id/offline_all_lv"
+        style="@style/CommonListView"
+        android:visibility="gone"
+        android:layout_below="@id/offline_button_ll"/>
+
 </RelativeLayout>

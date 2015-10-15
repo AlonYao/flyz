@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -602,7 +601,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * @param response 回调
      */
     private void dealSubmitPaperResp(JSONObject response) {
-        Log.i("mockauto", response.toString());
         if (response == null) return;
 
         SubmitPaperResp submitPaperResp =

@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.offline.model;
+package com.appublisher.quizbank.model.offline.model.db;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
@@ -7,13 +7,13 @@ import com.appublisher.quizbank.model.db.Paper;
 /**
  * 离线模块DAO层
  */
-public class OfflineCourseDAO {
+public class OfflineDAO {
 
     /**
      * 根据room_id查询数据
      * @return 视频数据
      */
-    public static OfflineCourse findByRoomId(String room_id) {
+    public static Offline findByRoomId(String room_id) {
         try {
             return new Select().from(Paper.class)
                     .where("room_id = ?", room_id)
@@ -30,23 +30,23 @@ public class OfflineCourseDAO {
      * @param purchased_data 已购课程数据
      */
     public static void savePurchasedData(String purchased_data) {
-        OfflineCourse offlineCourse = null;
+        Offline offline = null;
 
         try {
-            offlineCourse = new Select().from(OfflineCourse.class)
+            offline = new Select().from(Offline.class)
                     .where("Id = ?", 1)
                     .executeSingle();
         } catch (Exception e) {
             // Empty
         }
 
-        if (offlineCourse == null) {
-            offlineCourse = new OfflineCourse();
-            offlineCourse.purchased_data = purchased_data;
-            offlineCourse.save();
+        if (offline == null) {
+            offline = new Offline();
+            offline.purchased_data = purchased_data;
+            offline.save();
         } else {
             try {
-                new Update(OfflineCourse.class)
+                new Update(Offline.class)
                         .set("purchased_data = ?", purchased_data)
                         .where("Id = ?", 1)
                         .execute();
@@ -61,10 +61,10 @@ public class OfflineCourseDAO {
      * @param room_id room_id
      */
 //    public static void savePurchasedData(String room_id) {
-//        OfflineCourse offlineCourse = null;
+//        Offline offlineCourse = null;
 //
 //        try {
-//            offlineCourse = new Select().from(OfflineCourse.class)
+//            offlineCourse = new Select().from(Offline.class)
 //                    .where("Id = ?", 1)
 //                    .executeSingle();
 //        } catch (Exception e) {

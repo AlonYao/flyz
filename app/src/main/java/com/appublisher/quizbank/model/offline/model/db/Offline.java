@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.offline.model;
+package com.appublisher.quizbank.model.offline.model.db;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -6,7 +6,7 @@ import com.activeandroid.annotation.Column;
 /**
  * 离线视频表
  */
-public class OfflineCourse extends Model {
+public class Offline extends Model {
 
     @Column(name = "purchased_data")
     public String purchased_data;

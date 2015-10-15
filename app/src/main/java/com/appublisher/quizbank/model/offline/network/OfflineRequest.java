@@ -11,10 +11,6 @@ import com.appublisher.quizbank.network.RequestCallback;
  */
 public class OfflineRequest extends Request implements OfflineApiConstants{
 
-    public OfflineRequest(Context context) {
-        super(context);
-    }
-
     public OfflineRequest(Context context, RequestCallback callback) {
         super(context, callback);
     }
