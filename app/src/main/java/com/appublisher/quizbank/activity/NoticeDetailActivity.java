@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
@@ -50,6 +52,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
             mProgressBar.setVisibility(View.VISIBLE);
             webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setDomStorageEnabled(true);
+            // 解决部分安卓机不弹出alert
+            webView.setWebChromeClient(new WebChromeClient() {
+                @Override
+                public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                    return super.onJsAlert(view, url, message, result);
+                }
+            });
             webView.loadUrl(content);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
