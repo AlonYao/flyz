@@ -275,7 +275,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
     /**
      * 展示WebView
-     *
      * @param url url
      */
     @SuppressLint("SetJavaScriptEnabled")
@@ -285,8 +284,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mProgressBar.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.loadUrl(url);
-        //解决部分安卓机不弹出alert
+        // 解决部分安卓机不弹出alert
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
