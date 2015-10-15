@@ -68,7 +68,7 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             tvOpenCourse.setVisibility(View.GONE);
         }
         //模考介绍页
-        if (mFrom.equals("mock_openopencourse")) {
+        if ("mock_openopencourse".equals(mFrom)) {
             tvOpenCourse.setText("考试前会收到短信提示哦");
             tvOpenCourse.setVisibility(View.VISIBLE);
         }

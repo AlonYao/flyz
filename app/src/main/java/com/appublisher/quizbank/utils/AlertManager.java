@@ -94,7 +94,7 @@ public class AlertManager {
                                     // 保存至本地
                                     PaperDAO.save(activity.mPaperId, activity.mCurPosition);
                                     // 提交数据
-                                    if(activity.mFrom.equals("mockpre")){
+                                    if("mockpre".equals(activity.mFrom)){
                                         MeasureModel.autoSubmitPaper(activity);
                                     }else{
                                         MeasureModel.submitPaper(activity);

@@ -501,7 +501,7 @@ public class LoginModel {
                         activity, "CodeVerified", "CodeVerified", "CodeVerified");
 
             } else {
-                if (activity.mFrom.equals("mock_openopencourse")) {
+                if ("mock_openopencourse".equals(activity.mFrom)) {
                     //给用户预约课
                     int mock_id = activity.getIntent().getIntExtra("mock_id", 0);
                     activity.mRequest.mobileBookMock(ParamBuilder.getBookMock(mock_id + ""), userInfoOnline.getUser_id(), userInfoOnline.getUser_token());
