@@ -44,7 +44,7 @@ public class WholePageModel {
 
                     WholePageFragment.mTvLastProvince.setTextColor(
                             WholePageFragment.mActivity.getResources().getColor(
-                                    R.color.setting_text));
+                                    R.color.common_text));
                 }
 
                 WholePageFragment.mTvLastProvince = WholePageFragment.mTvLocation;

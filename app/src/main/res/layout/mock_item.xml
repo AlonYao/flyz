@@ -24,7 +24,7 @@
         android:layout_marginRight="52dp"
         android:layout_centerVertical="true"
         android:textSize="18sp"
-        android:textColor="@color/setting_text"
+        android:textColor="@color/common_text"
         tools:ignore="RelativeOverlap" />
 
     <ImageView

@@ -185,7 +185,7 @@ public class OpenCourseModel {
     public static void setBooked(OpenCourseUnstartActivity activity) {
         activity.mTvNotice.setText(R.string.opencourse_notice_true);
         activity.mTvNotice.setTextColor(
-                activity.getResources().getColor(R.color.setting_text));
+                activity.getResources().getColor(R.color.common_text));
         activity.mTvNotice.setBackgroundColor(
                 activity.getResources().getColor(R.color.transparency));
 

@@ -17,7 +17,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/setting_line"/>
+            android:background="@color/common_line"/>
         <!-- 输入密码 -->
         <EditText
             style="@style/Login_EditText"

@@ -9,7 +9,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/setting_line"/>
+        android:background="@color/common_line"/>
 
     <!-- 确认&取消按钮 -->
     <LinearLayout
@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/setting_text"
+            android:textColor="@color/common_text"
             android:background="@android:color/white"
             android:text="@string/alert_n"/>
 

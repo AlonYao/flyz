@@ -10,6 +10,7 @@ public class PurchasedCourseM {
     int id;
     String name;
     ArrayList<PurchasedClassM> classes;
+    String lector;
 
     public int getId() {
         return id;
@@ -21,5 +22,9 @@ public class PurchasedCourseM {
 
     public ArrayList<PurchasedClassM> getClasses() {
         return classes;
+    }
+
+    public String getLector() {
+        return lector;
     }
 }

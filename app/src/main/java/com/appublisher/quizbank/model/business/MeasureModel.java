@@ -102,7 +102,7 @@ public class MeasureModel {
                 0,
                 qNum.length(),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
+        textView.setTextColor(activity.getResources().getColor(R.color.common_text));
         textView.setText(word);
         flowLayout.addView(textView);
 
@@ -129,7 +129,7 @@ public class MeasureModel {
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 textView.setLayoutParams(p);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-                textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
+                textView.setTextColor(activity.getResources().getColor(R.color.common_text));
                 textView.setText(segment.text);
                 flowLayout.addView(textView);
 
@@ -237,7 +237,7 @@ public class MeasureModel {
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 textView.setLayoutParams(p);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-                textView.setTextColor(activity.getResources().getColor(R.color.setting_text));
+                textView.setTextColor(activity.getResources().getColor(R.color.common_text));
                 textView.setText(segment.text);
                 flowLayout.addView(textView);
 

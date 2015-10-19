@@ -33,7 +33,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/setting_line"/>
+                android:background="@color/common_line"/>
 
             <RelativeLayout
                 android:id="@+id/wholepage_year_rl"
@@ -54,7 +54,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/setting_line"/>
+            android:background="@color/common_line"/>
 
         <com.appublisher.quizbank.customui.XListView
             android:id="@+id/wholepage_xlistview"

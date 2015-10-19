@@ -14,7 +14,7 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:textSize="18sp"
-        android:textColor="@color/setting_text"/>
+        android:textColor="@color/common_text"/>
 
     <View
         android:id="@+id/wholepage_list_item_line"
@@ -22,6 +22,6 @@
         android:layout_height="1dp"
         android:layout_marginLeft="18dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/setting_line"/>
+        android:background="@color/common_line"/>
 
 </RelativeLayout>

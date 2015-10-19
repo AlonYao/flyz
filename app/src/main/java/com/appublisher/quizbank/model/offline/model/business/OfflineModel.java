@@ -6,7 +6,9 @@ import android.view.View;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineActivity;
+import com.appublisher.quizbank.model.offline.adapter.PurchasedCoursesAdapter;
 import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
+import com.appublisher.quizbank.model.offline.netdata.PurchasedCourseM;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.utils.GsonManager;
 
@@ -54,6 +56,11 @@ public class OfflineModel {
         // 保存至数据库
         OfflineDAO.savePurchasedData(
                 GsonManager.getGson().toJson(resp, PurchasedCoursesResp.class));
+
+        ArrayList<PurchasedCourseM> courses = resp.getList();
+        if (courses == null) return;
+
+        PurchasedCoursesAdapter adapter = new PurchasedCoursesAdapter(activity, courses);
     }
 
     /**
@@ -63,8 +70,11 @@ public class OfflineModel {
     public static void pressAllBtn(OfflineActivity activity) {
         activity.mTvAll.setTextColor(Color.WHITE);
         activity.mAllLine.setVisibility(View.VISIBLE);
-        activity.mTvLocal.setTextColor(activity.getResources().getColor(R.color.tab_unpress));
+        activity.mLvAll.setVisibility(View.VISIBLE);
+
         activity.mLocalLine.setVisibility(View.INVISIBLE);
+        activity.mTvLocal.setTextColor(activity.getResources().getColor(R.color.tab_unpress));
+        activity.mLvLocal.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -74,8 +84,11 @@ public class OfflineModel {
     public static void pressLocalBtn(OfflineActivity activity) {
         activity.mTvLocal.setTextColor(Color.WHITE);
         activity.mLocalLine.setVisibility(View.VISIBLE);
+        activity.mLvLocal.setVisibility(View.VISIBLE);
+
         activity.mTvAll.setTextColor(activity.getResources().getColor(R.color.tab_unpress));
         activity.mAllLine.setVisibility(View.INVISIBLE);
+        activity.mLvAll.setVisibility(View.INVISIBLE);
     }
 
 }

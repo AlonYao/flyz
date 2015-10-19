@@ -109,7 +109,7 @@ public class EvaluationModel {
 
         // 根据值绘图
         Paint lineGridPaint = new Paint();
-        lineGridPaint.setColor(activity.getResources().getColor(R.color.setting_line));
+        lineGridPaint.setColor(activity.getResources().getColor(R.color.common_line));
         lineGridPaint.setStyle(Paint.Style.STROKE);
         lineGridPaint.setAntiAlias(true);
         lineGridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));

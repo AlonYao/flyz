@@ -124,7 +124,7 @@
                 android:id="@+id/measure_analysis_rightanswer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:textSize="17sp"/>
 
             <LinearLayout
@@ -143,7 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="17sp"
-                android:textColor="@color/setting_text"/>
+                android:textColor="@color/common_text"/>
 
             <!-- 来源 -->
             <TextView
@@ -153,7 +153,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:textSize="17sp"
-                android:textColor="@color/setting_text"/>
+                android:textColor="@color/common_text"/>
 
             <!-- 统计 -->
             <TextView
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:textSize="17sp"
-                android:textColor="@color/setting_text"/>
+                android:textColor="@color/common_text"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

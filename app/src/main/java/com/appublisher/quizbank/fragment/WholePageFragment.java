@@ -294,7 +294,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                     if (mTvLastProvince != null && mTvLastProvince != tvProvinceItem) {
                         mTvLastProvince.setBackgroundResource(R.drawable.wholepage_item_all);
                         mTvLastProvince.setTextColor(
-                                getResources().getColor(R.color.setting_text));
+                                getResources().getColor(R.color.common_text));
                     }
 
                     mTvLastProvince = tvProvinceItem;
@@ -396,7 +396,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                     if (mTvLastYear != null && mTvLastYear != tvYearItem) {
                         mTvLastYear.setBackgroundResource(R.drawable.wholepage_item_all);
                         mTvLastYear.setTextColor(
-                                getResources().getColor(R.color.setting_text));
+                                getResources().getColor(R.color.common_text));
                     }
 
                     mTvLastYear = tvYearItem;

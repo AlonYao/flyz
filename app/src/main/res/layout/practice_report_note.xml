@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="36dp"
         android:ems="7"
-        android:textColor="@color/setting_text"
+        android:textColor="@color/common_text"
         android:text="@string/practice_report_note_name"
         tools:ignore="RelativeOverlap" />
 

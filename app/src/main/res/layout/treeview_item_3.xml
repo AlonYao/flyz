@@ -21,7 +21,7 @@
         android:layout_marginLeft="35dp"
         android:layout_centerVertical="true"
         android:textSize="16sp"
-        android:textColor="@color/setting_text"
+        android:textColor="@color/common_text"
         android:text="@string/hierarchy_name"/>
 
     <ImageView

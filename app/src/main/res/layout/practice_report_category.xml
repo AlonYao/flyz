@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="36dp"
         android:ems="4"
-        android:textColor="@color/setting_text"
+        android:textColor="@color/common_text"
         android:text="@string/practice_report_category"/>
 
     <LinearLayout
@@ -43,13 +43,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:text="@string/practice_report_zero"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:textSize="10sp"
                 android:text="@string/practice_report_semicolon"/>
 
@@ -58,7 +58,7 @@
                 android:id="@+id/practice_report_category_totalnum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:textSize="10sp"
                 android:text="@string/practice_report_zero"/>
         </LinearLayout>
@@ -78,13 +78,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textColor="@color/setting_text"
+            android:textColor="@color/common_text"
             android:text="@string/practice_report_zero"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/setting_text"
+            android:textColor="@color/common_text"
             android:textSize="10sp"
             android:text="@string/practice_report_time"/>
     </LinearLayout>

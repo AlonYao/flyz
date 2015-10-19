@@ -214,7 +214,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         detail.setLayoutParams(lp);
         detail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         detail.setTextSize(17);
-        detail.setTextColor(getResources().getColor(R.color.setting_text));
+        detail.setTextColor(getResources().getColor(R.color.common_text));
         if (isLast) {
             int start = detailString.length() + 2;
             int end = start + 4;
@@ -261,7 +261,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         detail.setLayoutParams(lp);
         detail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         detail.setTextSize(17);
-        detail.setTextColor(getResources().getColor(R.color.setting_text));
+        detail.setTextColor(getResources().getColor(R.color.common_text));
         detail.setText(detailString);
         exam.addView(detail);
         rankingContainer.addView(exam);

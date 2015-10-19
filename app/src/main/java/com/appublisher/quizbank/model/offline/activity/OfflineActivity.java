@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -31,6 +32,11 @@ public class OfflineActivity extends AppCompatActivity
     public TextView mTvLocal;
     public View mAllLine;
     public View mLocalLine;
+    public ListView mLvAll;
+    public ListView mLvLocal;
+
+    /** Data **/
+    public PurchasedCoursesResp mPurchasedCoursesResp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,8 @@ public class OfflineActivity extends AppCompatActivity
         mTvLocal = (TextView) findViewById(R.id.offline_local_btn);
         mAllLine = findViewById(R.id.offline_all_line);
         mLocalLine = findViewById(R.id.offline_local_line);
+        mLvAll = (ListView) findViewById(R.id.offline_all_lv);
+        mLvLocal = (ListView) findViewById(R.id.offline_local_lv);
 
         mTvAll.setOnClickListener(this);
         mTvLocal.setOnClickListener(this);
@@ -77,9 +85,9 @@ public class OfflineActivity extends AppCompatActivity
         }
 
         if ("purchased_courses".equals(apiName)) {
-            PurchasedCoursesResp purchasedCoursesResp =
+            mPurchasedCoursesResp =
                     GsonManager.getGson().fromJson(response.toString(), PurchasedCoursesResp.class);
-            OfflineModel.dealPurchasedCoursesResp(this, purchasedCoursesResp);
+            OfflineModel.dealPurchasedCoursesResp(this, mPurchasedCoursesResp);
         }
 
         ProgressDialogManager.closeProgressDialog();
@@ -100,6 +108,10 @@ public class OfflineActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.offline_all_btn:
                 OfflineModel.pressAllBtn(this);
+
+                // 如果数据正常，则不从网络获取数据
+                if (mPurchasedCoursesResp != null
+                        && mPurchasedCoursesResp.getResponse_code() == 1) return;
 
                 ProgressDialogManager.showProgressDialog(this);
                 OfflineRequest request = new OfflineRequest(this, this);

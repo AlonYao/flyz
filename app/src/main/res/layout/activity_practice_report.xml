@@ -32,14 +32,14 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="2dp"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/setting_text"/>
+                android:textColor="@color/common_text"/>
 
             <TextView
                 android:id="@+id/practice_report_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:text="@string/practice_report_name"/>
 
             <!-- mini模考排名信息 -->
@@ -58,14 +58,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="@string/common_none"
-                    android:textColor="@color/setting_text"
+                    android:text="@string/common_text"
+                    android:textColor="@color/common_text"
                     tools:ignore="RelativeOverlap,RtlHardcoded" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/practice_report_minimokao_rank"
-                    android:textColor="@color/setting_text"
+                    android:textColor="@color/common_text"
                     android:text="@string/practice_report_minimokaorank"/>
             </RelativeLayout>
 
@@ -81,13 +81,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/setting_text"
+                    android:textColor="@color/common_text"
                     android:text="@string/practice_report_evaluate"/>
                 <TextView
                     android:id="@+id/practice_report_evaluate_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/setting_text"
+                    android:textColor="@color/common_text"
                     android:textSize="40sp"/>
             </LinearLayout>
 
@@ -117,19 +117,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="30sp"
-                        android:textColor="@color/setting_text"
+                        android:textColor="@color/common_text"
                         android:text="@string/practice_report_zero"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/setting_text"
+                        android:textColor="@color/common_text"
                         android:text="@string/practice_report_semicolon"/>
                     <!-- 全部的题目 -->
                     <TextView
                         android:id="@+id/practice_report_totalnum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/setting_text"
+                        android:textColor="@color/common_text"
                         android:text="@string/practice_report_zero"/>
                 </LinearLayout>
             </LinearLayout>
@@ -158,7 +158,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/setting_text"
+                    android:textColor="@color/common_text"
                     android:layout_marginLeft="36dp"
                     android:layout_marginBottom="10dp"
                     android:text="@string/practice_report_note"
@@ -187,7 +187,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/setting_text"
+                    android:textColor="@color/common_text"
                     android:layout_marginLeft="36dp"
                     android:layout_marginBottom="10dp"
                     android:text="@string/practice_report_borderline"

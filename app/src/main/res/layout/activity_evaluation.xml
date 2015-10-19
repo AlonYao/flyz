@@ -49,7 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/practice_report_zero"
-                        android:textColor="@color/setting_text"
+                        android:textColor="@color/common_text"
                         android:textStyle="bold"
                         android:textSize="43sp"/>
                 </LinearLayout>
@@ -78,7 +78,7 @@
                             android:id="@+id/evaluation_rank_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/setting_text"
+                            android:textColor="@color/common_text"
                             android:text="@string/practice_report_zero"
                             android:textStyle="bold"
                             android:textSize="43sp"/>

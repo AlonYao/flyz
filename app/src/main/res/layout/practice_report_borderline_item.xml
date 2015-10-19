@@ -12,7 +12,7 @@
         android:layout_marginLeft="36dp"
         android:layout_centerVertical="true"
         android:ems="4"
-        android:textColor="@color/setting_text"
+        android:textColor="@color/common_text"
         android:text="@string/practice_report_totalpoints"
         tools:ignore="RtlHardcoded" />
     <TextView
@@ -22,8 +22,8 @@
         android:layout_toRightOf="@id/item_borderline_name"
         android:layout_marginLeft="25dp"
         android:layout_centerVertical="true"
-        android:textColor="@color/setting_text"
-        android:text="@string/common_none"
+        android:textColor="@color/common_text"
+        android:text="@string/common_text"
         tools:ignore="RtlHardcoded" />
 
     <!-- 分割线 -->

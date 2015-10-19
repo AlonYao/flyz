@@ -41,7 +41,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/setting_line"/>
+            android:background="@color/common_line"/>
         <TextView
             android:id="@+id/mobile_resetpwd_reget"
             android:layout_width="0dp"

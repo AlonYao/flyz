@@ -18,7 +18,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="15sp"
         android:text="@string/login_cannot_get_smscode"
-        android:textColor="@color/setting_text"/>
+        android:textColor="@color/common_text"/>
 
     <TextView
         android:id="@+id/cannotget_smscode_qq"
@@ -26,6 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:textColor="@color/setting_text"/>
+        android:textColor="@color/common_text"/>
 
 </LinearLayout>

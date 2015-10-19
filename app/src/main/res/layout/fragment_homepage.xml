@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/common_none"
+                    android:text="@string/common_text"
                     android:textSize="15sp"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
@@ -143,12 +143,12 @@
                     style="@style/HomePageListTV"
                     android:textSize="16sp"
                     android:textColor="@android:color/white"
-                    android:text="@string/common_none"/>
+                    android:text="@string/common_text"/>
                 <TextView
                     android:id="@+id/homepage_mock_name"
                     style="@style/HomePageListTV"
                     android:textColor="@android:color/white"
-                    android:text="@string/common_none"/>
+                    android:text="@string/common_text"/>
             </LinearLayout>
 
             <!-- 今日模考 -->

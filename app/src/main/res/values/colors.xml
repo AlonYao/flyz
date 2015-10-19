@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="common_bg">#EFEFF4</color>
+    <color name="common_text">#262B2D</color>
+    <color name="common_line">#D8D8D8</color>
     <color name="drawer_text">#506183</color>
     <color name="white_translucence">#80FFFFFF</color>
     <color name="white">#FFFFFF</color>
@@ -13,9 +15,6 @@
     <color name="homepage_gongkaike_bg">#DC514A</color>
     <color name="homepage_item_bg">#ECF5F3</color>
     <color name="homepage_mokao">#EE9900</color>
-
-    <color name="setting_text">#262B2D</color>
-    <color name="setting_line">#D8D8D8</color>
 
     <color name="exam_change_button">#3AAB7E</color>
 

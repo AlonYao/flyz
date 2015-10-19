@@ -92,7 +92,7 @@ public class AnswerSheetAdapter extends BaseAdapter{
             } else {
                 viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_unselect);
                 viewHolder.tvNum.setTextColor(
-                        mActivity.getResources().getColor(R.color.setting_text));
+                        mActivity.getResources().getColor(R.color.common_text));
             }
         }
 

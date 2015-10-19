@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:textColor="@color/setting_text"
+            android:textColor="@color/common_text"
             android:textSize="24sp"
             android:text="@string/app_name"/>
 
@@ -35,7 +35,7 @@
             android:layout_marginTop="45dp"
             android:gravity="center_horizontal"
             android:textSize="18sp"
-            android:textColor="@color/setting_text"/>
+            android:textColor="@color/common_text"/>
     </LinearLayout>
 
     <TextView
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:text="@string/practicedesc_hide"
-            android:textColor="@color/setting_text"
+            android:textColor="@color/common_text"
             android:textSize="19sp"/>
     </LinearLayout>
 

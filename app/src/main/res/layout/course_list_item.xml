@@ -22,9 +22,9 @@
             android:layout_marginRight="40dp"
             android:maxLines="2"
             android:ellipsize="end"
-            android:text="@string/common_none"
+            android:text="@string/common_text"
             android:textSize="18sp"
-            android:textColor="@color/setting_text"
+            android:textColor="@color/common_text"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/course_zhiboke_flag"
             android:drawablePadding="10dp"
@@ -43,9 +43,9 @@
                 android:id="@+id/courselist_item_teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/common_none"
+                android:text="@string/common_text"
                 android:textSize="15sp"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
@@ -57,8 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="@string/common_none"
-                android:textColor="@color/setting_text"
+                android:text="@string/common_text"
+                android:textColor="@color/common_text"
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:ellipsize="end"
@@ -78,8 +78,8 @@
             android:layout_marginRight="10dp"
             android:singleLine="true"
             android:ellipsize="end"
-            android:text="@string/common_none"
-            android:textColor="@color/setting_text"
+            android:text="@string/common_text"
+            android:textColor="@color/common_text"
             android:textSize="15sp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/course_desc_flag"
@@ -100,15 +100,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:textSize="25sp"
-                android:text="@string/common_none"/>
+                android:text="@string/common_text"/>
             <TextView
                 android:id="@+id/courselist_item_persons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 android:textSize="15sp"
-                android:textColor="@color/setting_text"
-                android:text="@string/common_none"/>
+                android:textColor="@color/common_text"
+                android:text="@string/common_text"/>
         </FrameLayout>
 
     </LinearLayout>

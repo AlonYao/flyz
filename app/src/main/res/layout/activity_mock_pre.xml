@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="考试时间"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -60,7 +60,7 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:text="排名及奖励说明"
-                android:textColor="@color/setting_text"
+                android:textColor="@color/common_text"
                 android:textSize="18sp" />
 
             <LinearLayout

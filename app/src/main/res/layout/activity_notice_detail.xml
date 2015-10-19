@@ -36,7 +36,7 @@
                 android:id="@+id/notice_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/setting_text"/>
+                android:textColor="@color/common_text"/>
 
         </LinearLayout>
     </ScrollView>

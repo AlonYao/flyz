@@ -503,7 +503,7 @@ public class CourseModel {
         textView.setBackgroundResource(R.drawable.wholepage_item_all);
         textView.setTextColor(
                 mCourseFragment.mActivity
-                        .getResources().getColor(R.color.setting_text));
+                        .getResources().getColor(R.color.common_text));
     }
 
     /**
