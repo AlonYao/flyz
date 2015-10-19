@@ -13,7 +13,6 @@
         android:layout_height="50dp"
         android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         android:background="@color/apptheme"
         tools:ignore="DisableBaselineAlignment">
@@ -61,12 +60,18 @@
     <ListView
         android:id="@+id/offline_local_lv"
         style="@style/CommonListView"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:divider="@null"
         android:layout_below="@id/offline_button_ll"/>
 
     <ListView
         android:id="@+id/offline_all_lv"
         style="@style/CommonListView"
         android:visibility="gone"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:divider="@null"
         android:layout_below="@id/offline_button_ll"/>
 
 </RelativeLayout>

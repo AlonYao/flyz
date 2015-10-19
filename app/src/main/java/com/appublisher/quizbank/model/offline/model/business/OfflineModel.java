@@ -61,6 +61,7 @@ public class OfflineModel {
         if (courses == null) return;
 
         PurchasedCoursesAdapter adapter = new PurchasedCoursesAdapter(activity, courses);
+        activity.mLvAll.setAdapter(adapter);
     }
 
     /**
