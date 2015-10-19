@@ -62,7 +62,6 @@
         style="@style/CommonListView"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:divider="@null"
         android:layout_below="@id/offline_button_ll"/>
 
     <ListView
@@ -71,7 +70,6 @@
         android:visibility="gone"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:divider="@null"
         android:layout_below="@id/offline_button_ll"/>
 
 </RelativeLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/item_purchased_classes_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="60dp"
+        android:layout_centerVertical="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/common_text"
+        android:textSize="18sp"
+        android:textColor="@color/common_text"
+        tools:ignore="RelativeOverlap,RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/item_purchased_classes_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/common_text"
+        android:textSize="18sp"
+        android:textColor="@color/item_class_status"
+        android:visibility="gone"
+        tools:ignore="RelativeOverlap,RtlHardcoded" />
+
+    <ImageView
+        android:id="@+id/item_purchased_classes_status_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        tools:ignore="ContentDescription,RelativeOverlap,RtlHardcoded" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="30dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_line"
+        tools:ignore="RtlHardcoded" />
+</RelativeLayout>

@@ -2,4 +2,5 @@
 <resources>
     <color name="tab_line">#B6E6D3</color>
     <color name="tab_unpress">#80FFFFFF</color>
+    <color name="item_class_status">#FF9800</color>
 </resources>

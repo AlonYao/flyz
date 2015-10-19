@@ -128,6 +128,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:scrollbars">none</item>
         <item name="android:overScrollMode">never</item>
+        <item name="android:divider">@null</item>
     </style>
 
     <!-- 做题页面 -->
