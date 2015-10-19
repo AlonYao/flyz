@@ -81,7 +81,23 @@ public class PurchasedClassesAdapter extends BaseAdapter{
         PurchasedClassM classM = mClasses.get(position);
         if (classM == null) return;
 
-        viewHolder.tvTitle.setText(classM.getName());
+        String date = "";
+        try {
+            String startTime = classM.getStart_time();
+            date = startTime.substring(0, 10).replaceAll("-", ".").substring(5, 10);
+
+            String firstNum = date.substring(0, 1);
+
+            if ("0".equals(firstNum)) {
+                date = date.substring(1, 5);
+            }
+
+        } catch (Exception e) {
+            // Empty
+        }
+
+        String title = date + " " + classM.getLector() + "：" + classM.getName();
+        viewHolder.tvTitle.setText(title);
     }
 
     private class ViewHolder {

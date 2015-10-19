@@ -1,11 +1,14 @@
 package com.appublisher.quizbank.model.offline.model.business;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Environment;
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineActivity;
+import com.appublisher.quizbank.model.offline.activity.OfflineClassActivity;
 import com.appublisher.quizbank.model.offline.adapter.PurchasedCoursesAdapter;
 import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCourseM;
@@ -49,7 +52,7 @@ public class OfflineModel {
      * @param activity OfflineActivity
      * @param resp 回调数据
      */
-    public static void dealPurchasedCoursesResp(OfflineActivity activity,
+    public static void dealPurchasedCoursesResp(final OfflineActivity activity,
                                                 PurchasedCoursesResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
@@ -57,11 +60,25 @@ public class OfflineModel {
         OfflineDAO.savePurchasedData(
                 GsonManager.getGson().toJson(resp, PurchasedCoursesResp.class));
 
-        ArrayList<PurchasedCourseM> courses = resp.getList();
+        final ArrayList<PurchasedCourseM> courses = resp.getList();
         if (courses == null) return;
 
         PurchasedCoursesAdapter adapter = new PurchasedCoursesAdapter(activity, courses);
         activity.mLvAll.setAdapter(adapter);
+
+        activity.mLvAll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= courses.size()) return;
+
+                PurchasedCourseM course = courses.get(position);
+                if (course == null) return;
+
+                Intent intent = new Intent(activity, OfflineClassActivity.class);
+                intent.putExtra("class_list", course.getClasses());
+                activity.startActivity(intent);
+            }
+        });
     }
 
     /**
