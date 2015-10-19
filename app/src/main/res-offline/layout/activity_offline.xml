@@ -14,40 +14,47 @@
         android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/apptheme"
+        tools:ignore="DisableBaselineAlignment">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-            <Button
+            <TextView
                 android:id="@+id/offline_local_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="46dp"
+                android:gravity="center"
                 android:text="@string/offline_local"
                 android:textColor="@android:color/white"
-                android:background="@color/apptheme"
                 tools:ignore="ContentDescription" />
             <View
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:id="@+id/offline_local_line"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@color/tab_line"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-            <Button
+            <TextView
                 android:id="@+id/offline_all_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="46dp"
+                android:gravity="center"
                 android:text="@string/offline_all"
-                android:textColor="@android:color/white"
-                android:background="@color/apptheme"
+                android:textColor="@color/tab_unpress"
                 tools:ignore="ContentDescription" />
             <View
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:id="@+id/offline_all_line"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@color/tab_line"
+                android:visibility="invisible"/>
         </LinearLayout>
     </LinearLayout>
 

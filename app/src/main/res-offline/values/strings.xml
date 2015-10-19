@@ -1,4 +1,4 @@
 <resources>
     <string name="offline_local">已下载</string>
-    <string name="offline_all">已购</string>
+    <string name="offline_all">全部</string>
 </resources>

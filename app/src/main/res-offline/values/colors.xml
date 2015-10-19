@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tab_line">#B6E6D3</color>
+    <color name="tab_unpress">#80FFFFFF</color>
+</resources>

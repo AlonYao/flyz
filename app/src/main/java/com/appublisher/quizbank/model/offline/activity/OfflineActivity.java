@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
@@ -26,12 +26,18 @@ import org.json.JSONObject;
 public class OfflineActivity extends AppCompatActivity
         implements RequestCallback, View.OnClickListener{
 
+    /** Views **/
+    public TextView mTvAll;
+    public TextView mTvLocal;
+    public View mAllLine;
+    public View mLocalLine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline);
 
-        // Toolbar
+        // Toolbar（特殊处理：保证颜色渐变一致）
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.apptheme));
         setSupportActionBar(toolbar);
@@ -40,9 +46,13 @@ public class OfflineActivity extends AppCompatActivity
         CommonModel.setBarTitle(this, "离线视频");
 
         // Init view
-        Button btnAll = (Button) findViewById(R.id.offline_all_btn);
+        mTvAll = (TextView) findViewById(R.id.offline_all_btn);
+        mTvLocal = (TextView) findViewById(R.id.offline_local_btn);
+        mAllLine = findViewById(R.id.offline_all_line);
+        mLocalLine = findViewById(R.id.offline_local_line);
 
-        btnAll.setOnClickListener(this);
+        mTvAll.setOnClickListener(this);
+        mTvLocal.setOnClickListener(this);
     }
 
     @Override
@@ -89,9 +99,15 @@ public class OfflineActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.offline_all_btn:
+                OfflineModel.pressAllBtn(this);
+
                 ProgressDialogManager.showProgressDialog(this);
                 OfflineRequest request = new OfflineRequest(this, this);
                 request.getPurchasedCourses();
+                break;
+
+            case R.id.offline_local_btn:
+                OfflineModel.pressLocalBtn(this);
                 break;
         }
     }

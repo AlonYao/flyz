@@ -1,7 +1,10 @@
 package com.appublisher.quizbank.model.offline.model.business;
 
+import android.graphics.Color;
 import android.os.Environment;
+import android.view.View;
 
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCoursesResp;
@@ -39,6 +42,11 @@ public class OfflineModel {
         return list;
     }
 
+    /**
+     * 处理已购课程列表回调
+     * @param activity OfflineActivity
+     * @param resp 回调数据
+     */
     public static void dealPurchasedCoursesResp(OfflineActivity activity,
                                                 PurchasedCoursesResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return;
@@ -47,4 +55,27 @@ public class OfflineModel {
         OfflineDAO.savePurchasedData(
                 GsonManager.getGson().toJson(resp, PurchasedCoursesResp.class));
     }
+
+    /**
+     * 按下全部按钮时的View变化
+     * @param activity OfflineActivity
+     */
+    public static void pressAllBtn(OfflineActivity activity) {
+        activity.mTvAll.setTextColor(Color.WHITE);
+        activity.mAllLine.setVisibility(View.VISIBLE);
+        activity.mTvLocal.setTextColor(activity.getResources().getColor(R.color.tab_unpress));
+        activity.mLocalLine.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * 按下已下载按钮时的View变化
+     * @param activity OfflineActivity
+     */
+    public static void pressLocalBtn(OfflineActivity activity) {
+        activity.mTvLocal.setTextColor(Color.WHITE);
+        activity.mLocalLine.setVisibility(View.VISIBLE);
+        activity.mTvAll.setTextColor(activity.getResources().getColor(R.color.tab_unpress));
+        activity.mAllLine.setVisibility(View.INVISIBLE);
+    }
+
 }
