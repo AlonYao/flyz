@@ -2,6 +2,7 @@ package com.appublisher.quizbank.model.offline.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +32,11 @@ public class OfflineActivity extends AppCompatActivity
         setContentView(R.layout.activity_offline);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.apptheme));
+        setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         CommonModel.setBarTitle(this, "离线视频");
 
         // Init view
