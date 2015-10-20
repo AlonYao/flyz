@@ -28,6 +28,11 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     private int mMenuStatus; // 1：下载 2：删除
     private HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
     private Button mBtnBottom;
+    private static int mPercent;
+    private static int mCurPosition;
+    private final static int DOWNLOAD_BEGIN = 1;
+    private final static int DOWNLOAD_PROGRESS = 2;
+    private final static int DOWNLOAD_FINISH = 3;
 
     public ArrayList<PurchasedClassM> mClasses;
     public ListView mLv;
@@ -154,6 +159,43 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 if (mMenuStatus == 1) {
                     // 下载
+//                    for (int i = mCurPosition; i < mClasses.size(); i++) {
+//                        if (!mSelectedMap.containsKey(i) || !mSelectedMap.get(i)) continue;
+//                        DuobeiYunClient.download(this, "jzb5a197820df24060bb8a607354dfce75",
+//                                new DownloadTaskListener() {
+//                                    @Override
+//                                    public void onProgress(int progress) {
+//                                        super.onProgress(progress);
+//                                        Logger.i("progress:::::::" + String.valueOf(progress));
+//                                        mProgress = progress;
+//                                        mHandler.sendEmptyMessage(PROGRESS);
+//                                        ProgressDialogManager.closeProgressDialog();
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(String error) {
+//                                        super.onError(error);
+//                                        Logger.i("error:::::::" + String.valueOf(error));
+//                                        ProgressDialogManager.closeProgressDialog();
+//                                    }
+//
+//                                    @Override
+//                                    public boolean onConnect(int type, String msg) {
+//                                        Logger.i("type:::::::" + String.valueOf(type));
+//                                        Logger.i("msg:::::::" + String.valueOf(msg));
+//                                        ProgressDialogManager.closeProgressDialog();
+//                                        return super.onConnect(type, msg);
+//                                    }
+//
+//                                    @Override
+//                                    public void onFinish(File file) {
+//                                        super.onFinish(file);
+//                                        Logger.i("file:::::::" + file.getAbsolutePath());
+//                                        ProgressDialogManager.closeProgressDialog();
+//                                    }
+//                                });
+//                    }
+
                 } else if (mMenuStatus == 2) {
                     // 删除
                 }
