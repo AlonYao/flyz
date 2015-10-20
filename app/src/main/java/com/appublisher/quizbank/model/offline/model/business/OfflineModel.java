@@ -5,15 +5,18 @@ import android.graphics.Color;
 import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.model.offline.activity.OfflineClassActivity;
 import com.appublisher.quizbank.model.offline.adapter.PurchasedCoursesAdapter;
 import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
+import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCourseM;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +26,10 @@ import java.util.ArrayList;
  */
 public class OfflineModel {
 
+    /**
+     * 获取本地下载的RoomId列表
+     * @return ArrayList
+     */
     public static ArrayList<String> getLocalRoomIdList() {
         ArrayList<String> list = new ArrayList<>();
 
@@ -45,6 +52,24 @@ public class OfflineModel {
         }
 
         return list;
+    }
+
+    /**
+     * 判断RoomId在本地是否存在
+     * @param roomId roomId
+     * @return Boolean
+     */
+    public static boolean isRoomIdExist(String roomId) {
+        if (roomId == null) return false;
+
+        ArrayList<String> list = getLocalRoomIdList();
+        if (list == null) return false;
+
+        for (String s : list) {
+            if (roomId.equals(s)) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -91,7 +116,8 @@ public class OfflineModel {
         activity.mLvAll.setVisibility(View.VISIBLE);
 
         activity.mLocalLine.setVisibility(View.INVISIBLE);
-        activity.mTvLocal.setTextColor(activity.getResources().getColor(R.color.tab_unpress));
+        activity.mTvLocal.setTextColor(
+                activity.getResources().getColor(R.color.offline_tab_unpress));
         activity.mLvLocal.setVisibility(View.INVISIBLE);
     }
 
@@ -104,9 +130,24 @@ public class OfflineModel {
         activity.mLocalLine.setVisibility(View.VISIBLE);
         activity.mLvLocal.setVisibility(View.VISIBLE);
 
-        activity.mTvAll.setTextColor(activity.getResources().getColor(R.color.tab_unpress));
+        activity.mTvAll.setTextColor(activity.getResources().getColor(R.color.offline_tab_unpress));
         activity.mAllLine.setVisibility(View.INVISIBLE);
         activity.mLvAll.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * 通过位置返回CheckBox
+     * @param activity OfflineClassActivity
+     * @param position 位置
+     * @return CheckBox
+     */
+    public static CheckBox getCheckBoxByPosition(OfflineClassActivity activity, int position) {
+        if (activity.mClasses == null || position >= activity.mClasses.size()) return null;
+
+        PurchasedClassM classM = activity.mClasses.get(position);
+        if (classM == null || classM.getStatus() != 2) return null; // 不能下载时，不显示CheckBox
+
+        View view = Utils.getViewByPosition(position, activity.mLv);
+        return (CheckBox) view.findViewById(R.id.item_purchased_classes_cb);
+    }
 }

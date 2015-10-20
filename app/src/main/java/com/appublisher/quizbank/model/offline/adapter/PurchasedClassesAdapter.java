@@ -4,11 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineClassActivity;
+import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 
 import java.util.ArrayList;
@@ -56,13 +58,19 @@ public class PurchasedClassesAdapter extends BaseAdapter{
                     (TextView) convertView.findViewById(R.id.item_purchased_classes_title);
             viewHolder.tvStatus =
                     (TextView) convertView.findViewById(R.id.item_purchased_classes_status);
-            viewHolder.ivStatus =
-                    (ImageView) convertView.findViewById(R.id.item_purchased_classes_status_iv);
+            viewHolder.ivPlay =
+                    (ImageView) convertView.findViewById(R.id.item_purchased_classes_play);
+            viewHolder.cb = (CheckBox) convertView.findViewById(R.id.item_purchased_classes_cb);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        // Init View Status
+        viewHolder.tvStatus.setVisibility(View.GONE);
+        viewHolder.ivPlay.setVisibility(View.GONE);
+        viewHolder.tvTitle.setTextColor(mActivity.getResources().getColor(R.color.common_text));
 
         // 设置内容
         setContent(viewHolder, position);
@@ -98,12 +106,26 @@ public class PurchasedClassesAdapter extends BaseAdapter{
 
         String title = date + " " + classM.getLector() + "：" + classM.getName();
         viewHolder.tvTitle.setText(title);
+
+        if (OfflineModel.isRoomIdExist(classM.getRoom_id())) {
+            viewHolder.ivPlay.setVisibility(View.VISIBLE);
+        }
+
+        if (classM.getStatus() == 0) {
+            // 课堂未结束
+            viewHolder.tvTitle.setTextColor(mActivity.getResources().getColor(R.color.common_line));
+        } else if (classM.getStatus() == 1) {
+            // 转录中
+            viewHolder.tvStatus.setVisibility(View.VISIBLE);
+            viewHolder.tvStatus.setText(R.string.offline_transcribe);
+        }
     }
 
     private class ViewHolder {
         TextView tvTitle;
         TextView tvStatus;
-        ImageView ivStatus;
+        ImageView ivPlay;
+        CheckBox cb;
     }
 
 }

@@ -42,4 +42,32 @@ public class PurchasedClassM implements Serializable{
     public int getStatus() {
         return status;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRoom_id(String room_id) {
+        this.room_id = room_id;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
+    public void setLector(String lector) {
+        this.lector = lector;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

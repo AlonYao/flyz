@@ -33,7 +33,7 @@
                 android:id="@+id/offline_local_line"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:background="@color/tab_line"/>
+                android:background="@color/offline_tab_line"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -46,13 +46,13 @@
                 android:layout_height="46dp"
                 android:gravity="center"
                 android:text="@string/offline_all"
-                android:textColor="@color/tab_unpress"
+                android:textColor="@color/offline_tab_unpress"
                 tools:ignore="ContentDescription" />
             <View
                 android:id="@+id/offline_all_line"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:background="@color/tab_line"
+                android:background="@color/offline_tab_line"
                 android:visibility="invisible"/>
         </LinearLayout>
     </LinearLayout>

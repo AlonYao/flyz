@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.ScrollView;
 
 import com.appublisher.quizbank.Globals;
@@ -378,5 +380,23 @@ public class Utils {
         double fen = baix / baiy;
         DecimalFormat df1 = new DecimalFormat("##.0%"); // ##.00%,百分比格式，后面不足2位的用0补齐
         return df1.format(fen);
+    }
+
+    /**
+     * 通过位置获取View
+     * @param pos 位置
+     * @param listView ListView
+     * @return View
+     */
+    public static View getViewByPosition(int pos, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+            return listView.getAdapter().getView(pos, null, listView);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return listView.getChildAt(childIndex);
+        }
     }
 }

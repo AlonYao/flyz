@@ -11,7 +11,15 @@
         android:id="@+id/offline_class_lv"
         style="@style/CommonListView"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="60dp"
         android:layout_below="@id/toolbar"/>
+
+    <Button
+        android:id="@+id/offline_bottom_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:background="@color/apptheme"/>
 
 </RelativeLayout>
