@@ -1,6 +1,10 @@
 package com.appublisher.quizbank.model.offline.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -17,11 +22,12 @@ import com.appublisher.quizbank.model.offline.adapter.PurchasedClassesAdapter;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.utils.Logger;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.Utils;
 import com.duobeiyun.DuobeiYunClient;
 import com.duobeiyun.listener.DownloadTaskListener;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,14 +44,79 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     private final static int DOWNLOAD_BEGIN = 1;
     private final static int DOWNLOAD_PROGRESS = 2;
     private final static int DOWNLOAD_FINISH = 3;
+    private static Handler mHandler;
 
-    public ArrayList<PurchasedClassM> mClasses;
-    public ListView mLv;
+    public static ArrayList<PurchasedClassM> mClasses;
+    public static ListView mLv;
+
+    private static class MsgHandler extends Handler {
+        private WeakReference<Activity> mActivity;
+
+        public MsgHandler(Activity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @SuppressLint("CommitPrefEdits")
+        @Override
+        public void handleMessage(Message msg) {
+            final Activity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case DOWNLOAD_BEGIN:
+                        if (mClasses == null || mCurPosition >= mClasses.size()) break;
+
+                        PurchasedClassM classM = mClasses.get(mCurPosition);
+                        if (classM == null || classM.getRoom_id() == null) break;
+
+                        DuobeiYunClient.download(
+                                activity,
+                                classM.getRoom_id(),
+                                new DownloadTaskListener() {
+                                    @Override
+                                    public void onProgress(int progress, int fileLength) {
+                                        super.onProgress(progress, fileLength);
+                                        mPercent = progress;
+                                        mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        super.onError(error);
+                                        Logger.e(error);
+                                    }
+
+                                    @Override
+                                    public void onFinish(File file) {
+                                        super.onFinish(file);
+                                        Logger.e("Finish");
+                                    }
+                                });
+
+                        break;
+
+                    case DOWNLOAD_PROGRESS:
+                        View view = Utils.getViewByPosition(mCurPosition, mLv);
+                        TextView textView =
+                                (TextView) view.findViewById(R.id.item_purchased_classes_status);
+                        textView.setVisibility(View.VISIBLE);
+                        String text = String.valueOf(mPercent) + "%";
+                        textView.setText(text);
+                        break;
+
+                    case DOWNLOAD_FINISH:
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_offline_course);
+        setContentView(R.layout.activity_offline_class);
 
         // Toolbar
         CommonModel.setToolBar(this);
@@ -59,6 +130,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
         // Init data
         mSelectedMap = new HashMap<>();
+        mHandler = new MsgHandler(this);
         // noinspection unchecked
         mClasses = (ArrayList<PurchasedClassM>) getIntent().getSerializableExtra("class_list");
 
@@ -108,6 +180,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             }
 
             mBtnBottom.setVisibility(View.VISIBLE);
+            mBtnBottom.setText(R.string.offline_download_btn);
 
         } else if ("全选".equals(item.getTitle())) {
             if (mClasses == null) return super.onOptionsItemSelected(item);
@@ -165,41 +238,20 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                 if (mMenuStatus == 1) {
                     // 下载
                     for (int i = mCurPosition; i < mClasses.size(); i++) {
-                        if (!mSelectedMap.containsKey(i) || !mSelectedMap.get(i)) continue;
-                        DuobeiYunClient.download(this, "jzb5a197820df24060bb8a607354dfce75",
-                                new DownloadTaskListener() {
-                                    @Override
-                                    public void onProgress(int progress) {
-                                        super.onProgress(progress);
-                                        Logger.i("progress:::::::" + String.valueOf(progress));
-                                        mPercent = progress;
-//                                        mHandler.sendEmptyMessage(PROGRESS);
-                                        ProgressDialogManager.closeProgressDialog();
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        super.onError(error);
-                                        Logger.i("error:::::::" + String.valueOf(error));
-                                        ProgressDialogManager.closeProgressDialog();
-                                    }
-
-                                    @Override
-                                    public boolean onConnect(int type, String msg) {
-                                        Logger.i("type:::::::" + String.valueOf(type));
-                                        Logger.i("msg:::::::" + String.valueOf(msg));
-                                        ProgressDialogManager.closeProgressDialog();
-                                        return super.onConnect(type, msg);
-                                    }
-
-                                    @Override
-                                    public void onFinish(File file) {
-                                        super.onFinish(file);
-                                        Logger.i("file:::::::" + file.getAbsolutePath());
-                                        ProgressDialogManager.closeProgressDialog();
-                                    }
-                                });
+                        if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
+                            mCurPosition = i;
+                            break;
+                        }
                     }
+
+                    int size = mClasses.size();
+                    for (int i = 0; i < size; i++) {
+                        CheckBox cb = OfflineModel.getCheckBoxByPosition(this, i);
+                        if (cb == null) continue;
+                        cb.setVisibility(View.GONE);
+                    }
+
+                    mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
 
                 } else if (mMenuStatus == 2) {
                     // 删除

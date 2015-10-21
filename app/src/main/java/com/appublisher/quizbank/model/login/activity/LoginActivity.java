@@ -103,6 +103,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
         setContentView(R.layout.login_activity_login);
 
         CommonModel.setToolBar(this);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         // 禁止键盘自动弹出
