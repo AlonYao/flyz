@@ -2,7 +2,6 @@ package com.appublisher.quizbank.model.offline.model.db;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
-import com.appublisher.quizbank.model.db.Paper;
 
 /**
  * 离线模块DAO层
@@ -15,7 +14,7 @@ public class OfflineDAO {
      */
     public static Offline findByRoomId(String room_id) {
         try {
-            return new Select().from(Paper.class)
+            return new Select().from(Offline.class)
                     .where("room_id = ?", room_id)
                     .executeSingle();
         } catch (Exception e) {
