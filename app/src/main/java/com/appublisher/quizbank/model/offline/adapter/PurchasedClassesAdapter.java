@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineClassActivity;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
-import com.appublisher.quizbank.model.offline.model.db.Offline;
-import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 
 import java.util.ArrayList;
@@ -109,10 +107,6 @@ public class PurchasedClassesAdapter extends BaseAdapter{
         String title = date + " " + classM.getLector() + "：" + classM.getName();
         viewHolder.tvTitle.setText(title);
 
-        if (OfflineModel.isRoomIdExist(classM.getRoom_id())) {
-            viewHolder.ivPlay.setVisibility(View.VISIBLE);
-        }
-
         if (classM.getStatus() == 0) {
             // 课堂未结束
             viewHolder.tvTitle.setTextColor(mActivity.getResources().getColor(R.color.common_line));
@@ -123,8 +117,7 @@ public class PurchasedClassesAdapter extends BaseAdapter{
         }
 
         // 如果本地视频存在，显示播放按钮
-        Offline item = OfflineDAO.findByRoomId(classM.getRoom_id());
-        if (item != null && item.is_success == 1) {
+        if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
             viewHolder.ivPlay.setVisibility(View.VISIBLE);
         }
     }

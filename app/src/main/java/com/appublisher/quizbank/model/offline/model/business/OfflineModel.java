@@ -11,6 +11,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.model.offline.activity.OfflineClassActivity;
 import com.appublisher.quizbank.model.offline.adapter.PurchasedCoursesAdapter;
+import com.appublisher.quizbank.model.offline.model.db.Offline;
 import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCourseM;
@@ -146,7 +147,9 @@ public class OfflineModel {
                 || position >= OfflineClassActivity.mClasses.size()) return null;
 
         PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
-        if (classM == null || classM.getStatus() != 2) return null; // 不能下载时，不显示CheckBox
+        // 不能下载或已下载时，不显示CheckBox
+        if (classM == null || classM.getStatus() != 2
+                || isRoomIdDownload(classM.getRoom_id())) return null;
 
         View view = Utils.getViewByPosition(position, OfflineClassActivity.mLv);
         return (CheckBox) view.findViewById(R.id.item_purchased_classes_cb);
@@ -185,6 +188,17 @@ public class OfflineModel {
         if (classM == null) return null;
 
         return classM.getRoom_id();
+    }
+
+    /**
+     * 判断RoomId是否被成功下载
+     * @param roomId roomId
+     * @return Boolean
+     */
+    public static boolean isRoomIdDownload(String roomId) {
+        if (roomId == null) return false;
+        Offline item = OfflineDAO.findByRoomId(roomId);
+        return item != null && item.is_success == 1;
     }
 
 }
