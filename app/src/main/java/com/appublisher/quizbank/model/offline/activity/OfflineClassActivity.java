@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.offline.adapter.PurchasedClassesAdapter;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
+import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.Utils;
@@ -36,11 +38,13 @@ import java.util.HashMap;
  */
 public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private int mMenuStatus; // 1：下载 2：删除
+    public int mMenuStatus; // 1：下载 2：删除
     private HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
-    private Button mBtnBottom;
+    private static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
+    public Button mBtnBottom;
     private static int mPercent;
-    private static int mCurPosition;
+    private static int mCurDownloadPosition;
+    private static String mCurDownloadRoomId;
     private final static int DOWNLOAD_BEGIN = 1;
     private final static int DOWNLOAD_PROGRESS = 2;
     private final static int DOWNLOAD_FINISH = 3;
@@ -63,14 +67,15 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             if (activity != null) {
                 switch (msg.what) {
                     case DOWNLOAD_BEGIN:
-                        if (mClasses == null || mCurPosition >= mClasses.size()) break;
+                        if (mDownloadList == null || mDownloadList.size() == 0) break;
+                        mCurDownloadPosition = mDownloadList.get(0);
 
-                        PurchasedClassM classM = mClasses.get(mCurPosition);
-                        if (classM == null || classM.getRoom_id() == null) break;
+                        mCurDownloadRoomId = OfflineModel.getRoomIdByPosition(mCurDownloadPosition);
+                        if (mCurDownloadRoomId == null || mCurDownloadRoomId.length() == 0) return;
 
                         DuobeiYunClient.download(
                                 activity,
-                                classM.getRoom_id(),
+                                mCurDownloadRoomId,
                                 new DownloadTaskListener() {
                                     @Override
                                     public void onProgress(int progress, int fileLength) {
@@ -88,22 +93,37 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                                     @Override
                                     public void onFinish(File file) {
                                         super.onFinish(file);
-                                        Logger.e("Finish");
+                                        mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
                                     }
                                 });
 
                         break;
 
                     case DOWNLOAD_PROGRESS:
-                        View view = Utils.getViewByPosition(mCurPosition, mLv);
-                        TextView textView =
+                        View view = Utils.getViewByPosition(mCurDownloadPosition, mLv);
+                        TextView tvStatus =
                                 (TextView) view.findViewById(R.id.item_purchased_classes_status);
-                        textView.setVisibility(View.VISIBLE);
+                        tvStatus.setVisibility(View.VISIBLE);
                         String text = String.valueOf(mPercent) + "%";
-                        textView.setText(text);
+                        tvStatus.setText(text);
                         break;
 
                     case DOWNLOAD_FINISH:
+                        // 更新数据库
+                        OfflineDAO.saveRoomId(mCurDownloadRoomId);
+
+                        // 更新UI
+                        view = Utils.getViewByPosition(mCurDownloadPosition, mLv);
+                        tvStatus = (TextView) view.findViewById(R.id.item_purchased_classes_status);
+                        tvStatus.setVisibility(View.GONE);
+                        ImageView ivPlay =
+                                (ImageView) view.findViewById(R.id.item_purchased_classes_play);
+                        ivPlay.setVisibility(View.VISIBLE);
+
+                        // 更新下载列表，继续下载其他视频
+                        mDownloadList.remove(0);
+                        mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+
                         break;
 
                     default:
@@ -113,6 +133,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,15 +152,22 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         // Init data
         mSelectedMap = new HashMap<>();
         mHandler = new MsgHandler(this);
-        // noinspection unchecked
+        mDownloadList = new ArrayList<>();
         mClasses = (ArrayList<PurchasedClassM>) getIntent().getSerializableExtra("class_list");
 
-        for (int i = 0; i < 30; i++) {
-            PurchasedClassM m = new PurchasedClassM();
-            m.setName("data " + String.valueOf(i));
-            if (i == 3 || i == 10 || i == 11) m.setStatus(1);
-            mClasses.add(m);
-        }
+//        PurchasedClassM m;
+//
+//        m = new PurchasedClassM();
+//        m.setName("判断推理—《别对我说不》（免费）");
+//        m.setStatus(2);
+//        m.setRoom_id("jz504c3b207db3446c8e3ccdb423342ce9");
+//        mClasses.add(m);
+
+//        m = new PurchasedClassM();
+//        m.setName("数量题型挑着做——不定方程（免费）");
+//        m.setStatus(2);
+//        m.setRoom_id("jze285571055304edcbf2ddfa0bf906fae");
+//        mClasses.add(m);
 
         PurchasedClassesAdapter adapter = new PurchasedClassesAdapter(this, mClasses);
         mLv.setAdapter(adapter);
@@ -194,19 +222,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             }
 
         } else if ("取消".equals(item.getTitle())) {
-            mMenuStatus = 0;
-            invalidateOptionsMenu();
-
-            if (mClasses == null) return super.onOptionsItemSelected(item);
-
-            int size = mClasses.size();
-            for (int i = 0; i < size; i++) {
-                CheckBox cb = OfflineModel.getCheckBoxByPosition(this, i);
-                if (cb == null) continue;
-                cb.setVisibility(View.GONE);
-            }
-
-            mBtnBottom.setVisibility(View.GONE);
+            OfflineModel.setCancel(this);
         }
 
         return super.onOptionsItemSelected(item);
@@ -237,21 +253,15 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 if (mMenuStatus == 1) {
                     // 下载
-                    for (int i = mCurPosition; i < mClasses.size(); i++) {
-                        if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
-                            mCurPosition = i;
-                            break;
-                        }
-                    }
-
-                    int size = mClasses.size();
-                    for (int i = 0; i < size; i++) {
-                        CheckBox cb = OfflineModel.getCheckBoxByPosition(this, i);
-                        if (cb == null) continue;
-                        cb.setVisibility(View.GONE);
+                    // 生成position列表
+                    for (int i = 0; i < mClasses.size(); i++) {
+                        if (!mSelectedMap.containsKey(i) || !mSelectedMap.get(i)) continue;
+                        mDownloadList.add(i);
                     }
 
                     mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+
+                    OfflineModel.setCancel(this);
 
                 } else if (mMenuStatus == 2) {
                     // 删除

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineClassActivity;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
+import com.appublisher.quizbank.model.offline.model.db.Offline;
+import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 
 import java.util.ArrayList;
@@ -119,9 +121,15 @@ public class PurchasedClassesAdapter extends BaseAdapter{
             viewHolder.tvStatus.setVisibility(View.VISIBLE);
             viewHolder.tvStatus.setText(R.string.offline_transcribe);
         }
+
+        // 如果本地视频存在，显示播放按钮
+        Offline item = OfflineDAO.findByRoomId(classM.getRoom_id());
+        if (item != null && item.is_success == 1) {
+            viewHolder.ivPlay.setVisibility(View.VISIBLE);
+        }
     }
 
-    private class ViewHolder {
+    public class ViewHolder {
         TextView tvTitle;
         TextView tvStatus;
         ImageView ivPlay;

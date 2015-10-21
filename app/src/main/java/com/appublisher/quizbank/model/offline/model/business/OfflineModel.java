@@ -142,12 +142,49 @@ public class OfflineModel {
      * @return CheckBox
      */
     public static CheckBox getCheckBoxByPosition(OfflineClassActivity activity, int position) {
-        if (activity.mClasses == null || position >= activity.mClasses.size()) return null;
+        if (OfflineClassActivity.mClasses == null
+                || position >= OfflineClassActivity.mClasses.size()) return null;
 
-        PurchasedClassM classM = activity.mClasses.get(position);
+        PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
         if (classM == null || classM.getStatus() != 2) return null; // 不能下载时，不显示CheckBox
 
-        View view = Utils.getViewByPosition(position, activity.mLv);
+        View view = Utils.getViewByPosition(position, OfflineClassActivity.mLv);
         return (CheckBox) view.findViewById(R.id.item_purchased_classes_cb);
     }
+
+    /**
+     * 设置取消状态
+     * @param activity OfflineClassActivity
+     */
+    public static void setCancel(OfflineClassActivity activity) {
+        activity.mMenuStatus = 0;
+        activity.invalidateOptionsMenu();
+
+        if (OfflineClassActivity.mClasses == null) return;
+
+        int size = OfflineClassActivity.mClasses.size();
+        for (int i = 0; i < size; i++) {
+            CheckBox cb = OfflineModel.getCheckBoxByPosition(activity, i);
+            if (cb == null) continue;
+            cb.setVisibility(View.GONE);
+        }
+
+        activity.mBtnBottom.setVisibility(View.GONE);
+    }
+
+    /**
+     * 通过位置获取RoomId
+     * @param position 位置
+     * @return RoomId
+     */
+    public static String getRoomIdByPosition(int position) {
+        if (OfflineClassActivity.mClasses == null
+                || position >= OfflineClassActivity.mClasses.size()) return null;
+
+        PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
+        if (classM == null) return null;
+
+        return classM.getRoom_id();
+    }
+
 }

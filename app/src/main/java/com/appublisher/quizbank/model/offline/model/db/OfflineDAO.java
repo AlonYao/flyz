@@ -19,7 +19,7 @@ public class OfflineDAO {
                     .where("room_id = ?", room_id)
                     .executeSingle();
         } catch (Exception e) {
-            e.printStackTrace();
+            // Empty
         }
 
         return null;
@@ -60,18 +60,26 @@ public class OfflineDAO {
      * 保存下载成功状态
      * @param room_id room_id
      */
-//    public static void savePurchasedData(String room_id) {
-//        Offline offlineCourse = null;
-//
-//        try {
-//            offlineCourse = new Select().from(Offline.class)
-//                    .where("Id = ?", 1)
-//                    .executeSingle();
-//        } catch (Exception e) {
-//            // Empty
-//        }
-//
-//
-//    }
+    public static void saveRoomId(String room_id) {
+        if (room_id == null || room_id.length() == 0) return;
+
+        Offline item = findByRoomId(room_id);
+
+        if (item == null) {
+            item = new Offline();
+            item.is_success = 1;
+            item.room_id = room_id;
+            item.save();
+        } else {
+            try {
+                new Update(Offline.class)
+                        .set("is_success = ?", 1)
+                        .where("room_id = ?", room_id)
+                        .execute();
+            } catch (Exception e) {
+                // Empty
+            }
+        }
+    }
 
 }

@@ -40,6 +40,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:visibility="gone"
+        android:src="@drawable/offline_play"
         tools:ignore="ContentDescription,RelativeOverlap,RtlHardcoded" />
 
     <CheckBox
