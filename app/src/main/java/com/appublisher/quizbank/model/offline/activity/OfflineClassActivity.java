@@ -16,7 +16,12 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.offline.adapter.PurchasedClassesAdapter;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
+import com.appublisher.quizbank.utils.Logger;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.duobeiyun.DuobeiYunClient;
+import com.duobeiyun.listener.DownloadTaskListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -159,42 +164,42 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 if (mMenuStatus == 1) {
                     // 下载
-//                    for (int i = mCurPosition; i < mClasses.size(); i++) {
-//                        if (!mSelectedMap.containsKey(i) || !mSelectedMap.get(i)) continue;
-//                        DuobeiYunClient.download(this, "jzb5a197820df24060bb8a607354dfce75",
-//                                new DownloadTaskListener() {
-//                                    @Override
-//                                    public void onProgress(int progress) {
-//                                        super.onProgress(progress);
-//                                        Logger.i("progress:::::::" + String.valueOf(progress));
-//                                        mProgress = progress;
+                    for (int i = mCurPosition; i < mClasses.size(); i++) {
+                        if (!mSelectedMap.containsKey(i) || !mSelectedMap.get(i)) continue;
+                        DuobeiYunClient.download(this, "jzb5a197820df24060bb8a607354dfce75",
+                                new DownloadTaskListener() {
+                                    @Override
+                                    public void onProgress(int progress) {
+                                        super.onProgress(progress);
+                                        Logger.i("progress:::::::" + String.valueOf(progress));
+                                        mPercent = progress;
 //                                        mHandler.sendEmptyMessage(PROGRESS);
-//                                        ProgressDialogManager.closeProgressDialog();
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(String error) {
-//                                        super.onError(error);
-//                                        Logger.i("error:::::::" + String.valueOf(error));
-//                                        ProgressDialogManager.closeProgressDialog();
-//                                    }
-//
-//                                    @Override
-//                                    public boolean onConnect(int type, String msg) {
-//                                        Logger.i("type:::::::" + String.valueOf(type));
-//                                        Logger.i("msg:::::::" + String.valueOf(msg));
-//                                        ProgressDialogManager.closeProgressDialog();
-//                                        return super.onConnect(type, msg);
-//                                    }
-//
-//                                    @Override
-//                                    public void onFinish(File file) {
-//                                        super.onFinish(file);
-//                                        Logger.i("file:::::::" + file.getAbsolutePath());
-//                                        ProgressDialogManager.closeProgressDialog();
-//                                    }
-//                                });
-//                    }
+                                        ProgressDialogManager.closeProgressDialog();
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        super.onError(error);
+                                        Logger.i("error:::::::" + String.valueOf(error));
+                                        ProgressDialogManager.closeProgressDialog();
+                                    }
+
+                                    @Override
+                                    public boolean onConnect(int type, String msg) {
+                                        Logger.i("type:::::::" + String.valueOf(type));
+                                        Logger.i("msg:::::::" + String.valueOf(msg));
+                                        ProgressDialogManager.closeProgressDialog();
+                                        return super.onConnect(type, msg);
+                                    }
+
+                                    @Override
+                                    public void onFinish(File file) {
+                                        super.onFinish(file);
+                                        Logger.i("file:::::::" + file.getAbsolutePath());
+                                        ProgressDialogManager.closeProgressDialog();
+                                    }
+                                });
+                    }
 
                 } else if (mMenuStatus == 2) {
                     // 删除
