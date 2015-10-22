@@ -243,4 +243,32 @@ public class OfflineModel {
         return item != null && item.is_success == 1;
     }
 
+    /**
+     * 显示本地视频列表
+     * @param activity OfflineActivity
+     */
+    public static void showLocalList(final OfflineActivity activity) {
+        final ArrayList<PurchasedCourseM> courses = getLocalCourseList();
+        if (courses == null || courses.size() == 0) {
+            activity.mTvNone.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        PurchasedCoursesAdapter adapter = new PurchasedCoursesAdapter(activity, courses);
+        activity.mLvLocal.setAdapter(adapter);
+
+        activity.mLvLocal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= courses.size()) return;
+
+                PurchasedCourseM course = courses.get(position);
+                if (course == null) return;
+
+                Intent intent = new Intent(activity, OfflineClassActivity.class);
+                intent.putExtra("class_list", course.getClasses());
+                activity.startActivity(intent);
+            }
+        });
+    }
 }

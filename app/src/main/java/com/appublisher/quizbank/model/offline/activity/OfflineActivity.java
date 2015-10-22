@@ -30,6 +30,7 @@ public class OfflineActivity extends AppCompatActivity
     /** Views **/
     public TextView mTvAll;
     public TextView mTvLocal;
+    public TextView mTvNone;
     public View mAllLine;
     public View mLocalLine;
     public ListView mLvAll;
@@ -58,11 +59,13 @@ public class OfflineActivity extends AppCompatActivity
         mLocalLine = findViewById(R.id.offline_local_line);
         mLvAll = (ListView) findViewById(R.id.offline_all_lv);
         mLvLocal = (ListView) findViewById(R.id.offline_local_lv);
+        mTvNone = (TextView) findViewById(R.id.offline_none_tv);
 
         mTvAll.setOnClickListener(this);
         mTvLocal.setOnClickListener(this);
 
-        OfflineModel.getLocalCourseList();
+        // 默认显示本地视频列表
+        OfflineModel.showLocalList(this);
     }
 
     @Override
