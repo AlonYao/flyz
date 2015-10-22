@@ -1,6 +1,6 @@
 <resources>
     <string name="offline_local">已下载</string>
-    <string name="offline_all">全部</string>
+    <string name="offline_all">已购</string>
     <string name="offline_transcribe">转录中</string>
     <string name="offline_download_btn">确认下载</string>
     <string name="offline_delete_btn">确认删除</string>

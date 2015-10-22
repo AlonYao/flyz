@@ -191,9 +191,10 @@ public class OfflineModel {
                 || position >= OfflineClassActivity.mClasses.size()) return null;
 
         PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
-        // 不能下载或已下载时，不显示CheckBox
+        // 不能下载或已下载（已下载时，删除页面需要显示CheckBox）时，不显示CheckBox
         if (classM == null || classM.getStatus() != 2
-                || isRoomIdDownload(classM.getRoom_id())) return null;
+                || (isRoomIdDownload(classM.getRoom_id()) && activity.mMenuStatus != 2))
+            return null;
 
         View view = Utils.getViewByPosition(position, OfflineClassActivity.mLv);
         return (CheckBox) view.findViewById(R.id.item_purchased_classes_cb);
@@ -206,16 +207,7 @@ public class OfflineModel {
     public static void setCancel(OfflineClassActivity activity) {
         activity.mMenuStatus = 0;
         activity.invalidateOptionsMenu();
-
-        if (OfflineClassActivity.mClasses == null) return;
-
-        int size = OfflineClassActivity.mClasses.size();
-        for (int i = 0; i < size; i++) {
-            CheckBox cb = OfflineModel.getCheckBoxByPosition(activity, i);
-            if (cb == null) continue;
-            cb.setVisibility(View.GONE);
-        }
-
+        activity.mAdapter.notifyDataSetChanged();
         activity.mBtnBottom.setVisibility(View.GONE);
     }
 
@@ -304,6 +296,35 @@ public class OfflineModel {
             cb.setVisibility(View.VISIBLE);
             cb.setChecked(false);
             activity.mSelectedMap.put(i, false);
+        }
+    }
+
+    /**
+     * 重置选中Map
+     * @param activity OfflineClassActivity
+     */
+    public static void initSelectedMap(OfflineClassActivity activity) {
+        if (OfflineClassActivity.mClasses == null) return;
+
+        int size = OfflineClassActivity.mClasses.size();
+        for (int i = 0; i < size; i++) {
+            activity.mSelectedMap.put(i, false);
+        }
+    }
+
+    /**
+     * 获取选中列表
+     * @param activity OfflineClassActivity
+     */
+    public static void createSelectedPositionList(OfflineClassActivity activity) {
+        if (OfflineClassActivity.mClasses == null) return;
+
+        OfflineClassActivity.mDownloadList = new ArrayList<>();
+
+        int size = OfflineClassActivity.mClasses.size();
+        for (int i = 0; i < size; i++) {
+            if (!activity.mSelectedMap.containsKey(i) || !activity.mSelectedMap.get(i)) continue;
+            OfflineClassActivity.mDownloadList.add(i);
         }
     }
 }

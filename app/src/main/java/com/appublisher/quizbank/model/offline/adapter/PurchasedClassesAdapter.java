@@ -71,6 +71,7 @@ public class PurchasedClassesAdapter extends BaseAdapter{
         viewHolder.tvStatus.setVisibility(View.GONE);
         viewHolder.ivPlay.setVisibility(View.GONE);
         viewHolder.tvTitle.setTextColor(mActivity.getResources().getColor(R.color.common_text));
+        viewHolder.cb.setVisibility(View.GONE);
 
         // 设置内容
         setContent(viewHolder, position);
@@ -104,21 +105,56 @@ public class PurchasedClassesAdapter extends BaseAdapter{
             // Empty
         }
 
+        // 课堂名称
         String title = date + " " + classM.getLector() + "：" + classM.getName();
         viewHolder.tvTitle.setText(title);
 
-        if (classM.getStatus() == 0) {
-            // 课堂未结束
-            viewHolder.tvTitle.setTextColor(mActivity.getResources().getColor(R.color.common_line));
-        } else if (classM.getStatus() == 1) {
-            // 转录中
-            viewHolder.tvStatus.setVisibility(View.VISIBLE);
-            viewHolder.tvStatus.setText(R.string.offline_transcribe);
-        }
+        switch (mActivity.mMenuStatus) {
+            case 0:
+                // 默认状态
+                if (classM.getStatus() == 0) {
+                    // 课堂未结束
+                    viewHolder.tvTitle.setTextColor(
+                            mActivity.getResources().getColor(R.color.common_line));
 
-        // 如果视频已下载，显示播放按钮
-        if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
-            viewHolder.ivPlay.setVisibility(View.VISIBLE);
+                } else if (classM.getStatus() == 1) {
+                    // 转录中
+                    viewHolder.tvStatus.setVisibility(View.VISIBLE);
+                    viewHolder.tvStatus.setText(R.string.offline_transcribe);
+                }
+
+                if (OfflineModel.isRoomIdDownload(classM.getRoom_id()))
+                    viewHolder.ivPlay.setVisibility(View.VISIBLE);
+
+                break;
+
+            case 1:
+                // 下载状态
+                if (classM.getStatus() == 0) {
+                    // 课堂未结束
+                    viewHolder.tvTitle.setTextColor(
+                            mActivity.getResources().getColor(R.color.common_line));
+
+                } else if (classM.getStatus() == 1) {
+                    // 转录中
+                    viewHolder.tvStatus.setVisibility(View.VISIBLE);
+                    viewHolder.tvStatus.setText(R.string.offline_transcribe);
+
+                } else if (classM.getStatus() == 2
+                        && !OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
+                    // 可下载
+                    viewHolder.cb.setVisibility(View.VISIBLE);
+                }
+
+                if (OfflineModel.isRoomIdDownload(classM.getRoom_id()))
+                    viewHolder.ivPlay.setVisibility(View.VISIBLE);
+
+                break;
+
+            case 2:
+                // 删除状态
+                viewHolder.cb.setVisibility(View.VISIBLE);
+                break;
         }
     }
 

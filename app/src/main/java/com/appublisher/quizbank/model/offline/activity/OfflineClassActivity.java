@@ -40,11 +40,12 @@ import java.util.HashMap;
  */
 public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private String mFrom;
     public int mMenuStatus; // 1：下载 2：删除
     public HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
-    private static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
+    public static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
     public Button mBtnBottom;
+    public PurchasedClassesAdapter mAdapter;
+    private String mFrom;
     private static int mPercent;
     private static int mCurDownloadPosition;
     private static String mCurDownloadRoomId;
@@ -159,15 +160,15 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         mClasses = (ArrayList<PurchasedClassM>) getIntent().getSerializableExtra("class_list");
         mFrom = getIntent().getStringExtra("from");
 
-        PurchasedClassesAdapter adapter = new PurchasedClassesAdapter(this, mClasses);
-        mLv.setAdapter(adapter);
+        mAdapter = new PurchasedClassesAdapter(this, mClasses);
+        mLv.setAdapter(mAdapter);
 
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // 如果视频已经成功下载
                 String roomId = OfflineModel.getRoomIdByPosition(position);
-                if (OfflineModel.isRoomIdDownload(roomId)) {
+                if (OfflineModel.isRoomIdDownload(roomId) && mMenuStatus != 2) {
+                    // 如果视频已经成功下载，且不是删除状态
                     String url = DuobeiYunClient.playUrl(roomId);
                     Intent intent = new Intent(OfflineClassActivity.this, WebViewActivity.class);
                     intent.putExtra("url", url);
@@ -192,7 +193,9 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             mMenuStatus = 2;
             invalidateOptionsMenu();
 
-            OfflineModel.showCheckBoxs(this);
+            OfflineModel.initSelectedMap(this);
+
+            mAdapter.notifyDataSetChanged();
 
             mBtnBottom.setVisibility(View.VISIBLE);
             mBtnBottom.setText(R.string.offline_delete_btn);
@@ -201,7 +204,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             mMenuStatus = 1;
             invalidateOptionsMenu();
 
-            OfflineModel.showCheckBoxs(this);
+            mAdapter.notifyDataSetChanged();
 
             mBtnBottom.setVisibility(View.VISIBLE);
             mBtnBottom.setText(R.string.offline_download_btn);
@@ -252,11 +255,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 if (mMenuStatus == 1) {
                     // 下载
-                    // 生成position列表
-                    for (int i = 0; i < mClasses.size(); i++) {
-                        if (!mSelectedMap.containsKey(i) || !mSelectedMap.get(i)) continue;
-                        mDownloadList.add(i);
-                    }
+                    OfflineModel.createSelectedPositionList(this); // 生成position列表
 
                     mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
 
@@ -264,6 +263,18 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 } else if (mMenuStatus == 2) {
                     // 删除
+                    OfflineModel.createSelectedPositionList(this); // 生成position列表
+
+                    for (Integer position : mDownloadList) {
+                        String roomId = OfflineModel.getRoomIdByPosition(position);
+                        try {
+                            DuobeiYunClient.delete(roomId);
+                        } catch (Exception e) {
+                            // Empty
+                        }
+                    }
+
+                    OfflineModel.setCancel(this);
                 }
 
                 break;
