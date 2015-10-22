@@ -319,8 +319,6 @@ public class OfflineModel {
     public static void createSelectedPositionList(OfflineClassActivity activity) {
         if (OfflineClassActivity.mClasses == null) return;
 
-        OfflineClassActivity.mDownloadList = new ArrayList<>();
-
         int size = OfflineClassActivity.mClasses.size();
         for (int i = 0; i < size; i++) {
             if (!activity.mSelectedMap.containsKey(i) || !activity.mSelectedMap.get(i)) continue;

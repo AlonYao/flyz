@@ -53,6 +53,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     private final static int DOWNLOAD_PROGRESS = 2;
     private final static int DOWNLOAD_FINISH = 3;
     private static Handler mHandler;
+    private static boolean mHasUnFinishTask;
 
     public static ArrayList<PurchasedClassM> mClasses;
     public static ListView mLv;
@@ -126,7 +127,13 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                         // 更新下载列表，继续下载其他视频
                         mDownloadList.remove(0);
-                        mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+
+                        if (mDownloadList.size() == 0) {
+                            mHasUnFinishTask = false;
+                        } else {
+                            mHasUnFinishTask = true;
+                            mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+                        }
 
                         break;
 
@@ -255,14 +262,18 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 if (mMenuStatus == 1) {
                     // 下载
+                    if (mDownloadList == null) mDownloadList = new ArrayList<>();
                     OfflineModel.createSelectedPositionList(this); // 生成position列表
 
-                    mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+                    if (!mHasUnFinishTask) {
+                        mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+                    }
 
                     OfflineModel.setCancel(this);
 
                 } else if (mMenuStatus == 2) {
                     // 删除
+                    mDownloadList = new ArrayList<>();
                     OfflineModel.createSelectedPositionList(this); // 生成position列表
 
                     for (Integer position : mDownloadList) {
