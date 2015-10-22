@@ -144,6 +144,8 @@ public class OfflineModel {
 
                 Intent intent = new Intent(activity, OfflineClassActivity.class);
                 intent.putExtra("class_list", course.getClasses());
+                intent.putExtra("from", "all");
+                intent.putExtra("bar_title", course.getName());
                 activity.startActivity(intent);
             }
         });
@@ -233,6 +235,21 @@ public class OfflineModel {
     }
 
     /**
+     * 通过位置获取课堂名称（Class）
+     * @param position 位置
+     * @return 课堂名称
+     */
+    public static String getClassNameByPosition(int position) {
+        if (OfflineClassActivity.mClasses == null
+                || position >= OfflineClassActivity.mClasses.size()) return null;
+
+        PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
+        if (classM == null) return null;
+
+        return classM.getName();
+    }
+
+    /**
      * 判断RoomId是否被成功下载
      * @param roomId roomId
      * @return Boolean
@@ -267,8 +284,26 @@ public class OfflineModel {
 
                 Intent intent = new Intent(activity, OfflineClassActivity.class);
                 intent.putExtra("class_list", course.getClasses());
+                intent.putExtra("from", "local");
+                intent.putExtra("bar_title", course.getName());
                 activity.startActivity(intent);
             }
         });
+    }
+
+    /**
+     * 显示复选框
+     */
+    public static void showCheckBoxs(OfflineClassActivity activity) {
+        if (OfflineClassActivity.mClasses == null) return;
+
+        int size = OfflineClassActivity.mClasses.size();
+        for (int i = 0; i < size; i++) {
+            CheckBox cb = OfflineModel.getCheckBoxByPosition(activity, i);
+            if (cb == null) continue;
+            cb.setVisibility(View.VISIBLE);
+            cb.setChecked(false);
+            activity.mSelectedMap.put(i, false);
+        }
     }
 }

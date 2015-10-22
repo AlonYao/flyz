@@ -285,6 +285,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.getSettings().setDomStorageEnabled(true);
+        mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.loadUrl(url);
         // 解决部分安卓机不弹出alert
         mWebView.setWebChromeClient(new WebChromeClient() {
@@ -297,6 +298,12 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             @Override
             public void onPageFinished(WebView view, String url) {
                 mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
             }
         });
     }

@@ -2,6 +2,7 @@ package com.appublisher.quizbank.model.offline.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.offline.adapter.PurchasedClassesAdapter;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
@@ -38,8 +40,9 @@ import java.util.HashMap;
  */
 public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private String mFrom;
     public int mMenuStatus; // 1：下载 2：删除
-    private HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
+    public HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
     private static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
     public Button mBtnBottom;
     private static int mPercent;
@@ -141,7 +144,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
         // Toolbar
         CommonModel.setToolBar(this);
-        CommonModel.setBarTitle(this, "离线管理");
+        CommonModel.setBarTitle(this, getIntent().getStringExtra("bar_title"));
 
         // Init view
         mLv = (ListView) findViewById(R.id.offline_class_lv);
@@ -154,20 +157,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         mHandler = new MsgHandler(this);
         mDownloadList = new ArrayList<>();
         mClasses = (ArrayList<PurchasedClassM>) getIntent().getSerializableExtra("class_list");
-
-//        PurchasedClassM m;
-//
-//        m = new PurchasedClassM();
-//        m.setName("判断推理—《别对我说不》（免费）");
-//        m.setStatus(2);
-//        m.setRoom_id("jz504c3b207db3446c8e3ccdb423342ce9");
-//        mClasses.add(m);
-
-//        m = new PurchasedClassM();
-//        m.setName("数量题型挑着做——不定方程（免费）");
-//        m.setStatus(2);
-//        m.setRoom_id("jze285571055304edcbf2ddfa0bf906fae");
-//        mClasses.add(m);
+        mFrom = getIntent().getStringExtra("from");
 
         PurchasedClassesAdapter adapter = new PurchasedClassesAdapter(this, mClasses);
         mLv.setAdapter(adapter);
@@ -175,7 +165,16 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mMenuStatus == 1 || mMenuStatus == 2) {
+                // 如果视频已经成功下载
+                String roomId = OfflineModel.getRoomIdByPosition(position);
+                if (OfflineModel.isRoomIdDownload(roomId)) {
+                    String url = DuobeiYunClient.playUrl(roomId);
+                    Intent intent = new Intent(OfflineClassActivity.this, WebViewActivity.class);
+                    intent.putExtra("url", url);
+                    intent.putExtra("bar_title", OfflineModel.getClassNameByPosition(position));
+                    startActivity(intent);
+
+                } else if (mMenuStatus == 1 || mMenuStatus == 2) {
                     CheckBox cb = (CheckBox) view.findViewById(R.id.item_purchased_classes_cb);
                     cb.toggle();
                     mSelectedMap.put(position, cb.isChecked());
@@ -193,19 +192,16 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             mMenuStatus = 2;
             invalidateOptionsMenu();
 
+            OfflineModel.showCheckBoxs(this);
+
+            mBtnBottom.setVisibility(View.VISIBLE);
+            mBtnBottom.setText(R.string.offline_delete_btn);
+
         } else if ("下载".equals(item.getTitle())) {
             mMenuStatus = 1;
             invalidateOptionsMenu();
 
-            if (mClasses == null) return super.onOptionsItemSelected(item);
-
-            int size = mClasses.size();
-            for (int i = 0; i < size; i++) {
-                CheckBox cb = OfflineModel.getCheckBoxByPosition(this, i);
-                if (cb == null) continue;
-                cb.setVisibility(View.VISIBLE);
-                cb.setChecked(false);
-            }
+            OfflineModel.showCheckBoxs(this);
 
             mBtnBottom.setVisibility(View.VISIBLE);
             mBtnBottom.setText(R.string.offline_download_btn);
@@ -236,10 +232,13 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             MenuItemCompat.setShowAsAction(menu.add("取消"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("全选"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         } else {
-            MenuItemCompat.setShowAsAction(menu.add("删除").setIcon(
-                    R.drawable.offline_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            MenuItemCompat.setShowAsAction(menu.add("下载").setIcon(
-                    R.drawable.offline_download), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            if ("local".equals(mFrom)) {
+                MenuItemCompat.setShowAsAction(menu.add("删除").setIcon(
+                        R.drawable.offline_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            } else if ("all".equals(mFrom)) {
+                MenuItemCompat.setShowAsAction(menu.add("下载").setIcon(
+                        R.drawable.offline_download), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            }
         }
 
         return super.onCreateOptionsMenu(menu);
