@@ -21,6 +21,7 @@ import com.appublisher.quizbank.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * 离线模块逻辑层
@@ -53,6 +54,47 @@ public class OfflineModel {
         }
 
         return list;
+    }
+
+    /**
+     * 获取本地已经下载完成的课程列表
+     * @return ArrayList
+     */
+    public static ArrayList<PurchasedCourseM> getLocalCourseList() {
+        Offline item = OfflineDAO.findById();
+        if (item == null) return null;
+
+        PurchasedCoursesResp resp =
+                GsonManager.getGson().fromJson(item.purchased_data, PurchasedCoursesResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return null;
+
+        ArrayList<PurchasedCourseM> courses = resp.getList();
+        if (courses == null) return null;
+
+        Iterator<PurchasedCourseM> iCourses = courses.iterator();
+        while (iCourses.hasNext()) {
+            PurchasedCourseM course = iCourses.next();
+            if (course == null) continue;
+
+            ArrayList<PurchasedClassM> classes = course.getClasses();
+            if (classes == null) continue;
+
+            Iterator<PurchasedClassM> iClasses = classes.iterator();
+            while (iClasses.hasNext()) {
+                PurchasedClassM classM = iClasses.next();
+                if (classM == null) continue;
+                // 如果本地没有下载成功记录，则移除
+                if (!isRoomIdDownload(classM.getRoom_id())) {
+                    iClasses.remove();
+                }
+            }
+
+            if (classes.size() == 0) {
+                iCourses.remove();
+            }
+        }
+
+        return courses;
     }
 
     /**

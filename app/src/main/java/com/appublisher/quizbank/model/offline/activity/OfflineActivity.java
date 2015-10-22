@@ -61,6 +61,8 @@ public class OfflineActivity extends AppCompatActivity
 
         mTvAll.setOnClickListener(this);
         mTvLocal.setOnClickListener(this);
+
+        OfflineModel.getLocalCourseList();
     }
 
     @Override

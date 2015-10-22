@@ -25,6 +25,22 @@ public class OfflineDAO {
     }
 
     /**
+     * 查询已购课程数据
+     * @return 视频数据
+     */
+    public static Offline findById() {
+        try {
+            return new Select().from(Offline.class)
+                    .where("Id = ?", 1)
+                    .executeSingle();
+        } catch (Exception e) {
+            // Empty
+        }
+
+        return null;
+    }
+
+    /**
      * 保存已购课程数据
      * @param purchased_data 已购课程数据
      */
