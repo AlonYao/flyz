@@ -45,6 +45,7 @@ public class ParamBuilder implements ApiConstants {
 
         return finalUrl.toString();
     }
+
     /**
      * 非本地用户 动态指定user_id , user_token
      * @param url 拼接前的url

@@ -116,7 +116,7 @@ public class PurchasedClassesAdapter extends BaseAdapter{
             viewHolder.tvStatus.setText(R.string.offline_transcribe);
         }
 
-        // 如果本地视频存在，显示播放按钮
+        // 如果视频已下载，显示播放按钮
         if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
             viewHolder.ivPlay.setVisibility(View.VISIBLE);
         }
