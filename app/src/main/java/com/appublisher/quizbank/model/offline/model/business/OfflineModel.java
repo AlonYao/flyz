@@ -20,15 +20,24 @@ import com.appublisher.quizbank.model.offline.network.OfflineRequest;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.Utils;
+import com.duobeiyun.DuobeiYunClient;
+import com.duobeiyun.listener.DownloadTaskListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
  * 离线模块逻辑层
  */
 public class OfflineModel {
+
+    private static downloadProgressListener mListener;
+
+    public OfflineModel(downloadProgressListener listener) {
+        mListener = listener;
+    }
 
     /**
      * 获取本地下载的RoomId列表
@@ -148,6 +157,7 @@ public class OfflineModel {
                 intent.putExtra("class_list", course.getClasses());
                 intent.putExtra("from", "all");
                 intent.putExtra("bar_title", course.getName());
+                intent.putExtra("course_id", course.getId());
                 activity.startActivity(intent);
             }
         });
@@ -191,10 +201,10 @@ public class OfflineModel {
      * @return CheckBox
      */
     public static CheckBox getCheckBoxByPosition(OfflineClassActivity activity, int position) {
-        if (OfflineClassActivity.mClasses == null
-                || position >= OfflineClassActivity.mClasses.size()) return null;
+        if (activity.mClasses == null
+                || position >= activity.mClasses.size()) return null;
 
-        PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
+        PurchasedClassM classM = activity.mClasses.get(position);
         // 不能下载或已下载（已下载时，删除页面需要显示CheckBox）时，不显示CheckBox
         if (classM == null || classM.getStatus() != 2
                 || (isRoomIdDownload(classM.getRoom_id()) && activity.mMenuStatus != 2))
@@ -220,11 +230,11 @@ public class OfflineModel {
      * @param position 位置
      * @return RoomId
      */
-    public static String getRoomIdByPosition(int position) {
-        if (OfflineClassActivity.mClasses == null
-                || position >= OfflineClassActivity.mClasses.size()) return null;
+    public static String getRoomIdByPosition(OfflineClassActivity activity, int position) {
+        if (activity.mClasses == null
+                || position >= activity.mClasses.size()) return null;
 
-        PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
+        PurchasedClassM classM = activity.mClasses.get(position);
         if (classM == null) return null;
 
         return classM.getRoom_id();
@@ -235,11 +245,11 @@ public class OfflineModel {
      * @param position 位置
      * @return 课堂名称
      */
-    public static String getClassNameByPosition(int position) {
-        if (OfflineClassActivity.mClasses == null
-                || position >= OfflineClassActivity.mClasses.size()) return null;
+    public static String getClassNameByPosition(OfflineClassActivity activity, int position) {
+        if (activity.mClasses == null
+                || position >= activity.mClasses.size()) return null;
 
-        PurchasedClassM classM = OfflineClassActivity.mClasses.get(position);
+        PurchasedClassM classM = activity.mClasses.get(position);
         if (classM == null) return null;
 
         return classM.getName();
@@ -281,6 +291,7 @@ public class OfflineModel {
                 intent.putExtra("class_list", course.getClasses());
                 intent.putExtra("from", "local");
                 intent.putExtra("bar_title", course.getName());
+                intent.putExtra("course_id", course.getId());
                 activity.startActivity(intent);
             }
         });
@@ -305,37 +316,106 @@ public class OfflineModel {
      * @param activity OfflineClassActivity
      */
     public static void initSelectedMap(OfflineClassActivity activity) {
-        if (OfflineClassActivity.mClasses == null) return;
+        if (activity.mClasses == null) return;
 
-        int size = OfflineClassActivity.mClasses.size();
+        int size = activity.mClasses.size();
         for (int i = 0; i < size; i++) {
-            OfflineClassActivity.mSelectedMap.put(i, false);
-        }
-    }
-
-    /**
-     * 获取选中列表
-     * @param activity OfflineClassActivity
-     */
-    public static void createSelectedPositionList(OfflineClassActivity activity) {
-        if (OfflineClassActivity.mClasses == null) return;
-
-        int size = OfflineClassActivity.mClasses.size();
-        for (int i = 0; i < size; i++) {
-            if (!OfflineClassActivity.mSelectedMap.containsKey(i)
-                    || !OfflineClassActivity.mSelectedMap.get(i)) continue;
-            OfflineClassActivity.mDownloadList.add(i);
+            activity.mSelectedMap.put(i, false);
         }
     }
 
     /**
      * 判断指定位置是否被选定
+     * @param activity OfflineClassActivity
      * @param position 位置
      * @return 是否
      */
-    public static boolean isPositionSelected(int position) {
-        return OfflineClassActivity.mSelectedMap != null
-                && OfflineClassActivity.mSelectedMap.containsKey(position)
-                && OfflineClassActivity.mSelectedMap.get(position);
+    public static boolean isPositionSelected(OfflineClassActivity activity, int position) {
+        return activity.mSelectedMap != null
+                && activity.mSelectedMap.containsKey(position)
+                && activity.mSelectedMap.get(position);
     }
+
+    /**
+     * 开始下载
+     * @param activity OfflineClassActivity
+     */
+    public static void startDownload(final OfflineClassActivity activity) {
+        if (OfflineConstants.mDownloadList == null || OfflineConstants.mDownloadList.size() == 0)
+            return;
+
+        HashMap<String, Object> map = OfflineConstants.mDownloadList.get(0);
+        if (map == null) return;
+
+        final String roomId = (String) map.get("room_id");
+        final int position = (int) map.get("position");
+
+        OfflineConstants.mStatus = OfflineConstants.WAITING;
+
+        DuobeiYunClient.download(
+                activity,
+                roomId,
+                new DownloadTaskListener() {
+                    @Override
+                    public void onProgress(int progress, int fileLength) {
+                        super.onProgress(progress, fileLength);
+                        OfflineConstants.mPercent = progress;
+                        OfflineConstants.mCurDownloadPosition = position;
+                        // 记录下载状态
+                        OfflineConstants.mLastTimestamp = System.currentTimeMillis();
+                        OfflineConstants.mStatus = OfflineConstants.PROGRESS;
+                        mListener.onProgress(progress);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        super.onError(error);
+                        OfflineConstants.mDownloadList.remove(0);
+
+                        if (OfflineConstants.mDownloadList.size() != 0) {
+                            startDownload(activity);
+                        }
+                    }
+
+                    @Override
+                    public void onFinish(File file) {
+                        super.onFinish(file);
+                        // 更新数据库
+                        OfflineDAO.saveRoomId(roomId);
+
+                        // 更新下载列表，继续下载其他视频
+                        OfflineConstants.mDownloadList.remove(0);
+
+                        if (OfflineConstants.mDownloadList.size() != 0) {
+                            startDownload(activity);
+                        } else {
+                            OfflineConstants.mStatus = OfflineConstants.DONE;
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 判断RoomId是否在下载队列中
+     * @param roomId RoomId
+     * @return 是否
+     */
+    public static boolean isRoomIdInDownloadList(String roomId) {
+        if (OfflineConstants.mDownloadList == null || roomId == null) return false;
+
+        for (HashMap<String, Object> map : OfflineConstants.mDownloadList) {
+            if (map == null) continue;
+            String mapRoomId = (String) map.get("room_id");
+            if (roomId.equals(mapRoomId)) return true;
+        }
+
+        return false;
+    }
+
+    public interface downloadProgressListener{
+        void onProgress(int progress);
+
+        void onFinish();
+    }
+
 }

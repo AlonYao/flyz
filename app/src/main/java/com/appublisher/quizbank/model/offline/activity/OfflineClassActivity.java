@@ -14,23 +14,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.offline.adapter.PurchasedClassesAdapter;
+import com.appublisher.quizbank.model.offline.model.business.OfflineConstants;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
-import com.appublisher.quizbank.utils.Logger;
-import com.appublisher.quizbank.utils.Utils;
 import com.duobeiyun.DuobeiYunClient;
-import com.duobeiyun.listener.DownloadTaskListener;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,26 +37,20 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
     public int mMenuStatus; // 1：下载 2：删除
     public Button mBtnBottom;
-    public PurchasedClassesAdapter mAdapter;
     public int mAllSelectFlag; // 控制全选、取消全选
     public String mFrom;
+    public int mCourseId;
 
     /** static **/
-    public static HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
-    public static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
-    public static int mPercent;
-    public static int mCurDownloadPosition;
-    public static String mCurDownloadRoomId;
+    public HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
+    public static PurchasedClassesAdapter mAdapter;
     public static Handler mHandler;
-    public static boolean mHasUnFinishTask;
-    public static ArrayList<PurchasedClassM> mClasses;
+    public ArrayList<PurchasedClassM> mClasses;
     public static ListView mLv;
-    public static long mLastTimestamp; // 记录下载时间戳
 
     /** final **/
-    public final static int DOWNLOAD_BEGIN = 1;
-    public final static int DOWNLOAD_PROGRESS = 2;
-    public final static int DOWNLOAD_FINISH = 3;
+    public final static int DOWNLOAD_PROGRESS = 1;
+    public final static int DOWNLOAD_FINISH = 2;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -76,72 +65,21 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             final Activity activity = mActivity.get();
             if (activity != null) {
                 switch (msg.what) {
-                    case DOWNLOAD_BEGIN:
-                        if (mDownloadList == null || mDownloadList.size() == 0) break;
-                        mCurDownloadPosition = mDownloadList.get(0);
-
-                        mCurDownloadRoomId = OfflineModel.getRoomIdByPosition(mCurDownloadPosition);
-                        if (mCurDownloadRoomId == null || mCurDownloadRoomId.length() == 0) return;
-
-                        DuobeiYunClient.download(
-                                activity,
-                                mCurDownloadRoomId,
-                                new DownloadTaskListener() {
-                                    @Override
-                                    public void onProgress(int progress, int fileLength) {
-                                        super.onProgress(progress, fileLength);
-                                        mPercent = progress;
-                                        mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
-                                        // 记录下载状态
-                                        mLastTimestamp = System.currentTimeMillis();
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        super.onError(error);
-                                        Logger.e(error);
-                                    }
-
-                                    @Override
-                                    public void onFinish(File file) {
-                                        super.onFinish(file);
-                                        mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
-                                    }
-                                });
-
-                        break;
-
                     case DOWNLOAD_PROGRESS:
-                        View view = Utils.getViewByPosition(mCurDownloadPosition, mLv);
-                        TextView tvStatus =
-                                (TextView) view.findViewById(R.id.item_purchased_classes_status);
-                        tvStatus.setVisibility(View.VISIBLE);
-                        String text = String.valueOf(mPercent) + "%";
-                        tvStatus.setText(text);
+//                        View view = Utils.getViewByPosition(
+//                                OfflineConstants.mCurDownloadPosition, mLv);
+//                        TextView tvStatus =
+//                                (TextView) view.findViewById(R.id.item_purchased_classes_status);
+//                        tvStatus.setVisibility(View.VISIBLE);
+//                        String text = String.valueOf(OfflineConstants.mPercent) + "%";
+//                        tvStatus.setText(text);
+
+                        mAdapter.notifyDataSetChanged();
+
                         break;
 
                     case DOWNLOAD_FINISH:
-                        // 更新数据库
-                        OfflineDAO.saveRoomId(mCurDownloadRoomId);
-
-                        // 更新UI
-                        view = Utils.getViewByPosition(mCurDownloadPosition, mLv);
-                        tvStatus = (TextView) view.findViewById(R.id.item_purchased_classes_status);
-                        tvStatus.setVisibility(View.GONE);
-                        ImageView ivPlay =
-                                (ImageView) view.findViewById(R.id.item_purchased_classes_play);
-                        ivPlay.setVisibility(View.VISIBLE);
-
-                        // 更新下载列表，继续下载其他视频
-                        mDownloadList.remove(0);
-
-                        if (mDownloadList.size() == 0) {
-                            mHasUnFinishTask = false;
-                        } else {
-                            mHasUnFinishTask = true;
-                            mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
-                        }
-
+                        mAdapter.notifyDataSetChanged();
                         break;
 
                     default:
@@ -172,7 +110,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         mHandler = new MsgHandler(this);
         mClasses = (ArrayList<PurchasedClassM>) getIntent().getSerializableExtra("class_list");
         mFrom = getIntent().getStringExtra("from");
-        mCurDownloadPosition = -1;
+        mCourseId = getIntent().getIntExtra("course_id", 0);
 
         mAdapter = new PurchasedClassesAdapter(this, mClasses);
         mLv.setAdapter(mAdapter);
@@ -180,13 +118,16 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String roomId = OfflineModel.getRoomIdByPosition(position);
+                String roomId = OfflineModel.getRoomIdByPosition(
+                        OfflineClassActivity.this, position);
+
                 if (OfflineModel.isRoomIdDownload(roomId) && mMenuStatus != 2) {
                     // 如果视频已经成功下载，且不是删除状态
                     String url = DuobeiYunClient.playUrl(roomId);
                     Intent intent = new Intent(OfflineClassActivity.this, WebViewActivity.class);
                     intent.putExtra("url", url);
-                    intent.putExtra("bar_title", OfflineModel.getClassNameByPosition(position));
+                    intent.putExtra("bar_title", OfflineModel.getClassNameByPosition(
+                            OfflineClassActivity.this, position));
                     startActivity(intent);
 
                 } else if (mMenuStatus == 1 || mMenuStatus == 2) {
@@ -199,12 +140,17 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         // 判断是否超时
-        if (mHasUnFinishTask && (System.currentTimeMillis() - mLastTimestamp) > 60000) {
-            mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
-        }
+//        if (mHasUnFinishTask && (System.currentTimeMillis() - mLastTimestamp) > 60000) {
+//            mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+//        }
     }
 
     @Override
@@ -287,24 +233,59 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 if (mMenuStatus == 1) {
                     // 下载
-                    if (mDownloadList == null) mDownloadList = new ArrayList<>();
-                    OfflineModel.createSelectedPositionList(this); // 生成position列表
+                    if (OfflineConstants.mDownloadList == null)
+                        OfflineConstants.mDownloadList = new ArrayList<>();
+
+                    // 数据异常处理
+                    if (mClasses == null) return;
+
+                    int size = mClasses.size();
+                    for (int i = 0; i < size; i++) {
+                        if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("position", i);
+                            map.put("room_id", OfflineModel.getRoomIdByPosition(this, i));
+                            map.put("course_id", mCourseId);
+                            OfflineConstants.mDownloadList.add(map);
+                        }
+                    }
+
+                    OfflineConstants.mStatus = OfflineConstants.WAITING;
 
                     mAdapter.notifyDataSetChanged();
 
-                    if (!mHasUnFinishTask) {
-                        mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
-                    }
+                    OfflineModel.startDownload(this);
+
+                    OfflineModel m = new OfflineModel(new OfflineModel.downloadProgressListener() {
+                        @Override
+                        public void onProgress(int progress) {
+                            mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                        }
+                    });
 
                     OfflineModel.setCancel(this);
 
                 } else if (mMenuStatus == 2) {
                     // 删除
-                    mDownloadList = new ArrayList<>();
-                    OfflineModel.createSelectedPositionList(this); // 生成position列表
+                    ArrayList<Integer> list = new ArrayList<>();
 
-                    for (Integer position : mDownloadList) {
-                        String roomId = OfflineModel.getRoomIdByPosition(position);
+                    // 数据异常处理
+                    if (mClasses == null) return;
+
+                    int size = mClasses.size();
+                    for (int i = 0; i < size; i++) {
+                        if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
+                            list.add(i);
+                        }
+                    }
+
+                    for (Integer position : list) {
+                        String roomId = OfflineModel.getRoomIdByPosition(this, position);
                         try {
                             DuobeiYunClient.delete(roomId);
                             OfflineDAO.deleteRoomId(roomId);

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.offline.activity.OfflineClassActivity;
+import com.appublisher.quizbank.model.offline.model.business.OfflineConstants;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 
@@ -128,21 +129,41 @@ public class PurchasedClassesAdapter extends BaseAdapter{
             case 2:
                 // 可下载
                 if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
+                    // 已下载
                     viewHolder.ivPlay.setVisibility(View.VISIBLE);
                     viewHolder.tvStatus.setVisibility(View.GONE);
                     viewHolder.cb.setVisibility(View.GONE);
+
                 } else {
+                    // 未下载
                     viewHolder.ivPlay.setVisibility(View.GONE);
 
-                    if (OfflineClassActivity.mCurDownloadPosition == position) {
-                        // 该任务正在下载
+                    if (OfflineModel.isRoomIdInDownloadList(classM.getRoom_id())) {
+                        // 该任务在下载队列中
                         viewHolder.tvStatus.setVisibility(View.VISIBLE);
+
+                        if (OfflineConstants.mCurDownloadPosition == position
+                                && OfflineConstants.mStatus == OfflineConstants.PROGRESS) {
+                            String text = String.valueOf(OfflineConstants.mPercent) + "%";
+                            viewHolder.tvStatus.setText(text);
+                        } else {
+                            viewHolder.tvStatus.setText(R.string.offline_waiting);
+                        }
+
+//                        if (OfflineConstants.mCurDownloadPosition != position
+//                                || OfflineConstants.mStatus == OfflineConstants.WAITING) {
+//                            viewHolder.tvStatus.setText(R.string.offline_waiting);
+//                        }
+
                         viewHolder.cb.setVisibility(View.GONE);
 
                     } else {
+                        viewHolder.tvStatus.setVisibility(View.GONE);
+
                         if (mActivity.mMenuStatus == 1 || mActivity.mMenuStatus == 2) {
                             viewHolder.cb.setVisibility(View.VISIBLE);
-                            viewHolder.cb.setChecked(OfflineModel.isPositionSelected(position));
+                            viewHolder.cb.setChecked(
+                                    OfflineModel.isPositionSelected(mActivity, position));
                         } else {
                             viewHolder.cb.setVisibility(View.GONE);
                         }
