@@ -221,8 +221,13 @@ public class OfflineModel {
     public static void setCancel(OfflineClassActivity activity) {
         activity.mMenuStatus = 0;
         activity.invalidateOptionsMenu();
-        activity.mAdapter.notifyDataSetChanged();
+        OfflineClassActivity.mAdapter.notifyDataSetChanged();
         activity.mBtnBottom.setVisibility(View.GONE);
+
+        int size = activity.mClasses.size();
+        for (int i = 0; i < size; i++) {
+            activity.mSelectedMap.put(i, false);
+        }
     }
 
     /**
@@ -382,6 +387,8 @@ public class OfflineModel {
                         super.onFinish(file);
                         // 更新数据库
                         OfflineDAO.saveRoomId(roomId);
+
+                        mListener.onFinish();
 
                         // 更新下载列表，继续下载其他视频
                         OfflineConstants.mDownloadList.remove(0);
