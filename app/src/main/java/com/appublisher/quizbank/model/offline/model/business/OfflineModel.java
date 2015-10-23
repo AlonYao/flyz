@@ -325,4 +325,15 @@ public class OfflineModel {
             OfflineClassActivity.mDownloadList.add(i);
         }
     }
+
+    /**
+     * 判断指定位置是否被选定
+     * @param position 位置
+     * @return 是否
+     */
+    public static boolean isPositionSelected(int position) {
+        return OfflineClassActivity.mSelectedMap != null
+                && OfflineClassActivity.mSelectedMap.containsKey(position)
+                && OfflineClassActivity.mSelectedMap.get(position);
+    }
 }

@@ -41,19 +41,19 @@ import java.util.HashMap;
 public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener{
 
     public int mMenuStatus; // 1：下载 2：删除
-    public HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
+    public static HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
     public static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
     public Button mBtnBottom;
     public PurchasedClassesAdapter mAdapter;
-    private String mFrom;
-    private static int mPercent;
-    private static int mCurDownloadPosition;
-    private static String mCurDownloadRoomId;
-    private final static int DOWNLOAD_BEGIN = 1;
-    private final static int DOWNLOAD_PROGRESS = 2;
-    private final static int DOWNLOAD_FINISH = 3;
-    private static Handler mHandler;
-    private static boolean mHasUnFinishTask;
+    public String mFrom;
+    public static int mPercent;
+    public static int mCurDownloadPosition;
+    public static String mCurDownloadRoomId;
+    public final static int DOWNLOAD_BEGIN = 1;
+    public final static int DOWNLOAD_PROGRESS = 2;
+    public final static int DOWNLOAD_FINISH = 3;
+    public static Handler mHandler;
+    public static boolean mHasUnFinishTask;
 
     public static ArrayList<PurchasedClassM> mClasses;
     public static ListView mLv;
@@ -163,9 +163,9 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         // Init data
         mSelectedMap = new HashMap<>();
         mHandler = new MsgHandler(this);
-        mDownloadList = new ArrayList<>();
         mClasses = (ArrayList<PurchasedClassM>) getIntent().getSerializableExtra("class_list");
         mFrom = getIntent().getStringExtra("from");
+        mCurDownloadPosition = -1;
 
         mAdapter = new PurchasedClassesAdapter(this, mClasses);
         mLv.setAdapter(mAdapter);
@@ -264,6 +264,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                     // 下载
                     if (mDownloadList == null) mDownloadList = new ArrayList<>();
                     OfflineModel.createSelectedPositionList(this); // 生成position列表
+
+                    mAdapter.notifyDataSetChanged();
 
                     if (!mHasUnFinishTask) {
                         mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);

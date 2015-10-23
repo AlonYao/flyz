@@ -68,7 +68,6 @@ public class PurchasedClassesAdapter extends BaseAdapter{
         }
 
         // Init View Status
-        viewHolder.tvStatus.setVisibility(View.GONE);
         viewHolder.ivPlay.setVisibility(View.GONE);
         viewHolder.tvTitle.setTextColor(mActivity.getResources().getColor(R.color.common_text));
         viewHolder.cb.setVisibility(View.GONE);
@@ -121,10 +120,18 @@ public class PurchasedClassesAdapter extends BaseAdapter{
                     // 转录中
                     viewHolder.tvStatus.setVisibility(View.VISIBLE);
                     viewHolder.tvStatus.setText(R.string.offline_transcribe);
+                } else if (classM.getStatus() == 2
+                        && !OfflineModel.isRoomIdDownload(classM.getRoom_id())
+                        && OfflineModel.isPositionSelected(position)
+                        && OfflineClassActivity.mCurDownloadPosition != position) {
+                    viewHolder.tvStatus.setVisibility(View.VISIBLE);
+                    viewHolder.tvStatus.setText(R.string.offline_waiting);
                 }
 
-                if (OfflineModel.isRoomIdDownload(classM.getRoom_id()))
+                if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
                     viewHolder.ivPlay.setVisibility(View.VISIBLE);
+                    viewHolder.tvStatus.setVisibility(View.GONE);
+                }
 
                 break;
 
@@ -141,13 +148,16 @@ public class PurchasedClassesAdapter extends BaseAdapter{
                     viewHolder.tvStatus.setText(R.string.offline_transcribe);
 
                 } else if (classM.getStatus() == 2
-                        && !OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
-                    // 可下载
+                        && !OfflineModel.isRoomIdDownload(classM.getRoom_id())
+                        && OfflineClassActivity.mCurDownloadPosition != position) {
+                    // 可下载 且 本地没记录 且 当前没有正在下载
                     viewHolder.cb.setVisibility(View.VISIBLE);
                 }
 
-                if (OfflineModel.isRoomIdDownload(classM.getRoom_id()))
+                if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
                     viewHolder.ivPlay.setVisibility(View.VISIBLE);
+                    viewHolder.tvStatus.setVisibility(View.GONE);
+                }
 
                 break;
 
