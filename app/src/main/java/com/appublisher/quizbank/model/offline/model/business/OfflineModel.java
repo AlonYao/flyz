@@ -16,7 +16,9 @@ import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCourseM;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCoursesResp;
+import com.appublisher.quizbank.model.offline.network.OfflineRequest;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.Utils;
 
 import java.io.File;
@@ -262,7 +264,6 @@ public class OfflineModel {
         final ArrayList<PurchasedCourseM> courses = getLocalCourseList();
         if (courses == null || courses.size() == 0) {
             activity.mTvNone.setVisibility(View.VISIBLE);
-            return;
         }
 
         PurchasedCoursesAdapter adapter = new PurchasedCoursesAdapter(activity, courses);
@@ -271,7 +272,7 @@ public class OfflineModel {
         activity.mLvLocal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= courses.size()) return;
+                if (courses == null || position >= courses.size()) return;
 
                 PurchasedCourseM course = courses.get(position);
                 if (course == null) return;
@@ -283,6 +284,20 @@ public class OfflineModel {
                 activity.startActivity(intent);
             }
         });
+    }
+
+    /**
+     * 显示已购视频列表
+     * @param activity OfflineActivity
+     */
+    public static void showAllList(final OfflineActivity activity) {
+        // 如果数据正常，则不从网络获取数据
+        if (activity.mPurchasedCoursesResp != null
+                && activity.mPurchasedCoursesResp.getResponse_code() == 1) return;
+
+        ProgressDialogManager.showProgressDialog(activity);
+        OfflineRequest request = new OfflineRequest(activity, activity);
+        request.getPurchasedCourses();
     }
 
     /**

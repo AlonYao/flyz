@@ -97,4 +97,30 @@ public class OfflineDAO {
         }
     }
 
+    /**
+     * 删除RoomId
+     * @param room_id room_id
+     */
+    public static void deleteRoomId(String room_id) {
+        if (room_id == null || room_id.length() == 0) return;
+
+        Offline item = findByRoomId(room_id);
+
+        if (item == null) {
+            item = new Offline();
+            item.is_success = 0;
+            item.room_id = room_id;
+            item.save();
+        } else {
+            try {
+                new Update(Offline.class)
+                        .set("is_success = ?", 0)
+                        .where("room_id = ?", room_id)
+                        .execute();
+            } catch (Exception e) {
+                // Empty
+            }
+        }
+    }
+
 }

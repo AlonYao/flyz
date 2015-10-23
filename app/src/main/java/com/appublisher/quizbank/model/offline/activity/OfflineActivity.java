@@ -13,7 +13,6 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedCoursesResp;
-import com.appublisher.quizbank.model.offline.network.OfflineRequest;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -63,9 +62,16 @@ public class OfflineActivity extends AppCompatActivity
 
         mTvAll.setOnClickListener(this);
         mTvLocal.setOnClickListener(this);
+    }
 
-        // 默认显示本地视频列表
-        OfflineModel.showLocalList(this);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mLvLocal.getVisibility() == View.VISIBLE) {
+            OfflineModel.showLocalList(this);
+        } else {
+            OfflineModel.showAllList(this);
+        }
     }
 
     @Override
@@ -113,18 +119,12 @@ public class OfflineActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.offline_all_btn:
                 OfflineModel.pressAllBtn(this);
-
-                // 如果数据正常，则不从网络获取数据
-                if (mPurchasedCoursesResp != null
-                        && mPurchasedCoursesResp.getResponse_code() == 1) return;
-
-                ProgressDialogManager.showProgressDialog(this);
-                OfflineRequest request = new OfflineRequest(this, this);
-                request.getPurchasedCourses();
+                OfflineModel.showAllList(this);
                 break;
 
             case R.id.offline_local_btn:
                 OfflineModel.pressLocalBtn(this);
+                OfflineModel.showLocalList(this);
                 break;
         }
     }

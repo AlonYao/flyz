@@ -282,6 +282,9 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                         String roomId = OfflineModel.getRoomIdByPosition(position);
                         try {
                             DuobeiYunClient.delete(roomId);
+                            OfflineDAO.deleteRoomId(roomId);
+                            mClasses.remove((int) position);
+                            mAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             // Empty
                         }
