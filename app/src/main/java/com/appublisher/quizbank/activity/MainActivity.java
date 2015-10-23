@@ -174,10 +174,10 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         if (mCurFragment instanceof HomePageFragment
                 && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
-            MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(
-                    R.drawable.homepage_grade), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(R.drawable.homepage_grade),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         } else if (mCurFragment instanceof CourseFragment) {
-            MenuItemCompat.setShowAsAction(menu.add("离线视频"),
+            MenuItemCompat.setShowAsAction(menu.add("下载管理").setIcon(R.drawable.offline_menu),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
@@ -190,7 +190,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
             ProgressDialogManager.showProgressDialog(this, true);
             mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
             mFrom = "menu";
-        } else if ("离线视频".equals(item.getTitle())) {
+        } else if ("下载管理".equals(item.getTitle())) {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);
         }

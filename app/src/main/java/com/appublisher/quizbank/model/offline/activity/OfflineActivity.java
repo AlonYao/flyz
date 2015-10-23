@@ -49,7 +49,7 @@ public class OfflineActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        CommonModel.setBarTitle(this, "离线视频");
+        CommonModel.setBarTitle(this, "下载管理");
 
         // Init view
         mTvAll = (TextView) findViewById(R.id.offline_all_btn);
