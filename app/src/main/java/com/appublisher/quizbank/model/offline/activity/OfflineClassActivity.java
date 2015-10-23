@@ -41,23 +41,27 @@ import java.util.HashMap;
 public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener{
 
     public int mMenuStatus; // 1：下载 2：删除
-    public static HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
-    public static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
     public Button mBtnBottom;
     public PurchasedClassesAdapter mAdapter;
+    public int mAllSelectFlag; // 控制全选、取消全选
     public String mFrom;
+
+    /** static **/
+    public static HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
+    public static ArrayList<Integer> mDownloadList; // 下载列表（保存position）
     public static int mPercent;
     public static int mCurDownloadPosition;
     public static String mCurDownloadRoomId;
+    public static Handler mHandler;
+    public static boolean mHasUnFinishTask;
+    public static ArrayList<PurchasedClassM> mClasses;
+    public static ListView mLv;
+    public static long mLastTimestamp; // 记录下载时间戳
+
+    /** final **/
     public final static int DOWNLOAD_BEGIN = 1;
     public final static int DOWNLOAD_PROGRESS = 2;
     public final static int DOWNLOAD_FINISH = 3;
-    public static Handler mHandler;
-    public static boolean mHasUnFinishTask;
-    public int mAllSelectFlag; // 控制全选、取消全选
-
-    public static ArrayList<PurchasedClassM> mClasses;
-    public static ListView mLv;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -88,6 +92,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                                         super.onProgress(progress, fileLength);
                                         mPercent = progress;
                                         mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
+                                        // 记录下载状态
+                                        mLastTimestamp = System.currentTimeMillis();
                                     }
 
                                     @Override
@@ -190,6 +196,15 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 判断是否超时
+        if (mHasUnFinishTask && (System.currentTimeMillis() - mLastTimestamp) > 60000) {
+            mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
+        }
     }
 
     @Override
