@@ -301,22 +301,6 @@ public class OfflineModel {
     }
 
     /**
-     * 显示复选框
-     */
-    public static void showCheckBoxs(OfflineClassActivity activity) {
-        if (OfflineClassActivity.mClasses == null) return;
-
-        int size = OfflineClassActivity.mClasses.size();
-        for (int i = 0; i < size; i++) {
-            CheckBox cb = OfflineModel.getCheckBoxByPosition(activity, i);
-            if (cb == null) continue;
-            cb.setVisibility(View.VISIBLE);
-            cb.setChecked(false);
-            activity.mSelectedMap.put(i, false);
-        }
-    }
-
-    /**
      * 重置选中Map
      * @param activity OfflineClassActivity
      */
@@ -325,7 +309,7 @@ public class OfflineModel {
 
         int size = OfflineClassActivity.mClasses.size();
         for (int i = 0; i < size; i++) {
-            activity.mSelectedMap.put(i, false);
+            OfflineClassActivity.mSelectedMap.put(i, false);
         }
     }
 
@@ -338,7 +322,8 @@ public class OfflineModel {
 
         int size = OfflineClassActivity.mClasses.size();
         for (int i = 0; i < size; i++) {
-            if (!activity.mSelectedMap.containsKey(i) || !activity.mSelectedMap.get(i)) continue;
+            if (!OfflineClassActivity.mSelectedMap.containsKey(i)
+                    || !OfflineClassActivity.mSelectedMap.get(i)) continue;
             OfflineClassActivity.mDownloadList.add(i);
         }
     }
