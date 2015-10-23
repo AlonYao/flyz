@@ -142,15 +142,30 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
+        if (OfflineConstants.mStatus != OfflineConstants.DONE) {
+            OfflineModel m = new OfflineModel(new OfflineModel.downloadProgressListener() {
+                @Override
+                public void onProgress(int progress) {
+                    mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
+                }
+
+                @Override
+                public void onFinish() {
+                    mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                }
+            });
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // 判断是否超时
-//        if (mHasUnFinishTask && (System.currentTimeMillis() - mLastTimestamp) > 60000) {
-//            mHandler.sendEmptyMessage(DOWNLOAD_BEGIN);
-//        }
+        if (OfflineConstants.mDownloadList != null && OfflineConstants.mDownloadList.size() != 0
+                && (System.currentTimeMillis() - OfflineConstants.mLastTimestamp) > 60000) {
+            OfflineConstants.mDownloadList.remove(0);
+            OfflineModel.startDownload(this);
+        }
     }
 
     @Override

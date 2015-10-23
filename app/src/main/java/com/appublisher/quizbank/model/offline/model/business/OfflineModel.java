@@ -346,8 +346,10 @@ public class OfflineModel {
      * @param activity OfflineClassActivity
      */
     public static void startDownload(final OfflineClassActivity activity) {
-        if (OfflineConstants.mDownloadList == null || OfflineConstants.mDownloadList.size() == 0)
+        if (OfflineConstants.mDownloadList == null || OfflineConstants.mDownloadList.size() == 0) {
+            OfflineConstants.mStatus = OfflineConstants.DONE;
             return;
+        }
 
         HashMap<String, Object> map = OfflineConstants.mDownloadList.get(0);
         if (map == null) return;
