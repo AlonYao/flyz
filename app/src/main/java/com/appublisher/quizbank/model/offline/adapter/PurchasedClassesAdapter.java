@@ -128,8 +128,16 @@ public class PurchasedClassesAdapter extends BaseAdapter{
 
             case 2:
                 // 可下载
-                if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
-                    // 已下载
+                boolean isRoomIdDownload = OfflineModel.isRoomIdDownload(classM.getRoom_id());
+                if (isRoomIdDownload && mActivity.mMenuStatus == 2 ) {
+                    // 已下载 且 在删除状态
+                    viewHolder.ivPlay.setVisibility(View.GONE);
+                    viewHolder.tvStatus.setVisibility(View.GONE);
+                    viewHolder.cb.setVisibility(View.VISIBLE);
+                    viewHolder.cb.setChecked(OfflineModel.isPositionSelected(mActivity, position));
+
+                } else if (isRoomIdDownload) {
+                    // 已下载 且 不在删除状态
                     viewHolder.ivPlay.setVisibility(View.VISIBLE);
                     viewHolder.tvStatus.setVisibility(View.GONE);
                     viewHolder.cb.setVisibility(View.GONE);
