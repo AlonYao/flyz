@@ -68,9 +68,7 @@ public class PurchasedClassesAdapter extends BaseAdapter{
         }
 
         // Init View Status
-        viewHolder.ivPlay.setVisibility(View.GONE);
         viewHolder.tvTitle.setTextColor(mActivity.getResources().getColor(R.color.common_text));
-        viewHolder.cb.setVisibility(View.GONE);
 
         // 设置内容
         setContent(viewHolder, position);
@@ -108,63 +106,49 @@ public class PurchasedClassesAdapter extends BaseAdapter{
         String title = date + " " + classM.getLector() + "：" + classM.getName();
         viewHolder.tvTitle.setText(title);
 
-        switch (mActivity.mMenuStatus) {
+        switch (classM.getStatus()) {
             case 0:
-                // 默认状态
-                if (classM.getStatus() == 0) {
-                    // 课堂未结束
-                    viewHolder.tvTitle.setTextColor(
-                            mActivity.getResources().getColor(R.color.common_line));
-
-                } else if (classM.getStatus() == 1) {
-                    // 转录中
-                    viewHolder.tvStatus.setVisibility(View.VISIBLE);
-                    viewHolder.tvStatus.setText(R.string.offline_transcribe);
-
-                } else if (classM.getStatus() == 2
-                        && !OfflineModel.isRoomIdDownload(classM.getRoom_id())
-                        && OfflineModel.isPositionSelected(position)
-                        && OfflineClassActivity.mCurDownloadPosition != position) {
-                    viewHolder.tvStatus.setVisibility(View.VISIBLE);
-                    viewHolder.tvStatus.setText(R.string.offline_waiting);
-                }
-
-                if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
-                    viewHolder.ivPlay.setVisibility(View.VISIBLE);
-                    viewHolder.tvStatus.setVisibility(View.GONE);
-                }
-
+                // 课堂未结束
+                viewHolder.tvTitle.setTextColor(
+                        mActivity.getResources().getColor(R.color.common_line));
+                viewHolder.cb.setVisibility(View.GONE);
+                viewHolder.tvStatus.setVisibility(View.GONE);
+                viewHolder.ivPlay.setVisibility(View.GONE);
                 break;
 
             case 1:
-                // 下载状态
-                if (classM.getStatus() == 0) {
-                    // 课堂未结束
-                    viewHolder.tvTitle.setTextColor(
-                            mActivity.getResources().getColor(R.color.common_line));
+                // 转录中
+                viewHolder.tvStatus.setVisibility(View.VISIBLE);
+                viewHolder.tvStatus.setText(R.string.offline_transcribe);
 
-                } else if (classM.getStatus() == 1) {
-                    // 转录中
-                    viewHolder.tvStatus.setVisibility(View.VISIBLE);
-                    viewHolder.tvStatus.setText(R.string.offline_transcribe);
-
-                } else if (classM.getStatus() == 2
-                        && !OfflineModel.isRoomIdDownload(classM.getRoom_id())
-                        && OfflineClassActivity.mCurDownloadPosition != position) {
-                    // 可下载 且 本地没记录 且 当前没有正在下载
-                    viewHolder.cb.setVisibility(View.VISIBLE);
-                }
-
-                if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
-                    viewHolder.ivPlay.setVisibility(View.VISIBLE);
-                    viewHolder.tvStatus.setVisibility(View.GONE);
-                }
-
+                viewHolder.cb.setVisibility(View.GONE);
+                viewHolder.ivPlay.setVisibility(View.GONE);
                 break;
 
             case 2:
-                // 删除状态
-                viewHolder.cb.setVisibility(View.VISIBLE);
+                // 可下载
+                if (OfflineModel.isRoomIdDownload(classM.getRoom_id())) {
+                    viewHolder.ivPlay.setVisibility(View.VISIBLE);
+                    viewHolder.tvStatus.setVisibility(View.GONE);
+                    viewHolder.cb.setVisibility(View.GONE);
+                } else {
+                    viewHolder.ivPlay.setVisibility(View.GONE);
+
+                    if (OfflineClassActivity.mCurDownloadPosition == position) {
+                        // 该任务正在下载
+                        viewHolder.tvStatus.setVisibility(View.VISIBLE);
+                        viewHolder.cb.setVisibility(View.GONE);
+
+                    } else {
+                        if (mActivity.mMenuStatus == 1 || mActivity.mMenuStatus == 2) {
+                            viewHolder.cb.setVisibility(View.VISIBLE);
+                            viewHolder.cb.setChecked(OfflineModel.isPositionSelected(position));
+                        } else {
+                            viewHolder.cb.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
                 break;
         }
     }

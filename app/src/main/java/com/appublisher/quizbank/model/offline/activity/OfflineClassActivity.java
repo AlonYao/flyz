@@ -237,20 +237,20 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
             int size = mClasses.size();
             for (int i = 0; i < size; i++) {
-                CheckBox cb = OfflineModel.getCheckBoxByPosition(this, i);
-                if (cb == null) continue;
-
                 if (mAllSelectFlag == 0) {
-                    cb.setChecked(true);
                     mSelectedMap.put(i, true);
-                    mAllSelectFlag = 1;
-
                 } else {
-                    cb.setChecked(false);
                     mSelectedMap.put(i, false);
-                    mAllSelectFlag = 0;
                 }
             }
+
+            if (mAllSelectFlag == 0) {
+                mAllSelectFlag = 1;
+            } else {
+                mAllSelectFlag = 0;
+            }
+
+            mAdapter.notifyDataSetChanged();
 
         } else if ("取消".equals(item.getTitle())) {
             OfflineModel.setCancel(this);
