@@ -156,6 +156,7 @@ public class OfflineModel {
      * @param activity OfflineActivity
      */
     public static void pressAllBtn(OfflineActivity activity) {
+        activity.mTvNone.setVisibility(View.GONE);
         activity.mTvAll.setTextColor(Color.WHITE);
         activity.mAllLine.setVisibility(View.VISIBLE);
         activity.mLvAll.setVisibility(View.VISIBLE);
@@ -171,6 +172,7 @@ public class OfflineModel {
      * @param activity OfflineActivity
      */
     public static void pressLocalBtn(OfflineActivity activity) {
+        activity.mTvNone.setVisibility(View.GONE);
         activity.mTvLocal.setTextColor(Color.WHITE);
         activity.mLocalLine.setVisibility(View.VISIBLE);
         activity.mLvLocal.setVisibility(View.VISIBLE);

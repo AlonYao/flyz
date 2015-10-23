@@ -120,6 +120,7 @@ public class PurchasedClassesAdapter extends BaseAdapter{
                     // 转录中
                     viewHolder.tvStatus.setVisibility(View.VISIBLE);
                     viewHolder.tvStatus.setText(R.string.offline_transcribe);
+
                 } else if (classM.getStatus() == 2
                         && !OfflineModel.isRoomIdDownload(classM.getRoom_id())
                         && OfflineModel.isPositionSelected(position)
