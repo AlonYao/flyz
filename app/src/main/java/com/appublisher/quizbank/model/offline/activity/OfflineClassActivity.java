@@ -228,12 +228,14 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             MenuItemCompat.setShowAsAction(menu.add("取消"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("全选"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         } else {
-            if ("local".equals(mFrom)) {
+            if ("all".equals(mFrom)) {
                 MenuItemCompat.setShowAsAction(menu.add("删除").setIcon(
                         R.drawable.offline_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            } else if ("all".equals(mFrom)) {
                 MenuItemCompat.setShowAsAction(menu.add("下载").setIcon(
                         R.drawable.offline_download), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            } else {
+                MenuItemCompat.setShowAsAction(menu.add("删除").setIcon(
+                        R.drawable.offline_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }
         }
 

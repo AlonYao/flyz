@@ -158,11 +158,6 @@ public class PurchasedClassesAdapter extends BaseAdapter{
                             viewHolder.tvStatus.setText(R.string.offline_waiting);
                         }
 
-//                        if (OfflineConstants.mCurDownloadPosition != position
-//                                || OfflineConstants.mStatus == OfflineConstants.WAITING) {
-//                            viewHolder.tvStatus.setText(R.string.offline_waiting);
-//                        }
-
                         viewHolder.cb.setVisibility(View.GONE);
 
                     } else {

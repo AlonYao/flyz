@@ -94,8 +94,9 @@ public class OfflineModel {
             while (iClasses.hasNext()) {
                 PurchasedClassM classM = iClasses.next();
                 if (classM == null) continue;
-                // 如果本地没有下载成功记录，则移除
-                if (!isRoomIdDownload(classM.getRoom_id())) {
+                // 如果本地没有下载成功记录 且 不在下载队列中，则移除
+                if (!isRoomIdDownload(classM.getRoom_id())
+                        && !isRoomIdInDownloadList(classM.getRoom_id())) {
                     iClasses.remove();
                 }
             }
@@ -356,6 +357,12 @@ public class OfflineModel {
 
         final String roomId = (String) map.get("room_id");
         final int position = (int) map.get("position");
+
+        // 判断是否被下载（防止重复下载）
+        if (isRoomIdDownload(roomId)) {
+            OfflineConstants.mDownloadList.remove(0);
+            startDownload(activity);
+        }
 
         OfflineConstants.mStatus = OfflineConstants.WAITING;
 
