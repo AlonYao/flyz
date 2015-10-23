@@ -54,6 +54,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     public final static int DOWNLOAD_FINISH = 3;
     public static Handler mHandler;
     public static boolean mHasUnFinishTask;
+    public int mAllSelectFlag; // 控制全选、取消全选
 
     public static ArrayList<PurchasedClassM> mClasses;
     public static ListView mLv;
@@ -223,8 +224,17 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             for (int i = 0; i < size; i++) {
                 CheckBox cb = OfflineModel.getCheckBoxByPosition(this, i);
                 if (cb == null) continue;
-                cb.setChecked(true);
-                mSelectedMap.put(i, true);
+
+                if (mAllSelectFlag == 0) {
+                    cb.setChecked(true);
+                    mSelectedMap.put(i, true);
+                    mAllSelectFlag = 1;
+
+                } else {
+                    cb.setChecked(false);
+                    mSelectedMap.put(i, false);
+                    mAllSelectFlag = 0;
+                }
             }
 
         } else if ("取消".equals(item.getTitle())) {
