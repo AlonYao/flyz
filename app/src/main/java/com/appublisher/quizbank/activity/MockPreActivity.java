@@ -64,8 +64,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     //预约后倒计时＋考试时间倒计时
     public Timer mTimer;
     public static long mDuration;
-    public static long mMins;//分钟
-    public static long mSec;//秒数
+    public static long mHours; //小时
+    public static long mMins; //分钟
+    public static long mSec; //秒数
     public static final int BEGINMOCK_N = 1;
     public static final int BEGINMOCK_Y = 0;
     //非预约时默认倒计时
@@ -87,9 +88,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     case BEGINMOCK_N:
                         String mins = String.valueOf(mMins);
                         String sec = String.valueOf(mSec);
+                        String hour = String.valueOf(mHours);
+                        if (hour.length() == 1) hour = "0" + hour;
                         if (mins.length() == 1) mins = "0" + mins;
                         if (sec.length() == 1) sec = "0" + sec;
-                        String time = mins + ":" + sec;
+                        String time = hour + ":" + mins + ":" + sec;
                         String text = time + " 开考";
                         bottom_left.setText(text);
                         break;
@@ -137,6 +140,8 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getMockPreExamInfo(mock_id + "");
 
+        mDuration = 79220;
+        startTimer();
     }
 
     @Override
@@ -404,7 +409,8 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * 倒计时启动
      */
     public void startTimer() {
-        mMins = mDuration / 60;
+        mHours = mDuration / (60*60);
+        mMins = (mDuration / 60) % 60;
         mSec = mDuration % 60;
         if (mTimer != null) {
             mTimer.cancel();
@@ -421,8 +427,14 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 if (mSec < 0) {
                     mMins--;
                     mSec = 59;
+
+                    if (mMins < 0) {
+                        mHours--;
+                        mMins = 59;
+                    }
+
                     mHandler.sendEmptyMessage(BEGINMOCK_N);
-                } else if (mMins == 0 && mSec == 0) {
+                } else if (mHours == 0 && mMins == 0 && mSec == 0) {
                     mTimer.cancel();
                     mHandler.sendEmptyMessage(BEGINMOCK_Y);
                 } else {
