@@ -325,14 +325,18 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //模考信息
         List<MockPre.DateInfoEntity> dataInfoEntity = mockPre.getDate_info();
         //查看详情链接
-        courseDetailLink = dataInfoEntity.get(dataInfoEntity.size() - 1).getLink();
-        for (int i = 0; i < dataInfoEntity.size(); i++) {
-            if (i != dataInfoEntity.size() - 1) {
-                addExamChildViews((i + 1) + "", dataInfoEntity.get(i).getText(), false);
-            } else {
-                addExamChildViews((i + 1) + "", dataInfoEntity.get(i).getText(), true);
-            }
+        int size = dataInfoEntity == null ? 0 : dataInfoEntity.size();
+        for (int i = 0; i < size; i++) {
+            MockPre.DateInfoEntity entity = dataInfoEntity.get(i);
+            if (entity == null) continue;
 
+            String link = entity.getLink();
+            if (link == null || link.length() == 0) {
+                addExamChildViews((i + 1) + "", entity.getText(), false);
+            } else {
+                courseDetailLink = link;
+                addExamChildViews((i + 1) + "", entity.getText(), true);
+            }
         }
     }
 
