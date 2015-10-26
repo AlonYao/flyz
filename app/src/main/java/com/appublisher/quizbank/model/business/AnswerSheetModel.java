@@ -66,7 +66,8 @@ public class AnswerSheetModel {
                     (ExpandableHeightGridView)
                             categoryChildView.findViewById(R.id.answer_sheet_entire_item_gv);
 
-            tvName.setText("第" + String.valueOf(categoryNum) + "部分  " + categoryName);
+            String text = "第" + String.valueOf(categoryNum) + "部分  " + categoryName;
+            tvName.setText(text);
 
             // 构造分类的题目
             ArrayList<HashMap<String, Object>> categoryUserAnswer = new ArrayList<>();
@@ -193,18 +194,16 @@ public class AnswerSheetModel {
             }
         }
 
-        if ("mockpre".equals(activity.mFrom)) {
-            String mock_time = activity.getIntent().getStringExtra("mock_time");
-            long curTime = Utils.getSeconds(mock_time);
-            if (curTime > -(30 * 60)) {
-                ToastManager.showToast(activity, "开考30分钟后才可以交卷");
-            }
+        String mock_time = activity.getIntent().getStringExtra("mock_time");
+
+        if ("mockpre".equals(activity.mFrom)
+                && Utils.getSecondsByDateMinusNow(mock_time) > -(30 * 60)) {
+            ToastManager.showToast(activity, "开考30分钟后才可以交卷");
         } else {
             if (hasNoAnswer) {
                 // 提示用户是否提交
                 AlertManager.answerSheetNoticeAlert(activity, redoSubmit, duration_total, questions);
             } else {
-
                 ProgressDialogManager.showProgressDialog(activity, false);
                 new Request(activity, activity).submitPaper(
                         ParamBuilder.submitPaper(
@@ -217,6 +216,5 @@ public class AnswerSheetModel {
                 );
             }
         }
-
     }
 }

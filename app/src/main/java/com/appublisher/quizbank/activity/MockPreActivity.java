@@ -64,8 +64,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     //预约后倒计时＋考试时间倒计时
     public Timer mTimer;
     public static long mDuration;
-    public static long mMins;//分钟
-    public static long mSec;//秒数
+    public static long mHours; //小时
+    public static long mMins; //分钟
+    public static long mSec; //秒数
     public static final int BEGINMOCK_N = 1;
     public static final int BEGINMOCK_Y = 0;
     //非预约时默认倒计时
@@ -87,10 +88,13 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     case BEGINMOCK_N:
                         String mins = String.valueOf(mMins);
                         String sec = String.valueOf(mSec);
+                        String hour = String.valueOf(mHours);
+                        if (hour.length() == 1) hour = "0" + hour;
                         if (mins.length() == 1) mins = "0" + mins;
                         if (sec.length() == 1) sec = "0" + sec;
-                        String time = mins + ":" + sec;
-                        bottom_left.setText(time + " 开考");
+                        String time = hour + ":" + mins + ":" + sec;
+                        String text = time + " 开考";
+                        bottom_left.setText(text);
                         break;
 
                     case BEGINMOCK_Y:
@@ -135,7 +139,6 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getMockPreExamInfo(mock_id + "");
-
     }
 
     @Override
@@ -154,30 +157,39 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (apiName.equals("mockpre_exam_info")) {
-            ProgressDialogManager.closeProgressDialog();
-            dealMockPreInfo(response);
-        } else if (apiName.equals("mock_signup")) {//报名结果
-            if (response == null || response.toString().equals("")) {
-                ToastManager.showToast(this, "报名失败");
-                return;
-            }
-            JSONObject jsonObject = response;
-            try {
-                int response_code = response.getInt("response_code");
-                if (response_code == 1) {
-                    ToastManager.showToast(this, "课程已开通，详情见侧边栏课程中心");
-                    bottom_right.setText("查看详情");
-                    courseDetailLink = courseDetailLink.replace("unpurchased", "purchased");
-                    is_purchased = true;
-                } else {
+        if (apiName == null) return;
+
+        switch (apiName) {
+            case "mockpre_exam_info":
+                ProgressDialogManager.closeProgressDialog();
+                dealMockPreInfo(response);
+                break;
+
+            case "mock_signup": //报名结果
+                if (response == null || response.toString().equals("")) {
                     ToastManager.showToast(this, "报名失败");
+                    return;
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else if (apiName.equals("book_mock")) {
-            dealBookMockSuccess();
+
+                try {
+                    int response_code = response.getInt("response_code");
+                    if (response_code == 1) {
+                        ToastManager.showToast(this, "课程已开通，详情见侧边栏课程中心");
+                        bottom_right.setText("查看详情");
+                        courseDetailLink = courseDetailLink.replace("unpurchased", "purchased");
+                        is_purchased = true;
+                    } else {
+                        ToastManager.showToast(this, "报名失败");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+
+            case "book_mock":
+                dealBookMockSuccess();
+                break;
         }
     }
 
@@ -274,7 +286,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         }
         //模
         mock_time = mockPre.getMock_time();
-        long time = Utils.getSeconds(mock_time);
+        long time = Utils.getSecondsByDateMinusNow(mock_time);
         int date = MockDAO.getIsDateById(mock_id);
         String mock_status = mockPre.getMock_status();
         if (mockPre.getExercise_id() > 0) {
@@ -315,17 +327,20 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //模考信息
         List<MockPre.DateInfoEntity> dataInfoEntity = mockPre.getDate_info();
         //查看详情链接
-        courseDetailLink = dataInfoEntity.get(dataInfoEntity.size() - 1).getLink();
-        for (int i = 0; i < dataInfoEntity.size(); i++) {
-            if (i != dataInfoEntity.size() - 1) {
-                addExamChildViews((i + 1) + "", dataInfoEntity.get(i).getText(), false);
-            } else {
-                addExamChildViews((i + 1) + "", dataInfoEntity.get(i).getText(), true);
-            }
+        int size = dataInfoEntity == null ? 0 : dataInfoEntity.size();
+        for (int i = 0; i < size; i++) {
+            MockPre.DateInfoEntity entity = dataInfoEntity.get(i);
+            if (entity == null) continue;
 
+            String link = entity.getLink();
+            if (link == null || link.length() == 0) {
+                addExamChildViews((i + 1) + "", entity.getText(), false);
+            } else {
+                courseDetailLink = link;
+                addExamChildViews((i + 1) + "", entity.getText(), true);
+            }
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -391,7 +406,8 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * 倒计时启动
      */
     public void startTimer() {
-        mMins = mDuration / 60;
+        mHours = mDuration / (60*60);
+        mMins = (mDuration / 60) % 60;
         mSec = mDuration % 60;
         if (mTimer != null) {
             mTimer.cancel();
@@ -408,8 +424,14 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 if (mSec < 0) {
                     mMins--;
                     mSec = 59;
+
+                    if (mMins < 0) {
+                        mHours--;
+                        mMins = 59;
+                    }
+
                     mHandler.sendEmptyMessage(BEGINMOCK_N);
-                } else if (mMins == 0 && mSec == 0) {
+                } else if (mHours == 0 && mMins == 0 && mSec == 0) {
                     mTimer.cancel();
                     mHandler.sendEmptyMessage(BEGINMOCK_Y);
                 } else {
@@ -462,7 +484,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //绑定成功后操作
         MockDAO.save(mock_id, 1);
         ToastManager.showToast(this, "考试前会收到短信提示哦");
-        mDuration = Utils.getSeconds(mock_time);
+        mDuration = Utils.getSecondsByDateMinusNow(mock_time);
         startTimer();
         isDate = false;
     }
