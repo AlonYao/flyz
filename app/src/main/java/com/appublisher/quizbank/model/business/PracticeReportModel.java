@@ -102,12 +102,13 @@ public class PracticeReportModel {
         // 添加科目
         addCategory();
 
-        if ("evaluate".equals(mActivity.mPaperType) || "entire".equals(mActivity.mPaperType)) {
-            // 估分：显示往年分数线、你的估分，不显示做对/全部、知识点变化
-            mActivity.mLlRatio.setVisibility(View.GONE);
-            mActivity.mLlNoteContainer.setVisibility(View.GONE);
-            mActivity.mLlBorderLine.setVisibility(View.VISIBLE);
-            mActivity.mLlEvaluate.setVisibility(View.VISIBLE);
+        if ("evaluate".equals(mActivity.mPaperType)
+                || "entire".equals(mActivity.mPaperType)) {
+            // 估分、整卷：显示往年分数线、你的估分，不显示做对/全部、知识点变化
+            mActivity.mLlRatio.setVisibility(View.GONE); // 做对/全部
+            mActivity.mLlNoteContainer.setVisibility(View.GONE); // 知识点变化
+            mActivity.mLlBorderLine.setVisibility(View.VISIBLE); // 分数线
+            mActivity.mLlEvaluate.setVisibility(View.VISIBLE); // 你的成绩
 
             // 预估分
             mActivity.mScore = mActivity.mMeasureEntity.getScore();
@@ -115,6 +116,21 @@ public class PracticeReportModel {
 
             // 往年分数线
             setBorderLine();
+
+        } else if ("mock".equals(mActivity.mPaperType)) {
+            // 模考
+            mActivity.mLlRatio.setVisibility(View.GONE);
+            mActivity.mLlEvaluate.setVisibility(View.VISIBLE);
+            mActivity.mLlBorderLine.setVisibility(View.GONE);
+            mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
+
+            // 预估分
+            mActivity.mScore = mActivity.mMeasureEntity.getScore();
+            mActivity.mTvEvaluateNum.setText(String.valueOf(mActivity.mScore));
+
+            // 知识点变化
+            addNote();
+
         } else {
             mActivity.mLlRatio.setVisibility(View.VISIBLE);
             mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
