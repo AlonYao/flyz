@@ -139,9 +139,6 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getMockPreExamInfo(mock_id + "");
-
-        mDuration = 79220;
-        startTimer();
     }
 
     @Override
