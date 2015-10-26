@@ -192,18 +192,19 @@ public class Utils {
      * @param date 指定日期
      * @return 秒数差
      */
-    public static long getSeconds(String date) {
+    public static long getSecondsByDateMinusNow(String date) {
         long seconds = 0;
-        if (date != null && !date.equals("")) {
-            try {
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                ParsePosition parsePosition = new ParsePosition(0);
-                Date time = formatter.parse(date, parsePosition);
-                seconds = time.getTime() - new Date().getTime();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+        if (date == null || date.length() == 0) return 0;
+
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            ParsePosition parsePosition = new ParsePosition(0);
+            Date time = formatter.parse(date, parsePosition);
+            seconds = time.getTime() - new Date().getTime();
+        } catch (Exception e) {
+            // Empty
         }
 
         return seconds / 1000;

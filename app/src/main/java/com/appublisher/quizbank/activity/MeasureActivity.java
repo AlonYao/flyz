@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -137,7 +136,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         activity.getSupportActionBar().setTitle("00:00");
                         break;
                     case ON_TIME:
-                        mock_duration = (int) Utils.getSeconds(activity.mock_time) + activity.mDuration;
+                        mock_duration = (int) Utils.getSecondsByDateMinusNow(activity.mock_time) + activity.mDuration;
                         MeasureActivity.mMins = activity.mock_duration / 60;
                         MeasureActivity.mSec = activity.mock_duration % 60;
                         mins = String.valueOf(mMins);
@@ -312,7 +311,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (mockpre) {
-                long curTime = Utils.getSeconds(mock_time);
+                long curTime = Utils.getSecondsByDateMinusNow(mock_time);
                 if (curTime > -(30 * 60)) {
                     ToastManager.showToast(this, "开考30分钟后才可以交卷");
                 } else {
@@ -566,7 +565,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      */
     private void saveTest() {
         if (mockpre) {
-            long curTime = Utils.getSeconds(mock_time);
+            long curTime = Utils.getSecondsByDateMinusNow(mock_time);
             if (curTime > -(30 * 60)) {
                 ToastManager.showToast(this, "开考30分钟后才可以交卷");
             } else {
@@ -602,7 +601,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      * @param response 回调
      */
     private void dealSubmitPaperResp(JSONObject response) {
-        Log.i("mockauto", response.toString());
         if (response == null) return;
 
         SubmitPaperResp submitPaperResp =
@@ -617,18 +615,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         measureEntity.setScore(submitPaperResp.getScore());
         measureEntity.setScores(submitPaperResp.getScores());
         measureEntity.setExercise_id(submitPaperResp.getExercise_id());
-
-//        Intent intent = new Intent(this, MeasureActivity.class);
-//        intent.putExtra("notes", notes);
-//        intent.putExtra("paper_name", mPaperName);
-//        intent.putExtra("right_num", mRightNum);
-//        intent.putExtra("total_num", mTotalNum);
-//        intent.putExtra("category", mCategoryMap);
-//        intent.putExtra("measure_entity", measureEntity);
-//        setResult(ActivitySkipConstants.ANSWER_SHEET_SUBMIT, intent);
-//
-//        finish();
-
 
         // 跳转到练习报告页面
         Intent intent = new Intent(this, PracticeReportActivity.class);
@@ -650,8 +636,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         intent.putExtra("paper_id", mPaperId);
         startActivity(intent);
         finish();
-
-
     }
 
     @Override
