@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class MeasureEntity implements Serializable{
 
     float defeat;
-    int score;
+    float score;
     ArrayList<ScoreM> scores;
     int exercise_id;
 
@@ -23,11 +23,11 @@ public class MeasureEntity implements Serializable{
         this.exercise_id = exercise_id;
     }
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(float score) {
         this.score = score;
     }
 

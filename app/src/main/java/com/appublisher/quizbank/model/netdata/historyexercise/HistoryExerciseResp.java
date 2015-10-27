@@ -21,10 +21,10 @@ public class HistoryExerciseResp {
     ArrayList<CategoryM> category;
     ArrayList<NoteM> notes;
     float defeat;
-    int score;
+    float score;
     ArrayList<ScoreM> scores;
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
