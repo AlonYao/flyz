@@ -66,10 +66,10 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
     public int mRightNum;
     public int mTotalNum;
-    public int mScore;
     public int mPaperId;
     public int mExerciseId;
     public boolean mIsFromError;
+    public float mScore;
     public float mDefeat;
     public ArrayList<NoteM> mNotes;
     public ArrayList<QuestionM> mQuestions;

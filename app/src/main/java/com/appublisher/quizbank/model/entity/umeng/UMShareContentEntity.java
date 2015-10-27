@@ -8,7 +8,7 @@ public class UMShareContentEntity {
     String type; // 种类：能力评估(evaluation)、练习报告(practice_report)、单题解析(measure_analysis)
     float rank; // 排名
     int learningDays; // 学习天数
-    int score; // 估分
+    float score; // 估分
     float defeat; // 击败了多少同学
     String accuracy; // 正确率
     String examName; // 估分考试名称
@@ -54,11 +54,11 @@ public class UMShareContentEntity {
         this.learningDays = learningDays;
     }
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(float score) {
         this.score = score;
     }
 

@@ -12,7 +12,7 @@ public class SubmitPaperResp {
     int response_code;
     ArrayList<NoteM> notes;
     float defeat;
-    int score;
+    float score;
     ArrayList<ScoreM> scores;
     int exercise_id;
 
@@ -20,7 +20,7 @@ public class SubmitPaperResp {
         return exercise_id;
     }
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
