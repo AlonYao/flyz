@@ -303,6 +303,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         if (mockPre.getResponse_code() != 1) {
             return;
         }
+
+        // 初始化Container
+        examdeailContainer.removeAllViews();
+        rankingContainer.removeAllViews();
+
         //模
         mock_time = mockPre.getMock_time();
         mDuration = getSecondsByDateMinusServerTime(mock_time);
@@ -410,6 +415,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     startActivity(intent);
                     finish();
                 }
+
+                if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) {
+                    mRequest.getServerCurrentTime();
+                }
+
                 break;
             default:
                 break;
@@ -431,6 +441,8 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * 倒计时启动
      */
     public void startTimer() {
+        if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) return;
+
         mHours = mDuration / (60*60);
         mMins = (mDuration / 60) % 60;
         mSec = mDuration % 60;
@@ -473,6 +485,8 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * 用户不预约，到时间后也可进入考试
      */
     public void startTimeBackground() {
+        if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) return;
+
         mHours = mDuration / (60*60);
         mMins = mDuration / 60;
         mSec = mDuration % 60;
@@ -541,6 +555,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             ParsePosition parsePosition = new ParsePosition(0);
             Date time = formatter.parse(date, parsePosition);
+
+            mServerCurrentTime = null;
+
             seconds = time.getTime() - Long.parseLong(mServerCurrentTime) * 1000;
         } catch (Exception e) {
             // Empty
