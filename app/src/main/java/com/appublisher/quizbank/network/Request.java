@@ -49,6 +49,13 @@ public class Request extends BaseRequest implements ApiConstants{
 	 *********************/
 
     /**
+     * 获取服务器时间
+     */
+    public void getServerCurrentTime() {
+        asyncRequest(ParamBuilder.finalUrl(serverCurrentTime), "server_current_time", "object");
+    }
+
+    /**
      * 获取考试项目列表
      */
     public void getExamList() {
@@ -197,7 +204,10 @@ public class Request extends BaseRequest implements ApiConstants{
      * 获取模考总动员
      */
     public void getMockPreExamInfo(String mock_id) {
-        asyncRequest(ParamBuilder.finalUrl(getMockPreExamInfo) + "&mock_id=" + mock_id, "mockpre_exam_info", "object");
+        asyncRequest(
+                ParamBuilder.finalUrl(getMockPreExamInfo) + "&mock_id=" + mock_id,
+                "mockpre_exam_info",
+                "object");
     }
     /**
      * 获取通知

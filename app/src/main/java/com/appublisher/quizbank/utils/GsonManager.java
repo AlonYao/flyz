@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.utils;
 
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.utils.gson.BooleanTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -36,5 +37,13 @@ public class GsonManager {
         Gson gson = new Gson();
         List list = gson.fromJson(jsonStr, typeToken.getType());
         return list;
+    }
+
+    /**
+     * 获取Gson对象
+     * @return Gson
+     */
+    public static Gson getGson() {
+        return Globals.gson == null ? initGson() : Globals.gson;
     }
 }
