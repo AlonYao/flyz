@@ -24,6 +24,7 @@ import com.appublisher.quizbank.model.offline.model.business.OfflineConstants;
 import com.appublisher.quizbank.model.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.model.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.model.offline.netdata.PurchasedClassM;
+import com.appublisher.quizbank.utils.ToastManager;
 import com.duobeiyun.DuobeiYunClient;
 
 import java.lang.ref.WeakReference;
@@ -286,6 +287,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                     });
 
                     OfflineModel.setCancel(this);
+
+                    ToastManager.showToast(this, "下载任务正在进行，请不要将应用关闭或切换至后台");
 
                 } else if (mMenuStatus == 2) {
                     // 删除
