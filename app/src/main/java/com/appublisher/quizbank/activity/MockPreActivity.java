@@ -555,9 +555,6 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             ParsePosition parsePosition = new ParsePosition(0);
             Date time = formatter.parse(date, parsePosition);
-
-            mServerCurrentTime = null;
-
             seconds = time.getTime() - Long.parseLong(mServerCurrentTime) * 1000;
         } catch (Exception e) {
             // Empty

@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.model.business;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.ScaleImageActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.dao.PaperDAO;
+import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
@@ -36,6 +38,7 @@ import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -46,7 +49,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -317,13 +323,13 @@ public class MeasureModel {
             activity.mPaperId = activity.mExerciseId;
 
             ProgressDialogManager.showProgressDialog(activity, true);
-            activity.mRequest.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
+            MeasureActivity.mRequest.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
         } else {
             // 做新题
             switch (activity.mPaperType) {
                 case "auto":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    activity.mRequest.getAutoTraining();
+                    MeasureActivity.mRequest.getAutoTraining();
                     break;
 
                 case "note":
@@ -332,7 +338,7 @@ public class MeasureModel {
                     switch (activity.mHierarchyLevel) {
                         case 1:
                             ProgressDialogManager.showProgressDialog(activity, true);
-                            activity.mRequest.getNoteQuestions(
+                            MeasureActivity.mRequest.getNoteQuestions(
                                     String.valueOf(activity.mHierarchyId),
                                     "",
                                     "",
@@ -342,7 +348,7 @@ public class MeasureModel {
 
                         case 2:
                             ProgressDialogManager.showProgressDialog(activity, true);
-                            activity.mRequest.getNoteQuestions(
+                            MeasureActivity.mRequest.getNoteQuestions(
                                     "",
                                     String.valueOf(activity.mHierarchyId),
                                     "",
@@ -352,7 +358,7 @@ public class MeasureModel {
 
                         case 3:
                             ProgressDialogManager.showProgressDialog(activity, true);
-                            activity.mRequest.getNoteQuestions(
+                            MeasureActivity.mRequest.getNoteQuestions(
                                     "",
                                     "",
                                     String.valueOf(activity.mHierarchyId),
@@ -367,7 +373,7 @@ public class MeasureModel {
                 case "entire":
                 case "mokao":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    activity.mRequest.getPaperExercise(activity.mPaperId, activity.mPaperType);
+                    MeasureActivity.mRequest.getPaperExercise(activity.mPaperId, activity.mPaperType);
                     break;
             }
         }
@@ -435,16 +441,15 @@ public class MeasureModel {
         }
 
         // 倒计时
-        activity.mDuration =
+        MeasureActivity.mDuration =
                 historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
-        if (activity.mockpre) {//如果是模考则计算剩余时间
-            if (activity.mock_time != null) {
-//                activity.mDuration = (int) Utils.getSeconds(activity.mock_time) + activity.mDuration;
-                time(activity);
-            }
+        if (MeasureActivity.mockpre && MeasureActivity.mMockTime != null) {
+            // 如果是模考则计算剩余时间
+            time(activity);
         } else {
             startTimer(activity);
         }
+
         // 设置ViewPager
         setViewPager(activity);
     }
@@ -503,8 +508,8 @@ public class MeasureModel {
      * 倒计时启动
      */
     private static void startTimer(final MeasureActivity activity) {
-        MeasureActivity.mMins = activity.mDuration / 60;
-        MeasureActivity.mSec = activity.mDuration % 60;
+        MeasureActivity.mMins = MeasureActivity.mDuration / 60;
+        MeasureActivity.mSec = MeasureActivity.mDuration % 60;
 
         if (activity.mTimer != null) {
             activity.mTimer.cancel();
@@ -517,17 +522,17 @@ public class MeasureModel {
             @Override
             public void run() {
                 MeasureActivity.mSec--;
-                activity.mDuration--;
+                MeasureActivity.mDuration--;
                 if (MeasureActivity.mSec < 0) {
                     MeasureActivity.mMins--;
                     MeasureActivity.mSec = 59;
-                    activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
+                    MeasureActivity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
                     if (MeasureActivity.mMins < 0) {
                         activity.mTimer.cancel();
-                        activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_OUT);
+                        MeasureActivity.mHandler.sendEmptyMessage(MeasureActivity.TIME_OUT);
                     }
                 } else {
-                    activity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
+                    MeasureActivity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
                 }
             }
         }, 0, 1000);
@@ -537,8 +542,8 @@ public class MeasureModel {
      * 倒计时2
      */
     private static void time(final MeasureActivity activity) {
-        Message message = activity.mHandler.obtainMessage(MeasureActivity.ON_TIME);
-        activity.mHandler.sendMessage(message);
+        Message message = MeasureActivity.mHandler.obtainMessage(MeasureActivity.TIME_ON_MOCK);
+        MeasureActivity.mHandler.sendMessage(message);
     }
 
     /**
@@ -668,8 +673,6 @@ public class MeasureModel {
         JSONArray questions = new JSONArray();
 
         boolean redo = activity.getIntent().getBooleanExtra("redo", false);
-        // 标记有没有未做的题
-        boolean hasNoAnswer = false;
 
         String redoSubmit;
         if (redo) {
@@ -702,9 +705,6 @@ public class MeasureModel {
                     is_right = true;
                     activity.mRightNum++;
                 }
-
-                // 标记有没有未做的题
-                if (answer == null || answer.length() == 0) hasNoAnswer = true;
 
                 // 统计总时长
                 duration_total = duration_total + duration;
@@ -764,7 +764,6 @@ public class MeasureModel {
 
         activity.mPaperId = activity.getIntent().getIntExtra("paper_id", 0);
 
-
         ProgressDialogManager.showProgressDialog(activity, false);
         new Request(activity, activity).submitPaper(
                 ParamBuilder.submitPaper(
@@ -775,5 +774,50 @@ public class MeasureModel {
                         questions.toString(),
                         "done")
         );
+    }
+
+    /**
+     * 处理服务器时间回调
+     * @param activity MeasureActivity
+     * @param resp ServerCurrentTimeResp
+     */
+    public static void dealServerCurrentTimeResp(MeasureActivity activity,
+                                                 ServerCurrentTimeResp resp) {
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        String serverTime = resp.getCurrent_time();
+
+        if (serverTime == null || serverTime.length() == 0) return;
+        if (MeasureActivity.mMockTime == null || MeasureActivity.mMockTime.length() == 0) return;
+
+        long seconds = 0;
+
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            ParsePosition parsePosition = new ParsePosition(0);
+            Date time = formatter.parse(MeasureActivity.mMockTime, parsePosition);
+            seconds = time.getTime() - Long.parseLong(serverTime) * 1000;
+        } catch (Exception e) {
+            // Empty
+        }
+
+        if (activity.mPressBack) {
+            // 如果是按了返回键获取的系统时间
+            if (seconds > -(30 * 60)) {
+                ToastManager.showToast(activity, "开考30分钟后才可以交卷");
+            } else {
+                activity.saveTest();
+            }
+
+        } else {
+            // 不是按了返回键（倒计时结束）
+            if (seconds <= 0) {
+                // 时间到
+                AlertManager.mockTimeOutAlert(activity);
+                MeasureModel.autoSubmitPaper(activity);
+                activity.getSupportActionBar().setTitle("00:00");
+            }
+        }
     }
 }

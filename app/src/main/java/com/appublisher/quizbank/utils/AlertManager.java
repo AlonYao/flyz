@@ -72,7 +72,7 @@ public class AlertManager {
      * @param activity MeasureActivity
      */
     public static void saveTestAlert(final MeasureActivity activity) {
-        if (activity.mockpre) {
+        if (MeasureActivity.mockpre) {
             new AlertDialog.Builder(activity)
                     .setTitle(R.string.alert_savetest_title)
                     .setMessage(R.string.alert_mock_back)
@@ -639,6 +639,10 @@ public class AlertManager {
                 .create().show();
     }
 
+    /**
+     * 模考时间到Alert
+     * @param activity MeasureActivity
+     */
     public static void mockTimeOutAlert(final MeasureActivity activity) {
         new AlertDialog.Builder(activity)
                 .setMessage("时间到了要交卷啦！")
@@ -647,6 +651,7 @@ public class AlertManager {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
                             }
                         }).create().show();
     }

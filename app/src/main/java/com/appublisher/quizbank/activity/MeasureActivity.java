@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -23,6 +22,7 @@ import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
+import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
@@ -56,14 +56,13 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     public int mScreenHeight;
     public int mCurPosition;
-    public static int mDuration;
-    public static int mock_duration;
     public int mPaperId;
     public int mExerciseId;
     public int mHierarchyId;
     public int mHierarchyLevel;
     public long mCurTimestamp;
     public boolean mRedo;
+    public boolean mPressBack;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public ArrayList<QuestionM> mQuestions;
     public ArrayList<HashMap<String, Integer>> mEntirePaperCategory;
@@ -72,17 +71,20 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     public String mPaperName;
     public String mFrom;
     public Gson mGson;
-    public static Handler mHandler;
     public Timer mTimer;
-    public Request mRequest;
-    public static String mock_time;
 
     public static Toolbar mToolbar;
+    public static Handler mHandler;
+    public static Request mRequest;
+    public static String mMockTime;
     public static int mMins;//分钟
     public static int mSec;//秒数
+    public static int mDuration;
+    public static int mock_duration;
     public static final int TIME_ON = 0;
     public static final int TIME_OUT = 1;
-    public static final int ON_TIME = 3;
+    public static final int TIME_ON_MOCK = 2;
+
     /**
      * Umeng
      */
@@ -101,7 +103,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      */
     public int mTotalNum;
     public int mRightNum;
-    public LinearLayout mLlEntireContainer;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
 
     public static class MsgHandler extends Handler {
@@ -132,13 +133,15 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                             mToolbar.setTitleTextColor(Color.parseColor("#FFCD02"));
                         }
                         break;
+
                     case TIME_OUT:
                         activity.getSupportActionBar().setTitle("00:00");
                         break;
-                    case ON_TIME:
-                        mock_duration = (int) Utils.getSecondsByDateMinusNow(activity.mock_time) + activity.mDuration;
-                        MeasureActivity.mMins = activity.mock_duration / 60;
-                        MeasureActivity.mSec = activity.mock_duration % 60;
+
+                    case TIME_ON_MOCK:
+                        mock_duration = (int) Utils.getSecondsByDateMinusNow(mMockTime) + mDuration;
+                        MeasureActivity.mMins = mock_duration / 60;
+                        MeasureActivity.mSec = mock_duration % 60;
                         mins = String.valueOf(mMins);
                         sec = String.valueOf(mSec);
                         if (mins.length() == 1) mins = "0" + mins;
@@ -148,18 +151,15 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         if (mMins == 15 && mSec == 0) {
                             ToastManager.showToast(activity, "距离考试结束还有15分钟");
                         }
-                        if (mock_duration == 0) {//停止发消息
-                            if (mockpre) {
-                                //弹出提示交卷
-                                AlertManager.mockTimeOutAlert(activity);
-                                MeasureModel.autoSubmitPaper(activity);
-                            }
-                            activity.getSupportActionBar().setTitle("00:00");
+                        if (mock_duration == 0) {
+                            // 停止发消息
+                            mRequest.getServerCurrentTime();
                         } else {
-                            Message message = mHandler.obtainMessage(ON_TIME);
+                            Message message = mHandler.obtainMessage(TIME_ON_MOCK);
                             mHandler.sendMessageDelayed(message, 1000);
                         }
                         break;
+
                     default:
                         break;
                 }
@@ -174,6 +174,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
         // ToolBar
         CommonModel.setToolBar(this);
+
         // View 初始化
         mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -207,11 +208,13 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         mFrom = getIntent().getStringExtra("from");
-        //判断是否是模考介绍页
-        if (mFrom != null && mFrom.equals("mockpre")) {
+
+        // 判断是否是模考介绍页
+        if ("mockpre".equals(mFrom)) {
             mockpre = true;
-            mock_time = getIntent().getStringExtra("mock_time");
+            mMockTime = getIntent().getStringExtra("mock_time");
         }
+
         MeasureModel.getData(this);
     }
 
@@ -296,13 +299,10 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
-        if (mockpre) {
-
-        } else {
+        if (!mockpre) {
             MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(
                     R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
-
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -310,16 +310,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (mockpre) {
-                long curTime = Utils.getSecondsByDateMinusNow(mock_time);
-                if (curTime > -(30 * 60)) {
-                    ToastManager.showToast(this, "开考30分钟后才可以交卷");
-                } else {
-                    saveTest();
-                }
-            } else {
-                saveTest();
-            }
+            checkSave();
+
         } else if (item.getTitle().equals("暂停")) {
             if (mTimer != null) mTimer.cancel();
             saveQuestionTime();
@@ -389,7 +381,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     @Override
     public void onBackPressed() {
-        saveTest();
+        checkSave();
     }
 
     /**
@@ -406,7 +398,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         intent.putExtra("umeng_entry", mUmengEntry);
         intent.putExtra("umeng_timestamp", mUmengTimestamp);
         intent.putExtra("from", mFrom);
-        intent.putExtra("mock_time", mock_time);
+        intent.putExtra("mock_time", mMockTime);
         startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
     }
 
@@ -563,36 +555,38 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     /**
      * 是否记录本次练习
      */
-    private void saveTest() {
+    private void checkSave() {
         if (mockpre) {
-            long curTime = Utils.getSecondsByDateMinusNow(mock_time);
-            if (curTime > -(30 * 60)) {
-                ToastManager.showToast(this, "开考30分钟后才可以交卷");
-            } else {
-                AlertManager.saveTestAlert(this);
-            }
+            mRequest.getServerCurrentTime();
+            mPressBack = true;
         } else {
-            boolean isSave = false;
-            if (mUserAnswerList != null) {
-                int size = mUserAnswerList.size();
-                for (int i = 0; i < size; i++) {
-                    HashMap<String, Object> map = mUserAnswerList.get(i);
-                    if (map != null && map.containsKey("answer")
-                            && !"".equals(map.get("answer"))) {
-                        isSave = true;
-                        break;
-                    }
-                }
-            }
+            saveTest();
+        }
+    }
 
-            if (isSave) {
-                AlertManager.saveTestAlert(this);
-            } else {
-                UmengManager.sendToUmeng(MeasureActivity.this, "0");
-                finish();
+    /**
+     * 保存
+     */
+    public void saveTest() {
+        boolean isSave = false;
+        if (mUserAnswerList != null) {
+            int size = mUserAnswerList.size();
+            for (int i = 0; i < size; i++) {
+                HashMap<String, Object> map = mUserAnswerList.get(i);
+                if (map != null && map.containsKey("answer")
+                        && !"".equals(map.get("answer"))) {
+                    isSave = true;
+                    break;
+                }
             }
         }
 
+        if (isSave) {
+            AlertManager.saveTestAlert(this);
+        } else {
+            UmengManager.sendToUmeng(MeasureActivity.this, "0");
+            finish();
+        }
     }
 
     /**
@@ -668,6 +662,11 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 MeasureModel.dealExerciseDetailResp(this, response);
                 break;
 
+            case "server_current_time":
+                ServerCurrentTimeResp resp = GsonManager.getGson().fromJson(
+                        response.toString(), ServerCurrentTimeResp.class);
+                MeasureModel.dealServerCurrentTimeResp(this, resp);
+                break;
         }
 
         ProgressDialogManager.closeProgressDialog();

@@ -38,6 +38,19 @@ public class ProgressDialogManager {
     }
 
     /**
+     * 显示ProgressDialog
+     * @param context  上下文
+     */
+    public static void showProgressDialog(final Context context) {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        progressDialog = ProgressDialog.show(context, null, "加载中，请稍候......");
+    }
+
+    /**
      * 关闭ProgressDialog
      */
     public static void closeProgressDialog() {
