@@ -802,6 +802,8 @@ public class MeasureModel {
             // Empty
         }
 
+        seconds = seconds / 1000;
+
         if (activity.mPressBack) {
             // 如果是按了返回键获取的系统时间
             if (seconds > -(30 * 60)) {

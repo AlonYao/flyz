@@ -241,7 +241,7 @@ public class AnswerSheetModel {
             // Empty
         }
 
-        if (seconds > -(30 * 60)) {
+        if (seconds / 1000 > -(30 * 60)) {
             ToastManager.showToast(activity, "开考30分钟后才可以交卷");
         } else {
             AnswerSheetModel.submitPaper(activity);
