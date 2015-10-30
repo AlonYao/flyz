@@ -812,6 +812,8 @@ public class MeasureModel {
                 activity.saveTest();
             }
 
+            activity.mPressBack = false;
+
         } else {
             // 不是按了返回键（倒计时结束）
             if (seconds <= 0) {

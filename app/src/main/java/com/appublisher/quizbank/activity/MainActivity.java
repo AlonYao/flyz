@@ -37,6 +37,7 @@ import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.model.offline.activity.OfflineActivity;
+import com.appublisher.quizbank.network.ApiConstants;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -171,6 +172,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
+
+        // 测试服Flag
+        if ("dev".equals(ApiConstants.base)) {
+            MenuItemCompat.setShowAsAction(menu.add("测试服"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
 
         if (mCurFragment instanceof HomePageFragment
                 && GradeDAO.isOpenGradeSys(Globals.appVersion)) {

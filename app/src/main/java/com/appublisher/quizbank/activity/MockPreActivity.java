@@ -162,6 +162,17 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     }
 
     @Override
+    public void onBackPressed() {
+        if (mBeginMockTimer != null) {
+            mBeginMockTimer.cancel();
+        }
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null || apiName == null) return;
 

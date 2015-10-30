@@ -310,6 +310,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            mPressBack = true;
             checkSave();
 
         } else if (item.getTitle().equals("暂停")) {
@@ -381,6 +382,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     @Override
     public void onBackPressed() {
+        mPressBack = true;
         checkSave();
     }
 
@@ -557,8 +559,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      */
     private void checkSave() {
         if (mockpre) {
+            ProgressDialogManager.showProgressDialog(this);
             mRequest.getServerCurrentTime();
-            mPressBack = true;
         } else {
             saveTest();
         }
