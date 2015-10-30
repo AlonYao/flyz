@@ -50,6 +50,9 @@ public interface ApiConstants {
     // 检查用户是否注册
     String isUserExists = baseUrl + "common/is_user_exists";
 
+    // 服务器时间
+    String serverCurrentTime = baseUrl + "common/server_current_time";
+
     // 密码重置URL
     String resetPassUri = "http://edu.appublisher.com/api/sendmail/mail.php?app=daily";
 
@@ -159,6 +162,9 @@ public interface ApiConstants {
     // 评论获取待赠送课程、开课
     String getRateCourse = baseUrl + "course/get_rate_course";
 
+    /**
+     * 模考
+     */
     // 模考直播课报名
     String mockSignUp = baseUrl + "quizbank/enroll_mock_course";
 

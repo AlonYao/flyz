@@ -26,6 +26,7 @@ import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPre;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
@@ -33,13 +34,15 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -71,6 +74,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     public static final int BEGINMOCK_Y = 0;
     //非预约时默认倒计时
     public Timer mBeginMockTimer;
+
+    // 系统时间
+    private String mServerCurrentTime;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -138,7 +144,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         mRequest = new Request(this, this);
         //获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getMockPreExamInfo(mock_id + "");
+        mRequest.getServerCurrentTime();
     }
 
     @Override
@@ -157,16 +163,16 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (apiName == null) return;
+        if (response == null || apiName == null) return;
 
         switch (apiName) {
             case "mockpre_exam_info":
-                ProgressDialogManager.closeProgressDialog();
                 dealMockPreInfo(response);
+                ProgressDialogManager.closeProgressDialog();
                 break;
 
             case "mock_signup": //报名结果
-                if (response == null || response.toString().equals("")) {
+                if (response.toString().equals("")) {
                     ToastManager.showToast(this, "报名失败");
                     return;
                 }
@@ -190,17 +196,26 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
             case "book_mock":
                 dealBookMockSuccess();
                 break;
+
+            case "server_current_time":
+                mRequest.getMockPreExamInfo(mock_id + "");
+                ServerCurrentTimeResp resp = GsonManager.getGson().fromJson(
+                        response.toString(), ServerCurrentTimeResp.class);
+                if (resp != null && resp.getResponse_code() == 1) {
+                    mServerCurrentTime = resp.getCurrent_time();
+                }
+                break;
         }
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 
     //动态添加模考说明
@@ -279,14 +294,23 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         rankingContainer.addView(exam);
     }
 
+    /**
+     * 处理模考信息
+     * @param response 回调数据
+     */
     public void dealMockPreInfo(JSONObject response) {
         MockPre mockPre = GsonManager.getObejctFromJSON(response.toString(), MockPre.class);
         if (mockPre.getResponse_code() != 1) {
             return;
         }
+
+        // 初始化Container
+        examdeailContainer.removeAllViews();
+        rankingContainer.removeAllViews();
+
         //模
         mock_time = mockPre.getMock_time();
-        long time = Utils.getSecondsByDateMinusNow(mock_time);
+        mDuration = getSecondsByDateMinusServerTime(mock_time);
         int date = MockDAO.getIsDateById(mock_id);
         String mock_status = mockPre.getMock_status();
         if (mockPre.getExercise_id() > 0) {
@@ -294,21 +318,27 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
             isExercise = true;
             exercise_id = mockPre.getExercise_id();
         } else {
-            if (mock_status.equals("unstart")) {//未开始
-                mDuration = time;
-                if (date == 0) {//未预约过
-                    bottom_left.setText("预约考试");
-                    isDate = true;
-                    startTimeBackground();
-                } else {//倒计时
-                    startTimer();
-                }
-            } else if (mock_status.equals("on_going")) {//开考30分钟内
-                bottom_left.setText("点击进入");
-                beginMock = true;
-            } else if (mock_status.equals("end") || mock_status.equals("finish")) {//开考30分钟后
-                bottom_left.setText("来晚啦");
-                bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
+            switch (mock_status) {
+                case "unstart": //未开始
+                    if (date == 0) {//未预约过
+                        bottom_left.setText("预约考试");
+                        isDate = true;
+                        startTimeBackground();
+                    } else {//倒计时
+                        startTimer();
+                    }
+                    break;
+
+                case "on_going": //开考30分钟内
+                    bottom_left.setText("点击进入");
+                    beginMock = true;
+                    break;
+
+                case "end": // 模考彻底结束
+                case "finish": //开考30分钟后
+                    bottom_left.setText("来晚啦");
+                    bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
+                    break;
             }
         }
         //是否已报名
@@ -385,6 +415,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     startActivity(intent);
                     finish();
                 }
+
+                if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) {
+                    mRequest.getServerCurrentTime();
+                }
+
                 break;
             default:
                 break;
@@ -406,15 +441,20 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * 倒计时启动
      */
     public void startTimer() {
+        if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) return;
+
         mHours = mDuration / (60*60);
         mMins = (mDuration / 60) % 60;
         mSec = mDuration % 60;
+
         if (mTimer != null) {
             mTimer.cancel();
         }
+
         if (mBeginMockTimer != null) {
             mBeginMockTimer.cancel();
         }
+
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
 
@@ -445,11 +485,16 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * 用户不预约，到时间后也可进入考试
      */
     public void startTimeBackground() {
+        if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) return;
+
+        mHours = mDuration / (60*60);
         mMins = mDuration / 60;
         mSec = mDuration % 60;
+
         if (mBeginMockTimer != null) {
             mTimer.cancel();
         }
+
         mBeginMockTimer = new Timer();
         mBeginMockTimer.schedule(new TimerTask() {
 
@@ -459,7 +504,13 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 if (mSec < 0) {
                     mMins--;
                     mSec = 59;
-                } else if (mMins == 0 && mSec == 0) {
+
+                    if (mMins < 0) {
+                        mHours--;
+                        mMins = 59;
+                    }
+
+                } else if (mHours == 0 && mMins == 0 && mSec == 0) {
                     mBeginMockTimer.cancel();
                     mHandler.sendEmptyMessage(BEGINMOCK_Y);
                 }
@@ -484,8 +535,31 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //绑定成功后操作
         MockDAO.save(mock_id, 1);
         ToastManager.showToast(this, "考试前会收到短信提示哦");
-        mDuration = Utils.getSecondsByDateMinusNow(mock_time);
+        mDuration = getSecondsByDateMinusServerTime(mock_time);
         startTimer();
         isDate = false;
+    }
+
+    /**
+     * 计算指定日期与服务器日期的秒数差
+     * @param date 指定日期
+     * @return 秒数差
+     */
+    public long getSecondsByDateMinusServerTime(String date) {
+        long seconds = 0;
+
+        if (date == null || date.length() == 0) return 0;
+
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            ParsePosition parsePosition = new ParsePosition(0);
+            Date time = formatter.parse(date, parsePosition);
+            seconds = time.getTime() - Long.parseLong(mServerCurrentTime) * 1000;
+        } catch (Exception e) {
+            // Empty
+        }
+
+        return seconds / 1000;
     }
 }

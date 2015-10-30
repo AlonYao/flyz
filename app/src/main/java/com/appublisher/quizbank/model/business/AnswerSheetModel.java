@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.model.business;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -8,18 +9,21 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.adapter.EntireAnswerSheetAdapter;
 import com.appublisher.quizbank.customui.ExpandableHeightGridView;
+import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -194,27 +198,53 @@ public class AnswerSheetModel {
             }
         }
 
-        String mock_time = activity.getIntent().getStringExtra("mock_time");
+        if (hasNoAnswer) {
+            // 提示用户是否提交
+            AlertManager.answerSheetNoticeAlert(activity, redoSubmit, duration_total, questions);
+        } else {
+            ProgressDialogManager.showProgressDialog(activity, false);
+            new Request(activity, activity).submitPaper(
+                    ParamBuilder.submitPaper(
+                            String.valueOf(activity.mPaperId),
+                            String.valueOf(activity.mPaperType),
+                            redoSubmit,
+                            String.valueOf(duration_total),
+                            questions.toString(),
+                            "done")
+            );
+        }
+    }
 
-        if ("mockpre".equals(activity.mFrom)
-                && Utils.getSecondsByDateMinusNow(mock_time) > -(30 * 60)) {
+    /**
+     * 处理服务器时间回调
+     * @param resp ServerCurrentTimeResp
+     * @param activity AnswerSheetActivity
+     */
+    public static void dealServerCurrentTimeResp(ServerCurrentTimeResp resp,
+                                                 AnswerSheetActivity activity) {
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        String serverTime = resp.getCurrent_time();
+        if (serverTime == null || serverTime.length() == 0) return;
+
+        if (activity.mMockTime == null || activity.mMockTime.length() == 0) return;
+
+        long seconds = 0;
+
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            ParsePosition parsePosition = new ParsePosition(0);
+            Date time = formatter.parse(activity.mMockTime, parsePosition);
+            seconds = time.getTime() - Long.parseLong(serverTime) * 1000;
+        } catch (Exception e) {
+            // Empty
+        }
+
+        if (seconds / 1000 > -(30 * 60)) {
             ToastManager.showToast(activity, "开考30分钟后才可以交卷");
         } else {
-            if (hasNoAnswer) {
-                // 提示用户是否提交
-                AlertManager.answerSheetNoticeAlert(activity, redoSubmit, duration_total, questions);
-            } else {
-                ProgressDialogManager.showProgressDialog(activity, false);
-                new Request(activity, activity).submitPaper(
-                        ParamBuilder.submitPaper(
-                                String.valueOf(activity.mPaperId),
-                                String.valueOf(activity.mPaperType),
-                                redoSubmit,
-                                String.valueOf(duration_total),
-                                questions.toString(),
-                                "done")
-                );
-            }
+            AnswerSheetModel.submitPaper(activity);
         }
     }
 }

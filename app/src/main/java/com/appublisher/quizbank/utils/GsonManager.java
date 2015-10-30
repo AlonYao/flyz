@@ -28,9 +28,9 @@ public class GsonManager {
 
     /**
      * 获取Gson对象
+     * @return Gson
      */
     public static Gson getGson() {
-        return Globals.gson == null ? GsonManager.initGson() : Globals.gson;
+        return Globals.gson == null ? initGson() : Globals.gson;
     }
-
 }

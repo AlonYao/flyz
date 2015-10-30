@@ -67,7 +67,7 @@ public class MockPre {
     }
 
     public String getMock_status() {
-        return mock_status;
+        return mock_status == null ? "" : mock_status;
     }
 
     public int getCourse_id() {

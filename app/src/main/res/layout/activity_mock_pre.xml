@@ -31,7 +31,6 @@
             android:paddingRight="12dp"
             >
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical"/>
 
             <View
                 android:layout_width="match_parent"
@@ -86,7 +85,7 @@
             android:id="@+id/mockpre_bottom_left"
             style="@style/PracticeReportTv"
             android:background="@color/practice_report_all"
-            android:text="" />
+            android:text="@string/mockpre_order_exam" />
 
         <TextView
             android:id="@+id/mockpre_bottom_right"

@@ -18,9 +18,12 @@ import com.appublisher.quizbank.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.model.business.AnswerSheetModel;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
+import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
+import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
@@ -46,6 +49,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
     public int mPaperId;
     public String mFrom;
     public String mPaperType;
+    public String mMockTime;
     public LinearLayout mLlEntireContainer;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
@@ -84,6 +88,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         mFrom = getIntent().getStringExtra("from");
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+        mMockTime = getIntent().getStringExtra("mock_time");
 
         // 整卷、非整卷 显示不同的页面
         if (mEntirePaperCategory != null && mEntirePaperCategory.size() != 0) {
@@ -108,7 +113,13 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
             tvSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
+                    if ("mockpre".equals(mFrom)) {
+                        ProgressDialogManager.showProgressDialog(AnswerSheetActivity.this);
+                        new Request(AnswerSheetActivity.this, AnswerSheetActivity.this)
+                                .getServerCurrentTime();
+                    } else {
+                        AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
+                    }
                 }
             });
         }
@@ -205,8 +216,21 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if ("submit_paper".equals(apiName)) {
-            dealSubmitPaperResp(response);
+        if (response == null || apiName == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
+
+        switch (apiName) {
+            case "submit_paper":
+                dealSubmitPaperResp(response);
+                break;
+
+            case "server_current_time":
+                ServerCurrentTimeResp resp = GsonManager.getGson().fromJson(
+                        response.toString(), ServerCurrentTimeResp.class);
+                AnswerSheetModel.dealServerCurrentTimeResp(resp, this);
+                break;
         }
 
         ProgressDialogManager.closeProgressDialog();
