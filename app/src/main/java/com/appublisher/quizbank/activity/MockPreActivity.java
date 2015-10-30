@@ -491,8 +491,12 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         mMins = mDuration / 60;
         mSec = mDuration % 60;
 
-        if (mBeginMockTimer != null) {
+        if (mTimer != null) {
             mTimer.cancel();
+        }
+
+        if (mBeginMockTimer != null) {
+            mBeginMockTimer.cancel();
         }
 
         mBeginMockTimer = new Timer();
