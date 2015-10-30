@@ -559,6 +559,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
      */
     private void checkSave() {
         if (mockpre) {
+            ProgressDialogManager.showProgressDialog(this);
             mRequest.getServerCurrentTime();
         } else {
             saveTest();
