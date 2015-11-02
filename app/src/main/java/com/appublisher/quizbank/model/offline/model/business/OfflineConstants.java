@@ -16,11 +16,7 @@ public class OfflineConstants {
 
     public static int mPercent;
 
-    public static int mCurDownloadPosition;
-
     public static String mCurDownloadRoomId;
-
-    public static boolean mHasUnFinishTask;
 
     public static long mLastTimestamp;
 

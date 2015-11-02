@@ -355,26 +355,30 @@ public class OfflineModel {
         HashMap<String, Object> map = OfflineConstants.mDownloadList.get(0);
         if (map == null) return;
 
-        final String roomId = (String) map.get("room_id");
-        final int position = (int) map.get("position");
+        // 更新当前正在下载的RoomId
+        OfflineConstants.mCurDownloadRoomId = (String) map.get("room_id");
 
-        // 判断是否被下载（防止重复下载）
-        if (isRoomIdDownload(roomId)) {
+        // 已下载 或者 roomId非法 则进行下一项
+        if (OfflineConstants.mCurDownloadRoomId == null
+                || OfflineConstants.mCurDownloadRoomId.length() == 0
+                || isRoomIdDownload(OfflineConstants.mCurDownloadRoomId)) {
             OfflineConstants.mDownloadList.remove(0);
             startDownload(activity);
+            return;
         }
 
+        // 更新状态：等待中
         OfflineConstants.mStatus = OfflineConstants.WAITING;
 
         DuobeiYunClient.download(
                 activity,
-                roomId,
+                OfflineConstants.mCurDownloadRoomId,
                 new DownloadTaskListener() {
                     @Override
                     public void onProgress(int progress, int fileLength) {
                         super.onProgress(progress, fileLength);
                         OfflineConstants.mPercent = progress;
-                        OfflineConstants.mCurDownloadPosition = position;
+//                        OfflineConstants.mCurDownloadPosition = position;
                         // 记录下载状态
                         OfflineConstants.mLastTimestamp = System.currentTimeMillis();
                         OfflineConstants.mStatus = OfflineConstants.PROGRESS;
@@ -395,7 +399,7 @@ public class OfflineModel {
                     public void onFinish(File file) {
                         super.onFinish(file);
                         // 更新数据库
-                        OfflineDAO.saveRoomId(roomId);
+                        OfflineDAO.saveRoomId(OfflineConstants.mCurDownloadRoomId);
 
                         mListener.onFinish();
 

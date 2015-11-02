@@ -67,16 +67,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             if (activity != null) {
                 switch (msg.what) {
                     case DOWNLOAD_PROGRESS:
-//                        View view = Utils.getViewByPosition(
-//                                OfflineConstants.mCurDownloadPosition, mLv);
-//                        TextView tvStatus =
-//                                (TextView) view.findViewById(R.id.item_purchased_classes_status);
-//                        tvStatus.setVisibility(View.VISIBLE);
-//                        String text = String.valueOf(OfflineConstants.mPercent) + "%";
-//                        tvStatus.setText(text);
-
                         mAdapter.notifyDataSetChanged();
-
                         break;
 
                     case DOWNLOAD_FINISH:
@@ -144,7 +135,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     protected void onResume() {
         super.onResume();
         if (OfflineConstants.mStatus != OfflineConstants.DONE) {
-            OfflineModel m = new OfflineModel(new OfflineModel.downloadProgressListener() {
+            new OfflineModel(new OfflineModel.downloadProgressListener() {
                 @Override
                 public void onProgress(int progress) {
                     mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
@@ -268,13 +259,12 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    OfflineConstants.mStatus = OfflineConstants.WAITING;
+                    if (OfflineConstants.mStatus == OfflineConstants.DONE) {
+                        OfflineModel.startDownload(this);
+                        mAdapter.notifyDataSetChanged();
+                    }
 
-                    mAdapter.notifyDataSetChanged();
-
-                    OfflineModel.startDownload(this);
-
-                    OfflineModel m = new OfflineModel(new OfflineModel.downloadProgressListener() {
+                    new OfflineModel(new OfflineModel.downloadProgressListener() {
                         @Override
                         public void onProgress(int progress) {
                             mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);

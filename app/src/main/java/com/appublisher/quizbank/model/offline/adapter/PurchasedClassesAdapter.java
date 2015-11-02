@@ -150,7 +150,7 @@ public class PurchasedClassesAdapter extends BaseAdapter{
                         // 该任务在下载队列中
                         viewHolder.tvStatus.setVisibility(View.VISIBLE);
 
-                        if (OfflineConstants.mCurDownloadPosition == position
+                        if (OfflineConstants.mCurDownloadRoomId.equals(classM.getRoom_id())
                                 && OfflineConstants.mStatus == OfflineConstants.PROGRESS) {
                             String text = String.valueOf(OfflineConstants.mPercent) + "%";
                             viewHolder.tvStatus.setText(text);
