@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Environment;
+import android.os.StatFs;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -400,4 +402,15 @@ public class Utils {
             return listView.getChildAt(childIndex);
         }
     }
+
+    /**
+     * 获取可用的SD Card 容量
+     * @return 容量单位：Byte
+     */
+    public static long getAvailableSDCardSize() {
+        StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        //noinspection deprecation
+        return (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
+    }
+
 }

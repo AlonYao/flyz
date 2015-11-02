@@ -19,6 +19,7 @@ import com.appublisher.quizbank.model.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.model.offline.network.OfflineRequest;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
 import com.duobeiyun.DuobeiYunClient;
 import com.duobeiyun.listener.DownloadTaskListener;
@@ -377,9 +378,14 @@ public class OfflineModel {
                     @Override
                     public void onProgress(int progress, int fileLength) {
                         super.onProgress(progress, fileLength);
-                        OfflineConstants.mPercent = progress;
-//                        OfflineConstants.mCurDownloadPosition = position;
+                        // 空间不足提示
+                        if (fileLength > Utils.getAvailableSDCardSize()) {
+                            ToastManager.showToast(activity, "手机可用存储空间不足");
+                            return;
+                        }
+
                         // 记录下载状态
+                        OfflineConstants.mPercent = progress;
                         OfflineConstants.mLastTimestamp = System.currentTimeMillis();
                         OfflineConstants.mStatus = OfflineConstants.PROGRESS;
                         mListener.onProgress(progress);
