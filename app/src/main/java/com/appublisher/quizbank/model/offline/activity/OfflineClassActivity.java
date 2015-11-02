@@ -124,6 +124,9 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 } else if (mMenuStatus == 1 || mMenuStatus == 2) {
                     CheckBox cb = (CheckBox) view.findViewById(R.id.item_purchased_classes_cb);
+
+                    if (cb.getVisibility() == View.GONE) return;
+
                     cb.toggle();
                     mSelectedMap.put(position, cb.isChecked());
                 }

@@ -161,9 +161,10 @@ public class PurchasedClassesAdapter extends BaseAdapter{
                         viewHolder.cb.setVisibility(View.GONE);
 
                     } else {
+                        // 该任务没有被下载
                         viewHolder.tvStatus.setVisibility(View.GONE);
 
-                        if (mActivity.mMenuStatus == 1 || mActivity.mMenuStatus == 2) {
+                        if (mActivity.mMenuStatus == 1) {
                             viewHolder.cb.setVisibility(View.VISIBLE);
                             viewHolder.cb.setChecked(
                                     OfflineModel.isPositionSelected(mActivity, position));
