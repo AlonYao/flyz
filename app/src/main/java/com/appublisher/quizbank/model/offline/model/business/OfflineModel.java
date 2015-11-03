@@ -399,6 +399,8 @@ public class OfflineModel {
                         if (OfflineConstants.mDownloadList.size() != 0) {
                             startDownload(activity);
                         }
+
+                        ToastManager.showToast(activity, "视频资源还没准备好，请耐心等待");
                     }
 
                     @Override
