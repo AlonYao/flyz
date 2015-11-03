@@ -2,7 +2,7 @@ package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +16,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 草稿纸
  */
-public class ScratchPaperActivity extends ActionBarActivity {
+public class ScratchPaperActivity extends AppCompatActivity {
 
     private PaintView mPaintView;
 
