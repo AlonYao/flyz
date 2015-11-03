@@ -158,7 +158,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         // 判断是否超时
         if (OfflineConstants.mDownloadList != null && OfflineConstants.mDownloadList.size() != 0
                 && (System.currentTimeMillis() - OfflineConstants.mLastTimestamp) > 60000) {
-            OfflineConstants.mDownloadList.remove(0);
+            OfflineModel.removeTopRoomId();
             OfflineModel.startDownload(this);
         }
     }

@@ -363,7 +363,7 @@ public class OfflineModel {
         if (OfflineConstants.mCurDownloadRoomId == null
                 || OfflineConstants.mCurDownloadRoomId.length() == 0
                 || isRoomIdDownload(OfflineConstants.mCurDownloadRoomId)) {
-            OfflineConstants.mDownloadList.remove(0);
+            removeTopRoomId();
             startDownload(activity);
             return;
         }
@@ -394,7 +394,7 @@ public class OfflineModel {
                     @Override
                     public void onError(String error) {
                         super.onError(error);
-                        OfflineConstants.mDownloadList.remove(0);
+                        removeTopRoomId();
 
                         if (OfflineConstants.mDownloadList.size() != 0) {
                             startDownload(activity);
@@ -412,7 +412,7 @@ public class OfflineModel {
                         mListener.onFinish();
 
                         // 更新下载列表，继续下载其他视频
-                        OfflineConstants.mDownloadList.remove(0);
+                        removeTopRoomId();
 
                         if (OfflineConstants.mDownloadList.size() != 0) {
                             startDownload(activity);
@@ -438,6 +438,15 @@ public class OfflineModel {
         }
 
         return false;
+    }
+
+    /**
+     * 移除顶部的RoomId
+     */
+    public static void removeTopRoomId() {
+        if (OfflineConstants.mDownloadList == null
+                || OfflineConstants.mDownloadList.size() == 0) return;
+        OfflineConstants.mDownloadList.remove(0);
     }
 
     public interface downloadProgressListener{
