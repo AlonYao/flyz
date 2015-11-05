@@ -2,8 +2,8 @@ package com.appublisher.quizbank.dao;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.appublisher.quizbank.common.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.model.db.User;
-import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.google.gson.Gson;
 

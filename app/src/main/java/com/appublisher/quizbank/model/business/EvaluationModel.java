@@ -5,10 +5,10 @@ import android.view.View;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
+import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
 import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
-import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.model.netdata.evaluation.EvaluationResp;
 import com.appublisher.quizbank.model.netdata.evaluation.HistoryScoreM;
 import com.appublisher.quizbank.utils.GsonManager;

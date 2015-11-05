@@ -11,10 +11,10 @@ import android.widget.ImageView;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
+import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
-import com.appublisher.quizbank.model.login.activity.BindingMobileActivity;
-import com.appublisher.quizbank.model.login.model.LoginModel;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;

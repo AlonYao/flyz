@@ -13,9 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.common.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
-import com.appublisher.quizbank.model.login.model.LoginModel;
-import com.appublisher.quizbank.model.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.fb.model.UserInfo;

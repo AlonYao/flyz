@@ -5,7 +5,7 @@ import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import com.appublisher.quizbank.model.login.model.LoginModel;
+import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.utils.OpenUDID_manager;
 import com.duobeiyun.DuobeiYunClient;
 import com.tendcloud.tenddata.TCAgent;
