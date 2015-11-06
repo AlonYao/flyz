@@ -18,11 +18,14 @@ import com.appublisher.quizbank.common.offline.netdata.PurchasedCourseM;
 import com.appublisher.quizbank.common.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.common.offline.network.OfflineRequest;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
+import com.coolerfall.download.DownloadListener;
+import com.coolerfall.download.DownloadManager;
+import com.coolerfall.download.DownloadRequest;
 import com.duobeiyun.DuobeiYunClient;
-import com.duobeiyun.listener.DownloadTaskListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -371,18 +374,37 @@ public class OfflineModel {
         // 更新状态：等待中
         OfflineConstants.mStatus = OfflineConstants.WAITING;
 
-        DuobeiYunClient.download(
-                activity,
-                OfflineConstants.mCurDownloadRoomId,
-                new DownloadTaskListener() {
+        String url = DuobeiYunClient.getDownResourceUrl(OfflineConstants.mCurDownloadRoomId);
+        String dirPath = Environment.getExternalStorageDirectory().toString() + "/" + "duobeiyun";
+
+        Logger.e(url);
+
+        DownloadManager manager = new DownloadManager();
+        DownloadRequest request = new DownloadRequest()
+                .setUrl(url)
+                .setDestFilePath(dirPath + "/" + OfflineConstants.mCurDownloadRoomId + ".zip")
+                .setRetryTime(100)
+                .setDownloadListener(new DownloadListener() {
                     @Override
-                    public void onProgress(int progress, int fileLength) {
-                        super.onProgress(progress, fileLength);
-                        // 空间不足提示
-                        if (fileLength > Utils.getAvailableSDCardSize()) {
-                            ToastManager.showToast(activity, "手机可用存储空间不足");
-                            return;
-                        }
+                    public void onStart(int downloadId, long totalBytes) {
+                        Logger.e(String.valueOf(totalBytes));
+                        Logger.e(String.valueOf(Utils.getAvailableSDCardSize()));
+
+//                        // 空间不足提示
+//                        if (fileLength > Utils.getAvailableSDCardSize()) {
+//                            ToastManager.showToast(activity, "手机可用存储空间不足");
+//                            return;
+//                        }
+                    }
+
+                    @Override
+                    public void onRetry(int downloadId) {
+                        Logger.e("onRetry");
+                    }
+
+                    @Override
+                    public void onProgress(int downloadId, long bytesWritten, long totalBytes) {
+                        int progress = (int) (((float) bytesWritten / (float) totalBytes) * 100);
 
                         // 记录下载状态
                         OfflineConstants.mPercent = progress;
@@ -392,20 +414,10 @@ public class OfflineModel {
                     }
 
                     @Override
-                    public void onError(String error) {
-                        super.onError(error);
-                        removeTopRoomId();
+                    public void onSuccess(int downloadId, String filePath) {
+                        // 解压缩
+                        DuobeiYunClient.unzipResource(OfflineConstants.mCurDownloadRoomId);
 
-                        if (OfflineConstants.mDownloadList.size() != 0) {
-                            startDownload(activity);
-                        }
-
-                        ToastManager.showToast(activity, "视频资源还没准备好，请耐心等待");
-                    }
-
-                    @Override
-                    public void onFinish(File file) {
-                        super.onFinish(file);
                         // 更新数据库
                         OfflineDAO.saveRoomId(OfflineConstants.mCurDownloadRoomId);
 
@@ -420,7 +432,67 @@ public class OfflineModel {
                             OfflineConstants.mStatus = OfflineConstants.DONE;
                         }
                     }
+
+                    @Override
+                    public void onFailure(int downloadId, int statusCode, String errMsg) {
+                        removeTopRoomId();
+                        if (OfflineConstants.mDownloadList.size() != 0) startDownload(activity);
+                        ToastManager.showToast(activity, "视频资源还没准备好，请耐心等待");
+                    }
                 });
+
+        manager.add(request);
+
+//        DuobeiYunClient.download(
+//                activity,
+//                OfflineConstants.mCurDownloadRoomId,
+//                new DownloadTaskListener() {
+//                    @Override
+//                    public void onProgress(int progress, int fileLength) {
+//                        super.onProgress(progress, fileLength);
+//                        // 空间不足提示
+//                        if (fileLength > Utils.getAvailableSDCardSize()) {
+//                            ToastManager.showToast(activity, "手机可用存储空间不足");
+//                            return;
+//                        }
+//
+//                        // 记录下载状态
+//                        OfflineConstants.mPercent = progress;
+//                        OfflineConstants.mLastTimestamp = System.currentTimeMillis();
+//                        OfflineConstants.mStatus = OfflineConstants.PROGRESS;
+//                        mListener.onProgress(progress);
+//                    }
+//
+//                    @Override
+//                    public void onError(String error) {
+//                        super.onError(error);
+//                        removeTopRoomId();
+//
+//                        if (OfflineConstants.mDownloadList.size() != 0) {
+//                            startDownload(activity);
+//                        }
+//
+//                        ToastManager.showToast(activity, "视频资源还没准备好，请耐心等待");
+//                    }
+//
+//                    @Override
+//                    public void onFinish(File file) {
+//                        super.onFinish(file);
+//                        // 更新数据库
+//                        OfflineDAO.saveRoomId(OfflineConstants.mCurDownloadRoomId);
+//
+//                        mListener.onFinish();
+//
+//                        // 更新下载列表，继续下载其他视频
+//                        removeTopRoomId();
+//
+//                        if (OfflineConstants.mDownloadList.size() != 0) {
+//                            startDownload(activity);
+//                        } else {
+//                            OfflineConstants.mStatus = OfflineConstants.DONE;
+//                        }
+//                    }
+//                });
     }
 
     /**

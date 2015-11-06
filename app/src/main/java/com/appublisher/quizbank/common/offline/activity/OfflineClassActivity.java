@@ -17,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.offline.adapter.PurchasedClassesAdapter;
 import com.appublisher.quizbank.common.offline.model.business.OfflineConstants;
 import com.appublisher.quizbank.common.offline.model.business.OfflineModel;
@@ -116,7 +115,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                 if (OfflineModel.isRoomIdDownload(roomId) && mMenuStatus != 2) {
                     // 如果视频已经成功下载，且不是删除状态
                     String url = DuobeiYunClient.playUrl(roomId);
-                    Intent intent = new Intent(OfflineClassActivity.this, WebViewActivity.class);
+                    Intent intent = new Intent(
+                            OfflineClassActivity.this, OfflineWebViewActivity.class);
                     intent.putExtra("url", url);
                     intent.putExtra("bar_title", OfflineModel.getClassNameByPosition(
                             OfflineClassActivity.this, position));

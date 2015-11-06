@@ -54,4 +54,5 @@ dependencies {
     //noinspection GradleDynamicVersion
     compile 'com.mcxiaoke.volley:library:1.0.+@aar'
     compile(name: 'duobeiyundownload', ext: 'aar')
+    compile 'com.coolerfall:android-http-download-manager:1.5.1'
 }

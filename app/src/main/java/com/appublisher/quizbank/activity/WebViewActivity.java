@@ -112,7 +112,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mHomeWatcher = new HomeWatcher(this);
         mIsFromQQ = false;
 
-
         // 获取数据
         mUrl = getIntent().getStringExtra("url");
         mFrom = getIntent().getStringExtra("from");
@@ -124,6 +123,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
         // 设置Bar Name
         CommonModel.setBarTitle(this, barTitle == null ? "" : barTitle);
+
         //设置屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }

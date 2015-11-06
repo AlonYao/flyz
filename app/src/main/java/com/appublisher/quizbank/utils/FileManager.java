@@ -6,9 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FileManager {
-	
+
+	private static final int BUF_SIZE = 1024;
+
 	/**
 	 * 创建目录（支持多级目录）
 	 * @param dirPath 目录路径
@@ -22,8 +26,8 @@ public class FileManager {
 	
 	/**
 	 * 拷贝文件
-	 * @param fromPath
-	 * @param toPath
+	 * @param fromPath fromPath
+	 * @param toPath toPath
 	 */
 	public static boolean copyFile(String fromPath, String toPath) {
 		try{
@@ -45,4 +49,66 @@ public class FileManager {
 			return false;
 		}
 	}
+
+	/**
+	 * 解压缩
+	 * @param zip File
+	 * @param targetDir File
+	 * @throws IOException
+	 */
+	public static void unzip(File zip, File targetDir) throws IOException {
+		InputStream in = new FileInputStream(zip);
+		unzip(in, targetDir);
+		in.close();
+	}
+
+	/**
+	 * 解压缩
+	 * @param in File
+	 * @param targetDir File
+	 * @throws IOException
+	 */
+	private static void unzip(InputStream in, File targetDir) throws IOException {
+		final ZipInputStream zipIn = new ZipInputStream(in);
+		final byte[] b = new byte[BUF_SIZE];
+		ZipEntry zipEntry;
+		while ((zipEntry = zipIn.getNextEntry()) != null) {
+			String zipEntryName = zipEntry.getName().replace("\\", "");
+			final File file = new File(targetDir, zipEntryName);
+			if (!zipEntry.isDirectory()) {
+				final File parent = file.getParentFile();
+				if (!parent.exists()) {
+					//noinspection ResultOfMethodCallIgnored
+					parent.mkdirs();
+				}
+				FileOutputStream fos = new FileOutputStream(file);
+				int r;
+				while ((r = zipIn.read(b)) != -1) {
+					fos.write(b, 0, r);
+				}
+				fos.close();
+			} else {
+				//noinspection ResultOfMethodCallIgnored
+				file.mkdirs();
+			}
+			zipIn.closeEntry();
+		}
+	}
+
+	/**
+	 * 删除指定文件
+	 * @param filePath 文件路径
+	 */
+	public static void deleteFiles(String filePath) {
+		if (filePath == null || filePath.length() == 0) return;
+
+		try {
+			File file = new File(filePath);
+			if (file.exists()) //noinspection ResultOfMethodCallIgnored
+				file.delete();
+		} catch (Exception e) {
+			// Empty
+		}
+	}
+
 }
