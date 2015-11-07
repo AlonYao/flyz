@@ -485,6 +485,8 @@ public class OfflineModel {
                 if (response == null) return;
 
                 if (curVersion == null) {
+                    // 如果本地没有播放器，则清空duobeiyun文件夹且重置数据库，解决内测版的旧文件问题。
+                    cleanOldSource();
                     downloadPlayer(response);
                     return;
                 }
@@ -501,6 +503,17 @@ public class OfflineModel {
                 }
             }
         }).execute(DuobeiYunClient.fetchLatetVersionUrl());
+    }
+
+    /**
+     * 清除旧的资源
+     */
+    private static void cleanOldSource() {
+        // 数据库
+        OfflineDAO.deletaAll();
+
+        // 多贝云文件夹
+        FileManager.deleteFiles(Environment.getExternalStorageDirectory().toString()+ "/duobeiyun");
     }
 
     /**

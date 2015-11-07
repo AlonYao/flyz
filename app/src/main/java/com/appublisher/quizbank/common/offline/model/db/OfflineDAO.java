@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.common.offline.model.db;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
 
@@ -123,4 +124,14 @@ public class OfflineDAO {
         }
     }
 
+    /**
+     * 清除所有记录
+     */
+    public static void deletaAll() {
+        try {
+            new Delete().from(Offline.class).execute();
+        } catch (Exception e) {
+            // Empty
+        }
+    }
 }
