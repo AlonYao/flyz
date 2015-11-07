@@ -478,6 +478,11 @@ public class OfflineModel {
     public static void checkDuobeiPlayer() {
         final String curVersion = getCurDuobeiPlayerVersion();
 
+        if (curVersion == null) {
+            // 如果本地没有播放器，则清空duobeiyun文件夹且重置数据库，解决内测版的旧文件问题。
+            cleanOldSource();
+        }
+
         // 从多贝服务器获取最新的播放器版本号
         new HttpManager(new IHttpListener() {
             @Override
@@ -485,8 +490,6 @@ public class OfflineModel {
                 if (response == null) return;
 
                 if (curVersion == null) {
-                    // 如果本地没有播放器，则清空duobeiyun文件夹且重置数据库，解决内测版的旧文件问题。
-                    cleanOldSource();
                     downloadPlayer(response);
                     return;
                 }
