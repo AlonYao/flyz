@@ -124,7 +124,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         // 设置Bar Name
         CommonModel.setBarTitle(this, barTitle == null ? "" : barTitle);
 
-        //设置屏幕常亮
+        // 设置屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -52,6 +53,9 @@ public class OfflineWebViewActivity extends AppCompatActivity implements IHttpLi
 
         // 获取最新的播放器版本
         new HttpManager(this).execute(DuobeiYunClient.fetchLatetVersionUrl());
+
+        // 设置屏幕常亮
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
