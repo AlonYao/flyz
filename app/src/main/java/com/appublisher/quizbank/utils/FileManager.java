@@ -17,6 +17,7 @@ public class FileManager {
 	 * 创建目录（支持多级目录）
 	 * @param dirPath 目录路径
 	 */
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void mkDir(String dirPath) {
 		File fileDirs = new File(dirPath);
 		if(!fileDirs.exists()) {
@@ -99,13 +100,25 @@ public class FileManager {
 	 * 删除指定文件
 	 * @param filePath 文件路径
 	 */
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void deleteFiles(String filePath) {
 		if (filePath == null || filePath.length() == 0) return;
 
 		try {
 			File file = new File(filePath);
-			if (file.exists()) //noinspection ResultOfMethodCallIgnored
+
+			if (file.isFile()) {
 				file.delete();
+			} else if (file.isDirectory()) {
+				for (File f : file.listFiles()) {
+					if (f.isFile()) {
+						f.delete();
+					} else if (f.isDirectory()) {
+						deleteFiles(f.getAbsolutePath());
+					}
+				}
+			}
+
 		} catch (Exception e) {
 			// Empty
 		}
