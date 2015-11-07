@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.utils.Logger;
+import com.appublisher.quizbank.utils.FileManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -23,6 +23,9 @@ import com.coolerfall.download.DownloadListener;
 import com.coolerfall.download.DownloadManager;
 import com.coolerfall.download.DownloadRequest;
 import com.duobeiyun.DuobeiYunClient;
+
+import java.io.File;
+import java.io.IOException;
 
 public class OfflineWebViewActivity extends AppCompatActivity implements IHttpListener{
 
@@ -48,7 +51,13 @@ public class OfflineWebViewActivity extends AppCompatActivity implements IHttpLi
         mProgressBar = (RelativeLayout) findViewById(R.id.progressbar);
 
         // 获取最新的播放器版本
-        new HttpManager(this).httpGetString(DuobeiYunClient.fetchLatetVersionUrl());
+        new HttpManager(this).execute(DuobeiYunClient.fetchLatetVersionUrl());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWebView.destroy();
     }
 
     /**
@@ -58,23 +67,25 @@ public class OfflineWebViewActivity extends AppCompatActivity implements IHttpLi
         if (version == null || version.length() == 0) return;
 
         String playerUrl = DuobeiYunClient.getPlayerResourceUrl(version);
-        String fileName = playerUrl.substring(
-                playerUrl.lastIndexOf("/"), playerUrl.lastIndexOf("."));
-        String dirPath = Environment.getExternalStorageDirectory().toString() + "/duobeiyun/play";
+        final String dirPath =
+                Environment.getExternalStorageDirectory().toString()
+                        + "/duobeiyun/play/";
+        String fileName = playerUrl.substring(playerUrl.lastIndexOf("/") + 1, playerUrl.length());
 
         ProgressDialogManager.showProgressDialog(this);
         ToastManager.showToast(this, "更新必要文件中……");
 
-        DownloadManager manager = new DownloadManager();
+        final DownloadManager manager = new DownloadManager();
         DownloadRequest request = new DownloadRequest()
                 .setUrl(playerUrl)
-                .setDestFilePath(dirPath + fileName + ".zip")
+                .setDestFilePath(dirPath + fileName)
                 .setRetryTime(100)
                 .setDownloadListener(new DownloadListener() {
                     @Override
                     public void onStart(int downloaduodId, long totalBytes) {
                         // 空间不足提示
                         if (totalBytes > Utils.getAvailableSDCardSize()) {
+                            manager.cancelAll();
                             ToastManager.showToast(
                                     OfflineWebViewActivity.this, "手机可用存储空间不足");
                             ProgressDialogManager.closeProgressDialog();
@@ -84,19 +95,27 @@ public class OfflineWebViewActivity extends AppCompatActivity implements IHttpLi
 
                     @Override
                     public void onRetry(int downloadId) {
-
+                        // Empty
                     }
 
                     @Override
                     public void onProgress(int downloadId, long bytesWritten, long totalBytes) {
-
+                        // Empty
                     }
 
                     @Override
                     public void onSuccess(int downloadId, String filePath) {
+                        // 解压缩播放器地址
+                        try {
+                            FileManager.unzip(new File(filePath), new File(dirPath));
+                            FileManager.deleteFiles(filePath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         ToastManager.showToast(OfflineWebViewActivity.this, "更新完成");
                         ProgressDialogManager.closeProgressDialog();
-                        Logger.e(filePath);
+                        showWebView(mUrl);
                     }
 
                     @Override
@@ -129,8 +148,7 @@ public class OfflineWebViewActivity extends AppCompatActivity implements IHttpLi
             if (latest > cur) {
                 downloadPlayer(response);
             } else {
-//                        showWebView(mUrl);
-                downloadPlayer(response);
+                showWebView(mUrl);
             }
         } catch (Exception e) {
             if (!"0.0".equals(curVersion)) {

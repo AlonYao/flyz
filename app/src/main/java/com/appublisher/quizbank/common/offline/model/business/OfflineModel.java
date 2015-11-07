@@ -17,8 +17,8 @@ import com.appublisher.quizbank.common.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.common.offline.netdata.PurchasedCourseM;
 import com.appublisher.quizbank.common.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.common.offline.network.OfflineRequest;
+import com.appublisher.quizbank.utils.FileManager;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -375,31 +375,26 @@ public class OfflineModel {
         OfflineConstants.mStatus = OfflineConstants.WAITING;
 
         String url = DuobeiYunClient.getDownResourceUrl(OfflineConstants.mCurDownloadRoomId);
-        String dirPath = Environment.getExternalStorageDirectory().toString() + "/" + "duobeiyun";
+        String dirPath = Environment.getExternalStorageDirectory().toString() + "/duobeiyun/";
 
-        Logger.e(url);
-
-        DownloadManager manager = new DownloadManager();
+        final DownloadManager manager = new DownloadManager();
         DownloadRequest request = new DownloadRequest()
                 .setUrl(url)
-                .setDestFilePath(dirPath + "/" + OfflineConstants.mCurDownloadRoomId + ".zip")
+                .setDestFilePath(dirPath + OfflineConstants.mCurDownloadRoomId + ".zip")
                 .setRetryTime(100)
                 .setDownloadListener(new DownloadListener() {
                     @Override
                     public void onStart(int downloadId, long totalBytes) {
-                        Logger.e(String.valueOf(totalBytes));
-                        Logger.e(String.valueOf(Utils.getAvailableSDCardSize()));
-
-//                        // 空间不足提示
-//                        if (fileLength > Utils.getAvailableSDCardSize()) {
-//                            ToastManager.showToast(activity, "手机可用存储空间不足");
-//                            return;
-//                        }
+                        // 空间不足提示
+                        if (totalBytes > Utils.getAvailableSDCardSize()) {
+                            ToastManager.showToast(activity, "手机可用存储空间不足");
+                            manager.cancelAll();
+                        }
                     }
 
                     @Override
                     public void onRetry(int downloadId) {
-                        Logger.e("onRetry");
+                        // Empty
                     }
 
                     @Override
@@ -417,6 +412,7 @@ public class OfflineModel {
                     public void onSuccess(int downloadId, String filePath) {
                         // 解压缩
                         DuobeiYunClient.unzipResource(OfflineConstants.mCurDownloadRoomId);
+                        FileManager.deleteFiles(filePath);
 
                         // 更新数据库
                         OfflineDAO.saveRoomId(OfflineConstants.mCurDownloadRoomId);

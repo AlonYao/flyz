@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.utils.http;
 
+import android.os.AsyncTask;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +12,7 @@ import java.net.URL;
 /**
  * Http管理
  */
-public class HttpManager implements IHttpListener{
+public class HttpManager extends AsyncTask<String, Void, String>{
 
     private static IHttpListener mHttpGetListener;
 
@@ -19,41 +21,40 @@ public class HttpManager implements IHttpListener{
     }
 
     @Override
-    public void onResponse(String response) {
+    protected String doInBackground(String... params) {
+        if (params == null) return null;
 
-    }
+        try {
+            URL url = new URL(params[0]);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
 
-    public void httpGetString(final String uri) {
-        if (uri == null || uri.length() == 0) return;
+            InputStream inputStream = connection.getInputStream();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(uri);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.connect();
+            BufferedReader bufferedReader =
+                    new BufferedReader(new InputStreamReader(inputStream));
 
-                    InputStream inputStream = connection.getInputStream();
+            StringBuilder stringBuilder = new StringBuilder();
+            String text;
 
-                    BufferedReader bufferedReader =
-                            new BufferedReader(new InputStreamReader(inputStream));
-
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String text;
-
-                    while ((text = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(text);
-                    }
-
-                    mHttpGetListener.onResponse(stringBuilder.toString());
-
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            while ((text = bufferedReader.readLine()) != null) {
+                stringBuilder.append(text);
             }
-        }).start();
+
+            inputStream.close();
+
+            return stringBuilder.toString();
+
+        } catch (IOException e) {
+            // Empty
+        }
+
+        return null;
     }
 
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        mHttpGetListener.onResponse(s);
+    }
 }
