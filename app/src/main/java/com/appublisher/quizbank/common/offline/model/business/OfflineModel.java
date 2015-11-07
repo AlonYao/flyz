@@ -22,12 +22,15 @@ import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
+import com.appublisher.quizbank.utils.http.HttpManager;
+import com.appublisher.quizbank.utils.http.IHttpListener;
 import com.coolerfall.download.DownloadListener;
 import com.coolerfall.download.DownloadManager;
 import com.coolerfall.download.DownloadRequest;
 import com.duobeiyun.DuobeiYunClient;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -467,6 +470,105 @@ public class OfflineModel {
         if (OfflineConstants.mDownloadList == null
                 || OfflineConstants.mDownloadList.size() == 0) return;
         OfflineConstants.mDownloadList.remove(0);
+    }
+
+    /**
+     * 检查多贝播放器是否需要更新
+     */
+    public static void checkDuobeiPlayer() {
+        final String curVersion = getCurDuobeiPlayerVersion();
+
+        // 从多贝服务器获取最新的播放器版本号
+        new HttpManager(new IHttpListener() {
+            @Override
+            public void onResponse(String response) {
+                if (response == null) return;
+
+                if (curVersion == null) {
+                    downloadPlayer(response);
+                    return;
+                }
+
+                try {
+                    int cur = Integer.parseInt(curVersion.substring(0, curVersion.indexOf(".")));
+                    int latest = Integer.parseInt(response.substring(0, response.indexOf(".")));
+
+                    if (latest > cur) {
+                        downloadPlayer(response);
+                    }
+                } catch (Exception e) {
+                    // Empty
+                }
+            }
+        }).execute(DuobeiYunClient.fetchLatetVersionUrl());
+    }
+
+    /**
+     * 下载播放器
+     */
+    private static void downloadPlayer(String version) {
+        if (version == null || version.length() == 0) return;
+
+        String playerUrl = DuobeiYunClient.getPlayerResourceUrl(version);
+        final String dirPath =
+                Environment.getExternalStorageDirectory().toString()
+                        + "/duobeiyun/play/";
+        String fileName = playerUrl.substring(playerUrl.lastIndexOf("/") + 1, playerUrl.length());
+
+        final DownloadManager manager = new DownloadManager();
+        DownloadRequest request = new DownloadRequest()
+                .setUrl(playerUrl)
+                .setDestFilePath(dirPath + fileName)
+                .setRetryTime(2)
+                .setDownloadListener(new DownloadListener() {
+                    @Override
+                    public void onStart(int downloaduodId, long totalBytes) {
+                        // 空间不足提示
+                        if (totalBytes > Utils.getAvailableSDCardSize()) {
+                            manager.cancelAll();
+                        }
+                    }
+
+                    @Override
+                    public void onRetry(int downloadId) {
+                        // Empty
+                    }
+
+                    @Override
+                    public void onProgress(int downloadId, long bytesWritten, long totalBytes) {
+                        // Empty
+                    }
+
+                    @Override
+                    public void onSuccess(int downloadId, String filePath) {
+                        // 解压缩播放器地址
+                        try {
+                            FileManager.unzip(new File(filePath), new File(dirPath));
+                            FileManager.deleteFiles(filePath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int downloadId, int statusCode, String errMsg) {
+                        // Empty
+                    }
+                });
+
+        manager.add(request);
+    }
+
+    /**
+     * 获取当前的多贝播放器版本号
+     * @return String
+     */
+    public static String getCurDuobeiPlayerVersion() {
+        try {
+            return DuobeiYunClient.fetchCurrentVersionUrl();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public interface downloadProgressListener{
