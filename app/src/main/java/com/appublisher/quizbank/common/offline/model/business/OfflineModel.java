@@ -387,7 +387,7 @@ public class OfflineModel {
         DownloadRequest request = new DownloadRequest()
                 .setUrl(url)
                 .setDestFilePath(dirPath + OfflineConstants.mCurDownloadRoomId + ".zip")
-                .setRetryTime(100)
+                .setRetryTime(5)
                 .setDownloadListener(new DownloadListener() {
                     @Override
                     public void onStart(int downloadId, long totalBytes) {
