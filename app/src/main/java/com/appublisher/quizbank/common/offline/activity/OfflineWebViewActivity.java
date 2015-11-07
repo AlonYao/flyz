@@ -135,7 +135,10 @@ public class OfflineWebViewActivity extends AppCompatActivity implements IHttpLi
 
     @Override
     public void onResponse(String response) {
-        if (response == null) return;
+        if (response == null) {
+            showWebView(mUrl);
+            return;
+        }
 
         String curVersion = "0.0";
 
