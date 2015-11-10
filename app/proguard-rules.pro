@@ -15,9 +15,9 @@
 -keepclassmembers class fqcn.of.javascript.interface.for.webview {
    public *;
 }
-#-keep public class com.appublisher.dailyplan.utils.WebViewHandler{
-# *;
-#}
+-keep public class com.appublisher.quizbank.model.business.CourseWebViewHandler{
+ *;
+}
 
 # 友盟反馈
 -keepclassmembers class * {
