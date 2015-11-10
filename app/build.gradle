@@ -53,6 +53,7 @@ dependencies {
     compile 'com.jakewharton:disklrucache:2.0.2'
     //noinspection GradleDynamicVersion
     compile 'com.mcxiaoke.volley:library:1.0.+@aar'
-    compile(name: 'duobeiyundownload', ext: 'aar')
+//    compile(name: 'duobeiyundownload', ext: 'aar')
     compile 'com.coolerfall:android-http-download-manager:1.5.1'
+    compile project(':duobeiyundownload')
 }
