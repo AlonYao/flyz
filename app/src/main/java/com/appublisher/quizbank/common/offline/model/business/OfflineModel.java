@@ -516,7 +516,7 @@ public class OfflineModel {
         OfflineDAO.deletaAll();
 
         // 多贝云文件夹
-        FileManager.deleteFiles(Environment.getExternalStorageDirectory().toString()+ "/duobeiyun");
+        FileManager.deleteFiles(Environment.getExternalStorageDirectory().toString() + "/duobeiyun");
     }
 
     /**
@@ -585,6 +585,14 @@ public class OfflineModel {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * 获取多贝播放视频的地址
+     * @return String
+     */
+    public static String getDuobeiPlayUrl(String roomId) {
+        return "http://127.0.0.1:12728/play/index.html?roomId=" + roomId;
     }
 
     public interface downloadProgressListener{
