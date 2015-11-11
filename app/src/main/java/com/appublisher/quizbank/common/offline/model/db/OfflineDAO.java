@@ -27,49 +27,22 @@ public class OfflineDAO {
 
     /**
      * 查询已购课程数据
-     * @return 视频数据
+     * @return Offline
      */
-    public static Offline findById() {
-        try {
-            return new Select().from(Offline.class)
-                    .where("Id = ?", 1)
-                    .executeSingle();
-        } catch (Exception e) {
-            // Empty
-        }
-
-        return null;
-    }
-
-    /**
-     * 保存已购课程数据
-     * @param purchased_data 已购课程数据
-     */
-    public static void savePurchasedData(String purchased_data) {
+    public static String findFirstPurchasedData() {
         Offline offline = null;
 
         try {
             offline = new Select().from(Offline.class)
-                    .where("Id = ?", 1)
+                    .where("purchased_data IS NOT NULL")
                     .executeSingle();
         } catch (Exception e) {
             // Empty
         }
 
-        if (offline == null) {
-            offline = new Offline();
-            offline.purchased_data = purchased_data;
-            offline.save();
-        } else {
-            try {
-                new Update(Offline.class)
-                        .set("purchased_data = ?", purchased_data)
-                        .where("Id = ?", 1)
-                        .execute();
-            } catch (Exception e) {
-                // Empty
-            }
-        }
+        if (offline != null) return offline.purchased_data;
+
+        return null;
     }
 
     /**

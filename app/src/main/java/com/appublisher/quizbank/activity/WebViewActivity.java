@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.CourseWebViewHandler;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -46,7 +47,7 @@ import java.util.Timer;
 public class WebViewActivity extends ActionBarActivity implements RequestCallback {
 
     private RelativeLayout mProgressBar;
-    private WebView mWebView;
+    public static WebView mWebView;
     private String mFrom;
     private String mUrl;
     private HomeWatcher mHomeWatcher;
@@ -277,8 +278,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
      * 展示WebView
      * @param url url
      */
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public void showWebView(String url) {
+        url = "http://192.168.1.114/mobile_live_web/demo.html";
+
         if (url == null) return;
 
         mProgressBar.setVisibility(View.VISIBLE);
@@ -287,6 +290,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.loadUrl(url);
+
+        mWebView.addJavascriptInterface(new CourseWebViewHandler(), "handler");
+
         // 解决部分安卓机不弹出alert
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -298,6 +304,8 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             @Override
             public void onPageFinished(WebView view, String url) {
                 mProgressBar.setVisibility(View.GONE);
+
+                CourseWebViewHandler.sendDataToWebView();
             }
 
             @Override
