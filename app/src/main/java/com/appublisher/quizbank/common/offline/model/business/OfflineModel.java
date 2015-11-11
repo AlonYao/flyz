@@ -1,6 +1,9 @@
 package com.appublisher.quizbank.common.offline.model.business;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Environment;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.common.offline.activity.OfflineClassActivity;
 import com.appublisher.quizbank.common.offline.adapter.PurchasedCoursesAdapter;
@@ -78,12 +82,12 @@ public class OfflineModel {
      * 获取本地已经下载完成的课程列表
      * @return ArrayList
      */
-    public static ArrayList<PurchasedCourseM> getLocalCourseList() {
-        Offline item = OfflineDAO.findById();
-        if (item == null) return null;
+    public static ArrayList<PurchasedCourseM> getLocalCourseList(Activity activity) {
+        // 获取本地数据
+        String purchased_data = getLocalSave(activity);
 
         PurchasedCoursesResp resp =
-                GsonManager.getGson().fromJson(item.purchased_data, PurchasedCoursesResp.class);
+                GsonManager.getGson().fromJson(purchased_data, PurchasedCoursesResp.class);
         if (resp == null || resp.getResponse_code() != 1) return null;
 
         ArrayList<PurchasedCourseM> courses = resp.getList();
@@ -117,6 +121,22 @@ public class OfflineModel {
     }
 
     /**
+     * 获取本地保存的已购数据
+     * @return String
+     */
+    private static String getLocalSave(Activity activity) {
+        String data;
+
+        // SharedPreferences中获取
+        SharedPreferences offline = activity.getSharedPreferences("offline", 0);
+        data = offline.getString(LoginModel.getUserId(), "");
+        if (data.length() != 0) return data;
+
+        // 数据库中获取
+        return OfflineDAO.findFirstPurchasedData();
+    }
+
+    /**
      * 判断RoomId在本地是否存在
      * @param roomId roomId
      * @return Boolean
@@ -139,13 +159,17 @@ public class OfflineModel {
      * @param activity OfflineActivity
      * @param resp 回调数据
      */
+    @SuppressLint("CommitPrefEdits")
     public static void dealPurchasedCoursesResp(final OfflineActivity activity,
                                                 PurchasedCoursesResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
-        // 保存至数据库
-        OfflineDAO.savePurchasedData(
+        // 保存至SharedPreferences
+        SharedPreferences offline = activity.getSharedPreferences("offline", 0);
+        SharedPreferences.Editor editor = offline.edit();
+        editor.putString(LoginModel.getUserId(),
                 GsonManager.getGson().toJson(resp, PurchasedCoursesResp.class));
+        editor.commit();
 
         final ArrayList<PurchasedCourseM> courses = resp.getList();
         if (courses == null) return;
@@ -284,7 +308,7 @@ public class OfflineModel {
      * @param activity OfflineActivity
      */
     public static void showLocalList(final OfflineActivity activity) {
-        final ArrayList<PurchasedCourseM> courses = getLocalCourseList();
+        final ArrayList<PurchasedCourseM> courses = getLocalCourseList(activity);
         if (courses == null || courses.size() == 0) {
             activity.mTvNone.setVisibility(View.VISIBLE);
         }
