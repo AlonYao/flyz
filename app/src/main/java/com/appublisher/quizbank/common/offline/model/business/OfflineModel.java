@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.common.offline.activity.OfflineClassActivity;
 import com.appublisher.quizbank.common.offline.adapter.PurchasedCoursesAdapter;
@@ -128,7 +129,7 @@ public class OfflineModel {
 
         // SharedPreferences中获取
         SharedPreferences offline = activity.getSharedPreferences("offline", 0);
-        data = offline.getString("purchased_courses", "");
+        data = offline.getString(LoginModel.getUserId(), "");
         if (data.length() != 0) return data;
 
         // 数据库中获取
@@ -166,7 +167,7 @@ public class OfflineModel {
         // 保存至SharedPreferences
         SharedPreferences offline = activity.getSharedPreferences("offline", 0);
         SharedPreferences.Editor editor = offline.edit();
-        editor.putString("purchased_courses",
+        editor.putString(LoginModel.getUserId(),
                 GsonManager.getGson().toJson(resp, PurchasedCoursesResp.class));
         editor.commit();
 
