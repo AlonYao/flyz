@@ -280,8 +280,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
      */
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public void showWebView(String url) {
-        url = "http://192.168.1.114/mobile_live_web/demo.html";
-
         if (url == null) return;
 
         mProgressBar.setVisibility(View.VISIBLE);
@@ -290,8 +288,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.loadUrl(url);
-
-        mWebView.addJavascriptInterface(new CourseWebViewHandler(), "handler");
 
         // 解决部分安卓机不弹出alert
         mWebView.setWebChromeClient(new WebChromeClient() {
@@ -304,8 +300,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             @Override
             public void onPageFinished(WebView view, String url) {
                 mProgressBar.setVisibility(View.GONE);
-
-                CourseWebViewHandler.sendDataToWebView();
             }
 
             @Override

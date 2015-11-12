@@ -42,9 +42,6 @@ public class OfflineWebViewActivity extends AppCompatActivity{
         // 设置屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-//        String url =
-//        "http://127.0.0.1:15121/play/index.html?roomId=jz7dec04d106e944b2b39cee9241df655d";
-
         showWebView(mUrl);
 
         Logger.e(mUrl);
