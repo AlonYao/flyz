@@ -109,14 +109,20 @@ public class FileManager {
 
 			if (file.isFile()) {
 				file.delete();
+
 			} else if (file.isDirectory()) {
-				for (File f : file.listFiles()) {
-					if (f.isFile()) {
-						f.delete();
-					} else if (f.isDirectory()) {
-						deleteFiles(f.getAbsolutePath());
-					}
+				File[] childFiles = file.listFiles();
+
+				if (childFiles == null || childFiles.length == 0) {
+					file.delete();
+					return;
 				}
+
+				for (File childFile : childFiles) {
+					deleteFiles(childFile.getCanonicalPath());
+				}
+
+				file.delete();
 			}
 
 		} catch (Exception e) {

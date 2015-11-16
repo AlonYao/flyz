@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
@@ -500,18 +501,13 @@ public class OfflineModel {
      * 检查多贝播放器是否需要更新
      */
     public static void checkDuobeiPlayer(final Activity activity) {
-        final String curVersion = DuobeiYunClient.fetchCurrentVersion();
-
-        if (curVersion == null) {
-            // 如果本地没有播放器，则清空duobeiyun文件夹且重置数据库，解决内测版的旧文件问题。
-            cleanOldSource();
-        }
-
         // 从多贝服务器获取最新的播放器版本号
         new HttpManager(new IHttpListener() {
             @Override
             public void onResponse(String response) {
                 if (response == null) return;
+
+                String curVersion = DuobeiYunClient.fetchCurrentVersion();
 
                 if (curVersion == null) {
                     downloadPlayer(response, activity);
@@ -598,6 +594,25 @@ public class OfflineModel {
                 });
 
         manager.add(request);
+    }
+
+    /**
+     * 检查版本
+     */
+    public static void checkVersion(Activity activity) {
+        // SharedPreferences中获取版本号
+        SharedPreferences offline = activity.getSharedPreferences("offline", 0);
+        String preVersion = offline.getString("version", "");
+
+        // 1.3.2之前的版本，清空数据
+        if (Utils.compareVersion(preVersion, "1.3.2") < 0) {
+            cleanOldSource();
+        }
+
+        // 更新版本号
+        SharedPreferences.Editor editor = offline.edit();
+        editor.putString("version", Globals.appVersion);
+        editor.commit();
     }
 
     public interface downloadProgressListener{

@@ -63,6 +63,9 @@ public class OfflineActivity extends AppCompatActivity
         mTvAll.setOnClickListener(this);
         mTvLocal.setOnClickListener(this);
 
+        // 检查版本问题
+        OfflineModel.checkVersion(this);
+
         // 检查是否需要更新多贝播放器
         OfflineModel.checkDuobeiPlayer(this);
     }
