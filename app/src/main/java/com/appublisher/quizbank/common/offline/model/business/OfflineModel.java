@@ -499,8 +499,8 @@ public class OfflineModel {
     /**
      * 检查多贝播放器是否需要更新
      */
-    public static void checkDuobeiPlayer() {
-        final String curVersion = getCurDuobeiPlayerVersion();
+    public static void checkDuobeiPlayer(final Activity activity) {
+        final String curVersion = DuobeiYunClient.fetchCurrentVersion();
 
         if (curVersion == null) {
             // 如果本地没有播放器，则清空duobeiyun文件夹且重置数据库，解决内测版的旧文件问题。
@@ -514,7 +514,7 @@ public class OfflineModel {
                 if (response == null) return;
 
                 if (curVersion == null) {
-                    downloadPlayer(response);
+                    downloadPlayer(response, activity);
                     return;
                 }
 
@@ -523,7 +523,7 @@ public class OfflineModel {
                     int latest = Integer.parseInt(response.substring(0, response.indexOf(".")));
 
                     if (latest > cur) {
-                        downloadPlayer(response);
+                        downloadPlayer(response, activity);
                     }
                 } catch (Exception e) {
                     // Empty
@@ -546,7 +546,7 @@ public class OfflineModel {
     /**
      * 下载播放器
      */
-    private static void downloadPlayer(String version) {
+    private static void downloadPlayer(String version, final Activity activity) {
         if (version == null || version.length() == 0) return;
 
         String playerUrl = DuobeiYunClient.getPlayerResourceUrl(version);
@@ -565,6 +565,7 @@ public class OfflineModel {
                     public void onStart(int downloaduodId, long totalBytes) {
                         // 空间不足提示
                         if (totalBytes > Utils.getAvailableSDCardSize()) {
+                            ToastManager.showToast(activity, "手机可用存储空间不足");
                             manager.cancelAll();
                         }
                     }
@@ -597,26 +598,6 @@ public class OfflineModel {
                 });
 
         manager.add(request);
-    }
-
-    /**
-     * 获取当前的多贝播放器版本号
-     * @return String
-     */
-    public static String getCurDuobeiPlayerVersion() {
-        try {
-            return DuobeiYunClient.fetchCurrentVersionUrl();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * 获取多贝播放视频的地址
-     * @return String
-     */
-    public static String getDuobeiPlayUrl(String roomId) {
-        return "http://127.0.0.1:12728/play/index.html?roomId=" + roomId;
     }
 
     public interface downloadProgressListener{

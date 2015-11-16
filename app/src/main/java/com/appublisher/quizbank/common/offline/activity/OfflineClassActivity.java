@@ -114,7 +114,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 if (OfflineModel.isRoomIdDownload(roomId) && mMenuStatus != 2) {
                     // 如果视频已经成功下载，且不是删除状态
-                    String url = OfflineModel.getDuobeiPlayUrl(roomId);
+                    String url = DuobeiYunClient.playUrl(roomId);
                     Intent intent = new Intent(
                             OfflineClassActivity.this, OfflineWebViewActivity.class);
                     intent.putExtra("url", url);
