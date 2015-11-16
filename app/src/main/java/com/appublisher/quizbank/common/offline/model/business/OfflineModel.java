@@ -605,7 +605,7 @@ public class OfflineModel {
      */
     public static String getCurDuobeiPlayerVersion() {
         try {
-            return DuobeiYunClient.fetchCurrentVersionUrl();
+            return DuobeiYunClient.fetchCurrentVersion();
         } catch (Exception e) {
             return null;
         }

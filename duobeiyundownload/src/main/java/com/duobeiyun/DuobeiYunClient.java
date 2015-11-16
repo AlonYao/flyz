@@ -25,9 +25,7 @@ public class DuobeiYunClient {
 
     static final int PORT = 12728;
 
-//    7xnxdc.com1.z0.glb.clouddn.com
-//    http://7xkmre.com1.z0.glb.clouddn.com/
-    static final String BASE_URL = "http://7xo2o6.dl1.z0.glb.clouddn.com/";
+    static final String BASE_URL = "http://7xod1f.dl1.z0.glb.clouddn.com/";
 
     public static void download(Context context, String roomId, DownloadTaskListener dlTaskListener){
         String url = BASE_URL + roomId+".zip";
@@ -83,7 +81,7 @@ public class DuobeiYunClient {
     }
 
     public static String playUrl(String roomId){
-        String playUrl = "http://"+NetUtil.getLocalIPAddress()+":" + PORT + "/play/index.html?roomId=" + roomId;
+        String playUrl = "http://127.0.0.1:" + PORT + "/play/index.html?roomId=" + roomId;
         return playUrl;
     }
 
@@ -113,10 +111,16 @@ public class DuobeiYunClient {
         return BASE_URL + "version.txt?" + System.currentTimeMillis();
     }
 
-    public static String fetchCurrentVersionUrl(){
-        File sdkPlayVersionFile = new File(dirPath + File.separator + "play/version.txt");
-        String playVersion = FileUtil.readFile(sdkPlayVersionFile, "UTF-8").toString();
-        return playVersion;
+    public static String fetchCurrentVersion(){
+        try {
+            File sdkPlayVersionFile = new File(dirPath + File.separator + "play/version.txt");
+            String playVersion = FileUtil.readFile(sdkPlayVersionFile, "UTF-8").toString();
+            return playVersion;
+        } catch (Exception e) {
+            // Empty
+        }
+
+        return null;
     }
 
     public static String getPlayerResourceUrl(String version){
