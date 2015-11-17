@@ -599,6 +599,7 @@ public class OfflineModel {
     /**
      * 检查版本
      */
+    @SuppressLint("CommitPrefEdits")
     public static void checkVersion(Activity activity) {
         // SharedPreferences中获取版本号
         SharedPreferences offline = activity.getSharedPreferences("offline", 0);
