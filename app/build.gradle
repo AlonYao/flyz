@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 18
-        versionName "1.3.1"
+        versionCode 19
+        versionName "1.3.2"
     }
 
     buildTypes {
@@ -52,7 +52,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:disklrucache:2.0.2'
     //noinspection GradleDynamicVersion
-    compile 'com.mcxiaoke.volley:library:1.0.+@aar'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
     compile(name: 'duobeiyundownload', ext: 'aar')
     compile 'com.coolerfall:android-http-download-manager:1.5.1'
 }

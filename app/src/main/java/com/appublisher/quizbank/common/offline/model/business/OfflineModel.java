@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
@@ -499,22 +500,17 @@ public class OfflineModel {
     /**
      * 检查多贝播放器是否需要更新
      */
-    public static void checkDuobeiPlayer() {
-        final String curVersion = getCurDuobeiPlayerVersion();
-
-        if (curVersion == null) {
-            // 如果本地没有播放器，则清空duobeiyun文件夹且重置数据库，解决内测版的旧文件问题。
-            cleanOldSource();
-        }
-
+    public static void checkDuobeiPlayer(final Activity activity) {
         // 从多贝服务器获取最新的播放器版本号
         new HttpManager(new IHttpListener() {
             @Override
             public void onResponse(String response) {
                 if (response == null) return;
 
+                String curVersion = DuobeiYunClient.fetchCurrentVersion();
+
                 if (curVersion == null) {
-                    downloadPlayer(response);
+                    downloadPlayer(response, activity);
                     return;
                 }
 
@@ -523,7 +519,7 @@ public class OfflineModel {
                     int latest = Integer.parseInt(response.substring(0, response.indexOf(".")));
 
                     if (latest > cur) {
-                        downloadPlayer(response);
+                        downloadPlayer(response, activity);
                     }
                 } catch (Exception e) {
                     // Empty
@@ -546,7 +542,7 @@ public class OfflineModel {
     /**
      * 下载播放器
      */
-    private static void downloadPlayer(String version) {
+    private static void downloadPlayer(String version, final Activity activity) {
         if (version == null || version.length() == 0) return;
 
         String playerUrl = DuobeiYunClient.getPlayerResourceUrl(version);
@@ -565,6 +561,7 @@ public class OfflineModel {
                     public void onStart(int downloaduodId, long totalBytes) {
                         // 空间不足提示
                         if (totalBytes > Utils.getAvailableSDCardSize()) {
+                            ToastManager.showToast(activity, "手机可用存储空间不足");
                             manager.cancelAll();
                         }
                     }
@@ -600,23 +597,23 @@ public class OfflineModel {
     }
 
     /**
-     * 获取当前的多贝播放器版本号
-     * @return String
+     * 检查版本
      */
-    public static String getCurDuobeiPlayerVersion() {
-        try {
-            return DuobeiYunClient.fetchCurrentVersionUrl();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+    @SuppressLint("CommitPrefEdits")
+    public static void checkVersion(Activity activity) {
+        // SharedPreferences中获取版本号
+        SharedPreferences offline = activity.getSharedPreferences("offline", 0);
+        String preVersion = offline.getString("version", "");
 
-    /**
-     * 获取多贝播放视频的地址
-     * @return String
-     */
-    public static String getDuobeiPlayUrl(String roomId) {
-        return "http://127.0.0.1:12728/play/index.html?roomId=" + roomId;
+        // 1.3.2之前的版本，清空数据
+        if (Utils.compareVersion(preVersion, "1.3.2") < 0) {
+            cleanOldSource();
+        }
+
+        // 更新版本号
+        SharedPreferences.Editor editor = offline.edit();
+        editor.putString("version", Globals.appVersion);
+        editor.commit();
     }
 
     public interface downloadProgressListener{
