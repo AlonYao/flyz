@@ -2,9 +2,6 @@ package com.appublisher.quizbank.model.business;
 
 import android.webkit.JavascriptInterface;
 
-import com.appublisher.quizbank.activity.WebViewActivity;
-import com.appublisher.quizbank.utils.Logger;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,28 +10,26 @@ import org.json.JSONObject;
  */
 public class CourseWebViewHandler {
 
-//    private WebView mWebView;
-
-//    public CourseWebViewHandler() {
-//        mWebView = webView;
-//    }
-
+    /**
+     * 捕获WebView中的动作
+     * @param data WebView传递过来的数据
+     */
     @JavascriptInterface
-    public void haha(String data) {
+    public void webToAndroid(String data) {
         try {
             JSONObject jsonObject = new JSONObject(data);
-            Logger.e(jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Logger.e(data);
 
+            String type = jsonObject.optString("type", "");
+            String orderId = jsonObject.optString("orderId", "");
+        } catch (JSONException e) {
+            // Empty
+        }
     }
 
-    public static void sendDataToWebView() {
-        String a = "aaa";
-        WebViewActivity.mWebView.loadUrl("javascript:xxx('aaa')");
-
-        Logger.e("11111111111111");
+    /**
+     * 通知WebView
+     */
+    public static void androidToWeb() {
+        // Empty
     }
 }
