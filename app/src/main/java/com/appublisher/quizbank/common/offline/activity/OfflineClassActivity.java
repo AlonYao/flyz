@@ -23,6 +23,7 @@ import com.appublisher.quizbank.common.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.common.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.common.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.duobeiyun.DuobeiYunClient;
 
@@ -111,7 +112,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String roomId = OfflineModel.getRoomIdByPosition(
                         OfflineClassActivity.this, position);
-
+                Logger.i("roomId=="+roomId);
                 if (OfflineModel.isRoomIdDownload(roomId) && mMenuStatus != 2) {
                     // 如果视频已经成功下载，且不是删除状态
                     String url = DuobeiYunClient.playUrl(roomId);

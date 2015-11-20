@@ -4,8 +4,8 @@ import android.graphics.Bitmap.CompressFormat;
 
 public interface ApiConstants {
     // 服务器切换：dev为测试服务器，api为正式服务器
-//    String base = "dev";
-    String base = "spark";
+    String base = "dev";
+//    String base = "spark";
 
     String baseUrl = "http://api." + base + ".appublisher.com/";
 
@@ -161,6 +161,10 @@ public interface ApiConstants {
 
     // 评论获取待赠送课程、开课
     String getRateCourse = baseUrl + "course/get_rate_course";
+    //获取微信支付
+    String getWXPayUrl = baseUrl + "payment/get_wxpay_params";
+    //获取支付宝支付
+    String getAliPayUrl = baseUrl + "payment/get_alipay_params";
 
     /**
      * 模考

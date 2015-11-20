@@ -29,14 +29,16 @@ import org.json.JSONObject;
 /**
  * 课程中心
  */
-public class CourseFragment extends Fragment implements RequestCallback{
+public class CourseFragment extends Fragment implements RequestCallback {
 
     public View mMainView;
     public Activity mActivity;
     public Request mRequest;
     public Gson mGson;
 
-    /** Filter **/
+    /**
+     * Filter
+     **/
     public RelativeLayout mRlTag;
     public RelativeLayout mRlArea;
     public RelativeLayout mRlPurchase;
@@ -47,9 +49,16 @@ public class CourseFragment extends Fragment implements RequestCallback{
     public static int mCurTagId;
     public static int mCurPurchaseId;
 
-    /** 课程中心列表 **/
+    /**
+     * 课程中心列表
+     **/
     public ListView mLvCourse;
     public LinearLayout mCourseNull;
+
+    /**
+     * 网络状况
+     **/
+    public LinearLayout netBadView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -79,7 +88,7 @@ public class CourseFragment extends Fragment implements RequestCallback{
         mLvCourse = (ListView) mMainView.findViewById(R.id.course_listview);
         mCourseNull = (LinearLayout) mMainView.findViewById(R.id.course_null);
         TextView courseQQ = (TextView) mMainView.findViewById(R.id.course_qq);
-
+        netBadView = (LinearLayout) mMainView.findViewById(R.id.netBad);
         // 成员变量初始化
         if (savedInstanceState == null) {
             mCurTagId = 0;

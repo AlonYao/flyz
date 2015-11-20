@@ -5,36 +5,36 @@ package com.appublisher.quizbank.common.pay.weixin;
  */
 public class WeiXinPayEntity {
 
-    String appId;
-    String partnerId;
-    String prepayId;
-    String packageValue;
-    String nonceStr;
-    String timeStamp;
+    String appid;
+    String partnerid;
+    String prepayid;
+    String package_value;
+    String noncestr;
+    String timestamp;
     String sign;
 
     public String getAppId() {
-        return appId;
+        return appid;
     }
 
     public String getPartnerId() {
-        return partnerId;
+        return partnerid;
     }
 
     public String getPrepayId() {
-        return prepayId;
+        return prepayid;
     }
 
     public String getPackageValue() {
-        return packageValue;
+        return package_value;
     }
 
     public String getNonceStr() {
-        return nonceStr;
+        return noncestr;
     }
 
     public String getTimeStamp() {
-        return timeStamp;
+        return timestamp;
     }
 
     public String getSign() {

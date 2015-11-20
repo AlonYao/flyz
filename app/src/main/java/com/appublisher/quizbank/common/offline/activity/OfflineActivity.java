@@ -15,6 +15,7 @@ import com.appublisher.quizbank.common.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 
 import org.json.JSONArray;
@@ -24,9 +25,11 @@ import org.json.JSONObject;
  * 离线视频页面
  */
 public class OfflineActivity extends AppCompatActivity
-        implements RequestCallback, View.OnClickListener{
+        implements RequestCallback, View.OnClickListener {
 
-    /** Views **/
+    /**
+     * Views
+     **/
     public TextView mTvAll;
     public TextView mTvLocal;
     public TextView mTvNone;
@@ -35,7 +38,9 @@ public class OfflineActivity extends AppCompatActivity
     public ListView mLvAll;
     public ListView mLvLocal;
 
-    /** Data **/
+    /**
+     * Data
+     **/
     public PurchasedCoursesResp mPurchasedCoursesResp;
 
     @Override
@@ -63,7 +68,7 @@ public class OfflineActivity extends AppCompatActivity
         mTvAll.setOnClickListener(this);
         mTvLocal.setOnClickListener(this);
 
-        // 检查版本问题
+        // 检查版本问题,删除以前的下载文件
         OfflineModel.checkVersion(this);
 
         // 检查是否需要更新多贝播放器
@@ -102,6 +107,7 @@ public class OfflineActivity extends AppCompatActivity
         }
 
         if ("purchased_courses".equals(apiName)) {
+            Logger.i(response.toString());
             mPurchasedCoursesResp =
                     GsonManager.getGson().fromJson(response.toString(), PurchasedCoursesResp.class);
             OfflineModel.dealPurchasedCoursesResp(this, mPurchasedCoursesResp);

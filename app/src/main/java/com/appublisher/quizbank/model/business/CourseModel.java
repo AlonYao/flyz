@@ -12,6 +12,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.adapter.CourseListAdapter;
@@ -27,6 +28,7 @@ import com.appublisher.quizbank.model.netdata.course.FilterAreaM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaResp;
 import com.appublisher.quizbank.model.netdata.course.FilterTagM;
 import com.appublisher.quizbank.model.netdata.course.FilterTagResp;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
@@ -56,7 +58,8 @@ public class CourseModel {
 
     /**
      * 处理课程标签回调（科目）
-     * @param response 回调数据
+     *
+     * @param response       回调数据
      * @param courseFragment 课程中心页面
      */
     public static void dealCourseFilterTagResp(JSONObject response, CourseFragment courseFragment) {
@@ -80,7 +83,8 @@ public class CourseModel {
 
     /**
      * 处理课程地区回调
-     * @param response 回调数据
+     *
+     * @param response       回调数据
      * @param courseFragment 课程中心页面
      */
     public static void dealCourseFilterAreaResp(JSONObject response,
@@ -105,7 +109,8 @@ public class CourseModel {
 
     /**
      * 处理课程列表回调
-     * @param response 回调数据
+     *
+     * @param response       回调数据
      * @param courseFragment 课程中心
      */
     public static void dealCourseListResp(JSONObject response, CourseFragment courseFragment) {
@@ -144,6 +149,7 @@ public class CourseModel {
 
     /**
      * 显示没有课程
+     *
      * @param courseFragment 课程中心页面
      */
     private static void showCourseNone(CourseFragment courseFragment) {
@@ -264,6 +270,7 @@ public class CourseModel {
 
     /**
      * 记录当前课程标签
+     *
      * @param position 位置
      */
     private static void recordCurTag(int position) {
@@ -281,6 +288,7 @@ public class CourseModel {
 
     /**
      * 记录当前课程购买状态
+     *
      * @param position 位置
      */
     private static void recordCurPurchase(int position) {
@@ -301,6 +309,7 @@ public class CourseModel {
 
     /**
      * 记录当前课程地区
+     *
      * @param position 位置
      */
     private static void recordCurArea(int position) {
@@ -359,84 +368,85 @@ public class CourseModel {
      * 课程中心点击事件
      */
     private static AdapterView.OnItemClickListener onItemClickListener =
-        new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (parent.getId()) {
-                    case R.id.filter_course_ehgv:
-                        // Popup：课程标签
-                        TextView tvTag = (TextView) view.findViewById(R.id.course_filter_gv_item);
-                        setPopupTextViewSelect(tvTag);
+            new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    switch (parent.getId()) {
+                        case R.id.filter_course_ehgv:
+                            // Popup：课程标签
+                            TextView tvTag = (TextView) view.findViewById(R.id.course_filter_gv_item);
+                            setPopupTextViewSelect(tvTag);
 
-                        // 前一个view改变
-                        if (mTvLastTag != null && mTvLastTag != tvTag)
-                            cancelPopupTextViewSelect(mTvLastTag);
+                            // 前一个view改变
+                            if (mTvLastTag != null && mTvLastTag != tvTag)
+                                cancelPopupTextViewSelect(mTvLastTag);
 
-                        mTvLastTag = tvTag;
+                            mTvLastTag = tvTag;
 
-                        // 记录当前的课程标签
-                        recordCurTag(position);
+                            // 记录当前的课程标签
+                            recordCurTag(position);
 
-                        // Umeng统计
-                        UmengManager.sendCountEvent(
-                                mCourseFragment.mActivity, "Filter", "Type", "Course");
+                            // Umeng统计
+                            UmengManager.sendCountEvent(
+                                    mCourseFragment.mActivity, "Filter", "Type", "Course");
 
-                        break;
+                            break;
 
-                    case R.id.course_filter_purchase_ehgv:
-                        // Popup：课程购买状态
-                        @SuppressLint("CutPasteId")
-                        TextView tvPurchase = (TextView) view.findViewById(
-                                R.id.course_filter_gv_item);
-                        setPopupTextViewSelect(tvPurchase);
+                        case R.id.course_filter_purchase_ehgv:
+                            // Popup：课程购买状态
+                            @SuppressLint("CutPasteId")
+                            TextView tvPurchase = (TextView) view.findViewById(
+                                    R.id.course_filter_gv_item);
+                            setPopupTextViewSelect(tvPurchase);
 
-                        // 前一个view改变
-                        if (mTvLastPurchase != null && mTvLastPurchase != tvPurchase)
-                            cancelPopupTextViewSelect(mTvLastPurchase);
+                            // 前一个view改变
+                            if (mTvLastPurchase != null && mTvLastPurchase != tvPurchase)
+                                cancelPopupTextViewSelect(mTvLastPurchase);
 
-                        mTvLastPurchase = tvPurchase;
+                            mTvLastPurchase = tvPurchase;
 
-                        // 记录当前的课程购买状态
-                        recordCurPurchase(position);
+                            // 记录当前的课程购买状态
+                            recordCurPurchase(position);
 
-                        // Umeng统计
-                        UmengManager.sendCountEvent(
-                                mCourseFragment.mActivity, "Filter", "Type", "Buy");
+                            // Umeng统计
+                            UmengManager.sendCountEvent(
+                                    mCourseFragment.mActivity, "Filter", "Type", "Buy");
 
-                        break;
+                            break;
 
-                    case R.id.course_filter_area_ehgv:
-                        // Popup：课程地区
-                        @SuppressLint("CutPasteId")
-                        TextView tvArea = (TextView) view.findViewById(
-                                R.id.course_filter_gv_item);
-                        setPopupTextViewSelect(tvArea);
+                        case R.id.course_filter_area_ehgv:
+                            // Popup：课程地区
+                            @SuppressLint("CutPasteId")
+                            TextView tvArea = (TextView) view.findViewById(
+                                    R.id.course_filter_gv_item);
+                            setPopupTextViewSelect(tvArea);
 
-                        // 前一个view改变
-                        if (mTvLastArea != null && mTvLastArea != tvArea)
-                            cancelPopupTextViewSelect(mTvLastArea);
+                            // 前一个view改变
+                            if (mTvLastArea != null && mTvLastArea != tvArea)
+                                cancelPopupTextViewSelect(mTvLastArea);
 
-                        mTvLastArea = tvArea;
+                            mTvLastArea = tvArea;
 
-                        // 记录当前的课程标签
-                        recordCurArea(position);
+                            // 记录当前的课程标签
+                            recordCurArea(position);
 
-                        // Umeng统计
-                        UmengManager.sendCountEvent(
-                                mCourseFragment.mActivity, "Filter", "Type", "Province");
+                            // Umeng统计
+                            UmengManager.sendCountEvent(
+                                    mCourseFragment.mActivity, "Filter", "Type", "Province");
 
-                        break;
+                            break;
 
-                    case R.id.course_listview:
-                        // 课程列表
-                        skipToCoursePage(position);
-                        break;
+                        case R.id.course_listview:
+                            // 课程列表
+                            skipToCoursePage(position);
+                            break;
+                    }
                 }
-            }
-        };
+            };
 
     /**
      * 跳转至课程页面
+     *
      * @param position item位置
      */
     private static void skipToCoursePage(int position) {
@@ -449,14 +459,16 @@ public class CourseModel {
         String title = course.getName();
         String courseUrl = "";
         int courseId = course.getId();
-
+        String detailPage = course.getDetail_page().replace("m.yaoguo.cn", "dev.m.zhiboke.net");
         if ("live".equals(type)) {
             // 直播课&公开课
-            courseUrl = course.getDetail_page()
+            courseUrl = detailPage
                     + "user_id=" + LoginModel.getUserId()
                     + "&user_token=" + LoginModel.getUserToken()
-                    + "&course_id=" + String.valueOf(courseId);
-
+                    + "&course_id=" + String.valueOf(courseId)
+                    + "&app_type=quizbank"
+                    + "&app_version=" + Globals.appVersion;
+            Logger.i("courseUrl=" + courseUrl);
         } else if ("vod".equals(type)) {
             // 录播课
             if (course.is_purchased()) {
@@ -488,6 +500,7 @@ public class CourseModel {
 
     /**
      * 设置控件的选中状态
+     *
      * @param textView 控件
      */
     private static void setPopupTextViewSelect(TextView textView) {
@@ -497,6 +510,7 @@ public class CourseModel {
 
     /**
      * 取消控件的选中状态
+     *
      * @param textView 控件
      */
     private static void cancelPopupTextViewSelect(TextView textView) {
@@ -508,8 +522,9 @@ public class CourseModel {
 
     /**
      * 更新Filter文字
+     *
      * @param textView 控件
-     * @param name 名称
+     * @param name     名称
      */
     public static void changeFilterText(TextView textView, String name) {
         if (name != null && name.length() >= 5) {
@@ -525,7 +540,8 @@ public class CourseModel {
 
     /**
      * 接口回调异常处理
-     * @param apiName 接口类型
+     *
+     * @param apiName        接口类型
      * @param courseFragment 课程中心
      */
     public static void dealRespError(String apiName, CourseFragment courseFragment) {
@@ -541,6 +557,11 @@ public class CourseModel {
             // 获取课程地区接口异常
             getCourseList(courseFragment);
         }
+        if ("course_list".equals(apiName)) {
+            mCourses.clear();
+            mCourseListAdapter.notifyDataSetChanged();
+            courseFragment.netBadView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -554,6 +575,7 @@ public class CourseModel {
 
     /**
      * 获取课程列表
+     *
      * @param courseFragment CourseFragment
      */
     public static void getCourseList(CourseFragment courseFragment) {

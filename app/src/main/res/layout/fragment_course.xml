@@ -20,7 +20,7 @@
             <TextView
                 android:id="@+id/course_tag_tv"
                 style="@style/WholePagePopupMenuTv"
-                android:text="@string/course_filter_tag"/>
+                android:text="@string/course_filter_tag" />
 
             <ImageView
                 android:id="@+id/course_tag_arrow"
@@ -32,7 +32,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/common_line"/>
+            android:background="@color/common_line" />
 
         <!-- 是否购买 -->
         <RelativeLayout
@@ -42,7 +42,7 @@
             <TextView
                 android:id="@+id/course_purchase_tv"
                 style="@style/WholePagePopupMenuTv"
-                android:text="@string/course_filter_purchase"/>
+                android:text="@string/course_filter_purchase" />
 
             <ImageView
                 android:id="@+id/course_purchase_arrow"
@@ -54,7 +54,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/common_line"/>
+            android:background="@color/common_line" />
 
         <!-- 课程地区 -->
         <RelativeLayout
@@ -64,7 +64,7 @@
             <TextView
                 android:id="@+id/course_area_tv"
                 style="@style/WholePagePopupMenuTv"
-                android:text="@string/course_filter_area"/>
+                android:text="@string/course_filter_area" />
 
             <ImageView
                 android:id="@+id/course_area_arrow"
@@ -79,22 +79,23 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/course_filter"
-        android:background="@color/common_line"/>
+        android:background="@color/common_line" />
 
     <!-- 课程列表 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/course_belowfilter_line">
+
         <ListView
             android:id="@+id/course_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:clipToPadding="false"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
-            android:clipToPadding="false"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
             tools:ignore="RtlHardcoded" />
         <!-- 课程中心列表没有内容时显示的内容 -->
         <LinearLayout
@@ -102,37 +103,72 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="38dp"
                 android:layout_marginBottom="38dp"
+                android:layout_marginTop="38dp"
                 android:src="@drawable/course_null"
                 tools:ignore="ContentDescription" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:textSize="18sp"
+                android:text="@string/course_null"
                 android:textColor="@color/common_text"
-                android:text="@string/course_null"/>
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/course_qq"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="18dp"
-                android:gravity="center"
                 android:background="@color/course_filter_selected"
+                android:gravity="center"
                 android:text="@string/course_qq"
-                android:textSize="18sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
         </LinearLayout>
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/netBad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/course_belowfilter_line"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="38dp"
+            android:layout_marginTop="38dp"
+            android:src="@drawable/course_null"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/neterror"
+            android:textColor="@color/login_green"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/course_offline"
+            android:textColor="@color/login_green"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <!-- Loading页面 -->
-    <include layout="@layout/progressbar"/>
+    <include layout="@layout/progressbar" />
 
 </RelativeLayout>

@@ -20,7 +20,6 @@ public class WeiXinPay {
     public static void pay(Context context, WeiXinPayEntity entity) {
         IWXAPI iwxapi = WXAPIFactory.createWXAPI(context, null);
         iwxapi.registerApp(context.getString(R.string.weixin_appid));
-
         PayReq payReq = new PayReq();
         payReq.appId = entity.getAppId();
         payReq.partnerId = entity.getPartnerId();
@@ -29,7 +28,6 @@ public class WeiXinPay {
         payReq.nonceStr= entity.getNonceStr();
         payReq.timeStamp= entity.getTimeStamp();
         payReq.sign= entity.getSign();
-
         iwxapi.sendReq(payReq);
     }
 }

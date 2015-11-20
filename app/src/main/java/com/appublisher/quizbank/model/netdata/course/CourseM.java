@@ -15,7 +15,7 @@ public class CourseM {
     private int id;
     private ArrayList<String> lectors;
     private boolean is_sticked;
-    private int price;
+    private float price;
     private String end_time;
     private String name;
     private String start_time;
@@ -54,7 +54,7 @@ public class CourseM {
         return is_sticked;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
