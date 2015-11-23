@@ -8,6 +8,8 @@ import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.appublisher.quizbank.utils.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -267,6 +269,7 @@ public class WVJBWebViewClient extends WebViewClient {
                 }
             });
         } else {
+            Logger.i("script=" + script);
             if (callback != null) {
                 myInterface.addCallback(++uniqueId + "", callback);
                 webView.loadUrl("javascript:window." + kInterface
