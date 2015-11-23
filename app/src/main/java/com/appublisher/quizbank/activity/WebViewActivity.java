@@ -16,7 +16,6 @@ import android.view.WindowManager;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,6 +42,7 @@ import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
@@ -74,6 +74,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     public boolean mIsFromQQ;
     private static final int SDK_PAY_FLAG = 1;
     public static final int TIME_ON = 10;
+    public MyWebViewClient myWebViewClient;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -163,6 +164,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
         // 设置屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        myWebViewClient = new MyWebViewClient(mWebView);
+        myWebViewClient.enableLogging();
+        mWebView.setWebViewClient(myWebViewClient);
     }
 
     @Override
@@ -353,19 +358,37 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                 return super.onJsAlert(view, url, message, result);
             }
         });
-        mWebView.setWebViewClient(new WebViewClient() {
+        myWebViewClient.send("a message from java hello bht", new WVJBWebViewClient.WVJBResponseCallback() {
             @Override
-            public void onPageFinished(WebView view, String url) {
-                mProgressBar.setVisibility(View.GONE);
-                CourseWebViewHandler.androidSendDataToWeb();
-            }
+            public void callback(Object data) {
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
             }
         });
+//        mWebView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                mProgressBar.setVisibility(View.GONE);
+//                CourseWebViewHandler.androidSendDataToWeb();
+//                myWebViewClient.send("A string sent from android to JS", new WVJBWebViewClient.WVJBResponseCallback() {
+//                    @Override
+//                    public void callback(Object data) {
+//                        Toast.makeText(WebViewActivity.this, "发送数据" + data.toString(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                myWebViewClient.executeJavascript("A string sent from android to JS", new WVJBWebViewClient.JavascriptCallback() {
+//                    @Override
+//                    public void onReceiveValue(String value) {
+//                        ToastManager.showToast(WebViewActivity.this, "发送成功" + value);
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                view.loadUrl(url);
+//                return true;
+//            }
+//        });
     }
 
     public void aliPay(final String payInfo) {
@@ -385,4 +408,61 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         thread.start();
     }
 
+    class MyWebViewClient extends WVJBWebViewClient {
+        public MyWebViewClient(WebView webView) {
+
+            // support js send
+            super(webView, new WVJBWebViewClient.WVJBHandler() {
+
+                @Override
+                public void request(Object data, WVJBResponseCallback callback) {
+//                    Toast.makeText(WebViewActivity.this, "ObjC Received message from JS:" + data, Toast.LENGTH_LONG).show();
+                    callback.callback("Response for message from ObjC!");
+                }
+            });
+
+			/*
+            // not support js send
+			super(webView);
+			*/
+
+            enableLogging();
+
+            registerHandler("testObjcCallback", new WVJBWebViewClient.WVJBHandler() {
+
+                @Override
+                public void request(Object data, WVJBResponseCallback callback) {
+//                    Toast.makeText(WebViewActivity.this, "testObjcCallback called:" + data, Toast.LENGTH_LONG).show();
+                    callback.callback("Response from testObjcCallback!");
+                }
+            });
+
+            send("A string sent from ObjC before Webview has loaded.", new WVJBResponseCallback() {
+
+                @Override
+                public void callback(Object data) {
+//                    Toast.makeText(WebViewActivity.this, "ObjC got response! :" + data, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            try {
+                callHandler("testJavascriptHandler", new JSONObject("{\"foo\":\"before ready\" }"), new WVJBResponseCallback() {
+
+                    @Override
+                    public void callback(Object data) {
+//                        Toast.makeText(WebViewActivity.this, "ObjC call testJavascriptHandler got response! :" + data, Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+
+        }
+    }
 }

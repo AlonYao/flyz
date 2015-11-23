@@ -52,16 +52,4 @@ public class CourseWebViewHandler {
         WebViewActivity.mWebView.loadUrl("javascript:androidToWeb(" + str + ")");
         Logger.i(object.toString());
     }
-
-    @JavascriptInterface
-    public String getMyJSONData() {
-        JSONObject object = new JSONObject();
-        try {
-            object.put("orderID", "123456");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String str = object.toString();
-        return str;
-    }
 }
