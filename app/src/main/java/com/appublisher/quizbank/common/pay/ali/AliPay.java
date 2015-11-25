@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.appublisher.quizbank.activity.WebViewActivity;
-import com.appublisher.quizbank.utils.Logger;
 
 import java.lang.ref.WeakReference;
 
@@ -18,7 +17,6 @@ import java.lang.ref.WeakReference;
  * 支付宝
  */
 public class AliPay {
-    private static payCallback mPayCallback;
     private static final int SDK_PAY_FLAG = 1;
 //    private static Handler mHandler;
 
@@ -44,10 +42,6 @@ public class AliPay {
                         if (TextUtils.equals(resultStatus, "9000")) {
                             Toast.makeText(activity, "支付成功",
                                     Toast.LENGTH_LONG).show();
-                            if (mPayCallback != null) {
-                                mPayCallback.sendData();
-                                Logger.i("payback!=null");
-                            }
                         } else {
                             // 判断resultStatus 为非“9000”则代表可能支付失败
                             // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，
@@ -79,12 +73,11 @@ public class AliPay {
      * @param payInfo  支付信息
      * @param activity Activity
      */
-    public static void pay(final String payInfo, final WebViewActivity activity, final payCallback payCallback) {
+    public static void pay(final String payInfo, final WebViewActivity activity) {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mPayCallback = payCallback;
                 //在子线程中new handler 必写
                 Looper.prepare();
                 PayTask alipay = new PayTask(activity);

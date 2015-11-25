@@ -41,15 +41,15 @@ public class CourseWebViewHandler {
     /**
      * 通知WebView
      */
-    public static void androidSendDataToWeb() {
-        JSONObject object = new JSONObject();
-        try {
-            object.put("orderID", "123456");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String str = object.toString();
-        WebViewActivity.mWebView.loadUrl("javascript:androidToWeb(" + str + ")");
-        Logger.i(object.toString());
-    }
+//    public static void androidSendDataToWeb() {
+//        JSONObject object = new JSONObject();
+//        try {
+//            object.put("orderID", "123456");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        String str = object.toString();
+//        WebViewActivity.mWebView.loadUrl("javascript:androidToWeb(" + str + ")");
+//        Logger.i(object.toString());
+//    }
 }
