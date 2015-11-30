@@ -24,11 +24,13 @@ public class MeasureAnalysisModel {
 
     public static boolean mIsShowAlert;
 
+
     /**
      * 设置ViewPager
-     * @param activity MeasureAnalysisActivity
+     *
+     * @param activity  MeasureAnalysisActivity
      * @param questions 问题
-     * @param answers 答案
+     * @param answers   答案
      */
     public static void setViewPager(final MeasureAnalysisActivity activity,
                                     final ArrayList<QuestionM> questions,
@@ -52,7 +54,7 @@ public class MeasureAnalysisModel {
             public void onPageScrolled(int position, float positionOffset,
                                        int positionOffsetPixels) {
                 // 最后一页再往后滑，弹出末题引导
-                if(mCurPosition == questions.size() - 1
+                if (mCurPosition == questions.size() - 1
                         && positionOffsetPixels == 0
                         && !"study_record".equals(activity.mFrom)
                         && !"collect_or_error".equals(activity.mFrom)) {
@@ -78,6 +80,7 @@ public class MeasureAnalysisModel {
 
                 // 设置页面的状态
                 setCurPageStatus(position, activity, answers);
+
             }
 
             @Override
@@ -100,7 +103,7 @@ public class MeasureAnalysisModel {
                 String categoryName = question.getCategory_name();
                 if (categoryName == null || categoryName.length() == 0) continue;
 
-                int sizeCategory =  activity.mEntirePaperCategory.size();
+                int sizeCategory = activity.mEntirePaperCategory.size();
                 if (sizeCategory == 0) {
                     HashMap<String, Integer> map = new HashMap<>();
                     map.put(categoryName, 1);
@@ -138,9 +141,10 @@ public class MeasureAnalysisModel {
 
     /**
      * 设置页面的状态
+     *
      * @param position 页面的位置
      * @param activity MeasureAnalysisActivity
-     * @param answers 用户答案
+     * @param answers  用户答案
      */
     private static void setCurPageStatus(int position,
                                          MeasureAnalysisActivity activity,
@@ -160,8 +164,9 @@ public class MeasureAnalysisModel {
 
     /**
      * 设置收藏
+     *
      * @param activity MeasureAnalysisActivity
-     * @param item MenuItem
+     * @param item     MenuItem
      */
     public static void setCollect(MeasureAnalysisActivity activity, MenuItem item) {
         activity.mCollect = "collect";
@@ -173,8 +178,9 @@ public class MeasureAnalysisModel {
 
     /**
      * 设置未收藏
+     *
      * @param activity MeasureAnalysisActivity
-     * @param item MenuItem
+     * @param item     MenuItem
      */
     public static void setUnCollect(MeasureAnalysisActivity activity, MenuItem item) {
         activity.mCollect = "cancel";

@@ -13,22 +13,26 @@ import android.widget.TextView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.QuestionCategoryModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
 
 /**
  * 题目解析容器
  */
-public class MeasureAnalysisAdapter extends PagerAdapter{
+public class MeasureAnalysisAdapter extends PagerAdapter {
 
     private MeasureAnalysisActivity mActivity;
     private int mLastY;
     private ArrayList<QuestionM> mQuestions;
     private ArrayList<AnswerM> mAnswers;
 
-    /** 页面控件 */
+    /**
+     * 页面控件
+     */
     private TextView mTvOptionA;
     private TextView mTvOptionB;
     private TextView mTvOptionC;
@@ -182,7 +186,6 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         if (rightAnswer != null && rightAnswer.length() != 0) {
             setOptionBackground(rightAnswer, true);
         }
-
         // 处理用户答案
         dealUserAnswer(position);
 
@@ -197,7 +200,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
             sRight = sRight + "你的选择是" + mAnswers.get(position).getAnswer();
         }
         tvRightAnswer.setText(sRight);
-
+        Logger.i("9999" + question.getAnswer() + "id=" + question.getId());
         // 解析
         LinearLayout llMeasureAnalysis =
                 (LinearLayout) view.findViewById(R.id.measure_analysis_container);
@@ -208,16 +211,23 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         // 解析 知识点&来源&统计
         TextView tvNote = (TextView) view.findViewById(R.id.measure_analysis_note);
         TextView tvSource = (TextView) view.findViewById(R.id.measure_analysis_source);
-        TextView tvCategory =(TextView) view.findViewById(R.id.measure_analysis_accuracy);
+        final TextView tvCategory = (TextView) view.findViewById(R.id.measure_analysis_accuracy);
         tvNote.setText("【知识点】 " + question.getNote_name());
         tvSource.setText("【来源】 " + question.getSource());
-//        tvCategory.setText("【统计】 ");
+        tvCategory.setText("【统计】 ");
+        new QuestionCategoryModel(mActivity).getData(question.getId(), new QuestionCategoryModel.DataChange() {
+            @Override
+            public void onDataChange(String data) {
+                tvCategory.setText("【统计】 " + data);
+            }
+        });
         container.addView(view);
         return view;
     }
 
     /**
      * 处理用户答案
+     *
      * @param position 当前页面
      */
     private void dealUserAnswer(int position) {
@@ -245,6 +255,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
 
     /**
      * 设置选项背景颜色
+     *
      * @param userAnswer 用户答案
      */
     private void setOptionBackground(String userAnswer, boolean isRight) {
@@ -277,4 +288,8 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
                 break;
         }
     }
+//    @Override
+//    public int getItemPosition(Object object) {
+//        return  POSITION_NONE;
+//    }
 }

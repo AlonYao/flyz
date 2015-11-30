@@ -612,4 +612,13 @@ public class Request extends BaseRequest implements ApiConstants {
         asyncRequest(ParamBuilder.finalUrl(getAliPayUrl) + "&order_id=" + order_id,
                 "aliPay", "object");
     }
+
+    /**
+     * 获取单个问题的统计信息
+     *
+     * @param question_id
+     */
+    public void getQuestionCategory(int question_id) {
+        asyncRequest(ParamBuilder.finalUrl(getQuestionCategoryInfo) + "&question_id=" + question_id, "question_category", "object");
+    }
 }

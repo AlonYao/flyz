@@ -165,7 +165,8 @@ public interface ApiConstants {
     String getWXPayUrl = baseUrl + "payment/get_wxpay_params";
     //获取支付宝支付
     String getAliPayUrl = baseUrl + "payment/get_alipay_params";
-
+    //获取单个问题的统计信息
+    String getQuestionCategoryInfo = baseUrl + "quizbank/get_question_summary";
     /**
      * 模考
      */

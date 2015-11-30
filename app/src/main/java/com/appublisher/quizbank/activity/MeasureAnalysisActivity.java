@@ -69,7 +69,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     private long mPopupDismissTime;
     private PopupWindow mPopupWindow;
-    private Request mRequest;
+    public Request mRequest;
     private HomeWatcher mHomeWatcher;
 
     /** Umeng */
@@ -483,7 +483,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if ("collect_error_questions".equals(apiName)) dealMeasureAnalysisResp(response);
 
         if ("history_exercise_detail".equals(apiName)) dealMeasureAnalysisResp(response);
-
         ProgressDialogManager.closeProgressDialog();
     }
 
