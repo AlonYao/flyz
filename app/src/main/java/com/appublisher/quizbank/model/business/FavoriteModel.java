@@ -78,6 +78,8 @@ public class FavoriteModel {
                         1,
                         hierarchy.getCategory_id(),
                         hierarchy.getName(),
+                        hierarchy.getDone(),
+                        hierarchy.getTotal(),
                         "collect"));
 
         root.addChild(firstRoot);
@@ -122,6 +124,8 @@ public class FavoriteModel {
                             2,
                             noteGroup.getGroup_id(),
                             noteGroup.getName(),
+                            noteGroup.getDone(),
+                            noteGroup.getTotal(),
                             "collect"));
             firstRoot.addChild(secondRoot);
 
@@ -147,6 +151,8 @@ public class FavoriteModel {
                             3,
                             note.getNote_id(),
                             note.getName(),
+                            note.getDone(),
+                            note.getTotal(),
                             "collect"));
             secondRoot.addChild(thirdRoot);
         }

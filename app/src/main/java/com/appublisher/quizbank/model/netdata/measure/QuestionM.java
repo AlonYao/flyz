@@ -21,7 +21,6 @@ public class QuestionM implements Serializable{
     String category_name;
     String source;
     int accuracy;
-
     public String getCategory_name() {
         return category_name;
     }

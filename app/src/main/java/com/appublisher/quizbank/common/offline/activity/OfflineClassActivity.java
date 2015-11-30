@@ -34,7 +34,7 @@ import java.util.HashMap;
 /**
  * 离线模块课程列表
  */
-public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener{
+public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener {
 
     public int mMenuStatus; // 1：下载 2：删除
     public Button mBtnBottom;
@@ -42,14 +42,18 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     public String mFrom;
     public int mCourseId;
 
-    /** static **/
+    /**
+     * static
+     **/
     public HashMap<Integer, Boolean> mSelectedMap; // 用来控制CheckBox的选中状况
     public static PurchasedClassesAdapter mAdapter;
     public static Handler mHandler;
     public ArrayList<PurchasedClassM> mClasses;
     public static ListView mLv;
 
-    /** final **/
+    /**
+     * final
+     **/
     public final static int DOWNLOAD_PROGRESS = 1;
     public final static int DOWNLOAD_FINISH = 2;
 
@@ -112,8 +116,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String roomId = OfflineModel.getRoomIdByPosition(
                         OfflineClassActivity.this, position);
-                Logger.i("roomId=="+roomId);
-                if (OfflineModel.isRoomIdDownload(roomId) && mMenuStatus != 2) {
+                Logger.i("roomId==" + roomId);
+                if (OfflineModel.isRoomIdDownload(roomId, mCourseId) && mMenuStatus != 2) {
                     // 如果视频已经成功下载，且不是删除状态
                     String url = DuobeiYunClient.playUrl(roomId);
                     Intent intent = new Intent(
@@ -125,11 +129,15 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
                 } else if (mMenuStatus == 1 || mMenuStatus == 2) {
                     CheckBox cb = (CheckBox) view.findViewById(R.id.item_purchased_classes_cb);
-
                     if (cb.getVisibility() == View.GONE) return;
-
                     cb.toggle();
-                    mSelectedMap.put(position, cb.isChecked());
+                    if (cb.isChecked()) {
+                        mSelectedMap.put(position, cb.isChecked());
+                        Logger.i("mokao_map_put" + position);
+                    } else {
+                        mSelectedMap.remove(position);
+                        Logger.i("mokao_map_remove" + position);
+                    }
                 }
             }
         });
@@ -170,28 +178,28 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             finish();
 
         } else if ("删除".equals(item.getTitle())) {
-            mMenuStatus = 2;
-            invalidateOptionsMenu();
-
             OfflineModel.initSelectedMap(this);
-
             mAdapter.notifyDataSetChanged();
-
-            mBtnBottom.setVisibility(View.VISIBLE);
-            mBtnBottom.setText(R.string.offline_delete_btn);
-
+            if (!mAdapter.isDelete) {
+                ToastManager.showToast(this, "没有已下载视频");
+            } else {
+                mMenuStatus = 2;
+                invalidateOptionsMenu();
+                mBtnBottom.setVisibility(View.VISIBLE);
+                mBtnBottom.setText(R.string.offline_delete_btn);
+            }
         } else if ("下载".equals(item.getTitle())) {
-            mMenuStatus = 1;
-            invalidateOptionsMenu();
-
             mAdapter.notifyDataSetChanged();
-
-            mBtnBottom.setVisibility(View.VISIBLE);
-            mBtnBottom.setText(R.string.offline_download_btn);
-
+            if (mAdapter.isDownload) {//不可点
+                ToastManager.showToast(this, "没有可以下载的视频");
+            } else {
+                mMenuStatus = 1;
+                invalidateOptionsMenu();
+                mBtnBottom.setVisibility(View.VISIBLE);
+                mBtnBottom.setText(R.string.offline_download_btn);
+            }
         } else if ("全选".equals(item.getTitle())) {
             if (mClasses == null) return super.onOptionsItemSelected(item);
-
             int size = mClasses.size();
             for (int i = 0; i < size; i++) {
                 if (mAllSelectFlag == 0) {
@@ -288,6 +296,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                     // 删除
                     ArrayList<Integer> list = new ArrayList<>();
 
+                    ArrayList<String> roomIds = new ArrayList<>();
+
                     // 数据异常处理
                     if (mClasses == null) return;
 
@@ -295,21 +305,58 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                     for (int i = 0; i < size; i++) {
                         if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
                             list.add(i);
+                            String roomId = OfflineModel.getRoomIdByPosition(this, i);
+                            roomIds.add(roomId);
                         }
                     }
-
                     for (Integer position : list) {
                         String roomId = OfflineModel.getRoomIdByPosition(this, position);
+                        if (OfflineConstants.mDownloadList != null && OfflineConstants.mDownloadList.size() != 0) {
+                            ArrayList<HashMap<String, Object>> downList = OfflineConstants.mDownloadList;
+                            for (int i = 0; i < downList.size(); i++) {
+                                HashMap<String, Object> map = downList.get(i);
+                                String downListRoomId = (String) map.get("room_id");
+                                if (downListRoomId.equals(roomId)) {
+                                    OfflineConstants.mDownloadList.remove(i);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    mAdapter.notifyDataSetChanged();
+                    //此操作最后遍历，因为对classes长度有影响
+//                    for (Integer position : list) {
+//                        String roomId = OfflineModel.getRoomIdByPosition(this, position);
+//                        Logger.i("mokao_remove_class_roomid" + roomId);
+//                        try {
+//                            OfflineDAO.deleteRoomId(roomId, mCourseId);
+//                            if (mFrom.equals("local"))//如果是本地的直接删除行
+//                            {
+//                                mClasses.remove((int) position);
+//                                Logger.i("mokao_remove_" + position);
+//                            }
+//
+//                            mAdapter.notifyDataSetChanged();
+//                        } catch (Exception e) {
+//                            // Empty
+//                        }
+//                    }
+                    for (String deleteRoomId : roomIds) {
                         try {
-                            DuobeiYunClient.delete(roomId);
-                            OfflineDAO.deleteRoomId(roomId);
-                            mClasses.remove((int) position);
-                            mAdapter.notifyDataSetChanged();
+                            OfflineDAO.deleteRoomId(deleteRoomId, mCourseId);
                         } catch (Exception e) {
                             // Empty
                         }
-                    }
+                        if (mFrom.equals("local"))
+                            for (int i = 0; i < mClasses.size(); i++) {
+                                String roomId = OfflineModel.getRoomIdByPosition(this, i);
+                                if (deleteRoomId.equals(roomId)) {
+                                    mClasses.remove(i);
+                                    break;
+                                }
 
+                            }
+                    }
                     OfflineModel.setCancel(this);
                 }
 

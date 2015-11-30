@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="55dp"
+    android:background="@android:color/white"
     android:minHeight="55dp"
-    android:background="@android:color/white">
+    android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#D8D8D8"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:background="#D8D8D8" />
 
     <ImageView
         android:id="@+id/toggle"
@@ -18,17 +18,36 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="18dp"
-        android:src="@drawable/treeview_add"/>
+        android:src="@drawable/treeview_add" />
 
     <TextView
         android:id="@+id/treeview_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="35dp"
         android:layout_centerVertical="true"
-        android:textSize="18sp"
+        android:layout_marginLeft="35dp"
+        android:text="@string/hierarchy_name"
         android:textColor="@color/common_text"
-        android:text="@string/hierarchy_name"/>
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/treeview_name"
+        android:textColor="@color/common_text"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/done"
+        android:textColor="@color/common_text"
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/treeview_do"
@@ -37,21 +56,21 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="18dp"
-        android:src="@drawable/treeview_do"/>
+        android:src="@drawable/treeview_do" />
 
     <ImageView
         android:id="@+id/treeview_watch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/treeview_do"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
-        android:src="@drawable/treeview_watch"/>
+        android:layout_toLeftOf="@id/treeview_do"
+        android:src="@drawable/treeview_watch" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#D8D8D8"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:background="#D8D8D8" />
 
 </RelativeLayout>

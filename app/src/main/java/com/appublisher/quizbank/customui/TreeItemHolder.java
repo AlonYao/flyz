@@ -16,7 +16,7 @@ import com.unnamed.b.atv.model.TreeNode;
 /**
  * 树形结构容器
  */
-public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.TreeItem>{
+public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.TreeItem> {
     private ImageView mIvToggle;
 
     public TreeItemHolder(Context context) {
@@ -52,10 +52,12 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         TextView tvName = (TextView) view.findViewById(R.id.treeview_name);
         ImageView ivDo = (ImageView) view.findViewById(R.id.treeview_do);
         ImageView ivWatch = (ImageView) view.findViewById(R.id.treeview_watch);
-
+        TextView doneText = (TextView) view.findViewById(R.id.done);
+        TextView totalText = (TextView) view.findViewById(R.id.total);
         // 知识点层级名字
         tvName.setText(value.name);
-
+        doneText.setText(value.done + "/");
+        totalText.setText(value.total + "");
         // 做题按钮
         ivDo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,12 +121,16 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         public int id;
         public String name;
         public String note_type;
+        public int done;
+        public int total;
 
-        public TreeItem(int level, int id, String name, String note_type) {
+        public TreeItem(int level, int id, String name, int done, int total, String note_type) {
             this.level = level;
             this.id = id;
             this.name = name;
             this.note_type = note_type;
+            this.total = total;
+            this.done = done;
         }
     }
 }

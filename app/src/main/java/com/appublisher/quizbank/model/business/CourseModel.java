@@ -455,12 +455,12 @@ public class CourseModel {
 
         CourseM course = mCourses.get(position);
         if (course == null) return;
-
         String type = course.getType();
         String title = course.getName();
         String courseUrl = "";
         int courseId = course.getId();
-        String detailPage = course.getDetail_page().replace("m.yaoguo.cn", "dev.m.zhiboke.net");
+        String detailPage = course.getDetail_page();
+//        String detailPage = course.getDetail_page().replace("m.yaoguo.cn", "dev.m.zhiboke.net");
         if ("live".equals(type)) {
             // 直播课&公开课
             courseUrl = detailPage
@@ -489,6 +489,7 @@ public class CourseModel {
         intent.putExtra("url", courseUrl);
         intent.putExtra("bar_title", title == null ? "" : title);
         intent.putExtra("from", "course");
+        intent.putExtra("course_id", courseId);
         mCourseFragment.startActivityForResult(intent, ActivitySkipConstants.COURSE);
 
         // Umeng统计

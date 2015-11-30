@@ -9,7 +9,20 @@ public class HierarchyM {
     int category_id;
     String name;
     ArrayList<NoteGroupM> note_group;
-
+    int done;
+    int total;
+    public  int getDone(){
+        return  done;
+    }
+    public  int getTotal(){
+        return  total;
+    }
+    public void setDone(int done){
+        this.done = done;
+    }
+    public  void setTotal(int total){
+        this.total= total;
+    }
     public int getCategory_id() {
         return category_id;
     }

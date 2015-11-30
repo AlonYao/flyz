@@ -19,10 +19,12 @@ import java.util.ArrayList;
 /**
  * 已购课程列表Adapter
  */
-public class PurchasedClassesAdapter extends BaseAdapter{
+public class PurchasedClassesAdapter extends BaseAdapter {
 
     private OfflineClassActivity mActivity;
     private ArrayList<PurchasedClassM> mClasses;
+    public boolean isDelete = false;
+    public boolean isDownload = true;//下载按钮是否可点
 
     public PurchasedClassesAdapter(OfflineClassActivity activity,
                                    ArrayList<PurchasedClassM> classes) {
@@ -79,8 +81,9 @@ public class PurchasedClassesAdapter extends BaseAdapter{
 
     /**
      * 设置内容
+     *
      * @param viewHolder ViewHolder
-     * @param position 位置
+     * @param position   位置
      */
     private void setContent(ViewHolder viewHolder, int position) {
         if (mClasses == null || position >= mClasses.size()) return;
@@ -128,42 +131,43 @@ public class PurchasedClassesAdapter extends BaseAdapter{
 
             case 2:
                 // 可下载
-                boolean isRoomIdDownload = OfflineModel.isRoomIdDownload(classM.getRoom_id());
-                if (isRoomIdDownload && mActivity.mMenuStatus == 2 ) {
+                boolean isRoomIdDownload = OfflineModel.isRoomIdDownload(classM.getRoom_id(), mActivity.mCourseId);
+                if (isRoomIdDownload && mActivity.mMenuStatus == 2) {
                     // 已下载 且 在删除状态
                     viewHolder.ivPlay.setVisibility(View.GONE);
                     viewHolder.tvStatus.setVisibility(View.GONE);
                     viewHolder.cb.setVisibility(View.VISIBLE);
                     viewHolder.cb.setChecked(OfflineModel.isPositionSelected(mActivity, position));
-
+                    isDelete = true;
                 } else if (isRoomIdDownload) {
                     // 已下载 且 不在删除状态
                     viewHolder.ivPlay.setVisibility(View.VISIBLE);
                     viewHolder.tvStatus.setVisibility(View.GONE);
                     viewHolder.cb.setVisibility(View.GONE);
-
                 } else {
                     // 未下载
                     viewHolder.ivPlay.setVisibility(View.GONE);
-
-                    if (OfflineModel.isRoomIdInDownloadList(classM.getRoom_id())) {
+                    if (OfflineModel.isRoomIdInDownloadList(classM.getRoom_id(), mActivity.mCourseId)) {
                         // 该任务在下载队列中
                         viewHolder.tvStatus.setVisibility(View.VISIBLE);
-
+                        viewHolder.cb.setVisibility(View.GONE);
                         if (OfflineConstants.mCurDownloadRoomId.equals(classM.getRoom_id())
                                 && OfflineConstants.mStatus == OfflineConstants.PROGRESS) {
                             String text = String.valueOf(OfflineConstants.mPercent) + "%";
                             viewHolder.tvStatus.setText(text);
+                        } else if (mActivity.mMenuStatus == 2) {
+                            viewHolder.ivPlay.setVisibility(View.GONE);
+                            viewHolder.tvStatus.setVisibility(View.GONE);
+                            viewHolder.cb.setVisibility(View.VISIBLE);
+                            viewHolder.cb.setChecked(OfflineModel.isPositionSelected(mActivity, position));
+                            isDelete = true;
                         } else {
                             viewHolder.tvStatus.setText(R.string.offline_waiting);
                         }
-
-                        viewHolder.cb.setVisibility(View.GONE);
-
                     } else {
                         // 该任务没有被下载
                         viewHolder.tvStatus.setVisibility(View.GONE);
-
+                        isDownload = false;
                         if (mActivity.mMenuStatus == 1) {
                             viewHolder.cb.setVisibility(View.VISIBLE);
                             viewHolder.cb.setChecked(

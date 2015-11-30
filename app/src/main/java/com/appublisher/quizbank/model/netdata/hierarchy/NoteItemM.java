@@ -6,7 +6,20 @@ package com.appublisher.quizbank.model.netdata.hierarchy;
 public class NoteItemM {
     int note_id;
     String name;
-
+    int done;
+    int total;
+    public  int getDone(){
+        return  done;
+    }
+    public  int getTotal(){
+        return  total;
+    }
+    public void setDone(int done){
+        this.done = done;
+    }
+    public  void setTotal(int total){
+        this.total= total;
+    }
     public int getNote_id() {
         return note_id;
     }

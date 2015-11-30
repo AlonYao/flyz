@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.offline.model.business;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import com.appublisher.quizbank.common.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.common.offline.network.OfflineRequest;
 import com.appublisher.quizbank.utils.FileManager;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -39,6 +41,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 离线模块逻辑层
@@ -53,6 +56,7 @@ public class OfflineModel {
 
     /**
      * 获取本地下载的RoomId列表
+     *
      * @return ArrayList
      */
     public static ArrayList<String> getLocalRoomIdList() {
@@ -81,6 +85,7 @@ public class OfflineModel {
 
     /**
      * 获取本地已经下载完成的课程列表
+     *
      * @return ArrayList
      */
     public static ArrayList<PurchasedCourseM> getLocalCourseList(Activity activity) {
@@ -93,7 +98,6 @@ public class OfflineModel {
 
         ArrayList<PurchasedCourseM> courses = resp.getList();
         if (courses == null) return null;
-
         Iterator<PurchasedCourseM> iCourses = courses.iterator();
         while (iCourses.hasNext()) {
             PurchasedCourseM course = iCourses.next();
@@ -107,8 +111,8 @@ public class OfflineModel {
                 PurchasedClassM classM = iClasses.next();
                 if (classM == null) continue;
                 // 如果本地没有下载成功记录 且 不在下载队列中，则移除
-                if (!isRoomIdDownload(classM.getRoom_id())
-                        && !isRoomIdInDownloadList(classM.getRoom_id())) {
+                if (!isRoomIdDownload(classM.getRoom_id(), course.getId())
+                        && !isRoomIdInDownloadList(classM.getRoom_id(), course.getId())) {
                     iClasses.remove();
                 }
             }
@@ -123,6 +127,7 @@ public class OfflineModel {
 
     /**
      * 获取本地保存的已购数据
+     *
      * @return String
      */
     private static String getLocalSave(Activity activity) {
@@ -139,6 +144,7 @@ public class OfflineModel {
 
     /**
      * 判断RoomId在本地是否存在
+     *
      * @param roomId roomId
      * @return Boolean
      */
@@ -157,8 +163,9 @@ public class OfflineModel {
 
     /**
      * 处理已购课程列表回调
+     *
      * @param activity OfflineActivity
-     * @param resp 回调数据
+     * @param resp     回调数据
      */
     @SuppressLint("CommitPrefEdits")
     public static void dealPurchasedCoursesResp(final OfflineActivity activity,
@@ -198,6 +205,7 @@ public class OfflineModel {
 
     /**
      * 按下全部按钮时的View变化
+     *
      * @param activity OfflineActivity
      */
     public static void pressAllBtn(OfflineActivity activity) {
@@ -214,6 +222,7 @@ public class OfflineModel {
 
     /**
      * 按下已下载按钮时的View变化
+     *
      * @param activity OfflineActivity
      */
     public static void pressLocalBtn(OfflineActivity activity) {
@@ -229,6 +238,7 @@ public class OfflineModel {
 
     /**
      * 通过位置返回CheckBox
+     *
      * @param activity OfflineClassActivity
      * @param position 位置
      * @return CheckBox
@@ -240,7 +250,7 @@ public class OfflineModel {
         PurchasedClassM classM = activity.mClasses.get(position);
         // 不能下载或已下载（已下载时，删除页面需要显示CheckBox）时，不显示CheckBox
         if (classM == null || classM.getStatus() != 2
-                || (isRoomIdDownload(classM.getRoom_id()) && activity.mMenuStatus != 2))
+                || (isRoomIdDownload(classM.getRoom_id(), activity.mCourseId) && activity.mMenuStatus != 2))
             return null;
 
         View view = Utils.getViewByPosition(position, OfflineClassActivity.mLv);
@@ -249,6 +259,7 @@ public class OfflineModel {
 
     /**
      * 设置取消状态
+     *
      * @param activity OfflineClassActivity
      */
     public static void setCancel(OfflineClassActivity activity) {
@@ -265,6 +276,7 @@ public class OfflineModel {
 
     /**
      * 通过位置获取RoomId
+     *
      * @param position 位置
      * @return RoomId
      */
@@ -274,12 +286,12 @@ public class OfflineModel {
 
         PurchasedClassM classM = activity.mClasses.get(position);
         if (classM == null) return null;
-
         return classM.getRoom_id();
     }
 
     /**
      * 通过位置获取课堂名称（Class）
+     *
      * @param position 位置
      * @return 课堂名称
      */
@@ -294,18 +306,44 @@ public class OfflineModel {
     }
 
     /**
-     * 判断RoomId是否被成功下载
+     * 判断RoomId是否被成功下载,需要课程id
+     *
      * @param roomId roomId
      * @return Boolean
      */
-    public static boolean isRoomIdDownload(String roomId) {
+    public static boolean isRoomIdDownload(String roomId, int course_id) {
         if (roomId == null) return false;
-        Offline item = OfflineDAO.findByRoomId(roomId);
-        return item != null && item.is_success == 1;
+        List<Offline> items = OfflineDAO.findByRoomId(roomId);
+        if (items != null && items.size() != 0) {
+            for (int i = 0; i < items.size(); i++) {
+                Offline item = items.get(i);
+                if (item.is_success == 1 && item.course_id == course_id)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断RoomId是否被成功下载,成功下载后记录第二次下载课程的ID
+     *
+     * @param roomId roomId
+     * @return Boolean
+     */
+    public static boolean roomIdDownloaded(Context context, String roomId, int course_id) {
+        if (roomId == null) return false;
+        List<Offline> items = OfflineDAO.findByRoomId(roomId);
+        if (items != null && items.size() != 0) {
+            Logger.i("mokao_laoded_items=" + items.size());
+            OfflineDAO.saveRoomId(roomId, course_id);
+            return true;
+        }
+        return false;
     }
 
     /**
      * 显示本地视频列表
+     *
      * @param activity OfflineActivity
      */
     public static void showLocalList(final OfflineActivity activity) {
@@ -337,6 +375,7 @@ public class OfflineModel {
 
     /**
      * 显示已购视频列表
+     *
      * @param activity OfflineActivity
      */
     public static void showAllList(final OfflineActivity activity) {
@@ -351,6 +390,7 @@ public class OfflineModel {
 
     /**
      * 重置选中Map
+     *
      * @param activity OfflineClassActivity
      */
     public static void initSelectedMap(OfflineClassActivity activity) {
@@ -364,6 +404,7 @@ public class OfflineModel {
 
     /**
      * 判断指定位置是否被选定
+     *
      * @param activity OfflineClassActivity
      * @param position 位置
      * @return 是否
@@ -376,6 +417,7 @@ public class OfflineModel {
 
     /**
      * 开始下载
+     *
      * @param activity OfflineClassActivity
      */
     public static void startDownload(final OfflineClassActivity activity) {
@@ -393,7 +435,8 @@ public class OfflineModel {
         // 已下载 或者 roomId非法 则进行下一项
         if (OfflineConstants.mCurDownloadRoomId == null
                 || OfflineConstants.mCurDownloadRoomId.length() == 0
-                || isRoomIdDownload(OfflineConstants.mCurDownloadRoomId)) {
+                || roomIdDownloaded(activity, OfflineConstants.mCurDownloadRoomId, activity.mCourseId)) {
+            activity.mAdapter.notifyDataSetChanged();
             removeTopRoomId();
             startDownload(activity);
             return;
@@ -434,6 +477,7 @@ public class OfflineModel {
 
                         // 记录下载状态
                         OfflineConstants.mPercent = progress;
+                        Logger.i("progress="+progress);
                         OfflineConstants.mLastTimestamp = System.currentTimeMillis();
                         OfflineConstants.mStatus = OfflineConstants.PROGRESS;
                         mListener.onProgress(progress);
@@ -446,7 +490,7 @@ public class OfflineModel {
                         FileManager.deleteFiles(filePath);
 
                         // 更新数据库
-                        OfflineDAO.saveRoomId(OfflineConstants.mCurDownloadRoomId);
+                        OfflineDAO.saveRoomId(OfflineConstants.mCurDownloadRoomId, activity.mCourseId);
 
                         mListener.onFinish();
 
@@ -473,16 +517,18 @@ public class OfflineModel {
 
     /**
      * 判断RoomId是否在下载队列中
+     *
      * @param roomId RoomId
      * @return 是否
      */
-    public static boolean isRoomIdInDownloadList(String roomId) {
+    public static boolean isRoomIdInDownloadList(String roomId, int course_id) {
         if (OfflineConstants.mDownloadList == null || roomId == null) return false;
 
         for (HashMap<String, Object> map : OfflineConstants.mDownloadList) {
             if (map == null) continue;
             String mapRoomId = (String) map.get("room_id");
-            if (roomId.equals(mapRoomId)) return true;
+            int courseId = (int) map.get("course_id");
+            if (roomId.equals(mapRoomId) && course_id == courseId) return true;
         }
 
         return false;
@@ -616,7 +662,7 @@ public class OfflineModel {
         editor.commit();
     }
 
-    public interface downloadProgressListener{
+    public interface downloadProgressListener {
         void onProgress(int progress);
 
         void onFinish();

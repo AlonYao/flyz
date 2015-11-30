@@ -261,7 +261,7 @@ public class LoginModel {
 
         Configuration.Builder builder = new Configuration.Builder(context);
         builder.setDatabaseName(databaseName);
-        builder.setDatabaseVersion(4);
+        builder.setDatabaseVersion(5);
         ActiveAndroid.initialize(builder.create());
         Globals.db_initialize = true;
     }

@@ -32,6 +32,9 @@ import com.appublisher.quizbank.common.pay.weixin.WeiXinPayEntity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.CourseWebViewHandler;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
+import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
+import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
+import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
@@ -74,6 +77,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     private static final int SDK_PAY_FLAG = 1;
     public static final int TIME_ON = 10;
     public static boolean isPaySuccess = false;
+    private String barTitle;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -154,7 +158,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
         if (mUmengTimestamp == 0) mUmengTimestamp = System.currentTimeMillis();
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
-        String barTitle = getIntent().getStringExtra("bar_title");
+        barTitle = getIntent().getStringExtra("bar_title");
 
         // 设置Bar Name
         CommonModel.setBarTitle(this, barTitle == null ? "" : barTitle);
@@ -269,7 +273,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             MenuItemCompat.setShowAsAction(menu.add("咨询"),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
-
+        if ("course".equals(mFrom)) {
+            MenuItemCompat.setShowAsAction(menu.add("分享"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -286,8 +292,26 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             mUmengQQ = "1";
 
             OpenCourseModel.setMarketQQ(this);
-        }
+        } else if ("分享".equals(item.getTitle())) {
+            /** 构造友盟分享实体 **/
+            UmengShareEntity umengShareEntity = new UmengShareEntity();
+            umengShareEntity.setActivity(this);
+            umengShareEntity.setContent("听说上过" + barTitle + ",一口气上岸不费劲儿～");
+            umengShareEntity.setFrom("course_detail");
 
+            // 友盟分享文字处理
+            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+            umShareContentEntity.setType("course_detail");
+            umShareContentEntity.setExamName(barTitle);
+
+            // 友盟分享跳转链接处理
+            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+            urlEntity.setType("course_detail");
+            int course_id = getIntent().getIntExtra("course_id", -1);
+            urlEntity.setCourse_id(course_id);
+            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+            UmengManager.openShare(umengShareEntity);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -301,18 +325,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         if ("wxPay".equals(apiName)) {
             Logger.i("wxPay=" + response.toString());
             WeiXinPayEntity weiXinPayEntity = GsonManager.getObejctFromJSON(response.toString(), WeiXinPayEntity.class);
-//            WeiXinPay weiXinPay = new WeiXinPay(WebViewActivity.this, weiXinPayEntity);
             WeiXinPay.pay(WebViewActivity.this, weiXinPayEntity);
-//            PayReq payReq = new PayReq();
-//            payReq.appId = weiXinPayEntity.getAppId();
-//            payReq.partnerId = weiXinPayEntity.getPartnerId();
-//            payReq.prepayId = weiXinPayEntity.getPrepayId();
-//            payReq.packageValue = weiXinPayEntity.getPackageValue();
-//            payReq.nonceStr = weiXinPayEntity.getNonceStr();
-//            payReq.timeStamp = weiXinPayEntity.getTimeStamp();
-//            payReq.sign = weiXinPayEntity.getSign();
-//            Logger.i(weiXinPayEntity.toString());
-//            iwxapi.sendReq(payReq);
         }
         if ("aliPay".equals(apiName)) {
             Logger.i("aliPay=" + response.toString());

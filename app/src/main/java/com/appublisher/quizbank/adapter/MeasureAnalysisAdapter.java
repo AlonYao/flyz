@@ -205,13 +205,13 @@ public class MeasureAnalysisAdapter extends PagerAdapter{
         MeasureModel.addRichTextToContainer(
                 mActivity, llMeasureAnalysis, "【解析】 " + question.getAnalysis(), true);
 
-        // 解析 知识点&来源
+        // 解析 知识点&来源&统计
         TextView tvNote = (TextView) view.findViewById(R.id.measure_analysis_note);
         TextView tvSource = (TextView) view.findViewById(R.id.measure_analysis_source);
-
+        TextView tvCategory =(TextView) view.findViewById(R.id.measure_analysis_accuracy);
         tvNote.setText("【知识点】 " + question.getNote_name());
         tvSource.setText("【来源】 " + question.getSource());
-
+//        tvCategory.setText("【统计】 ");
         container.addView(view);
         return view;
     }

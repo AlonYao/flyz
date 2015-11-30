@@ -64,6 +64,8 @@ public class SpecialProjectModel {
                         1,
                         hierarchy.getCategory_id(),
                         hierarchy.getName(),
+                        hierarchy.getDone(),
+                        hierarchy.getTotal(),
                         "note"));
 
         root.addChild(firstRoot);
@@ -108,6 +110,8 @@ public class SpecialProjectModel {
                             2,
                             noteGroup.getGroup_id(),
                             noteGroup.getName(),
+                            noteGroup.getDone(),
+                            noteGroup.getTotal(),
                             "note"));
             firstRoot.addChild(secondRoot);
 
@@ -133,6 +137,8 @@ public class SpecialProjectModel {
                             3,
                             note.getNote_id(),
                             note.getName(),
+                            note.getDone(),
+                            note.getTotal(),
                             "note"));
             secondRoot.addChild(thirdRoot);
         }

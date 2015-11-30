@@ -12,6 +12,7 @@ public class UMShareUrlEntity {
     String paper_type; // 练习类型：mini模考、快速智能练习等等
     String name; // 试卷名称
     int question_id; // 题目id
+    int course_id;//课程id
 
     public int getQuestion_id() {
         return question_id;
@@ -68,4 +69,16 @@ public class UMShareUrlEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public int getCourse_id()
+
+    {
+        return course_id;
+    }
+
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
+    }
+
+
 }

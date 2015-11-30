@@ -162,7 +162,6 @@ public class UmengManager {
         String content = umengShareEntity.getContent();
         if (content == null || content.length() == 0)
             content = activity.getString(R.string.app_name);
-
         // 初始化跳转地址
         String url = umengShareEntity.getUrl() == null ? "" : umengShareEntity.getUrl();
 
@@ -403,6 +402,8 @@ public class UmengManager {
             // 单题解析
             return "http://share.zhiboke.net/question.php?question_id="
                     + urlEntity.getQuestion_id();
+        } else if ("course_detail".equals(urlEntity.getType())) {
+            return "http://m.yaoguo.cn/terminalType/shareCourse.html?course_id=" + urlEntity.getCourse_id();
         }
 
         return "";

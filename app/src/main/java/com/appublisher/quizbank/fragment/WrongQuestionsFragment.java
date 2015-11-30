@@ -34,7 +34,7 @@ import java.util.ArrayList;
 /**
  * 错题本
  */
-public class WrongQuestionsFragment extends Fragment implements RequestCallback{
+public class WrongQuestionsFragment extends Fragment implements RequestCallback {
 
     private Activity mActivity;
     private LinearLayout mContainer;
@@ -99,6 +99,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
     /**
      * 处理知识点层级（错题）回调
+     *
      * @param response 回调对象
      */
     private void dealNoteHierarchyResp(JSONObject response) {
@@ -140,6 +141,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
     /**
      * 添加知识点层级第一层
+     *
      * @param hierarchy 第一层数据
      */
     private void addHierarchy(HierarchyM hierarchy) {
@@ -152,6 +154,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
                         1,
                         hierarchy.getCategory_id(),
                         hierarchy.getName(),
+                        hierarchy.getDone(),
+                        hierarchy.getTotal(),
                         "error"));
 
         root.addChild(firstRoot);
@@ -180,7 +184,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
     /**
      * 添加第二层级
-     * @param firstRoot 第一层级节点
+     *
+     * @param firstRoot  第一层级节点
      * @param noteGroups 第二层级数据
      */
     private void addNoteGroup(TreeNode firstRoot, ArrayList<NoteGroupM> noteGroups) {
@@ -196,6 +201,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
                             2,
                             noteGroup.getGroup_id(),
                             noteGroup.getName(),
+                            noteGroup.getDone(),
+                            noteGroup.getTotal(),
                             "error"));
             firstRoot.addChild(secondRoot);
 
@@ -205,8 +212,9 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
 
     /**
      * 添加第三层
+     *
      * @param secondRoot 第二层级节点
-     * @param notes 第三层级数据
+     * @param notes      第三层级数据
      */
     private void addNotes(TreeNode secondRoot, ArrayList<NoteItemM> notes) {
         if (notes == null || notes.size() == 0) return;
@@ -221,6 +229,8 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback{
                             3,
                             note.getNote_id(),
                             note.getName(),
+                            note.getDone(),
+                            note.getTotal(),
                             "error"));
             secondRoot.addChild(thirdRoot);
         }

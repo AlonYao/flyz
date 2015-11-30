@@ -9,7 +9,20 @@ public class NoteGroupM {
     int group_id;
     String name;
     ArrayList<NoteItemM> notes;
-
+    int done;
+    int total;
+    public  int getDone(){
+        return  done;
+    }
+    public  int getTotal(){
+        return  total;
+    }
+    public void setDone(int done){
+        this.done = done;
+    }
+    public  void setTotal(int total){
+        this.total= total;
+    }
     public int getGroup_id() {
         return group_id;
     }
