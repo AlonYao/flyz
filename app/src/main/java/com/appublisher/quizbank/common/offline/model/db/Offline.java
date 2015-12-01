@@ -19,4 +19,5 @@ public class Offline extends Model {
 
     @Column(name = "course_id")
     public int course_id;
+
 }
