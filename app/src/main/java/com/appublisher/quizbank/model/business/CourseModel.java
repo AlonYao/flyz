@@ -560,7 +560,8 @@ public class CourseModel {
             getCourseList(courseFragment);
         }
         if ("course_list".equals(apiName)) {
-            mCourses.clear();
+            if (mCourses != null)
+                mCourses.clear();
             mCourseListAdapter.notifyDataSetChanged();
             courseFragment.netBadView.setVisibility(View.VISIBLE);
         }

@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,13 +19,11 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alipay.sdk.app.PayTask;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.pay.ali.AliPayResult;
+import com.appublisher.quizbank.common.pay.ali.AliPay;
 import com.appublisher.quizbank.common.pay.weixin.WeiXinPay;
 import com.appublisher.quizbank.common.pay.weixin.WeiXinPayEntity;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -74,7 +71,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     public Timer mTimer;
     public boolean mHasShowOpenCourseConsult;
     public boolean mIsFromQQ;
-    private static final int SDK_PAY_FLAG = 1;
+    //    private static final int SDK_PAY_FLAG = 1;
     public static final int TIME_ON = 10;
     public static boolean isPaySuccess = false;
     private String barTitle;
@@ -95,33 +92,33 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                     case TIME_ON:
                         mRequest.getOpenCourseConsult(mOpencourseId);
                         break;
-                    case SDK_PAY_FLAG: {
-                        AliPayResult aliPayResult = new AliPayResult((String) msg.obj);
-                        // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
-//                        String resultInfo = aliPayResult.getResult();
-                        String resultStatus = aliPayResult.getResultStatus();
-                        // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
-                        if (TextUtils.equals(resultStatus, "9000")) {
-                            Toast.makeText(activity, "支付成功",
-                                    Toast.LENGTH_LONG).show();
-                            isPaySuccess = true;
-                        } else {
-                            // 判断resultStatus 为非“9000”则代表可能支付失败
-                            // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，
-                            // 最终交易是否成功以服务端异步通知为准（小概率状态）
-                            if (TextUtils.equals(resultStatus, "8000")) {
-                                Toast.makeText(activity, "支付结果确认中",
-                                        Toast.LENGTH_LONG).show();
-
-                            } else {
-                                // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-                                Toast.makeText(activity, "支付失败",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        break;
-                    }
+//                    case SDK_PAY_FLAG: {
+//                        AliPayResult aliPayResult = new AliPayResult((String) msg.obj);
+//                        // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
+////                        String resultInfo = aliPayResult.getResult();
+//                        String resultStatus = aliPayResult.getResultStatus();
+//                        // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
+//                        if (TextUtils.equals(resultStatus, "9000")) {
+//                            Toast.makeText(activity, "支付成功",
+//                                    Toast.LENGTH_LONG).show();
+//                            isPaySuccess = true;
+//                        } else {
+//                            // 判断resultStatus 为非“9000”则代表可能支付失败
+//                            // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，
+//                            // 最终交易是否成功以服务端异步通知为准（小概率状态）
+//                            if (TextUtils.equals(resultStatus, "8000")) {
+//                                Toast.makeText(activity, "支付结果确认中",
+//                                        Toast.LENGTH_LONG).show();
+//
+//                            } else {
+//                                // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
+//                                Toast.makeText(activity, "支付失败",
+//                                        Toast.LENGTH_LONG).show();
+//                            }
+//                        }
+//
+//                        break;
+//                    }
                     default:
                         break;
                 }
@@ -274,7 +271,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
         if ("course".equals(mFrom)) {
-            MenuItemCompat.setShowAsAction(menu.add("分享"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            MenuItemCompat.setShowAsAction(menu.add("分享").setIcon(R.drawable.quiz_share), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -332,9 +329,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             String response_code = response.optString("response_code");
             if (response_code.equals("1")) {
                 String param_str = response.optString("param_str");
-                if (param_str != null && param_str != "") {
-                    aliPay(param_str);
-                }
+//                if (param_str != null && param_str != "") {
+//                    aliPay(param_str);
+//                }
+                AliPay.pay(param_str, this);
             }
         }
         ProgressDialogManager.closeProgressDialog();
@@ -389,21 +387,21 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
     }
 
-    public void aliPay(final String payInfo) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                PayTask alipay = new PayTask(WebViewActivity.this);
-                // 调用支付接口，获取支付结果
-                String result = alipay.pay(payInfo);
-                Message msg = new Message();
-                msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-    }
+//    public void aliPay(final String payInfo) {
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                PayTask alipay = new PayTask(WebViewActivity.this);
+//                // 调用支付接口，获取支付结果
+//                String result = alipay.pay(payInfo);
+//                Message msg = new Message();
+//                msg.what = SDK_PAY_FLAG;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+//            }
+//        };
+//        Thread thread = new Thread(runnable);
+//        thread.start();
+//    }
 
 }

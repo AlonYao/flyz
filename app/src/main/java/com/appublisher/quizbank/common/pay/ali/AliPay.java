@@ -40,6 +40,7 @@ public class AliPay {
                         String resultStatus = aliPayResult.getResultStatus();
                         // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                         if (TextUtils.equals(resultStatus, "9000")) {
+                            WebViewActivity.isPaySuccess = true;
                             Toast.makeText(activity, "支付成功",
                                     Toast.LENGTH_LONG).show();
                         } else {

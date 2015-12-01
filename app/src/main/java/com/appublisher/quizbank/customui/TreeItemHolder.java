@@ -56,8 +56,11 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         TextView totalText = (TextView) view.findViewById(R.id.total);
         // 知识点层级名字
         tvName.setText(value.name);
-        doneText.setText(value.done + "/");
-        totalText.setText(value.total + "");
+        //专项训练加统计信息
+        if ("note".equals(value.note_type)) {
+            doneText.setText(value.done + "/");
+            totalText.setText(value.total + "");
+        }
         // 做题按钮
         ivDo.setOnClickListener(new View.OnClickListener() {
             @Override
