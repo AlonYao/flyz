@@ -241,7 +241,7 @@ public class UmengManager {
             content = content + "戳右看看：";
         }
 
-        sina.setShareContent("#天天模考#" + content + url + "(分享自@腰果公务员)ios："
+        sina.setShareContent("#天天模考#" + content + url + "(分享自@腰果公考)ios："
                 + ios + "安卓：" + android + "#公考要过，就用腰果#");
 
         // 新浪微博图片部分---特殊处理
@@ -333,7 +333,7 @@ public class UmengManager {
                 return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
                         + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
                         + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
-                        + Utils.rateToPercent(rank) + "%，妈妈再也不用担心我的拖延症啦~~";
+                        + Utils.rateToPercent(rank) + "%，再也不用担心我的拖延症啦~~";
             } else if (rank < 0.75 && rank >= 0.5) {
                 // 75%-50%
                 return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())

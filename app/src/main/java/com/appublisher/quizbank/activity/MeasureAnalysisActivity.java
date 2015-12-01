@@ -259,7 +259,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
-        MenuItemCompat.setShowAsAction(menu.add("分享"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(menu.add("分享").setIcon(R.drawable.quiz_share), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         return super.onCreateOptionsMenu(menu);
     }

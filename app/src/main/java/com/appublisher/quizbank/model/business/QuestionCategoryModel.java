@@ -11,6 +11,8 @@ import com.appublisher.quizbank.utils.GsonManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+
 /**
  * Created by on 15/11/30.
  */
@@ -36,7 +38,10 @@ public class QuestionCategoryModel implements RequestCallback {
         if (response == null) return;
         if ("question_category".equals(apiName)) {
             QuestionM questionM = GsonManager.getObejctFromJSON(response.toString(), QuestionM.class);
-            String string = "全站作答" + questionM.getCount() + "次，正确率" + questionM.getAccuracy() + ",易错项为" + questionM.getFallible();
+            float accuracy = questionM.getAccuracy()*100;
+            BigDecimal bigDecimal = new BigDecimal(accuracy);
+            accuracy = bigDecimal.setScale(1,BigDecimal.ROUND_HALF_UP).floatValue();
+            String string = "全站作答" + questionM.getCount() + "次，正确率" + accuracy + "%，易错项为" + questionM.getFallible();
             dataChange.onDataChange(string);
         }
     }

@@ -105,7 +105,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-        MenuItemCompat.setShowAsAction(menu.add("分享"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(menu.add("分享").setIcon(R.drawable.quiz_share), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
 

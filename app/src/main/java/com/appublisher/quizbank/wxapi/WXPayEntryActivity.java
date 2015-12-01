@@ -47,7 +47,6 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
             if (errCode == 0) {
                 ToastManager.showToast(WXPayEntryActivity.this, "微信支付成功");
                 WebViewActivity.isPaySuccess = true;
-
             } else if (errCode == -1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.wx_pay);

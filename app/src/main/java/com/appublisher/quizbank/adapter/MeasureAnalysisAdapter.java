@@ -200,7 +200,6 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
             sRight = sRight + "你的选择是" + mAnswers.get(position).getAnswer();
         }
         tvRightAnswer.setText(sRight);
-        Logger.i("9999" + question.getAnswer() + "id=" + question.getId());
         // 解析
         LinearLayout llMeasureAnalysis =
                 (LinearLayout) view.findViewById(R.id.measure_analysis_container);
