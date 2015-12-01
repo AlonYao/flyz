@@ -16,6 +16,8 @@ public class Offline extends Model {
 
     @Column(name = "is_success")
     public int is_success;
+
     @Column(name = "course_id")
     public int course_id;
+
 }

@@ -1,0 +1,1 @@
+ALTER TABLE Offline ADD COLUMN course_id INTEGER;
