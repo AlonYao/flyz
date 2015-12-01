@@ -157,7 +157,7 @@ public class MeasureModel {
 
                 // 异步加载图片
                 DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                final float minHeight = (float) ((dm.heightPixels - 50) * 0.2); // 50是状态栏高度
+                final float minHeight = (float) ((dm.heightPixels - 50) * 0.05); // 50是状态栏高度
 
                 ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
                     @Override
@@ -265,7 +265,7 @@ public class MeasureModel {
 
                 // 异步加载图片
                 DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                final float minHeight = (float) ((dm.heightPixels - 50) * 0.2); // 50是状态栏高度
+                final float minHeight = (float) ((dm.heightPixels - 50) * 0.05); // 50是状态栏高度
 
                 ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
                     @Override
@@ -445,7 +445,7 @@ public class MeasureModel {
                 historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
         if (MeasureActivity.mockpre && MeasureActivity.mMockTime != null) {
             // 如果是模考则计算剩余时间
-            time(activity);
+            time();
         } else {
             startTimer(activity);
         }
@@ -461,6 +461,7 @@ public class MeasureModel {
         MeasureAdapter measureAdapter = new MeasureAdapter(activity);
         activity.mViewPager.setAdapter(measureAdapter);
 
+        //noinspection deprecation
         activity.mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
@@ -541,7 +542,7 @@ public class MeasureModel {
     /**
      * 倒计时2
      */
-    private static void time(final MeasureActivity activity) {
+    private static void time() {
         Message message = MeasureActivity.mHandler.obtainMessage(MeasureActivity.TIME_ON_MOCK);
         MeasureActivity.mHandler.sendMessage(message);
     }
@@ -820,6 +821,7 @@ public class MeasureModel {
                 // 时间到
                 AlertManager.mockTimeOutAlert(activity);
                 MeasureModel.autoSubmitPaper(activity);
+                if (activity.getSupportActionBar() == null) return;
                 activity.getSupportActionBar().setTitle("00:00");
             }
         }
