@@ -221,19 +221,19 @@ public class MeasureAdapter extends PagerAdapter{
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.measure_option_a:
-                    MeasureModel.optionOnClickAction(mTvOptionA);
+                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionA);
                     break;
 
                 case R.id.measure_option_b:
-                    MeasureModel.optionOnClickAction(mTvOptionB);
+                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionB);
                     break;
 
                 case R.id.measure_option_c:
-                    MeasureModel.optionOnClickAction(mTvOptionC);
+                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionC);
                     break;
 
                 case R.id.measure_option_d:
-                    MeasureModel.optionOnClickAction(mTvOptionD);
+                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionD);
                     break;
 
                 default:
@@ -293,7 +293,7 @@ public class MeasureAdapter extends PagerAdapter{
     /**
      * 重置按钮状态
      */
-    private void resetOption() {
+    public void resetOption() {
         mTvOptionA.setSelected(false);
         mTvOptionB.setSelected(false);
         mTvOptionC.setSelected(false);

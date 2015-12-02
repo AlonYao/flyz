@@ -834,10 +834,11 @@ public class MeasureModel {
      * 选项点击动作
      * @param textView 选项
      */
-    public static void optionOnClickAction(final TextView textView) {
+    public static void optionOnClickAction(MeasureAdapter adapter, final TextView textView) {
         if (mOptionClick) return;
 
         mOptionClick = true;
+        adapter.resetOption();
         textView.setSelected(true);
 
         new Handler().postDelayed(new Runnable() {
