@@ -40,6 +40,7 @@ import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -353,6 +354,12 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        /**使用SSO授权必须添加如下代码 */
+        UMSsoHandler ssoHandler = UmengManager.mController.getConfig().getSsoHandler(requestCode);
+        if(ssoHandler != null){
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
 
         // 答题卡回调
         if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SKIP && data != null) {

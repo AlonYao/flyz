@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +21,7 @@ import com.appublisher.quizbank.utils.UmengManager;
 import com.db.chart.view.LineChartView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -100,6 +102,17 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
 
         // TalkingData
         TCAgent.onPause(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /**使用SSO授权必须添加如下代码 */
+        UMSsoHandler ssoHandler = UmengManager.mController.getConfig().getSsoHandler(requestCode);
+        if(ssoHandler != null){
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
     }
 
     @Override

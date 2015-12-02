@@ -241,8 +241,11 @@ public class UmengManager {
             content = content + "戳右看看：";
         }
 
+        String tag = "#公考要过，就用腰果#";
+        if ("practice_report".equals(umengShareEntity.getFrom())) tag = "";
+
         sina.setShareContent("#天天模考#" + content + url + "(分享自@腰果公考)ios："
-                + ios + "安卓：" + android + "#公考要过，就用腰果#");
+                + ios + "安卓：" + android + tag);
 
         // 新浪微博图片部分---特殊处理
         Bitmap bitmap = umengShareEntity.getBitmap();
@@ -305,24 +308,24 @@ public class UmengManager {
         if ("practice_report".equals(umShareContentEntity.getType())) {
             // 练习报告
             if ("mokao".equals(umShareContentEntity.getPaperType())) {
-                return "刚刚我在天天模考中打败了全国"
+                return "刚刚打败了全国"
                         + Utils.rateToPercent(umShareContentEntity.getDefeat())
-                        + "%的小伙伴，学霸非我莫属！你也想试试？";
+                        + "%的小伙伴，学霸非我莫属！";
             } else if ("evaluate".equals(umShareContentEntity.getPaperType())) {
                 return umShareContentEntity.getExamName()
-                        + "考试可以估分了呢，我的预测分是"
+                        + "我估计能"
                         + umShareContentEntity.getScore()
-                        + "分，小伙伴们快来看看~";
+                        + "分，快来看看~";
             } else if ("mock".equals(umShareContentEntity.getPaperType())) {
-                return "我在考试"
+                return "我在"
                         + umShareContentEntity.getExamName()
                         + "中拿了"
                         + umShareContentEntity.getScore()
-                        + "分，上考场前不模考几次怎么行！";
+                        + "分，棒棒哒！";
             } else {
                 return "刷了一套题，正确率竟然达到了"
                         + umShareContentEntity.getAccuracy()
-                        + "，你想PK吗？放马过来吧~";
+                        + "呢~";
             }
 
         } else if ("evaluation".equals(umShareContentEntity.getType())) {
@@ -332,25 +335,25 @@ public class UmengManager {
                 // 100%-75%
                 return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
                         + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
-                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
-                        + Utils.rateToPercent(rank) + "%，再也不用担心我的拖延症啦~~";
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，排名前"
+                        + Utils.rateToPercent(rank) + "%，再也不用担心我的拖延症啦~";
             } else if (rank < 0.75 && rank >= 0.5) {
                 // 75%-50%
                 return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
                         + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
-                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
-                        + Utils.rateToPercent(rank) + "%，上岸指日可待~~";
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，排名前"
+                        + Utils.rateToPercent(rank) + "%，上岸指日可待~";
             } else if (rank < 0.5 && rank >= 0.25) {
                 // 50%-25%
                 return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
                         + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
-                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，排名前"
                         + Utils.rateToPercent(rank) + "%，成公就在眼前啦~";
             } else {
                 // 25%-1%
                 return "学习Day" + String.valueOf(umShareContentEntity.getLearningDays())
                         + "，我的" + umShareContentEntity.getExamName() + "考试已经刷到了"
-                        + String.valueOf(umShareContentEntity.getScore()) + "分，在小伙伴们排名前"
+                        + String.valueOf(umShareContentEntity.getScore()) + "分，排名前"
                         + Utils.rateToPercent(rank) + "%，排名靠前也是很孤独的，谁来打败我啊？";
             }
 
