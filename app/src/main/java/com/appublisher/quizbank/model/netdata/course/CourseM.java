@@ -22,7 +22,6 @@ public class CourseM {
     private String introduction;
     private boolean is_purchased;
 
-
     public int getPeriods() {
         return periods;
     }
