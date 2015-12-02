@@ -111,7 +111,7 @@
     <string name="course_null">没有合适的课程？\n联系在线客服，获取更多信息</string>
     <string name="course_qq">咨询客服</string>
     <string name="neterror">连接不到网络</string>
-    <string name="course_offline">点击右上角 “图标” 可以查看已下载课程</string>
+    <string name="course_offline">点击右上角可以查看已下载课程</string>
     <!-- 知识点层级 -->
     <string name="hierarchy_name">知识点层级</string>
 

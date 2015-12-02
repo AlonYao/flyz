@@ -22,6 +22,7 @@ public class CourseM {
     private String introduction;
     private boolean is_purchased;
 
+
     public int getPeriods() {
         return periods;
     }
@@ -54,8 +55,8 @@ public class CourseM {
         return is_sticked;
     }
 
-    public float getPrice() {
-        return price;
+    public int getPrice() {
+        return (int) price;
     }
 
     public String getEnd_time() {
