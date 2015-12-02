@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
@@ -61,6 +62,8 @@ import java.util.TimerTask;
  * 做题模块
  */
 public class MeasureModel {
+
+    private static boolean mOptionClick;
 
     /**
      * 获取View高度
@@ -825,5 +828,24 @@ public class MeasureModel {
                 activity.getSupportActionBar().setTitle("00:00");
             }
         }
+    }
+
+    /**
+     * 选项点击动作
+     * @param textView 选项
+     */
+    public static void optionOnClickAction(final TextView textView) {
+        if (mOptionClick) return;
+
+        mOptionClick = true;
+        textView.setSelected(true);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                textView.performClick();
+                mOptionClick = false;
+            }
+        }, 100);
     }
 }

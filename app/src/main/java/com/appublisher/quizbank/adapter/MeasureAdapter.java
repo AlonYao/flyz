@@ -204,57 +204,14 @@ public class MeasureAdapter extends PagerAdapter{
         mTvOptionD.setOnClickListener(optionClick);
 
         // 选中行执行点击
-        llOptionA.setOnTouchListener(optionLlClick);
-        llOptionB.setOnTouchListener(optionLlClick);
-        llOptionC.setOnTouchListener(optionLlClick);
-        llOptionD.setOnTouchListener(optionLlClick);
+        llOptionA.setOnClickListener(optionClick);
+        llOptionB.setOnClickListener(optionClick);
+        llOptionC.setOnClickListener(optionClick);
+        llOptionD.setOnClickListener(optionClick);
 
         container.addView(view);
         return view;
     }
-
-    /**
-     * 选项所在行点击事件
-     */
-    private View.OnTouchListener optionLlClick = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            TextView option = null;
-
-            switch (v.getId()) {
-                case R.id.measure_option_a:
-                    option = mTvOptionA;
-                    break;
-
-                case R.id.measure_option_b:
-                    option = mTvOptionB;
-                    break;
-
-                case R.id.measure_option_c:
-                    option = mTvOptionC;
-                    break;
-
-                case R.id.measure_option_d:
-                    option = mTvOptionD;
-                    break;
-            }
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (option == null) break;
-                    resetOption();
-                    option.setSelected(true);
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                    if (option == null) break;
-                    option.performClick();
-                    break;
-            }
-
-            return true;
-        }
-    };
 
     /**
      * 选项点击事件
@@ -262,10 +219,28 @@ public class MeasureAdapter extends PagerAdapter{
     private View.OnClickListener optionClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            updateUserAnswer(v);
+            switch (v.getId()) {
+                case R.id.measure_option_a:
+                    MeasureModel.optionOnClickAction(mTvOptionA);
+                    break;
 
-            // 页面跳转
-            pageSkip();
+                case R.id.measure_option_b:
+                    MeasureModel.optionOnClickAction(mTvOptionB);
+                    break;
+
+                case R.id.measure_option_c:
+                    MeasureModel.optionOnClickAction(mTvOptionC);
+                    break;
+
+                case R.id.measure_option_d:
+                    MeasureModel.optionOnClickAction(mTvOptionD);
+                    break;
+
+                default:
+                    updateUserAnswer(v);
+                    pageSkip(); // 页面跳转
+                    break;
+            }
         }
     };
 
@@ -294,25 +269,21 @@ public class MeasureAdapter extends PagerAdapter{
             case R.id.measure_option_a_tv:
                 mTvOptionA.setSelected(true);
                 mUserAnswerMap.put("answer", "A");
-
                 break;
 
             case R.id.measure_option_b_tv:
                 mTvOptionB.setSelected(true);
                 mUserAnswerMap.put("answer", "B");
-
                 break;
 
             case R.id.measure_option_c_tv:
                 mTvOptionC.setSelected(true);
                 mUserAnswerMap.put("answer", "C");
-
                 break;
 
             case R.id.measure_option_d_tv:
                 mTvOptionD.setSelected(true);
                 mUserAnswerMap.put("answer", "D");
-
                 break;
         }
 
