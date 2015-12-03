@@ -3,6 +3,8 @@ package com.appublisher.quizbank.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Environment;
@@ -468,6 +470,24 @@ public class Utils {
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    /**
+     * 检测应用是否安装
+     * @param pkgName 包名
+     * @param context 上下文
+     * @return 是否
+     */
+    public static boolean isPkgInstalled(String pkgName, Context context) {
+        PackageInfo packageInfo = null;
+
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(pkgName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            // Empty
+        }
+
+        return packageInfo != null;
     }
 
 }

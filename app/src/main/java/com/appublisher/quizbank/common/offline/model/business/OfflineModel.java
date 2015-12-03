@@ -435,7 +435,7 @@ public class OfflineModel {
         if (OfflineConstants.mCurDownloadRoomId == null
                 || OfflineConstants.mCurDownloadRoomId.length() == 0
                 || roomIdDownloaded(activity, OfflineConstants.mCurDownloadRoomId, activity.mCourseId)) {
-            activity.mAdapter.notifyDataSetChanged();
+            OfflineClassActivity.mAdapter.notifyDataSetChanged();
             removeTopRoomId();
             startDownload(activity);
             return;
