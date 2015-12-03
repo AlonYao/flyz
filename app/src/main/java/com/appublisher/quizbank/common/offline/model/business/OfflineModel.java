@@ -658,7 +658,7 @@ public class OfflineModel {
 
         // 1.3.3之前的版本，同步course_id字段
         if (Utils.compareVersion(preVersion, "1.3.3") <= 0) {
-            addCourseId();
+            addCourseId(activity);
         }
 
         // 更新版本号
@@ -670,13 +670,65 @@ public class OfflineModel {
     /**
      * 增加course_id字段
      */
-    private static void addCourseId() {
+    private static void addCourseId(Context context) {
+        ArrayList<Offline> offlines = (ArrayList<Offline>) OfflineDAO.findAllRoomId();
+        if (offlines == null) return;
 
+        // SharedPreferences中获取已购数据
+        SharedPreferences local = context.getSharedPreferences("offline", 0);
+        String data = local.getString(LoginModel.getUserId(), "");
+
+        PurchasedCoursesResp resp = GsonManager.getGson().fromJson(data, PurchasedCoursesResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        ArrayList<PurchasedCourseM> courses = resp.getList();
+        if (courses == null) return;
+
+        for (Offline offline : offlines) {
+            if (offline == null || offline.room_id == null || offline.room_id.length() == 0)
+                continue;
+
+            ArrayList<Integer> courseIds = findCouresIdByRoomId(offline.room_id, courses);
+
+            for (Integer courseId : courseIds) {
+                if (courseId == 0) continue;
+                OfflineDAO.saveRoomId(offline.room_id, courseId);
+            }
+        }
+
+        OfflineDAO.deleteNullCourseId();
+    }
+
+    /**
+     * 通过RoomId查找CourseId列表
+     * @param roomId roomId
+     * @param courses 课程列表
+     * @return 课程id列表
+     */
+    private static ArrayList<Integer> findCouresIdByRoomId(String roomId,
+                                                   ArrayList<PurchasedCourseM> courses) {
+        ArrayList<Integer> courseIds = new ArrayList<>();
+
+        if (roomId == null || courses == null) return courseIds;
+
+        // 遍历获取RoomId对应的CourseId
+        for (PurchasedCourseM course : courses) {
+            if (course == null) continue;
+
+            ArrayList<PurchasedClassM> classes = course.getClasses();
+            if (classes == null) continue;
+
+            for (PurchasedClassM classM : classes) {
+                if (classM == null || classM.getRoom_id() == null) continue;
+                if (classM.getRoom_id().equals(roomId)) courseIds.add(course.getId());
+            }
+        }
+
+        return courseIds;
     }
 
     public interface downloadProgressListener {
         void onProgress(int progress);
-
         void onFinish();
     }
 

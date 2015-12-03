@@ -29,6 +29,23 @@ public class OfflineDAO {
     }
 
     /**
+     * 查询数据库中保存的全部的RoomId
+     *
+     * @return Offline
+     */
+    public static List<Offline> findAllRoomId() {
+        try {
+            return new Select().from(Offline.class)
+                    .where("room_id IS NOT NULL")
+                    .execute();
+        } catch (Exception e) {
+            // Empty
+        }
+
+        return null;
+    }
+
+    /**
      * 查询已购课程数据
      *
      * @return Offline
@@ -56,25 +73,7 @@ public class OfflineDAO {
      */
     public static void saveRoomId(String room_id, int course_id) {
         if (room_id == null || room_id.length() == 0) return;
-//        Offline item = findByRoomId(room_id);
-//
-//        if (item == null) {
-//            item = new Offline();
-//            item.is_success = 1;
-//            item.room_id = room_id;
-//            item.course_id = course_id;
-//            item.save();
-//        } else {
-//            try {
-//                new Update(Offline.class)
-//                        .set("is_success = ?", 1)
-//                        .where("room_id = ?", room_id)
-//                        .where("course_id", course_id)
-//                        .execute();
-//            } catch (Exception e) {
-//                // Empty
-//            }
-//        }
+
         Offline item = new Offline();
         item.is_success = 1;
         item.room_id = room_id;
@@ -100,28 +99,25 @@ public class OfflineDAO {
         } catch (Exception e) {
             // Empty
         }
-//        if (item == null) {
-//            item = new Offline();
-//            item.is_success = 0;
-//            item.room_id = room_id;
-//            item.save();
-//        } else {
-//            try {
-//                new Update(Offline.class)
-//                        .set("is_success = ?", 0)
-//                        .where("room_id = ?", room_id)
-//                        .execute();
-//            } catch (Exception e) {
-//                // Empty
-//            }
-//        }
+    }
+
+    /**
+     * 删除CourseId为空的数据
+     */
+    public static void deleteNullCourseId() {
+        try {
+            new Delete().from(Offline.class)
+                    .where("course_id IS NULL")
+                    .execute();
+        } catch (Exception e) {
+            // Empty
+        }
     }
 
     /**
      * 清除所有记录
      */
     public static void deletaAll() {
-
         try {
             new Delete().from(Offline.class).execute();
         } catch (Exception e) {
