@@ -22,9 +22,9 @@ import java.util.ArrayList;
 public class PurchasedClassesAdapter extends BaseAdapter {
 
     private OfflineClassActivity mActivity;
-    private ArrayList<PurchasedClassM> mClasses;
-    public boolean isDelete = false;
-    public boolean isDownload = true;//下载按钮是否可点
+    public ArrayList<PurchasedClassM> mClasses;
+//    public boolean isDelete = false;
+//    public boolean isDownload = true;//下载按钮是否可点
 
     public PurchasedClassesAdapter(OfflineClassActivity activity,
                                    ArrayList<PurchasedClassM> classes) {
@@ -138,7 +138,6 @@ public class PurchasedClassesAdapter extends BaseAdapter {
                     viewHolder.tvStatus.setVisibility(View.GONE);
                     viewHolder.cb.setVisibility(View.VISIBLE);
                     viewHolder.cb.setChecked(OfflineModel.isPositionSelected(mActivity, position));
-                    isDelete = true;
                 } else if (isRoomIdDownload) {
                     // 已下载 且 不在删除状态
                     viewHolder.ivPlay.setVisibility(View.VISIBLE);
@@ -160,14 +159,13 @@ public class PurchasedClassesAdapter extends BaseAdapter {
                             viewHolder.tvStatus.setVisibility(View.GONE);
                             viewHolder.cb.setVisibility(View.VISIBLE);
                             viewHolder.cb.setChecked(OfflineModel.isPositionSelected(mActivity, position));
-                            isDelete = true;
                         } else {
                             viewHolder.tvStatus.setText(R.string.offline_waiting);
                         }
                     } else {
                         // 该任务没有被下载
                         viewHolder.tvStatus.setVisibility(View.GONE);
-                        isDownload = false;
+//                        isDownload = false;
                         if (mActivity.mMenuStatus == 1) {
                             viewHolder.cb.setVisibility(View.VISIBLE);
                             viewHolder.cb.setChecked(
@@ -177,7 +175,6 @@ public class PurchasedClassesAdapter extends BaseAdapter {
                         }
                     }
                 }
-
                 break;
         }
     }

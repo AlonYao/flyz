@@ -28,7 +28,6 @@ import com.appublisher.quizbank.model.netdata.course.FilterAreaM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaResp;
 import com.appublisher.quizbank.model.netdata.course.FilterTagM;
 import com.appublisher.quizbank.model.netdata.course.FilterTagResp;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
@@ -469,7 +468,6 @@ public class CourseModel {
                     + "&course_id=" + String.valueOf(courseId)
                     + "&app_type=quizbank"
                     + "&app_version=" + Globals.appVersion;
-            Logger.i("courseUrl=" + courseUrl);
         } else if ("vod".equals(type)) {
             // 录播课
             if (course.is_purchased()) {

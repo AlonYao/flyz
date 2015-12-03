@@ -16,6 +16,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.common.offline.activity.OfflineClassActivity;
+import com.appublisher.quizbank.common.offline.adapter.PurchasedClassesAdapter;
 import com.appublisher.quizbank.common.offline.adapter.PurchasedCoursesAdapter;
 import com.appublisher.quizbank.common.offline.model.db.Offline;
 import com.appublisher.quizbank.common.offline.model.db.OfflineDAO;
@@ -25,7 +26,6 @@ import com.appublisher.quizbank.common.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.common.offline.network.OfflineRequest;
 import com.appublisher.quizbank.utils.FileManager;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.Utils;
@@ -334,7 +334,6 @@ public class OfflineModel {
         if (roomId == null) return false;
         List<Offline> items = OfflineDAO.findByRoomId(roomId);
         if (items != null && items.size() != 0) {
-            Logger.i("mokao_laoded_items=" + items.size());
             OfflineDAO.saveRoomId(roomId, course_id);
             return true;
         }
@@ -477,7 +476,6 @@ public class OfflineModel {
 
                         // 记录下载状态
                         OfflineConstants.mPercent = progress;
-                        Logger.i("progress="+progress);
                         OfflineConstants.mLastTimestamp = System.currentTimeMillis();
                         OfflineConstants.mStatus = OfflineConstants.PROGRESS;
                         mListener.onProgress(progress);
@@ -732,4 +730,31 @@ public class OfflineModel {
         void onFinish();
     }
 
+    //判断是否有可删除的视频,返回true:有
+    public static boolean isDeletedClass(OfflineClassActivity activity, PurchasedClassesAdapter adapter) {
+        if (adapter.mClasses == null) return false;
+        ArrayList<PurchasedClassM> mClasses = adapter.mClasses;
+        for (int i = 0; i < mClasses.size(); i++) {
+            PurchasedClassM classM = mClasses.get(i);
+            boolean isRoomIdDownload = OfflineModel.isRoomIdDownload(classM.getRoom_id(), activity.mCourseId);
+            if (isRoomIdDownload) return true;
+            if (OfflineModel.isRoomIdInDownloadList(classM.getRoom_id(), activity.mCourseId) && !OfflineConstants.mCurDownloadRoomId.equals(classM.getRoom_id())) {//在下载列表中
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //判断是否有可下载的视频
+    public static boolean isDownloadClass(OfflineClassActivity activity, PurchasedClassesAdapter adapter) {
+        if (adapter.mClasses == null) return false;
+        ArrayList<PurchasedClassM> mClasses = adapter.mClasses;
+        for (int i = 0; i < mClasses.size(); i++) {
+            PurchasedClassM classM = mClasses.get(i);
+            boolean isRoomIdDownload = OfflineModel.isRoomIdDownload(classM.getRoom_id(), activity.mCourseId);
+            if (!isRoomIdDownload && !OfflineModel.isRoomIdInDownloadList(classM.getRoom_id(), activity.mCourseId))
+                return true;
+        }
+        return false;
+    }
 }
