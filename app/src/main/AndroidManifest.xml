@@ -89,6 +89,21 @@
             android:name="TD_CHANNEL_ID"
             android:value="@string/market" />
 
+        <!-- 支付宝 -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" >
+        </activity>
+
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" >
+        </activity>
+
         <!-- 微信回调Activity -->
         <activity
             android:name=".wxapi.WXEntryActivity"

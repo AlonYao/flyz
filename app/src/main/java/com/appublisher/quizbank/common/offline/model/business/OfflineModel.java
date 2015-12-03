@@ -654,10 +654,22 @@ public class OfflineModel {
             cleanOldSource();
         }
 
+        // 1.3.3之前的版本，同步course_id字段
+        if (Utils.compareVersion(preVersion, "1.3.3") <= 0) {
+            addCourseId();
+        }
+
         // 更新版本号
         SharedPreferences.Editor editor = offline.edit();
         editor.putString("version", Globals.appVersion);
         editor.commit();
+    }
+
+    /**
+     * 增加course_id字段
+     */
+    private static void addCourseId() {
+
     }
 
     public interface downloadProgressListener {
