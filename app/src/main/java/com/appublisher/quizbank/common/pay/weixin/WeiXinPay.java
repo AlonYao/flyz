@@ -29,9 +29,7 @@ public class WeiXinPay {
         payReq.nonceStr = entity.getNonceStr();
         payReq.timeStamp = entity.getTimeStamp();
         payReq.sign = entity.getSign();
-        Logger.i(entity.toString());
         iwxapi.sendReq(payReq);
-        Logger.i("payReq=" + payReq.packageValue);
         ToastManager.showToast(context, "微信支付");
     }
 

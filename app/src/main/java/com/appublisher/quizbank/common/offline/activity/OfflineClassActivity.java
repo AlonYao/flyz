@@ -23,7 +23,6 @@ import com.appublisher.quizbank.common.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.common.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.common.offline.netdata.PurchasedClassM;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.duobeiyun.DuobeiYunClient;
 
@@ -116,7 +115,6 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String roomId = OfflineModel.getRoomIdByPosition(
                         OfflineClassActivity.this, position);
-                Logger.i("roomId==" + roomId);
                 if (OfflineModel.isRoomIdDownload(roomId, mCourseId) && mMenuStatus != 2) {
                     // 如果视频已经成功下载，且不是删除状态
                     String url = DuobeiYunClient.playUrl(roomId);
@@ -133,10 +131,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                     cb.toggle();
                     if (cb.isChecked()) {
                         mSelectedMap.put(position, cb.isChecked());
-                        Logger.i("mokao_map_put" + position);
                     } else {
                         mSelectedMap.remove(position);
-                        Logger.i("mokao_map_remove" + position);
                     }
                 }
             }
@@ -179,21 +175,21 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
         } else if ("删除".equals(item.getTitle())) {
             OfflineModel.initSelectedMap(this);
+            mMenuStatus = 2;
             mAdapter.notifyDataSetChanged();
-            if (!mAdapter.isDelete) {
+            if (!OfflineModel.isDeletedClass(this,mAdapter)) {
                 ToastManager.showToast(this, "没有已下载视频");
             } else {
-                mMenuStatus = 2;
                 invalidateOptionsMenu();
                 mBtnBottom.setVisibility(View.VISIBLE);
                 mBtnBottom.setText(R.string.offline_delete_btn);
             }
         } else if ("下载".equals(item.getTitle())) {
+            mMenuStatus = 1;
             mAdapter.notifyDataSetChanged();
-            if (mAdapter.isDownload) {//不可点
+            if (!OfflineModel.isDownloadClass(this,mAdapter)) {//不可点
                 ToastManager.showToast(this, "没有可以下载的视频");
             } else {
-                mMenuStatus = 1;
                 invalidateOptionsMenu();
                 mBtnBottom.setVisibility(View.VISIBLE);
                 mBtnBottom.setText(R.string.offline_download_btn);
@@ -324,23 +320,6 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
                     mAdapter.notifyDataSetChanged();
-                    //此操作最后遍历，因为对classes长度有影响
-//                    for (Integer position : list) {
-//                        String roomId = OfflineModel.getRoomIdByPosition(this, position);
-//                        Logger.i("mokao_remove_class_roomid" + roomId);
-//                        try {
-//                            OfflineDAO.deleteRoomId(roomId, mCourseId);
-//                            if (mFrom.equals("local"))//如果是本地的直接删除行
-//                            {
-//                                mClasses.remove((int) position);
-//                                Logger.i("mokao_remove_" + position);
-//                            }
-//
-//                            mAdapter.notifyDataSetChanged();
-//                        } catch (Exception e) {
-//                            // Empty
-//                        }
-//                    }
                     for (String deleteRoomId : roomIds) {
                         try {
                             OfflineDAO.deleteRoomId(deleteRoomId, mCourseId);

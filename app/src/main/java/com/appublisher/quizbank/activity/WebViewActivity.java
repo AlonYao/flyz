@@ -36,7 +36,6 @@ import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -320,18 +319,13 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         if ("open_course_consult".equals(apiName))
             OpenCourseModel.dealOpenCourseConsultResp(this, response);
         if ("wxPay".equals(apiName)) {
-            Logger.i("wxPay=" + response.toString());
             WeiXinPayEntity weiXinPayEntity = GsonManager.getObejctFromJSON(response.toString(), WeiXinPayEntity.class);
             WeiXinPay.pay(WebViewActivity.this, weiXinPayEntity);
         }
         if ("aliPay".equals(apiName)) {
-            Logger.i("aliPay=" + response.toString());
             String response_code = response.optString("response_code");
             if (response_code.equals("1")) {
                 String param_str = response.optString("param_str");
-//                if (param_str != null && param_str != "") {
-//                    aliPay(param_str);
-//                }
                 AliPay.pay(param_str, this);
             }
         }
