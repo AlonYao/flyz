@@ -15,7 +15,7 @@
 -keepclassmembers class fqcn.of.javascript.interface.for.webview {
    public *;
 }
--keep public class com.appublisher.quizbank.model.business.CourseWebViewHandler{
+-keep public class com.appublisher.quizbank.common.pay.PayWebViewHandler{
  *;
 }
 

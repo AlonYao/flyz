@@ -23,18 +23,15 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.pay.ali.AliPay;
-import com.appublisher.quizbank.common.pay.weixin.WeiXinPay;
-import com.appublisher.quizbank.common.pay.weixin.WeiXinPayEntity;
+import com.appublisher.quizbank.common.pay.PayConstants;
+import com.appublisher.quizbank.common.pay.PayWebViewHandler;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.business.CourseWebViewHandler;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
 import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.HomeWatcher;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
@@ -60,7 +57,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     private HomeWatcher mHomeWatcher;
     public static Request mRequest;
     private static String mOpencourseId;
-    public static String orderID;
     private long mUmengTimestamp;
     private String mUmengEntry;
     public String mUmengQQ;
@@ -70,9 +66,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     public Timer mTimer;
     public boolean mHasShowOpenCourseConsult;
     public boolean mIsFromQQ;
-    //    private static final int SDK_PAY_FLAG = 1;
     public static final int TIME_ON = 10;
-    public static boolean isPaySuccess = false;
     private String barTitle;
 
     private static class MsgHandler extends Handler {
@@ -91,33 +85,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                     case TIME_ON:
                         mRequest.getOpenCourseConsult(mOpencourseId);
                         break;
-//                    case SDK_PAY_FLAG: {
-//                        AliPayResult aliPayResult = new AliPayResult((String) msg.obj);
-//                        // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
-////                        String resultInfo = aliPayResult.getResult();
-//                        String resultStatus = aliPayResult.getResultStatus();
-//                        // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
-//                        if (TextUtils.equals(resultStatus, "9000")) {
-//                            Toast.makeText(activity, "支付成功",
-//                                    Toast.LENGTH_LONG).show();
-//                            isPaySuccess = true;
-//                        } else {
-//                            // 判断resultStatus 为非“9000”则代表可能支付失败
-//                            // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，
-//                            // 最终交易是否成功以服务端异步通知为准（小概率状态）
-//                            if (TextUtils.equals(resultStatus, "8000")) {
-//                                Toast.makeText(activity, "支付结果确认中",
-//                                        Toast.LENGTH_LONG).show();
-//
-//                            } else {
-//                                // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-//                                Toast.makeText(activity, "支付失败",
-//                                        Toast.LENGTH_LONG).show();
-//                            }
-//                        }
-//
-//                        break;
-//                    }
                     default:
                         break;
                 }
@@ -198,15 +165,19 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             }
         });
         mHomeWatcher.startWatch();
-        //判断是否是购买成功
-        if (isPaySuccess) {
-            String url = "http://dev.m.zhiboke.net/index.html#/live/ordersuccess?order_num=" + orderID;
+
+        // 判断是否是购买成功
+        if ("course".equals(mFrom) && PayConstants.mIsPaySuccess) {
+            String url = "http://dev.m.zhiboke.net/index.html#/live/ordersuccess?order_num="
+                    + PayConstants.mOrderID;
             mWebView.loadUrl(url);
-            isPaySuccess = false;
+            PayConstants.mIsPaySuccess = false;
         }
+
         // Umeng
         MobclickAgent.onPageStart("WebViewActivity");
         MobclickAgent.onResume(this);
+
         // TalkingData
         TCAgent.onResume(this);
     }
@@ -269,9 +240,12 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             MenuItemCompat.setShowAsAction(menu.add("咨询"),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
+
         if ("course".equals(mFrom)) {
-            MenuItemCompat.setShowAsAction(menu.add("分享").setIcon(R.drawable.quiz_share), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            MenuItemCompat.setShowAsAction(menu.add("分享").setIcon(R.drawable.quiz_share),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -308,6 +282,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
             UmengManager.openShare(umengShareEntity);
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -318,17 +293,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
         if ("open_course_consult".equals(apiName))
             OpenCourseModel.dealOpenCourseConsultResp(this, response);
-        if ("wxPay".equals(apiName)) {
-            WeiXinPayEntity weiXinPayEntity = GsonManager.getObejctFromJSON(response.toString(), WeiXinPayEntity.class);
-            WeiXinPay.pay(WebViewActivity.this, weiXinPayEntity);
-        }
-        if ("aliPay".equals(apiName)) {
-            String response_code = response.optString("response_code");
-            if (response_code.equals("1")) {
-                String param_str = response.optString("param_str");
-                AliPay.pay(param_str, this);
-            }
-        }
+
         ProgressDialogManager.closeProgressDialog();
     }
 
@@ -348,17 +313,20 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
      * @param url url
      */
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
-    public static void showWebView(String url) {
-//        url = "http://192.168.1.115/mobile_live_web/demo.html";
-//        url = "http://192.168.1.115/mobile_live_web/yaoguoNotice/dailyplan.html";
+    public void showWebView(String url) {
         if (url == null) return;
+
         mProgressBar.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.loadUrl(url);
-        mWebView.addJavascriptInterface(new CourseWebViewHandler(), "handler");
+
+        if ("course".equals(mFrom)) {
+            mWebView.addJavascriptInterface(new PayWebViewHandler(this), "handler");
+        }
+
         // 解决部分安卓机不弹出alert
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -380,22 +348,4 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         });
 
     }
-
-//    public void aliPay(final String payInfo) {
-//        Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                PayTask alipay = new PayTask(WebViewActivity.this);
-//                // 调用支付接口，获取支付结果
-//                String result = alipay.pay(payInfo);
-//                Message msg = new Message();
-//                msg.what = SDK_PAY_FLAG;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
-//            }
-//        };
-//        Thread thread = new Thread(runnable);
-//        thread.start();
-//    }
-
 }

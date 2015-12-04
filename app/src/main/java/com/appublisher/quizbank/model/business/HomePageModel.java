@@ -221,6 +221,7 @@ public class HomePageModel {
                             intent.putExtra("url", targetContent.replace("zhiboke@", "")
                                     + "&user_id=" + LoginModel.getUserId()
                                     + "&user_token=" + LoginModel.getUserToken());
+                            intent.putExtra("from", "course");
                             mActivity.startActivity(intent);
 
                             // Umeng统计

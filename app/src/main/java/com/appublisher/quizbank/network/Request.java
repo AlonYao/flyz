@@ -594,29 +594,9 @@ public class Request extends BaseRequest implements ApiConstants {
     }
 
     /**
-     * 获取微信支付回调
-     *
-     * @param order_id 公开课id
-     */
-    public void getWeiXinPayEntity(String order_id) {
-        asyncRequest(ParamBuilder.finalUrl(getWXPayUrl) + "&order_id=" + order_id,
-                "wxPay", "object");
-    }
-
-    /**
-     * 获取支付宝支付回调
-     *
-     * @param order_id 公开课id
-     */
-    public void getAliPayUrl(String order_id) {
-        asyncRequest(ParamBuilder.finalUrl(getAliPayUrl) + "&order_id=" + order_id,
-                "aliPay", "object");
-    }
-
-    /**
      * 获取单个问题的统计信息
      *
-     * @param question_id
+     * @param question_id 题目id
      */
     public void getQuestionCategory(int question_id) {
         asyncRequest(ParamBuilder.finalUrl(getQuestionCategoryInfo) + "&question_id=" + question_id, "question_category", "object");

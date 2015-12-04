@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.WebViewActivity;
+import com.appublisher.quizbank.common.pay.PayConstants;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
@@ -46,7 +46,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
             int errCode = resp.errCode;
             if (errCode == 0) {
                 ToastManager.showToast(WXPayEntryActivity.this, "微信支付成功");
-                WebViewActivity.isPaySuccess = true;
+                PayConstants.mIsPaySuccess = true;
             } else if (errCode == -1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.wx_pay);

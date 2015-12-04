@@ -117,8 +117,10 @@ public class CourseModel {
             showCourseNone(courseFragment);
             return;
         }
+
         //网络状态不好时显示过提示view，需要隐藏.
         courseFragment.netBadView.setVisibility(View.INVISIBLE);
+
         // 初始化数据
         mCourseFragment = courseFragment;
         CourseListResp courseListResp = courseFragment.mGson.fromJson(

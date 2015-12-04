@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.appublisher.quizbank.activity.WebViewActivity;
+import com.appublisher.quizbank.common.pay.PayConstants;
 
 import java.lang.ref.WeakReference;
 
@@ -40,7 +41,7 @@ public class AliPay {
                         String resultStatus = aliPayResult.getResultStatus();
                         // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                         if (TextUtils.equals(resultStatus, "9000")) {
-                            WebViewActivity.isPaySuccess = true;
+                            PayConstants.mIsPaySuccess = true;
                             Toast.makeText(activity, "支付成功",
                                     Toast.LENGTH_LONG).show();
                         } else {
@@ -53,7 +54,7 @@ public class AliPay {
 
                             } else {
                                 // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-                                Toast.makeText(activity, "支付失败",
+                                Toast.makeText(activity, "支付不成功，请重试或联系客服",
                                         Toast.LENGTH_LONG).show();
                             }
                         }
@@ -74,7 +75,7 @@ public class AliPay {
      * @param payInfo  支付信息
      * @param activity Activity
      */
-    public static void pay(final String payInfo, final WebViewActivity activity) {
+    public static void pay(final String payInfo, final Activity activity) {
 
         new Thread(new Runnable() {
             @Override
