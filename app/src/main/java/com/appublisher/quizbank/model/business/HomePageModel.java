@@ -20,6 +20,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.common.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.UserDAO;
@@ -28,6 +29,7 @@ import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.netdata.course.GradeCourseResp;
 import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
+import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.mock.MockListResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
@@ -57,7 +59,7 @@ public class HomePageModel {
      * 设置考试项目倒计时
      * @param textView textView
      */
-    public static void setExamCountDown(TextView textView) {
+    public static void setExamCountDown(TextView textView, Request request) {
         User user = UserDAO.findById();
 
         if (user == null) return;
@@ -71,8 +73,13 @@ public class HomePageModel {
         String date = examItemModel.getDate();
 
         long day = Utils.dateMinusNow(date);
+        if (day < 0) {
+            day = 0;
+            request.getExamList();
+        }
 
-        textView.setText("距离" + name + "还有" + String.valueOf(day) + "天");
+        String text = "距离" + name + "还有" + String.valueOf(day) + "天";
+        textView.setText(text);
     }
 
     /**
@@ -301,5 +308,45 @@ public class HomePageModel {
         AlertManager.showGradeSuccessAlert(
                 homePageFragment.mActivity, gradeCourseResp.getJump_url());
         GradeDAO.setGrade(Globals.appVersion);
+    }
+
+    /**
+     * 更新考试时间
+     * @param examDetailModel 考试列表数据模型
+     * @param textView 考试项目控件
+     */
+    public static void updateExam(ExamDetailModel examDetailModel, TextView textView) {
+        if (examDetailModel == null || examDetailModel.getResponse_code() != 1) return;
+
+        ArrayList<ExamItemModel> list = examDetailModel.getExams();
+        if (list == null) return;
+
+        int userExamId = LoginModel.getUserExamId();
+        if (userExamId == 0) return;
+
+        for (ExamItemModel examItemModel : list) {
+            if (examItemModel == null) continue;
+            if (examItemModel.getExam_id() == userExamId) {
+                // 更新用户考试项目
+                UserExamInfoModel curUserExam = LoginModel.getExamInfo();
+                if (curUserExam == null) return;
+
+                String name = examItemModel.getName();
+                String date = examItemModel.getDate();
+
+                curUserExam.setName(name);
+                curUserExam.setDate(date);
+
+                // 更新数据库
+                LoginModel.updateUserExam(
+                        GsonManager.getGson().toJson(curUserExam, UserExamInfoModel.class));
+
+                // 更新页面显示
+                long day = Utils.dateMinusNow(date);
+                if (day < 0) day = 0;
+                String text = "距离" + name + "还有" + String.valueOf(day) + "天";
+                textView.setText(text);
+            }
+        }
     }
 }

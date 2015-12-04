@@ -28,6 +28,7 @@ import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
+import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.MockM;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
@@ -224,7 +225,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         dealGradeAlert();
 
         // 考试项目倒计时
-        HomePageModel.setExamCountDown(mTvExam);
+        HomePageModel.setExamCountDown(mTvExam, mRequest);
     }
 
     /**
@@ -319,26 +320,45 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response == null) {
+        if (response == null || apiName == null) {
             ProgressBarManager.hideProgressBar();
             return;
         }
 
-        if ("entry_data".equals(apiName)) {
-            setContent(response);
-        } else if ("free_open_course_status".equals(apiName)) {
-            OpenCourseModel.dealOpenCourseStatusResp(response);
-            OpenCourseModel.setOpenCourseBtn(mActivity, mTvZhiboke);
-        } else if ("promote_live_course".equals(apiName)) {
-            HomePageModel.dealPromoteResp(response, this);
-        } else if ("global_settings".equals(apiName)) {
-            GlobalSettingDAO.save(response.toString());
-            setMockBtn();
-        } else if ("get_rate_course".equals(apiName)) {
-            ProgressDialogManager.closeProgressDialog();
-            HomePageModel.dealOpenupCourseResp(response, this);
-        } else if (apiName.equals("mock_exercise_list")) {
-            HomePageModel.dealMockListResp(response, this);
+        switch (apiName) {
+            case "entry_data":
+                setContent(response);
+                break;
+
+            case "free_open_course_status":
+                OpenCourseModel.dealOpenCourseStatusResp(response);
+                OpenCourseModel.setOpenCourseBtn(mActivity, mTvZhiboke);
+                break;
+
+            case "promote_live_course":
+                HomePageModel.dealPromoteResp(response, this);
+                break;
+
+            case "global_settings":
+                GlobalSettingDAO.save(response.toString());
+                setMockBtn();
+                break;
+
+            case "get_rate_course":
+                ProgressDialogManager.closeProgressDialog();
+                HomePageModel.dealOpenupCourseResp(response, this);
+                break;
+
+            case "mock_exercise_list":
+                HomePageModel.dealMockListResp(response, this);
+                break;
+
+            case "exam_list":
+                // 更新考试时间
+                ExamDetailModel exam = GsonManager.getGson().fromJson(
+                        response.toString(), ExamDetailModel.class);
+                HomePageModel.updateExam(exam, mTvExam);
+                break;
         }
     }
 
@@ -443,7 +463,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                     ToastManager.showToast(getActivity(), "没有相应的模考");
                 } else {
                     Class<?> cls;
-                    if (type == "mock") {
+                    if ("mock".equals(type)) {
                         cls = MockPreActivity.class;
                     } else {
                         cls = MockActivity.class;

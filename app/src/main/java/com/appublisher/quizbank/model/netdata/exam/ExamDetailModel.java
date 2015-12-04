@@ -1,6 +1,6 @@
 package com.appublisher.quizbank.model.netdata.exam;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 考试项目详情模型
@@ -8,7 +8,7 @@ import java.util.List;
 public class ExamDetailModel {
 
     int response_code;
-    List<ExamItemModel> exams;
+    ArrayList<ExamItemModel> exams;
 
     public int getResponse_code() {
         return response_code;
@@ -18,11 +18,11 @@ public class ExamDetailModel {
         this.response_code = response_code;
     }
 
-    public List<ExamItemModel> getExams() {
+    public ArrayList<ExamItemModel> getExams() {
         return exams;
     }
 
-    public void setExams(List<ExamItemModel> exams) {
+    public void setExams(ArrayList<ExamItemModel> exams) {
         this.exams = exams;
     }
 }

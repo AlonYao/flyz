@@ -375,6 +375,13 @@ public class LoginModel {
     }
 
     /**
+     * 更新用户考试项目
+     */
+    public static void updateUserExam(String exam) {
+        UserDAO.updateExamInfo(exam);
+    }
+
+    /**
      * 获取考试项目名称
      *
      * @return 考试项目名称
@@ -388,6 +395,22 @@ public class LoginModel {
         if (exam == null) return "";
 
         return exam.getName();
+    }
+
+    /**
+     * 获取考试项目id
+     *
+     * @return 考试项目id
+     */
+    public static int getUserExamId() {
+        User user = UserDAO.findById();
+        if (user == null) return 0;
+
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        UserExamInfoModel exam = Globals.gson.fromJson(user.exam, UserExamInfoModel.class);
+        if (exam == null) return 0;
+
+        return exam.getExam_id();
     }
 
     /**

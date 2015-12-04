@@ -9,7 +9,16 @@ public class UserExamInfoModel {
     String code;
     String date;
     boolean is_official;
+    boolean is_interview;
     String name;
+
+    public boolean is_interview() {
+        return is_interview;
+    }
+
+    public void setIs_interview(boolean is_interview) {
+        this.is_interview = is_interview;
+    }
 
     public String getCode() {
         return code;
