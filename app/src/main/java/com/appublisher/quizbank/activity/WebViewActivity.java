@@ -143,6 +143,11 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                         + "&user_id=" + LoginModel.getUserId()
                         + "&user_token=" + LoginModel.getUserToken()
                         + "&timestamp=" + System.currentTimeMillis());
+            } else if ("course".equals(mFrom) && PayConstants.mIsPaySuccess) {
+                String url = "http://dev.m.zhiboke.net/index.html#/live/ordersuccess?order_num="
+                        + PayConstants.mOrderID;
+                mWebView.loadUrl(url);
+                PayConstants.mIsPaySuccess = false;
             } else {
                 showWebView(mUrl);
             }
@@ -165,14 +170,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             }
         });
         mHomeWatcher.startWatch();
-
-        // 判断是否是购买成功
-        if ("course".equals(mFrom) && PayConstants.mIsPaySuccess) {
-            String url = "http://dev.m.zhiboke.net/index.html#/live/ordersuccess?order_num="
-                    + PayConstants.mOrderID;
-            mWebView.loadUrl(url);
-            PayConstants.mIsPaySuccess = false;
-        }
 
         // Umeng
         MobclickAgent.onPageStart("WebViewActivity");
