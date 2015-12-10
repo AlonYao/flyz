@@ -158,17 +158,6 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 判断是否超时
-        if (OfflineConstants.mDownloadList != null && OfflineConstants.mDownloadList.size() != 0
-                && (System.currentTimeMillis() - OfflineConstants.mLastTimestamp) > 60000) {
-            OfflineModel.removeTopRoomId();
-            OfflineModel.startDownload(this);
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();

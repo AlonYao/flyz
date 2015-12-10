@@ -460,8 +460,8 @@ public class CourseModel {
         String title = course.getName();
         String courseUrl = "";
         int courseId = course.getId();
-//        String detailPage = course.getDetail_page();
-        String detailPage = course.getDetail_page().replace("m.yaoguo.cn", "dev.m.zhiboke.net");
+        String detailPage = course.getDetail_page();
+
         if ("live".equals(type)) {
             // 直播课&公开课
             courseUrl = detailPage

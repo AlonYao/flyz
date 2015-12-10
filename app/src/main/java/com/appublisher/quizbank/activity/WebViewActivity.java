@@ -144,7 +144,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                         + "&user_token=" + LoginModel.getUserToken()
                         + "&timestamp=" + System.currentTimeMillis());
             } else if ("course".equals(mFrom) && PayConstants.mIsPaySuccess) {
-                String url = "http://dev.m.zhiboke.net/index.html#/live/ordersuccess?order_num="
+                String url = "http://m.yaoguo.cn/index.html#/live/ordersuccess?order_num="
                         + PayConstants.mOrderID;
                 mWebView.loadUrl(url);
                 PayConstants.mIsPaySuccess = false;
