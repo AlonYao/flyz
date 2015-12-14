@@ -45,11 +45,11 @@ public class CourseModel {
     private static PopupWindow mPwTag;
     private static PopupWindow mPwArea;
     private static PopupWindow mPwPurchase;
-    private static CourseFragment mCourseFragment;
     private static ArrayList<FilterTagM> mFilterTags;
     private static ArrayList<FilterAreaM> mFilterAreas;
     private static ArrayList<String> mFilterPurchase;
     private static ArrayList<CourseM> mCourses;
+    public static CourseFragment mCourseFragment;
     public static TextView mTvLastTag;
     public static TextView mTvLastArea;
     public static TextView mTvLastPurchase;
@@ -342,7 +342,7 @@ public class CourseModel {
 
                 case R.id.course_purchase_rl:
                     // Filter：课程购买状态
-                    if (mFilterPurchase == null) initPwPurchase();
+                    if (mPwPurchase == null) initPwPurchase();
                     mPwPurchase.showAsDropDown(mCourseFragment.mRlPurchase, 0, 2);
                     break;
 
@@ -559,10 +559,12 @@ public class CourseModel {
             // 获取课程地区接口异常
             getCourseList(courseFragment);
         }
+
         if ("course_list".equals(apiName)) {
             if (mCourses != null)
                 mCourses.clear();
-            mCourseListAdapter.notifyDataSetChanged();
+            if (mCourseListAdapter != null)
+                mCourseListAdapter.notifyDataSetChanged();
             courseFragment.netBadView.setVisibility(View.VISIBLE);
         }
     }

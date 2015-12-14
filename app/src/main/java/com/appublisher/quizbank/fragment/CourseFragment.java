@@ -99,6 +99,7 @@ public class CourseFragment extends Fragment implements RequestCallback {
         }
 
         CourseModel.mCourseListAdapter = null;
+        CourseModel.mCourseFragment = this;
 
         // 已购/未购
         mRlPurchase.setOnClickListener(CourseModel.onClickListener);
