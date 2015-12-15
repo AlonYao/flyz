@@ -94,15 +94,12 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind" >
-        </activity>
-
+            android:screenOrientation="behind"/>
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind" >
-        </activity>
+            android:screenOrientation="behind"/>
 
         <!-- 微信回调Activity -->
         <activity
@@ -114,9 +111,11 @@
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <!-- Activity -->
-        <!-- 登录注册模块Activity -->
+
+        <!-- 登录注册模块 START -->
+
         <activity
             android:name=".common.login.activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -153,10 +152,52 @@
             android:label="@string/title_activity_cannot_get_sms"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".common.login.activity.ForceBindingMobileActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ExamChangeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_exam_change"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.login.activity.MobileRegisterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_mobile_register"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.login.activity.RegisterSmsCodeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_register_sms_code"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.login.activity.ForgetPwdActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_forget_pwd"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.login.activity.EmailResetPwdActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_email_reset_pwd"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.login.activity.CannotGetEmailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_cannot_get_email"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.login.activity.MobileResetPwdActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_mobile_reset_pwd"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.login.activity.BindingSmsCodeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_binding_sms_code"
+            android:screenOrientation="portrait" />
+
+        <!-- 登录注册模块 END -->
+
         <activity
             android:name=".activity.SystemNoticeActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -252,44 +293,9 @@
             android:label="@string/title_activity_app_guide"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".common.login.activity.MobileRegisterActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_mobile_register"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.RegisterSmsCodeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_register_sms_code"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.ForgetPwdActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_forget_pwd"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.EmailResetPwdActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_email_reset_pwd"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.CannotGetEmailActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_cannot_get_email"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.MobileResetPwdActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_mobile_reset_pwd"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.MockActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_mock"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.BindingSmsCodeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_binding_sms_code"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MockPreActivity"
@@ -297,16 +303,20 @@
             android:label="@string/title_activity_mock_pre"
             android:screenOrientation="portrait" />
 
-        <!-- 离线模块 -->
-        <activity android:name=".common.offline.activity.OfflineActivity"
+        <!-- 离线模块 START -->
+        <activity
+            android:name=".common.offline.activity.OfflineActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".common.offline.activity.OfflineClassActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.offline.activity.OfflineClassActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".common.offline.activity.OfflineWebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.offline.activity.OfflineWebViewActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <!-- 离线模块 END -->
     </application>
 
 </manifest>
