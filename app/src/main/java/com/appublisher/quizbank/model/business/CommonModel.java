@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.model.business;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.fb.model.UserInfo;
@@ -200,5 +202,19 @@ public class CommonModel {
                 agent.updateUserInfo();
             }
         }).start();
+    }
+
+    /**
+     * 获取客服QQ
+     * @param context 上下文
+     * @return 客服QQ
+     */
+    public static String getServiceQQ(Context context) {
+        GlobalSettingsResp resp = GlobalSettingDAO.getGlobalSettingsResp();
+        if (resp != null && resp.getResponse_code() == 1) {
+            return resp.getService_qq();
+        }
+
+        return context.getResources().getString(R.string.service_qq);
     }
 }

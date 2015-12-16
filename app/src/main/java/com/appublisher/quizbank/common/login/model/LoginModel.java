@@ -11,7 +11,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
@@ -32,6 +34,7 @@ import com.appublisher.quizbank.common.login.model.netdata.LoginResponseModel;
 import com.appublisher.quizbank.common.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.common.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.dao.UserDAO;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
@@ -936,6 +939,7 @@ public class LoginModel {
                         bindingMobile(context, phone_num);
                     } else {
                         // 其他情况联系客服处理
+                        showChangeAccountAlert(true, context);
                     }
                 } else if (Globals.sharedPreferences.getString("user_wb_id", "").length() != 0) {
                     // 微信新用户
@@ -944,10 +948,12 @@ public class LoginModel {
                         bindingMobile(context, phone_num);
                     } else {
                         // 其他情况联系客服处理
+                        showChangeAccountAlert(true, context);
                     }
                 }
             } else {
-                // 如果是社交老用户
+                // 如果是社交老用户，直接联系客服
+                showChangeAccountAlert(false, context);
             }
         }
     }
@@ -969,12 +975,58 @@ public class LoginModel {
     /**
      * 展示切换账号Alert
      * @param is_new 是否是新用户
+     * @param context 上下文
      */
-    private static void showChangeAccountAlert(boolean is_new) {
+    private static void showChangeAccountAlert(boolean is_new, final Context context) {
+        String text = "手机号已注册并绑定其他账号，请切换账号或联系客服(QQ:"
+                + CommonModel.getServiceQQ(context) + ")";
+        String change = "切换账号";
+        String abandon = "放弃绑定";
+
+        // 自定义textview，方便用户长按复制QQ号
+        TextView textView = new TextView(context);
+        textView.setText(text);
+        textView.setPadding(20, 20, 20, 20);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(15);
+        textView.setTextColor(context.getResources().getColor(R.color.common_text));
+        CommonModel.setTextLongClickCopy(textView);
+
         if (is_new) {
+            new AlertDialog.Builder(context)
+                    .setView(textView)
+                    .setTitle(R.string.alert_logout_title)
+                    .setPositiveButton(change,
+                            new DialogInterface.OnClickListener() {
 
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    LoginModel.setLogout((Activity) context);
+                                    dialog.dismiss();
+                                }
+                            })
+                    .create().show();
         } else {
+            new AlertDialog.Builder(context)
+                    .setView(textView)
+                    .setTitle(R.string.alert_logout_title)
+                    .setPositiveButton(change,
+                            new DialogInterface.OnClickListener() {
 
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    LoginModel.setLogout((Activity) context);
+                                    dialog.dismiss();
+                                }
+                            })
+                    .setNegativeButton(abandon, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
         }
     }
+
 }

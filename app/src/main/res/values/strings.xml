@@ -93,7 +93,7 @@
     <string name="practice_report_xingce">行测</string>
     <string name="practice_report_shenlun">申论</string>
 
-    <!--模考总动员  -->
+    <!-- 模考总动员  -->
     <string name="mockpre_exam_join">课程报名</string>
     <string name="mockpre_join_exam">进入考试</string>
     <string name="mockpre_order_exam">预约考试</string>
@@ -112,6 +112,7 @@
     <string name="course_qq">咨询客服</string>
     <string name="neterror">连接不到网络</string>
     <string name="course_offline">点击右上角可以查看已下载课程</string>
+
     <!-- 知识点层级 -->
     <string name="hierarchy_name">知识点层级</string>
 
@@ -189,6 +190,7 @@
     <string name="title_activity_app_guide">AppGuideActivity</string>
     <string name="title_activity_mock">模考估分</string>
     <string name="title_activity_mock_pre">模考总动员</string>
+
     <!-- 支付模块 -->
     <string name="wx_pay">微信支付结果</string>
     <string name="wx_pay_error">支付错误</string>
