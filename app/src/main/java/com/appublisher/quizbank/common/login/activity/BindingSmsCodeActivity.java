@@ -300,7 +300,7 @@ public class BindingSmsCodeActivity extends ActionBarActivity
         } else if ("login".equals(apiName)) {
             // 处理预约公开课手机号验证部分的回调
             LoginModel.dealOpenCourseResp(this, response);
-        } else if (apiName.equals("book_mock")) {
+        } else if ("book_mock".equals(apiName)) {
             Intent intent = new Intent(this, BindingMobileActivity.class);
             setResult(ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT, intent);
             finish();

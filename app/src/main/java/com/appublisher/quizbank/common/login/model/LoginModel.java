@@ -35,6 +35,7 @@ import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.DownloadAsyncTask;
 import com.appublisher.quizbank.utils.FileManager;
@@ -666,19 +667,14 @@ public class LoginModel {
      * @param resp 用户检查回调
      */
     public static void dealCheckOAuthUserResp(IsUserExistsResp resp) {
-        if (resp == null || resp.getResponse_code() != 1) {
+        if (resp == null || resp.getResponse_code() != 1 || mLoginId == null) {
             ProgressDialogManager.closeProgressDialog();
+            ToastManager.showToast(mLoginActivity, "登录失败");
             return;
         }
 
         if (resp.isUser_exists()) {
             // 老用户直接执行登录
-            if (mLoginId == null) {
-                ProgressDialogManager.closeProgressDialog();
-                ToastManager.showToast(mLoginActivity, "登录失败");
-                return;
-            }
-
             String type;
             if ("WB".equals(mLoginActivity.mSocialLoginType)) {
                 // 微博
@@ -698,8 +694,18 @@ public class LoginModel {
         } else {
             // 新用户跳转至强制绑定手机页面
             Intent intent = new Intent(mLoginActivity, ForceBindingMobileActivity.class);
+            intent.putExtra("is_new", true);
             mLoginActivity.startActivity(intent);
             ProgressDialogManager.closeProgressDialog();
+
+            // 本地记录第三方登录id，用于后续手机号的绑定
+            SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+            if ("WB".equals(mLoginActivity.mSocialLoginType)) {
+                editor.putString("user_wb_id", mLoginId);
+            } else {
+                editor.putString("user_wx_id", mLoginId);
+            }
+            editor.commit();
         }
     }
 
@@ -899,6 +905,76 @@ public class LoginModel {
         } else if (!"".equals(preWeiboId)) {
             // 微博用户
             activity.mIvWeiboPre.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 检查手机绑定
+     * @param resp 用户是否存在接口的回调
+     * @param context 上下文
+     * @param phone_num 手机号
+     * @param is_new 是否是新用户
+     */
+    public static void checkMobileBinding(IsUserExistsResp resp,
+                                          Context context,
+                                          String phone_num,
+                                          boolean is_new) {
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        if (!resp.isUser_exists()) {
+            // 未注册，可以直接绑定
+            bindingMobile(context, phone_num);
+
+        } else {
+            // 已注册，需要进一步判断绑定的社交账号
+            if (is_new) {
+                // 如果是社交新用户，需要检测手机号的社交账号绑定状态
+                if (Globals.sharedPreferences.getString("user_wb_id", "").length() != 0) {
+                    // 微博新用户
+                    if (resp.getWeibo() == null || resp.getWeibo().length() == 0) {
+                        // 该手机号没有绑定微博，直接绑定
+                        bindingMobile(context, phone_num);
+                    } else {
+                        // 其他情况联系客服处理
+                    }
+                } else if (Globals.sharedPreferences.getString("user_wb_id", "").length() != 0) {
+                    // 微信新用户
+                    if (resp.getWeixin() == null || resp.getWeixin().length() == 0) {
+                        // 该手机号没有绑定微信，直接绑定
+                        bindingMobile(context, phone_num);
+                    } else {
+                        // 其他情况联系客服处理
+                    }
+                }
+            } else {
+                // 如果是社交老用户
+            }
+        }
+    }
+
+    /**
+     * 绑定手机号
+     * @param context 上下文
+     * @param phone_num 手机号
+     */
+    private static void bindingMobile(Context context, String phone_num) {
+        new Request(context, (RequestCallback) context).getSmsCode(
+                ParamBuilder.phoneNumParams(phone_num, ""));
+
+        Intent intent = new Intent(context, BindingSmsCodeActivity.class);
+        intent.putExtra("user_phone", phone_num);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 展示切换账号Alert
+     * @param is_new 是否是新用户
+     */
+    private static void showChangeAccountAlert(boolean is_new) {
+        if (is_new) {
+
+        } else {
+
         }
     }
 }
