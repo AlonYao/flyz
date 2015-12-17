@@ -22,7 +22,6 @@ import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.activity.BindingSmsCodeActivity;
 import com.appublisher.quizbank.common.login.activity.EmailResetPwdActivity;
-import com.appublisher.quizbank.common.login.activity.ForceBindingMobileActivity;
 import com.appublisher.quizbank.common.login.activity.LoginActivity;
 import com.appublisher.quizbank.common.login.activity.MobileRegisterActivity;
 import com.appublisher.quizbank.common.login.activity.MobileResetPwdActivity;
@@ -65,10 +64,6 @@ public class LoginModel {
 
     private static LoginActivity mLoginActivity;
     public static int mPwdErrorCount;
-
-    private static String mLoginId;
-    private static String mNickName;
-    private static String mAvatar;
 
     /**
      * 构造函数
@@ -155,15 +150,26 @@ public class LoginModel {
                                         }
 
                                         @Override
-                                        public void onComplete(int status,
-                                                               Map<String, Object> info) {
+                                        public void onComplete(int status, Map<String, Object> info) {
                                             if (status == 200 && info != null) {
-                                                mLoginId = (String) info.get("unionid");
-                                                mNickName = (String) info.get("nickname");
-                                                mAvatar = (String) info.get("headimgurl");
+                                                String login_id = (String) info.get("unionid");
+                                                String nickname = (String) info.get("nickname");
+                                                String avatar = (String) info.get("headimgurl");
+
+                                                if (login_id == null) {
+                                                    ProgressDialogManager.closeProgressDialog();
+                                                    ToastManager.showToast(mLoginActivity, "登录失败");
+                                                    return;
+                                                }
+
                                                 mLoginActivity.mSocialLoginType = "WX";
-                                                mLoginActivity.mRequest.isUserExists(
-                                                        mLoginId, "weixin");
+                                                mLoginActivity.mRequest.socialLogin(
+                                                        ParamBuilder.socialLoginParams(
+                                                                "2",
+                                                                login_id,
+                                                                nickname,
+                                                                "",
+                                                                avatar));
                                             } else {
                                                 ProgressDialogManager.closeProgressDialog();
                                             }
@@ -209,15 +215,20 @@ public class LoginModel {
                                         }
 
                                         @Override
-                                        public void onComplete(int status,
-                                                               Map<String, Object> info) {
+                                        public void onComplete(int status, Map<String, Object> info) {
                                             if (status == 200 && info != null) {
-                                                mLoginId = info.get("uid").toString();
-                                                mNickName = info.get("screen_name").toString();
-                                                mAvatar = info.get("profile_image_url").toString();
+                                                String login_id = info.get("uid").toString();
+                                                String nickname = info.get("screen_name").toString();
+                                                String avatar = info.get("profile_image_url").toString();
+
                                                 mLoginActivity.mSocialLoginType = "WB";
-                                                mLoginActivity.mRequest.isUserExists(
-                                                        mLoginId, "weibo");
+                                                mLoginActivity.mRequest.socialLogin(
+                                                        ParamBuilder.socialLoginParams(
+                                                                "1",
+                                                                login_id,
+                                                                nickname,
+                                                                "",
+                                                                avatar));
                                             } else {
                                                 ProgressDialogManager.closeProgressDialog();
                                             }
@@ -579,35 +590,25 @@ public class LoginModel {
      * @param apiName  接口类别
      */
     public static void dealResp(JSONObject response, String apiName, LoginActivity activity) {
-        if (response == null || apiName == null) {
+        if (response == null) {
             ProgressDialogManager.closeProgressDialog();
             return;
         }
 
-        switch (apiName) {
-            case "is_user_exists":
-                IsUserExistsResp isUserExistsResp =
-                        GsonManager.getGson().fromJson(response.toString(), IsUserExistsResp.class);
-                dealIsUserExistsResp(isUserExistsResp, activity);
-                break;
+        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
 
-            case "is_user_exists_oauth":
-                // 检查第三方登录用户是否是新用户
-                isUserExistsResp =
-                        GsonManager.getGson().fromJson(response.toString(), IsUserExistsResp.class);
-                dealCheckOAuthUserResp(isUserExistsResp);
-                break;
+        if ("is_user_exists".equals(apiName)) {
+            IsUserExistsResp isUserExistsResp =
+                    Globals.gson.fromJson(response.toString(), IsUserExistsResp.class);
+            dealIsUserExistsResp(isUserExistsResp, activity);
 
-            case "social_login":
-            case "login":
-                LoginResponseModel lrm =
-                        GsonManager.getGson().fromJson(response.toString(), LoginResponseModel.class);
-                dealLoginResp(lrm, activity, apiName);
-                break;
+        } else if ("login".equals(apiName) || "social_login".equals(apiName)) {
+            LoginResponseModel lrm =
+                    Globals.gson.fromJson(response.toString(), LoginResponseModel.class);
+            dealLoginResp(lrm, activity, apiName);
 
-            default:
-                ProgressDialogManager.closeProgressDialog();
-                break;
+        } else {
+            ProgressDialogManager.closeProgressDialog();
         }
     }
 
@@ -658,48 +659,6 @@ public class LoginModel {
             // 用户不存在
             ProgressDialogManager.closeProgressDialog();
             LoginModel.showUserNonentityAlert(activity);
-        }
-    }
-
-    /**
-     * 处理检查第三方登录用户是否是新用户
-     * @param resp 用户检查回调
-     */
-    public static void dealCheckOAuthUserResp(IsUserExistsResp resp) {
-        if (resp == null || resp.getResponse_code() != 1) {
-            ProgressDialogManager.closeProgressDialog();
-            return;
-        }
-
-        if (resp.isUser_exists()) {
-            // 老用户直接执行登录
-            if (mLoginId == null) {
-                ProgressDialogManager.closeProgressDialog();
-                ToastManager.showToast(mLoginActivity, "登录失败");
-                return;
-            }
-
-            String type;
-            if ("WB".equals(mLoginActivity.mSocialLoginType)) {
-                // 微博
-                type = "1";
-            } else {
-                // 微信
-                type = "2";
-            }
-
-            mLoginActivity.mRequest.socialLogin(
-                    ParamBuilder.socialLoginParams(
-                            type,
-                            mLoginId,
-                            mNickName,
-                            "",
-                            mAvatar));
-        } else {
-            // 新用户跳转至强制绑定手机页面
-            Intent intent = new Intent(mLoginActivity, ForceBindingMobileActivity.class);
-            mLoginActivity.startActivity(intent);
-            ProgressDialogManager.closeProgressDialog();
         }
     }
 

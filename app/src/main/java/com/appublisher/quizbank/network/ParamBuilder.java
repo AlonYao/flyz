@@ -128,11 +128,8 @@ public class ParamBuilder implements ApiConstants {
      * @param avatar     用户头像
      * @return params  用户登录参数
      */
-    public static Map<String, String> socialLoginParams(String login_type,
-                                                        String login_id,
-                                                        String nickname,
-                                                        String password,
-                                                        String avatar) {
+    public static Map<String, String> socialLoginParams(String login_type, String login_id,
+                                                        String nickname, String password, String avatar) {
         Map<String, String> params = new HashMap<>();
         params.put("login_type", login_type);
         params.put("login_id", login_id);
@@ -380,7 +377,7 @@ public class ParamBuilder implements ApiConstants {
      * 模考解析直播课报名
      *
      * @param course_id 课程id
-     * @return 参数Map
+     * @return
      */
     public static Map<String, String> getSignUpMockCourse(String course_id) {
         Map<String, String> params = new HashMap<>();
@@ -390,8 +387,8 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 预约模考
-     * @param mock_id 模考id
-     * @return 参数Map
+     * @param mock_id
+     * @return
      */
     public static Map<String,String> getBookMock(String mock_id){
         Map<String,String> params = new HashMap<>();

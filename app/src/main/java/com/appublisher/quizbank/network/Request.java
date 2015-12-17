@@ -318,18 +318,6 @@ public class Request extends BaseRequest implements ApiConstants {
     }
 
     /**
-     * 检查用户是否存在（第三方登录用户）
-     * @param user_name 用户名
-     * @param type 第三方登录类别：weibo weixin
-     */
-    public void isUserExists(String user_name, String type) {
-        asyncRequest(ParamBuilder.finalUrl(isUserExists)
-                + "&user_name=" + user_name
-                + "&type=" + type,
-                "is_user_exists_oauth", "object");
-    }
-
-    /**
      * 密码重置
      *
      * @param email 用户邮箱
