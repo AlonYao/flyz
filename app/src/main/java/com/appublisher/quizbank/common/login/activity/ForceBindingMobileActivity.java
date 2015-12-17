@@ -8,12 +8,9 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.login.model.netdata.IsUserExistsResp;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 
@@ -26,7 +23,6 @@ import org.json.JSONObject;
 public class ForceBindingMobileActivity extends AppCompatActivity implements RequestCallback{
 
     private String mPhoneNum;
-    private boolean mIsNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +34,6 @@ public class ForceBindingMobileActivity extends AppCompatActivity implements Req
 
         // Variable Init
         final Request request = new Request(this, this);
-        mIsNew = getIntent().getBooleanExtra("is_new", false);
 
         // View Init
         final EditText etMobile = (EditText) findViewById(R.id.forcebindingmobile_phone);
@@ -68,17 +63,6 @@ public class ForceBindingMobileActivity extends AppCompatActivity implements Req
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response == null || apiName == null) {
-            ProgressDialogManager.closeProgressDialog();
-            return;
-        }
-
-        if ("is_user_exists".equals(apiName)) {
-            IsUserExistsResp isUserExistsResp =
-                    GsonManager.getGson().fromJson(response.toString(), IsUserExistsResp.class);
-            LoginModel.checkMobileBinding(isUserExistsResp, this, mPhoneNum, mIsNew);
-        }
-
         ProgressDialogManager.closeProgressDialog();
     }
 
