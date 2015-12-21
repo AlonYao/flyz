@@ -13,17 +13,19 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
+import com.appublisher.quizbank.utils.ToastManager;
 
 /**
  * 侧边栏按钮容器
  */
-public class DrawerAdapter extends BaseAdapter{
+public class DrawerAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    public static int[] mItemNames = new int[] {
+    public static int[] mItemNames = new int[]{
             R.string.drawer_homepage,
             R.string.drawer_wholepage,
             R.string.drawer_course,
@@ -33,7 +35,7 @@ public class DrawerAdapter extends BaseAdapter{
             R.string.drawer_setting,
     };
 
-    private int[] mItemImgs = new int[] {
+    private int[] mItemImgs = new int[]{
             R.drawable.drawer_homepage,
             R.drawable.drawer_wholepage,
             R.drawable.drawer_course,
@@ -94,8 +96,17 @@ public class DrawerAdapter extends BaseAdapter{
         } else {
             viewHolder.llVersion.setVisibility(View.VISIBLE);
             viewHolder.rlIcon.setVisibility(View.GONE);
-
             viewHolder.tvVersion.setText(Globals.appVersion);
+            viewHolder.llVersion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (AppUpdate.getIsNewAppVersion(mContext)) {
+                        AppUpdate.showUpGrade(mContext);
+                    } else {
+                        ToastManager.showToast(mContext, "现在已经是最新版啦");
+                    }
+                }
+            });
         }
 
         // 判断设置按钮是否显示红点

@@ -193,4 +193,11 @@
     <string name="wx_pay">微信支付结果</string>
     <string name="wx_pay_error">支付错误</string>
     <string name="wx_pay_cancel">取消支付</string>
+    <!--版本更新-->
+    <string name="new_version">新版本</string>
+    <string name="update_now">这就更新</string>
+    <string name="nexttime">下次再说</string>
+    <string name="hehe">新版本</string>
+    <string name="evaluation_update_text">更详细的等级评估</string>
+    <string name="practice_update_text">可以跟小伙伴比较啦</string>
 </resources>

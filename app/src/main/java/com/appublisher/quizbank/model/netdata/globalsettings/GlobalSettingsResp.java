@@ -17,6 +17,7 @@ public class GlobalSettingsResp {
     String evaluate_share_url;
     String app_ios_url;
     String app_android_url;
+    NewVersion new_version;
 
     public String getApp_ios_url() {
         return app_ios_url;
@@ -56,5 +57,13 @@ public class GlobalSettingsResp {
 
     public String getService_qq() {
         return service_qq;
+    }
+
+    public NewVersion getNew_version() {
+        return new_version;
+    }
+
+    public void setNew_version(NewVersion new_version) {
+        this.new_version = new_version;
     }
 }

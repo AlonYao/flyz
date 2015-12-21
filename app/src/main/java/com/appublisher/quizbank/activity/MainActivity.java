@@ -55,9 +55,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-public class MainActivity extends ActionBarActivity implements RequestCallback{
+public class MainActivity extends ActionBarActivity implements RequestCallback {
 
-    /** Fragment **/
+    /**
+     * Fragment
+     **/
     private FragmentManager mFragmentManager;
     private HomePageFragment mHomePageFragment;
     private WholePageFragment mWholePageFragment;
@@ -84,6 +86,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     private static final String FAVORITE = "Favorite";
     private static final String STUDYRECORD = "Study";
     private static final String SETTING = "Setting";
+    public static final String DOWNLOAD_FOLDER_NAME = "Application";
+    public static final String DOWNLOAD_FILE_NAME = "QuziBank.apk";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +146,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
+
     }
 
     @Override
@@ -149,9 +154,13 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
         super.onResume();
         // Umeng
         MobclickAgent.onResume(this);
-
         // TalkingData
         TCAgent.onResume(this);
+        //版本更新
+        boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
+//        if (enable) {
+//            AppUpdate.showUpGrade(this);
+//        }
     }
 
     @Override
@@ -207,7 +216,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
     @SuppressLint("RtlHardcoded")
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerLayout.closeDrawers();
             return;
         }
@@ -235,26 +244,27 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
      */
     private AdapterView.OnItemClickListener drawerListOnClick =
             new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // 点击版本号，直接返回
-            if (position == DrawerAdapter.mItemNames.length) return;
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // 点击版本号，直接返回
+                    if (position == DrawerAdapter.mItemNames.length) return;
 
-            changeFragment(position);
+                    changeFragment(position);
 
-            // 侧边栏顶部红点消失
-            if (position == 5) {
-                mIvDrawerRedPoint.setVisibility(View.GONE);
-            }
+                    // 侧边栏顶部红点消失
+                    if (position == 5) {
+                        mIvDrawerRedPoint.setVisibility(View.GONE);
+                    }
 
-            // Umeng统计
-            if (position == 2)
-                UmengManager.sendCountEvent(MainActivity.this, "CourseCenter", "Entry", "Drawer");
-        }
-    };
+                    // Umeng统计
+                    if (position == 2)
+                        UmengManager.sendCountEvent(MainActivity.this, "CourseCenter", "Entry", "Drawer");
+                }
+            };
 
     /**
      * 切换Fragment
+     *
      * @param position fragment在侧边栏上的位置
      */
     public void changeFragment(int position) {
@@ -398,6 +408,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback{
 
     /**
      * 将所有的Fragment都置为隐藏状态
+     *
      * @param transaction 用于对Fragment执行操作的事务
      */
     private void hideFragments(FragmentTransaction transaction) {

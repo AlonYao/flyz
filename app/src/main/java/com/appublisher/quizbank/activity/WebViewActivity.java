@@ -19,7 +19,6 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
@@ -33,6 +32,7 @@ import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.HomeWatcher;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -144,7 +144,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                         + "&user_token=" + LoginModel.getUserToken()
                         + "&timestamp=" + System.currentTimeMillis());
             } else if ("course".equals(mFrom) && PayConstants.mIsPaySuccess) {
-                String url = "http://m.yaoguo.cn/index.html#/live/ordersuccess?order_num="
+                String url = "http://dev.m.zhiboke.net/index.html#/live/ordersuccess?order_num="
                         + PayConstants.mOrderID;
                 mWebView.loadUrl(url);
                 PayConstants.mIsPaySuccess = false;
@@ -312,7 +312,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public void showWebView(String url) {
         if (url == null) return;
-
+        Logger.i("url="+url);
         mProgressBar.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);

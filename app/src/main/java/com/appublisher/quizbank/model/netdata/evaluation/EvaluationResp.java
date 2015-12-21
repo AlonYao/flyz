@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.model.netdata.evaluation;
 
+import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
+
 import java.util.ArrayList;
 
 /**
@@ -20,7 +22,7 @@ public class EvaluationResp {
     String summary_source;
     String calculation_basis;
     String summary_date;
-
+    ArrayList<HierarchyM> note_hierarchy;
     public int getResponse_code() {
         return response_code;
     }
@@ -71,5 +73,13 @@ public class EvaluationResp {
 
     public float getAvarage_accuracy() {
         return avarage_accuracy;
+    }
+
+    public ArrayList<HierarchyM> getNote_hierarchy() {
+        return note_hierarchy;
+    }
+
+    public void setNote_hierarchy(ArrayList<HierarchyM> note_hierarchy) {
+        this.note_hierarchy = note_hierarchy;
     }
 }

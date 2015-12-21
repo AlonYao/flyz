@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/common_bg"
-    tools:context="com.appublisher.quizbank.activity.EvaluationActivity">
+    tools:context="com.appublisher.quizbank.activity.EvaluationActivity"
+    android:id="@+id/baseView"
+    >
 
     <include layout="@layout/toolbar"/>
 
@@ -285,6 +287,14 @@
                 </RelativeLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/category_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
             <!-- 历史估分折线图 -->
             <LinearLayout
                 android:id="@+id/evaluation_history_ll"

@@ -6,6 +6,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -29,7 +30,7 @@ import org.json.JSONObject;
 /**
  * 能力评估
  */
-public class EvaluationActivity extends ActionBarActivity implements RequestCallback{
+public class EvaluationActivity extends ActionBarActivity implements RequestCallback {
 
     public LineChartView mLineChart;
     public TextView mTvScore;
@@ -45,11 +46,11 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
     public TextView mTvSummaryDate;
     public LinearLayout mLlHistory;
     public ScrollView mSvMain;
-
+    public View parentView;
     public int mLearningDays;
     public int mScore;
     public float mRank;
-
+    public LinearLayout mContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,8 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         mTvCalculationBasis = (TextView) findViewById(R.id.evaluation_calculationbasis);
         mTvSummaryDate = (TextView) findViewById(R.id.evaluation_summarydate);
         mSvMain = (ScrollView) findViewById(R.id.evaluation_sv);
-
+        parentView = findViewById(R.id.baseView);
+        mContainer = (LinearLayout)findViewById(R.id.category_container);
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new Request(this, this).getEvaluation();
@@ -88,9 +90,9 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         // Umeng
         MobclickAgent.onPageStart("EvaluationActivity");
         MobclickAgent.onResume(this);
-
         // TalkingData
         TCAgent.onResume(this);
+
     }
 
     @Override
@@ -110,7 +112,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
 
         /**使用SSO授权必须添加如下代码 */
         UMSsoHandler ssoHandler = UmengManager.mController.getConfig().getSsoHandler(requestCode);
-        if(ssoHandler != null){
+        if (ssoHandler != null) {
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }

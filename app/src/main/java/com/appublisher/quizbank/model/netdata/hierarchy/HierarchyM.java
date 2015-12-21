@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class HierarchyM {
     int category_id;
     String name;
+    int level;
     ArrayList<NoteGroupM> note_group;
     int done;
     int total;
@@ -45,5 +46,13 @@ public class HierarchyM {
 
     public void setNote_group(ArrayList<NoteGroupM> note_group) {
         this.note_group = note_group;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

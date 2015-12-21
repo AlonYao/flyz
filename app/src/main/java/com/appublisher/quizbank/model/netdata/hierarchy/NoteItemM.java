@@ -8,6 +8,7 @@ public class NoteItemM {
     String name;
     int done;
     int total;
+    int level;
     public  int getDone(){
         return  done;
     }
@@ -34,5 +35,13 @@ public class NoteItemM {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

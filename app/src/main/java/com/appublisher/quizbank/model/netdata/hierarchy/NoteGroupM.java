@@ -11,6 +11,7 @@ public class NoteGroupM {
     ArrayList<NoteItemM> notes;
     int done;
     int total;
+    int level;
     public  int getDone(){
         return  done;
     }
@@ -45,5 +46,13 @@ public class NoteGroupM {
 
     public void setNotes(ArrayList<NoteItemM> notes) {
         this.notes = notes;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

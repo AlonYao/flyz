@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@android:color/white"
+    android:minHeight="55dp"
+    android:orientation="vertical">
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="#D8D8D8" />-->
+
+    <ImageView
+        android:id="@+id/toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="18dp"
+        android:src="@drawable/treeview_add" />
+
+    <TextView
+        android:id="@+id/treeview_name"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="35dp"
+        android:text="@string/hierarchy_name"
+        android:textColor="@color/common_text"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/level_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="18dp"
+        android:src="@drawable/level_4" />
+
+    <ImageView
+        android:id="@+id/level_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/level_5"
+        android:src="@drawable/level_3" />
+
+    <ImageView
+        android:id="@+id/level_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/level_4"
+        android:src="@drawable/level_2" />
+
+    <ImageView
+        android:id="@+id/level_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/level_3"
+        android:src="@drawable/level_1" />
+
+    <ImageView
+        android:id="@+id/level_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/level_2"
+        android:src="@drawable/level_0" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#D8D8D8" />
+
+</RelativeLayout>

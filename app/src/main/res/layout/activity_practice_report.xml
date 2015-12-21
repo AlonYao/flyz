@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_bg"
-    tools:context="com.appublisher.quizbank.activity.PracticeReportActivity">
+    tools:context="com.appublisher.quizbank.activity.PracticeReportActivity"
+    android:id="@+id/parentView"
+    >
 
     <include layout="@layout/toolbar"
         android:layout_width="match_parent"

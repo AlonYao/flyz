@@ -103,21 +103,19 @@ public class FileManager {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void deleteFiles(String filePath) {
 		if (filePath == null || filePath.length() == 0) return;
-
 		try {
 			File file = new File(filePath);
 
 			if (file.isFile()) {
 				file.delete();
-
+				Logger.i("file_true");
 			} else if (file.isDirectory()) {
 				File[] childFiles = file.listFiles();
-
+				Logger.i("file_size"+childFiles.length);
 				if (childFiles == null || childFiles.length == 0) {
 					file.delete();
 					return;
 				}
-
 				for (File childFile : childFiles) {
 					deleteFiles(childFile.getCanonicalPath());
 				}

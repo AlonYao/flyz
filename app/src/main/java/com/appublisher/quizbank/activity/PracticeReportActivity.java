@@ -6,6 +6,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -63,7 +64,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public ImageView mIvNoteNoChange;
     public RelativeLayout mRlMiniMokao;
     public ScrollView mSvMain;
-
+    public View parentView;
     public int mRightNum;
     public int mTotalNum;
     public int mPaperId;
@@ -113,7 +114,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mLlEvaluate = (LinearLayout) findViewById(R.id.practice_report_evaluate);
         mTvEvaluateNum = (TextView) findViewById(R.id.practice_report_evaluate_num);
         mSvMain = (ScrollView) findViewById(R.id.practice_report_sv);
-
+        parentView = findViewById(R.id.parentView);
         // 成员变量初始化
         mUmengStatus = "1";
         mHomeWatcher = new HomeWatcher(this);

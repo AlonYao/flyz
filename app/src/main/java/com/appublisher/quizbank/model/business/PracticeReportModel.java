@@ -28,6 +28,7 @@ import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.PopupWindowManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.appublisher.quizbank.utils.Utils;
 
@@ -46,6 +47,7 @@ public class PracticeReportModel {
 
     /**
      * 获取数据
+     *
      * @param activity PracticeReportActivity
      */
     public static void getData(final PracticeReportActivity activity) {
@@ -55,7 +57,7 @@ public class PracticeReportModel {
         activity.mTotalNum = activity.getIntent().getIntExtra("total_num", 0);
         //noinspection unchecked
         activity.mCategoryMap = (HashMap<String, HashMap<String, Object>>)
-                        activity.getIntent().getSerializableExtra("category");
+                activity.getIntent().getSerializableExtra("category");
         //noinspection unchecked
         activity.mNotes = (ArrayList<NoteM>) activity.getIntent().getSerializableExtra("notes");
 
@@ -116,7 +118,6 @@ public class PracticeReportModel {
 
             // 往年分数线
             setBorderLine();
-
         } else if ("mock".equals(mActivity.mPaperType)) {
             // 模考
             mActivity.mLlRatio.setVisibility(View.GONE);
@@ -192,6 +193,14 @@ public class PracticeReportModel {
             }
 
             mActivity.mLlBorderLine.addView(child);
+        }
+        //1.5版本加排名信息提示
+        if ("entire".equals(mActivity.mPaperType)) {
+            boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
+            boolean detailCategory = Globals.sharedPreferences.getBoolean("rankInfo", true);
+            if (isFirstStart && detailCategory) {
+                PopupWindowManager.showUpdatePracticeReport(mActivity.parentView, mActivity);
+            }
         }
     }
 
@@ -290,8 +299,9 @@ public class PracticeReportModel {
 
     /**
      * 跳转到做题解析页面
+     *
      * @param questions 题目
-     * @param answers 答案
+     * @param answers   答案
      */
     private static void skipToMeasureAnalysisActivity(ArrayList<QuestionM> questions,
                                                       ArrayList<AnswerM> answers) {
@@ -423,8 +433,9 @@ public class PracticeReportModel {
 
     /**
      * 设置知识点变化img
+     *
      * @param level 知识点等级
-     * @param view 知识点等级view
+     * @param view  知识点等级view
      */
     private static void setLevelImg(int level, ImageView view) {
         if (level == 0) {
@@ -446,6 +457,7 @@ public class PracticeReportModel {
 
     /**
      * 处理练习历史信息接口回调
+     *
      * @param response 回调数据
      */
     public static void dealHistoryExerciseDetailResp(PracticeReportActivity activity,
@@ -570,6 +582,7 @@ public class PracticeReportModel {
 
     /**
      * 拼接用户答案
+     *
      * @param answers 用户答案
      */
     private static void jointUserAnswer(ArrayList<AnswerM> answers) {
@@ -610,6 +623,7 @@ public class PracticeReportModel {
 
     /**
      * 显示试卷类型
+     *
      * @param activity PracticeReportActivity
      */
     public static void showPaperType(PracticeReportActivity activity) {
@@ -638,6 +652,7 @@ public class PracticeReportModel {
 
     /**
      * 显示试卷描述
+     *
      * @param activity PracticeReportActivity
      */
     public static void showPaperDesc(PracticeReportActivity activity) {
@@ -657,6 +672,7 @@ public class PracticeReportModel {
 
     /**
      * 设置友盟分享
+     *
      * @param activity PracticeReportActivity
      */
     public static void setUmengShare(PracticeReportActivity activity) {
