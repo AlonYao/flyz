@@ -95,3 +95,6 @@
 
 # picasso
 -dontwarn com.squareup.okhttp.**
+
+# 支付宝
+-ignorewarnings
