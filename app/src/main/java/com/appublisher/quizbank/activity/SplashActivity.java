@@ -11,13 +11,12 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.activity.LoginActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.appublisher.quizbank.model.netdata.globalsettings.NewVersion;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -31,6 +30,7 @@ import org.json.JSONObject;
  */
 public class SplashActivity extends Activity implements RequestCallback {
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +38,13 @@ public class SplashActivity extends Activity implements RequestCallback {
 
         // 获取全局配置
         new Request(this, this).getGlobalSettings();
-        //应用版本更新
+
+        // 应用版本更新
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
         boolean isFirstStart = Globals.sharedPreferences.getBoolean("isFirstStart", true);
         editor.putBoolean("appUpdate", true);
-        //版本更新后，更新内容是否提示
+
+        // 版本更新后，更新内容是否提示
         editor.putBoolean("firstNotice", isFirstStart);
         editor.commit();
     }
@@ -69,6 +71,7 @@ public class SplashActivity extends Activity implements RequestCallback {
         TCAgent.onPause(this);
     }
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) {
@@ -78,18 +81,18 @@ public class SplashActivity extends Activity implements RequestCallback {
 
         if ("global_settings".equals(apiName)) {
             GlobalSettingDAO.save(response.toString());
-            Logger.i("" + response.toString());
-            GlobalSettingsResp globalSettingsResp = GsonManager.getObejctFromJSON(response.toString(), GlobalSettingsResp.class);
+            GlobalSettingsResp globalSettingsResp =
+                    GsonManager.getObejctFromJSON(response.toString(), GlobalSettingsResp.class);
             if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
-                SharedPreferences sharedPreferences = getSharedPreferences("updateVersion", MODE_PRIVATE);
+                SharedPreferences sharedPreferences =
+                        getSharedPreferences("updateVersion", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("versionInfo", globalSettingsResp.getNew_version().toString());
-                Logger.i("ceshi");
-                NewVersion object = globalSettingsResp.getNew_version();
-                Logger.i("versionInfo=" + object.toString());
+                editor.putString("versionInfo", GsonManager.getGson().toJson(
+                        globalSettingsResp.getNew_version(), NewVersion.class));
                 editor.commit();
             }
         }
+
         skipToMainActivity();
     }
 

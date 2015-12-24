@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.netdata.globalsettings.NewVersion;
 import com.appublisher.quizbank.utils.FileManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ToastManager;

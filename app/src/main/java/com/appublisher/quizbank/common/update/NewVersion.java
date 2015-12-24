@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.netdata.globalsettings;
+package com.appublisher.quizbank.common.update;
 
 /**
  * Created  on 15/12/15.
@@ -50,14 +50,14 @@ public class NewVersion {
         this.target_url = target_url;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "app_version:'" + app_version + '\'' +
-                ", size:'" + size + '\'' +
-                ", notice_text:'" + notice_text + '\'' +
-                ", force_update:" + force_update +
-                ", target_url:'" + target_url + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "{" +
+//                "app_version:'" + app_version + '\'' +
+//                ", size:'" + size + '\'' +
+//                ", notice_text:'" + notice_text + '\'' +
+//                ", force_update:" + force_update +
+//                ", target_url:'" + target_url + '\'' +
+//                '}';
+//    }
 }

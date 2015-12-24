@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.model.netdata.globalsettings;
 
+import com.appublisher.quizbank.common.update.NewVersion;
+
 import java.util.ArrayList;
 
 /**
@@ -63,7 +65,4 @@ public class GlobalSettingsResp {
         return new_version;
     }
 
-    public void setNew_version(NewVersion new_version) {
-        this.new_version = new_version;
-    }
 }

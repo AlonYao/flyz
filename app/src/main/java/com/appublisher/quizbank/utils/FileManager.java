@@ -108,10 +108,8 @@ public class FileManager {
 
 			if (file.isFile()) {
 				file.delete();
-				Logger.i("file_true");
 			} else if (file.isDirectory()) {
 				File[] childFiles = file.listFiles();
-				Logger.i("file_size"+childFiles.length);
 				if (childFiles == null || childFiles.length == 0) {
 					file.delete();
 					return;
