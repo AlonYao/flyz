@@ -23,6 +23,11 @@ public class HistoryExerciseResp {
     float defeat;
     float score;
     ArrayList<ScoreM> scores;
+    float avg_score;
+
+    public float getAvg_score() {
+        return avg_score;
+    }
 
     public float getScore() {
         return score;

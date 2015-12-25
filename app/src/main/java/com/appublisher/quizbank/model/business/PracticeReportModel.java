@@ -104,11 +104,8 @@ public class PracticeReportModel {
         // 添加科目
         addCategory();
 
-        if ("evaluate".equals(mActivity.mPaperType)
-                || "entire".equals(mActivity.mPaperType)) {
-            // 估分、整卷：显示往年分数线、你的估分，不显示做对/全部、知识点变化
-            mActivity.mLlRatio.setVisibility(View.GONE); // 做对/全部
-            mActivity.mLlNoteContainer.setVisibility(View.GONE); // 知识点变化
+        if ("evaluate".equals(mActivity.mPaperType)) {
+            // 估分：显示往年分数线、你的估分，不显示做对/全部、知识点变化
             mActivity.mLlBorderLine.setVisibility(View.VISIBLE); // 分数线
             mActivity.mLlEvaluate.setVisibility(View.VISIBLE); // 你的成绩
 
@@ -118,11 +115,24 @@ public class PracticeReportModel {
 
             // 往年分数线
             setBorderLine();
-        } else if ("mock".equals(mActivity.mPaperType)) {
-            // 模考
-            mActivity.mLlRatio.setVisibility(View.GONE);
+
+        } else if ("entire".equals(mActivity.mPaperType)) {
+            // 整卷：显示成绩、全站统计信息、科目、往年分数线
+            // 你的成绩
             mActivity.mLlEvaluate.setVisibility(View.VISIBLE);
-            mActivity.mLlBorderLine.setVisibility(View.GONE);
+            mActivity.mScore = mActivity.mMeasureEntity.getScore();
+            mActivity.mTvEvaluateNum.setText(String.valueOf(mActivity.mScore));
+
+            // 全站统计信息
+            showEntireInfo();
+
+            // 分数线
+            mActivity.mLlBorderLine.setVisibility(View.VISIBLE);
+            setBorderLine();
+
+        } else if ("mock".equals(mActivity.mPaperType)) {
+            // 模考：显示成绩、科目、知识点变化
+            mActivity.mLlEvaluate.setVisibility(View.VISIBLE);
             mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
 
             // 预估分
@@ -135,8 +145,6 @@ public class PracticeReportModel {
         } else {
             mActivity.mLlRatio.setVisibility(View.VISIBLE);
             mActivity.mLlNoteContainer.setVisibility(View.VISIBLE);
-            mActivity.mLlBorderLine.setVisibility(View.GONE);
-            mActivity.mLlEvaluate.setVisibility(View.GONE);
 
             // 正确率
             mActivity.mTvRightNum.setText(String.valueOf(mActivity.mRightNum));
@@ -158,6 +166,20 @@ public class PracticeReportModel {
             mActivity.mTvError.setBackgroundResource(R.color.practice_report_error);
             mActivity.mTvError.setOnClickListener(errorOnClick);
         }
+    }
+
+    /**
+     * 显示全站统计信息
+     */
+    private static void showEntireInfo() {
+        if (mActivity.mMeasureEntity == null) return;
+
+        mActivity.mRlEntireInfo.setVisibility(View.VISIBLE);
+
+        String text = Utils.rateToPercent(mActivity.mMeasureEntity.getDefeat()) + "%";
+        mActivity.mTvEntireInfoRank.setText(text);
+        mActivity.mTvEntireInfoScore.setText(
+                String.valueOf(mActivity.mMeasureEntity.getAvg_score()));
     }
 
     /**
@@ -477,6 +499,7 @@ public class PracticeReportModel {
         activity.mMeasureEntity.setDefeat(historyExerciseResp.getDefeat());
         activity.mMeasureEntity.setScore(historyExerciseResp.getScore());
         activity.mMeasureEntity.setScores(historyExerciseResp.getScores());
+        activity.mMeasureEntity.setAvg_score(historyExerciseResp.getAvg_score());
 
         if (activity.mQuestions != null && categorys == null) {
             // 非整卷

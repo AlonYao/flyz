@@ -61,8 +61,11 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public TextView mTvPaperType;
     public TextView mTvMiniMokaoRank;
     public TextView mTvEvaluateNum;
+    public TextView mTvEntireInfoRank;
+    public TextView mTvEntireInfoScore;
     public ImageView mIvNoteNoChange;
     public RelativeLayout mRlMiniMokao;
+    public RelativeLayout mRlEntireInfo;
     public ScrollView mSvMain;
     public View parentView;
     public int mRightNum;
@@ -115,6 +118,10 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         mTvEvaluateNum = (TextView) findViewById(R.id.practice_report_evaluate_num);
         mSvMain = (ScrollView) findViewById(R.id.practice_report_sv);
         parentView = findViewById(R.id.parentView);
+        mRlEntireInfo = (RelativeLayout) findViewById(R.id.practice_report_entire_info);
+        mTvEntireInfoRank = (TextView) findViewById(R.id.entire_info_rank);
+        mTvEntireInfoScore = (TextView) findViewById(R.id.entire_info_score);
+
         // 成员变量初始化
         mUmengStatus = "1";
         mHomeWatcher = new HomeWatcher(this);

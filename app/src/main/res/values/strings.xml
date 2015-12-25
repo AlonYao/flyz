@@ -92,6 +92,8 @@
     <string name="practice_report_totalpoints">总分</string>
     <string name="practice_report_xingce">行测</string>
     <string name="practice_report_shenlun">申论</string>
+    <string name="practice_report_entire_rank">在全站排名前</string>
+    <string name="practice_report_entire_score">全站平均分数</string>
 
     <!--模考总动员  -->
     <string name="mockpre_exam_join">课程报名</string>
@@ -189,10 +191,12 @@
     <string name="title_activity_app_guide">AppGuideActivity</string>
     <string name="title_activity_mock">模考估分</string>
     <string name="title_activity_mock_pre">模考总动员</string>
+
     <!-- 支付模块 -->
     <string name="wx_pay">微信支付结果</string>
     <string name="wx_pay_error">支付错误</string>
     <string name="wx_pay_cancel">取消支付</string>
+
     <!--版本更新-->
     <string name="new_version">新版本</string>
     <string name="update_now">这就更新</string>
