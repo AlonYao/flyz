@@ -15,7 +15,6 @@ import com.appublisher.quizbank.common.offline.netdata.PurchasedCoursesResp;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 
 import org.json.JSONArray;
@@ -107,7 +106,6 @@ public class OfflineActivity extends AppCompatActivity
         }
 
         if ("purchased_courses".equals(apiName)) {
-            Logger.i(response.toString());
             mPurchasedCoursesResp =
                     GsonManager.getGson().fromJson(response.toString(), PurchasedCoursesResp.class);
             OfflineModel.dealPurchasedCoursesResp(this, mPurchasedCoursesResp);

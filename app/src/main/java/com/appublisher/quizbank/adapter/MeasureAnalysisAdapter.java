@@ -16,7 +16,6 @@ import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.business.QuestionCategoryModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.utils.Logger;
 
 import java.util.ArrayList;
 
