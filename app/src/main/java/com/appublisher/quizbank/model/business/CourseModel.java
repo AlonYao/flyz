@@ -28,6 +28,7 @@ import com.appublisher.quizbank.model.netdata.course.FilterAreaM;
 import com.appublisher.quizbank.model.netdata.course.FilterAreaResp;
 import com.appublisher.quizbank.model.netdata.course.FilterTagM;
 import com.appublisher.quizbank.model.netdata.course.FilterTagResp;
+import com.appublisher.quizbank.network.ApiConstants;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.umeng.analytics.MobclickAgent;
@@ -461,6 +462,12 @@ public class CourseModel {
         String courseUrl = "";
         int courseId = course.getId();
         String detailPage = course.getDetail_page();
+
+        // 用于切换服务器测试课程购买
+        if (detailPage != null && detailPage.contains("m.yaoguo.cn")) {
+            detailPage = detailPage.replace("m.yaoguo.cn", getDomain());
+        }
+
         if ("live".equals(type)) {
             // 直播课&公开课
             courseUrl = detailPage
@@ -588,5 +595,17 @@ public class CourseModel {
                 CourseFragment.mCurTagId,
                 CourseFragment.mCurAreaId,
                 CourseFragment.mCurPurchaseId);
+    }
+
+    /**
+     * 根据服务器类别获取课程域名
+     * @return 域名
+     */
+    public static String getDomain() {
+        if (ApiConstants.base.equals("dev")) {
+            return "dev.m.zhiboke.net";
+        } else {
+            return "m.yaoguo.cn";
+        }
     }
 }

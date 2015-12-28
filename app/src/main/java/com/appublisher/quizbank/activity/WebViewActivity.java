@@ -26,6 +26,7 @@ import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.pay.PayConstants;
 import com.appublisher.quizbank.common.pay.PayWebViewHandler;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.CourseModel;
 import com.appublisher.quizbank.model.business.OpenCourseModel;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
 import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
@@ -144,7 +145,9 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
                         + "&user_token=" + LoginModel.getUserToken()
                         + "&timestamp=" + System.currentTimeMillis());
             } else if ("course".equals(mFrom) && PayConstants.mIsPaySuccess) {
-                String url = "http://m.yaoguo.cn/index.html#/live/ordersuccess?order_num="
+                String url = "http://"
+                        + CourseModel.getDomain()
+                        + "/index.html#/live/ordersuccess?order_num="
                         + PayConstants.mOrderID;
                 mWebView.loadUrl(url);
                 PayConstants.mIsPaySuccess = false;
