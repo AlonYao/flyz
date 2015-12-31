@@ -21,9 +21,15 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk'))
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        //noinspection GroovyAssignabilityCheck
+                        def apkFile = new File(
+                                output.outputFile.getParent(),
+                                "QuizBank_${variant.versionName}" +
+                                        "_${variant.flavorName}.apk")
+                        output.outputFile = apkFile
+                    }
                 }
-
             }
         }
     }
