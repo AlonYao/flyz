@@ -83,7 +83,7 @@ android {
                                     APP_CHANNEL: "tencent"]
         }
 
-        qihu {
+        qihoo {
             manifestPlaceholders = [APP_NAME: "天天模考腰果公务员",
                                     APP_CHANNEL: "360"]
         }
