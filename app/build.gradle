@@ -17,6 +17,20 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        //noinspection GroovyAssignabilityCheck
+                        def apkFile = new File(
+                                output.outputFile.getParent(),
+                                "QuizBank_${variant.versionName}" +
+                                        "_${variant.flavorName}.apk")
+                        output.outputFile = apkFile
+                    }
+                }
+            }
         }
     }
 
@@ -24,6 +38,59 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
             res.srcDirs = ['src/main/res', 'src/main/res-offline']
+        }
+    }
+
+    // 渠道
+    productFlavors {
+        other {
+            manifestPlaceholders = [APP_NAME: "天天模考·腰果公务员",
+                                    APP_CHANNEL: "other"]
+        }
+
+        meizu {
+            manifestPlaceholders = [APP_NAME: "天天模考·腰果公务员",
+                                    APP_CHANNEL: "meizu"]
+        }
+
+        baidu {
+            manifestPlaceholders = [APP_NAME: "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu"]
+        }
+
+        huawei {
+            manifestPlaceholders = [APP_NAME: "天天模考·腰果公务员",
+                                    APP_CHANNEL: "huawei"]
+        }
+
+        xiaomi {
+            manifestPlaceholders = [APP_NAME: "天天模考公务员",
+                                    APP_CHANNEL: "xiaomi"]
+        }
+
+        wandoujia {
+            manifestPlaceholders = [APP_NAME: "天天模考腰果公务员",
+                                    APP_CHANNEL: "wandoujia"]
+        }
+
+        taobao {
+            manifestPlaceholders = [APP_NAME: "天天模考腰果公务员",
+                                    APP_CHANNEL: "taobao"]
+        }
+
+        tencent {
+            manifestPlaceholders = [APP_NAME: "天天模考腰果公务员",
+                                    APP_CHANNEL: "tencent"]
+        }
+
+        qihoo {
+            manifestPlaceholders = [APP_NAME: "天天模考腰果公务员",
+                                    APP_CHANNEL: "360"]
+        }
+
+        oppo {
+            manifestPlaceholders = [APP_NAME: "天天模考腰果公务员",
+                                    APP_CHANNEL: "oppo"]
         }
     }
 }
