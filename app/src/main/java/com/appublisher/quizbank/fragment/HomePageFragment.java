@@ -136,13 +136,6 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             setMockBtn();
         }
 
-        // 获取课程快讯
-        if (Globals.promoteLiveCourseResp == null) {
-            mRequest.getPromoteLiveCourse();
-        } else {
-            HomePageModel.setPromoteLiveCourse(mActivity, mView);
-        }
-
         return mView;
     }
 
@@ -183,8 +176,15 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
      */
     private void getData() {
         ProgressBarManager.showProgressBar(mView);
+
+        // 获取首页信息
         mRequest.getEntryData();
+
+        // 获取公开课信息
         mRequest.getFreeOpenCourseStatus();
+
+        // 获取快讯
+        mRequest.getPromoteLiveCourse();
     }
 
     /**
@@ -205,6 +205,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             if (dex >= 10) {
                 // 视为评价完成，开通课程
                 HomePageModel.openupCourse(this);
+                //noinspection deprecation
                 Utils.updateMenu((ActionBarActivity) mActivity);
             } else {
                 // 视为未完成评价
@@ -254,12 +255,15 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             mTodayExam = pager.getToday();
             if (mTodayExam != null) {
                 if (mTodayExam.getDefeat() == 0) {
-                    mTvTodayExam.setText(
-                            "已有" + String.valueOf(mTodayExam.getPersons_num()) + "人参加");
+                    String text = "已有" + String.valueOf(mTodayExam.getPersons_num()) + "人参加";
+                    mTvTodayExam.setText(text);
                 } else {
-                    mTvTodayExam.setText(
-                            "已有" + String.valueOf(mTodayExam.getPersons_num()) + "人参加，击败"
-                                    + Utils.rateToPercent(mTodayExam.getDefeat()) + "%");
+                    String text = "已有"
+                            + String.valueOf(mTodayExam.getPersons_num())
+                            + "人参加，击败"
+                            + Utils.rateToPercent(mTodayExam.getDefeat())
+                            + "%";
+                    mTvTodayExam.setText(text);
                 }
                 mLlMiniMokao.setOnClickListener(this);
             }
@@ -267,7 +271,8 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             // 推荐专项训练
             mNote = pager.getNote();
             if (mNote != null) {
-                mTvSpecial.setText("推荐：" + mNote.getName());
+                String text = "推荐：" + mNote.getName();
+                mTvSpecial.setText(text);
                 mLlSpecial.setOnClickListener(this);
             }
         }
@@ -300,8 +305,6 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             mLlMock.setVisibility(View.GONE);
             return;
         }
-        //获取模考列表
-        mRequest.getMockExerciseList();
         mLlMock.setVisibility(View.VISIBLE);
         mLlMock.setOnClickListener(this);
 
@@ -349,10 +352,6 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 HomePageModel.dealOpenupCourseResp(response, this);
                 break;
 
-            case "mock_exercise_list":
-                HomePageModel.dealMockListResp(response, this);
-                break;
-
             case "exam_list":
                 // 更新考试时间
                 ExamDetailModel exam = GsonManager.getGson().fromJson(
@@ -370,10 +369,15 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        if (!isAdded()) return;
+        if (!isAdded() || apiName == null) return;
         ToastManager.showToast(mActivity, getString(R.string.netdata_overtime));
         ProgressBarManager.hideProgressBar();
         ProgressDialogManager.closeProgressDialog();
+
+        if ("promote_live_course".equals(apiName)) {
+            LinearLayout llPromote = (LinearLayout) mView.findViewById(R.id.course_promote);
+            llPromote.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -459,22 +463,17 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case R.id.homepage_mock:
                 // 模考&估分
-                if (mock_id == 0) {
-                    ToastManager.showToast(getActivity(), "没有相应的模考");
+                Class<?> cls;
+                if ("mock".equals(type)) {
+                    cls = MockPreActivity.class;
                 } else {
-                    Class<?> cls;
-                    if ("mock".equals(type)) {
-                        cls = MockPreActivity.class;
-                    } else {
-                        cls = MockActivity.class;
-                    }
-                    intent = new Intent(mActivity, cls);
-                    intent.putExtra("title", mTvMockTitle.getText().toString());
-                    intent.putExtra("mock_id", mock_id);
-                    intent.putExtra("type", type);
-                    intent.putExtra("paper_name", mock_name);
-                    startActivity(intent);
+                    cls = MockActivity.class;
                 }
+                intent = new Intent(mActivity, cls);
+                intent.putExtra("title", mTvMockTitle.getText().toString());
+                intent.putExtra("type", type);
+                intent.putExtra("paper_name", mock_name);
+                startActivity(intent);
                 break;
         }
     }

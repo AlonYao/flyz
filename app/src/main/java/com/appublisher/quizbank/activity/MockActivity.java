@@ -37,7 +37,6 @@ public class MockActivity extends ActionBarActivity implements
 
     private ListView mLvMock;
     private ImageView mIvNull;
-    private Request mRequest;
     private ArrayList<MockPaperM> mMockPapers;
     private String mType;
 
@@ -54,7 +53,7 @@ public class MockActivity extends ActionBarActivity implements
         CommonModel.setBarTitle(this, title);
 
         // 成员变量初始化
-        mRequest = new Request(this, this);
+        Request request = new Request(this, this);
 
         // View 初始化
         mLvMock = (ListView) findViewById(R.id.mock_lv);
@@ -62,7 +61,7 @@ public class MockActivity extends ActionBarActivity implements
 
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getMockExerciseList();
+        request.getMockExerciseList();
     }
 
     @Override
