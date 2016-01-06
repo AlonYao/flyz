@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
-import com.appublisher.quizbank.model.netdata.opencourse.StaticCourseM;
+import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.common.opencourse.netdata.StaticCourseM;
 
 import java.util.ArrayList;
 

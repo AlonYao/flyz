@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.netdata.opencourse;
+package com.appublisher.quizbank.common.opencourse.netdata;
 
 /**
  * 获取公开课咨询轮询请求 回调数据模型

@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.netdata.opencourse;
+package com.appublisher.quizbank.common.opencourse.netdata;
 
 /**
  * 公开课状态回调数据模型

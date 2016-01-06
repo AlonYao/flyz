@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.netdata.opencourse;
+package com.appublisher.quizbank.common.opencourse.netdata;
 
 /**
  * 往期回放课程列表

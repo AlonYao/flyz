@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.model.netdata.opencourse;
+package com.appublisher.quizbank.common.opencourse.netdata;
 
 /**
  * 公开课详情 数据模型
