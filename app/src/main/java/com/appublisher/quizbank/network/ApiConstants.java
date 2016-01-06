@@ -154,17 +154,23 @@ public interface ApiConstants {
     // 获取课程列表
     String getCourseList = baseUrl + "course/get_course_list";
 
+    //获取单个问题的统计信息
+    String getQuestionCategoryInfo = baseUrl + "quizbank/get_question_summary";
+
+    // 评论获取待赠送课程、开课
+    String getRateCourse = baseUrl + "course/get_rate_course";
+
+    /**
+     * 公开课
+     */
     // 获取公开课状态
     String getFreeOpenCourseStatus = baseUrl + "course/free_open_course";
 
     // 获取公开课详情
     String getOpenCourseDetail = baseUrl + "course/open_course_detail";
 
-    // 评论获取待赠送课程、开课
-    String getRateCourse = baseUrl + "course/get_rate_course";
-
-    //获取单个问题的统计信息
-    String getQuestionCategoryInfo = baseUrl + "quizbank/get_question_summary";
+    // 获取公开课列表
+    String getOpenCourseList = baseUrl + "course/get_open_class";
 
     /**
      * 模考

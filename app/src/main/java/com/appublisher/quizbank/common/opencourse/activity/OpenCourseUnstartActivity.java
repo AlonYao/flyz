@@ -3,7 +3,7 @@ package com.appublisher.quizbank.common.opencourse.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -32,7 +32,7 @@ import java.util.HashMap;
 /**
  * 公开课即将开始
  */
-public class OpenCourseUnstartActivity extends ActionBarActivity implements RequestCallback{
+public class OpenCourseUnstartActivity extends AppCompatActivity implements RequestCallback{
 
     public Request mRequest;
     public TextView mTvName;
@@ -78,9 +78,9 @@ public class OpenCourseUnstartActivity extends ActionBarActivity implements Requ
 
         // 获取数据
         mContent = getIntent().getStringExtra("content");
+        mUmengEntry = getIntent().getStringExtra("umeng_entry");
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getOpenCourseDetail(mContent);
-        mUmengEntry = getIntent().getStringExtra("umeng_entry");
     }
 
     @Override
