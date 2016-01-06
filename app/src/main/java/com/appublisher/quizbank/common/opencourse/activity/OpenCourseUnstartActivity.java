@@ -6,19 +6,17 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
 import com.appublisher.quizbank.customui.MultiListView;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -34,16 +32,9 @@ import java.util.HashMap;
  */
 public class OpenCourseUnstartActivity extends AppCompatActivity implements RequestCallback{
 
-    public Request mRequest;
-    public TextView mTvName;
-    public TextView mTvTime;
-    public TextView mTvLector;
-    public TextView mTvNotice;
     public String mContent;
-    public ImageView mIvOpenCourse;
-    public LinearLayout mLlOldtimey;
-    public MultiListView mLvOldtimey;
-    public int mCurOldtimeyPosition;
+    public MultiListView mLvOpencourse;
+    private MultiListView mLvPlayback;
 
     /** Umeng **/
     private long mUmengTimestamp;
@@ -61,25 +52,21 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         CommonModel.setToolBar(this);
 
         // 成员变量初始化
-        mRequest = new Request(this, this);
+        OpenCourseRequest request = new OpenCourseRequest(this, this);
         mUmengTimestamp = System.currentTimeMillis();
         mUmengQQ = "0";
         mUmengPreSit = "0";
         mUmengVideoPlay = "0";
 
         // View 初始化
-        mTvName = (TextView) findViewById(R.id.opencourse_name);
-        mTvTime = (TextView) findViewById(R.id.opencourse_time);
-        mTvLector = (TextView) findViewById(R.id.opencourse_lector);
-        mTvNotice = (TextView) findViewById(R.id.opencourse_notice);
-        mLlOldtimey = (LinearLayout) findViewById(R.id.opencourse_oldtimey_ll);
-        mLvOldtimey = (MultiListView) findViewById(R.id.opencourse_oldtimey_lv);
+        mLvOpencourse = (MultiListView) findViewById(R.id.opencourse_lv);
+        mLvPlayback = (MultiListView) findViewById(R.id.opencourse_playback_lv);
 
         // 获取数据
         mContent = getIntent().getStringExtra("content");
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getOpenCourseDetail(mContent);
+        request.getOpenCourseList();
     }
 
     @Override
@@ -125,15 +112,15 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
             case ActivitySkipConstants.BOOK_OPENCOURSE:
                 // 预约公开课回调
                 ProgressDialogManager.showProgressDialog(this, false);
-                mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
+//                mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
                 break;
 
             case ActivitySkipConstants.OPENCOURSE_PRE:
                 // 公开课回放
-                mLvOldtimey.performItemClick(
-                        mLvOldtimey.getAdapter().getView(mCurOldtimeyPosition, null, null),
-                        mCurOldtimeyPosition,
-                        mLvOldtimey.getAdapter().getItemId(mCurOldtimeyPosition));
+//                mLvOldtimey.performItemClick(
+//                        mLvOldtimey.getAdapter().getView(mCurOldtimeyPosition, null, null),
+//                        mCurOldtimeyPosition,
+//                        mLvOldtimey.getAdapter().getItemId(mCurOldtimeyPosition));
                 break;
         }
     }
@@ -159,11 +146,20 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if ("open_course_detail".equals(apiName))
-            OpenCourseModel.dealOpenCourseDetailResp(this, response);
+        if (response == null || apiName == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
 
-        if ("book_open_course".equals(apiName))
-            OpenCourseModel.dealBookOpenCourseResp(this, response);
+        switch (apiName) {
+            case "open_course_list":
+                OpenCourseListResp resp = GsonManager.getModel(response, OpenCourseListResp.class);
+                OpenCourseModel.dealOpenCourseListResp(resp, this);
+                break;
+
+            default:
+                break;
+        }
 
         ProgressDialogManager.closeProgressDialog();
     }

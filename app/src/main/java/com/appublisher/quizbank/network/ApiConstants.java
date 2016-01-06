@@ -169,9 +169,6 @@ public interface ApiConstants {
     // 获取公开课详情
     String getOpenCourseDetail = baseUrl + "course/open_course_detail";
 
-    // 获取公开课列表
-    String getOpenCourseList = baseUrl + "course/get_open_class";
-
     /**
      * 模考
      */

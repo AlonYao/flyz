@@ -5,29 +5,24 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
-import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.WebViewActivity;
-import com.appublisher.quizbank.adapter.OldtimeyListAdapter;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.common.opencourse.adapter.ListOpencourseAdapter;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseConsultResp;
-import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseDetailResp;
-import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseM;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUrlResp;
-import com.appublisher.quizbank.common.opencourse.netdata.StaticCourseM;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
@@ -43,126 +38,126 @@ import java.util.TimerTask;
  */
 public class OpenCourseModel {
 
-    /**
-     * 处理公开课详情回调
-     * @param activity OpenCourseUnstartActivity
-     * @param response 回调数据
-     */
-    public static void dealOpenCourseDetailResp(final OpenCourseUnstartActivity activity,
-                                                JSONObject response) {
-        if (response == null) return;
-
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
-        final OpenCourseDetailResp openCourseDetailResp =
-                Globals.gson.fromJson(response.toString(), OpenCourseDetailResp.class);
-
-        if (openCourseDetailResp == null || openCourseDetailResp.getResponse_code() != 1) return;
-
-        OpenCourseM openCourse = openCourseDetailResp.getCourse();
-
-        if (openCourse == null) return;
-
-        // 公开课图片
-        activity.mRequest.loadImage(openCourse.getCover_pic(), activity.mIvOpenCourse);
-
-        // 公开课名字
-        activity.mTvName.setText("公开课：" + openCourse.getName());
-
-        // 公开课时间
-        String startTime = openCourse.getStart_time();
-        String endTime = openCourse.getEnd_time();
-
-        try {
-            if (startTime != null) startTime = startTime.substring(0, 16);
-            if (endTime != null) endTime = endTime.substring(11, 16);
-        } catch (Exception e) {
-            activity.mTvTime.setText("时间：" + openCourse.getStart_time()
-                    + " - " + openCourse.getEnd_time());
-        }
-
-        activity.mTvTime.setText("时间：" + startTime + " - " + endTime);
-
-        // 公开课讲师
-        activity.mTvLector.setText("主讲：" + openCourse.getLector());
-
-        // 预约状态
-        boolean booked = openCourseDetailResp.isBooked();
-        if (booked) {
-            setBooked(activity);
-            // Umeng
-            activity.mUmengPreSit = "3";
-
-        } else {
-            activity.mTvNotice.setText(R.string.opencourse_notice_false);
-            activity.mTvNotice.setTextColor(
-                    activity.getResources().getColor(R.color.white));
-            activity.mTvNotice.setBackgroundColor(
-                    activity.getResources().getColor(R.color.answer_sheet_btn));
-
-            activity.mTvNotice.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 判断用户是否有手机号
-                    String mobileNum = LoginModel.getUserMobile();
-                    if (mobileNum == null || mobileNum.length() == 0) {
-                        // 没有手机号
-                        Intent intent = new Intent(activity, BindingMobileActivity.class);
-                        intent.putExtra("from", "book_opencourse");
-                        activity.startActivityForResult(intent,
-                                ActivitySkipConstants.BOOK_OPENCOURSE);
-                    } else {
-                        // 有手机号
-                        AlertManager.bookOpenCourseAlert(activity, mobileNum, activity.mContent);
-                    }
-
-                    // Umeng
-                    activity.mUmengPreSit = "2";
-                }
-            });
-        }
-
-        // 往期内容
-        final ArrayList<StaticCourseM> staticCourses = openCourseDetailResp.getStaticCourses();
-
-        if (staticCourses != null && staticCourses.size() != 0) {
-            activity.mLlOldtimey.setVisibility(View.VISIBLE);
-            OldtimeyListAdapter oldtimeyListAdapter =
-                    new OldtimeyListAdapter(activity, openCourseDetailResp.getStaticCourses());
-            activity.mLvOldtimey.setAdapter(oldtimeyListAdapter);
-
-            activity.mLvOldtimey.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (position >= staticCourses.size()) return;
-
-                    activity.mCurOldtimeyPosition = position;
-
-                    String mobileNum = LoginModel.getUserMobile();
-                    if (mobileNum == null || mobileNum.length() == 0) {
-                        // 没有手机号
-                        Intent intent = new Intent(activity, BindingMobileActivity.class);
-                        intent.putExtra("from", "opencourse_pre");
-                        activity.startActivityForResult(
-                                intent, ActivitySkipConstants.OPENCOURSE_PRE);
-
-                    } else {
-                        // 跳转
-                        StaticCourseM staticCourse = staticCourses.get(position);
-                        String url = staticCourse.getCourse_url()
-                                + "&user_id=" + LoginModel.getUserId()
-                                + "&user_token=" + LoginModel.getUserToken();
-                        OpenCourseModel.skipToPreOpenCourse(activity, url, staticCourse.getName());
-                    }
-
-                    // Umeng
-                    activity.mUmengVideoPlay = "1";
-                }
-            });
-
-        } else {
-            activity.mLlOldtimey.setVisibility(View.GONE);
-        }
-    }
+//    /**
+//     * 处理公开课详情回调
+//     * @param activity OpenCourseUnstartActivity
+//     * @param response 回调数据
+//     */
+//    public static void dealOpenCourseDetailResp(final OpenCourseUnstartActivity activity,
+//                                                JSONObject response) {
+//        if (response == null) return;
+//
+//        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+//        final OpenCourseDetailResp openCourseDetailResp =
+//                Globals.gson.fromJson(response.toString(), OpenCourseDetailResp.class);
+//
+//        if (openCourseDetailResp == null || openCourseDetailResp.getResponse_code() != 1) return;
+//
+//        OpenCourseM openCourse = openCourseDetailResp.getCourse();
+//
+//        if (openCourse == null) return;
+//
+//        // 公开课图片
+//        activity.mRequest.loadImage(openCourse.getCover_pic(), activity.mIvOpenCourse);
+//
+//        // 公开课名字
+//        activity.mTvName.setText("公开课：" + openCourse.getName());
+//
+//        // 公开课时间
+//        String startTime = openCourse.getStart_time();
+//        String endTime = openCourse.getEnd_time();
+//
+//        try {
+//            if (startTime != null) startTime = startTime.substring(0, 16);
+//            if (endTime != null) endTime = endTime.substring(11, 16);
+//        } catch (Exception e) {
+//            activity.mTvTime.setText("时间：" + openCourse.getStart_time()
+//                    + " - " + openCourse.getEnd_time());
+//        }
+//
+//        activity.mTvTime.setText("时间：" + startTime + " - " + endTime);
+//
+//        // 公开课讲师
+//        activity.mTvLector.setText("主讲：" + openCourse.getLector());
+//
+//        // 预约状态
+//        boolean booked = openCourseDetailResp.isBooked();
+//        if (booked) {
+//            setBooked(activity);
+//            // Umeng
+//            activity.mUmengPreSit = "3";
+//
+//        } else {
+//            activity.mTvNotice.setText(R.string.opencourse_notice_false);
+//            activity.mTvNotice.setTextColor(
+//                    activity.getResources().getColor(R.color.white));
+//            activity.mTvNotice.setBackgroundColor(
+//                    activity.getResources().getColor(R.color.answer_sheet_btn));
+//
+//            activity.mTvNotice.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // 判断用户是否有手机号
+//                    String mobileNum = LoginModel.getUserMobile();
+//                    if (mobileNum == null || mobileNum.length() == 0) {
+//                        // 没有手机号
+//                        Intent intent = new Intent(activity, BindingMobileActivity.class);
+//                        intent.putExtra("from", "book_opencourse");
+//                        activity.startActivityForResult(intent,
+//                                ActivitySkipConstants.BOOK_OPENCOURSE);
+//                    } else {
+//                        // 有手机号
+//                        AlertManager.bookOpenCourseAlert(activity, mobileNum, activity.mContent);
+//                    }
+//
+//                    // Umeng
+//                    activity.mUmengPreSit = "2";
+//                }
+//            });
+//        }
+//
+//        // 往期内容
+//        final ArrayList<StaticCourseM> staticCourses = openCourseDetailResp.getStaticCourses();
+//
+//        if (staticCourses != null && staticCourses.size() != 0) {
+//            activity.mLlOldtimey.setVisibility(View.VISIBLE);
+//            OldtimeyListAdapter oldtimeyListAdapter =
+//                    new OldtimeyListAdapter(activity, openCourseDetailResp.getStaticCourses());
+//            activity.mLvOldtimey.setAdapter(oldtimeyListAdapter);
+//
+//            activity.mLvOldtimey.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    if (position >= staticCourses.size()) return;
+//
+//                    activity.mCurOldtimeyPosition = position;
+//
+//                    String mobileNum = LoginModel.getUserMobile();
+//                    if (mobileNum == null || mobileNum.length() == 0) {
+//                        // 没有手机号
+//                        Intent intent = new Intent(activity, BindingMobileActivity.class);
+//                        intent.putExtra("from", "opencourse_pre");
+//                        activity.startActivityForResult(
+//                                intent, ActivitySkipConstants.OPENCOURSE_PRE);
+//
+//                    } else {
+//                        // 跳转
+//                        StaticCourseM staticCourse = staticCourses.get(position);
+//                        String url = staticCourse.getCourse_url()
+//                                + "&user_id=" + LoginModel.getUserId()
+//                                + "&user_token=" + LoginModel.getUserToken();
+//                        OpenCourseModel.skipToPreOpenCourse(activity, url, staticCourse.getName());
+//                    }
+//
+//                    // Umeng
+//                    activity.mUmengVideoPlay = "1";
+//                }
+//            });
+//
+//        } else {
+//            activity.mLlOldtimey.setVisibility(View.GONE);
+//        }
+//    }
 
     /**
      * 跳转到查看往期页面
@@ -183,13 +178,13 @@ public class OpenCourseModel {
      * @param activity OpenCourseUnstartActivity
      */
     public static void setBooked(OpenCourseUnstartActivity activity) {
-        activity.mTvNotice.setText(R.string.opencourse_notice_true);
-        activity.mTvNotice.setTextColor(
-                activity.getResources().getColor(R.color.common_text));
-        activity.mTvNotice.setBackgroundColor(
-                activity.getResources().getColor(R.color.transparency));
-
-        activity.mTvNotice.setOnClickListener(null);
+//        activity.mTvNotice.setText(R.string.opencourse_notice_true);
+//        activity.mTvNotice.setTextColor(
+//                activity.getResources().getColor(R.color.common_text));
+//        activity.mTvNotice.setBackgroundColor(
+//                activity.getResources().getColor(R.color.transparency));
+//
+//        activity.mTvNotice.setOnClickListener(null);
     }
 
     /**
@@ -436,4 +431,19 @@ public class OpenCourseModel {
         return null;
     }
 
+    /**
+     * 处理公开课列表回调
+     * @param resp 公开课列表数据模型
+     * @param activity OpenCourseUnstartActivity
+     */
+    public static void dealOpenCourseListResp(OpenCourseListResp resp,
+                                              OpenCourseUnstartActivity activity) {
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        ArrayList<OpenCourseListItem> courses = resp.getCourses();
+        if (courses == null) return;
+
+        ListOpencourseAdapter adapter = new ListOpencourseAdapter(activity, courses);
+        activity.mLvOpencourse.setAdapter(adapter);
+    }
 }

@@ -77,7 +77,7 @@ public class OldtimeyListAdapter extends BaseAdapter{
 
         if (staticCourse == null) return;
 
-        mActivity.mRequest.loadImage(staticCourse.getCover_pic(), viewHolder.ivImg);
+//        mActivity.mRequest.loadImage(staticCourse.getCover_pic(), viewHolder.ivImg);
         viewHolder.tvName.setText(staticCourse.getName());
         viewHolder.tvTeacher.setText(String.valueOf(staticCourse.getLector()));
     }
