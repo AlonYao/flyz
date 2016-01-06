@@ -72,7 +72,6 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         mTvTime = (TextView) findViewById(R.id.opencourse_time);
         mTvLector = (TextView) findViewById(R.id.opencourse_lector);
         mTvNotice = (TextView) findViewById(R.id.opencourse_notice);
-        mIvOpenCourse = (ImageView) findViewById(R.id.opencourse_img);
         mLlOldtimey = (LinearLayout) findViewById(R.id.opencourse_oldtimey_ll);
         mLvOldtimey = (MultiListView) findViewById(R.id.opencourse_oldtimey_lv);
 
