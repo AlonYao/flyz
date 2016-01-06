@@ -114,17 +114,17 @@ public class HomePageModel {
      * @param activity 上下文
      * @param view 控件
      */
-    public static void setPromoteLiveCourse(final Activity activity, View view) {
-        if (Globals.promoteLiveCourseResp == null
-                || Globals.promoteLiveCourseResp.getResponse_code() != 1) return;
+    public static void setPromoteLiveCourse(final Activity activity,
+                                            View view,
+                                            final PromoteLiveCourseResp resp) {
+        if (resp == null || resp.getResponse_code() != 1) return;
 
         LinearLayout llPromote = (LinearLayout) view.findViewById(R.id.course_promote);
         TextView tvPromote = (TextView) view.findViewById(R.id.course_promote_text);
         final ImageView ivPromote = (ImageView) view.findViewById(R.id.course_promote_img);
 
-        String displayType = Globals.promoteLiveCourseResp.getDisplay_type();
-        String displayContent = Globals.promoteLiveCourseResp.getDisplay_content() == null
-                ? "" : Globals.promoteLiveCourseResp.getDisplay_content();
+        String displayType = resp.getDisplay_type();
+        String displayContent = resp.getDisplay_content() == null ? "" : resp.getDisplay_content();
 
         // 设置内容
         if (displayType == null) {
@@ -166,7 +166,7 @@ public class HomePageModel {
             llPromote.setVisibility(View.VISIBLE);
             tvPromote.setVisibility(View.VISIBLE);
 
-            String targetContent = Globals.promoteLiveCourseResp.getTarget_content();
+            String targetContent = resp.getTarget_content();
             if (targetContent == null || targetContent.length() == 0) {
                 // 没有跳转信息
                 tvPromote.setText(displayContent);
@@ -187,74 +187,68 @@ public class HomePageModel {
         // 设置跳转
         mActivity = activity;
         llPromote.setVisibility(View.VISIBLE);
-        llPromote.setOnClickListener(onClickListener);
-    }
+        llPromote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.course_promote:
+                        if (resp.getResponse_code() != 1) return;
 
-    /**
-     * 公告栏课程推广点击事件
-     */
-    private static View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.course_promote:
-                    if (Globals.promoteLiveCourseResp == null
-                            || Globals.promoteLiveCourseResp.getResponse_code() != 1) return;
+                        String targetType = resp.getTarget_type();
+                        String targetContent = resp.getTarget_content();
 
-                    String targetType = Globals.promoteLiveCourseResp.getTarget_type();
-                    String targetContent = Globals.promoteLiveCourseResp.getTarget_content();
+                        if (targetContent == null || targetContent.length() == 0) return;
 
-                    if (targetContent == null || targetContent.length() == 0) return;
-
-                    if ("url".equals(targetType)) {
-                        Intent intent = new Intent(mActivity, WebViewActivity.class);
-                        intent.putExtra("url", targetContent);
-                        mActivity.startActivity(intent);
-
-                    } else if ("app".equals(targetType)) {
-                        if (targetContent.contains("market@")) {
-                            // 跳转到市场
-                            CommonModel.skipToGrade(
-                                    mActivity, targetContent.replace("market@", ""));
-
-                        } else if (targetContent.contains("courselist")) {
-                            // 跳转到课程中心模块
-                            if (mActivity instanceof MainActivity)
-                                ((MainActivity) mActivity).changeFragment(2);
-
-                        } else if (targetContent.contains("zhiboke@")) {
-                            // 跳转至课程详情页面
+                        if ("url".equals(targetType)) {
                             Intent intent = new Intent(mActivity, WebViewActivity.class);
-                            intent.putExtra("url", targetContent.replace("zhiboke@", "")
-                                    + "&user_id=" + LoginModel.getUserId()
-                                    + "&user_token=" + LoginModel.getUserToken());
-                            intent.putExtra("from", "course");
+                            intent.putExtra("url", targetContent);
                             mActivity.startActivity(intent);
 
-                            // Umeng统计
-                            try {
-                                String courseId =
-                                        targetContent.substring(
-                                                targetContent.indexOf("course_id=") + 10,
-                                                targetContent.indexOf("&user_id="));
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put("CourseID", courseId);
-                                map.put("Entry", "KX");
-                                map.put("Status", "");
-                                MobclickAgent.onEvent(mActivity, "EnterCourse", map);
-                            } catch (Exception e) {
-                                // Empty
+                        } else if ("app".equals(targetType)) {
+                            if (targetContent.contains("market@")) {
+                                // 跳转到市场
+                                CommonModel.skipToGrade(
+                                        mActivity, targetContent.replace("market@", ""));
+
+                            } else if (targetContent.contains("courselist")) {
+                                // 跳转到课程中心模块
+                                if (mActivity instanceof MainActivity)
+                                    ((MainActivity) mActivity).changeFragment(2);
+
+                            } else if (targetContent.contains("zhiboke@")) {
+                                // 跳转至课程详情页面
+                                Intent intent = new Intent(mActivity, WebViewActivity.class);
+                                intent.putExtra("url", targetContent.replace("zhiboke@", "")
+                                        + "&user_id=" + LoginModel.getUserId()
+                                        + "&user_token=" + LoginModel.getUserToken());
+                                intent.putExtra("from", "course");
+                                mActivity.startActivity(intent);
+
+                                // Umeng统计
+                                try {
+                                    String courseId =
+                                            targetContent.substring(
+                                                    targetContent.indexOf("course_id=") + 10,
+                                                    targetContent.indexOf("&user_id="));
+                                    HashMap<String, String> map = new HashMap<>();
+                                    map.put("CourseID", courseId);
+                                    map.put("Entry", "KX");
+                                    map.put("Status", "");
+                                    MobclickAgent.onEvent(mActivity, "EnterCourse", map);
+                                } catch (Exception e) {
+                                    // Empty
+                                }
                             }
+
+                        } else if ("apk".equals(targetType)) {
+                            AppDownload.downloadApk(mActivity, targetContent);
                         }
 
-                    } else if ("apk".equals(targetType)) {
-                        AppDownload.downloadApk(mActivity, targetContent);
-                    }
-
-                    break;
+                        break;
+                }
             }
-        }
-    };
+        });
+    }
 
     /**
      * 处理快讯模块数据回调
@@ -264,10 +258,10 @@ public class HomePageModel {
     public static void dealPromoteResp(JSONObject response, HomePageFragment homePageFragment) {
         if (response == null) return;
         if (Globals.gson == null) Globals.gson = GsonManager.initGson();
-        Globals.promoteLiveCourseResp =
+        PromoteLiveCourseResp resp =
                 Globals.gson.fromJson(response.toString(), PromoteLiveCourseResp.class);
 
-        setPromoteLiveCourse(homePageFragment.mActivity, homePageFragment.mView);
+        setPromoteLiveCourse(homePageFragment.mActivity, homePageFragment.mView, resp);
     }
     /*
     获取mock_id

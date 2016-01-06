@@ -2,7 +2,6 @@ package com.appublisher.quizbank;
 
 import android.content.SharedPreferences;
 
-import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseStatusResp;
 import com.google.gson.Gson;
@@ -32,9 +31,6 @@ public class Globals {
 
     // Gson对象
     public static Gson gson;
-
-    // 快讯数据模型
-    public static PromoteLiveCourseResp promoteLiveCourseResp;
 
     // 评价赠送课程数据
     public static RateCourseResp rateCourseResp;

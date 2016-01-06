@@ -27,6 +27,8 @@ import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
+import com.appublisher.quizbank.model.netdata.mock.MockListResp;
+import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
 import com.appublisher.quizbank.model.netdata.mock.MockPre;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
@@ -42,6 +44,7 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -121,10 +124,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mock_pre);
-        // Toolbar
+        //Toolbar
         CommonModel.setToolBar(this);
         //获取传参
-        mock_id = getIntent().getIntExtra("mock_id", -1);
         paper_name = getIntent().getStringExtra("paper_name");
         //布局
         examdeailContainer = (LinearLayout) findViewById(R.id.examdetailcontainer);
@@ -139,12 +141,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         isDate = false;
         isExercise = false;
         //成员变量初始化
-        // 成员变量初始化
         mHandler = new MsgHandler(this);
         mRequest = new Request(this, this);
-        //获取数据
+        //获取数据(模考列表)
         ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getServerCurrentTime();
+        mRequest.getMockExerciseList();
     }
 
     @Override
@@ -215,6 +216,24 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 if (resp != null && resp.getResponse_code() == 1) {
                     mServerCurrentTime = resp.getCurrent_time();
                 }
+                break;
+
+            case "mock_exercise_list":
+                MockListResp mockListResp =
+                        GsonManager.getObejctFromJSON(response.toString(), MockListResp.class);
+                if (mockListResp == null || mockListResp.getResponse_code() != 1) return;
+
+                ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
+                if (mockPaperMs != null && mockPaperMs.size() != 0) {
+                    MockPaperM mockPaperM = mockPaperMs.get(0);
+                    mock_id = mockPaperM.getId();
+                    if (mock_id <= 0) {
+                        ToastManager.showToast(this, "没有相应的模考");
+                    } else {
+                        mRequest.getServerCurrentTime();
+                    }
+                }
+
                 break;
         }
     }
