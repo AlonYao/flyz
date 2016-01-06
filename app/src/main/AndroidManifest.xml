@@ -237,14 +237,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".common.opencourse.activity.OpenCourseUnstartActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_open_course_unstart"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.opencourse.activity.OpenCourseNoneActivity"
-            android:label="@string/title_activity_open_course_none" />
-        <activity
             android:name=".activity.WebViewActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_web_view" />
@@ -298,6 +290,16 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_mock_pre"
             android:screenOrientation="portrait" />
+
+        <!-- 公开课 -->
+        <activity
+            android:name=".common.opencourse.activity.OpenCourseUnstartActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_open_course_unstart"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.opencourse.activity.OpenCourseNoneActivity"
+            android:label="@string/title_activity_open_course_none" />
 
         <!-- 离线模块 -->
         <activity android:name=".common.offline.activity.OfflineActivity"
