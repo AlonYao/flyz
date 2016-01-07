@@ -23,6 +23,7 @@ public class ListOpencourseAdapter extends BaseAdapter {
 
     public ListOpencourseAdapter(Context context, ArrayList<OpenCourseListItem> courses) {
         this.mContext = context;
+        this.mCourses = courses;
     }
 
     @Override

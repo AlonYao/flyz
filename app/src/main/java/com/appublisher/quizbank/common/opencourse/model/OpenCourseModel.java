@@ -336,12 +336,8 @@ public class OpenCourseModel {
      * @param response 回调数据
      */
     public static void dealOpenCourseStatusResp(JSONObject response) {
-        if (response == null) return;
-
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
         OpenCourseStatusResp openCourseStatusResp =
-                Globals.gson.fromJson(response.toString(), OpenCourseStatusResp.class);
-
+                GsonManager.getModel(response, OpenCourseStatusResp.class);
         if (openCourseStatusResp == null || openCourseStatusResp.getResponse_code() != 1) return;
 
         Globals.openCourseStatus = openCourseStatusResp;
@@ -372,7 +368,9 @@ public class OpenCourseModel {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                skipToOpenCoursePage(activity, "Home");
+//                skipToOpenCoursePage(activity, "Home");
+                Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
+                activity.startActivity(intent);
             }
         });
     }
