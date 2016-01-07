@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,6 +38,9 @@ import java.util.TimerTask;
  * OpenCourse Model
  */
 public class OpenCourseModel {
+
+    private static final int SECTION = 3;
+    private static List<OpenCourseListItem> mShowList;
 
 //    /**
 //     * 处理公开课详情回调
@@ -435,13 +439,45 @@ public class OpenCourseModel {
      * @param activity OpenCourseUnstartActivity
      */
     public static void dealOpenCourseListResp(OpenCourseListResp resp,
-                                              OpenCourseUnstartActivity activity) {
+                                              final OpenCourseUnstartActivity activity) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
-        ArrayList<OpenCourseListItem> courses = resp.getCourses();
+        final ArrayList<OpenCourseListItem> courses = resp.getCourses();
         if (courses == null) return;
 
-        ListOpencourseAdapter adapter = new ListOpencourseAdapter(activity, courses);
+        mShowList = new ArrayList<>();
+
+        if (courses.size() > SECTION) {
+            mShowList = courses.subList(0, SECTION);
+        } else {
+            mShowList = courses;
+        }
+
+        final ListOpencourseAdapter adapter = new ListOpencourseAdapter(activity, mShowList);
         activity.mLvOpencourse.setAdapter(adapter);
+
+        // 加载更多
+        activity.mTvMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int all = courses.size();
+                int cur = mShowList.size();
+
+                if (cur < all) {
+                    // 如果有未显示的公开课
+                    mShowList.clear();
+                    if ((all - cur) > SECTION) {
+                        // 如果未显示的公开课，超过区间长度，则再显示下一个区间
+                        mShowList.addAll(courses.subList(0, cur + SECTION));
+                    } else {
+                        mShowList.addAll(courses);
+                    }
+                    adapter.notifyDataSetChanged();
+
+                } else {
+                    ToastManager.showToast(activity, "暂无更多公开课");
+                }
+            }
+        });
     }
 }

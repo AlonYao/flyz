@@ -12,6 +12,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 公开课Adapter（非回放课程）
@@ -19,9 +20,9 @@ import java.util.ArrayList;
 public class ListOpencourseAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<OpenCourseListItem> mCourses;
+    private List<OpenCourseListItem> mCourses;
 
-    public ListOpencourseAdapter(Context context, ArrayList<OpenCourseListItem> courses) {
+    public ListOpencourseAdapter(Context context, List<OpenCourseListItem> courses) {
         this.mContext = context;
         this.mCourses = courses;
     }

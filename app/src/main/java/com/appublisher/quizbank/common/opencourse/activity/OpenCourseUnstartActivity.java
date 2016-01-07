@@ -6,6 +6,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -34,6 +35,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
 
     public String mContent;
     public MultiListView mLvOpencourse;
+    public TextView mTvMore;
     private MultiListView mLvPlayback;
 
     /** Umeng **/
@@ -61,6 +63,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         // View 初始化
         mLvOpencourse = (MultiListView) findViewById(R.id.opencourse_lv);
         mLvPlayback = (MultiListView) findViewById(R.id.opencourse_playback_lv);
+        mTvMore = (TextView) findViewById(R.id.opencourse_more);
 
         // 获取数据
         mContent = getIntent().getStringExtra("content");

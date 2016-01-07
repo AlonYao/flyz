@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="opencourse_more"><u>加载更多</u></string>
+    <string name="opencourse_playback">回放</string>
+    <string name="opencourse_notice_true">开讲时会提醒你哒</string>
+    <string name="opencourse_notice_false">开讲时提醒我</string>
+    <string name="opencourse_none">暂时没有公开课哦~\n看看往期内容吧</string>
+    <string name="opencourse_consult">点我咨询</string>
+    <string name="opencourse_name">免费公开课</string>
+    <string name="opencourse_passed_events">往期精彩回放：</string>
+</resources>
