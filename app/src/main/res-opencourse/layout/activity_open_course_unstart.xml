@@ -29,20 +29,24 @@
                 android:paddingRight="15dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:visibility="gone"
                 android:text="@string/opencourse_more"
                 tools:ignore="RtlHardcoded,RtlSymmetry" />
             <TextView
+                android:id="@+id/opencourse_playback_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginLeft="15dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/opencourse_playback"
+                android:visibility="gone"
                 tools:ignore="RtlHardcoded" />
-            <com.appublisher.quizbank.customui.MultiListView
-                android:id="@+id/opencourse_playback_lv"
+            <LinearLayout
+                android:id="@+id/opencourse_playback_ll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
         </LinearLayout>
     </ScrollView>
 

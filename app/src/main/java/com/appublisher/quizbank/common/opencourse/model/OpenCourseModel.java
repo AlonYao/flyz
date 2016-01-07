@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
@@ -17,6 +20,7 @@ import com.appublisher.quizbank.common.opencourse.adapter.ListOpencourseAdapter;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseConsultResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCoursePlaybackItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUrlResp;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
@@ -442,7 +446,59 @@ public class OpenCourseModel {
                                               final OpenCourseUnstartActivity activity) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
-        final ArrayList<OpenCourseListItem> courses = resp.getCourses();
+        ArrayList<OpenCourseListItem> courses = resp.getCourses();
+        ArrayList<OpenCoursePlaybackItem> playbacks = resp.getPlaybacks();
+
+        // 公开课列表
+        showOpenCourseList(courses, activity);
+
+        // 回放列表
+        showPlayBackList(playbacks, activity);
+    }
+
+    /**
+     * 显示回放列表
+     * @param playbacks 回放列表数据
+     * @param activity OpenCourseUnstartActivity
+     */
+    private static void showPlayBackList(ArrayList<OpenCoursePlaybackItem> playbacks,
+                                         OpenCourseUnstartActivity activity) {
+        if (playbacks == null) return;
+
+        activity.mTvPlayback.setVisibility(View.VISIBLE);
+
+        int size = playbacks.size();
+        for (int i = 0; i < size; i++) {
+            OpenCoursePlaybackItem playback = playbacks.get(i);
+            if (playback == null) continue;
+
+            View child = LayoutInflater.from(activity).inflate(
+                    R.layout.item_playback, activity.mLlPlayback, false);
+
+            TextView tvDesc = (TextView) child.findViewById(R.id.playback_desc);
+            String desc = playback.getLector() + "-" + playback.getName();
+            tvDesc.setText(desc);
+
+            TextView tvPerson = (TextView) child.findViewById(R.id.playback_person_tv);
+            tvPerson.setText(String.valueOf(playback.getPersons_num()));
+
+            TextView tvGrade = (TextView) child.findViewById(R.id.playback_grade_tv);
+            tvGrade.setText(String.valueOf(playback.getRate_num()));
+
+            RatingBar rb = (RatingBar) child.findViewById(R.id.playback_ratingbar);
+            rb.setRating(playback.getScore());
+
+            activity.mLlPlayback.addView(child);
+        }
+    }
+
+    /**
+     * 显示公开课列表
+     * @param courses 公开课列表
+     * @param activity OpenCourseUnstartActivity
+     */
+    private static void showOpenCourseList(final ArrayList<OpenCourseListItem> courses,
+                                           final OpenCourseUnstartActivity activity) {
         if (courses == null) return;
 
         mShowList = new ArrayList<>();
@@ -453,10 +509,11 @@ public class OpenCourseModel {
             mShowList = courses;
         }
 
-        final ListOpencourseAdapter adapter = new ListOpencourseAdapter(activity, mShowList);
+        ListOpencourseAdapter adapter = new ListOpencourseAdapter(activity, mShowList);
         activity.mLvOpencourse.setAdapter(adapter);
 
         // 加载更多
+        activity.mTvMore.setVisibility(View.VISIBLE);
         activity.mTvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -465,14 +522,14 @@ public class OpenCourseModel {
 
                 if (cur < all) {
                     // 如果有未显示的公开课
-                    mShowList.clear();
                     if ((all - cur) > SECTION) {
                         // 如果未显示的公开课，超过区间长度，则再显示下一个区间
-                        mShowList.addAll(courses.subList(0, cur + SECTION));
+                        mShowList = courses.subList(0, cur + SECTION);
                     } else {
-                        mShowList.addAll(courses);
+                        mShowList = courses;
                     }
-                    adapter.notifyDataSetChanged();
+                    ListOpencourseAdapter adapter = new ListOpencourseAdapter(activity, mShowList);
+                    activity.mLvOpencourse.setAdapter(adapter);
 
                 } else {
                     ToastManager.showToast(activity, "暂无更多公开课");
