@@ -8,4 +8,6 @@
     <string name="opencourse_consult">点我咨询</string>
     <string name="opencourse_name">免费公开课</string>
     <string name="opencourse_passed_events">往期精彩回放：</string>
+    <string name="opencourse_mygrade">我的评论</string>
+    <string name="opencourse_allgrade">全部评论</string>
 </resources>

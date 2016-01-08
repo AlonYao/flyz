@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.appublisher.quizbank.common.opencourse.activity.OpenCourseGradeActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/opencourse_mygrade"
+                tools:ignore="RtlHardcoded" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@color/white">
+                <RatingBar
+                    android:id="@+id/opencourse_mygrade_rb"
+                    style="@style/custom_ratingbar_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="65dp"
+                    tools:ignore="RtlHardcoded" />
+                <TextView
+                    android:id="@+id/opencourse_mygrade_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/opencourse_mygrade_rb"
+                    android:layout_marginLeft="65dp"
+                    android:layout_marginBottom="5dp"
+                    android:maxLines="1"
+                    android:text="@string/common_text"
+                    android:textColor="@color/common_text"
+                    android:textSize="12sp"
+                    tools:ignore="RtlHardcoded" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/opencourse_mygrade_username"
+                    android:layout_marginLeft="65dp"
+                    android:layout_marginRight="20dp"
+                    android:textColor="@color/common_text"
+                    android:text="@string/common_text"
+                    android:textSize="12sp"
+                    tools:ignore="RtlHardcoded" />
+                <com.makeramen.roundedimageview.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/userinfo_avatar"
+                    android:layout_centerVertical="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/login_avatar"
+                    android:scaleType="fitCenter"
+                    app:riv_border_width="1dp"
+                    app:riv_border_color="#979AA4"
+                    app:riv_oval="true"
+                    tools:ignore="RtlHardcoded" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/common_text"
+                    tools:ignore="RtlHardcoded" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
