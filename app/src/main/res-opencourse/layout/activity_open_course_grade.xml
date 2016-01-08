@@ -16,10 +16,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/opencourse_mygrade_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
                 android:text="@string/opencourse_mygrade"
                 tools:ignore="RtlHardcoded" />
             <RelativeLayout
@@ -75,9 +77,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
                     android:text="@string/common_text"
-                    tools:ignore="RtlHardcoded" />
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
             </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/opencourse_allgrade"
+                tools:ignore="RtlHardcoded" />
+            <com.appublisher.quizbank.customui.MultiListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 
