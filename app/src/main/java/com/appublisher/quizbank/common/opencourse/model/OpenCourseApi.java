@@ -10,4 +10,7 @@ public interface OpenCourseApi extends ApiConstants{
     // 获取公开课列表
     String getOpenCourseList = baseUrl + "course/get_open_class";
 
+    // 获取评价列表
+    String getRateList = baseUrl + "course/get_rate_list";
+
 }

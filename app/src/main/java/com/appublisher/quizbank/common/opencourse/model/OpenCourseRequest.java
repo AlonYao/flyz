@@ -21,4 +21,23 @@ public class OpenCourseRequest extends Request implements OpenCourseApi{
     public void getOpenCourseList() {
         asyncRequest(ParamBuilder.finalUrl(getOpenCourseList), "open_course_list", "object");
     }
+
+    /**
+     * 获取评价列表
+     * @param course_id 课程id
+     * @param class_id 课堂id
+     * @param lector_id 教师id
+     * @param page 每页15条
+     */
+    public void getGradeList(int course_id, int class_id, int lector_id, int page) {
+        asyncRequest(
+                ParamBuilder.finalUrl(getRateList)
+                        + "&course_id=" + course_id
+                        + "&class_id=" + class_id
+                        + "&lector_id=" + lector_id
+                        + "&page=" + page,
+                "get_grade_list",
+                "object");
+    }
+
 }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
@@ -14,6 +15,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.common.opencourse.activity.OpenCourseGradeActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.common.opencourse.adapter.ListOpencourseAdapter;
@@ -462,14 +464,14 @@ public class OpenCourseModel {
      * @param activity OpenCourseUnstartActivity
      */
     private static void showPlayBackList(ArrayList<OpenCoursePlaybackItem> playbacks,
-                                         OpenCourseUnstartActivity activity) {
+                                         final OpenCourseUnstartActivity activity) {
         if (playbacks == null) return;
 
         activity.mTvPlayback.setVisibility(View.VISIBLE);
 
         int size = playbacks.size();
         for (int i = 0; i < size; i++) {
-            OpenCoursePlaybackItem playback = playbacks.get(i);
+            final OpenCoursePlaybackItem playback = playbacks.get(i);
             if (playback == null) continue;
 
             View child = LayoutInflater.from(activity).inflate(
@@ -487,6 +489,17 @@ public class OpenCourseModel {
 
             RatingBar rb = (RatingBar) child.findViewById(R.id.playback_ratingbar);
             rb.setRating(playback.getScore());
+
+            RelativeLayout rlGrade = (RelativeLayout) child.findViewById(R.id.playback_grade);
+            rlGrade.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, OpenCourseGradeActivity.class);
+                    intent.putExtra("course_id", playback.getId());
+                    intent.putExtra("bar_title", playback.getName());
+                    activity.startActivity(intent);
+                }
+            });
 
             activity.mLlPlayback.addView(child);
         }
