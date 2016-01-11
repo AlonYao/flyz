@@ -1,11 +1,21 @@
 package com.appublisher.quizbank.common.opencourse.model;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +28,7 @@ import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseGradeActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.common.opencourse.adapter.GridOpencourseGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListOpencourseAdapter;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseConsultResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
@@ -30,6 +41,7 @@ import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
@@ -47,6 +59,8 @@ public class OpenCourseModel {
 
     private static final int SECTION = 3;
     private static List<OpenCourseListItem> mShowList;
+    private static EditText mEditText;
+    private static TextView mTvCurNum;
 
 //    /**
 //     * 处理公开课详情回调
@@ -550,4 +564,70 @@ public class OpenCourseModel {
             }
         });
     }
+
+    /**
+     * 评价Alert
+     * @param activity Activity
+     */
+    public static void showGradeAlert(final Activity activity) {
+        Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.show();
+
+        Window window = dialog.getWindow();
+        window.setContentView(R.layout.alert_opencourse_grade);
+        window.setBackgroundDrawableResource(R.color.transparency);
+
+        RatingBar ratingBar = (RatingBar) window.findViewById(R.id.alert_opencourse_grade_rb);
+        Drawable progress = ratingBar.getProgressDrawable();
+        DrawableCompat.setTint(progress, Color.parseColor("#FFD000"));
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Logger.e(String.valueOf(rating));
+            }
+        });
+
+        GridView gridView = (GridView) window.findViewById(R.id.alert_opencourse_grade_gv);
+        GridOpencourseGradeAdapter adapter = new GridOpencourseGradeAdapter(activity);
+        gridView.setAdapter(adapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                view.setSelected(true);
+            }
+        });
+
+        mTvCurNum = (TextView) window.findViewById(R.id.alert_opencourse_grade_num);
+        String text = "0/100";
+        mTvCurNum.setText(text);
+
+        mEditText = (EditText) window.findViewById(R.id.alert_opencourse_grade_edt);
+        mEditText.addTextChangedListener(mTextWatcher);
+    }
+
+    private static TextWatcher mTextWatcher = new TextWatcher() {
+        private CharSequence temp;
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            temp = s;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+            // Empty
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String text = String.valueOf(temp.length()) + "/100";
+            mTvCurNum.setText(text);
+        }
+    };
+
 }

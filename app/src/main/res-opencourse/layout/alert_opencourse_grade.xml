@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:paddingTop="17dp"
+    android:paddingBottom="17dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:background="@drawable/alert_opencourse_grade_bg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="15sp"
+        android:text="@string/common_text"
+        android:textColor="@color/common_text"/>
+
+    <RatingBar
+        android:id="@+id/alert_opencourse_grade_rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:rating="5"
+        android:stepSize="1.0"/>
+
+    <GridView
+        android:id="@+id/alert_opencourse_grade_gv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:verticalSpacing="8dp"
+        android:numColumns="3"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/alert_opencourse_grade_edt"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:gravity="top"
+            android:maxLength="100"
+            android:background="@drawable/alert_grade_edt_bg"
+            android:scrollbars="vertical"
+            android:inputType="textMultiLine"/>
+        <TextView
+            android:id="@+id/alert_opencourse_grade_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_alignBottom="@id/alert_opencourse_grade_edt"
+            android:layout_alignParentRight="true"
+            android:text="@string/common_text"
+            android:textColor="@color/common_line"
+            tools:ignore="RelativeOverlap,RtlHardcoded" />
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="right"
+        android:background="@color/apptheme"
+        android:textColor="@android:color/white"
+        android:text="@string/opencourse_submit"
+        tools:ignore="RtlHardcoded" />
+
+</LinearLayout>

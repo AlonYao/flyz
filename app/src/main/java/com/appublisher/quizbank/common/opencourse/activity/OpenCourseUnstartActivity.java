@@ -73,6 +73,8 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         ProgressDialogManager.showProgressDialog(this, true);
         request.getOpenCourseList();
+
+        OpenCourseModel.showGradeAlert(this);
     }
 
     @Override
