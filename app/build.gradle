@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 24
-        versionName "1.4.3"
+        versionCode 25
+        versionName "1.4.4"
     }
 
     buildTypes {
