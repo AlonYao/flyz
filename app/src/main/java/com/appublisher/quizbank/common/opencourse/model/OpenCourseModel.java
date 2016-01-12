@@ -571,7 +571,6 @@ public class OpenCourseModel {
      */
     public static void showGradeAlert(final Activity activity) {
         Dialog dialog = new Dialog(activity);
-        dialog.setCancelable(false);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.show();
 
@@ -586,7 +585,21 @@ public class OpenCourseModel {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Logger.e(String.valueOf(rating));
+                if (rating < 1.0f) {
+                    ratingBar.setRating(1.0f);
+                }
+
+                if (rating == 5.0f) {
+                    ToastManager.showToast(activity, "5");
+                } else if (rating == 4.0f) {
+                    ToastManager.showToast(activity, "4");
+                } else if (rating == 3.0f) {
+                    ToastManager.showToast(activity, "3");
+                } else if (rating == 2.0f) {
+                    ToastManager.showToast(activity, "2");
+                } else if (rating == 1.0f) {
+                    ToastManager.showToast(activity, "1");
+                }
             }
         });
 
@@ -609,6 +622,9 @@ public class OpenCourseModel {
         mEditText.addTextChangedListener(mTextWatcher);
     }
 
+    /**
+     * TextWatcher
+     */
     private static TextWatcher mTextWatcher = new TextWatcher() {
         private CharSequence temp;
 
