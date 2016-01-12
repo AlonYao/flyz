@@ -649,14 +649,19 @@ public class OpenCourseModel {
 
     /**
      * 处理未评价课堂列表
+     * @param activity OpenCourseUnstartActivity
      * @param resp 接口数据
      */
-    public static void dealUnrateClassResp(OpenCourseUnrateClassResp resp) {
+    public static void dealUnrateClassResp(OpenCourseUnstartActivity activity,
+                                           OpenCourseUnrateClassResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
         ArrayList<OpenCourseUnrateClassItem> classes = resp.getList();
-        if (classes == null || classes.size() == 0) return;
-
-
+        if (classes == null || classes.size() == 0) {
+            activity.mTvNumNotice.setVisibility(View.GONE);
+        } else {
+            activity.mTvNumNotice.setVisibility(View.VISIBLE);
+            activity.mTvNumNotice.setText(String.valueOf(classes.size()));
+        }
     }
 }

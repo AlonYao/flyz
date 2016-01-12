@@ -40,6 +40,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
     public LinearLayout mLlPlayback;
     public TextView mTvMore;
     public TextView mTvPlayback;
+    public TextView mTvNumNotice;
     private OpenCourseRequest mRequest;
 
     /** Umeng **/
@@ -69,6 +70,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         mLlPlayback = (LinearLayout) findViewById(R.id.opencourse_playback_ll);
         mTvMore = (TextView) findViewById(R.id.opencourse_more);
         mTvPlayback = (TextView) findViewById(R.id.opencourse_playback_tv);
+        mTvNumNotice = (TextView) findViewById(R.id.opencourse_num_notice);
 
         // 获取数据
         mContent = getIntent().getStringExtra("content");
@@ -179,7 +181,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
             case "get_unrated_class":
                 OpenCourseUnrateClassResp unrateClassResp =
                         GsonManager.getModel(response, OpenCourseUnrateClassResp.class);
-                OpenCourseModel.dealUnrateClassResp(unrateClassResp);
+                OpenCourseModel.dealUnrateClassResp(this, unrateClassResp);
                 break;
 
             default:
