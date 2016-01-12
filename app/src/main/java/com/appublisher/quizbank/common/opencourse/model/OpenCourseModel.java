@@ -35,13 +35,14 @@ import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCoursePlaybackItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUrlResp;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
@@ -646,4 +647,16 @@ public class OpenCourseModel {
         }
     };
 
+    /**
+     * 处理未评价课堂列表
+     * @param resp 接口数据
+     */
+    public static void dealUnrateClassResp(OpenCourseUnrateClassResp resp) {
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        ArrayList<OpenCourseUnrateClassItem> classes = resp.getList();
+        if (classes == null || classes.size() == 0) return;
+
+
+    }
 }

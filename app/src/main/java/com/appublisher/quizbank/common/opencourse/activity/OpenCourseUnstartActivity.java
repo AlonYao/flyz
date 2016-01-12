@@ -15,6 +15,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.customui.MultiListView;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -39,6 +40,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
     public LinearLayout mLlPlayback;
     public TextView mTvMore;
     public TextView mTvPlayback;
+    private OpenCourseRequest mRequest;
 
     /** Umeng **/
     private long mUmengTimestamp;
@@ -56,7 +58,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         CommonModel.setToolBar(this);
 
         // 成员变量初始化
-        OpenCourseRequest request = new OpenCourseRequest(this, this);
+        mRequest = new OpenCourseRequest(this, this);
         mUmengTimestamp = System.currentTimeMillis();
         mUmengQQ = "0";
         mUmengPreSit = "0";
@@ -71,8 +73,9 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         // 获取数据
         mContent = getIntent().getStringExtra("content");
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
+
         ProgressDialogManager.showProgressDialog(this, true);
-        request.getOpenCourseList();
+        mRequest.getOpenCourseList();
 
         OpenCourseModel.showGradeAlert(this);
     }
@@ -80,6 +83,9 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
     @Override
     protected void onResume() {
         super.onResume();
+        // 获取未评价课程
+        mRequest.getUnratedClass("true", 1);
+
         // Umeng
         MobclickAgent.onPageStart("AnswerSheetActivity");
         MobclickAgent.onResume(this);
@@ -137,6 +143,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
         MenuItemCompat.setShowAsAction(menu.add("咨询"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -147,6 +154,9 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         } else if ("咨询".equals(item.getTitle())) {
             OpenCourseModel.setMarketQQ(this);
             mUmengQQ = "1"; // Umeng
+        } else if ("评分".equals(item.getTitle())) {
+            Intent intent = new Intent(this, OpenCourseMyGradeActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -163,13 +173,18 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
             case "open_course_list":
                 OpenCourseListResp resp = GsonManager.getModel(response, OpenCourseListResp.class);
                 OpenCourseModel.dealOpenCourseListResp(resp, this);
+                ProgressDialogManager.closeProgressDialog();
+                break;
+
+            case "get_unrated_class":
+                OpenCourseUnrateClassResp unrateClassResp =
+                        GsonManager.getModel(response, OpenCourseUnrateClassResp.class);
+                OpenCourseModel.dealUnrateClassResp(unrateClassResp);
                 break;
 
             default:
                 break;
         }
-
-        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override

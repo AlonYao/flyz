@@ -40,4 +40,18 @@ public class OpenCourseRequest extends Request implements OpenCourseApi{
                 "object");
     }
 
+    /**
+     * 获取未评价的课堂列表
+     * @param is_open 是否为公开课(true:公开课 false:课程中心)
+     * @param page 每页15条
+     */
+    public void getUnratedClass(String is_open, int page) {
+        asyncRequest(
+                ParamBuilder.finalUrl(getUnratedClass)
+                        + "&is_open=" + is_open
+                        + "&page=" + page,
+                "get_unrated_class",
+                "object");
+    }
+
 }
