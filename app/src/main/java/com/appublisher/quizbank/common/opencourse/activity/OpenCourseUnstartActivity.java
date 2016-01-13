@@ -15,6 +15,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.customui.MultiListView;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -28,6 +29,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -41,6 +43,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
     public TextView mTvMore;
     public TextView mTvPlayback;
     public TextView mTvNumNotice;
+    public ArrayList<OpenCourseUnrateClassItem> mUnrateClasses;
     private OpenCourseRequest mRequest;
 
     /** Umeng **/
@@ -158,6 +161,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
             mUmengQQ = "1"; // Umeng
         } else if ("评分".equals(item.getTitle())) {
             Intent intent = new Intent(this, OpenCourseMyGradeActivity.class);
+            intent.putExtra("unrate_classes", mUnrateClasses);
             startActivity(intent);
         }
 

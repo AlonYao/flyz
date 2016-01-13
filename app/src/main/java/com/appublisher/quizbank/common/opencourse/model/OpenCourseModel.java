@@ -35,7 +35,6 @@ import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCoursePlaybackItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
-import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUrlResp;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
@@ -656,12 +655,12 @@ public class OpenCourseModel {
                                            OpenCourseUnrateClassResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
-        ArrayList<OpenCourseUnrateClassItem> classes = resp.getList();
-        if (classes == null || classes.size() == 0) {
+        activity.mUnrateClasses = resp.getList();
+        if (activity.mUnrateClasses == null || activity.mUnrateClasses.size() == 0) {
             activity.mTvNumNotice.setVisibility(View.GONE);
         } else {
             activity.mTvNumNotice.setVisibility(View.VISIBLE);
-            activity.mTvNumNotice.setText(String.valueOf(classes.size()));
+            activity.mTvNumNotice.setText(String.valueOf(activity.mUnrateClasses.size()));
         }
     }
 }
