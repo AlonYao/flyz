@@ -23,6 +23,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@null"/>
+            <TextView
+                android:id="@+id/mygrade_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp"
+                android:textColor="@color/common_text"
+                android:text="@string/opencourse_refresh"/>
         </LinearLayout>
     </ScrollView>
 

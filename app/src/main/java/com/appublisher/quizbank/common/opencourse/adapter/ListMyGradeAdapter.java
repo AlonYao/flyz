@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
@@ -49,8 +48,6 @@ public class ListMyGradeAdapter extends BaseAdapter{
             convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.item_unrate_class, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.ivRedPoint =
-                    (ImageView) convertView.findViewById(R.id.unrate_class_redpoint);
             viewHolder.tvDesc = (TextView) convertView.findViewById(R.id.unrate_class_desc);
             viewHolder.tvDate = (TextView) convertView.findViewById(R.id.unrate_class_date);
             convertView.setTag(viewHolder);
@@ -97,7 +94,6 @@ public class ListMyGradeAdapter extends BaseAdapter{
     }
 
     private class ViewHolder {
-        ImageView ivRedPoint;
         TextView tvDesc;
         TextView tvDate;
     }

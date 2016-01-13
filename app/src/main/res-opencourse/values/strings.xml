@@ -13,4 +13,5 @@
     <string name="opencourse_grade">我要评分</string>
     <string name="opencourse_listen">我要听课</string>
     <string name="opencourse_submit">提交</string>
+    <string name="opencourse_refresh">点击刷新</string>
 </resources>

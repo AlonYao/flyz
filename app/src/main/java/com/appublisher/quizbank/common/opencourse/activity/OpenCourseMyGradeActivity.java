@@ -2,14 +2,23 @@ package com.appublisher.quizbank.common.opencourse.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseRateEntity;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.customui.MultiListView;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
+import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 
 import org.json.JSONArray;
@@ -23,6 +32,9 @@ import java.util.ArrayList;
 public class OpenCourseMyGradeActivity extends AppCompatActivity implements RequestCallback{
 
     public MultiListView mListView;
+    public ListMyGradeAdapter mAdapter;
+    public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
+    public String mIsOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,34 +46,88 @@ public class OpenCourseMyGradeActivity extends AppCompatActivity implements Requ
         CommonModel.setBarTitle(this, "评分");
 
         // init data
+        final OpenCourseRequest request = new OpenCourseRequest(this, this);
+        String entry = getIntent().getStringExtra("entry");
+        mIsOpen = "false";
+        if ("opencourse".equals(entry)) mIsOpen = "true";
+
         // noinspection unchecked
-        ArrayList<OpenCourseUnrateClassItem> unRateClasses =
-                (ArrayList<OpenCourseUnrateClassItem>)
+        mUnRateClasses = (ArrayList<OpenCourseUnrateClassItem>)
                         getIntent().getSerializableExtra("unrate_classes");
 
         // init view
         mListView = (MultiListView) findViewById(R.id.mygrade_lv);
+        TextView tvRefresh = (TextView) findViewById(R.id.mygrade_refresh);
 
-        if (unRateClasses == null || unRateClasses.size() == 0) {
+        if (mUnRateClasses == null || mUnRateClasses.size() == 0) {
             ToastManager.showToast(this, "暂无待评价课程");
         } else {
-            ListMyGradeAdapter adapter = new ListMyGradeAdapter(this, unRateClasses);
-            mListView.setAdapter(adapter);
+            mAdapter = new ListMyGradeAdapter(this, mUnRateClasses);
+            mListView.setAdapter(mAdapter);
         }
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mUnRateClasses == null || position >= mUnRateClasses.size()) return;
+
+                OpenCourseUnrateClassItem item = mUnRateClasses.get(position);
+                if (item == null) return;
+
+                OpenCourseRateEntity entity = new OpenCourseRateEntity();
+                if ("true".equals(mIsOpen)) {
+                    entity.class_id = item.getId();
+                } else {
+                    entity.course_id = item.getId();
+                }
+                entity.is_open = mIsOpen;
+
+                OpenCourseModel.showGradeAlert(OpenCourseMyGradeActivity.this, entity);
+            }
+        });
+
+        tvRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                request.getUnratedClass(mIsOpen, 1);
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        if (response == null || apiName == null) {
+            ProgressDialogManager.closeProgressDialog();
+            return;
+        }
 
+        switch (apiName) {
+            case "get_unrated_class":
+                OpenCourseUnrateClassResp resp =
+                        GsonManager.getModel(response, OpenCourseUnrateClassResp.class);
+                OpenCourseModel.dealUnrateClassResp(this, resp);
+                break;
+
+            default:
+                break;
+        }
+
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 }

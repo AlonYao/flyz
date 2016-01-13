@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RatingBar;
@@ -26,9 +27,11 @@ import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseGradeActivity;
+import com.appublisher.quizbank.common.opencourse.activity.OpenCourseMyGradeActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.common.opencourse.adapter.GridOpencourseGradeAdapter;
+import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListOpencourseAdapter;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseConsultResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
@@ -61,6 +64,7 @@ public class OpenCourseModel {
     private static List<OpenCourseListItem> mShowList;
     private static EditText mEditText;
     private static TextView mTvCurNum;
+    private static View mCurGradeView;
 
 //    /**
 //     * 处理公开课详情回调
@@ -568,8 +572,9 @@ public class OpenCourseModel {
     /**
      * 评价Alert
      * @param activity Activity
+     * @param entity OpenCourseRateEntity
      */
-    public static void showGradeAlert(final Activity activity) {
+    public static void showGradeAlert(final Activity activity, final OpenCourseRateEntity entity) {
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.show();
@@ -578,7 +583,8 @@ public class OpenCourseModel {
         window.setContentView(R.layout.alert_opencourse_grade);
         window.setBackgroundDrawableResource(R.color.transparency);
 
-        RatingBar ratingBar = (RatingBar) window.findViewById(R.id.alert_opencourse_grade_rb);
+        // 星星
+        final RatingBar ratingBar = (RatingBar) window.findViewById(R.id.alert_opencourse_grade_rb);
         Drawable progress = ratingBar.getProgressDrawable();
         DrawableCompat.setTint(progress, Color.parseColor("#FFD000"));
 
@@ -603,6 +609,7 @@ public class OpenCourseModel {
             }
         });
 
+        // 评语标签
         GridView gridView = (GridView) window.findViewById(R.id.alert_opencourse_grade_gv);
         GridOpencourseGradeAdapter adapter = new GridOpencourseGradeAdapter(activity);
         gridView.setAdapter(adapter);
@@ -611,15 +618,38 @@ public class OpenCourseModel {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
+                mCurGradeView = view;
             }
         });
 
+        // 评价文本框
         mTvCurNum = (TextView) window.findViewById(R.id.alert_opencourse_grade_num);
         String text = "0/100";
         mTvCurNum.setText(text);
 
         mEditText = (EditText) window.findViewById(R.id.alert_opencourse_grade_edt);
         mEditText.addTextChangedListener(mTextWatcher);
+
+        // 提交
+        Button btnSubmit = (Button) window.findViewById(R.id.alert_opencourse_grade_submit);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (entity == null) return;
+
+                entity.score = (int) ratingBar.getRating();
+
+                String edit = mEditText.getText().toString();
+                String tag = "";
+                if (mCurGradeView != null) {
+                    TextView textView = (TextView) mCurGradeView.findViewById(R.id.item_alert_tv);
+                    tag = textView.getText().toString();
+                }
+                entity.comment = tag + (tag.length() == 0 ? "" : "，") + edit;
+
+
+            }
+        });
     }
 
     /**
@@ -661,6 +691,25 @@ public class OpenCourseModel {
         } else {
             activity.mTvNumNotice.setVisibility(View.VISIBLE);
             activity.mTvNumNotice.setText(String.valueOf(activity.mUnrateClasses.size()));
+        }
+    }
+
+    /**
+     * 处理未评价课堂列表
+     * @param activity OpenCourseMyGradeActivity
+     * @param resp 接口数据
+     */
+    public static void dealUnrateClassResp(OpenCourseMyGradeActivity activity,
+                                           OpenCourseUnrateClassResp resp) {
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        activity.mUnRateClasses = resp.getList();
+        if (activity.mUnRateClasses == null || activity.mUnRateClasses.size() == 0) {
+            activity.mListView.setVisibility(View.GONE);
+        } else {
+            activity.mListView.setVisibility(View.VISIBLE);
+            activity.mAdapter = new ListMyGradeAdapter(activity, activity.mUnRateClasses);
+            activity.mListView.setAdapter(activity.mAdapter);
         }
     }
 }

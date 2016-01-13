@@ -67,6 +67,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/alert_opencourse_grade_submit"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"

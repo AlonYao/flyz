@@ -124,7 +124,7 @@ public interface ApiConstants {
     String bookMcok = baseUrl + "quizbank/book_mock";
 
     // 获取公开课播放地址
-    String getOpenCourseUrl = baseUrl + "quizbank/open_course_url";
+    String getOpenCourseUrl = baseUrl + "course/open_course_url";
 
     // 轮询公开课咨询窗口的弹出
     String getOpenCourseConsult = baseUrl + "quizbank/open_course_alert";

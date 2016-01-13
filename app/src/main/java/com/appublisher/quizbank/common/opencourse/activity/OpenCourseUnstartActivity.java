@@ -81,8 +81,6 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
 
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getOpenCourseList();
-
-        OpenCourseModel.showGradeAlert(this);
     }
 
     @Override
@@ -162,6 +160,7 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         } else if ("评分".equals(item.getTitle())) {
             Intent intent = new Intent(this, OpenCourseMyGradeActivity.class);
             intent.putExtra("unrate_classes", mUnrateClasses);
+            intent.putExtra("entry", "opencourse");
             startActivity(intent);
         }
 
