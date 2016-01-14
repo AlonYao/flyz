@@ -38,6 +38,7 @@ import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseConsultResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCoursePlaybackItem;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateTagItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUrlResp;
@@ -593,6 +594,10 @@ public class OpenCourseModel {
         TextView tvDesc = (TextView) window.findViewById(R.id.alert_opencourse_grade_desc);
         tvDesc.setText(entity.desc);
 
+        // 评语标签
+        final GridView gridView = (GridView) window.findViewById(R.id.alert_opencourse_grade_gv);
+        showTagsByRating(5, gridView, activity);
+
         // 星星
         final RatingBar ratingBar = (RatingBar) window.findViewById(R.id.alert_opencourse_grade_rb);
         Drawable progress = ratingBar.getProgressDrawable();
@@ -605,32 +610,7 @@ public class OpenCourseModel {
                     ratingBar.setRating(1.0f);
                 }
 
-                if (rating == 5.0f) {
-                    ToastManager.showToast(activity, "5");
-                } else if (rating == 4.0f) {
-                    ToastManager.showToast(activity, "4");
-                } else if (rating == 3.0f) {
-                    ToastManager.showToast(activity, "3");
-                } else if (rating == 2.0f) {
-                    ToastManager.showToast(activity, "2");
-                } else if (rating == 1.0f) {
-                    ToastManager.showToast(activity, "1");
-                }
-            }
-        });
-
-        // 评语标签
-        final GridView gridView = (GridView) window.findViewById(R.id.alert_opencourse_grade_gv);
-        GridOpencourseGradeAdapter adapter = new GridOpencourseGradeAdapter(activity);
-        gridView.setAdapter(adapter);
-        mCurGradeView = null;
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                setUnSelected(activity);
-                mCurGradeView = view;
-                setSelected();
+                showTagsByRating((int) rating, gridView, activity);
             }
         });
 
@@ -659,6 +639,43 @@ public class OpenCourseModel {
 
                 ProgressDialogManager.showProgressDialog(activity);
                 activity.mRequest.rateClass(entity);
+            }
+        });
+    }
+
+    /**
+     * 通过评分显示标签
+     * @param rating 评分
+     * @param gridView GridView
+     * @param context Context
+     */
+    private static void showTagsByRating(int rating, GridView gridView, final Context context) {
+        GlobalSettingsResp resp = GlobalSettingDAO.getGlobalSettingsResp();
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        ArrayList<OpenCourseRateTagItem> rateTagItems = resp.getRate_tags();
+        if (rateTagItems == null) return;
+
+        ArrayList<String> tags = new ArrayList<>();
+        for (OpenCourseRateTagItem rateTagItem : rateTagItems) {
+            if (rateTagItem == null) continue;
+
+            if (rating == rateTagItem.getStar()) {
+                tags = rateTagItem.getTags();
+                break;
+            }
+        }
+
+        GridOpencourseGradeAdapter adapter = new GridOpencourseGradeAdapter(context, tags);
+        gridView.setAdapter(adapter);
+        mCurGradeView = null;
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setUnSelected(context);
+                mCurGradeView = view;
+                setSelected();
             }
         });
     }

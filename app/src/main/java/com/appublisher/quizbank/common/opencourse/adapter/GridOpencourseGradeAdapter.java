@@ -9,20 +9,24 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 
+import java.util.ArrayList;
+
 /**
  * 公开课评价弹窗评论内容Gird
  */
 public class GridOpencourseGradeAdapter extends BaseAdapter{
 
     private Context mContext;
+    private ArrayList<String> mTags;
 
-    public GridOpencourseGradeAdapter(Context context) {
+    public GridOpencourseGradeAdapter(Context context, ArrayList<String> tags) {
         this.mContext = context;
+        this.mTags = tags;
     }
 
     @Override
     public int getCount() {
-        return 6;
+        return mTags == null ? 0 : mTags.size();
     }
 
     @Override
@@ -50,7 +54,19 @@ public class GridOpencourseGradeAdapter extends BaseAdapter{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        setContent(viewHolder, position);
+
         return convertView;
+    }
+
+    /**
+     * 设置内容
+     * @param viewHolder ViewHolder
+     * @param position position
+     */
+    private void setContent(ViewHolder viewHolder, int position) {
+        if (mTags == null || position >= mTags.size()) return;
+        viewHolder.tvContent.setText(mTags.get(position));
     }
 
     private class ViewHolder {

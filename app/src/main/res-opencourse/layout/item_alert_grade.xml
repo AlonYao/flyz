@@ -2,14 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/alert_grade">
+    android:background="@drawable/alert_grade_unpress">
 
     <TextView
         android:id="@+id/item_alert_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@color/alert_grade"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:maxEms="7"
+        android:textColor="@color/apptheme"
+        android:textSize="12sp"
         android:text="@string/common_text"/>
 
 </RelativeLayout>

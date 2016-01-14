@@ -2,7 +2,6 @@ package com.appublisher.quizbank.dao;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.utils.GsonManager;
@@ -176,7 +175,6 @@ public class GlobalSettingDAO {
     public static GlobalSettingsResp getGlobalSettingsResp() {
         GlobalSetting globalSetting = findById();
         if (globalSetting == null || globalSetting.content == null) return null;
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
-        return Globals.gson.fromJson(globalSetting.content, GlobalSettingsResp.class);
+        return GsonManager.getObejctFromJSON(globalSetting.content, GlobalSettingsResp.class);
     }
 }
