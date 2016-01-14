@@ -7,15 +7,20 @@ import java.io.Serializable;
  */
 public class OpenCourseUnrateClassItem implements Serializable{
 
-    int id;
+    int class_id;
+    int course_id;
     String course_name;
     String class_name;
     String lector;
     String start_time;
     String end_time;
 
-    public int getId() {
-        return id;
+    public int getClass_id() {
+        return class_id;
+    }
+
+    public int getCourse_id() {
+        return course_id;
     }
 
     public String getLector() {

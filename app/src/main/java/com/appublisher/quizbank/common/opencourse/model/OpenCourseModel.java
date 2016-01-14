@@ -578,6 +578,8 @@ public class OpenCourseModel {
      */
     public static void showGradeAlert(final OpenCourseMyGradeActivity activity,
                                       final OpenCourseRateEntity entity) {
+        if (entity == null) return;
+
         mRateDialog = new Dialog(activity);
         mRateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mRateDialog.show();
@@ -585,6 +587,10 @@ public class OpenCourseModel {
         Window window = mRateDialog.getWindow();
         window.setContentView(R.layout.alert_opencourse_grade);
         window.setBackgroundDrawableResource(R.color.transparency);
+
+        // 描述
+        TextView tvDesc = (TextView) window.findViewById(R.id.alert_opencourse_grade_desc);
+        tvDesc.setText(entity.desc);
 
         // 星星
         final RatingBar ratingBar = (RatingBar) window.findViewById(R.id.alert_opencourse_grade_rb);
@@ -627,7 +633,7 @@ public class OpenCourseModel {
 
         // 评价文本框
         mTvCurNum = (TextView) window.findViewById(R.id.alert_opencourse_grade_num);
-        String text = "0/100";
+        String text = "0/140";
         mTvCurNum.setText(text);
 
         mEditText = (EditText) window.findViewById(R.id.alert_opencourse_grade_edt);
@@ -638,8 +644,6 @@ public class OpenCourseModel {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (entity == null) return;
-
                 entity.score = (int) ratingBar.getRating();
 
                 String edit = mEditText.getText().toString();

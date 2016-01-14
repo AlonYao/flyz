@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
@@ -75,12 +76,12 @@ public class OpenCourseMyGradeActivity extends AppCompatActivity implements Requ
                 if (item == null) return;
 
                 OpenCourseRateEntity entity = new OpenCourseRateEntity();
-                if ("true".equals(mIsOpen)) {
-                    entity.class_id = item.getId();
-                } else {
-                    entity.course_id = item.getId();
-                }
+                entity.course_id = item.getCourse_id();
+                entity.class_id = item.getClass_id();
                 entity.is_open = mIsOpen;
+                // 获取公开课描述（教师+名称）
+                TextView textView = (TextView) view.findViewById(R.id.unrate_class_desc);
+                entity.desc = textView.getText().toString();
 
                 OpenCourseModel.showGradeAlert(OpenCourseMyGradeActivity.this, entity);
             }
@@ -114,6 +115,7 @@ public class OpenCourseMyGradeActivity extends AppCompatActivity implements Requ
                 if (rateResp != null && rateResp.getResponse_code() == 1) {
                     OpenCourseModel.closeRateDialog();
                     mRequest.getUnratedClass(mIsOpen, 1);
+                    ToastManager.showToast(this, "评价成功");
                 } else {
                     ProgressDialogManager.closeProgressDialog();
                     ToastManager.showToast(this, "评价提交失败");

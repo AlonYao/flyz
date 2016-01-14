@@ -10,5 +10,6 @@ public class OpenCourseRateEntity {
     public int class_id;
     public int score;
     public String comment;
+    public String desc;
 
 }

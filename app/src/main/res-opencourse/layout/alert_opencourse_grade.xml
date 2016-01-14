@@ -12,6 +12,7 @@
     android:background="@drawable/alert_opencourse_grade_bg">
 
     <TextView
+        android:id="@+id/alert_opencourse_grade_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -33,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
         android:gravity="center"
         android:verticalSpacing="8dp"
         android:numColumns="3"/>
@@ -49,7 +51,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:gravity="top"
-            android:maxLength="100"
+            android:maxLength="140"
             android:background="@drawable/alert_grade_edt_bg"
             android:scrollbars="vertical"
             android:inputType="textMultiLine"/>
