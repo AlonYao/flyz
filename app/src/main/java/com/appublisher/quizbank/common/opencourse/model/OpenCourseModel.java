@@ -546,6 +546,23 @@ public class OpenCourseModel {
 
         ListOpencourseAdapter adapter = new ListOpencourseAdapter(activity, mShowList);
         activity.mLvOpencourse.setAdapter(adapter);
+        activity.mLvOpencourse.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= mShowList.size()) return;
+
+                OpenCourseListItem item = mShowList.get(position);
+                if (item == null) return;
+
+                if (item.is_onair()) {
+                    // 正在直播，验证手机号
+                    skipToOpenCoursePage(activity, "Home");
+                } else {
+                    // 即将开始
+                    ToastManager.showToast(activity, "直播时间还没到哦");
+                }
+            }
+        });
 
         // 加载更多
         activity.mTvMore.setVisibility(View.VISIBLE);
