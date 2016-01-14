@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
@@ -12,9 +12,9 @@ import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRateEntity;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
-import com.appublisher.quizbank.customui.MultiListView;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
@@ -31,10 +31,11 @@ import java.util.ArrayList;
  */
 public class OpenCourseMyGradeActivity extends AppCompatActivity implements RequestCallback{
 
-    public MultiListView mListView;
+    public ListView mListView;
     public ListMyGradeAdapter mAdapter;
     public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
     public String mIsOpen;
+    public OpenCourseRequest mRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +47,18 @@ public class OpenCourseMyGradeActivity extends AppCompatActivity implements Requ
         CommonModel.setBarTitle(this, "评分");
 
         // init data
-        final OpenCourseRequest request = new OpenCourseRequest(this, this);
+        mRequest = new OpenCourseRequest(this, this);
         String entry = getIntent().getStringExtra("entry");
         mIsOpen = "false";
         if ("opencourse".equals(entry)) mIsOpen = "true";
-
         // noinspection unchecked
         mUnRateClasses = (ArrayList<OpenCourseUnrateClassItem>)
                         getIntent().getSerializableExtra("unrate_classes");
 
         // init view
-        mListView = (MultiListView) findViewById(R.id.mygrade_lv);
-        TextView tvRefresh = (TextView) findViewById(R.id.mygrade_refresh);
+        mListView = (ListView) findViewById(R.id.mygrade_lv);
 
+        // show listview
         if (mUnRateClasses == null || mUnRateClasses.size() == 0) {
             ToastManager.showToast(this, "暂无待评价课程");
         } else {
@@ -85,13 +85,6 @@ public class OpenCourseMyGradeActivity extends AppCompatActivity implements Requ
                 OpenCourseModel.showGradeAlert(OpenCourseMyGradeActivity.this, entity);
             }
         });
-
-        tvRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                request.getUnratedClass(mIsOpen, 1);
-            }
-        });
     }
 
     @Override
@@ -112,13 +105,26 @@ public class OpenCourseMyGradeActivity extends AppCompatActivity implements Requ
                 OpenCourseUnrateClassResp resp =
                         GsonManager.getModel(response, OpenCourseUnrateClassResp.class);
                 OpenCourseModel.dealUnrateClassResp(this, resp);
+                ProgressDialogManager.closeProgressDialog();
+                break;
+
+            case "rate_class":
+                OpenCourseRateResp rateResp =
+                        GsonManager.getModel(response, OpenCourseRateResp.class);
+                if (rateResp != null && rateResp.getResponse_code() == 1) {
+                    OpenCourseModel.closeRateDialog();
+                    mRequest.getUnratedClass(mIsOpen, 1);
+                } else {
+                    ProgressDialogManager.closeProgressDialog();
+                    ToastManager.showToast(this, "评价提交失败");
+                }
+
                 break;
 
             default:
+                ProgressDialogManager.closeProgressDialog();
                 break;
         }
-
-        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override

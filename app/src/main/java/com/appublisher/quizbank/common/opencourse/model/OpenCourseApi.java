@@ -16,4 +16,7 @@ public interface OpenCourseApi extends ApiConstants{
     // 获取未评价的课堂列表
     String getUnratedClass = baseUrl + "course/get_unrated_class";
 
+    // 评价课程
+    String rateClass = baseUrl + "course/rate_class";
+
 }

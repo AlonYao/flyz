@@ -6,6 +6,8 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 
+import java.util.HashMap;
+
 /**
  * 公开课模块请求
  */
@@ -52,6 +54,23 @@ public class OpenCourseRequest extends Request implements OpenCourseApi{
                         + "&page=" + page,
                 "get_unrated_class",
                 "object");
+    }
+
+    /**
+     * 提交评价
+     * @param entity 评价信息
+     */
+    public void rateClass(OpenCourseRateEntity entity) {
+        if (entity == null) return;
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("course_id", String.valueOf(entity.course_id));
+        map.put("is_open", entity.is_open);
+        map.put("class_id", String.valueOf(entity.class_id));
+        map.put("score", String.valueOf(entity.score));
+        map.put("comment", entity.comment);
+
+        postRequest(ParamBuilder.finalUrl(rateClass), map, "rate_class", "object");
     }
 
 }

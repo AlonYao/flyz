@@ -45,6 +45,7 @@ import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.google.gson.Gson;
 
@@ -65,6 +66,7 @@ public class OpenCourseModel {
     private static EditText mEditText;
     private static TextView mTvCurNum;
     private static View mCurGradeView;
+    private static Dialog mRateDialog;
 
 //    /**
 //     * 处理公开课详情回调
@@ -574,12 +576,13 @@ public class OpenCourseModel {
      * @param activity Activity
      * @param entity OpenCourseRateEntity
      */
-    public static void showGradeAlert(final Activity activity, final OpenCourseRateEntity entity) {
-        Dialog dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.show();
+    public static void showGradeAlert(final OpenCourseMyGradeActivity activity,
+                                      final OpenCourseRateEntity entity) {
+        mRateDialog = new Dialog(activity);
+        mRateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mRateDialog.show();
 
-        Window window = dialog.getWindow();
+        Window window = mRateDialog.getWindow();
         window.setContentView(R.layout.alert_opencourse_grade);
         window.setBackgroundDrawableResource(R.color.transparency);
 
@@ -647,7 +650,8 @@ public class OpenCourseModel {
                 }
                 entity.comment = tag + (tag.length() == 0 ? "" : "，") + edit;
 
-
+                ProgressDialogManager.showProgressDialog(activity);
+                activity.mRequest.rateClass(entity);
             }
         });
     }
@@ -712,4 +716,12 @@ public class OpenCourseModel {
             activity.mListView.setAdapter(activity.mAdapter);
         }
     }
+
+    /**
+     * 关闭评价Dialog
+     */
+    public static void closeRateDialog() {
+        if (mRateDialog != null) mRateDialog.dismiss();
+    }
+
 }
