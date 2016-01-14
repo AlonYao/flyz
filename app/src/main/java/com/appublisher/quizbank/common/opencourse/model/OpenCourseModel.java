@@ -3,6 +3,7 @@ package com.appublisher.quizbank.common.opencourse.model;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -619,15 +620,17 @@ public class OpenCourseModel {
         });
 
         // 评语标签
-        GridView gridView = (GridView) window.findViewById(R.id.alert_opencourse_grade_gv);
+        final GridView gridView = (GridView) window.findViewById(R.id.alert_opencourse_grade_gv);
         GridOpencourseGradeAdapter adapter = new GridOpencourseGradeAdapter(activity);
         gridView.setAdapter(adapter);
+        mCurGradeView = null;
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.setSelected(true);
+                setUnSelected(activity);
                 mCurGradeView = view;
+                setSelected();
             }
         });
 
@@ -658,6 +661,29 @@ public class OpenCourseModel {
                 activity.mRequest.rateClass(entity);
             }
         });
+    }
+
+    /**
+     * 设置未选中状态
+     * @param context Context
+     */
+    private static void setUnSelected(Context context) {
+        if (mCurGradeView == null) return;
+
+        mCurGradeView.setBackgroundResource(R.drawable.alert_grade_unpress);
+        TextView textView = (TextView) mCurGradeView.findViewById(R.id.item_alert_tv);
+        textView.setTextColor(context.getResources().getColor(R.color.apptheme));
+    }
+
+    /**
+     * 设置选中状态
+     */
+    private static void setSelected() {
+        if (mCurGradeView == null) return;
+
+        mCurGradeView.setBackgroundResource(R.drawable.alert_grade_press);
+        TextView textView = (TextView) mCurGradeView.findViewById(R.id.item_alert_tv);
+        textView.setTextColor(Color.WHITE);
     }
 
     /**
