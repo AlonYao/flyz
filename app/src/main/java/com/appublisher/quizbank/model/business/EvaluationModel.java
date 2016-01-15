@@ -156,7 +156,7 @@ public class EvaluationModel {
         //1.5版本提示
         boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
         boolean detailCategory = Globals.sharedPreferences.getBoolean("detailCategory", true);
-        if (isFirstStart && detailCategory) {
+        if (!isFirstStart && detailCategory) {
             PopupWindowManager.showUpdateEvaluation(activity.parentView, activity);
         }
     }

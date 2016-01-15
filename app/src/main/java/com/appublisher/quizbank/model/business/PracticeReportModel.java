@@ -220,7 +220,7 @@ public class PracticeReportModel {
         if ("entire".equals(mActivity.mPaperType)) {
             boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
             boolean detailCategory = Globals.sharedPreferences.getBoolean("rankInfo", true);
-            if (isFirstStart && detailCategory) {
+            if (!isFirstStart && detailCategory) {
                 PopupWindowManager.showUpdatePracticeReport(mActivity.parentView, mActivity);
             }
         }
