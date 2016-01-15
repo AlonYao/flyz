@@ -15,13 +15,18 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.model.business.CourseModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
+import com.tendcloud.tenddata.TCAgent;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -120,6 +125,38 @@ public class CourseFragment extends Fragment implements RequestCallback {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            refreshData();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isHidden()) {
+            refreshData();
+        }
+
+        // Umeng
+        MobclickAgent.onPageStart("CourseFragment");
+
+        // TalkingData
+        TCAgent.onPageStart(mActivity, "CourseFragment");
+    }
+
+    /**
+     * 刷新数据
+     */
+    private void refreshData() {
+        // 获取课程列表
+        ProgressBarManager.showProgressBar(mMainView);
+        CourseModel.getCourseList(this);
+        new OpenCourseRequest(mActivity, this).getUnratedClass("false", 1);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ActivitySkipConstants.COURSE) {
@@ -137,6 +174,12 @@ public class CourseFragment extends Fragment implements RequestCallback {
 
         if ("course_list".equals(apiName))
             CourseModel.dealCourseListResp(response, this);
+
+        if ("get_unrated_class".equals(apiName)) {
+            OpenCourseUnrateClassResp unrateClassResp =
+                    GsonManager.getModel(response, OpenCourseUnrateClassResp.class);
+            OpenCourseModel.dealUnrateClassResp((MainActivity) mActivity, unrateClassResp);
+        }
     }
 
     @Override

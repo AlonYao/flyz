@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
@@ -532,6 +533,27 @@ public class OpenCourseModel {
                 }
             });
 
+            child.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String mobileNum = LoginModel.getUserMobile();
+                    if (mobileNum == null || mobileNum.length() == 0) {
+                        // 没有手机号
+                        Intent intent = new Intent(activity, BindingMobileActivity.class);
+                        intent.putExtra("from", "opencourse");
+                        activity.startActivity(intent);
+
+                    } else {
+                        // 跳转
+                        String url = playback.getUrl()
+                                + "&user_id=" + LoginModel.getUserId()
+                                + "&user_token=" + LoginModel.getUserToken();
+                        OpenCourseModel.skipToPreOpenCourse(
+                                activity, url, playback.getName());
+                    }
+                }
+            });
+
             activity.mLlPlayback.addView(child);
         }
     }
@@ -661,6 +683,9 @@ public class OpenCourseModel {
                 String tag = "";
                 if (mTags != null) {
                     for (HashMap<String, Object> mTag : mTags) {
+                        boolean isSelected = (boolean) mTag.get("is_selected");
+                        if (!isSelected) continue;
+
                         String item = (String) mTag.get("comment");
                         if (item == null || item.length() == 0) continue;
                         tag = tag + item + "，";
@@ -799,6 +824,24 @@ public class OpenCourseModel {
         } else {
             activity.mTvNumNotice.setVisibility(View.VISIBLE);
             activity.mTvNumNotice.setText(String.valueOf(activity.mUnrateClasses.size()));
+        }
+    }
+
+    /**
+     * 处理未评价课堂列表
+     * @param activity MainActivity
+     * @param resp 接口数据
+     */
+    public static void dealUnrateClassResp(MainActivity activity,
+                                           OpenCourseUnrateClassResp resp) {
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        activity.mUnRateClasses = resp.getList();
+        if (activity.mUnRateClasses == null || activity.mUnRateClasses.size() == 0) {
+            activity.mTvOpenCourseNumNotice.setVisibility(View.GONE);
+        } else {
+            activity.mTvOpenCourseNumNotice.setVisibility(View.VISIBLE);
+            activity.mTvOpenCourseNumNotice.setText(String.valueOf(activity.mUnRateClasses.size()));
         }
     }
 

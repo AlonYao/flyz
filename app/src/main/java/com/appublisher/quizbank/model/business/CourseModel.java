@@ -102,9 +102,6 @@ public class CourseModel {
 
         // 设置点击事件
         mCourseFragment.mRlArea.setOnClickListener(onClickListener);
-
-        // 获取课程列表
-        getCourseList(courseFragment);
     }
 
     /**

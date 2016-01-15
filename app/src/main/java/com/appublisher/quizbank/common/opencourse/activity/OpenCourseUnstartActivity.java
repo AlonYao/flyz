@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
@@ -120,26 +119,26 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         UmengManager.sendComputeEvent(this, "Reserve", map, (int) (dur/1000));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (resultCode) {
-            case ActivitySkipConstants.BOOK_OPENCOURSE:
-                // 预约公开课回调
-                ProgressDialogManager.showProgressDialog(this, false);
-//                mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
-                break;
-
-            case ActivitySkipConstants.OPENCOURSE_PRE:
-                // 公开课回放
-//                mLvOldtimey.performItemClick(
-//                        mLvOldtimey.getAdapter().getView(mCurOldtimeyPosition, null, null),
-//                        mCurOldtimeyPosition,
-//                        mLvOldtimey.getAdapter().getItemId(mCurOldtimeyPosition));
-                break;
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        switch (resultCode) {
+//            case ActivitySkipConstants.BOOK_OPENCOURSE:
+//                // 预约公开课回调
+//                ProgressDialogManager.showProgressDialog(this, false);
+////                mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
+//                break;
+//
+//            case ActivitySkipConstants.OPENCOURSE_PRE:
+//                // 公开课回放
+////                mLvOldtimey.performItemClick(
+////                        mLvOldtimey.getAdapter().getView(mCurOldtimeyPosition, null, null),
+////                        mCurOldtimeyPosition,
+////                        mLvOldtimey.getAdapter().getItemId(mCurOldtimeyPosition));
+//                break;
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
