@@ -4,18 +4,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateListResp;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateResp;
 import com.appublisher.quizbank.common.opencourse.netdata.RateListOthersItem;
 import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.ToastManager;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,6 +44,11 @@ public class OpenCourseGradeActivity extends AppCompatActivity
     public String mUrl;
     public String mCourseName;
     public String mIsOpen;
+    public RoundedImageView mIvMineAvatar;
+    public RatingBar mRbMineRating;
+    public TextView mTvMineName;
+    public TextView mTvMineComment;
+    public TextView mTvMineDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,11 @@ public class OpenCourseGradeActivity extends AppCompatActivity
         mXlv = (XListView) findViewById(R.id.opencourse_grade_xlv);
         mLlMine = (LinearLayout) findViewById(R.id.opencourse_grade_mine_ll);
         mBtn = (Button) findViewById(R.id.opencourse_grade_btn);
+        mIvMineAvatar = (RoundedImageView) findViewById(R.id.opencourse_grade_mine_avatar);
+        mRbMineRating = (RatingBar) findViewById(R.id.opencourse_grade_mine_rb);
+        mTvMineName = (TextView) findViewById(R.id.opencourse_grade_mine_username);
+        mTvMineComment = (TextView) findViewById(R.id.opencourse_grade_mine_comment);
+        mTvMineDate = (TextView) findViewById(R.id.opencourse_grade_mine_date);
 
         mXlv.setXListViewListener(this);
         mXlv.setPullLoadEnable(true);
@@ -97,6 +112,20 @@ public class OpenCourseGradeActivity extends AppCompatActivity
                         GsonManager.getModel(response, OpenCourseRateListResp.class);
                 OpenCourseModel.dealOpenCourseRateListResp(this, resp);
                 ProgressDialogManager.closeProgressDialog();
+                break;
+
+            case "rate_class":
+                OpenCourseRateResp rateResp =
+                        GsonManager.getModel(response, OpenCourseRateResp.class);
+                if (rateResp != null && rateResp.getResponse_code() == 1) {
+                    OpenCourseModel.closeRateDialog();
+                    mRequest.getGradeList(mCourseId, 0, 0, 1);
+                    ToastManager.showToast(this, "评价成功");
+                } else {
+                    ProgressDialogManager.closeProgressDialog();
+                    ToastManager.showToast(this, "评价提交失败");
+                }
+
                 break;
 
             default:

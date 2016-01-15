@@ -339,6 +339,21 @@ public class LoginModel {
     }
 
     /**
+     * 获取用户昵称
+     *
+     * @return 昵称
+     */
+    public static String getNickName() {
+        User user = UserDAO.findById();
+        if (user == null) return "";
+
+        UserInfoModel userInfo = GsonManager.getObejctFromJSON(user.user, UserInfoModel.class);
+        if (userInfo == null) return "";
+
+        return String.valueOf(userInfo.getNickname());
+    }
+
+    /**
      * 判断是否有考试项目
      *
      * @return 是或否

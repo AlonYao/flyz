@@ -61,7 +61,7 @@
                 tools:ignore="RtlHardcoded" />
             <com.makeramen.roundedimageview.RoundedImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/userinfo_avatar"
+                android:id="@+id/opencourse_grade_mine_avatar"
                 android:layout_centerVertical="true"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

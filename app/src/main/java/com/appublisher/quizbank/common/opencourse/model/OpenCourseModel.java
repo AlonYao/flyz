@@ -57,6 +57,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -70,9 +71,9 @@ public class OpenCourseModel {
     private static List<OpenCourseListItem> mShowList;
     private static EditText mEditText;
     private static TextView mTvCurNum;
-    private static View mCurGradeView;
     private static Dialog mRateDialog;
     private static ListOthersRateAdapter mOthersRateAdapter;
+    private static ArrayList<HashMap<String, Object>> mTags;
 
 //    /**
 //     * 处理公开课详情回调
@@ -494,6 +495,7 @@ public class OpenCourseModel {
         if (playbacks == null) return;
 
         activity.mTvPlayback.setVisibility(View.VISIBLE);
+        activity.mLlPlayback.removeAllViews();
 
         int size = playbacks.size();
         for (int i = 0; i < size; i++) {
@@ -657,11 +659,15 @@ public class OpenCourseModel {
 
                 String edit = mEditText.getText().toString();
                 String tag = "";
-                if (mCurGradeView != null) {
-                    TextView textView = (TextView) mCurGradeView.findViewById(R.id.item_alert_tv);
-                    tag = textView.getText().toString();
+                if (mTags != null) {
+                    for (HashMap<String, Object> mTag : mTags) {
+                        String item = (String) mTag.get("comment");
+                        if (item == null || item.length() == 0) continue;
+                        tag = tag + item + "，";
+                    }
                 }
-                entity.comment = tag + (tag.length() == 0 ? "" : "，") + edit;
+
+                entity.comment = tag + edit;
 
                 ProgressDialogManager.showProgressDialog(context);
                 request.rateClass(entity);
@@ -694,38 +700,63 @@ public class OpenCourseModel {
 
         GridOpencourseGradeAdapter adapter = new GridOpencourseGradeAdapter(context, tags);
         gridView.setAdapter(adapter);
-        mCurGradeView = null;
+        mTags = initTags(tags);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                setUnSelected(context);
-                mCurGradeView = view;
-                setSelected();
+                if (position >= mTags.size()) return;
+
+                HashMap<String, Object> map = mTags.get(position);
+                boolean is_selected = (boolean) map.get("is_selected");
+                if (is_selected) {
+                    setUnSelected(context, view);
+                    map.put("is_selected", false);
+                } else {
+                    setSelected(view);
+                    map.put("is_selected", true);
+                }
+                mTags.set(position, map);
             }
         });
+    }
+
+    /**
+     * 初始化标签列表
+     * @param tags 标签列表
+     */
+    private static ArrayList<HashMap<String, Object>> initTags(ArrayList<String> tags) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        if (tags == null || tags.size() == 0) return list;
+
+        for (String tag : tags) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("comment", tag);
+            map.put("is_selected", false);
+            list.add(map);
+        }
+
+        return list;
     }
 
     /**
      * 设置未选中状态
      * @param context Context
      */
-    private static void setUnSelected(Context context) {
-        if (mCurGradeView == null) return;
-
-        mCurGradeView.setBackgroundResource(R.drawable.alert_grade_unpress);
-        TextView textView = (TextView) mCurGradeView.findViewById(R.id.item_alert_tv);
+    private static void setUnSelected(Context context, View view) {
+        if (view == null) return;
+        view.setBackgroundResource(R.drawable.alert_grade_unpress);
+        TextView textView = (TextView) view.findViewById(R.id.item_alert_tv);
         textView.setTextColor(context.getResources().getColor(R.color.apptheme));
     }
 
     /**
      * 设置选中状态
      */
-    private static void setSelected() {
-        if (mCurGradeView == null) return;
-
-        mCurGradeView.setBackgroundResource(R.drawable.alert_grade_press);
-        TextView textView = (TextView) mCurGradeView.findViewById(R.id.item_alert_tv);
+    private static void setSelected(View view) {
+        if (view == null) return;
+        view.setBackgroundResource(R.drawable.alert_grade_press);
+        TextView textView = (TextView) view.findViewById(R.id.item_alert_tv);
         textView.setTextColor(Color.WHITE);
     }
 
@@ -809,6 +840,12 @@ public class OpenCourseModel {
         RateListSelfItem self = resp.getSelf();
         if (self != null && self.getId() != 0) {
             activity.mLlMine.setVisibility(View.VISIBLE);
+            activity.mRbMineRating.setRating(self.getScore());
+            activity.mTvMineName.setText(LoginModel.getNickName());
+            activity.mTvMineComment.setText(self.getComment());
+            activity.mTvMineDate.setText(self.getRate_time());
+            activity.mRequest.loadImage(self.getAvatar(), activity.mIvMineAvatar);
+
         } else {
             activity.mLlMine.setVisibility(View.GONE);
         }
