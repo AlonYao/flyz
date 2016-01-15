@@ -3,7 +3,6 @@ package com.appublisher.quizbank.common.opencourse.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.BaseActivity;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 /**
  * 公开课模块：没有公开课（查看往期）
  */
-public class OpenCourseNoneActivity extends ActionBarActivity {
+public class OpenCourseNoneActivity extends BaseActivity {
 
     private ImageView mIvNone;
 

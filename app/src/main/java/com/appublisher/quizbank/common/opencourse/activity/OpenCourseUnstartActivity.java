@@ -3,7 +3,6 @@ package com.appublisher.quizbank.common.opencourse.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.BaseActivity;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListResp;
@@ -34,7 +34,7 @@ import java.util.HashMap;
 /**
  * 公开课即将开始
  */
-public class OpenCourseUnstartActivity extends AppCompatActivity implements RequestCallback{
+public class OpenCourseUnstartActivity extends BaseActivity implements RequestCallback{
 
     public String mContent;
     public MultiListView mLvOpencourse;

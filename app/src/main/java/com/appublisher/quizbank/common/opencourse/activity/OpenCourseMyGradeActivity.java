@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.opencourse.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.BaseActivity;
 import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRateEntity;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 /**
  * 我的评价页面
  */
-public class OpenCourseMyGradeActivity extends AppCompatActivity implements RequestCallback{
+public class OpenCourseMyGradeActivity extends BaseActivity implements RequestCallback{
 
     public ListView mListView;
     public ListMyGradeAdapter mAdapter;

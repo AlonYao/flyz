@@ -116,6 +116,7 @@
             android:exported="true"
             android:launchMode="singleTop" />
         <!-- Activity -->
+        <activity android:name=".activity.BaseActivity"/>
         <!-- 登录注册模块Activity -->
         <activity
             android:name=".common.login.activity.LoginActivity"
@@ -303,9 +304,10 @@
             android:name=".common.opencourse.activity.OpenCourseGradeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.opencourse.activity.OpenCourseMyGradeActivity"
+        <activity
+            android:name=".common.opencourse.activity.OpenCourseMyGradeActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 离线模块 -->
         <activity

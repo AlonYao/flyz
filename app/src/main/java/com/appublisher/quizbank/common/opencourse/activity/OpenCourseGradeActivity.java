@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.opencourse.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.BaseActivity;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateListResp;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 /**
  * 公开课单个课程评价页面
  */
-public class OpenCourseGradeActivity extends AppCompatActivity
+public class OpenCourseGradeActivity extends BaseActivity
         implements RequestCallback, XListView.IXListViewListener{
 
     public XListView mXlv;

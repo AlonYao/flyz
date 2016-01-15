@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.common.opencourse.model;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -46,6 +47,7 @@ import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUrlResp;
 import com.appublisher.quizbank.common.opencourse.netdata.RateListSelfItem;
+import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.CommonResp;
@@ -57,7 +59,9 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -959,5 +963,17 @@ public class OpenCourseModel {
                 activity.mBtn.setVisibility(View.GONE);
                 break;
         }
+
+        onLoadFinish(activity.mXlv);
+    }
+
+    /**
+     * 刷新&加载结束时执行的操作
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static void onLoadFinish(XListView xListView) {
+        xListView.stopRefresh();
+        xListView.stopLoadMore();
+        xListView.setRefreshTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     }
 }
