@@ -60,7 +60,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="17dp"
         android:layout_marginBottom="17dp"
-        android:layout_marginRight="15dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
         android:layout_alignParentRight="true"
         tools:ignore="RelativeOverlap,RtlHardcoded">
         <ImageView

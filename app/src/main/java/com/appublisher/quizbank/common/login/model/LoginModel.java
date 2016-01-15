@@ -517,6 +517,8 @@ public class LoginModel {
                     Intent intent = new Intent(activity, BindingMobileActivity.class);
                     activity.setResult(ActivitySkipConstants.BOOK_MOCK_RESULT, intent);
                     activity.finish();
+                } else {
+                    activity.finish();
                 }
 
                 // Umeng

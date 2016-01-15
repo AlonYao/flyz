@@ -83,7 +83,7 @@ public class OpenCourseMyGradeActivity extends AppCompatActivity implements Requ
                 TextView textView = (TextView) view.findViewById(R.id.unrate_class_desc);
                 entity.desc = textView.getText().toString();
 
-                OpenCourseModel.showGradeAlert(OpenCourseMyGradeActivity.this, entity);
+                OpenCourseModel.showGradeAlert(OpenCourseMyGradeActivity.this, entity, mRequest);
             }
         });
     }

@@ -78,15 +78,14 @@ public class OpenCourseUnstartActivity extends AppCompatActivity implements Requ
         // 获取数据
         mContent = getIntent().getStringExtra("content");
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
-
-        ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getOpenCourseList();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         // 获取未评价课程
+        ProgressDialogManager.showProgressDialog(this, true);
+        mRequest.getOpenCourseList();
         mRequest.getUnratedClass("true", 1);
 
         // Umeng
