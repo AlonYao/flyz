@@ -73,6 +73,7 @@ import java.util.TimerTask;
 public class OpenCourseModel {
 
     private static final int SECTION = 3;
+    private static final int MAX_TEXT_LENGTH = 140;
     private static List<OpenCourseListItem> mShowList;
     private static EditText mEditText;
     private static TextView mTvCurNum;
@@ -670,7 +671,7 @@ public class OpenCourseModel {
 
         // 评价文本框
         mTvCurNum = (TextView) window.findViewById(R.id.alert_opencourse_grade_num);
-        String text = "0/140";
+        String text = "0/" + MAX_TEXT_LENGTH;
         mTvCurNum.setText(text);
 
         mEditText = (EditText) window.findViewById(R.id.alert_opencourse_grade_edt);
@@ -808,7 +809,7 @@ public class OpenCourseModel {
 
         @Override
         public void afterTextChanged(Editable s) {
-            String text = String.valueOf(temp.length()) + "/100";
+            String text = String.valueOf(temp.length()) + "/" + MAX_TEXT_LENGTH;
             mTvCurNum.setText(text);
         }
     };
