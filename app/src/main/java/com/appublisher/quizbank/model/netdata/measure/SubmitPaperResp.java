@@ -15,6 +15,15 @@ public class SubmitPaperResp {
     float score;
     ArrayList<ScoreM> scores;
     int exercise_id;
+    float avg_score;
+
+    public float getAvg_score() {
+        return avg_score;
+    }
+
+    public void setAvg_score(float avg_score) {
+        this.avg_score = avg_score;
+    }
 
     public int getExercise_id() {
         return exercise_id;

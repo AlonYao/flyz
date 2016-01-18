@@ -202,6 +202,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         measureEntity.setScore(submitPaperResp.getScore());
         measureEntity.setScores(submitPaperResp.getScores());
         measureEntity.setExercise_id(submitPaperResp.getExercise_id());
+        measureEntity.setAvg_score(submitPaperResp.getAvg_score());
         Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
         intent.putExtra("notes", notes);
         intent.putExtra("paper_name", mPaperName);
