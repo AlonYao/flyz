@@ -697,6 +697,10 @@ public class OpenCourseModel {
                     }
                 }
 
+                if (tag.length() != 0 && edit.length() == 0) {
+                    tag = tag.substring(0, tag.length() - 1);
+                }
+
                 entity.comment = tag + edit;
 
                 ProgressDialogManager.showProgressDialog(context);
