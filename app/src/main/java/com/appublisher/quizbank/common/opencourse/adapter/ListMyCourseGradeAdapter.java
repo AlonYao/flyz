@@ -15,12 +15,12 @@ import java.util.ArrayList;
 /**
  * 公开课模块：我的评价（从课程中心进入）
  */
-public class ListMyClassGradeAdapter extends BaseAdapter{
+public class ListMyCourseGradeAdapter extends BaseAdapter{
 
     Context mContext;
     ArrayList<OpenCourseUnrateClassItem> mClasses;
 
-    public ListMyClassGradeAdapter(Context context, ArrayList<OpenCourseUnrateClassItem> classes) {
+    public ListMyCourseGradeAdapter(Context context, ArrayList<OpenCourseUnrateClassItem> classes) {
         this.mContext = context;
         this.mClasses = classes;
     }

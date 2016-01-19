@@ -34,7 +34,7 @@ import com.appublisher.quizbank.common.opencourse.activity.OpenCourseMyGradeActi
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.common.opencourse.adapter.GridOpencourseGradeAdapter;
-import com.appublisher.quizbank.common.opencourse.adapter.ListMyClassGradeAdapter;
+import com.appublisher.quizbank.common.opencourse.adapter.ListMyCourseGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListOpencourseAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListOthersRateAdapter;
@@ -559,7 +559,7 @@ public class OpenCourseModel {
                     intent.putExtra("class_id", playback.getClass_id());
                     intent.putExtra("bar_title", playback.getName());
                     intent.putExtra("url", playback.getUrl());
-                    intent.putExtra("entry", "opencourse");
+                    intent.putExtra("is_open", "true");
                     activity.startActivity(intent);
                 }
             });
@@ -902,7 +902,7 @@ public class OpenCourseModel {
                         new ListMyGradeAdapter(activity, activity.mUnRateClasses));
             } else {
                 activity.mListView.setAdapter(
-                        new ListMyClassGradeAdapter(activity, activity.mUnRateClasses));
+                        new ListMyCourseGradeAdapter(activity, activity.mUnRateClasses));
             }
         }
     }

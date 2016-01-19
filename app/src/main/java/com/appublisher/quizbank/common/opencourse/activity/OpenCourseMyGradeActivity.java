@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.BaseActivity;
-import com.appublisher.quizbank.common.opencourse.adapter.ListMyClassGradeAdapter;
+import com.appublisher.quizbank.common.opencourse.adapter.ListMyCourseGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRateEntity;
@@ -64,7 +64,7 @@ public class OpenCourseMyGradeActivity extends BaseActivity implements RequestCa
             if ("true".equals(mIsOpen)) {
                 mListView.setAdapter(new ListMyGradeAdapter(this, mUnRateClasses));
             } else {
-                mListView.setAdapter(new ListMyClassGradeAdapter(this, mUnRateClasses));
+                mListView.setAdapter(new ListMyCourseGradeAdapter(this, mUnRateClasses));
             }
         }
 

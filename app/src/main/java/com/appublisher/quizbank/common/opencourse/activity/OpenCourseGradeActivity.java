@@ -66,10 +66,7 @@ public class OpenCourseGradeActivity extends BaseActivity
         mCourseName = getIntent().getStringExtra("bar_title");
         mRequest = new OpenCourseRequest(this, this);
         mCurPage = 1;
-        mIsOpen = "false";
-        if ("opencourse".equals(getIntent().getStringExtra("entry"))) {
-            mIsOpen = "true";
-        }
+        mIsOpen = getIntent().getStringExtra("is_open");
 
         // init view
         mXlv = (XListView) findViewById(R.id.opencourse_grade_xlv);
@@ -90,7 +87,7 @@ public class OpenCourseGradeActivity extends BaseActivity
     protected void onResume() {
         super.onResume();
         ProgressDialogManager.showProgressDialog(this);
-        mRequest.getGradeList(mCourseId, 0, 0, 1);
+        getData(1);
     }
 
     @Override
@@ -119,7 +116,7 @@ public class OpenCourseGradeActivity extends BaseActivity
                         GsonManager.getModel(response, OpenCourseRateResp.class);
                 if (rateResp != null && rateResp.getResponse_code() == 1) {
                     OpenCourseModel.closeRateDialog();
-                    mRequest.getGradeList(mCourseId, 0, 0, 1);
+                    getData(1);
                     ToastManager.showToast(this, "评价成功");
                 } else {
                     ProgressDialogManager.closeProgressDialog();
@@ -147,12 +144,19 @@ public class OpenCourseGradeActivity extends BaseActivity
     @Override
     public void onRefresh() {
         mCurPage = 1;
-        mRequest.getGradeList(mCourseId, 0, 0, mCurPage);
+        getData(mCurPage);
     }
 
     @Override
     public void onLoadMore() {
         mCurPage++;
-        mRequest.getGradeList(mCourseId, 0, 0, mCurPage);
+        getData(mCurPage);
+    }
+
+    /**
+     * 获取数据
+     */
+    private void getData(int page) {
+        mRequest.getGradeList(0, mClassId, 0, page);
     }
 }
