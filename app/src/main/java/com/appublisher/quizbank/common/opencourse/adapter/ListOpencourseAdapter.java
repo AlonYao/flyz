@@ -6,12 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseListItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +22,12 @@ public class ListOpencourseAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<OpenCourseListItem> mCourses;
+    private int[] mBgs;
 
     public ListOpencourseAdapter(Context context, List<OpenCourseListItem> courses) {
         this.mContext = context;
         this.mCourses = courses;
+        this.mBgs = OpenCourseModel.getOpenCourseBgs(courses == null ? 0 : courses.size());
     }
 
     @Override
@@ -50,6 +53,7 @@ public class ListOpencourseAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.item_opencourse, parent, false);
             viewHolder = new ViewHolder();
+            viewHolder.rlMain = (RelativeLayout) convertView;
             viewHolder.tvDesc = (TextView) convertView.findViewById(R.id.item_opencourse_desc);
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.item_opencourse_name);
             viewHolder.ivFlagLeft =
@@ -91,6 +95,11 @@ public class ListOpencourseAdapter extends BaseAdapter {
             viewHolder.ivFlagLeft.setVisibility(View.INVISIBLE);
             viewHolder.ivFlagRight.setVisibility(View.INVISIBLE);
         }
+
+        // 背景
+        if (position < mBgs.length && mBgs[position] != 0) {
+            viewHolder.rlMain.setBackgroundResource(mBgs[position]);
+        }
     }
 
     private class ViewHolder {
@@ -98,5 +107,6 @@ public class ListOpencourseAdapter extends BaseAdapter {
         TextView tvDesc;
         ImageView ivFlagLeft;
         ImageView ivFlagRight;
+        RelativeLayout rlMain;
     }
 }
