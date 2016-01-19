@@ -86,7 +86,9 @@ public class ListOthersRateAdapter extends BaseAdapter{
         viewHolder.tvComment.setText(item.getComment());
         viewHolder.tvDate.setText(item.getRate_time());
 
-        mRequest.loadImage(item.getAvatar(), viewHolder.ivAvatar);
+        if (item.getAvatar() != null && item.getAvatar().length() > 0) {
+            mRequest.loadImage(item.getAvatar(), viewHolder.ivAvatar);
+        }
     }
 
     private class ViewHolder {
