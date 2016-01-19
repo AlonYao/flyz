@@ -194,7 +194,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         } else if (mCurFragment instanceof CourseFragment) {
-            MenuItemCompat.setShowAsAction(menu.add("下载管理").setIcon(R.drawable.offline_menu),
+            MenuItemCompat.setShowAsAction(menu.add("下载"),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
@@ -208,7 +208,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
             ProgressDialogManager.showProgressDialog(this, true);
             mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
             mFrom = "menu";
-        } else if ("下载管理".equals(item.getTitle())) {
+        } else if ("下载".equals(item.getTitle())) {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);
         } else if ("评分".equals(item.getTitle())) {
