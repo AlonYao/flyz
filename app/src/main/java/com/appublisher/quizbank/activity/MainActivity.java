@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
@@ -27,6 +28,8 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -54,6 +57,8 @@ import com.umeng.analytics.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends ActionBarActivity implements RequestCallback {
 
@@ -75,6 +80,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     private boolean mDoubleBackToExit;
     private Request mRequest;
     private String mFrom;
+    public TextView mTvOpenCourseNumNotice;
 
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
@@ -86,8 +92,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     private static final String FAVORITE = "Favorite";
     private static final String STUDYRECORD = "Study";
     private static final String SETTING = "Setting";
-    public static final String DOWNLOAD_FOLDER_NAME = "Application";
-    public static final String DOWNLOAD_FILE_NAME = "QuziBank.apk";
+    public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +104,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mIvDrawerRedPoint = (ImageView) findViewById(R.id.drawer_redpoint);
+        mTvOpenCourseNumNotice = (TextView) findViewById(R.id.opencourse_num_notice);
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
@@ -156,11 +162,6 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         MobclickAgent.onResume(this);
         // TalkingData
         TCAgent.onResume(this);
-        //版本更新
-        boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
-//        if (enable) {
-//            AppUpdate.showUpGrade(this);
-//        }
     }
 
     @Override
@@ -191,9 +192,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
                 && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
             MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(R.drawable.homepage_grade),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
         } else if (mCurFragment instanceof CourseFragment) {
-            MenuItemCompat.setShowAsAction(menu.add("下载管理").setIcon(R.drawable.offline_menu),
+            MenuItemCompat.setShowAsAction(menu.add("下载"),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -205,9 +208,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
             ProgressDialogManager.showProgressDialog(this, true);
             mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
             mFrom = "menu";
-        } else if ("下载管理".equals(item.getTitle())) {
+        } else if ("下载".equals(item.getTitle())) {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);
+        } else if ("评分".equals(item.getTitle())) {
+            OpenCourseModel.skipToMyGrade(this, mUnRateClasses, "false");
         }
 
         return super.onOptionsItemSelected(item);

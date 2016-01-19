@@ -37,14 +37,6 @@
     <string name="homepage_today_exam_value">已有0人参加</string>
     <string name="drawer_version">版本号</string>
 
-    <!-- 公开课 -->
-    <string name="opencourse_notice_true">开讲时会提醒你哒</string>
-    <string name="opencourse_notice_false">开讲时提醒我</string>
-    <string name="opencourse_none">暂时没有公开课哦~\n看看往期内容吧</string>
-    <string name="opencourse_consult">点我咨询</string>
-    <string name="opencourse_name">免费公开课</string>
-    <string name="opencourse_passed_events">往期精彩回放：</string>
-
     <!-- 快讯 -->
     <string name="course_promote">快讯</string>
 

@@ -12,7 +12,6 @@ public interface ApiConstants {
     String baseUrlImg = "http://img.edu.appublisher.com/";
 
     /**
-     *
      * 登录注册模块
      **/
     // 用户登录
@@ -125,7 +124,7 @@ public interface ApiConstants {
     String bookMcok = baseUrl + "quizbank/book_mock";
 
     // 获取公开课播放地址
-    String getOpenCourseUrl = baseUrl + "quizbank/open_course_url";
+    String getOpenCourseUrl = baseUrl + "course/open_course_url";
 
     // 轮询公开课咨询窗口的弹出
     String getOpenCourseConsult = baseUrl + "quizbank/open_course_alert";
@@ -154,17 +153,20 @@ public interface ApiConstants {
     // 获取课程列表
     String getCourseList = baseUrl + "course/get_course_list";
 
+    //获取单个问题的统计信息
+    String getQuestionCategoryInfo = baseUrl + "quizbank/get_question_summary";
+
+    // 评论获取待赠送课程、开课
+    String getRateCourse = baseUrl + "course/get_rate_course";
+
+    /**
+     * 公开课
+     */
     // 获取公开课状态
     String getFreeOpenCourseStatus = baseUrl + "course/free_open_course";
 
     // 获取公开课详情
     String getOpenCourseDetail = baseUrl + "course/open_course_detail";
-
-    // 评论获取待赠送课程、开课
-    String getRateCourse = baseUrl + "course/get_rate_course";
-
-    //获取单个问题的统计信息
-    String getQuestionCategoryInfo = baseUrl + "quizbank/get_question_summary";
 
     /**
      * 模考

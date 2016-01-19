@@ -82,4 +82,6 @@
         android:paddingBottom="15dp"
         tools:ignore="RtlHardcoded" />
 
+    <include layout="@layout/app_logo"/>
+
 </LinearLayout>

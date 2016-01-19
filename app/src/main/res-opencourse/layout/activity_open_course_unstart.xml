@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".common.opencourse.activity.OpenCourseUnstartActivity">
+
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/opencourse_num_notice"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="2dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:background="@drawable/opencourse_num_bg"
+        tools:ignore="RtlHardcoded" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <com.appublisher.quizbank.customui.MultiListView
+                android:id="@+id/opencourse_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/opencourse_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:visibility="gone"
+                android:text="@string/opencourse_more"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
+            <TextView
+                android:id="@+id/opencourse_playback_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/opencourse_playback"
+                android:visibility="gone"
+                tools:ignore="RtlHardcoded" />
+            <LinearLayout
+                android:id="@+id/opencourse_playback_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

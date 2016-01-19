@@ -2,8 +2,8 @@ package com.appublisher.quizbank;
 
 import android.content.SharedPreferences;
 
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
-import com.appublisher.quizbank.model.netdata.opencourse.OpenCourseStatusResp;
 import com.google.gson.Gson;
 
 /**

@@ -19,4 +19,6 @@
         android:textColor="@color/login_black"
         android:hint="@string/myanalysis_hint"/>
 
+    <include layout="@layout/app_logo"/>
+
 </LinearLayout>
