@@ -22,11 +22,11 @@
 
     <TextView
         android:id="@+id/treeview_name"
-        android:layout_width="80dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="35dp"
-        android:text="@string/hierarchy_name"
+        android:layout_marginLeft="40dp"
+        android:text=""
         android:textColor="@color/common_text"
         android:textSize="16sp" />
 
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="15dp"
         android:layout_toLeftOf="@id/level_5"
         android:src="@drawable/level_3" />
 
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="15dp"
         android:layout_toLeftOf="@id/level_4"
         android:src="@drawable/level_2" />
 
@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="15dp"
         android:layout_toLeftOf="@id/level_3"
         android:src="@drawable/level_1" />
 
@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="15dp"
         android:layout_toLeftOf="@id/level_2"
         android:src="@drawable/level_0" />
 
