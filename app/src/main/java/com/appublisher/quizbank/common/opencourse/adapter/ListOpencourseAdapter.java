@@ -22,12 +22,11 @@ public class ListOpencourseAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<OpenCourseListItem> mCourses;
-    private int[] mBgs;
 
     public ListOpencourseAdapter(Context context, List<OpenCourseListItem> courses) {
         this.mContext = context;
         this.mCourses = courses;
-        this.mBgs = OpenCourseModel.getOpenCourseBgs(courses == null ? 0 : courses.size());
+        OpenCourseModel.getOpenCourseBgs(courses == null ? 0 : courses.size());
     }
 
     @Override
@@ -97,8 +96,9 @@ public class ListOpencourseAdapter extends BaseAdapter {
         }
 
         // 背景
-        if (position < mBgs.length && mBgs[position] != 0) {
-            viewHolder.rlMain.setBackgroundResource(mBgs[position]);
+        int bg = OpenCourseModel.getOpenCourseBgByIndex(position);
+        if (bg != 0) {
+            viewHolder.rlMain.setBackgroundResource(bg);
         }
     }
 

@@ -83,6 +83,7 @@ public class OpenCourseModel {
     private static Dialog mRateDialog;
     private static ListOthersRateAdapter mOthersRateAdapter;
     private static ArrayList<HashMap<String, Object>> mTags;
+    public static ArrayList<Integer> mCurBgs;
 
     private static final int[] BGS = {
             R.drawable.opencourse_bg_1, R.drawable.opencourse_bg_2, R.drawable.opencourse_bg_3,
@@ -91,20 +92,7 @@ public class OpenCourseModel {
             R.drawable.opencourse_bg_10, R.drawable.opencourse_bg_11, R.drawable.opencourse_bg_12,
             R.drawable.opencourse_bg_13, R.drawable.opencourse_bg_14, R.drawable.opencourse_bg_15,
             R.drawable.opencourse_bg_16, R.drawable.opencourse_bg_17, R.drawable.opencourse_bg_18,
-            R.drawable.opencourse_bg_19, R.drawable.opencourse_bg_20, R.drawable.opencourse_bg_21,
-            R.drawable.opencourse_bg_22, R.drawable.opencourse_bg_23, R.drawable.opencourse_bg_24,
-            R.drawable.opencourse_bg_25, R.drawable.opencourse_bg_26, R.drawable.opencourse_bg_27,
-            R.drawable.opencourse_bg_28, R.drawable.opencourse_bg_29, R.drawable.opencourse_bg_30,
-            R.drawable.opencourse_bg_31, R.drawable.opencourse_bg_32, R.drawable.opencourse_bg_33,
-            R.drawable.opencourse_bg_34, R.drawable.opencourse_bg_35, R.drawable.opencourse_bg_36,
-            R.drawable.opencourse_bg_37, R.drawable.opencourse_bg_38, R.drawable.opencourse_bg_39,
-            R.drawable.opencourse_bg_40, R.drawable.opencourse_bg_41, R.drawable.opencourse_bg_42,
-            R.drawable.opencourse_bg_43, R.drawable.opencourse_bg_44, R.drawable.opencourse_bg_45,
-            R.drawable.opencourse_bg_46, R.drawable.opencourse_bg_47, R.drawable.opencourse_bg_48,
-            R.drawable.opencourse_bg_49, R.drawable.opencourse_bg_50, R.drawable.opencourse_bg_51,
-            R.drawable.opencourse_bg_52, R.drawable.opencourse_bg_53, R.drawable.opencourse_bg_54,
-            R.drawable.opencourse_bg_55, R.drawable.opencourse_bg_56, R.drawable.opencourse_bg_57,
-            R.drawable.opencourse_bg_58, R.drawable.opencourse_bg_59, R.drawable.opencourse_bg_60
+            R.drawable.opencourse_bg_19, R.drawable.opencourse_bg_20
     };
 
 //    /**
@@ -1019,15 +1007,26 @@ public class OpenCourseModel {
     /**
      * 获取公开课背景
      * @param count 公开课数量
-     * @return int[]
      */
-    public static int[] getOpenCourseBgs(int count) {
-        int[] bgs = new int[count];
-        for (int i = 0; i < count; i++) {
+    public static void getOpenCourseBgs(int count) {
+        if (mCurBgs == null) mCurBgs = new ArrayList<>();
+
+        if (count <= mCurBgs.size()) return;
+
+        int dex = count - mCurBgs.size();
+        for (int i = 0; i < dex; i++) {
             int random = new Random().nextInt(BGS.length);
-            bgs[i] = BGS[random];
+            mCurBgs.add(BGS[random]);
         }
-        return bgs;
+    }
+
+    /**
+     * 获取公开课背景
+     * @param index 序号
+     */
+    public static int getOpenCourseBgByIndex(int index) {
+        if (mCurBgs == null || index >= mCurBgs.size()) return 0;
+        return mCurBgs.get(index);
     }
 
     /**
