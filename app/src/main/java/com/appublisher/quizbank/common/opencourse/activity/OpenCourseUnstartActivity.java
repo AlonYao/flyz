@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.common.opencourse.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
@@ -156,10 +155,7 @@ public class OpenCourseUnstartActivity extends BaseActivity implements RequestCa
             OpenCourseModel.setMarketQQ(this);
             mUmengQQ = "1"; // Umeng
         } else if ("评分".equals(item.getTitle())) {
-            Intent intent = new Intent(this, OpenCourseMyGradeActivity.class);
-            intent.putExtra("unrate_classes", mUnrateClasses);
-            intent.putExtra("entry", "opencourse");
-            startActivity(intent);
+            OpenCourseModel.skipToMyGrade(this, mUnrateClasses, "true");
         }
 
         return super.onOptionsItemSelected(item);

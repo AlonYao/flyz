@@ -28,7 +28,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
-import com.appublisher.quizbank.common.opencourse.activity.OpenCourseMyGradeActivity;
+import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
@@ -212,9 +212,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);
         } else if ("评分".equals(item.getTitle())) {
-            Intent intent = new Intent(this, OpenCourseMyGradeActivity.class);
-            intent.putExtra("unrate_classes", mUnRateClasses);
-            startActivity(intent);
+            OpenCourseModel.skipToMyGrade(this, mUnRateClasses, "false");
         }
 
         return super.onOptionsItemSelected(item);

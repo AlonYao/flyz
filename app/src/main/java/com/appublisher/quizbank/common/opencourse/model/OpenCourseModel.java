@@ -34,6 +34,7 @@ import com.appublisher.quizbank.common.opencourse.activity.OpenCourseMyGradeActi
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseNoneActivity;
 import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.common.opencourse.adapter.GridOpencourseGradeAdapter;
+import com.appublisher.quizbank.common.opencourse.adapter.ListMyClassGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListOpencourseAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListOthersRateAdapter;
@@ -44,6 +45,7 @@ import com.appublisher.quizbank.common.opencourse.netdata.OpenCoursePlaybackItem
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateListResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateTagItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUrlResp;
 import com.appublisher.quizbank.common.opencourse.netdata.RateListSelfItem;
@@ -882,9 +884,11 @@ public class OpenCourseModel {
      * 处理未评价课堂列表
      * @param activity OpenCourseMyGradeActivity
      * @param resp 接口数据
+     * @param isOpen 是否是从公开课进入
      */
     public static void dealUnrateClassResp(OpenCourseMyGradeActivity activity,
-                                           OpenCourseUnrateClassResp resp) {
+                                           OpenCourseUnrateClassResp resp,
+                                           String isOpen) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
         activity.mUnRateClasses = resp.getList();
@@ -892,8 +896,14 @@ public class OpenCourseModel {
             activity.mListView.setVisibility(View.GONE);
         } else {
             activity.mListView.setVisibility(View.VISIBLE);
-            activity.mAdapter = new ListMyGradeAdapter(activity, activity.mUnRateClasses);
-            activity.mListView.setAdapter(activity.mAdapter);
+
+            if ("true".equals(isOpen)) {
+                activity.mListView.setAdapter(
+                        new ListMyGradeAdapter(activity, activity.mUnRateClasses));
+            } else {
+                activity.mListView.setAdapter(
+                        new ListMyClassGradeAdapter(activity, activity.mUnRateClasses));
+            }
         }
     }
 
@@ -1018,6 +1028,20 @@ public class OpenCourseModel {
             bgs[i] = BGS[random];
         }
         return bgs;
+    }
+
+    /**
+     * 跳转到我的评价页面
+     * @param context 上下文
+     * @param classes 课程
+     */
+    public static void skipToMyGrade(Context context,
+                                     ArrayList<OpenCourseUnrateClassItem> classes,
+                                     String isOpen) {
+        Intent intent = new Intent(context, OpenCourseMyGradeActivity.class);
+        intent.putExtra("unrate_classes", classes);
+        intent.putExtra("is_open", isOpen);
+        context.startActivity(intent);
     }
 
 }

@@ -13,14 +13,14 @@ import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassI
 import java.util.ArrayList;
 
 /**
- * 公开课模块：我的评价
+ * 公开课模块：我的评价（从课程中心进入）
  */
-public class ListMyGradeAdapter extends BaseAdapter{
+public class ListMyClassGradeAdapter extends BaseAdapter{
 
     Context mContext;
     ArrayList<OpenCourseUnrateClassItem> mClasses;
 
-    public ListMyGradeAdapter(Context context, ArrayList<OpenCourseUnrateClassItem> classes) {
+    public ListMyClassGradeAdapter(Context context, ArrayList<OpenCourseUnrateClassItem> classes) {
         this.mContext = context;
         this.mClasses = classes;
     }
@@ -46,10 +46,12 @@ public class ListMyGradeAdapter extends BaseAdapter{
 
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(
-                    R.layout.item_unrate_course, parent, false);
+                    R.layout.item_unrate_class_course, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.tvDesc = (TextView) convertView.findViewById(R.id.unrate_desc);
-            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.unrate_class_date);
+            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.unrate_date);
+            viewHolder.tvCourseName =
+                    (TextView) convertView.findViewById(R.id.unrate_desc_coursename);
             convertView.setTag(viewHolder);
 
         } else {
@@ -76,6 +78,8 @@ public class ListMyGradeAdapter extends BaseAdapter{
         viewHolder.tvDesc.setText(desc);
 
         viewHolder.tvDate.setText(getCourseDate(item));
+
+        viewHolder.tvCourseName.setText(item.getCourse_name());
     }
 
     /**
@@ -96,6 +100,7 @@ public class ListMyGradeAdapter extends BaseAdapter{
     private class ViewHolder {
         TextView tvDesc;
         TextView tvDate;
+        TextView tvCourseName;
     }
 
 }

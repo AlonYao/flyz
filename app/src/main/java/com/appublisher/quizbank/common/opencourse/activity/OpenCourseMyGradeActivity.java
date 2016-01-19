@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.BaseActivity;
+import com.appublisher.quizbank.common.opencourse.adapter.ListMyClassGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.adapter.ListMyGradeAdapter;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseRateEntity;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 public class OpenCourseMyGradeActivity extends BaseActivity implements RequestCallback{
 
     public ListView mListView;
-    public ListMyGradeAdapter mAdapter;
     public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
     public String mIsOpen;
     public OpenCourseRequest mRequest;
@@ -49,9 +49,7 @@ public class OpenCourseMyGradeActivity extends BaseActivity implements RequestCa
 
         // init data
         mRequest = new OpenCourseRequest(this, this);
-        String entry = getIntent().getStringExtra("entry");
-        mIsOpen = "false";
-        if ("opencourse".equals(entry)) mIsOpen = "true";
+        mIsOpen = getIntent().getStringExtra("is_open");
         // noinspection unchecked
         mUnRateClasses = (ArrayList<OpenCourseUnrateClassItem>)
                         getIntent().getSerializableExtra("unrate_classes");
@@ -63,8 +61,11 @@ public class OpenCourseMyGradeActivity extends BaseActivity implements RequestCa
         if (mUnRateClasses == null || mUnRateClasses.size() == 0) {
             ToastManager.showToast(this, "暂无待评价课程");
         } else {
-            mAdapter = new ListMyGradeAdapter(this, mUnRateClasses);
-            mListView.setAdapter(mAdapter);
+            if ("true".equals(mIsOpen)) {
+                mListView.setAdapter(new ListMyGradeAdapter(this, mUnRateClasses));
+            } else {
+                mListView.setAdapter(new ListMyClassGradeAdapter(this, mUnRateClasses));
+            }
         }
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -80,7 +81,7 @@ public class OpenCourseMyGradeActivity extends BaseActivity implements RequestCa
                 entity.class_id = item.getClass_id();
                 entity.is_open = mIsOpen;
                 // 获取公开课描述（教师+名称）
-                TextView textView = (TextView) view.findViewById(R.id.unrate_class_desc);
+                TextView textView = (TextView) view.findViewById(R.id.unrate_desc);
                 entity.desc = textView.getText().toString();
 
                 OpenCourseModel.showGradeAlert(OpenCourseMyGradeActivity.this, entity, mRequest);
@@ -105,7 +106,7 @@ public class OpenCourseMyGradeActivity extends BaseActivity implements RequestCa
             case "get_unrated_class":
                 OpenCourseUnrateClassResp resp =
                         GsonManager.getModel(response, OpenCourseUnrateClassResp.class);
-                OpenCourseModel.dealUnrateClassResp(this, resp);
+                OpenCourseModel.dealUnrateClassResp(this, resp, mIsOpen);
                 ProgressDialogManager.closeProgressDialog();
                 break;
 
