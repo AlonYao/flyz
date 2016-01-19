@@ -188,6 +188,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
             MenuItemCompat.setShowAsAction(menu.add("测试服"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
+        // 恢复课程评论小红点的显示状态
+        mTvOpenCourseNumNotice.setVisibility(View.GONE);
+
         if (mCurFragment instanceof HomePageFragment
                 && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
             MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(R.drawable.homepage_grade),
