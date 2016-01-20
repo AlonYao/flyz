@@ -27,6 +27,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
+import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -158,9 +159,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         TCAgent.onResume(this);
         //版本更新
         boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
-//        if (enable) {
-//            AppUpdate.showUpGrade(this);
-//        }
+        if (enable) {
+            AppUpdate.showUpGrade(this);
+        }
     }
 
     @Override
