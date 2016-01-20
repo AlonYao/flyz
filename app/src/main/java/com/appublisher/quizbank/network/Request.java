@@ -328,6 +328,16 @@ public class Request extends BaseRequest implements ApiConstants {
         asyncRequest(url, "resetPassword", "object");
     }
 
+    /**
+     * 检查账号是否被合并
+     *
+     * @param userId 用户Id
+     */
+    public void isUserMerged(String userId) {
+        asyncRequest(ParamBuilder.finalUrl(isUserMerged) + userId,
+                "is_user_merged", "object");
+    }
+
     /*********************
      *     				 *
      * 	数据提交接口代码块	 *

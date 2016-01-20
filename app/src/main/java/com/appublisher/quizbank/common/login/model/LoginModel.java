@@ -877,4 +877,31 @@ public class LoginModel {
             activity.mIvWeiboPre.setVisibility(View.VISIBLE);
         }
     }
+
+    /**
+     * 账号被合并Alert
+     * @param activity Activity
+     */
+    public static void userMergedAlert(final Activity activity) {
+        // 提交登出信息至服务器
+        new Request(activity).userLogout();
+
+        // 清空本地数据
+        cleanLocalData();
+
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.login_alert_usermerged)
+                .setTitle(R.string.alert_title)
+                .setCancelable(false)
+                .setPositiveButton(R.string.login_setpwd_submit,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(activity, LoginActivity.class);
+                                activity.startActivity(intent);
+                            }
+                        })
+                .create().show();
+    }
 }

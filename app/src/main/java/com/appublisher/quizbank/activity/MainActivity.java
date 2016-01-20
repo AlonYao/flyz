@@ -27,10 +27,12 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
+import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.common.login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
-import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -163,11 +165,13 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         MobclickAgent.onResume(this);
         // TalkingData
         TCAgent.onResume(this);
-        //版本更新
+        // 版本更新
         boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
         if (enable) {
             AppUpdate.showUpGrade(this);
         }
+        // 检测账号是否被合并
+        mRequest.isUserMerged(LoginModel.getUserId());
     }
 
     @Override
@@ -463,20 +467,28 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response == null) {
+        if (response == null || apiName == null) {
             ProgressDialogManager.closeProgressDialog();
             return;
         }
 
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+        switch (apiName) {
+            case "get_rate_course":
+                Globals.rateCourseResp = GsonManager.getModel(response, RateCourseResp.class);
+                if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this, "Click");
+                ProgressDialogManager.closeProgressDialog();
+                break;
 
-        if ("get_rate_course".equals(apiName)) {
-            Globals.rateCourseResp =
-                    Globals.gson.fromJson(response.toString(), RateCourseResp.class);
-            if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this, "Click");
+            case "is_user_merged":
+                IsUserMergedResp resp = GsonManager.getModel(response, IsUserMergedResp.class);
+                if (resp == null || resp.getResponse_code() != 1 || !resp.is_merged()) break;
+                LoginModel.userMergedAlert(this);
+                break;
+
+            default:
+                ProgressDialogManager.closeProgressDialog();
+                break;
         }
-
-        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override

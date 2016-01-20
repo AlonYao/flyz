@@ -47,6 +47,7 @@
     <string name="login_alert_forgetpwd_msg">想不起密码？</string>
     <string name="login_alert_forgetpwd_p">找回密码</string>
     <string name="login_alert_forgetpwd_n">再试试</string>
+    <string name="login_alert_usermerged">账号已被合并，请重新登录</string>
 
     <!-- 用户信息模块 string资源 -->
     <string name="userinfo_nickname">昵称：</string>

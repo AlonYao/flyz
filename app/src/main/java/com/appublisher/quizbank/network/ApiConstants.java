@@ -56,6 +56,9 @@ public interface ApiConstants {
     // 密码重置URL
     String resetPassUri = "http://edu.appublisher.com/api/sendmail/mail.php?app=daily";
 
+    // 检测账号是否被合并
+    String isUserMerged = baseUrl + "common/is_user_merged?user_id=";
+
     /**
      * 天天模考
      **/
