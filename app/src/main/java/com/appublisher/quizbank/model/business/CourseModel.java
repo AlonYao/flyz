@@ -460,12 +460,10 @@ public class CourseModel {
         int courseId = course.getId();
         String detailPage = course.getDetail_page();
 
-//        // 用于切换服务器测试课程购买
-//        if (detailPage != null && detailPage.contains("m.yaoguo.cn")) {
-//            detailPage = detailPage.replace("m.yaoguo.cn", getDomain());
-//        }
-
-        detailPage = detailPage.replace("m.yaoguo.cn", "dev.m.zhiboke.net");
+        // 用于切换服务器测试课程购买
+        if (detailPage != null && detailPage.contains("m.yaoguo.cn")) {
+            detailPage = detailPage.replace("m.yaoguo.cn", getDomain());
+        }
 
         if ("live".equals(type)) {
             // 直播课&公开课
