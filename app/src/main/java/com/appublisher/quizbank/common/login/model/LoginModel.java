@@ -339,6 +339,21 @@ public class LoginModel {
     }
 
     /**
+     * 获取用户昵称
+     *
+     * @return 昵称
+     */
+    public static String getNickName() {
+        User user = UserDAO.findById();
+        if (user == null) return "";
+
+        UserInfoModel userInfo = GsonManager.getObejctFromJSON(user.user, UserInfoModel.class);
+        if (userInfo == null) return "";
+
+        return String.valueOf(userInfo.getNickname());
+    }
+
+    /**
      * 判断是否有考试项目
      *
      * @return 是或否
@@ -516,6 +531,8 @@ public class LoginModel {
                 } else if ("mock_openopencourse".equals(activity.mFrom)) {
                     Intent intent = new Intent(activity, BindingMobileActivity.class);
                     activity.setResult(ActivitySkipConstants.BOOK_MOCK_RESULT, intent);
+                    activity.finish();
+                } else {
                     activity.finish();
                 }
 

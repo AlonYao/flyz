@@ -102,9 +102,6 @@ public class CourseModel {
 
         // 设置点击事件
         mCourseFragment.mRlArea.setOnClickListener(onClickListener);
-
-        // 获取课程列表
-        getCourseList(courseFragment);
     }
 
     /**
@@ -463,10 +460,12 @@ public class CourseModel {
         int courseId = course.getId();
         String detailPage = course.getDetail_page();
 
-        // 用于切换服务器测试课程购买
-        if (detailPage != null && detailPage.contains("m.yaoguo.cn")) {
-            detailPage = detailPage.replace("m.yaoguo.cn", getDomain());
-        }
+//        // 用于切换服务器测试课程购买
+//        if (detailPage != null && detailPage.contains("m.yaoguo.cn")) {
+//            detailPage = detailPage.replace("m.yaoguo.cn", getDomain());
+//        }
+
+        detailPage = detailPage.replace("m.yaoguo.cn", "dev.m.zhiboke.net");
 
         if ("live".equals(type)) {
             // 直播课&公开课

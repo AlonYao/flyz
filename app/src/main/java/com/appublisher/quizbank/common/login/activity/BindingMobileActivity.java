@@ -14,8 +14,8 @@ import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.common.login.model.netdata.IsUserExistsResp;
+import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
@@ -67,11 +67,13 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
             getSupportActionBar().setTitle("验证手机号");
             tvOpenCourse.setVisibility(View.GONE);
         }
+
         //模考介绍页
         if ("mock_openopencourse".equals(mFrom)) {
             tvOpenCourse.setText("考试前会收到短信提示哦");
             tvOpenCourse.setVisibility(View.VISIBLE);
         }
+
         // 下一步
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,10 +133,12 @@ public class BindingMobileActivity extends ActionBarActivity implements RequestC
                 setResult(ActivitySkipConstants.OPENCOURSE_PRE, intent);
                 finish();
                 break;
+
             case ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT:
                 setResult(ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT);
                 finish();
                 break;
+
             case ActivitySkipConstants.BOOK_MOCK_RESULT:
                 setResult(ActivitySkipConstants.BOOK_MOCK_RESULT);
                 finish();

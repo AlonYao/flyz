@@ -5,10 +5,13 @@ import com.appublisher.quizbank.utils.gson.BooleanTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONObject;
+
 /**
  * Gson库管理类
  */
 public class GsonManager {
+
     /**
      * 初始化Gson对象
      * @return Gson对象
@@ -20,10 +23,27 @@ public class GsonManager {
                 .create();
     }
 
+    /**
+     * 获取数据模型
+     * @param jsonStr JSON字符串
+     * @param cls 数据模型class
+     * @param <T> <T>
+     * @return 数据模型
+     */
     public static <T> T getObejctFromJSON(String jsonStr, Class<T> cls) {
-        Gson gson = new Gson();
-        T t = gson.fromJson(jsonStr, cls);
-        return t;
+        return getGson().fromJson(jsonStr, cls);
+    }
+
+    /**
+     * 获取数据模型
+     * @param jsonObject JSONObject
+     * @param cls 数据模型class
+     * @param <T> <T>
+     * @return 数据模型
+     */
+    public static <T> T getModel(JSONObject jsonObject, Class<T> cls) {
+        if (jsonObject == null) return null;
+        return getGson().fromJson(jsonObject.toString(), cls);
     }
 
     /**
@@ -33,4 +53,5 @@ public class GsonManager {
     public static Gson getGson() {
         return Globals.gson == null ? initGson() : Globals.gson;
     }
+
 }

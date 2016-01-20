@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.model.netdata.globalsettings;
 
+import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateTagItem;
 import com.appublisher.quizbank.common.update.NewVersion;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class GlobalSettingsResp {
     String app_ios_url;
     String app_android_url;
     NewVersion new_version;
+    ArrayList<OpenCourseRateTagItem> rate_tags;
 
     public String getApp_ios_url() {
         return app_ios_url;
@@ -65,4 +67,7 @@ public class GlobalSettingsResp {
         return new_version;
     }
 
+    public ArrayList<OpenCourseRateTagItem> getRate_tags() {
+        return rate_tags;
+    }
 }

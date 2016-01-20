@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:paddingLeft="15dp"
+    android:background="@android:color/white"
+    tools:ignore="RtlHardcoded,RtlSymmetry">
+
+    <TextView
+        android:id="@+id/playback_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:maxLines="1"
+        android:textColor="@color/common_text"
+        android:textSize="16sp"
+        android:text="@string/common_text"
+        tools:ignore="RelativeOverlap" />
+
+    <ImageView
+        android:id="@+id/playback_person_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="17dp"
+        android:src="@drawable/item_playback_person"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/playback_person_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/playback_person_iv"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/opencourse_person_num"
+        android:textSize="12sp"
+        android:text="@string/common_text"
+        tools:ignore="RtlHardcoded" />
+
+    <RatingBar
+        android:id="@+id/playback_ratingbar"
+        style="@style/custom_ratingbar_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/playback_person_tv"
+        android:layout_marginBottom="17dp"
+        android:layout_marginLeft="15dp"
+        android:rating="5"
+        android:numStars="5"
+        tools:ignore="RtlHardcoded" />
+
+    <RelativeLayout
+        android:id="@+id/playback_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="17dp"
+        android:layout_marginBottom="17dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:layout_alignParentRight="true"
+        tools:ignore="RelativeOverlap,RtlHardcoded">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/item_playback_grade"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+        <TextView
+            android:id="@+id/playback_grade_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="12sp"
+            android:textColor="@color/opencourse_grade_num"
+            android:text="@string/common_text"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_line"
+        tools:ignore="RtlHardcoded" />
+
+</RelativeLayout>

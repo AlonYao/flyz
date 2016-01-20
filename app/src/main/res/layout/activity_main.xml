@@ -14,7 +14,21 @@
         android:layout_marginLeft="32dp"
         android:visibility="gone"
         android:src="@drawable/setting_notice"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/opencourse_num_notice"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="2dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:background="@drawable/opencourse_num_bg"
+        tools:ignore="RtlHardcoded" />
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer"

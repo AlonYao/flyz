@@ -257,6 +257,8 @@
                     android:text="@string/practice_report_borderline"
                     tools:ignore="RtlHardcoded" />
             </LinearLayout>
+
+            <include layout="@layout/app_logo"/>
         </LinearLayout>
     </ScrollView>
 

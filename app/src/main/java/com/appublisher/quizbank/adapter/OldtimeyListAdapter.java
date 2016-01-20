@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.OpenCourseUnstartActivity;
-import com.appublisher.quizbank.model.netdata.opencourse.StaticCourseM;
+import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
+import com.appublisher.quizbank.common.opencourse.netdata.StaticCourseM;
 
 import java.util.ArrayList;
 
@@ -77,7 +77,7 @@ public class OldtimeyListAdapter extends BaseAdapter{
 
         if (staticCourse == null) return;
 
-        mActivity.mRequest.loadImage(staticCourse.getCover_pic(), viewHolder.ivImg);
+//        mActivity.mRequest.loadImage(staticCourse.getCover_pic(), viewHolder.ivImg);
         viewHolder.tvName.setText(staticCourse.getName());
         viewHolder.tvTeacher.setText(String.valueOf(staticCourse.getLector()));
     }
