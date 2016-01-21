@@ -14,4 +14,5 @@
     <string name="opencourse_listen">先去上课再评分</string>
     <string name="opencourse_submit">提交</string>
     <string name="opencourse_refresh">点击刷新</string>
+    <string name="opencourse_list_empty">还没有评论哦，抢个沙发吧</string>
 </resources>
