@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
@@ -27,18 +29,36 @@ import org.json.JSONObject;
  */
 public class SplashActivity extends Activity implements RequestCallback{
 
+    public static boolean mIsClickBg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // 获取全局配置
-        new Request(this, this).getGlobalSettings();
+        // init data
+        mIsClickBg = false;
+
+        // init view
+        ImageView imageView = (ImageView) findViewById(R.id.splash_bg);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsClickBg = true;
+                Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
+                intent.putExtra("url", "http://dev.pp.cn/public/brand_rel/wap.html");
+                intent.putExtra("from", "splash");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // 获取全局配置
+        new Request(this, this).getGlobalSettings();
+
         // Umeng
         MobclickAgent.onPageStart("SplashActivity");
         MobclickAgent.onResume(this);
@@ -88,6 +108,8 @@ public class SplashActivity extends Activity implements RequestCallback{
      */
     @SuppressLint("CommitPrefEdits")
     private void skipToMainActivity() {
+        if (mIsClickBg) return;
+
         // 页面跳转
         Class<?> cls;
         boolean is_login = Globals.sharedPreferences.getBoolean("is_login", false);

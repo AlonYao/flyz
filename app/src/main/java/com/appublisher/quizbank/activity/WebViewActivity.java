@@ -204,6 +204,8 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             map.put("QQ", mUmengQQ);
             long dur = System.currentTimeMillis() - mUmengTimestamp;
             UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur / 1000));
+        } else if ("splash".equals(mFrom)) {
+            SplashActivity.mIsClickBg = false;
         }
 
         // 关闭定时器
