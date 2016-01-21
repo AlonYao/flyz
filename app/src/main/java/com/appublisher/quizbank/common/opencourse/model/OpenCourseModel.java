@@ -910,6 +910,15 @@ public class OpenCourseModel {
                                                   OpenCourseRateListResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
+        // 评价为空时的处理
+        if (resp.getSelf() == null && resp.getOthers() == null && resp.getOthers().size() == 0
+                && activity.mCurPage == 1) {
+            activity.mTvListEmpty.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            activity.mTvListEmpty.setVisibility(View.GONE);
+        }
+
         // 我的评价
         RateListSelfItem self = resp.getSelf();
         if (self != null && self.getId() != 0) {

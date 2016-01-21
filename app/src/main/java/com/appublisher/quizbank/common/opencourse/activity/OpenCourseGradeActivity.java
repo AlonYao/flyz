@@ -49,6 +49,7 @@ public class OpenCourseGradeActivity extends BaseActivity
     public TextView mTvMineName;
     public TextView mTvMineComment;
     public TextView mTvMineDate;
+    public TextView mTvListEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class OpenCourseGradeActivity extends BaseActivity
         mTvMineName = (TextView) findViewById(R.id.opencourse_grade_mine_username);
         mTvMineComment = (TextView) findViewById(R.id.opencourse_grade_mine_comment);
         mTvMineDate = (TextView) findViewById(R.id.opencourse_grade_mine_date);
+        mTvListEmpty = (TextView) findViewById(R.id.opencourse_list_empty);
 
         mXlv.setXListViewListener(this);
         mXlv.setPullLoadEnable(true);
