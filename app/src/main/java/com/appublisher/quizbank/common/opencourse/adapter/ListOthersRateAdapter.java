@@ -14,6 +14,7 @@ import com.appublisher.quizbank.network.Request;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 公开课模块：其他用户评价
@@ -23,11 +24,21 @@ public class ListOthersRateAdapter extends BaseAdapter{
     private Context mContext;
     private ArrayList<RateListOthersItem> mItems;
     private Request mRequest;
+    private HashMap<Integer, Boolean> mAvatarMap;
 
     public ListOthersRateAdapter(Context context, ArrayList<RateListOthersItem> items) {
         this.mContext = context;
         this.mItems = items;
         this.mRequest = new Request(context);
+
+        // 增加对图像是否加载过的控制，减少卡顿
+        if (items != null) {
+            int size = items.size();
+            mAvatarMap = new HashMap<>();
+            for (int i = 0; i < size; i++) {
+                mAvatarMap.put(i, false);
+            }
+        }
     }
 
     @Override
@@ -86,8 +97,10 @@ public class ListOthersRateAdapter extends BaseAdapter{
         viewHolder.tvComment.setText(item.getComment());
         viewHolder.tvDate.setText(item.getRate_time());
 
-        if (item.getAvatar() != null && item.getAvatar().length() > 0) {
+        if (item.getAvatar() != null && item.getAvatar().length() > 0
+                && !mAvatarMap.get(position)) {
             mRequest.loadImage(item.getAvatar(), viewHolder.ivAvatar);
+            mAvatarMap.put(position, true);
         }
     }
 
