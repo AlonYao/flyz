@@ -97,11 +97,19 @@
             tools:ignore="RtlHardcoded" />
     </LinearLayout>
 
-    <com.appublisher.quizbank.customui.XListView
-        android:id="@+id/opencourse_grade_xlv"
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+        android:id="@+id/opencourse_grade_bga"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/opencourse_grade_mine_ll"/>
+        android:layout_below="@id/opencourse_grade_mine_ll">
+        <ListView
+            android:id="@+id/opencourse_grade_lv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="50dp"/>
+    </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 
     <Button
         android:id="@+id/opencourse_grade_btn"

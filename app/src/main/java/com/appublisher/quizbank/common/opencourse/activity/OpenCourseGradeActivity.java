@@ -3,6 +3,7 @@ package com.appublisher.quizbank.common.opencourse.activity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -14,7 +15,6 @@ import com.appublisher.quizbank.common.opencourse.model.OpenCourseRequest;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateListResp;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateResp;
 import com.appublisher.quizbank.common.opencourse.netdata.RateListOthersItem;
-import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
@@ -27,13 +27,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
+
 /**
  * 公开课单个课程评价页面
  */
 public class OpenCourseGradeActivity extends BaseActivity
-        implements RequestCallback, XListView.IXListViewListener{
+        implements RequestCallback, BGARefreshLayout.BGARefreshLayoutDelegate{
 
-    public XListView mXlv;
     public LinearLayout mLlMine;
     public Button mBtn;
     public int mCurPage;
@@ -50,6 +52,8 @@ public class OpenCourseGradeActivity extends BaseActivity
     public TextView mTvMineComment;
     public TextView mTvMineDate;
     public TextView mTvListEmpty;
+    public ListView mLv;
+    public BGARefreshLayout mBga;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +74,6 @@ public class OpenCourseGradeActivity extends BaseActivity
         mIsOpen = getIntent().getStringExtra("is_open");
 
         // init view
-        mXlv = (XListView) findViewById(R.id.opencourse_grade_xlv);
         mLlMine = (LinearLayout) findViewById(R.id.opencourse_grade_mine_ll);
         mBtn = (Button) findViewById(R.id.opencourse_grade_btn);
         mIvMineAvatar = (RoundedImageView) findViewById(R.id.opencourse_grade_mine_avatar);
@@ -79,10 +82,12 @@ public class OpenCourseGradeActivity extends BaseActivity
         mTvMineComment = (TextView) findViewById(R.id.opencourse_grade_mine_comment);
         mTvMineDate = (TextView) findViewById(R.id.opencourse_grade_mine_date);
         mTvListEmpty = (TextView) findViewById(R.id.opencourse_list_empty);
+        mLv = (ListView) findViewById(R.id.opencourse_grade_lv);
+        mBga = (BGARefreshLayout) findViewById(R.id.opencourse_grade_bga);
 
-        mXlv.setXListViewListener(this);
-        mXlv.setPullLoadEnable(true);
-        mXlv.setPullRefreshEnable(true);
+        // int BGARefreshLayout
+        mBga.setDelegate(this);
+        mBga.setRefreshViewHolder(new BGANormalRefreshViewHolder(this, true));
     }
 
     @Override
@@ -143,22 +148,23 @@ public class OpenCourseGradeActivity extends BaseActivity
         ProgressDialogManager.closeProgressDialog();
     }
 
-    @Override
-    public void onRefresh() {
-        mCurPage = 1;
-        getData(mCurPage);
-    }
-
-    @Override
-    public void onLoadMore() {
-        mCurPage++;
-        getData(mCurPage);
-    }
-
     /**
      * 获取数据
      */
     private void getData(int page) {
         mRequest.getGradeList(0, mClassId, 0, page);
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+        mCurPage = 1;
+        getData(mCurPage);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+        mCurPage++;
+        getData(mCurPage);
+        return true;
     }
 }

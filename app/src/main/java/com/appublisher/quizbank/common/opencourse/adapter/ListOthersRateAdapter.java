@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.opencourse.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.opencourse.netdata.RateListOthersItem;
 import com.appublisher.quizbank.network.Request;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * 公开课模块：其他用户评价
@@ -24,21 +26,12 @@ public class ListOthersRateAdapter extends BaseAdapter{
     private Context mContext;
     private ArrayList<RateListOthersItem> mItems;
     private Request mRequest;
-    private HashMap<Integer, Boolean> mAvatarMap;
+    private View mParent;
 
     public ListOthersRateAdapter(Context context, ArrayList<RateListOthersItem> items) {
         this.mContext = context;
         this.mItems = items;
         this.mRequest = new Request(context);
-
-        // 增加对图像是否加载过的控制，减少卡顿
-        if (items != null) {
-            int size = items.size();
-            mAvatarMap = new HashMap<>();
-            for (int i = 0; i < size; i++) {
-                mAvatarMap.put(i, false);
-            }
-        }
     }
 
     @Override
@@ -76,6 +69,8 @@ public class ListOthersRateAdapter extends BaseAdapter{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        mParent = convertView;
+
         setContent(viewHolder, position);
 
         return convertView;
@@ -89,7 +84,7 @@ public class ListOthersRateAdapter extends BaseAdapter{
     private void setContent(ViewHolder viewHolder, int position) {
         if (mItems == null || position >= mItems.size()) return;
 
-        RateListOthersItem item = mItems.get(position);
+        final RateListOthersItem item = mItems.get(position);
         if (item == null) return;
 
         viewHolder.rb.setRating(item.getScore());
@@ -97,10 +92,29 @@ public class ListOthersRateAdapter extends BaseAdapter{
         viewHolder.tvComment.setText(item.getComment());
         viewHolder.tvDate.setText(item.getRate_time());
 
-        if (item.getAvatar() != null && item.getAvatar().length() > 0
-                && !mAvatarMap.get(position)) {
-            mRequest.loadImage(item.getAvatar(), viewHolder.ivAvatar);
-            mAvatarMap.put(position, true);
+        if (item.getAvatar() != null && item.getAvatar().length() > 0) {
+            viewHolder.ivAvatar.setTag(item.getAvatar());
+            mRequest.loadImage(item.getAvatar(), new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    Bitmap data = response.getBitmap();
+                    if (data == null) return;
+
+                    RoundedImageView imageView =
+                            (RoundedImageView) mParent.findViewWithTag(item.getAvatar());
+                    if (imageView == null) return;
+
+                    imageView.setImageBitmap(data);
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Empty
+                }
+            });
+
+        } else {
+            viewHolder.ivAvatar.setImageResource(R.drawable.login_avatar);
         }
     }
 

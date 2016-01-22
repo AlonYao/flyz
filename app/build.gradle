@@ -108,7 +108,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile project(':umeng')
-//    compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.2.5'
+    //    compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.2.5'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.makeramen:roundedimageview:2.0.1'
     compile 'com.umeng:fb:5.1.0'
@@ -122,4 +122,7 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile(name: 'duobeiyundownload', ext: 'aar')
     compile 'com.coolerfall:android-http-download-manager:1.5.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'cn.bingoogolapple:bga-refreshlayout:1.1.3'
 }
