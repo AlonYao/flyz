@@ -659,15 +659,17 @@ public class OpenCourseModel {
         final RatingBar ratingBar = (RatingBar) window.findViewById(R.id.alert_opencourse_grade_rb);
         Drawable progress = ratingBar.getProgressDrawable();
         DrawableCompat.setTint(progress, Color.parseColor("#FFD000"));
+        ratingBar.setRating(5.0f);
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 if (rating < 1.0f) {
                     ratingBar.setRating(1.0f);
+                    showTagsByRating(1, gridView, context);
+                } else {
+                    showTagsByRating((int) rating, gridView, context);
                 }
-
-                showTagsByRating((int) rating, gridView, context);
             }
         });
 
