@@ -343,4 +343,15 @@ public class HomePageModel {
             }
         }
     }
+
+    /**
+     * 更新考试项目
+     * @param model 考试项目数据
+     * @param fragment HomePageFragment
+     */
+    public static void updateExam(ExamItemModel model, HomePageFragment fragment) {
+        if (model == null) return;
+        LoginModel.updateUserExam(GsonManager.modelToString(model, ExamItemModel.class));
+        setExamCountDown(fragment.mTvExam, fragment.mRequest);
+    }
 }

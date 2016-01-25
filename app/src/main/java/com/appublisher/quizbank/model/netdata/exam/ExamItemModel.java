@@ -8,8 +8,13 @@ public class ExamItemModel {
     String name;
     int exam_id;
     boolean is_official;
+    boolean is_interview;
     String code;
     String date;
+
+    public boolean is_interview() {
+        return is_interview;
+    }
 
     public String getName() {
         return name;

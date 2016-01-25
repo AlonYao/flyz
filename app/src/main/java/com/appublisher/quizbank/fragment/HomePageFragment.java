@@ -63,13 +63,13 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private TextView mTvMockTitle;
     private TextView mTvMockName;
     private TextView mTvQuickTest;
-    private TextView mTvExam;
     private LinearLayout mLlMiniMokao;
     private LinearLayout mLlMock;
     private LinearLayout mLlSpecial;
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
     private int mOnResumeCount;
+    public TextView mTvExam;
     public View mView;
     public Request mRequest;
     public LinearLayout mPromote;
@@ -285,6 +285,9 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         // 显示红点
         HomePageModel.setDrawerRedPoint();
+
+        // 更新用户考试项目
+        HomePageModel.updateExam(homePageResp.getExam_info(), this);
 
         ProgressBarManager.hideProgressBar();
     }

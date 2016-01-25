@@ -54,4 +54,13 @@ public class GsonManager {
         return Globals.gson == null ? initGson() : Globals.gson;
     }
 
+    /**
+     * 将模型转换成字符串
+     * @param object 数据模型
+     * @param cls 数据模型class
+     * @return 字符串
+     */
+    public static String modelToString(Object object, Class<?> cls) {
+        return getGson().toJson(object, cls);
+    }
 }

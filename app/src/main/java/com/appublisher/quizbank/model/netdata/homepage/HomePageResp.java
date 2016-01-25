@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.model.netdata.homepage;
 
+import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
+
 /**
  * 首页数据模型
  */
@@ -10,6 +12,11 @@ public class HomePageResp {
     PaperM paper;
     LiveCourseM live_course;
     int latest_notify;
+    ExamItemModel exam_info;
+
+    public ExamItemModel getExam_info() {
+        return exam_info;
+    }
 
     public int getResponse_code() {
         return response_code;
