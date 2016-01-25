@@ -536,6 +536,8 @@ public class LoginModel {
                     activity.finish();
                 }
 
+                ToastManager.showToast(activity, "验证成功");
+
                 // Umeng
                 UmengManager.sendCountEvent(
                         activity, "CodeVerified", "CodeVerified", "CodeVerified");

@@ -421,7 +421,6 @@ public class OpenCourseModel {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                skipToOpenCoursePage(activity, "Home");
                 Intent intent = new Intent(activity, OpenCourseUnstartActivity.class);
                 activity.startActivity(intent);
             }
@@ -433,19 +432,12 @@ public class OpenCourseModel {
      * @param activity Activity
      */
     public static void skipToOpenCoursePage(Activity activity, String umengEntry) {
-        if (Globals.openCourseStatus == null) return;
-
-        Class<?> cls = getOpenCourseClass(Globals.openCourseStatus.getType());
-
+        Class<?> cls = getOpenCourseClass(1);
         if (cls == null) return;
 
         Intent intent = new Intent(activity, cls);
-
-        if (Globals.openCourseStatus.getType() == 1) {
-            intent.putExtra("from", "opencourse_started");
-            intent.putExtra("bar_title", Globals.openCourseStatus.getCourse_name());
-        }
-
+        intent.putExtra("from", "opencourse_started");
+        intent.putExtra("bar_title", Globals.openCourseStatus.getCourse_name());
         intent.putExtra("content", Globals.openCourseStatus.getContent());
         intent.putExtra("umeng_entry", umengEntry);
         activity.startActivity(intent);

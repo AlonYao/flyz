@@ -118,27 +118,6 @@ public class OpenCourseUnstartActivity extends BaseActivity implements RequestCa
         UmengManager.sendComputeEvent(this, "Reserve", map, (int) (dur/1000));
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        switch (resultCode) {
-//            case ActivitySkipConstants.BOOK_OPENCOURSE:
-//                // 预约公开课回调
-//                ProgressDialogManager.showProgressDialog(this, false);
-////                mRequest.bookOpenCourse(ParamBuilder.bookOpenCourse(mContent));
-//                break;
-//
-//            case ActivitySkipConstants.OPENCOURSE_PRE:
-//                // 公开课回放
-////                mLvOldtimey.performItemClick(
-////                        mLvOldtimey.getAdapter().getView(mCurOldtimeyPosition, null, null),
-////                        mCurOldtimeyPosition,
-////                        mLvOldtimey.getAdapter().getItemId(mCurOldtimeyPosition));
-//                break;
-//        }
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
