@@ -92,6 +92,15 @@
             android:name="TD_CHANNEL_ID"
             android:value="${APP_CHANNEL}" />
 
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="com.appublisher.quizbank.model.db.GlobalSetting,
+                           com.appublisher.quizbank.model.db.Grade,
+                           com.appublisher.quizbank.model.db.Mock,
+                           com.appublisher.quizbank.model.db.Paper,
+                           com.appublisher.quizbank.model.db.User,
+                           com.appublisher.quizbank.common.offline.model.db.Offline"/>
+
         <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
