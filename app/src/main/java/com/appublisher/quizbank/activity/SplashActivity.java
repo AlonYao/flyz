@@ -11,6 +11,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.activity.LoginActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
@@ -93,7 +94,13 @@ public class SplashActivity extends Activity implements RequestCallback {
             }
         }
 
-        skipToMainActivity();
+        // 版本更新
+        boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
+        if (enable) {
+            AppUpdate.showUpGrade(this);
+        } else {
+            skipToMainActivity();
+        }
     }
 
     @Override

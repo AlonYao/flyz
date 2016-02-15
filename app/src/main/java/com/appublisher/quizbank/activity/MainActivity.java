@@ -32,7 +32,6 @@ import com.appublisher.quizbank.common.login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
-import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -165,11 +164,6 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         MobclickAgent.onResume(this);
         // TalkingData
         TCAgent.onResume(this);
-        // 版本更新
-        boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
-        if (enable) {
-            AppUpdate.showUpGrade(this);
-        }
         // 检测账号是否被合并
         mRequest.isUserMerged(LoginModel.getUserId());
     }
