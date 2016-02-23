@@ -1,7 +1,7 @@
 package com.appublisher.quizbank.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,7 @@ import com.appublisher.quizbank.utils.ToastManager;
  */
 public class DrawerAdapter extends BaseAdapter {
 
-    private Context mContext;
+    private Activity mActivity;
 
     public static int[] mItemNames = new int[]{
             R.string.drawer_homepage,
@@ -45,8 +45,8 @@ public class DrawerAdapter extends BaseAdapter {
             R.drawable.drawer_setting,
     };
 
-    public DrawerAdapter(Context context) {
-        this.mContext = context;
+    public DrawerAdapter(Activity activity) {
+        this.mActivity = activity;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class DrawerAdapter extends BaseAdapter {
 
         // view初始化
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.drawer_item, null);
+            convertView = LayoutInflater.from(mActivity).inflate(R.layout.drawer_item, null);
 
             viewHolder = new ViewHolder();
             viewHolder.ivItem = (ImageView) convertView.findViewById(R.id.drawer_item_iv);
@@ -100,10 +100,10 @@ public class DrawerAdapter extends BaseAdapter {
             viewHolder.llVersion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (AppUpdate.getIsNewAppVersion(mContext)) {
-                        AppUpdate.showUpGrade(mContext);
+                    if (AppUpdate.getIsNewAppVersion(mActivity)) {
+                        AppUpdate.showUpGrade(mActivity);
                     } else {
-                        ToastManager.showToast(mContext, "现在已经是最新版啦");
+                        ToastManager.showToast(mActivity, "现在已经是最新版啦");
                     }
                 }
             });

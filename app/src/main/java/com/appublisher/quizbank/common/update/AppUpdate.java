@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.common.update;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.SplashActivity;
 import com.appublisher.quizbank.utils.FileManager;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ToastManager;
@@ -34,11 +36,11 @@ public class AppUpdate {
     /**
      * 显示更新提示
      */
-    public static boolean showUpGrade(final Context context) {
+    public static boolean showUpGrade(final Activity activity) {
         String newAppVersion;
         final String appDwonUrl;
         String updateMessage;
-        SharedPreferences sharedPreferences = context.getSharedPreferences("updateVersion", context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("updateVersion", activity.MODE_PRIVATE);
         String versionInfo = sharedPreferences.getString("versionInfo", "");
         if (versionInfo == "") return false;
         NewVersion newVersion = GsonManager.getObejctFromJSON(versionInfo, NewVersion.class);
@@ -49,27 +51,32 @@ public class AppUpdate {
         //可更新
         if (Utils.compareVersion(newAppVersion, Globals.appVersion) == 1) {
             if (newVersion.getForce_update()) {//强制更新
-                new AlertDialog.Builder(context)
+                new AlertDialog.Builder(activity)
                         .setTitle("新版本 " + newAppVersion + "")
                         .setMessage(updateMessage)
                         .setCancelable(false)
                         .setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                downloadApk(context, appDwonUrl);
+                                downloadApk(activity, appDwonUrl);
+                                if(activity instanceof SplashActivity){
+                                    ((SplashActivity) activity).skipToMainActivity();
+                                }
                             }
-
                         })
                         .create().show();
             } else {
-                new AlertDialog.Builder(context)
+                new AlertDialog.Builder(activity)
                         .setTitle("新版本 " + newAppVersion + "")
                         .setMessage(updateMessage)
                         .setCancelable(false)
                         .setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                downloadApk(context, appDwonUrl);
+                                downloadApk(activity, appDwonUrl);
+                                if(activity instanceof SplashActivity){
+                                    ((SplashActivity) activity).skipToMainActivity();
+                                }
                             }
 
                         })
@@ -77,7 +84,9 @@ public class AppUpdate {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
+                                if(activity instanceof SplashActivity){
+                                    ((SplashActivity) activity).skipToMainActivity();
+                                }
                             }
                         })
                         .create().show();

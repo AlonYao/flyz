@@ -97,7 +97,7 @@ public class SplashActivity extends Activity implements RequestCallback {
         // 版本更新
         boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
         if (enable && AppUpdate.showUpGrade(this)) {
-        } else {
+        }else{
             skipToMainActivity();
         }
     }
@@ -117,7 +117,7 @@ public class SplashActivity extends Activity implements RequestCallback {
      * 跳转至主页面
      */
     @SuppressLint("CommitPrefEdits")
-    private void skipToMainActivity() {
+    public void skipToMainActivity() {
         // 页面跳转
         Class<?> cls;
         boolean is_login = Globals.sharedPreferences.getBoolean("is_login", false);
