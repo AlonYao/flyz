@@ -329,8 +329,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".common.offline.activity.OfflineWebViewActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>
