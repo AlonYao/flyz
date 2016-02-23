@@ -34,15 +34,15 @@ public class AppUpdate {
     /**
      * 显示更新提示
      */
-    public static void showUpGrade(final Context context) {
+    public static boolean showUpGrade(final Context context) {
         String newAppVersion;
         final String appDwonUrl;
         String updateMessage;
         SharedPreferences sharedPreferences = context.getSharedPreferences("updateVersion", context.MODE_PRIVATE);
         String versionInfo = sharedPreferences.getString("versionInfo", "");
-        if (versionInfo == "") return;
+        if (versionInfo == "") return false;
         NewVersion newVersion = GsonManager.getObejctFromJSON(versionInfo, NewVersion.class);
-        if (newVersion == null) return;
+        if (newVersion == null) return false;
         newAppVersion = newVersion.getApp_version();
         appDwonUrl = newVersion.getTarget_url();
         updateMessage = "大小：" + newVersion.getSize() + "\n更新内容：\n" + newVersion.getNotice_text();
@@ -82,12 +82,13 @@ public class AppUpdate {
                         })
                         .create().show();
             }
-
+            return true;
         }
         //一次登录应用提示一次
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
         editor.putBoolean("appUpdate", false);
         editor.commit();
+        return false;
     }
 
     /**

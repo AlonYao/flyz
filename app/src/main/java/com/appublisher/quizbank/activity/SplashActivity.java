@@ -96,8 +96,7 @@ public class SplashActivity extends Activity implements RequestCallback {
 
         // 版本更新
         boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
-        if (enable) {
-            AppUpdate.showUpGrade(this);
+        if (enable && AppUpdate.showUpGrade(this)) {
         } else {
             skipToMainActivity();
         }
