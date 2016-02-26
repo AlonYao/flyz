@@ -3,7 +3,9 @@ package com.appublisher.quizbank.common.offline.activity;
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -55,6 +57,8 @@ public class OfflineWebViewActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if ("刷新".equals(item.getTitle())) {
+            mWebView.reload();
         }
 
         return super.onOptionsItemSelected(item);
@@ -63,6 +67,16 @@ public class OfflineWebViewActivity extends AppCompatActivity{
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+
+        MenuItemCompat.setShowAsAction(menu.add("刷新").setIcon(
+                R.drawable.webview_refresh), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**

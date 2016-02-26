@@ -92,11 +92,6 @@ android {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
                                     APP_CHANNEL: "oppo"]
         }
-
-        appub {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "appub"]
-        }
     }
 }
 

@@ -428,22 +428,6 @@ public class OpenCourseModel {
     }
 
     /**
-     * 跳转至公开课相关页面
-     * @param activity Activity
-     */
-    public static void skipToOpenCoursePage(Activity activity, String umengEntry) {
-        Class<?> cls = getOpenCourseClass(1);
-        if (cls == null) return;
-
-        Intent intent = new Intent(activity, cls);
-        intent.putExtra("from", "opencourse_started");
-        intent.putExtra("bar_title", Globals.openCourseStatus.getCourse_name());
-        intent.putExtra("content", Globals.openCourseStatus.getContent());
-        intent.putExtra("umeng_entry", umengEntry);
-        activity.startActivity(intent);
-    }
-
-    /**
      * 获取公开课跳转Class
      * @param type 公开课状态
      * @return Class
@@ -594,7 +578,16 @@ public class OpenCourseModel {
 
                 if (item.is_onair()) {
                     // 正在直播，验证手机号
-                    skipToOpenCoursePage(activity, "Home");
+                    Class<?> cls = getOpenCourseClass(1);
+                    if (cls == null) return;
+
+                    Intent intent = new Intent(activity, cls);
+                    intent.putExtra("from", "opencourse_started");
+                    intent.putExtra("bar_title", item.getName());
+                    intent.putExtra("content", item.getId());
+                    intent.putExtra("umeng_entry", "Home");
+                    activity.startActivity(intent);
+
                 } else {
                     // 即将开始
                     ToastManager.showToast(activity, "直播时间还没到哦");
