@@ -57,7 +57,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     private String mUrl;
     private HomeWatcher mHomeWatcher;
     public static Request mRequest;
-    private static String mOpencourseId;
+    private static int mOpencourseId;
     private long mUmengTimestamp;
     private String mUmengEntry;
     public String mUmengQQ;
@@ -118,11 +118,12 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         // 获取数据
         mUrl = getIntent().getStringExtra("url");
         mFrom = getIntent().getStringExtra("from");
-        mOpencourseId = getIntent().getStringExtra("content");
+        mOpencourseId = getIntent().getIntExtra("opencourse_id", 0);
         mUmengTimestamp = getIntent().getLongExtra("umeng_timestamp", 0);
         if (mUmengTimestamp == 0) mUmengTimestamp = System.currentTimeMillis();
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         barTitle = getIntent().getStringExtra("bar_title");
+
 
         // 设置Bar Name
         CommonModel.setBarTitle(this, barTitle == null ? "" : barTitle);
