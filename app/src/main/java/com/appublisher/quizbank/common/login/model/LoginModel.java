@@ -18,7 +18,6 @@ import com.activeandroid.Configuration;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.activity.BindingSmsCodeActivity;
 import com.appublisher.quizbank.common.login.activity.EmailResetPwdActivity;
@@ -508,19 +507,6 @@ public class LoginModel {
                     // 预约公开课
                     Intent intent = new Intent(activity, BindingMobileActivity.class);
                     activity.setResult(ActivitySkipConstants.BOOK_OPENCOURSE, intent);
-                    activity.finish();
-
-                } else if ("opencourse_started".equals(activity.mFrom)) {
-                    // Umeng
-                    activity.mUmengIsCheckSuccess = true;
-
-                    // 进入直播课页面
-                    Intent intent = new Intent(activity, WebViewActivity.class);
-                    intent.putExtra("from", activity.mFrom);
-                    intent.putExtra("content", activity.mOpenCourseId);
-                    intent.putExtra("umeng_entry", activity.mUmengEntry);
-                    intent.putExtra("umeng_timestamp", activity.mUmengTimestamp);
-                    activity.startActivity(intent);
                     activity.finish();
 
                 } else if ("opencourse_pre".equals(activity.mFrom)) {

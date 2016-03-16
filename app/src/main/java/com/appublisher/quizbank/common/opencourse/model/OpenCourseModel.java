@@ -584,7 +584,7 @@ public class OpenCourseModel {
                     Intent intent = new Intent(activity, cls);
                     intent.putExtra("from", "opencourse_started");
                     intent.putExtra("bar_title", item.getName());
-                    intent.putExtra("content", item.getId());
+                    intent.putExtra("opencourse_id", item.getId());
                     intent.putExtra("umeng_entry", "Home");
                     activity.startActivity(intent);
 

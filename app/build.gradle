@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 31
-        versionName "1.5.5"
+        versionCode 32
+        versionName "1.5.6"
     }
 
     buildTypes {
@@ -77,21 +77,31 @@ android {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
                                     APP_CHANNEL: "taobao"]
         }
-
-        tencent {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "tencent"]
-        }
-
-        qihoo {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "360"]
-        }
-
+//
+//        tencent {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "tencent"]
+//        }
+//
+//        qihoo {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "360"]
+//        }
+//
         oppo {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
                                     APP_CHANNEL: "oppo"]
         }
+
+        BDsem {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "BDsem"]
+        }
+//
+//        appub {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "appub"]
+//        }
     }
 }
 
