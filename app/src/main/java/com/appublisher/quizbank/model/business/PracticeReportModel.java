@@ -216,12 +216,21 @@ public class PracticeReportModel {
 
             mActivity.mLlBorderLine.addView(child);
         }
+
+    }
+
+    /**
+     * 1.5练习报告页版本更新
+     *
+     * @param activity
+     */
+    public static void updateNotice(PracticeReportActivity activity) {
         //1.5版本加排名信息提示
-        if ("entire".equals(mActivity.mPaperType)) {
+        if ("entire".equals(activity.mPaperType)) {
             boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
             boolean detailCategory = Globals.sharedPreferences.getBoolean("rankInfo", true);
             if (!isFirstStart && detailCategory) {
-                PopupWindowManager.showUpdatePracticeReport(mActivity.parentView, mActivity);
+                PopupWindowManager.showUpdatePracticeReport(activity.parentView, activity);
             }
         }
     }

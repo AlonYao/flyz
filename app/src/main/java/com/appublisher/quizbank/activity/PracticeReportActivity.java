@@ -198,6 +198,8 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
         // TalkingData
         TCAgent.onResume(this);
+
+        PracticeReportModel.updateNotice(this);
     }
 
     @Override
