@@ -199,7 +199,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         // TalkingData
         TCAgent.onResume(this);
 
-        PracticeReportModel.updateNotice(this);
+
     }
 
     @Override
@@ -272,5 +272,11 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         ProgressDialogManager.closeProgressDialog();
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        PracticeReportModel.updateNotice(this);
     }
 }
