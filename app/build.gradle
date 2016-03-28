@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 32
-        versionName "1.5.6"
+        versionCode 37
+        versionName "1.5.9"
     }
 
     buildTypes {
@@ -58,11 +58,11 @@ android {
                                     APP_CHANNEL: "baidu"]
         }
 
-        huawei {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "huawei"]
-        }
-
+//        huawei {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "huawei"]
+//        }
+//
         xiaomi {
             manifestPlaceholders = [APP_NAME   : "天天模考公务员",
                                     APP_CHANNEL: "xiaomi"]
@@ -77,17 +77,17 @@ android {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
                                     APP_CHANNEL: "taobao"]
         }
-//
-//        tencent {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "tencent"]
-//        }
-//
-//        qihoo {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "360"]
-//        }
-//
+
+        tencent {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "tencent"]
+        }
+
+        qihoo {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "360"]
+        }
+
         oppo {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
                                     APP_CHANNEL: "oppo"]
@@ -101,6 +101,136 @@ android {
 //        appub {
 //            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
 //                                    APP_CHANNEL: "appub"]
+//        }
+//
+//        ZHT01 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "ZHT01"]
+//        }
+//
+//        ZHT02 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "ZHT02"]
+//        }
+//
+//        ZHT03 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "ZHT03"]
+//        }
+
+//        BDcpd {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "BDcpd"]
+//        }
+
+        liebao {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "liebao"]
+        }
+
+//        sem {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem"]
+//        }
+//
+//        sem01 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem01"]
+//        }
+//
+//        sem02 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem02"]
+//        }
+//
+//        sem03 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem03"]
+//        }
+//
+//        sem04 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem04"]
+//        }
+//
+//        sem05 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem05"]
+//        }
+//
+//        sem06 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem06"]
+//        }
+//
+//        sem07 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem07"]
+//        }
+//
+//        sem08 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem08"]
+//        }
+//
+//        sem09 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem09"]
+//        }
+//
+//        sem10 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem10"]
+//        }
+//
+//        sem11 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem11"]
+//        }
+//
+//        sem12 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem12"]
+//        }
+//
+//        sem13 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem13"]
+//        }
+//
+//        sem14 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem14"]
+//        }
+//
+//        sem15 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem15"]
+//        }
+//
+//        sem16 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem16"]
+//        }
+//
+//        sem17 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem17"]
+//        }
+//
+//        sem18 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem18"]
+//        }
+//
+//        sem19 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem19"]
+//        }
+//
+//        sem20 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "sem20"]
 //        }
     }
 }
