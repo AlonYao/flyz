@@ -14,13 +14,15 @@ public class ProgressDialogManager {
 
     /**
      * 显示ProgressDialog
-     * @param context  上下文
+     * @param context 上下文
      */
     public static void showProgressDialog(final Context context, boolean cancelable) {
         if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
         }
+
+        if (context == null || ((Activity) context).isFinishing()) return;
 
         progressDialog = ProgressDialog.show(context, null, "加载中，请稍候......");
 
@@ -39,15 +41,15 @@ public class ProgressDialogManager {
 
     /**
      * 显示ProgressDialog
-     * @param context  上下文
+     * @param context 上下文
      */
     public static void showProgressDialog(final Context context) {
         if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
         }
-
-        progressDialog = ProgressDialog.show(context, null, "加载中，请稍候......");
+        if (context != null && !((Activity) context).isFinishing())
+            progressDialog = ProgressDialog.show(context, null, "加载中，请稍候......");
     }
 
     /**

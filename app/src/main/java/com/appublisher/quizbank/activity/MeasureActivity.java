@@ -410,6 +410,8 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private void saveQuestionTime() {
         int duration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
         mCurTimestamp = System.currentTimeMillis();
+
+        if (mUserAnswerList == null) return;
         HashMap<String, Object> userAnswerMap = mUserAnswerList.get(mCurPosition);
 
         if (userAnswerMap.containsKey("duration")) {
