@@ -600,7 +600,7 @@ public class CourseModel {
      */
     public static String getDomain() {
         if (ApiConstants.base.equals("dev")) {
-            return "dev.m.zhiboke.net";
+            return "dev.m.yaoguo.cn";
         } else {
             return "m.yaoguo.cn";
         }
