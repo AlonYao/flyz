@@ -108,6 +108,11 @@ android {
                                     APP_CHANNEL: "vivo"]
         }
 
+        samsung {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "samsung"]
+        }
+
 //        BDsem {
 //            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
 //                                    APP_CHANNEL: "BDsem"]
