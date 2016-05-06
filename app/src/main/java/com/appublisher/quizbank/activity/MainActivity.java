@@ -144,10 +144,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         changeFragment(mCurFragmentPosition);
 
         // 记录用户评价行为
-        if (GradeDAO.findByAppVersion(Globals.appVersion) == null) {
-            GradeDAO.insert(Globals.appVersion);
-        } else if (GradeDAO.isOpenGradeSys(Globals.appVersion)
-                && GradeDAO.isShowGradeAlert(Globals.appVersion)) {
+        if (GradeDAO.isShowGradeAlert(Globals.appVersion)) {
             // 提前获取评价课程数据
             mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
         }
@@ -181,6 +178,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         TCAgent.onPause(this);
 
         ProgressDialogManager.closeProgressDialog();
+
+        // 关闭评价窗口
+        AlertManager.dismissGradeAlert();
     }
 
     @Override

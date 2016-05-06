@@ -39,6 +39,7 @@ import java.util.HashMap;
 public class AlertManager {
 
     private static AlertDialog mAlertLastPage;
+    private static AlertDialog mAlertGrade;
 
     /**
      * 暂停Alert
@@ -239,11 +240,11 @@ public class AlertManager {
     public static void showGradeAlert(final Activity activity, final String umengEntry) {
         if (activity.isFinishing()) return;
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+        mAlertGrade = new AlertDialog.Builder(activity).create();
+        mAlertGrade.setCancelable(false);
+        mAlertGrade.show();
 
-        Window window = alertDialog.getWindow();
+        Window window = mAlertGrade.getWindow();
         window.setContentView(R.layout.alert_item_grade);
         window.setBackgroundDrawableResource(R.color.transparency);
 
@@ -262,7 +263,7 @@ public class AlertManager {
                 // 保存时间戳
                 GradeDAO.updateTimestamp(Globals.appVersion, System.currentTimeMillis());
 
-                alertDialog.dismiss();
+                mAlertGrade.dismiss();
 
                 // Umeng统计
                 HashMap<String, String> map = new HashMap<>();
@@ -280,7 +281,7 @@ public class AlertManager {
                 CommonModel.skipToGrade(activity);
                 GradeDAO.saveGradeTimestamp(Globals.appVersion, System.currentTimeMillis());
 
-                alertDialog.dismiss();
+                mAlertGrade.dismiss();
 
                 // Umeng统计
                 HashMap<String, String> map = new HashMap<>();
@@ -300,7 +301,7 @@ public class AlertManager {
                 // 进入反馈
                 CommonModel.skipToUmengFeedback(activity);
 
-                alertDialog.dismiss();
+                mAlertGrade.dismiss();
 
                 // Umeng统计
                 HashMap<String, String> map = new HashMap<>();
@@ -309,6 +310,13 @@ public class AlertManager {
                 MobclickAgent.onEvent(activity, "Rating", map);
             }
         });
+    }
+
+    public static void dismissGradeAlert() {
+        if (mAlertGrade != null && mAlertGrade.isShowing()) {
+            mAlertGrade.dismiss();
+            mAlertGrade = null;
+        }
     }
 
     /**
@@ -323,7 +331,8 @@ public class AlertManager {
         String price = String.valueOf(Globals.rateCourseResp.getCourse_price());
         String name = Globals.rateCourseResp.getCourse_name();
 
-        tvCourse.setText("卖个萌，求好评\n你将获赠价值" + price + "元的\n\"" + name + "\"\n直播课一套");
+        String text = "卖个萌，求好评\n你将获赠价值" + price + "元的\n\"" + name + "\"\n直播课一套";
+        tvCourse.setText(text);
     }
 
     /**

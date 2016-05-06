@@ -8,6 +8,9 @@ import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.model.db.Grade;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 用户评价表DAO层
  */
@@ -81,15 +84,71 @@ public class GradeDAO {
     }
 
     /**
+     * 查询全部数据
+     * @return Grade
+     */
+    public static List<Grade> findAllByAppVersion() {
+        try {
+            return new Select().from(Grade.class).execute();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * 根据时间戳判断是否应该显示评价Alert
      * @param appVersion 版本号
      * @return 是否
      */
     public static boolean isShowGradeAlert(String appVersion) {
         if (appVersion == null) return false;
-        Grade item = findByAppVersion(appVersion);
-        if (item == null || item.is_grade == 1) return false;
-        long dif = System.currentTimeMillis() - item.timestamp;
+
+        ArrayList<Grade> list = (ArrayList<Grade>) findAllByAppVersion();
+        if (list == null || list.size() == 0) {
+            insert(appVersion);
+            return false;
+        }
+
+        Grade lastItem = list.get(list.size() - 1);
+        if (lastItem == null) {
+            insert(appVersion);
+            return false;
+        }
+
+        // 第一层条件：判断版本号
+        try {
+            String lastVersion = lastItem.app_version;
+            if (!lastVersion.equals(appVersion)) {
+                // 本方法只适应两位以上的数字版本号
+                String[] lastVersionArray = lastVersion.split("\\.");
+                String[] appVersionArray = appVersion.split("\\.");
+
+                if (Integer.parseInt(appVersionArray[0])
+                        <= Integer.parseInt(lastVersionArray[0])) {
+                    // 判断第一位
+                    if (Integer.parseInt(appVersionArray[1])
+                            <= Integer.parseInt(lastVersionArray[1])) {
+                        // 判断第二位
+                        // 如果前两位版本号相同，则不邀请评价
+                        // 注：理论上不存在新版本号比旧版本号小的情况
+                        return false;
+                    } else {
+                        insert(appVersion);
+                        return true;
+                    }
+                } else {
+                    insert(appVersion);
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            insert(appVersion);
+            return false;
+        }
+
+        // 第二层条件：用户首次打开App72个小时后开启
+        if (lastItem.is_grade == 1) return false;
+        long dif = System.currentTimeMillis() - lastItem.timestamp;
         return (dif / (1000 * 60 * 60)) > 72;
     }
 
