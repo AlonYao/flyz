@@ -20,10 +20,10 @@ public class QuestionM implements Serializable{
     int category_id;
     String category_name;
     String source;
-//    int accuracy;
-    int count;//作答次数
-    float accuracy;//正确率
-    String fallible;//易错项
+    float accuracy;
+    float summary_accuracy;
+    int summary_count;
+    String summary_fallible;
 
     public String getCategory_name() {
         return category_name;
@@ -145,19 +145,15 @@ public class QuestionM implements Serializable{
         this.accuracy = accuracy;
     }
 
-    public int getCount() {
-        return count;
+    public float getSummary_accuracy() {
+        return summary_accuracy;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public int getSummary_count() {
+        return summary_count;
     }
 
-    public String getFallible() {
-        return fallible;
-    }
-
-    public void setFallible(String fallible) {
-        this.fallible = fallible;
+    public String getSummary_fallible() {
+        return summary_fallible == null ? "" : summary_fallible;
     }
 }

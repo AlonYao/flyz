@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.model.business.MeasureModel;
-import com.appublisher.quizbank.model.business.QuestionCategoryModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -212,15 +212,48 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
         final TextView tvCategory = (TextView) view.findViewById(R.id.measure_analysis_accuracy);
         tvNote.setText("【知识点】 " + question.getNote_name());
         tvSource.setText("【来源】 " + question.getSource());
-        tvCategory.setText("【统计】 ");
-        new QuestionCategoryModel(mActivity).getData(question.getId(), new QuestionCategoryModel.DataChange() {
-            @Override
-            public void onDataChange(String data) {
-                tvCategory.setText("【统计】 " + data);
-            }
-        });
+
+        showSummary(question, tvCategory);
+
         container.addView(view);
         return view;
+    }
+
+    /**
+     * 显示统计信息
+     * @param question QuestionM
+     * @param textView TextView
+     */
+    private void showSummary(QuestionM question, TextView textView) {
+        float summaryAccuracy = question.getSummary_accuracy();
+        int summary_count = question.getSummary_count();
+        String summary_fallible = question.getSummary_fallible();
+        String data = "";
+
+        if (summary_count != 0) {
+            data = data + "全站作答" + String.valueOf(summary_count) + "次";
+        }
+
+        if (summaryAccuracy != 0) {
+            if (data.length() != 0) data = data + "，";
+            summaryAccuracy = summaryAccuracy*100;
+            BigDecimal bigDecimal = new BigDecimal(summaryAccuracy);
+            summaryAccuracy = bigDecimal.setScale(1,BigDecimal.ROUND_HALF_UP).floatValue();
+            data = data + "正确率" + summaryAccuracy + "%";
+        }
+
+        if (summary_fallible != null && summary_fallible.length() != 0) {
+            if (data.length() != 0) data = data + "，";
+            data = data + "易错项为" + summary_fallible;
+        }
+
+        if (data.length() == 0) {
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            data = "【统计】 " + data;
+            textView.setText(data);
+        }
     }
 
     /**
