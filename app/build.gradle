@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 38
-        versionName "1.6.0"
+        versionCode 40
+        versionName "1.6.2"
     }
 
     buildTypes {
@@ -93,15 +93,15 @@ android {
                                     APP_CHANNEL: "oppo"]
         }
 
-        suimishouye {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "suimishouye"]
-        }
-
-        suimiyejiao {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "suimiyejiao"]
-        }
+//        suimishouye {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "suimishouye"]
+//        }
+//
+//        suimiyejiao {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "suimiyejiao"]
+//        }
 
         vivo {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
