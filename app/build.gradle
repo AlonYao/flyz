@@ -10,7 +10,7 @@ android {
         minSdkVersion 10
         targetSdkVersion 21
         versionCode 40
-        versionName "1.6.2"
+        versionName "1.7.2"
     }
 
     buildTypes {

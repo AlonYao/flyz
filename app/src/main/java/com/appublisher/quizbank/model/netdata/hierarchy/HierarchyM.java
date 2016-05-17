@@ -6,53 +6,55 @@ import java.util.ArrayList;
  * 知识点层级接口数据模型（第一层）
  */
 public class HierarchyM {
-    int category_id;
+    int id;
     String name;
+    int parent_id;
+    int note_type;
+    int total;
+    int done;
+    ArrayList<HierarchyM> childs;
+
+    int category_id;
     int level;
     ArrayList<NoteGroupM> note_group;
-    int done;
-    int total;
-    public  int getDone(){
-        return  done;
-    }
-    public  int getTotal(){
-        return  total;
-    }
-    public void setDone(int done){
-        this.done = done;
-    }
-    public  void setTotal(int total){
-        this.total= total;
-    }
-    public int getCategory_id() {
-        return category_id;
-    }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getParent_id() {
+        return parent_id;
     }
 
-    public ArrayList<NoteGroupM> getNote_group() {
-        return note_group;
+    public int getNote_type() {
+        return note_type;
     }
 
-    public void setNote_group(ArrayList<NoteGroupM> note_group) {
-        this.note_group = note_group;
+    public int getTotal() {
+        return total;
+    }
+
+    public int getDone() {
+        return done;
+    }
+
+    public ArrayList<HierarchyM> getChilds() {
+        return childs;
+    }
+
+    public int getCategory_id() {
+        return category_id;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public ArrayList<NoteGroupM> getNote_group() {
+        return note_group;
     }
 }

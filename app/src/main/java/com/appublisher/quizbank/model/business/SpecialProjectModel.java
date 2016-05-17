@@ -6,9 +6,7 @@ import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.customui.TreeItemHolder;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyResp;
-import com.appublisher.quizbank.model.netdata.hierarchy.NoteGroupM;
-import com.appublisher.quizbank.model.netdata.hierarchy.NoteItemM;
-import com.google.gson.Gson;
+import com.appublisher.quizbank.utils.GsonManager;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
@@ -33,8 +31,7 @@ public class SpecialProjectModel {
 
         if (response == null) return;
 
-        Gson gson = new Gson();
-        HierarchyResp hierarchyResp = gson.fromJson(response.toString(), HierarchyResp.class);
+        HierarchyResp hierarchyResp = GsonManager.getModel(response, HierarchyResp.class);
 
         if (hierarchyResp == null || hierarchyResp.getResponse_code() != 1) return;
         ArrayList<HierarchyM> hierarchys = hierarchyResp.getHierarchy();
@@ -66,13 +63,14 @@ public class SpecialProjectModel {
                         hierarchy.getName(),
                         hierarchy.getDone(),
                         hierarchy.getTotal(),
-                        "note"));
+                        "note",
+                        hierarchy.getChilds()));
 
         root.addChild(firstRoot);
 
         // 添加第二层
-        ArrayList<NoteGroupM> noteGroups = hierarchy.getNote_group();
-        addNoteGroup(firstRoot, noteGroups);
+        ArrayList<HierarchyM> hierarchys = hierarchy.getChilds();
+        addNoteGroup(firstRoot, hierarchys);
 
         // rootContainer
         LinearLayout rootContainer = new LinearLayout(mActivity);
@@ -97,25 +95,26 @@ public class SpecialProjectModel {
      * @param firstRoot 第一层级节点
      * @param noteGroups 第二层级数据
      */
-    private static void addNoteGroup(TreeNode firstRoot, ArrayList<NoteGroupM> noteGroups) {
+    private static void addNoteGroup(TreeNode firstRoot, ArrayList<HierarchyM> noteGroups) {
         if (noteGroups == null || noteGroups.size() == 0) return;
 
         int size = noteGroups.size();
         for (int i = 0; i < size; i++) {
-            NoteGroupM noteGroup = noteGroups.get(i);
+            HierarchyM hierarchy = noteGroups.get(i);
 
-            if (noteGroup == null) continue;
+            if (hierarchy == null) continue;
             TreeNode secondRoot = new TreeNode(
                     new TreeItemHolder.TreeItem(
                             2,
-                            noteGroup.getGroup_id(),
-                            noteGroup.getName(),
-                            noteGroup.getDone(),
-                            noteGroup.getTotal(),
-                            "note"));
+                            0,
+                            hierarchy.getName(),
+                            hierarchy.getDone(),
+                            hierarchy.getTotal(),
+                            "note",
+                            hierarchy.getChilds()));
             firstRoot.addChild(secondRoot);
 
-            addNotes(secondRoot, noteGroup.getNotes());
+            addNotes(secondRoot, hierarchy.getChilds());
         }
     }
 
@@ -124,22 +123,23 @@ public class SpecialProjectModel {
      * @param secondRoot 第二层级节点
      * @param notes 第三层级数据
      */
-    private static void addNotes(TreeNode secondRoot, ArrayList<NoteItemM> notes) {
+    private static void addNotes(TreeNode secondRoot, ArrayList<HierarchyM> notes) {
         if (notes == null || notes.size() == 0) return;
 
         int size = notes.size();
         for (int i = 0; i < size; i++) {
-            NoteItemM note = notes.get(i);
+            HierarchyM hierarchy = notes.get(i);
 
-            if (note == null) continue;
+            if (hierarchy == null) continue;
             TreeNode thirdRoot = new TreeNode(
                     new TreeItemHolder.TreeItem(
                             3,
-                            note.getNote_id(),
-                            note.getName(),
-                            note.getDone(),
-                            note.getTotal(),
-                            "note"));
+                            0,
+                            hierarchy.getName(),
+                            hierarchy.getDone(),
+                            hierarchy.getTotal(),
+                            "note",
+                            hierarchy.getChilds()));
             secondRoot.addChild(thirdRoot);
         }
     }

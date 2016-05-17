@@ -11,7 +11,10 @@ import android.widget.TextView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.unnamed.b.atv.model.TreeNode;
+
+import java.util.ArrayList;
 
 /**
  * 树形结构容器
@@ -43,7 +46,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 break;
 
             default:
-                view = inflater.inflate(R.layout.treeview_item_1, null, false);
+                view = inflater.inflate(R.layout.treeview_item_3, null, false);
                 break;
         }
 
@@ -54,13 +57,16 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ImageView ivWatch = (ImageView) view.findViewById(R.id.treeview_watch);
         TextView doneText = (TextView) view.findViewById(R.id.done);
         TextView totalText = (TextView) view.findViewById(R.id.total);
+
         // 知识点层级名字
         tvName.setText(value.name);
+
         //专项训练加统计信息
         if ("note".equals(value.note_type)) {
             doneText.setText(value.done + "/");
             totalText.setText(value.total + "");
         }
+
         // 做题按钮
         ivDo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,8 +102,13 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             }
         });
 
-        // 最后一层不显示开关
-        if (value.level == 3) {
+//        // 最后一层不显示开关
+//        if (value.level == 3) {
+//            mIvToggle.setVisibility(View.GONE);
+//        }
+
+        // 如果没有子节点，则不显示开关
+        if (value.childs == null || value.childs.size() == 0) {
             mIvToggle.setVisibility(View.GONE);
         }
 
@@ -126,6 +137,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         public String note_type;
         public int done;
         public int total;
+        public ArrayList<HierarchyM> childs;
 
         public TreeItem(int level, int id, String name, int done, int total, String note_type) {
             this.level = level;
@@ -134,6 +146,22 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             this.note_type = note_type;
             this.total = total;
             this.done = done;
+        }
+
+        public TreeItem(int level,
+                        int id,
+                        String name,
+                        int done,
+                        int total,
+                        String note_type,
+                        ArrayList<HierarchyM> childs) {
+            this.level = level;
+            this.id = id;
+            this.name = name;
+            this.note_type = note_type;
+            this.total = total;
+            this.done = done;
+            this.childs = childs;
         }
     }
 }
