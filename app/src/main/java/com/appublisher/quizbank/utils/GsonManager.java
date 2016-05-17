@@ -31,7 +31,11 @@ public class GsonManager {
      * @return 数据模型
      */
     public static <T> T getObejctFromJSON(String jsonStr, Class<T> cls) {
-        return getGson().fromJson(jsonStr, cls);
+        try {
+            return getGson().fromJson(jsonStr, cls);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -43,7 +47,11 @@ public class GsonManager {
      */
     public static <T> T getModel(JSONObject jsonObject, Class<T> cls) {
         if (jsonObject == null) return null;
-        return getGson().fromJson(jsonObject.toString(), cls);
+        try {
+            return getGson().fromJson(jsonObject.toString(), cls);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

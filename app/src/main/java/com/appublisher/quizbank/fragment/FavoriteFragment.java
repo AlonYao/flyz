@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.FavoriteModel;
+import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
@@ -83,7 +83,20 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("note_hierarchy".equals(apiName))
-            FavoriteModel.dealNoteHierarchyResp(this, response);
+            new KnowledgeTreeModel(
+                    mActivity,
+                    mContainer,
+                    KnowledgeTreeModel.TYPE_COLLECT,
+                    new KnowledgeTreeModel.ICheckHierarchyResp() {
+                        @Override
+                        public void isCorrectData(boolean isCorrect) {
+                            if (isCorrect) {
+                                mIvNull.setVisibility(View.GONE);
+                            } else {
+                                mIvNull.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }).dealHierarchyResp(response);
 
         ProgressBarManager.hideProgressBar();
     }
@@ -103,6 +116,6 @@ public class FavoriteFragment extends Fragment implements RequestCallback{
      */
     private void getData() {
         ProgressBarManager.showProgressBar(mView);
-        new Request(mActivity, this).getNoteHierarchy("collect");
+        new Request(mActivity, this).getNoteHierarchy(KnowledgeTreeModel.TYPE_COLLECT);
     }
 }

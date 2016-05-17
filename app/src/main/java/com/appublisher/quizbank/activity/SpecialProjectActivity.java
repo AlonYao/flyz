@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.business.SpecialProjectModel;
+import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
@@ -75,7 +75,8 @@ public class SpecialProjectActivity extends ActionBarActivity implements Request
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("note_hierarchy".equals(apiName))
-            SpecialProjectModel.dealNoteHierarchyResp(this, response);
+            new KnowledgeTreeModel(this, mContainer, KnowledgeTreeModel.TYPE_NOTE)
+                    .dealHierarchyResp(response);
 
         ProgressDialogManager.closeProgressDialog();
     }
