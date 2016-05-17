@@ -96,15 +96,15 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback 
                     mContainer,
                     KnowledgeTreeModel.TYPE_ERROR,
                     new KnowledgeTreeModel.ICheckHierarchyResp() {
-                @Override
-                public void isCorrectData(boolean isCorrect) {
-                    if (isCorrect) {
-                        mIvNull.setVisibility(View.GONE);
-                    } else {
-                        mIvNull.setVisibility(View.VISIBLE);
-                    }
-                }
-            }).dealHierarchyResp(response);
+                        @Override
+                        public void isCorrectData(boolean isCorrect) {
+                            if (isCorrect) {
+                                mIvNull.setVisibility(View.GONE);
+                            } else {
+                                mIvNull.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }).dealHierarchyResp(response);
 
         ProgressBarManager.hideProgressBar();
     }
