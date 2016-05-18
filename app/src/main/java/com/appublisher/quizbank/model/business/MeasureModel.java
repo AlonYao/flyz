@@ -338,37 +338,10 @@ public class MeasureModel {
                 case "note":
                 case "error":
                 case "collect":
-                    switch (activity.mHierarchyLevel) {
-                        case 1:
-                            ProgressDialogManager.showProgressDialog(activity, true);
-                            MeasureActivity.mRequest.getNoteQuestions(
-                                    String.valueOf(activity.mHierarchyId),
-                                    "",
-                                    "",
-                                    activity.mPaperType);
-
-                            break;
-
-                        case 2:
-                            ProgressDialogManager.showProgressDialog(activity, true);
-                            MeasureActivity.mRequest.getNoteQuestions(
-                                    "",
-                                    String.valueOf(activity.mHierarchyId),
-                                    "",
-                                    activity.mPaperType);
-
-                            break;
-
-                        case 3:
-                            ProgressDialogManager.showProgressDialog(activity, true);
-                            MeasureActivity.mRequest.getNoteQuestions(
-                                    "",
-                                    "",
-                                    String.valueOf(activity.mHierarchyId),
-                                    activity.mPaperType);
-
-                            break;
-                    }
+                    ProgressDialogManager.showProgressDialog(activity, true);
+                    MeasureActivity.mRequest.getNoteQuestions(
+                            String.valueOf(activity.mHierarchyId),
+                            activity.mPaperType);
                     break;
 
                 case "evaluate":

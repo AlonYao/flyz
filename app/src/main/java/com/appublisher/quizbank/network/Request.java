@@ -99,6 +99,20 @@ public class Request extends BaseRequest implements ApiConstants {
     }
 
     /**
+     * 专项练习获取题目
+     *
+     * @param note_id 知识点id
+     * @param type 类型: all：所有题目 error：只从错题里抽 collect：只从收藏的题目里抽
+     */
+    public void getNoteQuestions(String note_id,
+                                 String type) {
+        asyncRequest(
+                ParamBuilder.finalUrl(getNoteQuestions) + "&note_id=" + note_id + "&type=" + type,
+                "note_questions",
+                "object");
+    }
+
+    /**
      * 获取错题收藏
      *
      * @param hierarchy_1 第一层级id
@@ -112,6 +126,21 @@ public class Request extends BaseRequest implements ApiConstants {
                         "&hierarchy_2=" + hierarchy_2 + "&hierarchy_3=" + hierarchy_3 + "&type=" +
                         type,
                 "collect_error_questions", "object");
+    }
+
+    /**
+     * 获取错题收藏
+     *
+     * @param note_id 知识点id
+     * @param type 类型: collect:收藏 error:错题
+     */
+    public void collectErrorQuestions(String note_id,
+                                      String type) {
+        asyncRequest(
+                ParamBuilder.finalUrl(collectErrorQuestions)
+                        + "&note_id=" + note_id + "&type=" + type,
+                "collect_error_questions",
+                "object");
     }
 
     /**

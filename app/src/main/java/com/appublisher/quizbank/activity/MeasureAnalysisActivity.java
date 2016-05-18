@@ -126,26 +126,8 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         //noinspection IfCanBeSwitch
         if (("collect".equals(mAnalysisType) || "error".equals(mAnalysisType))
                 && !"study_record".equals(mFrom)) {
-
-            switch (mHierarchyLevel) {
-                case 1:
-                    ProgressDialogManager.showProgressDialog(this, true);
-                    mRequest.collectErrorQuestions(
-                            String.valueOf(mHierarchyId), "", "", mAnalysisType);
-                    break;
-
-                case 2:
-                    ProgressDialogManager.showProgressDialog(this, true);
-                    mRequest.collectErrorQuestions(
-                            "", String.valueOf(mHierarchyId), "", mAnalysisType);
-                    break;
-
-                case 3:
-                    ProgressDialogManager.showProgressDialog(this, true);
-                    mRequest.collectErrorQuestions(
-                            "", "", String.valueOf(mHierarchyId), mAnalysisType);
-                    break;
-            }
+            ProgressDialogManager.showProgressDialog(this, true);
+            mRequest.collectErrorQuestions(String.valueOf(mHierarchyId), mAnalysisType);
 
         } else {
             //noinspection unchecked

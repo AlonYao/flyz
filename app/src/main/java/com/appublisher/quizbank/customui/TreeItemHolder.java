@@ -133,6 +133,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
 
         } else {
             ivWatch.setVisibility(View.VISIBLE);
+            ivDo.setVisibility(View.VISIBLE);
         }
 
         // 做题按钮

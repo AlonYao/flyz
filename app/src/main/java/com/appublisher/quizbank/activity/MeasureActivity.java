@@ -127,7 +127,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
                         String time = mins + ":" + sec;
 
-                        activity.getSupportActionBar().setTitle(time);
+                        activity.setTitle(time);
 
                         if (mMins < 1) {
                             mToolbar.setTitleTextColor(Color.parseColor("#FFCD02"));
@@ -135,7 +135,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         break;
 
                     case TIME_OUT:
-                        activity.getSupportActionBar().setTitle("00:00");
+                        activity.setTitle("00:00");
                         break;
 
                     case TIME_ON_MOCK:
@@ -147,7 +147,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         if (mins.length() == 1) mins = "0" + mins;
                         if (sec.length() == 1) sec = "0" + sec;
                         time = mins + ":" + sec;
-                        activity.getSupportActionBar().setTitle(time);
+                        activity.setTitle(time);
                         if (mMins == 15 && mSec == 0) {
                             ToastManager.showToast(activity, "距离考试结束还有15分钟");
                         }
