@@ -9,14 +9,10 @@ public class HierarchyM {
     int id;
     String name;
     int parent_id;
-    int note_type;
     int total;
     int done;
     ArrayList<HierarchyM> childs;
-
-    int category_id;
     int level;
-    ArrayList<NoteGroupM> note_group;
 
     public int getId() {
         return id;
@@ -28,10 +24,6 @@ public class HierarchyM {
 
     public int getParent_id() {
         return parent_id;
-    }
-
-    public int getNote_type() {
-        return note_type;
     }
 
     public int getTotal() {
@@ -46,15 +38,7 @@ public class HierarchyM {
         return childs;
     }
 
-    public int getCategory_id() {
-        return category_id;
-    }
-
     public int getLevel() {
         return level;
-    }
-
-    public ArrayList<NoteGroupM> getNote_group() {
-        return note_group;
     }
 }

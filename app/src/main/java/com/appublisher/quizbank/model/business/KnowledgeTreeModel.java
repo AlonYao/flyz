@@ -22,6 +22,7 @@ public class KnowledgeTreeModel {
     public static final String TYPE_NOTE = "note";
     public static final String TYPE_COLLECT = "collect";
     public static final String TYPE_ERROR = "error";
+    public static final String TYPE_EVALUATION = "evaluation";
 
     private Context mContext;
     private LinearLayout mContainer;
@@ -67,13 +68,20 @@ public class KnowledgeTreeModel {
         }
 
         HierarchyResp hierarchyResp = GsonManager.getModel(response, HierarchyResp.class);
-
         if (hierarchyResp == null || hierarchyResp.getResponse_code() != 1) {
             dataCorrectResp(false);
             return;
         }
 
         ArrayList<HierarchyM> hierarchys = hierarchyResp.getHierarchy();
+        dealHierarchyResp(hierarchys);
+    }
+
+    /**
+     * 处理专项练习回调
+     * @param hierarchys 回调数据
+     */
+    public void dealHierarchyResp(ArrayList<HierarchyM> hierarchys) {
         if (hierarchys == null) {
             dataCorrectResp(false);
             return;
@@ -159,12 +167,13 @@ public class KnowledgeTreeModel {
         return new TreeNode(
                 new TreeItemHolder.TreeItem(
                         level,
-                        hierarchy.getCategory_id(),
+                        hierarchy.getId(),
                         hierarchy.getName(),
                         hierarchy.getDone(),
                         hierarchy.getTotal(),
                         mType,
-                        hierarchy.getChilds()));
+                        hierarchy.getChilds(),
+                        hierarchy.getLevel()));
     }
 
     /**

@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -57,14 +59,80 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ImageView ivWatch = (ImageView) view.findViewById(R.id.treeview_watch);
         TextView doneText = (TextView) view.findViewById(R.id.done);
         TextView totalText = (TextView) view.findViewById(R.id.total);
+        LinearLayout evLevel = (LinearLayout) view.findViewById(R.id.ev_level);
+        ImageView level_1 = (ImageView) view.findViewById(R.id.level_1);
+        ImageView level_2 = (ImageView) view.findViewById(R.id.level_2);
+        ImageView level_3 = (ImageView) view.findViewById(R.id.level_3);
+        ImageView level_4 = (ImageView) view.findViewById(R.id.level_4);
+        ImageView level_5 = (ImageView) view.findViewById(R.id.level_5);
 
         // 知识点层级名字
         tvName.setText(value.name);
 
-        //专项训练加统计信息
-        if ("note".equals(value.note_type)) {
+        // 如果没有子节点，则不显示开关
+        if (value.childs == null || value.childs.size() == 0) {
+            mIvToggle.setVisibility(View.GONE);
+        }
+
+        if (KnowledgeTreeModel.TYPE_EVALUATION.equals(value.type)) {
+            // 能力评估页面特殊处理
+            evLevel.setVisibility(View.VISIBLE);
+
+            switch (value.ev_level) {
+                case 1:
+                    level_1.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_5));
+                    break;
+                case 2:
+                    level_1.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_5));
+                    level_2.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_6));
+                    break;
+                case 3:
+                    level_1.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_5));
+                    level_2.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_6));
+                    level_3.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_7));
+                    break;
+                case 4:
+                    level_1.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_5));
+                    level_2.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_6));
+                    level_3.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_7));
+                    level_4.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_8));
+                    break;
+                case 5:
+                    level_1.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_5));
+                    level_2.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_6));
+                    level_3.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_7));
+                    level_4.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_8));
+                    level_5.setImageDrawable(
+                            context.getResources().getDrawable(R.drawable.level_9));
+                    break;
+                default:
+                    break;
+            }
+        } else if (KnowledgeTreeModel.TYPE_NOTE.equals(value.type)) {
+            // 专项训练特殊处理
+            doneText.setVisibility(View.VISIBLE);
+            totalText.setVisibility(View.VISIBLE);
             doneText.setText(value.done + "/");
             totalText.setText(value.total + "");
+
+            ivDo.setVisibility(View.VISIBLE);
+
+        } else {
+            ivWatch.setVisibility(View.VISIBLE);
         }
 
         // 做题按钮
@@ -72,7 +140,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PracticeDescriptionActivity.class);
-                intent.putExtra("paper_type", value.note_type);
+                intent.putExtra("paper_type", value.type);
                 intent.putExtra("paper_name", value.name);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
@@ -86,14 +154,14 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MeasureAnalysisActivity.class);
-                intent.putExtra("analysis_type", value.note_type);
+                intent.putExtra("analysis_type", value.type);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
                 intent.putExtra("umeng_entry", "List");
-                if ("error".equals(value.note_type)) {
+                if (KnowledgeTreeModel.TYPE_ERROR.equals(value.type)) {
                     intent.putExtra("is_from_error", true);
                     intent.putExtra("umeng_entry_review", "Error");
-                } else if ("collect".equals(value.note_type)) {
+                } else if (KnowledgeTreeModel.TYPE_COLLECT.equals(value.type)) {
                     intent.putExtra("umeng_entry_review", "Collect");
                 }
                 intent.putExtra("from", "collect_or_error");
@@ -101,23 +169,6 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 context.startActivity(intent);
             }
         });
-
-//        // 最后一层不显示开关
-//        if (value.level == 3) {
-//            mIvToggle.setVisibility(View.GONE);
-//        }
-
-        // 如果没有子节点，则不显示开关
-        if (value.childs == null || value.childs.size() == 0) {
-            mIvToggle.setVisibility(View.GONE);
-        }
-
-        // 全部专项不显示看题按钮
-        if ("note".equals(value.note_type)) {
-            ivWatch.setVisibility(View.GONE);
-        } else {
-            ivWatch.setVisibility(View.VISIBLE);
-        }
 
         return view;
     }
@@ -134,34 +185,28 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         public int level;
         public int id;
         public String name;
-        public String note_type;
+        public String type;
         public int done;
         public int total;
         public ArrayList<HierarchyM> childs;
-
-        public TreeItem(int level, int id, String name, int done, int total, String note_type) {
-            this.level = level;
-            this.id = id;
-            this.name = name;
-            this.note_type = note_type;
-            this.total = total;
-            this.done = done;
-        }
+        public int ev_level;
 
         public TreeItem(int level,
                         int id,
                         String name,
                         int done,
                         int total,
-                        String note_type,
-                        ArrayList<HierarchyM> childs) {
+                        String type,
+                        ArrayList<HierarchyM> childs,
+                        int ev_level) {
             this.level = level;
             this.id = id;
             this.name = name;
-            this.note_type = note_type;
+            this.type = type;
             this.total = total;
             this.done = done;
             this.childs = childs;
+            this.ev_level = ev_level;
         }
     }
 }

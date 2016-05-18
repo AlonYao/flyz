@@ -2,21 +2,17 @@ package com.appublisher.quizbank.model.business;
 
 import android.graphics.Paint;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.customui.EvaluationTreeItemHolder;
 import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
 import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
 import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.model.netdata.evaluation.EvaluationResp;
 import com.appublisher.quizbank.model.netdata.evaluation.HistoryScoreM;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
-import com.appublisher.quizbank.model.netdata.hierarchy.NoteGroupM;
-import com.appublisher.quizbank.model.netdata.hierarchy.NoteItemM;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.PopupWindowManager;
 import com.appublisher.quizbank.utils.UmengManager;
@@ -27,8 +23,6 @@ import com.db.chart.view.LineChartView;
 import com.db.chart.view.XController;
 import com.db.chart.view.YController;
 import com.google.gson.Gson;
-import com.unnamed.b.atv.model.TreeNode;
-import com.unnamed.b.atv.view.AndroidTreeView;
 
 import org.json.JSONObject;
 
@@ -116,8 +110,15 @@ public class EvaluationModel {
         } else {
             size = 1;
         }
-        if (evaluationResp.getNote_hierarchy() != null && evaluationResp.getNote_hierarchy().size() != 0)
-            setCategoryInfo(activity, evaluationResp.getNote_hierarchy());
+
+        ArrayList<HierarchyM> hierarchys = evaluationResp.getNote_hierarchy();
+        if (hierarchys != null && hierarchys.size() != 0) {
+            new KnowledgeTreeModel(
+                    activity,
+                    activity.mContainer,
+                    KnowledgeTreeModel.TYPE_EVALUATION).dealHierarchyResp(hierarchys);
+        }
+
         // 根据值绘图
         Paint lineGridPaint = new Paint();
         lineGridPaint.setColor(activity.getResources().getColor(R.color.common_line));
@@ -158,120 +159,6 @@ public class EvaluationModel {
         boolean detailCategory = Globals.sharedPreferences.getBoolean("detailCategory", true);
         if (!isFirstStart && detailCategory) {
             PopupWindowManager.showUpdateEvaluation(activity.parentView, activity);
-        }
-    }
-
-    /**
-     * 分类信息
-     *
-     * @param activity
-     * @param hierarchyMs
-     */
-    public static void setCategoryInfo(EvaluationActivity activity, ArrayList<HierarchyM> hierarchyMs) {
-        final ArrayList<HierarchyM> hierarchys = hierarchyMs;
-        for (int i = 0; i < hierarchys.size(); i++) {
-            HierarchyM hierarchy = hierarchys.get(i);
-            if (hierarchy == null) continue;
-            addHierarchy(activity, hierarchy);
-        }
-    }
-
-    /**
-     * 添加知识点层级第一层
-     *
-     * @param hierarchy 第一层数据
-     */
-    public static void addHierarchy(EvaluationActivity activity, HierarchyM hierarchy) {
-        if (activity.mContainer == null) return;
-
-        TreeNode root = TreeNode.root();
-
-        TreeNode firstRoot = new TreeNode(
-                new EvaluationTreeItemHolder.TreeItem(
-                        1,
-                        hierarchy.getCategory_id(),
-                        hierarchy.getName(),
-                        hierarchy.getDone(),
-                        hierarchy.getTotal(),
-                        "evaluation",
-                        hierarchy.getLevel()));
-
-        root.addChild(firstRoot);
-
-        // 添加第二层
-        ArrayList<NoteGroupM> noteGroups = hierarchy.getNote_group();
-        addNoteGroup(activity, firstRoot, noteGroups);
-
-        // rootContainer
-        LinearLayout rootContainer = new LinearLayout(activity);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        lp.setMargins(0, 0, 0, 0);
-        rootContainer.setLayoutParams(lp);
-        rootContainer.setOrientation(LinearLayout.VERTICAL);
-
-        AndroidTreeView tView = new AndroidTreeView(activity, root);
-        tView.setDefaultViewHolder(EvaluationTreeItemHolder.class);
-
-        rootContainer.addView(tView.getView());
-
-        activity.mContainer.addView(rootContainer);
-    }
-
-    /**
-     * 添加第二层级
-     *
-     * @param firstRoot  第一层级节点
-     * @param noteGroups 第二层级数据
-     */
-    public static void addNoteGroup(EvaluationActivity activity, TreeNode firstRoot, ArrayList<NoteGroupM> noteGroups) {
-        if (noteGroups == null || noteGroups.size() == 0) return;
-
-        int size = noteGroups.size();
-        for (int i = 0; i < size; i++) {
-            NoteGroupM noteGroup = noteGroups.get(i);
-
-            if (noteGroup == null) continue;
-            TreeNode secondRoot = new TreeNode(
-                    new EvaluationTreeItemHolder.TreeItem(
-                            2,
-                            noteGroup.getGroup_id(),
-                            noteGroup.getName(),
-                            noteGroup.getDone(),
-                            noteGroup.getTotal(),
-                            "evaluation",
-                            noteGroup.getLevel()));
-            firstRoot.addChild(secondRoot);
-
-            addNotes(activity, secondRoot, noteGroup.getNotes());
-        }
-    }
-
-    /**
-     * 添加第三层
-     *
-     * @param secondRoot 第二层级节点
-     * @param notes      第三层级数据
-     */
-    public static void addNotes(EvaluationActivity activity, TreeNode secondRoot, ArrayList<NoteItemM> notes) {
-        if (notes == null || notes.size() == 0) return;
-
-        int size = notes.size();
-        for (int i = 0; i < size; i++) {
-            NoteItemM note = notes.get(i);
-            if (note == null) continue;
-            TreeNode thirdRoot = new TreeNode(
-                    new EvaluationTreeItemHolder.TreeItem(
-                            3,
-                            note.getNote_id(),
-                            note.getName(),
-                            note.getDone(),
-                            note.getTotal(),
-                            "evaluation",
-                            note.getLevel()));
-            secondRoot.addChild(thirdRoot);
         }
     }
 
