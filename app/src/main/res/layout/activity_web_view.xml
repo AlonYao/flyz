@@ -6,11 +6,6 @@
 
     <include layout="@layout/toolbar"/>
 
-    <include layout="@layout/progressbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"/>
-
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
@@ -37,7 +32,11 @@
             android:textSize="17sp"
             android:textColor="@color/white"
             android:text="@string/opencourse_consult"/>
-
     </LinearLayout>
+
+    <include layout="@layout/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"/>
 
 </RelativeLayout>
