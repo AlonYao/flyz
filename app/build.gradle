@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 40
-        versionName "1.7.2"
+        versionCode 41
+        versionName "1.7.0"
     }
 
     buildTypes {
@@ -121,6 +121,16 @@ android {
         qudao_360tui {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
                                     APP_CHANNEL: "360tui"]
+        }
+
+        AppUpdate {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "AppUpdate"]
+        }
+
+        微信 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "微信"]
         }
 
 //
@@ -258,6 +268,56 @@ android {
 //            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
 //                                    APP_CHANNEL: "sem20"]
 //        }
+
+        信息流01 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流01"]
+        }
+
+        信息流02 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流02"]
+        }
+
+        信息流03 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流03"]
+        }
+
+        信息流04 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流04"]
+        }
+
+        信息流05 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流05"]
+        }
+
+        信息流06 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流06"]
+        }
+
+        信息流07 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流07"]
+        }
+
+        信息流08 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流08"]
+        }
+
+        信息流09 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流09"]
+        }
+
+        信息流10 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "信息流10"]
+        }
     }
 }
 
