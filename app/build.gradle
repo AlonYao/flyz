@@ -318,6 +318,31 @@ android {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
                                     APP_CHANNEL: "信息流10"]
         }
+
+        huodong360 {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "360huodong"]
+        }
+
+        tuijian360 {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "360tuijian"]
+        }
+
+        ruanjian360 {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "360ruanjian"]
+        }
+
+        zhanshi360 {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "360zhanshi"]
+        }
+
+        公众号 {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "公众号"]
+        }
     }
 }
 
