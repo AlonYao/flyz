@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.ActivitySkipConstants;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
@@ -143,6 +144,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //成员变量初始化
         mHandler = new MsgHandler(this);
         mRequest = new Request(this, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //获取数据(模考列表)
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getMockExerciseList();
@@ -406,11 +412,14 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mockpre_bottom_right://课程报名
-                if (is_purchased) {//已购
-                    skipCourseDetailPage();
-                } else {//报名
-                    mRequest.mockSignUp(ParamBuilder.getSignUpMockCourse(course_id + ""));
-                }
+//                if (is_purchased) {//已购
+//                    skipCourseDetailPage();
+//                } else {//报名
+//                    mRequest.mockSignUp(ParamBuilder.getSignUpMockCourse(course_id + ""));
+//                }
+
+                skipCourseDetailPage();
+
                 break;
             case R.id.mockpre_bottom_left://进入考试
                 if (beginMock) {
@@ -460,10 +469,16 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * 跳转课程详情页
      */
     public void skipCourseDetailPage() {
+        String url = courseDetailLink
+                + "&user_id=" + LoginModel.getUserId()
+                + "&user_token=" + LoginModel.getUserToken()
+                + "&app_type=quizbank"
+                + "&app_version=" + Globals.appVersion;
+
         Intent intent = new Intent(this, WebViewActivity.class);
-        intent.putExtra("url", courseDetailLink);
+        intent.putExtra("url", url);
         intent.putExtra("bar_title", "");
-        intent.putExtra("from", "opencourse_pre");
+        intent.putExtra("from", "course");
         startActivity(intent);
     }
 
