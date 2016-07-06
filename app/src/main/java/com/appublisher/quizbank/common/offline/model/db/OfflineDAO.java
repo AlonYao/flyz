@@ -2,7 +2,7 @@ package com.appublisher.quizbank.common.offline.model.db;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
-import com.duobeiyun.DuobeiYunClient;
+import com.appublisher.quizbank.thirdparty.duobeiyun.DuobeiYunClient;
 
 import java.util.List;
 
@@ -37,6 +37,23 @@ public class OfflineDAO {
         try {
             return new Select().from(Offline.class)
                     .where("room_id IS NOT NULL")
+                    .execute();
+        } catch (Exception e) {
+            // Empty
+        }
+
+        return null;
+    }
+
+    /**
+     * 查询数据库中保存的全部的成功下载的对象
+     *
+     * @return Offline
+     */
+    public static List<Offline> findAllSuccess() {
+        try {
+            return new Select().from(Offline.class)
+                    .where("room_id IS NOT NULL and is_success = 1")
                     .execute();
         } catch (Exception e) {
             // Empty

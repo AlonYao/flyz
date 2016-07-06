@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +15,15 @@ import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.activity.BaseActivity;
+import com.appublisher.quizbank.thirdparty.duobeiyun.DuobeiYunClient;
 
-public class OfflineWebViewActivity extends AppCompatActivity{
+import java.io.IOException;
+
+public class OfflineWebViewActivity extends BaseActivity {
 
     private WebView mWebView;
     private RelativeLayout mProgressBar;
-    private String mUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +31,12 @@ public class OfflineWebViewActivity extends AppCompatActivity{
         setContentView(R.layout.activity_offline_web_view);
 
         // fetch data
-        mUrl = getIntent().getStringExtra("url");
+        String url = getIntent().getStringExtra("url");
         String barTitle = getIntent().getStringExtra("bar_title");
 
         // Bar Title
-        CommonModel.setToolBar(this);
-        CommonModel.setBarTitle(this, barTitle);
+        setToolBar(this);
+        setTitle(barTitle);
 
         // init view
         mWebView = (WebView) findViewById(R.id.webView);
@@ -44,13 +45,26 @@ public class OfflineWebViewActivity extends AppCompatActivity{
         // 设置屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        showWebView(mUrl);
+        // 初始化多贝云Server
+        try {
+            DuobeiYunClient.startServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        showWebView(url);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mWebView.destroy();
+        // 停止多贝云Server
+        try {
+            DuobeiYunClient.stopServer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

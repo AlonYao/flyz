@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,14 +16,15 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.BaseActivity;
 import com.appublisher.quizbank.common.offline.adapter.PurchasedClassesAdapter;
 import com.appublisher.quizbank.common.offline.model.business.OfflineConstants;
 import com.appublisher.quizbank.common.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.common.offline.model.db.OfflineDAO;
 import com.appublisher.quizbank.common.offline.netdata.PurchasedClassM;
-import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.thirdparty.duobeiyun.DuobeiYunClient;
 import com.appublisher.quizbank.utils.ToastManager;
-import com.duobeiyun.DuobeiYunClient;
+import com.appublisher.quizbank.utils.UmengManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.HashMap;
 /**
  * 离线模块课程列表
  */
-public class OfflineClassActivity extends AppCompatActivity implements View.OnClickListener {
+public class OfflineClassActivity extends BaseActivity implements View.OnClickListener {
 
     public int mMenuStatus; // 1：下载 2：删除
     public Button mBtnBottom;
@@ -91,8 +91,8 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_offline_class);
 
         // Toolbar
-        CommonModel.setToolBar(this);
-        CommonModel.setBarTitle(this, getIntent().getStringExtra("bar_title"));
+        setToolBar(this);
+        setTitle(getIntent().getStringExtra("bar_title"));
 
         // Init view
         mLv = (ListView) findViewById(R.id.offline_class_lv);
@@ -173,6 +173,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                 mBtnBottom.setVisibility(View.VISIBLE);
                 mBtnBottom.setText(R.string.offline_delete_btn);
             }
+
         } else if ("下载".equals(item.getTitle())) {
             mMenuStatus = 1;
             mAdapter.notifyDataSetChanged();
@@ -183,6 +184,7 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
                 mBtnBottom.setVisibility(View.VISIBLE);
                 mBtnBottom.setText(R.string.offline_download_btn);
             }
+
         } else if ("全选".equals(item.getTitle())) {
             if (mClasses == null) return super.onOptionsItemSelected(item);
             int size = mClasses.size();
@@ -233,102 +235,120 @@ public class OfflineClassActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.offline_bottom_btn:
-                if (mClasses == null) break;
+        int vId = v.getId();
+        if (vId == R.id.offline_bottom_btn) {
+            if (mClasses == null) return;
 
-                if (mMenuStatus == 1) {
-                    // 下载
-                    if (OfflineConstants.mDownloadList == null)
-                        OfflineConstants.mDownloadList = new ArrayList<>();
+            if (mMenuStatus == 1) {
+                // 下载
+                if (OfflineConstants.mDownloadList == null)
+                    OfflineConstants.mDownloadList = new ArrayList<>();
 
-                    // 数据异常处理
-                    if (mClasses == null) return;
+                // 数据异常处理
+                if (mClasses == null) return;
 
-                    int size = mClasses.size();
-                    for (int i = 0; i < size; i++) {
-                        if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("position", i);
-                            map.put("room_id", OfflineModel.getRoomIdByPosition(this, i));
-                            map.put("course_id", mCourseId);
-                            OfflineConstants.mDownloadList.add(map);
-                        }
+                int umCount = 0;
+                int size = mClasses.size();
+                for (int i = 0; i < size; i++) {
+                    if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("position", i);
+                        map.put("room_id", OfflineModel.getRoomIdByPosition(this, i));
+                        map.put("course_id", mCourseId);
+                        OfflineConstants.mDownloadList.add(map);
+                        umCount++;
                     }
-
-                    if (OfflineConstants.mStatus == OfflineConstants.DONE) {
-                        OfflineModel.startDownload(this);
-                        mAdapter.notifyDataSetChanged();
-                    }
-
-                    new OfflineModel(new OfflineModel.downloadProgressListener() {
-                        @Override
-                        public void onProgress(int progress) {
-                            mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
-                        }
-                    });
-
-                    OfflineModel.setCancel(this);
-
-                    ToastManager.showToast(this, "下载任务正在进行，请不要将应用关闭或切换至后台");
-
-                } else if (mMenuStatus == 2) {
-                    // 删除
-                    ArrayList<Integer> list = new ArrayList<>();
-
-                    ArrayList<String> roomIds = new ArrayList<>();
-
-                    // 数据异常处理
-                    if (mClasses == null) return;
-
-                    int size = mClasses.size();
-                    for (int i = 0; i < size; i++) {
-                        if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
-                            list.add(i);
-                            String roomId = OfflineModel.getRoomIdByPosition(this, i);
-                            roomIds.add(roomId);
-                        }
-                    }
-                    for (Integer position : list) {
-                        String roomId = OfflineModel.getRoomIdByPosition(this, position);
-                        if (OfflineConstants.mDownloadList != null && OfflineConstants.mDownloadList.size() != 0) {
-                            ArrayList<HashMap<String, Object>> downList = OfflineConstants.mDownloadList;
-                            for (int i = 0; i < downList.size(); i++) {
-                                HashMap<String, Object> map = downList.get(i);
-                                String downListRoomId = (String) map.get("room_id");
-                                if (downListRoomId.equals(roomId)) {
-                                    OfflineConstants.mDownloadList.remove(i);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    mAdapter.notifyDataSetChanged();
-                    for (String deleteRoomId : roomIds) {
-                        try {
-                            OfflineDAO.deleteRoomId(deleteRoomId, mCourseId);
-                        } catch (Exception e) {
-                            // Empty
-                        }
-                        if (mFrom.equals("local"))
-                            for (int i = 0; i < mClasses.size(); i++) {
-                                String roomId = OfflineModel.getRoomIdByPosition(this, i);
-                                if (deleteRoomId.equals(roomId)) {
-                                    mClasses.remove(i);
-                                    break;
-                                }
-
-                            }
-                    }
-                    OfflineModel.setCancel(this);
                 }
 
-                break;
+                if (OfflineConstants.mStatus == OfflineConstants.DONE) {
+                    OfflineModel.startDownload(this);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+                new OfflineModel(new OfflineModel.downloadProgressListener() {
+                    @Override
+                    public void onProgress(int progress) {
+                        mHandler.sendEmptyMessage(DOWNLOAD_PROGRESS);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                    }
+                });
+
+                OfflineModel.setCancel(this);
+
+                ToastManager.showToast(this, "下载任务正在进行，请不要将应用关闭或切换至后台");
+
+                // Umeng
+                if (umCount != 0) {
+                    String umParamDownload = (umCount == size) ? "0" : String.valueOf(umCount);
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Download", umParamDownload);
+                    UmengManager.onEvent(this, "Video", map);
+                }
+
+            } else if (mMenuStatus == 2) {
+                // 删除
+                ArrayList<Integer> list = new ArrayList<>();
+
+                ArrayList<String> roomIds = new ArrayList<>();
+
+                // 数据异常处理
+                if (mClasses == null) return;
+
+                int umCount = 0;
+                int size = mClasses.size();
+                for (int i = 0; i < size; i++) {
+                    if (mSelectedMap.containsKey(i) && mSelectedMap.get(i)) {
+                        list.add(i);
+                        String roomId = OfflineModel.getRoomIdByPosition(this, i);
+                        roomIds.add(roomId);
+                        umCount++;
+                    }
+                }
+                for (Integer position : list) {
+                    String roomId = OfflineModel.getRoomIdByPosition(this, position);
+                    if (OfflineConstants.mDownloadList != null && OfflineConstants.mDownloadList.size() != 0) {
+                        ArrayList<HashMap<String, Object>> downList = OfflineConstants.mDownloadList;
+                        for (int i = 0; i < downList.size(); i++) {
+                            HashMap<String, Object> map = downList.get(i);
+                            String downListRoomId = (String) map.get("room_id");
+                            if (downListRoomId.equals(roomId)) {
+                                OfflineConstants.mDownloadList.remove(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                for (String deleteRoomId : roomIds) {
+                    try {
+                        OfflineDAO.deleteRoomId(deleteRoomId, mCourseId);
+                    } catch (Exception e) {
+                        // Empty
+                    }
+                    if (mFrom.equals("local"))
+                        for (int i = 0; i < mClasses.size(); i++) {
+                            String roomId = OfflineModel.getRoomIdByPosition(this, i);
+                            if (deleteRoomId.equals(roomId)) {
+                                mClasses.remove(i);
+                                break;
+                            }
+
+                        }
+                }
+                OfflineModel.setCancel(this);
+
+                // Umeng
+                if (umCount != 0) {
+                    String umParamDownload = (umCount == size) ? "0" : String.valueOf(umCount);
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Delete", umParamDownload);
+                    UmengManager.onEvent(this, "Video", map);
+                }
+            }
         }
     }
 }

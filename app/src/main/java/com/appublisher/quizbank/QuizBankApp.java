@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.utils.OpenUDID_manager;
-import com.duobeiyun.DuobeiYunClient;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 /**
@@ -67,12 +68,10 @@ public class QuizBankApp extends Application{
 //        NBSAppAgent.setLicenseKey(getString(R.string.tingyun_appkey))
 //                .withLocationServiceEnabled(true).start(this);
 
-        // 多贝离线下载
-        try {
-            DuobeiYunClient.startServer();
-        } catch (IOException e) {
-            // Empty
-        }
+        // 初始化多贝云离线下载
+        FileDownloader.init(this);
+        FileDownloadUtils.setDefaultSaveRootPath(
+                Environment.getExternalStorageDirectory().toString());
     }
 
     // 单例模式中获取唯一的QuizBankApp实例

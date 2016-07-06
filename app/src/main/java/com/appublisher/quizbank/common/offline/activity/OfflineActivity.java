@@ -1,8 +1,6 @@
 package com.appublisher.quizbank.common.offline.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -10,20 +8,23 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.BaseActivity;
 import com.appublisher.quizbank.common.offline.model.business.OfflineModel;
 import com.appublisher.quizbank.common.offline.netdata.PurchasedCoursesResp;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
+import com.appublisher.quizbank.utils.UmengManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 /**
  * 离线视频页面
  */
-public class OfflineActivity extends AppCompatActivity
+public class OfflineActivity extends BaseActivity
         implements RequestCallback, View.OnClickListener {
 
     /**
@@ -48,12 +49,8 @@ public class OfflineActivity extends AppCompatActivity
         setContentView(R.layout.activity_offline);
 
         // Toolbar（特殊处理：保证颜色渐变一致）
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.apptheme));
-        setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        CommonModel.setBarTitle(this, "下载管理");
+        setToolBar(this);
+        setTitle("下载管理");
 
         // Init view
         mTvAll = (TextView) findViewById(R.id.offline_all_btn);
@@ -69,9 +66,6 @@ public class OfflineActivity extends AppCompatActivity
 
         // 检查版本问题,删除以前的下载文件
         OfflineModel.checkVersion(this);
-
-        // 检查是否需要更新多贝播放器
-        OfflineModel.checkDuobeiPlayer(this);
     }
 
     @Override
@@ -82,12 +76,6 @@ public class OfflineActivity extends AppCompatActivity
         } else {
             OfflineModel.showAllList(this);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
@@ -107,7 +95,7 @@ public class OfflineActivity extends AppCompatActivity
 
         if ("purchased_courses".equals(apiName)) {
             mPurchasedCoursesResp =
-                    GsonManager.getGson().fromJson(response.toString(), PurchasedCoursesResp.class);
+                    GsonManager.getModel(response, PurchasedCoursesResp.class);
             OfflineModel.dealPurchasedCoursesResp(this, mPurchasedCoursesResp);
         }
 
@@ -126,16 +114,25 @@ public class OfflineActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.offline_all_btn:
-                OfflineModel.pressAllBtn(this);
-                OfflineModel.showAllList(this);
-                break;
+        int i = v.getId();
+        if (i == R.id.offline_all_btn) {
+            // 全部
+            OfflineModel.pressAllBtn(this);
+            OfflineModel.showAllList(this);
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "All");
+            UmengManager.onEvent(this, "Video", map);
 
-            case R.id.offline_local_btn:
-                OfflineModel.pressLocalBtn(this);
-                OfflineModel.showLocalList(this);
-                break;
+        } else if (i == R.id.offline_local_btn) {
+            // 已下载
+            OfflineModel.pressLocalBtn(this);
+            OfflineModel.showLocalList(this);
+
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Done");
+            UmengManager.onEvent(this, "Video", map);
         }
     }
 }

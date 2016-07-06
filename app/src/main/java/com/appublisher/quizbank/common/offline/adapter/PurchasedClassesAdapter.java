@@ -16,6 +16,7 @@ import com.appublisher.quizbank.common.offline.netdata.PurchasedClassM;
 
 import java.util.ArrayList;
 
+
 /**
  * 已购课程列表Adapter
  */

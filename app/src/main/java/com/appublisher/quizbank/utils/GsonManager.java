@@ -55,6 +55,21 @@ public class GsonManager {
     }
 
     /**
+     * 获取数据模型
+     * @param jsonObject String
+     * @param cls 数据模型class
+     * @param <T> <T>
+     * @return 数据模型
+     */
+    public static <T> T getModel(String jsonObject, Class<T> cls) {
+        try {
+            return getGson().fromJson(jsonObject, cls);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * 获取Gson对象
      * @return Gson
      */

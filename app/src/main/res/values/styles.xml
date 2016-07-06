@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/apptheme</item>
     </style>
 
     <!-- ToolBar -->
@@ -29,7 +30,7 @@
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
     </style>
-
+7.0
     <!-- ActivityTransparent -->
     <style name="ActivityTransparent" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@color/scratch_paper_bg</item>

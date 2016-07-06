@@ -39,6 +39,7 @@ import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -48,6 +49,27 @@ public class UmengManager {
 
     public static final UMSocialService mController =
             UMServiceFactory.getUMSocialService("com.umeng.share");
+
+    /**
+     * 计数事件
+     *
+     * @param context Context
+     * @param eventId String
+     */
+    public static void onEvent(Context context, String eventId) {
+        MobclickAgent.onEvent(context, eventId);
+    }
+
+    /**
+     * 计数事件
+     *
+     * @param context Context
+     * @param eventId String
+     * @param map     当前事件的属性和取值（Key-Value键值对）
+     */
+    public static void onEvent(Context context, String eventId, Map<String, String> map) {
+        MobclickAgent.onEvent(context, eventId, map);
+    }
 
     /**
      * 发送计数事件
