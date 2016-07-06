@@ -54,8 +54,6 @@ public class CourseListAdapter extends BaseAdapter{
             viewHolder = new ViewHolder();
             viewHolder.tvTitle =
                     (TextView) convertView.findViewById(R.id.courselist_item_title);
-            viewHolder.tvTeacher =
-                    (TextView) convertView.findViewById(R.id.courselist_item_teacher);
             viewHolder.llZhibokeDesc =
                     (LinearLayout) convertView.findViewById(R.id.courselist_item_zhiboke_desc);
             viewHolder.tvLubokeDesc =
@@ -154,15 +152,6 @@ public class CourseListAdapter extends BaseAdapter{
             viewHolder.llZhibokeDesc.setVisibility(View.VISIBLE);
             viewHolder.tvLubokeDesc.setVisibility(View.GONE);
 
-            // 讲师
-            String teacher = "";
-            ArrayList<String> teachers = course.getLectors();
-            int size = teachers == null ? 0 : teachers.size();
-            for (int i = 0; i < size; i++) {
-                teacher = teacher + teachers.get(i) + " ";
-            }
-            viewHolder.tvTeacher.setText(teacher);
-
             // 描述详情
             setZhibokeDesc(course, viewHolder.tvZhibokeDesc);
 
@@ -218,7 +207,6 @@ public class CourseListAdapter extends BaseAdapter{
 
     class ViewHolder {
         TextView tvTitle;
-        TextView tvTeacher;
         TextView tvLubokeDesc;
         TextView tvZhibokeDesc;
         TextView tvStatus;
