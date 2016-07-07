@@ -37,6 +37,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.UmengManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +48,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -81,6 +83,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
 
     // 系统时间
     private String mServerCurrentTime;
+
+    // Umeng
+    private String mUMOrder = "0";
+    private String mUMEntryMock = "0";
+    private String mUMCourse = "0";
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
@@ -152,6 +159,17 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         //获取数据(模考列表)
         ProgressDialogManager.showProgressDialog(this, true);
         mRequest.getMockExerciseList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Order", mUMOrder);
+        map.put("EntryMock", mUMEntryMock);
+        map.put("Course", mUMCourse);
+        UmengManager.onEvent(this, "MockPre", map);
     }
 
     @Override
@@ -412,15 +430,11 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mockpre_bottom_right://课程报名
-//                if (is_purchased) {//已购
-//                    skipCourseDetailPage();
-//                } else {//报名
-//                    mRequest.mockSignUp(ParamBuilder.getSignUpMockCourse(course_id + ""));
-//                }
-
                 skipCourseDetailPage();
-
+                // Umeng
+                mUMCourse = "1";
                 break;
+
             case R.id.mockpre_bottom_left://进入考试
                 if (beginMock) {
                     Intent intent = new Intent(this, MeasureActivity.class);
@@ -432,6 +446,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     intent.putExtra("redo", false);
                     startActivity(intent);
                     finish();
+
+                    // Umeng
+                    mUMEntryMock = "1";
                 }
                 if (isDate) {
                     // 判断用户是否有手机号
@@ -453,6 +470,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     intent.putExtra("from", "mock");
                     startActivity(intent);
                     finish();
+
+                    // Umeng
+                    mUMEntryMock = "1";
                 }
 
                 if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) {
@@ -587,6 +607,9 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         startTimer();
         isDate = false;
+
+        // Umeng
+        mUMOrder = "1";
     }
 
     /**
