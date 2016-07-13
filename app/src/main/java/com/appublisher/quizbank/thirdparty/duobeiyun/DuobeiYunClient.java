@@ -135,7 +135,7 @@ public class DuobeiYunClient {
         new Thread(){
             @Override
             public void run() {
-                String version = NetUtil.get(BASE_URL + "version.txt?t=" + System.currentTimeMillis());
+                String version = NetUtil.get(BASE_URL + "version-yaoguo.txt?t=" + System.currentTimeMillis());
                 String basePlayUrl = BASE_URL + "yun-sdk-"+version+".zip";
                 File sdkPlayVersionFile = new File(dirPath + File.separator + "play/version.txt");
                 boolean download = false;
