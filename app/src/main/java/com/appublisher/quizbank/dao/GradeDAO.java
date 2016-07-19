@@ -159,15 +159,22 @@ public class GradeDAO {
      */
     public static void saveGradeTimestamp(String appVersion, long grade_timestamp) {
         Grade item = findByAppVersion(appVersion);
-        if (item == null) return;
-
-        try {
-            new Update(Grade.class)
-                    .set("grade_timestamp = ?", grade_timestamp)
-                    .where("app_version = ?", appVersion)
-                    .execute();
-        } catch (Exception e) {
-            // Empty
+        if (item == null) {
+            item = new Grade();
+            item.app_version = appVersion;
+            item.grade_timestamp = grade_timestamp;
+            item.timestamp = System.currentTimeMillis();
+            item.is_grade = 0;
+            item.save();
+        } else {
+            try {
+                new Update(Grade.class)
+                        .set("grade_timestamp = ?", grade_timestamp)
+                        .where("app_version = ?", appVersion)
+                        .execute();
+            } catch (Exception e) {
+                // Empty
+            }
         }
     }
 
@@ -199,13 +206,59 @@ public class GradeDAO {
      * @return 是否
      */
     public static boolean isOpenGradeSys(String appVersion) {
-        Grade item = findByAppVersion(appVersion);
-        if (item == null) return true;
-        if (item.is_grade == 1) return false;
-        if (item.grade_timestamp == 0) return true;
-        // 如果系统未检测到用户做出评价，但是评价动作已经超过了10秒，则默认视为完成评价
-        long dev = (System.currentTimeMillis() - item.grade_timestamp) / 1000;
-        return dev < 10;
+        if (appVersion == null) return false;
+
+        ArrayList<Grade> list = (ArrayList<Grade>) findAllByAppVersion();
+        if (list == null || list.size() == 0) {
+            return true;
+        }
+
+        Grade lastItem = list.get(list.size() - 1);
+        if (lastItem == null) {
+            return true;
+        }
+
+        if (appVersion.equals(lastItem.app_version)) {
+            // 版本号没有变化
+            if (lastItem.is_grade == 1) return false;
+            if (lastItem.grade_timestamp == 0) return true;
+            // 如果系统未检测到用户做出评价，但是评价动作已经超过了10秒，则默认视为完成评价
+            long dev = (System.currentTimeMillis() - lastItem.grade_timestamp) / 1000;
+            return dev < 10;
+        } else {
+            // 版本号发生了变化，判断版本号
+            // 第一层条件
+            try {
+                String lastVersion = lastItem.app_version;
+                // 本方法只适应两位以上的数字版本号
+                String[] lastVersionArray = lastVersion.split("\\.");
+                String[] appVersionArray = appVersion.split("\\.");
+
+                if (Integer.parseInt(appVersionArray[0])
+                        <= Integer.parseInt(lastVersionArray[0])) {
+                    // 第一位相等
+                    if (Integer.parseInt(appVersionArray[1])
+                            <= Integer.parseInt(lastVersionArray[1])) {
+                        // 第二位相等（小于的情况是为了防止版本号错误，理应不存在）
+                        // 等价于版本号没有发生变化
+                        if (lastItem.is_grade == 1) return false;
+                        if (lastItem.grade_timestamp == 0) return true;
+                        // 如果系统未检测到用户做出评价，但是评价动作已经超过了10秒，则默认视为完成评价
+                        long dev = (System.currentTimeMillis() - lastItem.grade_timestamp) / 1000;
+                        return dev < 10;
+                    } else {
+                        insert(appVersion);
+                        return true;
+                    }
+                } else {
+                    insert(appVersion);
+                    return true;
+                }
+            } catch (Exception e) {
+                insert(appVersion);
+                return false;
+            }
+        }
     }
 
     /**
