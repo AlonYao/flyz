@@ -6,12 +6,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
-import com.appublisher.quizbank.utils.Utils;
-
 import java.util.ArrayList;
 
 /**

@@ -2,6 +2,7 @@ package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -15,43 +16,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.HomeButtonManager;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
-import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
-import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
-import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.HomeWatcher;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.UmengManager;
-import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.sso.UMSsoHandler;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * 做题解析模块
  */
-public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback{
+public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback {
 
     public int mScreenHeight;
     public int mCurQuestionId;
@@ -71,9 +71,11 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     private long mPopupDismissTime;
     private PopupWindow mPopupWindow;
     public Request mRequest;
-    private HomeWatcher mHomeWatcher;
+    private HomeButtonManager mHomeWatcher;
 
-    /** Umeng */
+    /**
+     * Umeng
+     */
     public boolean mUmengIsPressHome;
     public long mUmengTimestamp;
     public String mUmengEntry;
@@ -98,7 +100,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         // 初始化成员变量
         mRequest = new Request(this, this);
         mUmengIsPressHome = false;
-        mHomeWatcher = new HomeWatcher(this);
+        mHomeWatcher = new HomeButtonManager(this);
         mUmengFavorite = "0";
         mUmengAnswerSheet = "0";
         mUmengFeedback = "0";
@@ -154,13 +156,13 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         }
 
         // Home键监听
-        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+        mHomeWatcher.setOnHomePressedListener(new HomeButtonManager.OnHomePressedListener() {
 
             @Override
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                UmengManager.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+                UmengManager.onEvent(MeasureAnalysisActivity.this, "Back");
             }
 
             @Override
@@ -260,7 +262,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // Umeng
-            UmengManager.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+            UmengManager.onEvent(MeasureAnalysisActivity.this, "Back");
             finish();
 
         } else if ("收藏".equals(item.getTitle())) {
@@ -304,23 +306,37 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
             skipToAnswerSheet();
         } else if ("分享".equals(item.getTitle())) {
             /** 构造友盟分享实体 **/
-            UmengShareEntity umengShareEntity = new UmengShareEntity();
-            umengShareEntity.setActivity(this);
-            umengShareEntity.setBitmap(Utils.getBitmapByView(mViewPager));
-            umengShareEntity.setFrom("measure_analysis");
+            String[] content = {"检验学霸的唯一标准就是做对题目，我出一道考考你？接招吗？",
+                    "发现一道比较难的题目，我可是做对了哦，你呢？",
+                    "长得美的这道题都做对了，比如我~~",
+                    "这道题我用时不到一分钟哦，看看你是不是比我快？"};
+            int random = new Random().nextInt(content.length);
+            Resources resources = getResources();
+            UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
+                    .setTitle(resources.getString(R.string.share_title))
+                    .setText(content[random])
+                    .setUmImage(new UMImage(this,Utils.getBitmapByView(mViewPager)))
+                    .setTargetUrl("http://share.zhiboke.net/question.php?question_id=" + mCurQuestionId);
+            UmengManager.shareAction(MeasureAnalysisActivity.this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
+                @Override
+                public void platform(SHARE_MEDIA platformType) {
+                    ////
+                }
+            });
+
 
             // 友盟分享文字处理
-            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
-            umShareContentEntity.setType("measure_analysis");
-            umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
-
-            // 友盟分享跳转链接处理
-            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-            urlEntity.setType("measure_analysis");
-            urlEntity.setQuestion_id(mCurQuestionId);
-            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
-
-            UmengManager.openShare(umengShareEntity);
+//            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+//            umShareContentEntity.setType("measure_analysis");
+//            umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+//
+//            // 友盟分享跳转链接处理
+//            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+//            urlEntity.setType("measure_analysis");
+//            urlEntity.setQuestion_id(mCurQuestionId);
+//            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+//
+//            UmengManager.openShare(umengShareEntity);
         }
 
         return super.onOptionsItemSelected(item);
@@ -329,7 +345,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     @Override
     public void onBackPressed() {
         // Umeng
-        UmengManager.sendToUmeng(MeasureAnalysisActivity.this, "Back");
+        UmengManager.onEvent(MeasureAnalysisActivity.this, "Back");
         super.onBackPressed();
     }
 
@@ -338,11 +354,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         super.onActivityResult(requestCode, resultCode, data);
 
         /**使用SSO授权必须添加如下代码 */
-        UMSsoHandler ssoHandler = UmengManager.mController.getConfig().getSsoHandler(requestCode);
-        if(ssoHandler != null){
-            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
-
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         // 答题卡回调
         if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SKIP && data != null) {
             int position = data.getIntExtra("position", 0);
@@ -452,6 +464,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     /**
      * 处理解析回调
+     *
      * @param response 解析数据回调
      */
     private void dealMeasureAnalysisResp(JSONObject response) {

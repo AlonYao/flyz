@@ -3,10 +3,10 @@ package com.appublisher.quizbank.model.business;
 import android.content.Context;
 import android.widget.LinearLayout;
 
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.customui.TreeItemHolder;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyResp;
-import com.appublisher.quizbank.utils.GsonManager;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 

@@ -6,7 +6,7 @@
     <string name="common_confirm">确认</string>
     <string name="common_text">无内容</string>
     <string name="netdata_error">数据异常</string>
-    <string name="netdata_overtime">您当前的网络有问题，请检查网络后重试</string>
+
     <string name="alert_n">取消</string>
     <string name="alert_p">确定</string>
     <string name="alert_mock_p">交卷</string>
@@ -196,4 +196,12 @@
     <string name="hehe">新版本</string>
     <string name="evaluation_update_text">更详细的等级评估</string>
     <string name="practice_update_text">可以跟小伙伴比较啦</string>
+
+    <!--分享-->
+    <string name="share_title">我的天天模考</string>
+    <string name="share_wb_content">戳右看看：</string>
+    <string name="share_wb_tag">#公考要过，就用腰果#</string>
+    <string name="share_wb_topic">#天天模考#</string>
+    <string name="share_wb_android">安卓</string>
+    <string name="share_wb_ios">(分享自@腰果公考)ios：</string>
 </resources>

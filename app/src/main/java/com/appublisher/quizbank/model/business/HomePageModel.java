@@ -15,18 +15,24 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.appublisher.lib_basic.AppDownload;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
+import com.appublisher.lib_course.opencourse.netdata.OpenCourseStatusResp;
+import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.model.db.User;
+import com.appublisher.lib_login.model.db.UserDAO;
+import com.appublisher.lib_login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.model.db.GlobalSetting;
-import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.netdata.course.GradeCourseResp;
 import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
@@ -34,11 +40,6 @@ import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.AppDownload;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.Utils;
-import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
@@ -62,8 +63,8 @@ public class HomePageModel {
 
         if (user == null) return;
 
-        Gson gson = GsonManager.initGson();
-        ExamItemModel examItemModel = gson.fromJson(user.exam, ExamItemModel.class);
+
+        ExamItemModel examItemModel = GsonManager.getModel(user.exam, ExamItemModel.class);
 
         if (examItemModel == null) return;
 
@@ -256,9 +257,8 @@ public class HomePageModel {
      */
     public static void dealPromoteResp(JSONObject response, HomePageFragment homePageFragment) {
         if (response == null) return;
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
         PromoteLiveCourseResp resp =
-                Globals.gson.fromJson(response.toString(), PromoteLiveCourseResp.class);
+                GsonManager.getModel(response.toString(), PromoteLiveCourseResp.class);
 
         setPromoteLiveCourse(homePageFragment.mActivity, homePageFragment.mView, resp);
     }
@@ -294,9 +294,9 @@ public class HomePageModel {
      */
     public static void dealOpenupCourseResp(JSONObject response,
                                             HomePageFragment homePageFragment) {
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
+
         GradeCourseResp gradeCourseResp =
-                Globals.gson.fromJson(response.toString(), GradeCourseResp.class);
+               GsonManager.getModel(response.toString(), GradeCourseResp.class);
 
         if (gradeCourseResp == null || gradeCourseResp.getResponse_code() != 1) return;
 
@@ -316,7 +316,7 @@ public class HomePageModel {
         ArrayList<ExamItemModel> list = examDetailModel.getExams();
         if (list == null) return;
 
-        int userExamId = LoginModel.getUserExamId();
+        int userExamId = LoginModel.getExamInfo().getExam_id();
         if (userExamId == 0) return;
 
         for (ExamItemModel examItemModel : list) {
@@ -333,8 +333,8 @@ public class HomePageModel {
                 curUserExam.setDate(date);
 
                 // 更新数据库
-                LoginModel.updateUserExam(
-                        GsonManager.getGson().toJson(curUserExam, UserExamInfoModel.class));
+                LoginModel.updateExamInfo(
+                        GsonManager.modelToString(curUserExam, UserExamInfoModel.class));
 
                 // 更新页面显示
                 long day = Utils.dateMinusNow(date);
@@ -352,7 +352,50 @@ public class HomePageModel {
      */
     public static void updateExam(ExamItemModel model, HomePageFragment fragment) {
         if (model == null) return;
-        LoginModel.updateUserExam(GsonManager.modelToString(model, ExamItemModel.class));
+        LoginModel.updateExamInfo(GsonManager.modelToString(model, ExamItemModel.class));
         setExamCountDown(fragment.mTvExam, fragment.mRequest);
+    }
+
+    /**
+     * 处理公开课状态回调
+     * @param response 回调数据
+     */
+    public static void dealOpenCourseStatusResp(JSONObject response) {
+        OpenCourseStatusResp openCourseStatusResp =
+                GsonManager.getModel(response, OpenCourseStatusResp.class);
+        if (openCourseStatusResp == null || openCourseStatusResp.getResponse_code() != 1) return;
+
+        Globals.openCourseStatus = openCourseStatusResp;
+    }
+
+    /**
+     * 设置公开课按钮
+     * @param activity Activity
+     * @param textView 公开课按钮控件
+     */
+    public static void setOpenCourseBtn(final Activity activity, TextView textView) {
+        // 更新按钮文字
+        String head = "免费公开课";
+        if (Globals.openCourseStatus != null && Globals.openCourseStatus.getType() != 0) {
+            String courseName = Globals.openCourseStatus.getCourse_name() == null
+                    ? ""
+                    : Globals.openCourseStatus.getCourse_name();
+
+            if (Globals.openCourseStatus.getType() == 1) {
+                head = "正在手机直播：\n" + courseName;
+            } else if (Globals.openCourseStatus.getType() == 2) {
+                head = "即将手机直播：\n" + courseName;
+            }
+        }
+        textView.setText(head);
+
+        // 跳转
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, OpenCourseActivity.class);
+                activity.startActivity(intent);
+            }
+        });
     }
 }

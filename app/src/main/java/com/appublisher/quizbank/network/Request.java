@@ -5,6 +5,8 @@ import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.appublisher.lib_basic.volley.BaseRequest;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.model.images.ImageCacheManager;
 
 import java.util.HashMap;

@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -25,7 +25,7 @@ import org.json.JSONObject;
 /**
  * 收藏夹
  */
-public class FavoriteFragment extends Fragment implements RequestCallback{
+public class FavoriteFragment extends Fragment implements RequestCallback {
 
     public Activity mActivity;
     public LinearLayout mContainer;

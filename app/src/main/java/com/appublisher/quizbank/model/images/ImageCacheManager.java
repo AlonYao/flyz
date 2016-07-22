@@ -5,7 +5,7 @@ import android.graphics.Bitmap.CompressFormat;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.lib_basic.volley.Request;
 
 /**
  * Implementation of volley's ImageCache interface. This manager tracks the application image loader and cache. 

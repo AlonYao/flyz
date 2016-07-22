@@ -2,9 +2,8 @@ package com.appublisher.quizbank;
 
 import android.content.SharedPreferences;
 
-import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseStatusResp;
+import com.appublisher.lib_course.opencourse.netdata.OpenCourseStatusResp;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
-import com.google.gson.Gson;
 
 /**
  * 全局变量
@@ -28,9 +27,6 @@ public class Globals {
 
     // 记录公开课状态数据模型
     public static OpenCourseStatusResp openCourseStatus;
-
-    // Gson对象
-    public static Gson gson;
 
     // 评价赠送课程数据
     public static RateCourseResp rateCourseResp;

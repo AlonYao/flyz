@@ -12,8 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
@@ -23,8 +29,6 @@ import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.model.business.HomePageModel;
@@ -37,17 +41,11 @@ import com.appublisher.quizbank.model.netdata.homepage.PaperM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperNoteM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.Utils;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -175,7 +173,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
      * 获取数据
      */
     private void getData() {
-        ProgressBarManager.showProgressBar(mView);
+//        ProgressBarManager.showProgressBar(mView);
 
         // 获取首页信息
         mRequest.getEntryData();
@@ -235,8 +233,8 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
      * @param response 首页数据回调
      */
     private void setContent(JSONObject response) {
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
-        HomePageResp homePageResp = Globals.gson.fromJson(response.toString(), HomePageResp.class);
+
+        HomePageResp homePageResp = GsonManager.getModel(response.toString(), HomePageResp.class);
         if (homePageResp == null || homePageResp.getResponse_code() != 1) {
             ProgressBarManager.hideProgressBar();
             return;
@@ -337,8 +335,8 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 break;
 
             case "free_open_course_status":
-                OpenCourseModel.dealOpenCourseStatusResp(response);
-                OpenCourseModel.setOpenCourseBtn(mActivity, mTvZhiboke);
+                HomePageModel.dealOpenCourseStatusResp(response);
+                HomePageModel.setOpenCourseBtn(mActivity, mTvZhiboke);
                 break;
 
             case "promote_live_course":
@@ -357,7 +355,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case "exam_list":
                 // 更新考试时间
-                ExamDetailModel exam = GsonManager.getGson().fromJson(
+                ExamDetailModel exam = GsonManager.getModel(
                         response.toString(), ExamDetailModel.class);
                 HomePageModel.updateExam(exam, mTvExam);
                 break;

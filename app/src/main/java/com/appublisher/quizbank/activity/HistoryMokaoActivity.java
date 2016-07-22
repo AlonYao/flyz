@@ -10,14 +10,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryMokaoAdapter;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoResp;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class HistoryMokaoActivity extends ActionBarActivity implements RequestCallback{
+public class HistoryMokaoActivity extends ActionBarActivity implements RequestCallback {
 
     private ListView mLvHistoryMokao;
     private ImageView mIvNull;

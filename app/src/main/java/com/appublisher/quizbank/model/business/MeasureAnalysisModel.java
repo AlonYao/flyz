@@ -3,13 +3,13 @@ package com.appublisher.quizbank.model.business;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;

@@ -2,10 +2,10 @@ package com.appublisher.quizbank.dao;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Utils;
 
 /**
  * 全局配置数据库表DAO层
@@ -175,6 +175,6 @@ public class GlobalSettingDAO {
     public static GlobalSettingsResp getGlobalSettingsResp() {
         GlobalSetting globalSetting = findById();
         if (globalSetting == null || globalSetting.content == null) return null;
-        return GsonManager.getObejctFromJSON(globalSetting.content, GlobalSettingsResp.class);
+        return GsonManager.getModel(globalSetting.content, GlobalSettingsResp.class);
     }
 }

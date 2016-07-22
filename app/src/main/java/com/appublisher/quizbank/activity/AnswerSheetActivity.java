@@ -11,6 +11,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
@@ -22,10 +25,6 @@ import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -38,9 +37,8 @@ import java.util.HashMap;
 /**
  * 答题卡
  */
-public class AnswerSheetActivity extends ActionBarActivity implements RequestCallback{
+public class AnswerSheetActivity extends ActionBarActivity implements RequestCallback {
 
-    private Gson mGson;
     private String mPaperName;
     private ExpandableHeightGridView mGridView;
 
@@ -75,7 +73,6 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         ScrollView svEntire = (ScrollView) findViewById(R.id.answer_sheet_sv_entire);
 
         // 成员变量初始化
-        mGson = new Gson();
 
         // 获取数据
         mUserAnswerList = (ArrayList<HashMap<String, Object>>)
@@ -191,7 +188,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         if (response == null) return;
 
         SubmitPaperResp submitPaperResp =
-                mGson.fromJson(response.toString(), SubmitPaperResp.class);
+                GsonManager.getModel(response.toString(), SubmitPaperResp.class);
 
         if (submitPaperResp == null || submitPaperResp.getResponse_code() != 1) return;
 
@@ -228,7 +225,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                 break;
 
             case "server_current_time":
-                ServerCurrentTimeResp resp = GsonManager.getGson().fromJson(
+                ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 AnswerSheetModel.dealServerCurrentTimeResp(resp, this);
                 break;

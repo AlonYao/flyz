@@ -3,6 +3,7 @@ package com.appublisher.quizbank.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,29 +20,25 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.HomeButtonManager;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.coursecenter.CourseModel;
+import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_pay.PayListener;
+import com.appublisher.lib_pay.PayWebViewHandler;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.pay.PayConstants;
-import com.appublisher.quizbank.common.pay.PayWebViewHandler;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.business.CourseModel;
-import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
-import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
-import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.model.business.WebviewModel;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.HomeWatcher;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Timer;
@@ -55,7 +52,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     public static WebView mWebView;
     private String mFrom;
     private String mUrl;
-    private HomeWatcher mHomeWatcher;
+    private HomeButtonManager mHomeWatcher;
     public static Request mRequest;
     private static int mOpencourseId;
     private long mUmengTimestamp;
@@ -112,7 +109,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mRequest = new Request(this, this);
         mHasShowOpenCourseConsult = false;
         mUmengQQ = "0";
-        mHomeWatcher = new HomeWatcher(this);
+        mHomeWatcher = new HomeButtonManager(this);
         mIsFromQQ = false;
 
         // 获取数据
@@ -161,7 +158,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mIsFromQQ = false;
 
         // Home键监听
-        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+        mHomeWatcher.setOnHomePressedListener(new HomeButtonManager.OnHomePressedListener() {
 
             @Override
             public void onHomePressed() {
@@ -207,6 +204,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             map.put("EnterLive", "1");
             map.put("QQ", mUmengQQ);
             long dur = System.currentTimeMillis() - mUmengTimestamp;
+            //onEventValue
             UmengManager.sendComputeEvent(this, "OnAir", map, (int) (dur / 1000));
         }
 
@@ -262,26 +260,38 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             // Umeng
             mUmengQQ = "1";
 
-            OpenCourseModel.setMarketQQ(this);
+            WebviewModel.setMarketQQ(this);
         } else if ("分享".equals(item.getTitle())) {
             /** 构造友盟分享实体 **/
-            UmengShareEntity umengShareEntity = new UmengShareEntity();
-            umengShareEntity.setActivity(this);
-            umengShareEntity.setContent("听说上过" + barTitle + ",一口气上岸不费劲儿～");
-            umengShareEntity.setFrom("course_detail");
-
-            // 友盟分享文字处理
-            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
-            umShareContentEntity.setType("course_detail");
-            umShareContentEntity.setExamName(barTitle);
-
-            // 友盟分享跳转链接处理
-            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-            urlEntity.setType("course_detail");
+            Resources resources = getResources();
             int course_id = getIntent().getIntExtra("course_id", -1);
-            urlEntity.setCourse_id(course_id);
-            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
-            UmengManager.openShare(umengShareEntity);
+            UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
+                    .setTitle(resources.getString(R.string.share_title))
+                    .setText("听说上过" + barTitle + ",一口气上岸不费劲儿～")
+                    .setTargetUrl("http://m.yaoguo.cn/terminalType/shareCourse.html?course_id=" + course_id);
+            UmengManager.shareAction(WebViewActivity.this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
+                @Override
+                public void platform(SHARE_MEDIA platformType) {
+
+                }
+            });
+//            UmengShareEntity umengShareEntity = new UmengShareEntity();
+//            umengShareEntity.setActivity(this);
+//            umengShareEntity.setContent();
+//            umengShareEntity.setFrom("course_detail");
+//
+//            // 友盟分享文字处理
+//            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+//            umShareContentEntity.setType("course_detail");
+//            umShareContentEntity.setExamName(barTitle);
+//
+//            // 友盟分享跳转链接处理
+//            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+//            urlEntity.setType("course_detail");
+//            int course_id = getIntent().getIntExtra("course_id", -1);
+//            urlEntity.setCourse_id(course_id);
+//            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+//            UmengManager.openShare(umengShareEntity);
         }
 
         return super.onOptionsItemSelected(item);
@@ -290,10 +300,10 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("open_course_url".equals(apiName))
-            OpenCourseModel.dealOpenCourseUrlResp(this, response);
+            WebviewModel.dealOpenCourseUrlResp(this, response);
 
         if ("open_course_consult".equals(apiName))
-            OpenCourseModel.dealOpenCourseConsultResp(this, response);
+            WebviewModel.dealOpenCourseConsultResp(this, response);
 
         ProgressDialogManager.closeProgressDialog();
     }
@@ -324,7 +334,12 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         mWebView.loadUrl(url);
 
         if ("course".equals(mFrom)) {
-            mWebView.addJavascriptInterface(new PayWebViewHandler(this), "handler");
+            mWebView.addJavascriptInterface(new PayWebViewHandler(this, new PayListener() {
+                @Override
+                public void isPaySuccess(boolean isPaySuccess, String orderId) {
+
+                }
+            }), "handler");
         }
 
         // 解决部分安卓机不弹出alert

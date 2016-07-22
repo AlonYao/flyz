@@ -19,13 +19,16 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.appublisher.quizbank.Globals;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.activity.ScaleImageActivity;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
-import com.appublisher.quizbank.activity.ScaleImageActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
@@ -38,12 +41,7 @@ import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.Utils;
 
 import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
@@ -365,10 +363,9 @@ public class MeasureModel {
                                               JSONObject response) {
         if (response == null) return;
 
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
 
         HistoryExerciseResp historyExerciseResp =
-                Globals.gson.fromJson(response.toString(), HistoryExerciseResp.class);
+                GsonManager.getModel(response.toString(), HistoryExerciseResp.class);
 
         if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
 
@@ -583,7 +580,7 @@ public class MeasureModel {
             status = "undone";
         }
 
-        new Request(activity).submitPaper(
+        new com.appublisher.quizbank.network.Request(activity).submitPaper(
                 ParamBuilder.submitPaper(
                         String.valueOf(activity.mPaperId),
                         String.valueOf(activity.mPaperType),
@@ -742,7 +739,7 @@ public class MeasureModel {
         activity.mPaperId = activity.getIntent().getIntExtra("paper_id", 0);
 
         ProgressDialogManager.showProgressDialog(activity, false);
-        new Request(activity, activity).submitPaper(
+        new com.appublisher.quizbank.network.Request(activity, activity).submitPaper(
                 ParamBuilder.submitPaper(
                         String.valueOf(activity.mPaperId),
                         String.valueOf(activity.mPaperType),

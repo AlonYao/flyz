@@ -1,7 +1,7 @@
 package com.appublisher.quizbank.network;
 
+import com.appublisher.lib_basic.OpenUDIDManager;
 import com.appublisher.quizbank.Globals;
-import com.appublisher.quizbank.utils.OpenUDID_manager;
 import com.appublisher.quizbank.utils.Utils;
 
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class ParamBuilder implements ApiConstants {
                 .append("&app_version=")
                 .append(Globals.appVersion)
                 .append("&uuid=")
-                .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
+                .append(OpenUDIDManager.getID() == null ? "" : OpenUDIDManager.getID())
                 .append("&user_id=")
                 .append(Globals.sharedPreferences.getString("user_id", ""))
                 .append("&user_token=")
@@ -70,7 +70,7 @@ public class ParamBuilder implements ApiConstants {
                 .append("&app_version=")
                 .append(Globals.appVersion)
                 .append("&uuid=")
-                .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
+                .append(OpenUDIDManager.getID() == null ? "" : OpenUDIDManager.getID())
                 .append("&user_id=")
                 .append(user_id)
                 .append("&user_token=")

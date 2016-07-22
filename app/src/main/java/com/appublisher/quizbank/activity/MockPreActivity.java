@@ -18,13 +18,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_login.activity.BindingMobileActivity;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.login.activity.BindingMobileActivity;
-import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
@@ -33,16 +37,9 @@ import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
 import com.appublisher.quizbank.model.netdata.mock.MockPre;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.UmengManager;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -235,7 +232,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
 
             case "server_current_time":
                 mRequest.getMockPreExamInfo(mock_id + "");
-                ServerCurrentTimeResp resp = GsonManager.getGson().fromJson(
+                ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 if (resp != null && resp.getResponse_code() == 1) {
                     mServerCurrentTime = resp.getCurrent_time();
@@ -244,7 +241,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
 
             case "mock_exercise_list":
                 MockListResp mockListResp =
-                        GsonManager.getObejctFromJSON(response.toString(), MockListResp.class);
+                        GsonManager.getModel(response.toString(), MockListResp.class);
                 if (mockListResp == null || mockListResp.getResponse_code() != 1) return;
 
                 ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
@@ -353,7 +350,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
      * @param response 回调数据
      */
     public void dealMockPreInfo(JSONObject response) {
-        MockPre mockPre = GsonManager.getObejctFromJSON(response.toString(), MockPre.class);
+        MockPre mockPre = GsonManager.getModel(response.toString(), MockPre.class);
         if (mockPre.getResponse_code() != 1) {
             return;
         }

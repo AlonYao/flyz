@@ -6,9 +6,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.pay.PayConstants;
-import com.appublisher.quizbank.utils.ToastManager;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;

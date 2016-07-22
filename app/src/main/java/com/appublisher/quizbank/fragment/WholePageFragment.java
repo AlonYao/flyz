@@ -19,7 +19,11 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.LocationManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
@@ -32,18 +36,12 @@ import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePapersResp;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.LocationManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,14 +97,13 @@ public class WholePageFragment extends Fragment implements RequestCallback,
             if (activity != null) {
                 switch (msg.what) {
                     case GET_LOCATION:
-                        LocationManager.getBaiduLocation(mActivity, new BDLocationListener() {
+                        LocationManager.getLocation(mActivity, new AMapLocationListener() {
                             @Override
-                            public void onReceiveLocation(BDLocation bdLocation) {
-                                if (bdLocation == null) {
+                            public void onLocationChanged(AMapLocation aMapLocation) {
+                                if (aMapLocation == null) {
                                     return;
                                 }
-
-                                WholePageModel.dealLocation(bdLocation);
+                                WholePageModel.dealLocation(aMapLocation);
                             }
                         });
 
@@ -226,32 +223,32 @@ public class WholePageFragment extends Fragment implements RequestCallback,
      */
     private AdapterView.OnItemClickListener xListViewOnClick =
             new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (mEntirePapers == null || position - 1 >= mEntirePapers.size()) return;
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (mEntirePapers == null || position - 1 >= mEntirePapers.size()) return;
 
-            EntirePaperM entirePaper = mEntirePapers.get(position - 1);
+                    EntirePaperM entirePaper = mEntirePapers.get(position - 1);
 
-            if (entirePaper == null) return;
+                    if (entirePaper == null) return;
 
-            int paperId = entirePaper.getId();
-            String paperName = entirePaper.getName();
+                    int paperId = entirePaper.getId();
+                    String paperName = entirePaper.getName();
 
-            Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
-            intent.putExtra("paper_type", "entire");
-            intent.putExtra("paper_id", paperId);
-            intent.putExtra("paper_name", paperName);
+                    Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+                    intent.putExtra("paper_type", "entire");
+                    intent.putExtra("paper_id", paperId);
+                    intent.putExtra("paper_name", paperName);
 
-            // Umeng
-            if (mUmengIsSelfPick) {
-                intent.putExtra("umeng_entry", "SelfPick");
-            } else {
-                intent.putExtra("umeng_entry", "Recom");
-            }
+                    // Umeng
+                    if (mUmengIsSelfPick) {
+                        intent.putExtra("umeng_entry", "SelfPick");
+                    } else {
+                        intent.putExtra("umeng_entry", "Recom");
+                    }
 
-            startActivity(intent);
-        }
-    };
+                    startActivity(intent);
+                }
+            };
 
     /**
      * 初始化省份菜单
@@ -449,6 +446,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 
     /**
      * 处理地区和年份回调
+     *
      * @param response 地区和年份回调
      */
     private void dealAreaYearResp(JSONObject response) {
@@ -466,6 +464,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 
     /**
      * 处理整卷回调
+     *
      * @param response 整卷回调
      */
     private void dealEntirePapersResp(JSONObject response) {

@@ -6,12 +6,12 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -21,7 +21,7 @@ import org.json.JSONObject;
 /**
  * 专项练习
  */
-public class SpecialProjectActivity extends ActionBarActivity implements RequestCallback{
+public class SpecialProjectActivity extends ActionBarActivity implements RequestCallback {
 
     public LinearLayout mContainer;
 

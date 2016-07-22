@@ -21,19 +21,25 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.LocationManager;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.coursecenter.CourseFragment;
+import com.appublisher.lib_course.offline.activity.OfflineActivity;
+import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
+import com.appublisher.lib_course.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.login.model.netdata.IsUserMergedResp;
-import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
-import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
-import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.SettingFragment;
@@ -45,21 +51,14 @@ import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ApiConstants;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.LocationManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.UmengManager;
-import com.appublisher.quizbank.utils.Utils;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity implements RequestCallback {
@@ -169,7 +168,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     protected void onPause() {
         super.onPause();
         // 关闭定位
-        LocationManager.stopBaiduLocation();
+        LocationManager.stop();
 
         // Umeng
         MobclickAgent.onPause(this);
@@ -269,8 +268,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
                     }
 
                     // Umeng统计
-                    if (position == 2)
-                        UmengManager.sendCountEvent(MainActivity.this, "CourseCenter", "Entry", "Drawer");
+                    if (position == 2){
+                        final Map<String,String> um_map = new HashMap<String,String>();
+                        um_map.put("Entry","Drawer");
+                        UmengManager.onEvent(MainActivity.this, "CourseCenter", um_map); ;
+                    }
                 }
             };
 

@@ -8,9 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
-import com.appublisher.quizbank.utils.Utils;
 
 import java.util.ArrayList;
 

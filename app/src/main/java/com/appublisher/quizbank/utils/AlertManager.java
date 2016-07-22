@@ -8,7 +8,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
+import com.appublisher.lib_login.activity.UserInfoActivity;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
@@ -16,13 +22,10 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
-import com.appublisher.quizbank.common.login.activity.UserInfoActivity;
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.opencourse.activity.OpenCourseUnstartActivity;
-import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -105,7 +108,7 @@ public class AlertManager {
                                     dialog.dismiss();
 
                                     // Umeng 练习统计
-                                    UmengManager.sendToUmeng(activity, "0");
+                                    UmengManager.onEvent(activity, "0");
 
                                     activity.finish();
                                 }
@@ -140,7 +143,7 @@ public class AlertManager {
                                     dialog.dismiss();
 
                                     // Umeng 练习统计
-                                    UmengManager.sendToUmeng(activity, "0");
+                                    UmengManager.onEvent(activity, "0");
 
                                     activity.finish();
                                 }
@@ -213,7 +216,7 @@ public class AlertManager {
                 }
 
                 // Umeng 练习类型统计
-                UmengManager.sendToUmeng(activity, "Again");
+                UmengManager.onEvent(activity, "Again");
             }
         });
 
@@ -222,14 +225,14 @@ public class AlertManager {
             @Override
             public void onClick(View v) {
                 // Umeng 练习类型统计
-                UmengManager.sendToUmeng(activity, "Back");
+                UmengManager.onEvent(activity, "Back");
 
                 finishActivity(activity);
             }
         });
 
         // 看个直播
-        OpenCourseModel.setOpenCourseBtn(activity, tvZhibo);
+        HomePageModel.setOpenCourseBtn(activity, tvZhibo);
     }
 
     /**
@@ -556,7 +559,7 @@ public class AlertManager {
      *
      * @param activity OpenCourseUnstartActivity
      */
-    public static void bookOpenCourseAlert(final OpenCourseUnstartActivity activity,
+    public static void bookOpenCourseAlert(final OpenCourseActivity activity,
                                            String mobileNum,
                                            final String courseId) {
         new AlertDialog.Builder(activity)

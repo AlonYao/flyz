@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.model.netdata.globalsettings;
-
-import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseRateTagItem;
+import com.appublisher.lib_course.opencourse.netdata.OpenCourseRateTagItem;
 import com.appublisher.quizbank.common.update.NewVersion;
 
 import java.util.ArrayList;

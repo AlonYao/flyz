@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.NoticeDetailActivity;
@@ -15,8 +16,6 @@ import com.appublisher.quizbank.model.netdata.notice.NoticeM;
 import com.appublisher.quizbank.model.netdata.notice.NoticeResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -36,8 +35,7 @@ public class SystemNoticeModel {
                                              JSONObject response) {
         if (response == null) return;
 
-        Gson gson = GsonManager.initGson();
-        NoticeResp noticeResp = gson.fromJson(response.toString(), NoticeResp.class);
+        NoticeResp noticeResp = GsonManager.getModel(response.toString(), NoticeResp.class);
 
         if (noticeResp == null || noticeResp.getResponse_code() != 1) return;
 

@@ -11,13 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.db.GlobalSetting;
-import com.appublisher.quizbank.utils.ToastManager;
-
 /**
  * 侧边栏按钮容器
  */

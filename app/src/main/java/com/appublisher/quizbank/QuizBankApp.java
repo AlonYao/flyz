@@ -6,8 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.utils.OpenUDID_manager;
+import com.appublisher.lib_basic.ActiveAndroidManager;
+import com.appublisher.lib_basic.OpenUDIDManager;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.tendcloud.tenddata.TCAgent;
@@ -44,17 +45,16 @@ public class QuizBankApp extends Application{
         TCAgent.init(this);
 
         // 初始化UUID
-        OpenUDID_manager.sync(this);
+        OpenUDIDManager.sync(this);
 
         // 初始化本地缓存
         Globals.sharedPreferences = getSharedPreferences("quizbank_store", 0);
 
         // 已登录状态下进行数据库切换
         if (LoginModel.isLogin()) {
-            String user_id = Globals.sharedPreferences.getString("user_id", "");
-            LoginModel.setDatabase(user_id, this);
+            ActiveAndroidManager.setDatabase(com.appublisher.lib_login.model.business.LoginModel.getUserId(), this);
         } else {
-            LoginModel.setDatabase("guest", this);
+            ActiveAndroidManager.setDatabase("guest", this);
         }
 
         // 友盟反馈

@@ -16,6 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.HomeButtonManager;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
@@ -28,14 +35,7 @@ import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.HomeWatcher;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.UmengManager;
-import com.appublisher.quizbank.utils.Utils;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -46,6 +46,7 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -95,7 +96,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private String mUmengPause; // 暂停
     private String mUmengAnswerSheet; // 答题卡
 
-    private HomeWatcher mHomeWatcher;
+    private HomeButtonManager mHomeWatcher;
     public static boolean mockpre = false;
 
     /**
@@ -184,7 +185,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mCurPosition = 0;
         mGson = new Gson();
         mHandler = new MsgHandler(this);
-        mHomeWatcher = new HomeWatcher(this);
+        mHomeWatcher = new HomeButtonManager(this);
         mUmengIsPressHome = false;
         mUmengDraft = "0";
         mUmengPause = "0";
@@ -232,13 +233,13 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         }
 
         // Home键监听
-        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+        mHomeWatcher.setOnHomePressedListener(new HomeButtonManager.OnHomePressedListener() {
 
             @Override
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                UmengManager.sendToUmeng(MeasureActivity.this, "0");
+                UmengManager.onEvent(MeasureActivity.this, "0");
             }
 
             @Override
@@ -505,11 +506,14 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 // Umeng 判断单个题是否完成
                 if (mUserAnswerList != null && position < mUserAnswerList.size()) {
                     HashMap<String, Object> map = mUserAnswerList.get(mCurPosition);
+                    final Map<String, String> um_map = new HashMap<String, String>();
                     if (map != null && map.containsKey("answer")
                             && map.get("answer") != null && !map.get("answer").equals("")) {
-                        UmengManager.sendCountEvent(MeasureActivity.this, "Problem", "Answer", "1");
+                        um_map.put("Answer", "1");
+                        UmengManager.onEvent(MeasureActivity.this, "Problem", um_map);
                     } else {
-                        UmengManager.sendCountEvent(MeasureActivity.this, "Problem", "Answer", "0");
+                        um_map.put("Answer", "0");
+                        UmengManager.onEvent(MeasureActivity.this, "Problem", um_map);
                     }
                 }
 
@@ -588,7 +592,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         if (isSave) {
             AlertManager.saveTestAlert(this);
         } else {
-            UmengManager.sendToUmeng(MeasureActivity.this, "0");
+            UmengManager.onEvent(MeasureActivity.this, "0");
             finish();
         }
     }
@@ -602,7 +606,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         if (response == null) return;
 
         SubmitPaperResp submitPaperResp =
-                GsonManager.getObejctFromJSON(response.toString(), SubmitPaperResp.class);
+                GsonManager.getModel(response.toString(), SubmitPaperResp.class);
 
         if (submitPaperResp == null || submitPaperResp.getResponse_code() != 1) return;
 
@@ -667,7 +671,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 break;
 
             case "server_current_time":
-                ServerCurrentTimeResp resp = GsonManager.getGson().fromJson(
+                ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 MeasureModel.dealServerCurrentTimeResp(this, resp);
                 break;

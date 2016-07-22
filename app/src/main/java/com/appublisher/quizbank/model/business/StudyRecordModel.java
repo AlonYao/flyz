@@ -4,15 +4,13 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.model.netdata.history.HistoryPapersResp;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.google.gson.Gson;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -33,9 +31,8 @@ public class StudyRecordModel {
                                              JSONObject response) {
         if (response == null) return;
 
-        Gson gson = GsonManager.initGson();
         HistoryPapersResp historyPapersResp =
-                gson.fromJson(response.toString(), HistoryPapersResp.class);
+                GsonManager.getModel(response.toString(), HistoryPapersResp.class);
 
         if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) return;
 

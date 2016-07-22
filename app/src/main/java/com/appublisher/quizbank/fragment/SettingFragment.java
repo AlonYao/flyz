@@ -19,25 +19,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_login.activity.ExamChangeActivity;
+import com.appublisher.lib_login.activity.UserInfoActivity;
+import com.appublisher.lib_login.model.db.User;
+import com.appublisher.lib_login.model.db.UserDAO;
+import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.ExamChangeActivity;
 import com.appublisher.quizbank.activity.QaActivity;
 import com.appublisher.quizbank.activity.SystemNoticeActivity;
-import com.appublisher.quizbank.common.login.activity.UserInfoActivity;
-import com.appublisher.quizbank.common.login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
-import com.appublisher.quizbank.dao.UserDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.db.GlobalSetting;
-import com.appublisher.quizbank.model.db.User;
 import com.appublisher.quizbank.model.images.DiskLruImageCache;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.network.ApiConstants;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -207,9 +206,9 @@ public class SettingFragment extends Fragment implements ApiConstants{
         // 显示学号&考试项目
         User user = UserDAO.findById();
         if (user != null) {
-            Gson gson = GsonManager.initGson();
-            final UserInfoModel userInfo = gson.fromJson(user.user, UserInfoModel.class);
-            ExamItemModel examInfo = gson.fromJson(user.exam, ExamItemModel.class);
+
+            final UserInfoModel userInfo = GsonManager.getModel(user.user, UserInfoModel.class);
+            ExamItemModel examInfo = GsonManager.getModel(user.exam, ExamItemModel.class);
 
             // 学号
             if (userInfo != null) {

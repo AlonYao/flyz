@@ -8,19 +8,19 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.ToastManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class MyAnalysisActivity extends ActionBarActivity implements RequestCallback{
+public class MyAnalysisActivity extends ActionBarActivity implements RequestCallback {
 
     private EditText mEditText;
     private String mQuestionId;

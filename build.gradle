@@ -1,4 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+import org.ajoberstar.grgit.Grgit
+import org.ajoberstar.grgit.operation.ResetOp
 
 buildscript {
     repositories {
@@ -6,10 +8,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
-//        classpath 'com.networkbench.newlens.agent.android:agent-gradle-plugin:2.2.5'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'org.ajoberstar:gradle-git:1.4.1'
+        // 听云
+        classpath 'com.networkbench.newlens.agent.android:agent-gradle-plugin:2.4.1.1'
     }
 }
 
@@ -18,5 +19,136 @@ allprojects {
         jcenter()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://raw.githubusercontent.com/umeng/mvn-repo-umeng/master/repository" }
+        // ActiveAndroid
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 }
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    TD_APP_ID = '81FEB0A34608D63C43DED2D2C79412C4'
+    UMENG_APPKEY = '54abaffcfd98c509a00000fe'
+    GT_APPID = ''
+    GT_APPKEY = ''
+    GT_APPSECRET = ''
+    GT_ACTION_APPID = 'com.igexin.sdk.action.4zI1oupRsKA37w5rRgHZw'
+    GT_AUTHORITIES = 'downloads.com.appublisher.dailyplan'
+    QQ_SCHEME = 'tencent1104297514'
+}
+
+task pullLibBasic {
+    doLast {
+        //noinspection GroovyAssignabilityCheck
+        def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_basic'
+        def libFile = file(path)
+        def branch = 'master'
+
+        if (libFile.exists()) {
+            //noinspection GroovyAssignabilityCheck
+            def grgit = Grgit.open(
+                    dir: file(path),
+                    creds: new org.ajoberstar.grgit.Credentials(
+                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+            grgit.checkout(branch: branch)
+            grgit.reset(mode: ResetOp.Mode.HARD)
+            grgit.pull()
+        } else {
+            //noinspection GroovyAssignabilityCheck
+            Grgit.clone(
+                    dir: file(path),
+                    uri: 'https://bitbucket.org/appublisher/android_lib_basic.git',
+                    refToCheckout: branch,
+                    credentials: new org.ajoberstar.grgit.Credentials(
+                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+        }
+    }
+}
+
+task pullLibLogin {
+    doLast {
+        //noinspection GroovyAssignabilityCheck
+        def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_login'
+        def libFile = file(path)
+        def branch = 'master'
+
+        if (libFile.exists()) {
+            //noinspection GroovyAssignabilityCheck
+            def grgit = Grgit.open(
+                    dir: file(path),
+                    creds: new org.ajoberstar.grgit.Credentials(
+                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+            grgit.checkout(branch: branch)
+            grgit.reset(mode: ResetOp.Mode.HARD)
+            grgit.pull()
+        } else {
+            //noinspection GroovyAssignabilityCheck
+            Grgit.clone(
+                    dir: file(path),
+                    uri: 'https://bitbucket.org/appublisher/android_lib_login.git',
+                    refToCheckout: branch,
+                    credentials: new org.ajoberstar.grgit.Credentials(
+                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+        }
+    }
+}
+
+//task pullLibCourse {
+//    doLast {
+//        //noinspection GroovyAssignabilityCheck
+//        def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_course'
+//        def libFile = file(path)
+//        def branch = 'master'
+//
+//        if (libFile.exists()) {
+//            //noinspection GroovyAssignabilityCheck
+//            def grgit = Grgit.open(
+//                    dir: file(path),
+//                    creds: new org.ajoberstar.grgit.Credentials(
+//                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+//            grgit.checkout(branch: branch)
+//            grgit.reset(mode: ResetOp.Mode.HARD)
+//            grgit.pull()
+//        } else {
+//            //noinspection GroovyAssignabilityCheck
+//            Grgit.clone(
+//                    dir: file(path),
+//                    uri: 'https://bitbucket.org/appublisher/android_lib_course.git',
+//                    refToCheckout: branch,
+//                    credentials: new org.ajoberstar.grgit.Credentials(
+//                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+//        }
+//    }
+//}
+
+task pullLibPay {
+    doLast {
+        //noinspection GroovyAssignabilityCheck
+        def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_pay'
+        def libFile = file(path)
+        def branch = 'master'
+
+        if (libFile.exists()) {
+            //noinspection GroovyAssignabilityCheck
+            def grgit = Grgit.open(
+                    dir: file(path),
+                    creds: new org.ajoberstar.grgit.Credentials(
+                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+            grgit.checkout(branch: branch)
+            grgit.reset(mode: ResetOp.Mode.HARD)
+            grgit.pull()
+        } else {
+            //noinspection GroovyAssignabilityCheck
+            Grgit.clone(
+                    dir: file(path),
+                    uri: 'https://bitbucket.org/appublisher/android_lib_pay.git',
+                    refToCheckout: branch,
+                    credentials: new org.ajoberstar.grgit.Credentials(
+                            BITBUCKET_USERNAME, BITBUCKET_PASSWORD))
+        }
+    }
+}
+
+task pullLibs(dependsOn: [pullLibBasic, pullLibLogin,pullLibPay])

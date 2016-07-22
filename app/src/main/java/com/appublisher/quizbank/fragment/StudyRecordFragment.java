@@ -9,25 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.business.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.ProgressBarManager;
-import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 学习记录
@@ -97,7 +96,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public void onPause() {
         super.onPause();
         // Umeng
-        UmengManager.sendCountEvent(mActivity, "Record", "Action", mUmengAction);
+        final Map<String,String> um_map = new HashMap<String,String>();
+        um_map.put("Action", mUmengAction);
+        UmengManager.onEvent(mActivity, "Record", um_map);
         MobclickAgent.onPageEnd("StudyRecordFragment");
 
         // TalkingData

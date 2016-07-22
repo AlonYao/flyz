@@ -10,22 +10,23 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.EvaluationModel;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.UmengManager;
+import com.appublisher.quizbank.utils.UMengManager;
 import com.db.chart.view.LineChartView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.sso.UMSsoHandler;
-
+import com.umeng.socialize.UMShareAPI;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 能力评估
@@ -51,6 +52,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
     public int mScore;
     public float mRank;
     public LinearLayout mContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,13 +77,15 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         mTvSummaryDate = (TextView) findViewById(R.id.evaluation_summarydate);
         mSvMain = (ScrollView) findViewById(R.id.evaluation_sv);
         parentView = findViewById(R.id.baseView);
-        mContainer = (LinearLayout)findViewById(R.id.category_container);
+        mContainer = (LinearLayout) findViewById(R.id.category_container);
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new Request(this, this).getEvaluation();
 
         // Umeng
-        UmengManager.sendCountEvent(this, "Mine", "Entry", "");
+        final Map<String, String> map = new HashMap<String, String>();
+        map.put("Entry", "");
+        UmengManager.onEvent(this, "Mine", map);
     }
 
     @Override
@@ -110,11 +114,8 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        /**使用SSO授权必须添加如下代码 */
-        UMSsoHandler ssoHandler = UmengManager.mController.getConfig().getSsoHandler(requestCode);
-        if (ssoHandler != null) {
-            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
+        //友盟分享回调(必写)
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -127,7 +128,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            UmengManager.checkUmengShare(this);
+            UMengManager.checkUmengShare(this);
         } else if ("分享".equals(item.getTitle())) {
             EvaluationModel.setUmengShare(this);
         }
@@ -137,7 +138,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
 
     @Override
     public void onBackPressed() {
-        UmengManager.checkUmengShare(this);
+        UMengManager.checkUmengShare(this);
     }
 
     @Override

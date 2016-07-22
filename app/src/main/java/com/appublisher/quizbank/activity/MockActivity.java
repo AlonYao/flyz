@@ -8,19 +8,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
 import com.android.volley.VolleyError;
-import com.appublisher.quizbank.Globals;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MockListAdapter;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.mock.MockListResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.ToastManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -108,7 +105,7 @@ public class MockActivity extends ActionBarActivity implements
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ToastManager.showOvertimeToash(this);
+//        ToastManager.showOvertimeToash(this);
         ProgressDialogManager.closeProgressDialog();
     }
 
@@ -139,9 +136,7 @@ public class MockActivity extends ActionBarActivity implements
             return;
         }
 
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
-
-        MockListResp mockListResp = Globals.gson.fromJson(response.toString(), MockListResp.class);
+        MockListResp mockListResp = GsonManager.getModel(response.toString(), MockListResp.class);
 
         if (mockListResp == null || mockListResp.getResponse_code() != 1) {
             mIvNull.setVisibility(View.VISIBLE);

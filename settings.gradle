@@ -1,1 +1,5 @@
-include ':app', ':umeng', ':treeviewlib', ':diagramlib'
+include ':app', ':treeviewlib', ':diagramlib', ':lib_basic', ':lib_login', ':lib_pay',':lib_course'
+project(':lib_basic').projectDir = new File(settingsDir, '../YaoguoLibs/lib_basic')
+project(':lib_login').projectDir = new File(settingsDir, '../YaoguoLibs/lib_login')
+project(':lib_pay').projectDir = new File(settingsDir, '../YaoguoLibs/lib_pay')
+project(':lib_course').projectDir = new File(settingsDir, '../YaoguoLibs/lib_course')

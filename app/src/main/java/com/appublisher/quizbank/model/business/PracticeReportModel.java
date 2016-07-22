@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.model.business;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
@@ -11,29 +12,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
-import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
-import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
-import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
-import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.ScoreM;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.PopupWindowManager;
-import com.appublisher.quizbank.utils.UmengManager;
-import com.appublisher.quizbank.utils.Utils;
-
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -496,9 +495,8 @@ public class PracticeReportModel {
         // 解析HistoryExerciseResp模型
         if (response == null) return;
         mActivity = activity;
-        if (Globals.gson == null) Globals.gson = GsonManager.initGson();
         HistoryExerciseResp historyExerciseResp =
-                Globals.gson.fromJson(response.toString(), HistoryExerciseResp.class);
+                GsonManager.getModel(response.toString(), HistoryExerciseResp.class);
         if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
 
         // 成员变量赋值
@@ -708,34 +706,85 @@ public class PracticeReportModel {
      * @param activity PracticeReportActivity
      */
     public static void setUmengShare(PracticeReportActivity activity) {
-        UmengShareEntity umengShareEntity = new UmengShareEntity();
-        umengShareEntity.setActivity(activity);
-        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
-        umengShareEntity.setFrom("practice_report");
 
-        // 友盟分享文字处理
-        UMShareContentEntity contentEntity = new UMShareContentEntity();
-        contentEntity.setType("practice_report");
-        contentEntity.setPaperType(activity.mPaperType);
-        contentEntity.setDefeat(activity.mDefeat);
-        contentEntity.setAccuracy(Utils.getPercent1(activity.mRightNum, activity.mTotalNum));
-        contentEntity.setScore(activity.mScore);
-        contentEntity.setExamName(activity.mPaperName);
-        umengShareEntity.setContent(UmengManager.getShareContent(contentEntity));
+        // 练习报告
+        GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
+        String baseUrl = "http://m.zhiboke.net/#/live/practiceReport?";
+        if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+            baseUrl = globalSettingsResp.getReport_share_url();
+        }
+        int exerciseId = activity.mExerciseId == 0 ? activity.mPaperId : activity.mExerciseId;
+        String paperName = activity.mTvPaperName.getText() == null ? "" : activity.mTvPaperName.getText().toString();
+        baseUrl += baseUrl + "user_id=" + LoginModel.getUserId()
+                + "&user_token=" + LoginModel.getUserToken()
+                + "&exercise_id=" + exerciseId
+                + "&paper_type=" + activity.mPaperType
+                + "&name=" + paperName;
 
-        // 友盟分享跳转链接处理
-        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-        urlEntity.setType("practice_report");
-        urlEntity.setUser_id(LoginModel.getUserId());
-        urlEntity.setUser_token(LoginModel.getUserToken());
-        urlEntity.setPaper_type(activity.mPaperType);
-        urlEntity.setName(
-                activity.mTvPaperName.getText() == null
-                        ? "" : activity.mTvPaperName.getText().toString());
-        urlEntity.setExercise_id(
-                activity.mExerciseId == 0 ? activity.mPaperId : activity.mExerciseId);
-        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+        // 练习报告
+        String content;
+        if ("mokao".equals(activity.mPaperType)) {
+            content = "刚刚打败了全国"
+                    + Utils.rateToPercent(activity.mDefeat)
+                    + "%的小伙伴，学霸非我莫属！";
+        } else if ("evaluate".equals(activity.mPaperType)) {
+            content = activity.mPaperName
+                    + "我估计能"
+                    + activity.mScore
+                    + "分，快来看看~";
+        } else if ("mock".equals(activity.mPaperType)) {
+            content = "我在"
+                    + activity.mPaperName
+                    + "中拿了"
+                    + activity.mScore
+                    + "分，棒棒哒！";
+        } else {
+            content = "刷了一套题，正确率竟然达到了"
+                    + Utils.getPercent1(activity.mRightNum, activity.mTotalNum)
+                    + "呢~";
+        }
+        Resources resources = activity.getResources();
+        UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
+                .setTitle(resources.getString(R.string.share_title))
+                .setText(content)
+                .setTargetUrl(baseUrl)
+                .setUmImage(new UMImage(activity, Utils.getBitmapByView(activity.mSvMain)));
+        UmengManager.shareAction(activity, umShareEntity, UmengManager.APP_TYPE_QUIZBANK, new UmengManager.PlatformInter() {
+            @Override
+            public void platform(SHARE_MEDIA platformType) {
 
-        UmengManager.openShare(umengShareEntity);
+            }
+        });
+
+
+//        UmengShareEntity umengShareEntity = new UmengShareEntity();
+//        umengShareEntity.setActivity(activity);
+//        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
+//        umengShareEntity.setFrom("practice_report");
+
+//        // 友盟分享文字处理
+//        UMShareContentEntity contentEntity = new UMShareContentEntity();
+//        contentEntity.setType("practice_report");
+//        contentEntity.setPaperType(activity.mPaperType);
+//        contentEntity.setDefeat(activity.mDefeat);
+//        contentEntity.setAccuracy(Utils.getPercent1(activity.mRightNum, activity.mTotalNum));
+//        contentEntity.setScore(activity.mScore);
+//        contentEntity.setExamName(activity.mPaperName);
+//        umengShareEntity.setContent(UmengManager.getShareContent(contentEntity));
+//
+//        // 友盟分享跳转链接处理
+//        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+//        urlEntity.setType("practice_report");
+//        urlEntity.setUser_id(LoginModel.getUserId());
+//        urlEntity.setUser_token(LoginModel.getUserToken());
+//        urlEntity.setPaper_type(activity.mPaperType);
+//        urlEntity.setName(
+//                activity.mTvPaperName.getText() == null
+//                        ? "" : activity.mTvPaperName.getText().toString());
+//        urlEntity.setExercise_id(
+//                activity.mExerciseId == 0 ? activity.mPaperId : activity.mExerciseId);
+//        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+//
+//        UmengManager.openShare(umengShareEntity);
     }
 }

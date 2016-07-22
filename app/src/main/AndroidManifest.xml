@@ -78,16 +78,10 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="@string/umeng_appkey" />
-        <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${APP_CHANNEL}" />
 
-        <!-- TalkingData -->
-        <meta-data
-            android:name="TD_APP_ID"
-            android:value="@string/talkingdata_appid" />
+
         <meta-data
             android:name="TD_CHANNEL_ID"
             android:value="${APP_CHANNEL}" />
@@ -101,12 +95,7 @@
                            com.appublisher.quizbank.model.db.User,
                            com.appublisher.quizbank.common.offline.model.db.Offline"/>
 
-        <!-- 支付宝 -->
-        <activity
-            android:name="com.alipay.sdk.app.H5PayActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
-            android:exported="false"
-            android:screenOrientation="behind" />
+
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -120,53 +109,9 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name=".wxapi.WXPayEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop" />
-        <!-- Activity -->
+
         <activity android:name=".activity.BaseActivity"/>
-        <!-- 登录注册模块Activity -->
-        <activity
-            android:name=".common.login.activity.LoginActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_login"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.NicknameChangeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_nickname_change"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.PwdChangeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_pwd_change"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.BindingMobileActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_register"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.SetpwdActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_setpwd"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.UserInfoActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_user_info"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.CannotGetSmsActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_cannot_get_sms"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ExamChangeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_exam_change"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.SystemNoticeActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -181,11 +126,6 @@
             android:name=".activity.MeasureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_measure"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ScaleImageActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="ScaleImageActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AnswerSheetActivity"
@@ -253,44 +193,9 @@
             android:label="@string/title_activity_app_guide"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".common.login.activity.MobileRegisterActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_mobile_register"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.RegisterSmsCodeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_register_sms_code"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.ForgetPwdActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_forget_pwd"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.EmailResetPwdActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_email_reset_pwd"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.CannotGetEmailActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_cannot_get_email"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.MobileResetPwdActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_mobile_reset_pwd"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.MockActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_mock"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.login.activity.BindingSmsCodeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_binding_sms_code"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MockPreActivity"
@@ -298,38 +203,6 @@
             android:label="@string/title_activity_mock_pre"
             android:screenOrientation="portrait" />
 
-        <!-- 公开课 -->
-        <activity
-            android:name=".common.opencourse.activity.OpenCourseUnstartActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_open_course_unstart"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.opencourse.activity.OpenCourseNoneActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_open_course_none"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.opencourse.activity.OpenCourseGradeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.opencourse.activity.OpenCourseMyGradeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-
-        <!-- 离线模块 -->
-        <activity
-            android:name=".common.offline.activity.OfflineActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.offline.activity.OfflineClassActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".common.offline.activity.OfflineWebViewActivity"
-            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>

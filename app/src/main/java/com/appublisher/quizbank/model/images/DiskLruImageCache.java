@@ -5,12 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-
 import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.quizbank.BuildConfig;
-import com.appublisher.quizbank.utils.Logger;
 import com.jakewharton.disklrucache.DiskLruCache;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;

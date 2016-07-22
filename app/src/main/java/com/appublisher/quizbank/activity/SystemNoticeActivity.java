@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.XListView;
@@ -16,8 +18,6 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.SystemNoticeModel;
 import com.appublisher.quizbank.model.netdata.notice.NoticeM;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -32,7 +32,7 @@ import java.util.Date;
  * 系统通知
  */
 public class SystemNoticeActivity extends ActionBarActivity implements
-        XListView.IXListViewListener, RequestCallback{
+        XListView.IXListViewListener, RequestCallback {
 
     public XListView mXListView;
     public ArrayList<NoticeM> mNotices;

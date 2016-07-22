@@ -14,13 +14,13 @@ import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
+import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.SplashActivity;
-import com.appublisher.quizbank.utils.FileManager;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ToastManager;
-import com.appublisher.quizbank.utils.Utils;
 
 import java.io.File;
 
@@ -43,7 +43,7 @@ public class AppUpdate {
         SharedPreferences sharedPreferences = activity.getSharedPreferences("updateVersion", activity.MODE_PRIVATE);
         String versionInfo = sharedPreferences.getString("versionInfo", "");
         if (versionInfo == "") return false;
-        NewVersion newVersion = GsonManager.getObejctFromJSON(versionInfo, NewVersion.class);
+        NewVersion newVersion = GsonManager.getModel(versionInfo, NewVersion.class);
         if (newVersion == null) return false;
         newAppVersion = newVersion.getApp_version();
         appDwonUrl = newVersion.getTarget_url();
@@ -223,7 +223,7 @@ public class AppUpdate {
         SharedPreferences sharedPreferences = context.getSharedPreferences("updateVersion", context.MODE_PRIVATE);
         String versionInfo = sharedPreferences.getString("versionInfo", "");
         if (versionInfo == "") return false;
-        NewVersion newVersion = GsonManager.getObejctFromJSON(versionInfo, NewVersion.class);
+        NewVersion newVersion = GsonManager.getModel(versionInfo, NewVersion.class);
         if (newVersion == null) return false;
         return Utils.compareVersion(newVersion.getApp_version(), Globals.appVersion) == 1;
     }

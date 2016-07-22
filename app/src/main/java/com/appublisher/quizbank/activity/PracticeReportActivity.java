@@ -12,8 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.HomeButtonManager;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
@@ -21,21 +25,16 @@ import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.HomeWatcher;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.appublisher.quizbank.utils.UmengManager;
-import com.appublisher.quizbank.utils.Utils;
+import com.appublisher.quizbank.utils.UMengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.sso.UMSsoHandler;
-
+import com.umeng.socialize.UMShareAPI;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 练习报告Activity
@@ -88,7 +87,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     public long mUmengTimestamp;
     public String mUmengStatus; // 1：未看 2：全部 3：错题
     public String mUmengEntry;
-    private HomeWatcher mHomeWatcher;
+    private HomeButtonManager mHomeWatcher;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -124,7 +123,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
 
         // 成员变量初始化
         mUmengStatus = "1";
-        mHomeWatcher = new HomeWatcher(this);
+        mHomeWatcher = new HomeButtonManager(this);
 
         // 获取数据
         mFrom = getIntent().getStringExtra("from");
@@ -176,13 +175,13 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         }
 
         // Home键监听
-        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+        mHomeWatcher.setOnHomePressedListener(new HomeButtonManager.OnHomePressedListener() {
 
             @Override
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                UmengManager.sendToUmeng(PracticeReportActivity.this, "Back");
+                UmengManager.onEvent(PracticeReportActivity.this, "Back");
             }
 
             @Override
@@ -220,12 +219,14 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     protected void onDestroy() {
         super.onDestroy();
         // Umeng
-        UmengManager.sendCountEvent(this, "Report", "Analysis", mUmengStatus);
+        final Map<String, String> um_map = new HashMap<String, String>();
+        um_map.put("Analysis", mUmengStatus);
+        UmengManager.onEvent(this, "Report", um_map);
     }
 
     @Override
     public void onBackPressed() {
-        UmengManager.checkUmengShare(this);
+        UMengManager.checkUmengShare(this);
     }
 
     @Override
@@ -238,7 +239,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            UmengManager.checkUmengShare(this);
+            UMengManager.checkUmengShare(this);
         } else if ("分享".equals(item.getTitle())) {
             PracticeReportModel.setUmengShare(this);
         }
@@ -250,10 +251,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         /**使用SSO授权必须添加如下代码 */
-        UMSsoHandler ssoHandler = UmengManager.mController.getConfig().getSsoHandler(requestCode);
-        if (ssoHandler != null) {
-            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -6,14 +6,13 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.QaResp;
 import com.appublisher.quizbank.network.Request;
-import com.appublisher.quizbank.network.RequestCallback;
-import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
-import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -23,7 +22,7 @@ import org.json.JSONObject;
 /**
  * 常见问题
  */
-public class QaActivity extends ActionBarActivity implements RequestCallback{
+public class QaActivity extends ActionBarActivity implements RequestCallback {
 
     private WebView mWebView;
 
@@ -78,8 +77,7 @@ public class QaActivity extends ActionBarActivity implements RequestCallback{
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) return;
 
-        Gson gson = GsonManager.initGson();
-        QaResp qaResp = gson.fromJson(response.toString(), QaResp.class);
+        QaResp qaResp = GsonManager.getModel(response.toString(), QaResp.class);
 
         if (qaResp == null || qaResp.getResponse_code() != 1) return;
 

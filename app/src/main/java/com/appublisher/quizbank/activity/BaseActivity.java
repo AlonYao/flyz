@@ -4,8 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 

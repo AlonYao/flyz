@@ -3,11 +3,12 @@ package com.appublisher.quizbank.model.business;
 import android.graphics.Color;
 import android.view.View;
 
+import com.amap.api.location.AMapLocation;
+import com.appublisher.lib_basic.LocationManager;
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
-import com.appublisher.quizbank.utils.LocationManager;
-import com.appublisher.quizbank.utils.ToastManager;
 import com.baidu.location.BDLocation;
 
 /**
@@ -19,7 +20,7 @@ public class WholePageModel {
      * 处理定位
      * @param bdLocation 定位信息
      */
-    public static void dealLocation(BDLocation bdLocation) {
+    public static void dealLocation(AMapLocation bdLocation) {
         // 省份
         final String province = bdLocation.getProvince();
 
@@ -82,7 +83,7 @@ public class WholePageModel {
             }
         });
 
-        LocationManager.stopBaiduLocation();
+        LocationManager.stop();
     }
 
     /**

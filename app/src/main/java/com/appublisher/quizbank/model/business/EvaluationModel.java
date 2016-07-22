@@ -1,31 +1,28 @@
 package com.appublisher.quizbank.model.business;
 
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.view.View;
-
+import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
-import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.model.entity.umeng.UMShareContentEntity;
-import com.appublisher.quizbank.model.entity.umeng.UMShareUrlEntity;
-import com.appublisher.quizbank.model.entity.umeng.UmengShareEntity;
+import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.evaluation.EvaluationResp;
 import com.appublisher.quizbank.model.netdata.evaluation.HistoryScoreM;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
-import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.PopupWindowManager;
-import com.appublisher.quizbank.utils.UmengManager;
-import com.appublisher.quizbank.utils.Utils;
 import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
 import com.db.chart.view.LineChartView;
 import com.db.chart.view.XController;
 import com.db.chart.view.YController;
-import com.google.gson.Gson;
-
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 /**
@@ -41,9 +38,7 @@ public class EvaluationModel {
      */
     public static void dealEvaluationResp(EvaluationActivity activity, JSONObject response) {
         if (response == null) return;
-
-        Gson gson = GsonManager.initGson();
-        EvaluationResp evaluationResp = gson.fromJson(response.toString(), EvaluationResp.class);
+        EvaluationResp evaluationResp = GsonManager.getModel(response.toString(), EvaluationResp.class);
 
         if (evaluationResp == null || evaluationResp.getResponse_code() != 1) return;
 
@@ -168,28 +163,76 @@ public class EvaluationModel {
      * @param activity EvaluationActivity
      */
     public static void setUmengShare(EvaluationActivity activity) {
-        UmengShareEntity umengShareEntity = new UmengShareEntity();
-        umengShareEntity.setActivity(activity);
-        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
-        umengShareEntity.setFrom("evaluation");
+        String content;
+        if (activity.mRank <= 1 && activity.mRank >= 0.75) {
+            // 100%-75%
+            content = "学习Day" + String.valueOf(activity.mLearningDays)
+                    + "，我的" + LoginModel.getUserExamName() + "考试已经刷到了"
+                    + String.valueOf(activity.mScore) + "分，排名前"
+                    + Utils.rateToPercent(activity.mRank) + "%，再也不用担心我的拖延症啦~";
+        } else if (activity.mRank < 0.75 && activity.mRank >= 0.5) {
+            // 75%-50%
+            content = "学习Day" + String.valueOf(activity.mLearningDays)
+                    + "，我的" + LoginModel.getUserExamName() + "考试已经刷到了"
+                    + String.valueOf(activity.mScore) + "分，排名前"
+                    + Utils.rateToPercent(activity.mRank) + "%，上岸指日可待~";
+        } else if (activity.mRank < 0.5 && activity.mRank >= 0.25) {
+            // 50%-25%
+            content = "学习Day" + String.valueOf(activity.mLearningDays)
+                    + "，我的" + LoginModel.getUserExamName() + "考试已经刷到了"
+                    + String.valueOf(activity.mScore) + "分，排名前"
+                    + Utils.rateToPercent(activity.mRank) + "%，成公就在眼前啦~";
+        } else {
+            // 25%-1%
+            content = "学习Day" + String.valueOf(activity.mLearningDays)
+                    + "，我的" + LoginModel.getUserExamName() + "考试已经刷到了"
+                    + String.valueOf(activity.mScore) + "分，排名前"
+                    + Utils.rateToPercent(activity.mRank) + "%，排名靠前也是很孤独的，谁来打败我啊？";
+        }
 
-        // 友盟分享文字处理
-        UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
-        umShareContentEntity.setType("evaluation");
-        umShareContentEntity.setLearningDays(activity.mLearningDays);
-        umShareContentEntity.setExamName(LoginModel.getUserExamName());
-        umShareContentEntity.setScore(activity.mScore);
-        umShareContentEntity.setRank(activity.mRank);
-        umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+        GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
+        String baseUrl = "http://m.zhiboke.net/#/live/assessment?";
+        if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+            baseUrl = globalSettingsResp.getEvaluate_share_url();
+        }
+        baseUrl = baseUrl + "user_id=" + LoginModel.getUserId()
+                + "&user_token=" + LoginModel.getUserToken();
 
-        // 友盟分享跳转链接处理
-        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-        urlEntity.setType("evaluation");
-        urlEntity.setUser_id(LoginModel.getUserId());
-        urlEntity.setUser_token(LoginModel.getUserToken());
-        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+        Resources resources = activity.getResources();
+        UmengManager.UMShareEntity shareEntity = new UmengManager.UMShareEntity()
+                .setTitle(resources.getString(R.string.share_title))
+                .setText(content)
+                .setTargetUrl(baseUrl);
 
-        UmengManager.openShare(umengShareEntity);
+        UmengManager.shareAction(activity, shareEntity, UmengManager.APP_TYPE_QUIZBANK, new UmengManager.PlatformInter() {
+            @Override
+            public void platform(SHARE_MEDIA platformType) {
+
+            }
+        });
+
+//        UmengShareEntity umengShareEntity = new UmengShareEntity();
+//        umengShareEntity.setActivity(activity);
+//        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
+//        umengShareEntity.setFrom("evaluation");
+//
+//        // 友盟分享文字处理
+//        UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
+//        umShareContentEntity.setType("evaluation");
+//        umShareContentEntity.setLearningDays(activity.mLearningDays);
+//        umShareContentEntity.setExamName(LoginModel.getUserExamName());
+//        umShareContentEntity.setScore(activity.mScore);
+//        umShareContentEntity.setRank(activity.mRank);
+//        umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
+//
+//        // 友盟分享跳转链接处理
+//        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
+//        urlEntity.setType("evaluation");
+//        urlEntity.setUser_id(LoginModel.getUserId());
+//        urlEntity.setUser_token(LoginModel.getUserToken());
+//        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
+//
+//        UmengManager.openShare(umengShareEntity);
     }
 
 }
