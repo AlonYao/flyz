@@ -343,6 +343,11 @@ android {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
                                     APP_CHANNEL: "公众号"]
         }
+
+        app_share {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "app_share"]
+        }
     }
 }
 
