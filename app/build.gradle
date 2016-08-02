@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 42
-        versionName "1.7.1"
+        versionCode 43
+        versionName "1.8.0"
     }
 
     buildTypes {
@@ -113,10 +113,10 @@ android {
                                     APP_CHANNEL: "samsung"]
         }
 
-        BDsem {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "BDsem"]
-        }
+//        BDsem {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "BDsem"]
+//        }
 
         qudao_360tui {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
@@ -159,10 +159,10 @@ android {
 //                                    APP_CHANNEL: "BDcpd"]
 //        }
 
-        liebao {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "liebao"]
-        }
+//        liebao {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "liebao"]
+//        }
 
 //        sem {
 //            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
