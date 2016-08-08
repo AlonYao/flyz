@@ -123,15 +123,15 @@ android {
                                     APP_CHANNEL: "360tui"]
         }
 
-        AppUpdate {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "AppUpdate"]
-        }
-
-        微信 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "微信"]
-        }
+//        AppUpdate {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+//                                    APP_CHANNEL: "AppUpdate"]
+//        }
+//
+//        微信 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "微信"]
+//        }
 
 //
 //        appub {
@@ -269,55 +269,55 @@ android {
 //                                    APP_CHANNEL: "sem20"]
 //        }
 
-        信息流01 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流01"]
-        }
-
-        信息流02 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流02"]
-        }
-
-        信息流03 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流03"]
-        }
-
-        信息流04 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流04"]
-        }
-
-        信息流05 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流05"]
-        }
-
-        信息流06 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流06"]
-        }
-
-        信息流07 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流07"]
-        }
-
-        信息流08 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流08"]
-        }
-
-        信息流09 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流09"]
-        }
-
-        信息流10 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "信息流10"]
-        }
+//        信息流01 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流01"]
+//        }
+//
+//        信息流02 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流02"]
+//        }
+//
+//        信息流03 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流03"]
+//        }
+//
+//        信息流04 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流04"]
+//        }
+//
+//        信息流05 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流05"]
+//        }
+//
+//        信息流06 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流06"]
+//        }
+//
+//        信息流07 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流07"]
+//        }
+//
+//        信息流08 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流08"]
+//        }
+//
+//        信息流09 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流09"]
+//        }
+//
+//        信息流10 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "信息流10"]
+//        }
 
         huodong360 {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
@@ -339,14 +339,19 @@ android {
                                     APP_CHANNEL: "360zhanshi"]
         }
 
-        公众号 {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "公众号"]
-        }
+//        公众号 {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "公众号"]
+//        }
+//
+//        app_share {
+//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+//                                    APP_CHANNEL: "app_share"]
+//        }
 
-        app_share {
-            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-                                    APP_CHANNEL: "app_share"]
+        txpyq {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "txpyq"]
         }
     }
 }
