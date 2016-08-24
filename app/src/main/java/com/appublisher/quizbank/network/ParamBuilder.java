@@ -141,6 +141,32 @@ public class ParamBuilder implements ApiConstants {
     }
 
     /**
+     * 第三方用户登录参数
+     *
+     * @param login_type 登录类型  0:手机/邮箱，1:新浪微博，2:微信，3:人人
+     * @param login_id   登录的id  手机号/邮箱，或者是第三方的open_id
+     * @param nickname   用户的昵称  第三方注册时对服务端有效，没有时传空
+     * @param password   用户密码
+     * @param avatar     用户头像
+     * @return params  用户登录参数
+     */
+    public static Map<String, String> socialLoginParams(String login_type,
+                                                        String login_id,
+                                                        String nickname,
+                                                        String password,
+                                                        String avatar,
+                                                        String channel) {
+        Map<String, String> params = new HashMap<>();
+        params.put("login_type", login_type);
+        params.put("login_id", login_id);
+        params.put("nickname", nickname);
+        params.put("password", password);
+        params.put("avatar", avatar);
+        params.put("channel", channel);
+        return params;
+    }
+
+    /**
      * 手机号信息
      *
      * @param mobile_num 手机号
@@ -178,6 +204,21 @@ public class ParamBuilder implements ApiConstants {
         Map<String, String> params = new HashMap<>();
         params.put("mobile_num", mobile_num);
         params.put("password", password);
+        return params;
+    }
+
+    /**
+     * 用户注册参数
+     *
+     * @param mobile_num 手机号
+     * @param password   密码
+     * @return 用户注册参数
+     */
+    public static Map<String, String> register(String mobile_num, String password, String channel) {
+        Map<String, String> params = new HashMap<>();
+        params.put("mobile_num", mobile_num);
+        params.put("password", password);
+        params.put("channel", channel);
         return params;
     }
 

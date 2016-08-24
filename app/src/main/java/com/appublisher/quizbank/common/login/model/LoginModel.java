@@ -63,6 +63,7 @@ public class LoginModel {
 
     private static LoginActivity mLoginActivity;
     public static int mPwdErrorCount;
+    public static final String CHANNEL = "UMENG_CHANNEL";
 
     /**
      * 构造函数
@@ -168,7 +169,9 @@ public class LoginModel {
                                                                 login_id,
                                                                 nickname,
                                                                 "",
-                                                                avatar));
+                                                                avatar,
+                                                                Utils.getApplicationMetaData(
+                                                                        mLoginActivity, CHANNEL)));
                                             } else {
                                                 ProgressDialogManager.closeProgressDialog();
                                             }
@@ -227,7 +230,9 @@ public class LoginModel {
                                                                 login_id,
                                                                 nickname,
                                                                 "",
-                                                                avatar));
+                                                                avatar,
+                                                                Utils.getApplicationMetaData(
+                                                                        mLoginActivity, CHANNEL)));
                                             } else {
                                                 ProgressDialogManager.closeProgressDialog();
                                             }

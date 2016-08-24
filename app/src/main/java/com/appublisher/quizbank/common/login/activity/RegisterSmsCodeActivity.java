@@ -29,6 +29,7 @@ import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
 import com.appublisher.quizbank.utils.ProgressDialogManager;
 import com.appublisher.quizbank.utils.ToastManager;
+import com.appublisher.quizbank.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -196,8 +197,11 @@ public class RegisterSmsCodeActivity extends ActionBarActivity
                     CommonResponseModel.class);
 
             if (commonResp != null && commonResp.getResponse_code() == 1) {
-                // 注册成功
-                mRequest.register(ParamBuilder.register(mUserPhone, mUserPwd));
+                // 注册
+                mRequest.register(ParamBuilder.register(
+                        mUserPhone,
+                        mUserPwd,
+                        Utils.getApplicationMetaData(this, LoginModel.CHANNEL)));
             } else {
                 // 验证码校验失败
                 ToastManager.showToast(this, getString(R.string.login_smscode_error));

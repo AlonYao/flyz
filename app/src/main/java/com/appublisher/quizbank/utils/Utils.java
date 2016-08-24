@@ -3,6 +3,7 @@ package com.appublisher.quizbank.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -488,6 +489,16 @@ public class Utils {
         }
 
         return packageInfo != null;
+    }
+
+    public static String getApplicationMetaData(Context context, String name) {
+        try {
+            ApplicationInfo appInfo = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return appInfo.metaData.getString(name);
+        } catch (PackageManager.NameNotFoundException e) {
+            return "";
+        }
     }
 
 }
