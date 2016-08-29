@@ -50,6 +50,7 @@
 
     <color name="mock_card_round">#ECEDEF</color>
     <color name="apptheme">#3AAD7F</color>
+    <color name="themecolor">#3AAD7F</color>
 
     <color name="popupwindow_backcolor">#a6000000</color>
 </resources>

@@ -33,12 +33,14 @@ import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.lib_course.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.lib_login.activity.LoginActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
+import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
@@ -76,13 +78,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     private SettingFragment mSettingFragment;
     private static Fragment mCurFragment;
     private static int mCurFragmentPosition;
-
     private DrawerLayout mDrawerLayout;
     private boolean mDoubleBackToExit;
     private Request mRequest;
     private String mFrom;
     public TextView mTvOpenCourseNumNotice;
-
     public static ListView mDrawerList;
     public static ImageView mIvDrawerRedPoint;
     public static DrawerAdapter mDrawerAdapter;
@@ -99,6 +99,12 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(!LoginModel.isLogin()){
+            final Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
 
         // View初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -196,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
 
         if (mCurFragment instanceof HomePageFragment
                 && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
-            MenuItemCompat.setShowAsAction(menu.add("评价").setIcon(R.drawable.homepage_grade),
+            MenuItemCompat.setShowAsAction(menu.add("小班").setIcon(R.drawable.vip_entry),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         } else if (mCurFragment instanceof CourseFragment) {
@@ -210,10 +216,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if ("评价".equals(item.getTitle())) {
-            ProgressDialogManager.showProgressDialog(this, true);
-            mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
-            mFrom = "menu";
+        if ("小班".equals(item.getTitle())) {
+            final Intent intent = new Intent(this, VipIndexActivity.class);
+            startActivity(intent);
         } else if ("下载".equals(item.getTitle())) {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);

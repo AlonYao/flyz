@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import com.appublisher.lib_basic.ActiveAndroidManager;
+import com.appublisher.lib_basic.LibBasicManager;
 import com.appublisher.lib_basic.OpenUDIDManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -20,11 +21,13 @@ import java.util.LinkedList;
 /**
  * QuizBankApp
  */
-public class QuizBankApp extends Application{
+public class QuizBankApp extends Application {
 
     public LinkedList<Activity> mActivityList = new LinkedList<>();
     public static QuizBankApp mInstance;
-    public QuizBankApp() { }
+
+    public QuizBankApp() {
+    }
 
     @Override
     public void onCreate() {
@@ -50,6 +53,12 @@ public class QuizBankApp extends Application{
         // 初始化本地缓存
         Globals.sharedPreferences = getSharedPreferences("quizbank_store", 0);
 
+        // 初始化基本库
+        LibBasicManager.init(this);
+
+        // 初始化登录注册模块
+        LoginModel.init(this);
+
         // 已登录状态下进行数据库切换
         if (LoginModel.isLogin()) {
             ActiveAndroidManager.setDatabase(com.appublisher.lib_login.model.business.LoginModel.getUserId(), this);
@@ -58,11 +67,11 @@ public class QuizBankApp extends Application{
         }
 
         // 友盟反馈
-        FeedbackAgent agent = new FeedbackAgent(this);
-        agent.sync();
+//        FeedbackAgent agent = new FeedbackAgent(this);
+//        agent.sync();
 
         // Umeng 统计
-        MobclickAgent.openActivityDurationTrack(false);
+//        MobclickAgent.openActivityDurationTrack(false);
 
         // 听云
 //        NBSAppAgent.setLicenseKey(getString(R.string.tingyun_appkey))
@@ -76,24 +85,24 @@ public class QuizBankApp extends Application{
 
     // 单例模式中获取唯一的QuizBankApp实例
     public static QuizBankApp getInstance() {
-        if(null == mInstance) {
+        if (null == mInstance) {
             mInstance = new QuizBankApp();
         }
         return mInstance;
     }
 
     // 添加Activity到容器中
-    public void addActivity(Activity activity)  {
+    public void addActivity(Activity activity) {
         if (mActivityList == null) mActivityList = new LinkedList<>();
 
         mActivityList.add(activity);
     }
 
     // 遍历所有Activity并finish
-    public void exit(){
+    public void exit() {
         if (mActivityList == null) return;
 
-        for(Activity activity : mActivityList) {
+        for (Activity activity : mActivityList) {
             activity.finish();
         }
     }

@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.network;
 
 import com.appublisher.lib_basic.OpenUDIDManager;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.utils.Utils;
 
@@ -37,9 +38,9 @@ public class ParamBuilder implements ApiConstants {
                 .append("&uuid=")
                 .append(OpenUDIDManager.getID() == null ? "" : OpenUDIDManager.getID())
                 .append("&user_id=")
-                .append(Globals.sharedPreferences.getString("user_id", ""))
+                .append(LoginModel.getUserId())
                 .append("&user_token=")
-                .append(Globals.sharedPreferences.getString("user_token", ""))
+                .append(LoginModel.getUserToken())
                 .append("&timestamp=")
                 .append(System.currentTimeMillis());
 

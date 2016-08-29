@@ -56,7 +56,7 @@
             android:layout_height="1dp"
             android:background="@color/common_line"/>
 
-        <com.appublisher.quizbank.customui.XListView
+        <com.appublisher.lib_basic.customui.XListView
             android:id="@+id/wholepage_xlistview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

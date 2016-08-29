@@ -80,21 +80,12 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${APP_CHANNEL}" />
-
-
         <meta-data
             android:name="TD_CHANNEL_ID"
             android:value="${APP_CHANNEL}" />
-
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.appublisher.quizbank.model.db.GlobalSetting,
-                           com.appublisher.quizbank.model.db.Grade,
-                           com.appublisher.quizbank.model.db.Mock,
-                           com.appublisher.quizbank.model.db.Paper,
-                           com.appublisher.quizbank.model.db.User,
-                           com.appublisher.quizbank.common.offline.model.db.Offline"/>
-
+            android:value="com.appublisher.quizbank.model.db.GlobalSetting,                            com.appublisher.quizbank.model.db.Grade,                            com.appublisher.quizbank.model.db.Mock,                            com.appublisher.quizbank.model.db.Paper,                            com.appublisher.lib_login.model.db.User,                            com.appublisher.lib_course.offline.model.db.Offline" />
 
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
@@ -109,8 +100,116 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".activity.BaseActivity" />
 
-        <activity android:name=".activity.BaseActivity"/>
+        <!-- 个推SDK配置开始 -->
+        <!-- 配置的第三方参数属性 -->
+        <meta-data
+            android:name="PUSH_APPID"
+            android:value="${GT_APPID}" />
+        <!-- 替换为第三方应用的APPID -->
+        <meta-data
+            android:name="PUSH_APPKEY"
+            android:value="${GT_APPKEY}" />
+        <!-- 替换为第三方应用的APPKEY -->
+        <meta-data
+            android:name="PUSH_APPSECRET"
+            android:value="${GT_APPSECRET}" />
+        <!-- 替换为第三方应用的APPSECRET -->
+        <!-- 配置SDK核心服务 -->
+        <service
+            android:name="com.igexin.sdk.PushService"
+            android:exported="true"
+            android:label="NotificationCenter"
+            android:process=":pushservice" />
+        <service
+            android:name="com.igexin.sdk.PushServiceUser"
+            android:exported="true"
+            android:label="NotificationCenterUser" />
+
+        <receiver
+            android:name=".broadcast.PushReceiver"
+            android:exported="false">
+            <intent-filter>
+
+                <!-- 个推 appID -->
+                <action android:name="${GT_ACTION_APPID}" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.igexin.sdk.PushReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="com.igexin.sdk.action.refreshls" />
+                <!-- 以下三项为可选的action声明，可大大提高service存活率和消息到达速度 -->
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.igexin.sdk.PushManagerReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.igexin.sdk.action.pushmanager" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.igexin.sdk.PushActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:process=":pushservice"
+            android:taskAffinity="com.igexin.sdk.PushActivityTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.igexin.sdk.GActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:process=":pushservice"
+            android:taskAffinity="com.igexin.sdk.PushActivityTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service
+            android:name="com.igexin.download.DownloadService"
+            android:process=":pushservice" />
+
+        <receiver android:name="com.igexin.download.DownloadReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="com.igexin.download.DownloadProvider"
+            android:authorities="${GT_AUTHORITIES}"
+            android:exported="true"
+            android:process=":pushservice" />
+        <!-- 替换为第三方应用的包名 -->
+        <activity
+            android:name="com.igexin.getuiext.activity.GetuiExtActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:process=":pushservice"
+            android:taskAffinity="android.task.myServicetask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <receiver
+            android:name="com.igexin.getuiext.service.PayloadReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.igexin.sdk.action.7fjUl2Z3LH6xYy7NQK4ni4" />
+                <action android:name="${GT_ACTION_APPID}" />
+                <!-- 替换为第三方应用的APPID -->
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.igexin.getuiext.service.GetuiExtService"
+            android:process=":pushservice" />
+        <!-- 个推SDK配置结束 -->
 
         <activity
             android:name=".activity.SystemNoticeActivity"
@@ -202,7 +301,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_mock_pre"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".common.vip.activity.VipIndexActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_vip_index"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

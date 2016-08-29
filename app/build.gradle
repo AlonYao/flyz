@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'newlens'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -11,6 +13,18 @@ android {
         targetSdkVersion 21
         versionCode 42
         versionName "1.7.1"
+
+        //参数
+        manifestPlaceholders = [
+                TD_APP_ID      : properties.getProperty("TD_APP_ID"),
+                UMENG_APPKEY   : properties.getProperty("UMENG_APPKEY"),
+                GT_APPID       : properties.getProperty("GT_APPID"),
+                GT_APPKEY      : properties.getProperty("GT_APPKEY"),
+                GT_APPSECRET   : properties.getProperty("GT_APPSECRET"),
+                GT_ACTION_APPID: properties.getProperty("GT_ACTION_APPID"),
+                GT_AUTHORITIES : properties.getProperty("GT_AUTHORITIES"),
+                QQ_SCHEME      : properties.getProperty("QQ_SCHEME")
+        ]
     }
 
     buildTypes {

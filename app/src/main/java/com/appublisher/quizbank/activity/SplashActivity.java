@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -121,8 +122,7 @@ public class SplashActivity extends Activity implements RequestCallback {
     public void skipToMainActivity() {
         // 页面跳转
         Class<?> cls;
-        boolean is_login = Globals.sharedPreferences.getBoolean("is_login", false);
-        if (is_login) {
+        if (LoginModel.isLogin()) {
             // 已登录
             if (LoginModel.hasExamInfo()) {
                 cls = MainActivity.class;
@@ -138,7 +138,7 @@ public class SplashActivity extends Activity implements RequestCallback {
 
         } else {
             // 未登录
-            cls = LoginActivity.class;
+            cls = MainActivity.class;
         }
 
         Intent intent = new Intent(SplashActivity.this, cls);
@@ -147,6 +147,7 @@ public class SplashActivity extends Activity implements RequestCallback {
 
         boolean isFirstStart = Globals.sharedPreferences.getBoolean("isFirstStart", true);
         if (isFirstStart) {
+
             // app 引导页
             intent = new Intent(SplashActivity.this, AppGuideActivity.class);
             startActivity(intent);

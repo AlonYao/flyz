@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.appublisher.quizbank.customui.XListView
+    <com.appublisher.lib_basic.customui.XListViewb
         android:id="@+id/studyrecord_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

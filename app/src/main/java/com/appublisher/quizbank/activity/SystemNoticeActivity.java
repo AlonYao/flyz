@@ -10,10 +10,10 @@ import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.customui.XListView;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.SystemNoticeModel;
 import com.appublisher.quizbank.model.netdata.notice.NoticeM;

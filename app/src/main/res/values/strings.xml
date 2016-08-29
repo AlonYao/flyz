@@ -183,6 +183,7 @@
     <string name="title_activity_app_guide">AppGuideActivity</string>
     <string name="title_activity_mock">模考估分</string>
     <string name="title_activity_mock_pre">模考总动员</string>
+    <string name="title_activity_vip_index">小班</string>
 
     <!-- 支付模块 -->
     <string name="wx_pay">微信支付结果</string>
@@ -204,4 +205,10 @@
     <string name="share_wb_topic">#天天模考#</string>
     <string name="share_wb_android">安卓</string>
     <string name="share_wb_ios">(分享自@腰果公考)ios：</string>
+
+    <!--vip -->
+    <string name="vip_index_evaluation">我的能力评估</string>
+    <string name="vip_index_course">我的课程</string>
+    <string name="vip_index_homework">我的作业</string>
+    <string name="vip_index_message">我的消息</string>
 </resources>
