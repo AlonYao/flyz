@@ -50,7 +50,7 @@ import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
-import com.appublisher.quizbank.network.ApiConstants;
+import com.appublisher.quizbank.network.QApiConstants;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
@@ -193,7 +193,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         menu.clear();
 
         // 测试服Flag
-        if ("dev".equals(ApiConstants.base)) {
+        if (QApiConstants.baseUrl.contains("dev")) {
             MenuItemCompat.setShowAsAction(menu.add("测试服"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 

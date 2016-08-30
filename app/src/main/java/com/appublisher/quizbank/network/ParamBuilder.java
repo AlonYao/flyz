@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class ParamBuilder implements ApiConstants {
+public class ParamBuilder implements QApiConstants {
 
     /**
      * 拼接通用参数

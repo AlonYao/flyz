@@ -8,7 +8,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QRequest extends Request implements ApiConstants {
+public class QRequest extends Request implements QApiConstants {
 
     private Context context;
 

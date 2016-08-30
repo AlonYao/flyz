@@ -2,14 +2,9 @@ package com.appublisher.quizbank.network;
 
 import android.graphics.Bitmap.CompressFormat;
 
-public interface ApiConstants {
-    // 服务器切换：dev为测试服务器，api为正式服务器
-//    String base = "dev";
-    String base = "spark";
+import com.appublisher.lib_basic.volley.ApiConstants;
 
-    String baseUrl = "http://api." + base + ".appublisher.com/";
-
-    String baseUrlImg = "http://img.edu.appublisher.com/";
+public interface QApiConstants extends ApiConstants{
 
     /**
      * 登录注册模块

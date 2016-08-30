@@ -36,7 +36,7 @@ import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.images.DiskLruImageCache;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
-import com.appublisher.quizbank.network.ApiConstants;
+import com.appublisher.quizbank.network.QApiConstants;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -45,7 +45,7 @@ import java.util.HashMap;
 /**
  * 设置
  */
-public class SettingFragment extends Fragment implements ApiConstants{
+public class SettingFragment extends Fragment implements QApiConstants {
 
     private Activity mActivity;
     private TextView mTvSno;
