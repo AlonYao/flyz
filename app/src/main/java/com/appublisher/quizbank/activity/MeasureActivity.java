@@ -34,7 +34,7 @@ import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
@@ -76,7 +76,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
 
     public static Toolbar mToolbar;
     public static Handler mHandler;
-    public static Request mRequest;
+    public static QRequest mQRequest;
     public static String mMockTime;
     public static int mMins;//分钟
     public static int mSec;//秒数
@@ -154,7 +154,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                         }
                         if (mock_duration == 0) {
                             // 停止发消息
-                            mRequest.getServerCurrentTime();
+                            mQRequest.getServerCurrentTime();
                         } else {
                             Message message = mHandler.obtainMessage(TIME_ON_MOCK);
                             mHandler.sendMessageDelayed(message, 1000);
@@ -190,7 +190,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         mUmengDraft = "0";
         mUmengPause = "0";
         mUmengAnswerSheet = "0";
-        mRequest = new Request(this, this);
+        mQRequest = new QRequest(this, this);
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(mToolbar);
@@ -566,7 +566,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     private void checkSave() {
         if (mockpre) {
             ProgressDialogManager.showProgressDialog(this);
-            mRequest.getServerCurrentTime();
+            mQRequest.getServerCurrentTime();
         } else {
             saveTest();
         }

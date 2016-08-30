@@ -16,7 +16,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -41,7 +41,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public ImageView mIvNull;
 
     private int mCount;
-    private Request mRequest;
+    private QRequest mQRequest;
     private View mView;
 
     /** Umeng */
@@ -58,7 +58,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         super.onCreate(savedInstanceState);
         mOffset = 0;
         mCount = 5;
-        mRequest = new Request(mActivity, this);
+        mQRequest = new QRequest(mActivity, this);
         mHistoryPapers = new ArrayList<>();
     }
 
@@ -127,13 +127,13 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public void onRefresh() {
         mOffset = 0;
         mHistoryPapers = new ArrayList<>();
-        mRequest.getHistoryPapers(mOffset, mCount);
+        mQRequest.getHistoryPapers(mOffset, mCount);
     }
 
     @Override
     public void onLoadMore() {
         mOffset = mOffset + mCount;
-        mRequest.getHistoryPapers(mOffset, mCount);
+        mQRequest.getHistoryPapers(mOffset, mCount);
     }
 
     /**

@@ -12,7 +12,6 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.activity.ExamChangeActivity;
-import com.appublisher.lib_login.activity.LoginActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
@@ -20,11 +19,13 @@ import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,8 +40,10 @@ public class SplashActivity extends Activity implements RequestCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        File file=  getApplicationContext().getCacheDir();
+        Logger.i("file=="+file.getAbsolutePath());
         // 获取全局配置
-        new Request(this, this).getGlobalSettings();
+        new QRequest(this, this).getGlobalSettings();
 
         // 应用版本更新
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();

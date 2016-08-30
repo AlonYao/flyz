@@ -38,7 +38,7 @@ import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.umeng.analytics.MobclickAgent;
 
@@ -58,7 +58,7 @@ public class HomePageModel {
      * 设置考试项目倒计时
      * @param textView textView
      */
-    public static void setExamCountDown(TextView textView, Request request) {
+    public static void setExamCountDown(TextView textView, QRequest QRequest) {
         User user = UserDAO.findById();
 
         if (user == null) return;
@@ -74,7 +74,7 @@ public class HomePageModel {
         long day = Utils.dateMinusNow(date);
         if (day < 0) {
             day = 0;
-            request.getExamList();
+            QRequest.getExamList();
         }
 
         String text = "距离" + name + "还有" + String.valueOf(day) + "天";
@@ -159,7 +159,7 @@ public class HomePageModel {
                 }
             };
 
-            new Request(activity).loadImage(displayContent, imageListener);
+            new QRequest(activity).loadImage(displayContent, imageListener);
 
         } else if ("text".equals(displayType)) {
             llPromote.setVisibility(View.VISIBLE);
@@ -283,7 +283,7 @@ public class HomePageModel {
         if (Globals.rateCourseResp == null || Globals.rateCourseResp.getResponse_code() != 1)
             return;
         ProgressDialogManager.showProgressDialog(homePageFragment.mActivity, false);
-        homePageFragment.mRequest.getRateCourse(ParamBuilder.getRateCourse(
+        homePageFragment.mQRequest.getRateCourse(ParamBuilder.getRateCourse(
                 "enroll", String.valueOf(Globals.rateCourseResp.getCourse_id())));
     }
 
@@ -353,7 +353,7 @@ public class HomePageModel {
     public static void updateExam(ExamItemModel model, HomePageFragment fragment) {
         if (model == null) return;
         LoginModel.updateExamInfo(GsonManager.modelToString(model, ExamItemModel.class));
-        setExamCountDown(fragment.mTvExam, fragment.mRequest);
+        setExamCountDown(fragment.mTvExam, fragment.mQRequest);
     }
 
     /**

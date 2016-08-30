@@ -33,7 +33,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.pay.PayConstants;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.WebviewModel;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -53,7 +53,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
     private String mFrom;
     private String mUrl;
     private HomeButtonManager mHomeWatcher;
-    public static Request mRequest;
+    public static QRequest mQRequest;
     private static int mOpencourseId;
     private long mUmengTimestamp;
     private String mUmengEntry;
@@ -81,7 +81,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
             if (activity != null) {
                 switch (msg.what) {
                     case TIME_ON:
-                        mRequest.getOpenCourseConsult(mOpencourseId);
+                        mQRequest.getOpenCourseConsult(mOpencourseId);
                         break;
                     default:
                         break;
@@ -106,7 +106,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
 
         // 成员变量初始化
         mHandler = new MsgHandler(this);
-        mRequest = new Request(this, this);
+        mQRequest = new QRequest(this, this);
         mHasShowOpenCourseConsult = false;
         mUmengQQ = "0";
         mHomeWatcher = new HomeButtonManager(this);
@@ -136,7 +136,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         if (!mIsFromQQ) {
             if ("opencourse_started".equals(mFrom)) {
                 ProgressDialogManager.showProgressDialog(this, true);
-                mRequest.getOpenCourseUrl(mOpencourseId);
+                mQRequest.getOpenCourseUrl(mOpencourseId);
             } else if ("opencourse_pre".equals(mFrom)) {
                 showWebView(mUrl
                         + "&user_id=" + LoginModel.getUserId()

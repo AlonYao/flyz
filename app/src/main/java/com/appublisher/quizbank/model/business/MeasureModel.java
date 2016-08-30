@@ -41,6 +41,7 @@ import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
 import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -324,20 +325,20 @@ public class MeasureModel {
             activity.mPaperId = activity.mExerciseId;
 
             ProgressDialogManager.showProgressDialog(activity, true);
-            MeasureActivity.mRequest.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
+            MeasureActivity.mQRequest.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
         } else {
             // 做新题
             switch (activity.mPaperType) {
                 case "auto":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mRequest.getAutoTraining();
+                    MeasureActivity.mQRequest.getAutoTraining();
                     break;
 
                 case "note":
                 case "error":
                 case "collect":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mRequest.getNoteQuestions(
+                    MeasureActivity.mQRequest.getNoteQuestions(
                             String.valueOf(activity.mHierarchyId),
                             activity.mPaperType);
                     break;
@@ -347,7 +348,7 @@ public class MeasureModel {
                 case "entire":
                 case "mokao":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mRequest.getPaperExercise(activity.mPaperId, activity.mPaperType);
+                    MeasureActivity.mQRequest.getPaperExercise(activity.mPaperId, activity.mPaperType);
                     break;
             }
         }
@@ -580,7 +581,7 @@ public class MeasureModel {
             status = "undone";
         }
 
-        new com.appublisher.quizbank.network.Request(activity).submitPaper(
+        new QRequest(activity).submitPaper(
                 ParamBuilder.submitPaper(
                         String.valueOf(activity.mPaperId),
                         String.valueOf(activity.mPaperType),
@@ -739,7 +740,7 @@ public class MeasureModel {
         activity.mPaperId = activity.getIntent().getIntExtra("paper_id", 0);
 
         ProgressDialogManager.showProgressDialog(activity, false);
-        new com.appublisher.quizbank.network.Request(activity, activity).submitPaper(
+        new QRequest(activity, activity).submitPaper(
                 ParamBuilder.submitPaper(
                         String.valueOf(activity.mPaperId),
                         String.valueOf(activity.mPaperType),

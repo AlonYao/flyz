@@ -24,7 +24,7 @@ import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.UMengManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -157,7 +157,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
                 || "mock".equals(mFrom)) {
             // 从学习记录、mini模考、历史模考、估分模考进入，需要重新获取数据
             ProgressDialogManager.showProgressDialog(this, true);
-            new Request(this, this).getHistoryExerciseDetail(mExerciseId, mPaperType);
+            new QRequest(this, this).getHistoryExerciseDetail(mExerciseId, mPaperType);
         } else {
             PracticeReportModel.getData(this);
         }

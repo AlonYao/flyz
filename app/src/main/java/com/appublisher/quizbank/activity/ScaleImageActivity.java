@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -29,7 +29,7 @@ public class ScaleImageActivity extends Activity{
 		PhotoView imageView = (PhotoView) findViewById(R.id.full_screen_imageView);
 		
 		if(url != null && !url.equals("")){
-			new Request(this).loadImage(url, imageView);
+			new QRequest(this).loadImage(url, imageView);
 		} else if(filePath != null && !filePath.equals("")) {
 			imageView.setImageBitmap(BitmapFactory.decodeFile(filePath));
 		}

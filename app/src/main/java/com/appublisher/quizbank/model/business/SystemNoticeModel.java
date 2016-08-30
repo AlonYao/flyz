@@ -15,7 +15,7 @@ import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.notice.NoticeM;
 import com.appublisher.quizbank.model.netdata.notice.NoticeResp;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 
 import org.json.JSONObject;
 
@@ -75,7 +75,7 @@ public class SystemNoticeModel {
                             (ImageView) view.findViewById(R.id.notice_item_redpoint);
 
                     // 通知服务器已读
-                    new Request(activity).readNotification(
+                    new QRequest(activity).readNotification(
                             ParamBuilder.readNotification(String.valueOf(notice.getId())));
 
                     // 跳转

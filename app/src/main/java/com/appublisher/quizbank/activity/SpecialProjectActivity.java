@@ -11,7 +11,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -38,7 +38,7 @@ public class SpecialProjectActivity extends ActionBarActivity implements Request
 
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        new Request(this, this).getNoteHierarchy("all");
+        new QRequest(this, this).getNoteHierarchy("all");
     }
 
     @Override

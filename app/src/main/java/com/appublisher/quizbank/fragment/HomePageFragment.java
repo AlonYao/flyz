@@ -18,7 +18,6 @@ import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
@@ -40,7 +39,7 @@ import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
 import com.appublisher.quizbank.model.netdata.homepage.PaperM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperNoteM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -69,7 +68,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
     private int mOnResumeCount;
     public TextView mTvExam;
     public View mView;
-    public Request mRequest;
+    public QRequest mQRequest;
     public LinearLayout mPromote;
     public TextView mTvZhiboke;
     public Activity mActivity;
@@ -112,7 +111,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         RoundedImageView ivAvatar = (RoundedImageView) mView.findViewById(R.id.homepage_avatar);
 
         // 成员变量初始化
-        mRequest = new Request(mActivity, this);
+        mQRequest = new QRequest(mActivity, this);
         mOnResumeCount = 0;
 
         // 设置头像
@@ -129,7 +128,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
         // 如果本地没有全局配置，获取全局配置，保证能获取到模考估分的状态
         if (GlobalSettingDAO.findById() == null) {
-            mRequest.getGlobalSettings();
+            mQRequest.getGlobalSettings();
         } else {
             setMockBtn();
         }
@@ -176,13 +175,13 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 //        ProgressBarManager.showProgressBar(mView);
 
         // 获取首页信息
-        mRequest.getEntryData();
+        mQRequest.getEntryData();
 
         // 获取公开课信息
-        mRequest.getFreeOpenCourseStatus();
+        mQRequest.getFreeOpenCourseStatus();
 
         // 获取快讯
-        mRequest.getPromoteLiveCourse();
+        mQRequest.getPromoteLiveCourse();
     }
 
     /**
@@ -224,7 +223,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         dealGradeAlert();
 
         // 考试项目倒计时
-        HomePageModel.setExamCountDown(mTvExam, mRequest);
+        HomePageModel.setExamCountDown(mTvExam, mQRequest);
     }
 
     /**

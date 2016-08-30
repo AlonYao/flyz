@@ -24,7 +24,7 @@ import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -112,7 +112,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                 public void onClick(View v) {
                     if ("mockpre".equals(mFrom)) {
                         ProgressDialogManager.showProgressDialog(AnswerSheetActivity.this);
-                        new Request(AnswerSheetActivity.this, AnswerSheetActivity.this)
+                        new QRequest(AnswerSheetActivity.this, AnswerSheetActivity.this)
                                 .getServerCurrentTime();
                     } else {
                         AnswerSheetModel.submitPaper(AnswerSheetActivity.this);

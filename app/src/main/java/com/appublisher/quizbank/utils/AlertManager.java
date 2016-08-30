@@ -29,7 +29,7 @@ import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -483,7 +483,7 @@ public class AlertManager {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 提交登出信息至服务器
-                                new Request(activity, activity).deleteErrorQuestion(
+                                new QRequest(activity, activity).deleteErrorQuestion(
                                         ParamBuilder.deleteErrorQuestion(
                                                 String.valueOf(activity.mCurQuestionId)));
 
@@ -531,7 +531,7 @@ public class AlertManager {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ProgressDialogManager.showProgressDialog(activity, false);
-                                new Request(activity, activity).submitPaper(
+                                new QRequest(activity, activity).submitPaper(
                                         ParamBuilder.submitPaper(
                                                 String.valueOf(activity.mPaperId),
                                                 String.valueOf(activity.mPaperType),
@@ -571,7 +571,7 @@ public class AlertManager {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ProgressDialogManager.showProgressDialog(activity, false);
-                                new Request(activity, activity).bookOpenCourse(
+                                new QRequest(activity, activity).bookOpenCourse(
                                         ParamBuilder.bookOpenCourse(courseId));
 
                                 dialog.dismiss();
@@ -632,7 +632,7 @@ public class AlertManager {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                new Request(activity).reportErrorQuestion(
+                                new QRequest(activity).reportErrorQuestion(
                                         ParamBuilder.reportErrorQuestion(
                                                 String.valueOf(activity.mCurQuestionId), type, ""));
 

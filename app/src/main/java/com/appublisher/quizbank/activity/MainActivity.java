@@ -52,7 +52,7 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ApiConstants;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -80,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     private static int mCurFragmentPosition;
     private DrawerLayout mDrawerLayout;
     private boolean mDoubleBackToExit;
-    private Request mRequest;
+    private QRequest mQRequest;
     private String mFrom;
     public TextView mTvOpenCourseNumNotice;
     public static ListView mDrawerList;
@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
-        mRequest = new Request(this, this);
+        mQRequest = new QRequest(this, this);
 
         /** 侧边栏设置 */
 
@@ -151,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // 记录用户评价行为
         if (GradeDAO.isShowGradeAlert(Globals.appVersion)) {
             // 提前获取评价课程数据
-            mRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
+            mQRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
         }
 
         // Add Activity
@@ -167,7 +167,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // TalkingData
         TCAgent.onResume(this);
         // 检测账号是否被合并
-        mRequest.isUserMerged(LoginModel.getUserId());
+        mQRequest.isUserMerged(LoginModel.getUserId());
     }
 
     @Override

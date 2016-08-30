@@ -13,7 +13,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -83,7 +83,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback 
      */
     private void getData() {
         ProgressBarManager.showProgressBar(mView);
-        new Request(mActivity, this).getNoteHierarchy(KnowledgeTreeModel.TYPE_ERROR);
+        new QRequest(mActivity, this).getNoteHierarchy(KnowledgeTreeModel.TYPE_ERROR);
     }
 
     @Override

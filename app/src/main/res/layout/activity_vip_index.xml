@@ -10,6 +10,7 @@
         layout="@layout/toolbar" />
 
     <ScrollView
+        android:id="@+id/container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar">
@@ -29,9 +30,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="taotao"
                     android:textColor="@color/common_text"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <!-- 头像 -->
                 <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -70,16 +70,18 @@
                     android:layout_below="@+id/ev_txt"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="hahahahahah"
                     android:textColor="@color/common_text"
-                    android:textSize="20sp" />
+                    android:textSize="14sp" />
 
                 <ImageView
+                    android:id="@+id/setting_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/exam_txt"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="-10dp"
+                    android:padding="10dp"
                     android:src="@drawable/vip_index_setting" />
 
             </RelativeLayout>

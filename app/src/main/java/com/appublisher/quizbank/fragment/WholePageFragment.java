@@ -35,7 +35,7 @@ import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePaperM;
 import com.appublisher.quizbank.model.netdata.wholepage.EntirePapersResp;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
@@ -55,7 +55,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 
     private PopupWindow mPwProvince;
     private PopupWindow mPwYear;
-    private Request mRequest;
+    private QRequest mQRequest;
     private Gson mGson;
     private ArrayList<Integer> mYears;
     private TextView mTvLastYear;
@@ -126,7 +126,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 成员变量初始化
-        mRequest = new Request(mActivity, this);
+        mQRequest = new QRequest(mActivity, this);
         mGson = new Gson();
         mCurAreaId = 0;
         mCurYear = 0;
@@ -159,7 +159,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 
         // 获取数据
         ProgressBarManager.showProgressBar(mMainView);
-        mRequest.getAreaYear();
+        mQRequest.getAreaYear();
 
         // 省份
         rlProvince.setOnClickListener(new View.OnClickListener() {
@@ -328,7 +328,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
             public void onClick(View v) {
                 ProgressBarManager.showProgressBar(mMainView);
                 mEntirePapers = null;
-                mRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
+                mQRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
                 mPwProvince.dismiss();
 
                 // Umeng
@@ -426,7 +426,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
             public void onClick(View v) {
                 ProgressBarManager.showProgressBar(mMainView);
                 mEntirePapers = null;
-                mRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
+                mQRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
                 mPwYear.dismiss();
 
                 mUmengIsSelfPick = true;
@@ -459,7 +459,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mAreas = areaYearResp.getArea();
         mYears = areaYearResp.getYear();
 
-        mRequest.getEntirePapers(0, 0, 0, 5, "true");
+        mQRequest.getEntirePapers(0, 0, 0, 5, "true");
     }
 
     /**
@@ -554,7 +554,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     public void onRefresh() {
         mOffset = 0;
         mEntirePapers = null;
-        mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
+        mQRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
     }
 
     /**
@@ -563,6 +563,6 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     @Override
     public void onLoadMore() {
         mOffset = mOffset + mCount;
-        mRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
+        mQRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
     }
 }

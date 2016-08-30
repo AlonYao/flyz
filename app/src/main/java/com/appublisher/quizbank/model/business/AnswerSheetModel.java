@@ -13,7 +13,7 @@ import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.adapter.EntireAnswerSheetAdapter;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 
 import org.json.JSONArray;
@@ -203,7 +203,7 @@ public class AnswerSheetModel {
             AlertManager.answerSheetNoticeAlert(activity, redoSubmit, duration_total, questions);
         } else {
             ProgressDialogManager.showProgressDialog(activity, false);
-            new Request(activity, activity).submitPaper(
+            new QRequest(activity, activity).submitPaper(
                     ParamBuilder.submitPaper(
                             String.valueOf(activity.mPaperId),
                             String.valueOf(activity.mPaperType),

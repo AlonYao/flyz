@@ -17,7 +17,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.EvaluationModel;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.UMengManager;
 import com.db.chart.view.LineChartView;
 import com.tendcloud.tenddata.TCAgent;
@@ -80,7 +80,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         mContainer = (LinearLayout) findViewById(R.id.category_container);
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        new Request(this, this).getEvaluation();
+        new QRequest(this, this).getEvaluation();
 
         // Umeng
         final Map<String, String> map = new HashMap<String, String>();

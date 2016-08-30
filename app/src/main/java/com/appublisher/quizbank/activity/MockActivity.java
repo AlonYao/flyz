@@ -17,7 +17,7 @@ import com.appublisher.quizbank.adapter.MockListAdapter;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.mock.MockListResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -50,7 +50,7 @@ public class MockActivity extends ActionBarActivity implements
         CommonModel.setBarTitle(this, title);
 
         // 成员变量初始化
-        Request request = new Request(this, this);
+        QRequest QRequest = new QRequest(this, this);
 
         // View 初始化
         mLvMock = (ListView) findViewById(R.id.mock_lv);
@@ -58,7 +58,7 @@ public class MockActivity extends ActionBarActivity implements
 
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        request.getMockExerciseList();
+        QRequest.getMockExerciseList();
     }
 
     @Override

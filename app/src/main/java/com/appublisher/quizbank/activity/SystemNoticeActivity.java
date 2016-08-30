@@ -17,7 +17,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.SystemNoticeModel;
 import com.appublisher.quizbank.model.netdata.notice.NoticeM;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -41,7 +41,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
     public ImageView mIvNull;
 
     private int mCount;
-    private Request mRequest;
+    private QRequest mQRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
         // 成员变量初始化
         mOffset = 0;
         mCount = 10;
-        mRequest = new Request(this, this);
+        mQRequest = new QRequest(this, this);
 
         // XListView 配置
         mXListView.setXListViewListener(this);
@@ -66,7 +66,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
 
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getNotifications(mOffset, mCount);
+        mQRequest.getNotifications(mOffset, mCount);
     }
 
     @Override
@@ -112,13 +112,13 @@ public class SystemNoticeActivity extends ActionBarActivity implements
     @Override
     public void onRefresh() {
         mOffset = 0;
-        mRequest.getNotifications(mOffset, mCount);
+        mQRequest.getNotifications(mOffset, mCount);
     }
 
     @Override
     public void onLoadMore() {
         mOffset = mOffset + mCount;
-        mRequest.getNotifications(mOffset, mCount);
+        mQRequest.getNotifications(mOffset, mCount);
     }
 
     @Override

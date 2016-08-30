@@ -1,49 +1,26 @@
 package com.appublisher.quizbank.network;
 
 import android.content.Context;
-import android.widget.ImageView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
-import com.appublisher.lib_basic.volley.BaseRequest;
+import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.quizbank.model.images.ImageCacheManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Request extends BaseRequest implements ApiConstants {
+public class QRequest extends Request implements ApiConstants {
 
     private Context context;
 
     private static Boolean imageCacheInit = false;
 
-    /**
-     * 非回调式请求使用
-     *
-     * @param context 上下文
-     */
-    public Request(Context context) {
-        if (mQueue == null) {
-            mQueue = Volley.newRequestQueue(context);
-        }
-        this.context = context;
+    public QRequest(Context context) {
+        super(context);
     }
 
-    /**
-     * 回调式请求使用
-     *
-     * @param context  上下文
-     * @param callback 回调监听器
-     */
-    public Request(Context context, RequestCallback callback) {
-        if (mQueue == null) {
-            mQueue = Volley.newRequestQueue(context);
-        }
-        setCallbackListener(callback);
-        this.context = context;
+    public QRequest(Context context, RequestCallback callback) {
+        super(context, callback);
     }
-
     /*********************
      *     				 *
      * 	数据获取接口代码块	 *
@@ -104,7 +81,7 @@ public class Request extends BaseRequest implements ApiConstants {
      * 专项练习获取题目
      *
      * @param note_id 知识点id
-     * @param type 类型: all：所有题目 error：只从错题里抽 collect：只从收藏的题目里抽
+     * @param type    类型: all：所有题目 error：只从错题里抽 collect：只从收藏的题目里抽
      */
     public void getNoteQuestions(String note_id,
                                  String type) {
@@ -134,7 +111,7 @@ public class Request extends BaseRequest implements ApiConstants {
      * 获取错题收藏
      *
      * @param note_id 知识点id
-     * @param type 类型: collect:收藏 error:错题
+     * @param type    类型: collect:收藏 error:错题
      */
     public void collectErrorQuestions(String note_id,
                                       String type) {
@@ -267,7 +244,7 @@ public class Request extends BaseRequest implements ApiConstants {
      */
     public void getOpenCourseUrl(int course_id) {
         asyncRequest(ParamBuilder.finalUrl(getOpenCourseUrl)
-                + "&is_open=true&course_id=" + course_id,
+                        + "&is_open=true&course_id=" + course_id,
                 "open_course_url", "object");
     }
 
@@ -564,75 +541,6 @@ public class Request extends BaseRequest implements ApiConstants {
      */
     public void mockSignUp(Map<String, String> params) {
         postRequest(ParamBuilder.finalUrl(mockSignUp), params, "mock_signup", "object");
-    }
-
-    /*********************
-     *     				 *
-     * 	图片加载方法代码块	 *
-     * 					 *
-     *********************/
-
-    /**
-     * 加载图片
-     *
-     * @param url       图片地址
-     * @param imageView 图片控件
-     */
-    public void loadImage(String url, ImageView imageView) {
-        if (!imageCacheInit || ImageCacheManager.getInstance().minWidth != 0) {
-            ImageCacheManager.getInstance().minWidth = 0;
-            createImageCache();
-        }
-
-        ImageLoader imageLoader = ImageCacheManager.getInstance().getImageLoader();
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, 0, 0);
-        imageLoader.get(url, listener);
-
-        // 如果取失败，换备用地址重取一次
-        if (ImageCacheManager.getInstance().mBitmapCache != null
-                && !ImageCacheManager.getInstance().mBitmapCache.success) {  // 基于
-            imageLoader.get(url, listener);
-        } else if (ImageCacheManager.getInstance().mDistCache != null
-                && !ImageCacheManager.getInstance().mDistCache.success) {
-            imageLoader.get(url.replace("http://dl.cdn.appublisher.com/", baseUrlImg), listener);
-        }
-    }
-
-    /**
-     * 加载图片(用于放大显示过小的图片)
-     *
-     * @param url 图片地址
-     */
-    public void loadImage(String url, ImageLoader.ImageListener listener) {
-        if (!imageCacheInit || ImageCacheManager.getInstance().minWidth != 0) {
-            ImageCacheManager.getInstance().minWidth = 0;
-            createImageCache();
-        }
-
-        ImageLoader imageLoader = ImageCacheManager.getInstance().getImageLoader();
-        imageLoader.get(url, listener);
-
-        // 如果取失败，换备用地址重取一次
-        if (ImageCacheManager.getInstance().mBitmapCache != null && !ImageCacheManager.getInstance().mBitmapCache.success) {  // 基于
-            imageLoader.get(url, listener);
-        } else if (ImageCacheManager.getInstance().mDistCache != null && !ImageCacheManager.getInstance().mDistCache.success) {
-            imageLoader.get(url.replace("http://dl.cdn.appublisher.com/", baseUrlImg), listener);
-        }
-    }
-
-    /**
-     * Create the image cache. Uses Memory Cache by default.
-     * Change to Disk for a Disk based LRU implementation.
-     */
-    private void createImageCache() {
-        ImageCacheManager icm = ImageCacheManager.getInstance();
-        icm.init(context,
-                DISK_IMAGECACHE_FOLDER
-                , DISK_IMAGECACHE_SIZE
-                , DISK_IMAGECACHE_COMPRESS_FORMAT
-                , DISK_IMAGECACHE_QUALITY
-                , ImageCacheManager.CacheType.DISK);
-        imageCacheInit = true;
     }
 
     /**

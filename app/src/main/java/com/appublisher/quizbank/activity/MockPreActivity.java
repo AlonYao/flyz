@@ -36,7 +36,8 @@ import com.appublisher.quizbank.model.netdata.mock.MockListResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
 import com.appublisher.quizbank.model.netdata.mock.MockPre;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +54,7 @@ import java.util.TimerTask;
 public class MockPreActivity extends ActionBarActivity implements RequestCallback, View.OnClickListener {
     private LinearLayout examdeailContainer;
     private LinearLayout rankingContainer;
-    private Request mRequest;
+    private QRequest mQRequest;
     private int mock_id;//模考id
     private String paper_name;
     private String mock_time;
@@ -147,7 +148,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         isExercise = false;
         //成员变量初始化
         mHandler = new MsgHandler(this);
-        mRequest = new Request(this, this);
+        mQRequest = new QRequest(this, this);
     }
 
     @Override
@@ -155,7 +156,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         super.onResume();
         //获取数据(模考列表)
         ProgressDialogManager.showProgressDialog(this, true);
-        mRequest.getMockExerciseList();
+        mQRequest.getMockExerciseList();
     }
 
     @Override
@@ -231,7 +232,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 break;
 
             case "server_current_time":
-                mRequest.getMockPreExamInfo(mock_id + "");
+                mQRequest.getMockPreExamInfo(mock_id + "");
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 if (resp != null && resp.getResponse_code() == 1) {
@@ -251,7 +252,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                     if (mock_id <= 0) {
                         ToastManager.showToast(this, "没有相应的模考");
                     } else {
-                        mRequest.getServerCurrentTime();
+                        mQRequest.getServerCurrentTime();
                     }
                 }
 
@@ -456,7 +457,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                         intent.putExtra("mock_id", mock_id);
                         startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
                     } else {
-                        mRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
+                        mQRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
                     }
                 }
                 if (isExercise) {//进入练习报告页
@@ -473,7 +474,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 }
 
                 if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) {
-                    mRequest.getServerCurrentTime();
+                    mQRequest.getServerCurrentTime();
                 }
 
                 break;
@@ -591,7 +592,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == ActivitySkipConstants.BOOK_MOCK_RESULT) {//绑定成功
-            mRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
+            mQRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
         } else if (resultCode == ActivitySkipConstants.MOBILE_BOOK_MOCK_RESULT) {//已经预约成功
             dealBookMockSuccess();
         }

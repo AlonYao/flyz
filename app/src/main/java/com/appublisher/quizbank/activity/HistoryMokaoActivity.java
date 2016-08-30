@@ -17,7 +17,7 @@ import com.appublisher.quizbank.adapter.HistoryMokaoAdapter;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoResp;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -50,7 +50,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         super.onResume();
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
-        new Request(this, this).getHistoryMokao();
+        new QRequest(this, this).getHistoryMokao();
 
         // Umeng
         MobclickAgent.onPageStart("HistoryMokaoActivity");

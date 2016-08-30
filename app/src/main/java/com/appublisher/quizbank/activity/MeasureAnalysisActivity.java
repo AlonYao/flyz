@@ -32,7 +32,7 @@ import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
@@ -70,7 +70,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     private long mPopupDismissTime;
     private PopupWindow mPopupWindow;
-    public Request mRequest;
+    public QRequest mQRequest;
     private HomeButtonManager mHomeWatcher;
 
     /**
@@ -98,7 +98,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // 初始化成员变量
-        mRequest = new Request(this, this);
+        mQRequest = new QRequest(this, this);
         mUmengIsPressHome = false;
         mHomeWatcher = new HomeButtonManager(this);
         mUmengFavorite = "0";
@@ -129,7 +129,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if (("collect".equals(mAnalysisType) || "error".equals(mAnalysisType))
                 && !"study_record".equals(mFrom)) {
             ProgressDialogManager.showProgressDialog(this, true);
-            mRequest.collectErrorQuestions(String.valueOf(mHierarchyId), mAnalysisType);
+            mQRequest.collectErrorQuestions(String.valueOf(mHierarchyId), mAnalysisType);
 
         } else {
             //noinspection unchecked
@@ -285,7 +285,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
                 mUmengFavorite = "1";
             }
 
-            mRequest.collectQuestion(ParamBuilder.collectQuestion(
+            mQRequest.collectQuestion(ParamBuilder.collectQuestion(
                     String.valueOf(mCurQuestionId), mCollect));
 
         } else if ("反馈".equals(item.getTitle())) {

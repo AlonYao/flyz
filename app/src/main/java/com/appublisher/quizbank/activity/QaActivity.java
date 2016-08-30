@@ -12,7 +12,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.QaResp;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -39,7 +39,7 @@ public class QaActivity extends ActionBarActivity implements RequestCallback {
         mWebView.setBackgroundColor(0);
 
         ProgressDialogManager.showProgressDialog(this, true);
-        new Request(this, this).getQa();
+        new QRequest(this, this).getQa();
     }
 
     @Override

@@ -13,7 +13,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.Request;
+import com.appublisher.quizbank.network.QRequest;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -84,7 +84,7 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
             if (mEditText.getText().toString().length() < 3) {
                 ToastManager.showToast(this, "字数不够……最少输入三个字");
             } else {
-                new Request(this).reportErrorQuestion(ParamBuilder.reportErrorQuestion(
+                new QRequest(this).reportErrorQuestion(ParamBuilder.reportErrorQuestion(
                         mQuestionId, mType, mEditText.getText().toString()));
 
                 ToastManager.showToast(this, "提交成功");
