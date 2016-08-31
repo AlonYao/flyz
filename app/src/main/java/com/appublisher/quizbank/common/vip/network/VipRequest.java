@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.network.ParamBuilder;
 
 import java.util.Map;
@@ -24,7 +25,7 @@ public class VipRequest extends Request implements VipApi {
     }
 
     private static String getFinalUrl(String url) {
-        return ParamBuilder.finalUrl(url);
+        return LoginParamBuilder.finalUrl(url);
     }
 
     /**

@@ -216,7 +216,12 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             mMockTime = getIntent().getStringExtra("mock_time");
         }
 
-        MeasureModel.getData(this);
+        if ("vip".equals(mPaperType)) {
+            MeasureModel measureModel = new MeasureModel(this);
+            measureModel.getVipIntelligentPaper();
+        } else {
+            MeasureModel.getData(this);
+        }
     }
 
     @Override
@@ -443,7 +448,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     /**
      * 设置内容
      */
-    private void setContent() {
+    public void setContent() {
         // 初始化用户答案
         initUserAnswer();
 
@@ -457,7 +462,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
     /**
      * 初始化用户答案
      */
-    private void initUserAnswer() {
+    public void initUserAnswer() {
         int size = mQuestions.size();
         mUserAnswerList = new ArrayList<>();
         for (int i = 0; i < size; i++) {

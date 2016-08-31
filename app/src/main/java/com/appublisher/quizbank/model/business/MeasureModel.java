@@ -30,6 +30,8 @@ import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
+import com.appublisher.quizbank.common.vip.model.VipManager;
+import com.appublisher.quizbank.common.vip.netdata.ExerciseDetailCommonResp;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
@@ -69,8 +71,26 @@ public class MeasureModel {
         mActivity = activity;
     }
 
-    public void getVipData() {
+    /**
+     * 获取小班智能组卷
+     */
+    public void getVipIntelligentPaper() {
+        VipManager vipManager = new VipManager(mActivity);
+        vipManager.obtainIntelligentPaper(
+                mActivity.mExerciseId,
+                new VipManager.IntelligentPaperListener() {
+            @Override
+            public void complete(JSONObject resp) {
+                if (resp == null) return;
+                ExerciseDetailCommonResp model =
+                        GsonManager.getModel(resp, ExerciseDetailCommonResp.class);
+                if (model == null || model.getResponse_code() != 1) return;
 
+                mActivity.mQuestions = model.getQuestion();
+                MeasureActivity.mDuration = model.getDuration();
+                mActivity.setContent();
+            }
+        });
     }
 
     /**

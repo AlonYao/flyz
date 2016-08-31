@@ -30,7 +30,7 @@ public class VipManager implements RequestCallback{
     private IntelligentPaperListener mIntelligentPaperListener;
     private VipRequest mVipRequest;
 
-    private VipManager(Context context) {
+    public VipManager(Context context) {
         mContext = context;
     }
 
@@ -38,15 +38,24 @@ public class VipManager implements RequestCallback{
         void complete(JSONObject resp);
     }
 
-    public void obtainIntelligentPaper(IntelligentPaperListener listener, int exercise_id) {
+    /**
+     * 获取智能组卷
+     * @param listener IntelligentPaperListener
+     * @param exercise_id 练习id
+     */
+    public void obtainIntelligentPaper(int exercise_id, IntelligentPaperListener listener) {
         mIntelligentPaperListener = listener;
         ProgressDialogManager.showProgressDialog(mContext);
         mVipRequest = new VipRequest(mContext, this);
         mVipRequest.getIntelligentPaper(exercise_id);
     }
 
+    /**
+     * 处理智能组卷回调
+     * @param response JSONObject
+     */
     private void dealIntelligentPaperResp(JSONObject response) {
-
+        mIntelligentPaperListener.complete(response);
     }
 
     /**

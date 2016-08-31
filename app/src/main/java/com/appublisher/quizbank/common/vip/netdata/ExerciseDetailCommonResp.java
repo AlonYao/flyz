@@ -14,12 +14,17 @@ public class ExerciseDetailCommonResp {
     private String exercise_name;
     private int exercise_type;
     private String end_time;
+    private int duration;
     private int status;
     private String status_text;
     private boolean can_submit;
     private ArrayList<QuestionM> question;
     String course_name;
     String class_name;
+
+    public int getDuration() {
+        return duration;
+    }
 
     public ArrayList<QuestionM> getQuestion() {
         return question;
