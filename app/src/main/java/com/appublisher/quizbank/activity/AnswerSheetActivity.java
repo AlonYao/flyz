@@ -116,7 +116,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                                 .getServerCurrentTime();
                     } else if ("vip".equals(mFrom)) {
                         // 小班系统特殊处理
-                        AnswerSheetModel.vipSubmitPaper(AnswerSheetActivity.this);
+//                        AnswerSheetModel.(AnswerSheetActivity.this);
                     } else {
                         AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
                     }
