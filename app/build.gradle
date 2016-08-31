@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 44
-        versionName "1.8.1"
+        versionCode 45
+        versionName "1.8.2"
     }
 
     buildTypes {
@@ -43,154 +43,94 @@ android {
 
     // 渠道
     productFlavors {
-//        other {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "other"]
-//        }
-//
-//        meizu {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "meizu"]
-//        }
-//
-//        baidu {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu"]
-//        }
-//
-//        huawei {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "huawei"]
-//        }
-//
-//        xiaomi {
-//            manifestPlaceholders = [APP_NAME   : "天天模考公务员",
-//                                    APP_CHANNEL: "xiaomi"]
-//        }
-//
-//        wandoujia {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "wandoujia"]
-//        }
-//
-//        taobao {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "taobao"]
-//        }
-//
-//        tencent {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "tencent"]
-//        }
-//
-//        qihoo {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "360"]
-//        }
-//
-//        "360sousuo" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "360sousuo"]
-//        }
-//
-//        oppo {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "oppo"]
-//        }
-
-//        suimishouye {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "suimishouye"]
-//        }
-//
-//        suimiyejiao {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "suimiyejiao"]
-//        }
-
-//        vivo {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "vivo"]
-//        }
-//
-//        samsung {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "samsung"]
-//        }
-
-//        BDsem {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "BDsem"]
-//        }
-
-//        qudao_360tui {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "360tui"]
-//        }
-
-//        sogou {
-//            manifestPlaceholders = [APP_NAME: "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sogou"]
-//        }
-//
-//        "wechat-pyq-3" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "wechat-pyq-1"]
-//        }
-//
-//        "wechat-pyq-4" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "wechat-pyq-2"]
-//        }
-//
-//        "tencent-gdt-1" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "tencent-gdt-1"]
-//        }
-//
-//        "tencent-gdt-2" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "tencent-gdt-2"]
-//        }
-//
-//        "tencent-gdt-3" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "tencent-gdt-3"]
-//        }
-//
-//        "tencent-gdt-4" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "tencent-gdt-4"]
-//        }
-//
-//        "tencent-gdt-5" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "tencent-gdt-5"]
-//        }
-
-        "tencent-gdt-11" {
+        baidu {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "tencent-gdt-11"]
+                                    APP_CHANNEL: "baidu"]
         }
 
-        "tencent-gdt-12" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "tencent-gdt-12"]
+        "360" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "360"]
         }
 
-        "tencent-gdt-13" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "tencent-gdt-13"]
+        tencent {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "tencent"]
         }
 
-        "tencent-gdt-14" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "tencent-gdt-14"]
+        xiaomi {
+            manifestPlaceholders = [APP_NAME   : "天天模考公务员",
+                                    APP_CHANNEL: "xiaomi"]
         }
 
-        "tencent-gdt-15" {
+        huawei {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-                                    APP_CHANNEL: "tencent-gdt-15"]
+                                    APP_CHANNEL: "huawei"]
+        }
+
+        meizu {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "meizu"]
+        }
+
+        wandoujia {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "wandoujia"]
+        }
+
+        PPzhushou {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "PPzhushou"]
+        }
+
+        vivo {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "vivo"]
+        }
+
+        oppo {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
+                                    APP_CHANNEL: "oppo"]
+        }
+
+        other {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "other"]
+        }
+
+        "wechat-pyq-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "wechat-pyq-1"]
+        }
+
+        "wechat-pyq-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "wechat-pyq-2"]
+        }
+
+        "wechat-pyq-3" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "wechat-pyq-3"]
+        }
+
+        "wechat-pyq-4" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "wechat-pyq-4"]
+        }
+
+        "wechat-pyq-5" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "wechat-pyq-5"]
+        }
+
+        "wechat-pyq-6" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "wechat-pyq-6"]
+        }
+
+        "wechat-pyq-7" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "wechat-pyq-7"]
         }
 
         "tencent-gdt-16" {
@@ -218,235 +158,54 @@ android {
                                     APP_CHANNEL: "tencent-gdt-20"]
         }
 
+        "weibo-feeds-12" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "tencent-gdt-12"]
+        }
+
+        "weibo-feeds-13" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "tencent-gdt-13"]
+        }
+
+        "weibo-feeds-14" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "tencent-gdt-14"]
+        }
+
+        "weibo-feeds-15" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "tencent-gdt-15"]
+        }
+
+        "weibo-feeds-16" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "tencent-gdt-16"]
+        }
+
+        "360-sousuo-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "360-sousuo-1"]
+        }
+
+        "360-tuijian-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "360-tuijian-1"]
+        }
+
+        "360-jiaoyu-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "360-jiaoyu-1"]
+        }
+
 //        AppUpdate {
 //            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
 //                                    APP_CHANNEL: "AppUpdate"]
 //        }
 //
-//        微信 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "微信"]
-//        }
-
-//
-//        appub {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "appub"]
-//        }
-//
-//        ZHT01 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "ZHT01"]
-//        }
-//
-//        ZHT02 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "ZHT02"]
-//        }
-//
-//        ZHT03 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "ZHT03"]
-//        }
-
-//        BDcpd {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "BDcpd"]
-//        }
-
-//        liebao {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "liebao"]
-//        }
-
-//        sem {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem"]
-//        }
-//
-//        sem01 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem01"]
-//        }
-//
-//        sem02 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem02"]
-//        }
-//
-//        sem03 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem03"]
-//        }
-//
-//        sem04 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem04"]
-//        }
-//
-//        sem05 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem05"]
-//        }
-//
-//        sem06 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem06"]
-//        }
-//
-//        sem07 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem07"]
-//        }
-//
-//        sem08 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem08"]
-//        }
-//
-//        sem09 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem09"]
-//        }
-//
-//        sem10 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem10"]
-//        }
-//
-//        sem11 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem11"]
-//        }
-//
-//        sem12 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem12"]
-//        }
-//
-//        sem13 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem13"]
-//        }
-//
-//        sem14 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem14"]
-//        }
-//
-//        sem15 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem15"]
-//        }
-//
-//        sem16 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem16"]
-//        }
-//
-//        sem17 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem17"]
-//        }
-//
-//        sem18 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem18"]
-//        }
-//
-//        sem19 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem19"]
-//        }
-//
-//        sem20 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "sem20"]
-//        }
-
-//        信息流01 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流01"]
-//        }
-//
-//        信息流02 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流02"]
-//        }
-//
-//        信息流03 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流03"]
-//        }
-//
-//        信息流04 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流04"]
-//        }
-//
-//        信息流05 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流05"]
-//        }
-//
-//        信息流06 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流06"]
-//        }
-//
-//        信息流07 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流07"]
-//        }
-//
-//        信息流08 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流08"]
-//        }
-//
-//        信息流09 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流09"]
-//        }
-//
-//        信息流10 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "信息流10"]
-//        }
-
-//        huodong360 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "360huodong"]
-//        }
-//
-//        tuijian360 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "360tuijian"]
-//        }
-//
-//        ruanjian360 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "360ruanjian"]
-//        }
-//
-//        zhanshi360 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "360zhanshi"]
-//        }
-
-//        公众号 {
-//            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
-//                                    APP_CHANNEL: "公众号"]
-//        }
-//
 //        app_share {
 //            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
 //                                    APP_CHANNEL: "app_share"]
-//        }
-
-//        txpyq {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "txpyq"]
 //        }
     }
 }
