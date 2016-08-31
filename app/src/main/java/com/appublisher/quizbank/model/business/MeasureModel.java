@@ -77,7 +77,7 @@ public class MeasureModel {
     public void getVipIntelligentPaper() {
         VipManager vipManager = new VipManager(mActivity);
         vipManager.obtainIntelligentPaper(
-                mActivity.mExerciseId,
+                mActivity.mPaperId,
                 new VipManager.IntelligentPaperListener() {
             @Override
             public void complete(JSONObject resp) {

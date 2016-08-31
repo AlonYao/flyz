@@ -8,11 +8,8 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
-import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.QRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,9 +58,8 @@ public class VipManager implements RequestCallback{
     /**
      * 小班系统真题作业提交
      */
-    public void vipSubmitPaper(Context context,
-                               ArrayList<HashMap<String, Object>> list,
-                               int exercise_id) {
+    public void submitPaper(ArrayList<HashMap<String, Object>> list,
+                            int exercise_id) {
         if (list == null) return;
 
         // 初始化数据
@@ -116,9 +112,9 @@ public class VipManager implements RequestCallback{
 
         if (hasNoAnswer) {
             // 提示用户存在未完成课程
-            vipUnFinishAlert(context, exercise_id, answers.toString(), duration_total);
+            showUnFinishAlert(mContext, exercise_id, answers.toString(), duration_total);
         } else {
-            postPaperAnswer(context, exercise_id, answers.toString(), duration_total);
+            postPaperAnswer(mContext, exercise_id, answers.toString(), duration_total);
         }
     }
 
@@ -144,7 +140,7 @@ public class VipManager implements RequestCallback{
     /**
      * 如果有未完成题目时的提示
      */
-    public void vipUnFinishAlert(final Context context,
+    public void showUnFinishAlert(final Context context,
                                  final int exercise_id,
                                  final String answers,
                                  final int duration) {
