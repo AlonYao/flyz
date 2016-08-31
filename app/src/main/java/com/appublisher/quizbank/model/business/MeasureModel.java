@@ -319,37 +319,44 @@ public class MeasureModel {
     public static void getData(MeasureActivity activity) {
         if (activity.mPaperType == null) return;
 
-        if (activity.mRedo) {
-            // 重新做题
-            // 提交时的字段是paperId，所有这里要统一
-            activity.mPaperId = activity.mExerciseId;
+        if ("vip".equals(activity.mPaperType)) {
+            // 小班真题
 
-            ProgressDialogManager.showProgressDialog(activity, true);
-            MeasureActivity.mQRequest.getHistoryExerciseDetail(activity.mExerciseId, activity.mPaperType);
         } else {
-            // 做新题
-            switch (activity.mPaperType) {
-                case "auto":
-                    ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mQRequest.getAutoTraining();
-                    break;
+            // 其他
+            if (activity.mRedo) {
+                // 重新做题
+                // 提交时的字段是paperId，所有这里要统一
+                activity.mPaperId = activity.mExerciseId;
+                ProgressDialogManager.showProgressDialog(activity, true);
+                MeasureActivity.mQRequest.getHistoryExerciseDetail(
+                        activity.mExerciseId, activity.mPaperType);
+            } else {
+                // 做新题
+                switch (activity.mPaperType) {
+                    case "auto":
+                        ProgressDialogManager.showProgressDialog(activity, true);
+                        MeasureActivity.mQRequest.getAutoTraining();
+                        break;
 
-                case "note":
-                case "error":
-                case "collect":
-                    ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mQRequest.getNoteQuestions(
-                            String.valueOf(activity.mHierarchyId),
-                            activity.mPaperType);
-                    break;
+                    case "note":
+                    case "error":
+                    case "collect":
+                        ProgressDialogManager.showProgressDialog(activity, true);
+                        MeasureActivity.mQRequest.getNoteQuestions(
+                                String.valueOf(activity.mHierarchyId),
+                                activity.mPaperType);
+                        break;
 
-                case "evaluate":
-                case "mock":
-                case "entire":
-                case "mokao":
-                    ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mQRequest.getPaperExercise(activity.mPaperId, activity.mPaperType);
-                    break;
+                    case "evaluate":
+                    case "mock":
+                    case "entire":
+                    case "mokao":
+                        ProgressDialogManager.showProgressDialog(activity, true);
+                        MeasureActivity.mQRequest.getPaperExercise(
+                                activity.mPaperId, activity.mPaperType);
+                        break;
+                }
             }
         }
     }

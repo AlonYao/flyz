@@ -347,9 +347,9 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         // 答题卡回调
         if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SKIP && data != null) {
             int position = data.getIntExtra("position", 0);
-
             if (mViewPager == null) return;
             mViewPager.setCurrentItem(position);
+
         } else if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SUBMIT && data != null) {
             ArrayList<NoteM> notes = (ArrayList<NoteM>) data.getSerializableExtra("notes");
             String paper_name = data.getStringExtra("paper_name");
