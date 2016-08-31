@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.model.business;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +13,8 @@ import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.adapter.EntireAnswerSheetAdapter;
+import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
+import com.appublisher.quizbank.common.vip.network.VipRequest;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
@@ -247,4 +251,5 @@ public class AnswerSheetModel {
             AnswerSheetModel.submitPaper(activity);
         }
     }
+
 }

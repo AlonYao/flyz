@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.model.netdata.measure;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 题目数据模型
@@ -16,6 +18,7 @@ public class QuestionM implements Serializable{
     String answer;
     String analysis;
     int note_id;
+    ArrayList<Integer> note_ids;
     String note_name;
     int category_id;
     String category_name;
@@ -24,6 +27,10 @@ public class QuestionM implements Serializable{
     float summary_accuracy;
     int summary_count;
     String summary_fallible;
+
+    public ArrayList<Integer> getNote_ids() {
+        return note_ids;
+    }
 
     public String getCategory_name() {
         return category_name;

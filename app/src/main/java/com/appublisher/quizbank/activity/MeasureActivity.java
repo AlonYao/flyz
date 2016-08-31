@@ -470,12 +470,14 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
                 map.put("note_id", question.getNote_id());
                 map.put("category_id", question.getCategory_id());
                 map.put("category_name", question.getCategory_name());
+                map.put("note_ids", question.getNote_ids());
             } else {
                 map.put("id", 0);
                 map.put("right_answer", "right_answer");
                 map.put("note_id", 0);
                 map.put("category_id", 0);
                 map.put("category_name", "科目");
+                map.put("note_ids", new ArrayList<>());
             }
 
             map.put("duration", 0);

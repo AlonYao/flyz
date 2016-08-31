@@ -114,6 +114,9 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                         ProgressDialogManager.showProgressDialog(AnswerSheetActivity.this);
                         new QRequest(AnswerSheetActivity.this, AnswerSheetActivity.this)
                                 .getServerCurrentTime();
+                    } else if ("vip".equals(mFrom)) {
+                        // 小班系统特殊处理
+                        AnswerSheetModel.vipSubmitPaper(AnswerSheetActivity.this);
                     } else {
                         AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
                     }
