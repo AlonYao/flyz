@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.appublisher.quizbank.common.vip.activity.VipIndexActivity">
+    tools:context=".common.vip.activity.VipIndexActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -56,12 +56,12 @@
                     android:layout_marginTop="75dp"
                     android:background="@drawable/shape_vip_index_evaluation"
                     android:paddingBottom="5dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingTop="5dp"
                     android:text="@string/vip_index_evaluation"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/exam_txt"
@@ -120,7 +120,7 @@
                         android:id="@+id/course_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2天后开课"
+                        android:text=""
                         android:textColor="@color/login_red" />
 
                 </LinearLayout>
@@ -161,7 +161,8 @@
                         android:background="@drawable/opencourse_num_bg"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:text="10" />
+                        android:visibility="invisible"
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/homework_time"
@@ -169,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/homework_txt"
                         android:layout_centerHorizontal="true"
-                        android:text="2天后开课"
+                        android:text=""
                         android:textColor="@color/login_red" />
 
                 </RelativeLayout>
@@ -218,7 +219,8 @@
                         android:background="@drawable/opencourse_num_bg"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:text="10" />
+                        android:visibility="invisible"
+                        android:text="" />
 
                     <TextView
                         android:layout_width="wrap_content"
