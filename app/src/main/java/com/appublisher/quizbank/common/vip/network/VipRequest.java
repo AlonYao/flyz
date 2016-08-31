@@ -13,6 +13,8 @@ import java.util.Map;
  */
 public class VipRequest extends Request implements VipApi {
 
+    public static final String GET_INTELLIGENT_PAPER = "get_intelligent_paper";
+
     public VipRequest(Context context) {
         super(context);
     }
@@ -30,6 +32,17 @@ public class VipRequest extends Request implements VipApi {
      */
     public void submit(Map<String, String> params) {
         postRequest(getFinalUrl(submit), params, "submit", "object");
+    }
+
+    /**
+     * 获取智能组卷
+     * @param exercise_id 练习id
+     */
+    public void getIntelligentPaper(int exercise_id) {
+        asyncRequest(
+                getFinalUrl(getExerciseDetail) + "&exercise_id=" + exercise_id,
+                GET_INTELLIGENT_PAPER,
+                "object");
     }
 
 }

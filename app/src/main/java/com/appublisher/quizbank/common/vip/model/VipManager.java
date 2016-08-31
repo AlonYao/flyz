@@ -26,6 +26,29 @@ import java.util.HashMap;
  */
 public class VipManager implements RequestCallback{
 
+    private Context mContext;
+    private IntelligentPaperListener mIntelligentPaperListener;
+    private VipRequest mVipRequest;
+
+    private VipManager(Context context) {
+        mContext = context;
+    }
+
+    public interface IntelligentPaperListener {
+        void complete(JSONObject resp);
+    }
+
+    public void obtainIntelligentPaper(IntelligentPaperListener listener, int exercise_id) {
+        mIntelligentPaperListener = listener;
+        ProgressDialogManager.showProgressDialog(mContext);
+        mVipRequest = new VipRequest(mContext, this);
+        mVipRequest.getIntelligentPaper(exercise_id);
+    }
+
+    private void dealIntelligentPaperResp(JSONObject response) {
+
+    }
+
     /**
      * 小班系统真题作业提交
      */
@@ -144,6 +167,9 @@ public class VipManager implements RequestCallback{
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        if (VipRequest.GET_INTELLIGENT_PAPER.equals(apiName)) {
+            dealIntelligentPaperResp(response);
+        }
         ProgressDialogManager.closeProgressDialog();
     }
 
