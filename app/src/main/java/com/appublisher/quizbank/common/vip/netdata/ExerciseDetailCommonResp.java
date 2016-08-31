@@ -1,5 +1,9 @@
 package com.appublisher.quizbank.common.vip.netdata;
 
+import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+
+import java.util.ArrayList;
+
 /**
  * Created by jinbao on 2016/8/31.
  */
@@ -13,6 +17,21 @@ public class ExerciseDetailCommonResp {
     private int status;
     private String status_text;
     private boolean can_submit;
+    private ArrayList<QuestionM> question;
+    String course_name;
+    String class_name;
+
+    public ArrayList<QuestionM> getQuestion() {
+        return question;
+    }
+
+    public String getCourse_name() {
+        return course_name;
+    }
+
+    public String getClass_name() {
+        return class_name;
+    }
 
     public int getResponse_code() {
         return response_code;
