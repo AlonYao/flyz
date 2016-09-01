@@ -157,6 +157,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
 
+        Intent intent = new Intent(this, MeasureActivity.class);
+        intent.putExtra("paper_id", 264);
+        intent.putExtra("paper_type", "vip");
+        startActivity(intent);
+
     }
 
     @Override

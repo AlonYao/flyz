@@ -31,6 +31,9 @@ public class VipManager implements RequestCallback{
         mContext = context;
     }
 
+    /**
+     * 智能组卷接口
+     */
     public interface IntelligentPaperListener {
         void complete(JSONObject resp);
     }
