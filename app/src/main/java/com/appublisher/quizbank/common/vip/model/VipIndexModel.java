@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.quizbank.common.vip.netdata.ExerciseResp;
+import com.appublisher.quizbank.common.vip.netdata.VipExerciseResp;
 import com.appublisher.quizbank.common.vip.netdata.VipNotificationResp;
 import com.appublisher.quizbank.model.netdata.course.CourseListResp;
 import com.appublisher.quizbank.model.netdata.course.CourseM;
@@ -80,9 +80,9 @@ public class VipIndexModel {
 
     /*处理我的作业*/
     public static void dealExerciseList(JSONObject response, TextView timeText, TextView tipsText) {
-        ExerciseResp exerciseResp = GsonManager.getModel(response, ExerciseResp.class);
-        if (exerciseResp.getResponse_code() == 1) {
-            List<ExerciseResp.ExercisesBean> list = exerciseResp.getExercises();
+        VipExerciseResp vipExerciseResp = GsonManager.getModel(response, VipExerciseResp.class);
+        if (vipExerciseResp.getResponse_code() == 1) {
+            List<VipExerciseResp.ExercisesBean> list = vipExerciseResp.getExercises();
             int sum = 0;
             String minTime = "";
             for (int i = 0; i < list.size(); i++) {

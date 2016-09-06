@@ -210,10 +210,14 @@
             android:label="@string/title_activity_vip_index"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".common.vip.activity.NotificationActivity"
+            android:name=".common.vip.activity.VipNotificationActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_notification"
             android:screenOrientation="portrait" />
+        <activity android:name=".common.vip.activity.VipExerciseIndexActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_vip_exercise"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

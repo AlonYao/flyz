@@ -59,4 +59,8 @@ public class VipRequest extends Request implements VipApi {
     public void getExerciseDetail(int exercise_id) {
         asyncRequest(ParamBuilder.finalUrl(getExerciseDetail) + "&exercise_id=" + exercise_id, "exercise_detail", "object");
     }
+
+    public void getVipFilter(){
+        asyncRequest(ParamBuilder.finalUrl(getVipFilter),"vip_filter","object");
+    }
 }

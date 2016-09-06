@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by jinbao on 2016/8/30.
  */
-public class ExerciseResp {
+public class VipExerciseResp {
 
     private int response_code;
 

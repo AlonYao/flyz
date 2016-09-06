@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationActivity extends BaseActivity implements RequestCallback {
+public class VipNotificationActivity extends BaseActivity implements RequestCallback {
 
     private VipRequest mRequest;
     private List<VipNotificationResp.NotificationsBean> list;
@@ -32,7 +32,7 @@ public class NotificationActivity extends BaseActivity implements RequestCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification);
+        setContentView(R.layout.activity_vip_notification);
         setToolBar(this);
         mRequest = new VipRequest(this, this);
         list = new ArrayList<VipNotificationResp.NotificationsBean>();
@@ -68,7 +68,7 @@ public class NotificationActivity extends BaseActivity implements RequestCallbac
                 if (type == 3) {
                     String url = notificationsBean.getRedirect_url();
                     if (url == null || "".equals(url)) return;
-                    final Intent intent = new Intent(NotificationActivity.this, WebViewActivity.class);
+                    final Intent intent = new Intent(VipNotificationActivity.this, WebViewActivity.class);
                     intent.putExtra("url", url);
                     startActivity(intent);
                 } else {
