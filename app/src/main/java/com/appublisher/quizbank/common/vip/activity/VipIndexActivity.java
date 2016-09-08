@@ -6,11 +6,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -27,7 +25,6 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 public class VipIndexActivity extends BaseActivity implements RequestCallback {
 
@@ -41,6 +38,7 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
     private TextView homeworkTipsText;
     private ImageView settingImage;
     private View notificationView;
+    private View exerciseView;
     private VipRequest mRequest;
 
     @Override
@@ -65,6 +63,7 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
         homeworkTipsText = (TextView) findViewById(R.id.homework_tips);
         messageTips = (TextView) findViewById(R.id.message_tips);
         notificationView = findViewById(R.id.message);
+        exerciseView = findViewById(R.id.homework);
         settingImage = (ImageView) findViewById(R.id.setting_image);
     }
 
@@ -104,7 +103,15 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
         notificationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(VipIndexActivity.this, NotificationActivity.class);
+                final Intent intent = new Intent(VipIndexActivity.this, VipNotificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        exerciseView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(VipIndexActivity.this, VipExerciseIndexActivity.class);
                 startActivity(intent);
             }
         });

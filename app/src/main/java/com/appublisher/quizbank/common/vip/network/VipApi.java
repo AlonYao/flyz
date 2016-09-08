@@ -26,4 +26,14 @@ public interface VipApi extends ApiConstants {
      * 获取练习详情
      */
     String getExerciseDetail = baseUrl + "vip/get_exercise_detail";
+
+    /**
+     * 获取筛选条件
+     */
+    String getVipFilter = baseUrl + "vip/get_exercise_filter";
+
+    /**
+     * 获取练习列表
+     */
+    String getVipExercises = baseUrl + "vip/get_filtered_exercise";
 }

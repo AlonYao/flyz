@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by jinbao on 2016/8/31.
  */
-public class ExerciseDetailCommonResp {
+public class VipExerciseDetailCommonResp {
 
     private int response_code;
     private int exercise_id;
