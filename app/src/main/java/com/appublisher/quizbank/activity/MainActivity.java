@@ -41,6 +41,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
+import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
@@ -157,9 +158,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
 
-        Intent intent = new Intent(this, MeasureActivity.class);
-        intent.putExtra("paper_id", 264);
-        intent.putExtra("paper_type", "vip");
+        Intent intent = new Intent(this, VipZJZDActivity.class);
         startActivity(intent);
 
     }

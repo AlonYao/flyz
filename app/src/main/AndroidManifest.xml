@@ -214,6 +214,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_notification"
             android:screenOrientation="portrait" />
+        <activity android:name=".common.vip.activity.VipZJZDActivity"></activity>
     </application>
 
 </manifest>
