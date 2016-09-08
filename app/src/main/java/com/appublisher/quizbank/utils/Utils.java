@@ -495,8 +495,8 @@ public class Utils {
         try {
             ApplicationInfo appInfo = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            return appInfo.metaData.getString(name);
-        } catch (PackageManager.NameNotFoundException e) {
+            return String.valueOf(appInfo.metaData.get(name));
+        } catch (Exception e) {
             return "";
         }
     }
