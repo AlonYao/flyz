@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.network.ParamBuilder;
 
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Map;
  * 小班模块
  */
 public class VipRequest extends Request implements VipApi {
+
+    public static final String GET_INTELLIGENT_PAPER = "get_intelligent_paper";
 
     public VipRequest(Context context) {
         super(context);
@@ -22,7 +25,7 @@ public class VipRequest extends Request implements VipApi {
     }
 
     private static String getFinalUrl(String url) {
-        return ParamBuilder.finalUrl(url);
+        return LoginParamBuilder.finalUrl(url);
     }
 
     /**
@@ -33,12 +36,26 @@ public class VipRequest extends Request implements VipApi {
     }
 
     /**
+     * 获取智能组卷
+     * @param exercise_id 练习id
+     */
+    public void getIntelligentPaper(int exercise_id) {
+        asyncRequest(
+                getFinalUrl(getExerciseDetail) + "&exercise_id=" + exercise_id,
+                GET_INTELLIGENT_PAPER,
+                "object");
+    }
+
+    /**
      * 小班消息列表
      *
      * @param page
      */
     public void getVipNotifications(int page) {
-        asyncRequest(ParamBuilder.finalUrl(getVipNotifications) + "&page=" + page, "notification_list", "object");
+        asyncRequest(
+                getFinalUrl(getVipNotifications) + "&page=" + page,
+                "notification_list",
+                "object");
     }
 
     /**
@@ -49,7 +66,13 @@ public class VipRequest extends Request implements VipApi {
      * @param type_id
      */
     public void getExerciseList(int status_id, int category_id, int type_id) {
-        asyncRequest(ParamBuilder.finalUrl(getExerciseList) + "&status_id=" + status_id + "&category_id=" + category_id + "&type_id=" + type_id, "exercise_list", "object");
+        asyncRequest(
+                getFinalUrl(getExerciseList)
+                + "&status_id=" + status_id
+                + "&category_id=" + category_id
+                + "&type_id=" + type_id,
+                "exercise_list",
+                "object");
     }
 
     /**
@@ -58,7 +81,11 @@ public class VipRequest extends Request implements VipApi {
      * @param exercise_id
      */
     public void getExerciseDetail(int exercise_id) {
-        asyncRequest(ParamBuilder.finalUrl(getExerciseDetail) + "&exercise_id=" + exercise_id, "exercise_detail", "object");
+        asyncRequest(
+                getFinalUrl(getExerciseDetail)
+                + "&exercise_id=" + exercise_id,
+                "exercise_detail",
+                "object");
     }
 
     /**

@@ -7,8 +7,11 @@ import com.appublisher.lib_basic.volley.ApiConstants;
  */
 public interface VipApi extends ApiConstants {
 
-    // 提交作业
+    /**
+     * 提交作业
+     */
     String submit = baseUrl + "vip/submit_exercise";
+
     /**
      * 小班消息列表
      */
