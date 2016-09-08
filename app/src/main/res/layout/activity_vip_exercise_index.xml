@@ -7,15 +7,14 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        />
+        layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/filter"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        android:background="@android:color/white"
         android:layout_below="@+id/toolbar"
+        android:background="@android:color/white"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -26,15 +25,16 @@
                 android:id="@+id/vip_status_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:textColor="@color/common_text"
                 android:layout_toLeftOf="@+id/vip_status_arrow"
-                android:text="@string/vip_filter_status" />
+                android:gravity="center"
+                android:text="@string/vip_filter_status"
+                android:textColor="@color/common_text"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/vip_status_arrow"
                 style="@style/WholePagePopupMenuIv"
+                android:background="@drawable/wholepage_arrowdown"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
 
@@ -51,15 +51,16 @@
                 android:id="@+id/vip_category_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:textColor="@color/common_text"
                 android:layout_toLeftOf="@+id/vip_category_arrow"
-                android:text="@string/vip_filter_category" />
+                android:gravity="center"
+                android:text="@string/vip_filter_category"
+                android:textColor="@color/common_text"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/vip_category_arrow"
                 style="@style/WholePagePopupMenuIv"
+                android:background="@drawable/wholepage_arrowdown"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
 
@@ -76,15 +77,16 @@
                 android:id="@+id/vip_type_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:textColor="@color/common_text"
                 android:layout_toLeftOf="@+id/vip_type_arrow"
-                android:text="@string/vip_filter_type" />
+                android:gravity="center"
+                android:text="@string/vip_filter_type"
+                android:textColor="@color/common_text"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/vip_type_arrow"
                 style="@style/WholePagePopupMenuIv"
+                android:background="@drawable/wholepage_arrowdown"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
     </LinearLayout>
@@ -95,4 +97,30 @@
         android:layout_below="@id/filter"
         android:background="@color/common_line" />
 
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/filter"></ListView>
+
+    <LinearLayout
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/opencourse_list_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="啥也没有呀"
+            android:textSize="14sp" />
+    </LinearLayout>
 </RelativeLayout>

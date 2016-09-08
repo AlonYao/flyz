@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.common.vip.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +11,18 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.netdata.VipExerciseFilterResp;
-import com.nineoldandroids.view.ViewHelper;
 
 import java.util.List;
 
 /**
  * Created by jinbao on 2016/9/6.
  */
-public class VipExerciseFilterAdapter extends BaseAdapter {
+public class VipExerciseFilterCategoryAdapter extends BaseAdapter {
     private Context context;
-    private List<String> list;
+    private List<VipExerciseFilterResp.CategoryFilterBean> list;
 
 
-    public VipExerciseFilterAdapter(Context context,List<String> list){
+    public VipExerciseFilterCategoryAdapter(Context context, List<VipExerciseFilterResp.CategoryFilterBean> list) {
         this.context = context;
         this.list = list;
     }
@@ -44,21 +45,30 @@ public class VipExerciseFilterAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        if(convertView==null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.vip_filter_item,null);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.vip_filter_item, null);
             viewHolder = new ViewHolder();
+
             viewHolder.textView = (TextView) convertView.findViewById(R.id.text);
+
+            viewHolder.textView.setTextColor(context.getResources().getColor(R.color.common_text));
+            Drawable drawable = viewHolder.textView.getBackground();
+            if (drawable instanceof GradientDrawable) {
+                ((GradientDrawable) drawable).setColor(
+                        context.getResources().getColor(R.color.vip_filter_item_unselect));
+            }
+
             convertView.setTag(viewHolder);
-        }else{
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.textView.setText(list.get(position));
+        viewHolder.textView.setText(list.get(position).getCategory_name());
 
         return convertView;
     }
 
-    class ViewHolder{
+    class ViewHolder {
         TextView textView;
     }
 }

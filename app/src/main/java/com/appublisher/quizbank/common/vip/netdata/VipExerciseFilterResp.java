@@ -71,7 +71,7 @@ public class VipExerciseFilterResp {
     public static class CategoryFilterBean {
         private int category_id;
         private String category_name;
-        private List<?> exercise_types;
+        private List<ExerciseTypeBean> exercise_types;
 
         public int getCategory_id() {
             return category_id;
@@ -89,12 +89,34 @@ public class VipExerciseFilterResp {
             this.category_name = category_name;
         }
 
-        public List<?> getExercise_types() {
+        public List<ExerciseTypeBean> getExercise_types() {
             return exercise_types;
         }
 
-        public void setExercise_types(List<?> exercise_types) {
+        public void setExercise_types(List<ExerciseTypeBean> exercise_types) {
             this.exercise_types = exercise_types;
+        }
+
+
+        public  static class ExerciseTypeBean{
+            int type_id;
+            String type_name;
+
+            public int getType_id() {
+                return type_id;
+            }
+
+            public void setType_id(int type_id) {
+                this.type_id = type_id;
+            }
+
+            public String getType_name() {
+                return type_name;
+            }
+
+            public void setType_name(String type_name) {
+                this.type_name = type_name;
+            }
         }
     }
 

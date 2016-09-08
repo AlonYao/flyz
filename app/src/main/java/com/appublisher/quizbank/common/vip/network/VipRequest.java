@@ -54,13 +54,28 @@ public class VipRequest extends Request implements VipApi {
 
     /**
      * 获取练习详情
+     *
      * @param exercise_id
      */
     public void getExerciseDetail(int exercise_id) {
         asyncRequest(ParamBuilder.finalUrl(getExerciseDetail) + "&exercise_id=" + exercise_id, "exercise_detail", "object");
     }
 
-    public void getVipFilter(){
-        asyncRequest(ParamBuilder.finalUrl(getVipFilter),"vip_filter","object");
+    /**
+     * 获取小班filter
+     */
+    public void getVipFilter() {
+        asyncRequest(ParamBuilder.finalUrl(getVipFilter), "vip_filter", "object");
+    }
+
+    /**
+     * 获取小班练习列表
+     *
+     * @param status_id
+     * @param category_id
+     * @param type_id
+     */
+    public void getVipExercises(int status_id, int category_id, int type_id) {
+        asyncRequest(ParamBuilder.finalUrl(getVipExercises) + "&status_id=" + status_id + "&category_id=" + category_id + "&type_id=" + type_id, "vip_exercise", "object");
     }
 }

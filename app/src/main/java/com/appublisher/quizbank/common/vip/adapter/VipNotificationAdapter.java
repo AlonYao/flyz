@@ -25,12 +25,12 @@ import java.util.List;
 /**
  * Created by jinbao on 2016/8/30.
  */
-public class NotificationAdapter extends BaseAdapter {
+public class VipNotificationAdapter extends BaseAdapter {
 
     private Context context;
     private List<VipNotificationResp.NotificationsBean> list;
 
-    public NotificationAdapter(Context context, List<VipNotificationResp.NotificationsBean> list) {
+    public VipNotificationAdapter(Context context, List<VipNotificationResp.NotificationsBean> list) {
         this.context = context;
         this.list = list;
     }
