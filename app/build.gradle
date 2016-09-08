@@ -223,55 +223,55 @@ android {
                                     APP_CHANNEL: "360-huodong-2"]
         }
 
-//        "baidu-sem-1" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-1"]
-//        }
-//
-//        "baidu-sem-2" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-2"]
-//        }
-//
-//        "baidu-sem-3" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-3"]
-//        }
-//
-//        "baidu-sem-4" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-4"]
-//        }
-//
-//        "baidu-sem-5" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-5"]
-//        }
-//
-//        "baidu-sem-6" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-6"]
-//        }
-//
-//        "baidu-sem-7" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-7"]
-//        }
-//
-//        "baidu-sem-8" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-8"]
-//        }
-//
-//        "baidu-sem-9" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-9"]
-//        }
-//
-//        "baidu-sem-10" {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "baidu-sem-10"]
-//        }
+        "baidu-sem-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-1"]
+        }
+
+        "baidu-sem-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-2"]
+        }
+
+        "baidu-sem-3" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-3"]
+        }
+
+        "baidu-sem-4" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-4"]
+        }
+
+        "baidu-sem-5" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-5"]
+        }
+
+        "baidu-sem-6" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-6"]
+        }
+
+        "baidu-sem-7" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-7"]
+        }
+
+        "baidu-sem-8" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-8"]
+        }
+
+        "baidu-sem-9" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-9"]
+        }
+
+        "baidu-sem-10" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-sem-10"]
+        }
 
 //        AppUpdate {
 //            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
