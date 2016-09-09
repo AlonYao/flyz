@@ -1,7 +1,5 @@
 package com.appublisher.quizbank.common.vip.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -40,37 +38,17 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VipManager.CAMERA_REQUEST_CODE) {
             // 将保存在本地的图片取出并缩小后显示在界面上
-            Bitmap bitmap = mModel.getThumbnail();
-            mIvMyjobAdd.setImageBitmap(mModel.getThumbnail());
+            Bitmap bitmap = mModel.getThumbnail(data);
+            if (bitmap != null) mIvMyjobAdd.setImageBitmap(bitmap);
         }
     }
+
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.vip_zjzd_myjob_iv) {
             // 添加图片
-            String[] avatarItems = new String[] { "选择本地图片", "拍照" };
-            new AlertDialog.Builder(VipZJZDActivity.this)
-                    .setItems(avatarItems, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (which == 0) {
-//                                    Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
-//                                    intentFromGallery.setDataAndType(
-//                                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                                            "image/*");
-//                                    startActivityForResult(intentFromGallery,
-//                                            IMAGE_REQUEST_CODE);
-                            } else {
-                                mModel.toCamera();
-                            }
-                        }
-                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).show();
+            mModel.toCamera();
         }
     }
 }

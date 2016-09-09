@@ -366,6 +366,8 @@ dependencies {
     compile 'com.coolerfall:android-http-download-manager:1.5.1'
     // for duobeiyun
     compile 'com.liulishuo.filedownloader:library:0.2.0'
+    compile(name:'multi-image-selector', ext:'aar')
+
     compile project(':lib_basic')
     compile project(':lib_login')
     compile project(':lib_pay')

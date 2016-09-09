@@ -19,6 +19,7 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.ProgressDialogManager;
@@ -30,7 +31,7 @@ import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
-import com.appublisher.quizbank.common.vip.model.VipManager;
+import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.common.vip.netdata.VipExerciseDetailCommonResp;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
@@ -75,21 +76,21 @@ public class MeasureModel {
      * 获取小班智能组卷
      */
     public void getVipIntelligentPaper() {
-        VipManager vipManager = new VipManager(mActivity);
-        vipManager.obtainIntelligentPaper(
+        VipXCModel xcModel = new VipXCModel(mActivity);
+        xcModel.obtainIntelligentPaper(
                 mActivity.mPaperId,
-                new VipManager.IntelligentPaperListener() {
-            @Override
-            public void complete(JSONObject resp) {
-                if (resp == null) return;
-                VipExerciseDetailCommonResp model =
-                        GsonManager.getModel(resp, VipExerciseDetailCommonResp.class);
-                if (model == null || model.getResponse_code() != 1) return;
+                new VipXCModel.IntelligentPaperListener() {
+                    @Override
+                    public void complete(JSONObject resp) {
+                        if (resp == null) return;
+                        VipExerciseDetailCommonResp model =
+                                GsonManager.getModel(resp, VipExerciseDetailCommonResp.class);
+                        if (model == null || model.getResponse_code() != 1) return;
 
-                mActivity.mQuestions = model.getQuestion();
-                MeasureActivity.mDuration = model.getDuration();
-                mActivity.setContent();
-            }
+                        mActivity.mQuestions = model.getQuestion();
+                        MeasureActivity.mDuration = model.getDuration();
+                        mActivity.setContent();
+                    }
         });
     }
 

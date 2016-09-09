@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import com.appublisher.lib_login.model.business.LoginModel;
@@ -17,12 +18,20 @@ public class VipZJZDModel extends VipManager{
         super(context);
     }
 
+    /**
+     * 跳转至拍照或相册
+     */
     public void toCamera() {
-        toCamera(mPicName);
+        toCamera(1);
     }
 
-    public Bitmap getThumbnail() {
-        return getThumbnail(mPicName, PIC_SIDE, PIC_SIDE);
+    /**
+     * 获取缩略图
+     * @param data 图片地址
+     * @return Bitmap
+     */
+    public Bitmap getThumbnail(Intent data) {
+        return getThumbnail(data, 0, PIC_SIDE, PIC_SIDE);
     }
 
 }
