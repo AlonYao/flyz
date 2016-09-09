@@ -31,7 +31,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.vip.model.VipManager;
-import com.appublisher.quizbank.common.vip.netdata.ExerciseDetailCommonResp;
+import com.appublisher.quizbank.common.vip.netdata.VipExerciseDetailCommonResp;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
@@ -82,8 +82,8 @@ public class MeasureModel {
             @Override
             public void complete(JSONObject resp) {
                 if (resp == null) return;
-                ExerciseDetailCommonResp model =
-                        GsonManager.getModel(resp, ExerciseDetailCommonResp.class);
+                VipExerciseDetailCommonResp model =
+                        GsonManager.getModel(resp, VipExerciseDetailCommonResp.class);
                 if (model == null || model.getResponse_code() != 1) return;
 
                 mActivity.mQuestions = model.getQuestion();
