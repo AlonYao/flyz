@@ -273,6 +273,11 @@ android {
                                     APP_CHANNEL: "baidu-sem-10"]
         }
 
+        "baidu-kaifazhe" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "baidu-kaifazhe"]
+        }
+
 //        AppUpdate {
 //            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
 //                                    APP_CHANNEL: "AppUpdate"]
