@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
@@ -42,6 +43,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
 import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
+import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
@@ -57,8 +59,10 @@ import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +81,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     private FavoriteFragment mFavoriteFragment;
     private StudyRecordFragment mStudyRecordFragment;
     private SettingFragment mSettingFragment;
+    private VipIndexFragment mVipIndexFragment;
     private static Fragment mCurFragment;
     private static int mCurFragmentPosition;
     private DrawerLayout mDrawerLayout;
@@ -94,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     private static final String FAVORITE = "Favorite";
     private static final String STUDYRECORD = "Study";
     private static final String SETTING = "Setting";
+    private static final String VIP = "Vip";
     public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
 
     @Override
@@ -101,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(!LoginModel.isLogin()){
+        if (!LoginModel.isLogin()) {
             final Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
@@ -213,6 +219,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
             MenuItemCompat.setShowAsAction(menu.add("下载"),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        } else if (mCurFragment instanceof VipIndexFragment) {
+            MenuItemCompat.setShowAsAction(menu.add("首页").setIcon(R.drawable.examindex),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -228,6 +237,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
             startActivity(intent);
         } else if ("评分".equals(item.getTitle())) {
             OpenCourseModel.skipToMyGrade(this, mUnRateClasses, "false");
+        } else if ("首页".equals(item.getTitle())) {
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -277,10 +288,11 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
                     }
 
                     // Umeng统计
-                    if (position == 2){
-                        final Map<String,String> um_map = new HashMap<String,String>();
-                        um_map.put("Entry","Drawer");
-                        UmengManager.onEvent(MainActivity.this, "CourseCenter", um_map); ;
+                    if (position == 2) {
+                        final Map<String, String> um_map = new HashMap<String, String>();
+                        um_map.put("Entry", "Drawer");
+                        UmengManager.onEvent(MainActivity.this, "CourseCenter", um_map);
+                        ;
                     }
                 }
             };
@@ -300,20 +312,33 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
 
         switch (position) {
             case 0:
-                // 首页
-                if (mHomePageFragment == null) {
-                    // 如果Fragment为空，则创建一个并添加到界面上
-                    mHomePageFragment = new HomePageFragment();
-                    transaction.add(R.id.drawer_frame, mHomePageFragment, HOMEPAGE);
+
+                if (Globals.sharedPreferences.getBoolean("vip" + LoginModel.getUserId(), false)) {
+                    if (mVipIndexFragment == null) {
+                        mVipIndexFragment = new VipIndexFragment();
+                        transaction.add(R.id.drawer_frame, mVipIndexFragment, VIP);
+                    } else {
+                        transaction.show(mVipIndexFragment);
+                    }
+
+                    getSupportActionBar().setTitle(" ");
+
+                    mCurFragment = mVipIndexFragment;
                 } else {
-                    // 如果Fragment不为空，则直接将它显示出来
-                    transaction.show(mHomePageFragment);
+                    // 首页
+                    if (mHomePageFragment == null) {
+                        // 如果Fragment为空，则创建一个并添加到界面上
+                        mHomePageFragment = new HomePageFragment();
+                        transaction.add(R.id.drawer_frame, mHomePageFragment, HOMEPAGE);
+                    } else {
+                        // 如果Fragment不为空，则直接将它显示出来
+                        transaction.show(mHomePageFragment);
+                    }
+
+                    getSupportActionBar().setTitle(" ");
+
+                    mCurFragment = mHomePageFragment;
                 }
-
-                getSupportActionBar().setTitle(" ");
-
-                mCurFragment = mHomePageFragment;
-
                 break;
 
             case 1:
@@ -468,6 +493,10 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // 设置
         mSettingFragment = (SettingFragment) mFragmentManager.findFragmentByTag(SETTING);
         if (mSettingFragment != null) transaction.hide(mSettingFragment);
+
+        //Vip
+        mVipIndexFragment = (VipIndexFragment) mFragmentManager.findFragmentByTag(VIP);
+        if (mVipIndexFragment != null) transaction.hide(mVipIndexFragment);
     }
 
     @Override

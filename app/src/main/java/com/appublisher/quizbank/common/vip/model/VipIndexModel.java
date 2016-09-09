@@ -1,16 +1,21 @@
 package com.appublisher.quizbank.common.vip.model;
 
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.common.vip.netdata.VipExerciseResp;
 import com.appublisher.quizbank.common.vip.netdata.VipNotificationResp;
 import com.appublisher.quizbank.model.netdata.course.CourseListResp;
 import com.appublisher.quizbank.model.netdata.course.CourseM;
+
 import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -30,7 +35,7 @@ public class VipIndexModel {
                     sum++;
                 }
             }
-            Logger.i("vip_message" + sum);
+
             if (sum != 0) {
                 textView.setText(String.valueOf(sum));
                 textView.setVisibility(View.VISIBLE);
@@ -56,6 +61,12 @@ public class VipIndexModel {
                             }
                         }
                     }
+                }
+                //是否开通小班服务
+                if (list.get(i).isIs_vipcourse()) {
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("vip" + LoginModel.getUserId(), true);
+                    editor.commit();
                 }
             }
             long time = Utils.getSecondsByDateMinusNow(minTime) / (60 * 60);

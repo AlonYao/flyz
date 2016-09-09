@@ -31,6 +31,20 @@ public class CourseM {
      */
 
     private List<TodayClassesBean> today_classes;
+    /**
+     * can_purchase : true
+     * can_purchase_time : -0001/11/30 00:00
+     * timeStr : 2016.09.02
+     * student_limit : -1
+     * type_id : 11
+     * is_vipcourse : false
+     * valid_order_num : 0
+     * cover_pic : http://dailylearn.b0.upaiyun.com/ad/0902redianzhiji.png
+     * show_after_soldout : false
+     * deadline : 2016-12-31 00:00:00
+     */
+
+    private boolean is_vipcourse;
 
     public int getPeriods() {
         return periods;
@@ -94,6 +108,14 @@ public class CourseM {
 
     public void setToday_classes(List<TodayClassesBean> today_classes) {
         this.today_classes = today_classes;
+    }
+
+    public boolean isIs_vipcourse() {
+        return is_vipcourse;
+    }
+
+    public void setIs_vipcourse(boolean is_vipcourse) {
+        this.is_vipcourse = is_vipcourse;
     }
 
     public static class TodayClassesBean {
