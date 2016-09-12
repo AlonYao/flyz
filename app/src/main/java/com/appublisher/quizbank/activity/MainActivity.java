@@ -42,7 +42,6 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
 import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
-import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -53,8 +52,8 @@ import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
-import com.appublisher.quizbank.network.QApiConstants;
 import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.QApiConstants;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -164,8 +163,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
 
-        Intent intent = new Intent(this, VipZJZDActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, VipZJZDActivity.class);
+//        startActivity(intent);
 
     }
 
