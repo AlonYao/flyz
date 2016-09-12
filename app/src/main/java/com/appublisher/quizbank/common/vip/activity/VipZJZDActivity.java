@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.model.VipManager;
 import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
@@ -18,6 +21,8 @@ import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
 public class VipZJZDActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView mIvMyjobAdd;
+    private ImageView mIvExample;
+    private TextView mTvMaterial;
     private VipZJZDModel mModel;
 
     @Override
@@ -40,9 +45,15 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.vip_zjzd_myjob_iv) {
+        int id = v.getId();
+        if (id == R.id.vip_zjzd_myjob_iv) {
             // 添加图片
             mModel.toCamera();
+        } else if (id == R.id.vip_zjzd_example) {
+            // 作业示例
+            Intent intent = new Intent(this, ScaleImageActivity.class);
+            intent.putExtra(ScaleImageActivity.INTENT_IMGURL, mModel.getExampleUrl());
+            startActivity(intent);
         }
     }
 
@@ -56,10 +67,22 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initView() {
         mIvMyjobAdd = (ImageView) findViewById(R.id.vip_zjzd_myjob_iv);
+        mIvExample = (ImageView) findViewById(R.id.vip_zjzd_example);
+        mTvMaterial = (TextView) findViewById(R.id.vip_zjzd_material);
+
         mIvMyjobAdd.setOnClickListener(this);
+        mIvExample.setOnClickListener(this);
     }
 
     private void showLoading() {
         ProgressDialogManager.showProgressDialog(this);
+    }
+
+    public void showTvMaterial(String text) {
+        mTvMaterial.setText(text);
+    }
+
+    public void showIvExample(String url) {
+        ImageManager.displayImage(url, mIvExample);
     }
 }

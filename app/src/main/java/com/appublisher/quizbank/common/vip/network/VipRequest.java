@@ -14,6 +14,7 @@ import java.util.Map;
 public class VipRequest extends Request implements VipApi {
 
     public static final String GET_INTELLIGENT_PAPER = "get_intelligent_paper";
+    public static final String EXERCISE_DETAIL = "exercise_detail";
 
     public VipRequest(Context context) {
         super(context);
@@ -83,7 +84,7 @@ public class VipRequest extends Request implements VipApi {
         asyncRequest(
                 getFinalUrl(getExerciseDetail)
                 + "&exercise_id=" + exercise_id,
-                "exercise_detail",
+                EXERCISE_DETAIL,
                 "object");
     }
 
