@@ -23,6 +23,9 @@ public class VipZJZDModel extends VipManager{
     private int mExerciseId;
     private VipZJZDActivity mView;
     private String mExampleUrl;
+    private String mMyJobPicPath;
+    private String mMyJobPicUrl;
+    private boolean mCanSubmit;
 
     public VipZJZDModel(Context context) {
         super(context);
@@ -42,7 +45,8 @@ public class VipZJZDModel extends VipManager{
      * @return Bitmap
      */
     public Bitmap getThumbnail(Intent data) {
-        return getThumbnail(data, 0, PIC_SIDE, PIC_SIDE);
+        mMyJobPicPath = getPathByIndex(data, 0);
+        return getThumbnail(mMyJobPicPath, PIC_SIDE, PIC_SIDE);
     }
 
     /**
@@ -60,6 +64,8 @@ public class VipZJZDModel extends VipManager{
         VipZJZDResp resp = GsonManager.getModel(response, VipZJZDResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
 
+        mCanSubmit = resp.isCan_submit();
+
         VipZJZDResp.QuestionBean question = resp.getQuestion();
         if (question != null) {
             // 材料
@@ -68,6 +74,19 @@ public class VipZJZDModel extends VipManager{
             mExampleUrl = question.getImage_url();
             mView.showIvExample(mExampleUrl + "!/fw/" + PIC_SIDE);
         }
+
+        VipZJZDResp.UserAnswerBean userAnswer = resp.getUser_answer();
+        if (userAnswer != null) {
+            mMyJobPicUrl = userAnswer.getImage_url();
+        }
+    }
+
+    /**
+     * 是否可以添加用户照片
+     * @return boolean
+     */
+    public boolean isCanAdd() {
+        return mCanSubmit && (mMyJobPicPath == null || mMyJobPicPath.length() == 0);
     }
 
     @Override
@@ -90,5 +109,17 @@ public class VipZJZDModel extends VipManager{
 
     public String getExampleUrl() {
         return mExampleUrl;
+    }
+
+    public boolean isCanSubmit() {
+        return mCanSubmit;
+    }
+
+    public String getMyJobPicUrl() {
+        return mMyJobPicUrl;
+    }
+
+    public String getMyJobPicPath() {
+        return mMyJobPicPath;
     }
 }

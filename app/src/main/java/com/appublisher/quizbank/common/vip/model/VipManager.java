@@ -47,9 +47,9 @@ public class VipManager implements RequestCallback{
      * @return Bitmap
      */
     public Bitmap getThumbnail(Intent data, int index, int targetWidth, int targetHeight) {
-        Bitmap bitmap;
         if (data == null) return null;
 
+        Bitmap bitmap;
         ArrayList<String> paths =
                 data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
         if (paths == null || index >= paths.size()) return null;
@@ -71,6 +71,46 @@ public class VipManager implements RequestCallback{
         }
 
         return bitmap;
+    }
+
+    /**
+     * 获取缩略图
+     * @param targetWidth 缩放后宽
+     * @param targetHeight 缩放后高
+     * @return Bitmap
+     */
+    public Bitmap getThumbnail(String path, int targetWidth, int targetHeight) {
+        if (path == null || path.length() == 0) return null;
+
+        Bitmap bitmap;
+        Bitmap preBitmap = BitmapFactory.decodeFile(path);
+        if (preBitmap == null) return null;
+
+        int scale = getScale(
+                preBitmap.getWidth(), preBitmap.getHeight(), targetWidth, targetHeight);
+        bitmap = picZoom(
+                preBitmap,
+                preBitmap.getWidth() / scale,
+                preBitmap.getHeight() / scale);
+        if (preBitmap != bitmap && !preBitmap.isRecycled()) {
+            preBitmap.recycle();
+        }
+
+        return bitmap;
+    }
+
+    /**
+     * 通过序号获取图片路径
+     * @param data 数据
+     * @param index 序号
+     * @return String
+     */
+    public String getPathByIndex(Intent data, int index) {
+        if (data == null) return null;
+        ArrayList<String> paths =
+                data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+        if (paths == null || index >= paths.size()) return null;
+        return paths.get(index);
     }
 
     /**

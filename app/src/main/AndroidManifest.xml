@@ -217,15 +217,20 @@
         <activity
             android:name=".common.vip.activity.VipZJZDActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".common.vip.activity.VipExerciseIndexActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.vip.activity.VipExerciseIndexActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_exercise"
-            android:screenOrientation="portrait"/>
-        <!--Image Selector Entry-->
+            android:screenOrientation="portrait" />
+        <!-- Image Selector Entry -->
         <activity
-            android:configChanges="orientation|screenSize"
-            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
+            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".common.vip.activity.VipGalleryActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
