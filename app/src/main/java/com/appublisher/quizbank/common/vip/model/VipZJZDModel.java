@@ -18,6 +18,7 @@ public class VipZJZDModel extends VipManager{
 
     private static final int PIC_SIDE = 147;
 
+    public static final int MAX_LENGTH = 1;
     public static final String INTENT_EXERCISEID = "exercise_id";
 
     private int mExerciseId;
@@ -32,12 +33,12 @@ public class VipZJZDModel extends VipManager{
         mView = (VipZJZDActivity) context;
     }
 
-    /**
-     * 跳转至拍照或相册
-     */
-    public void toCamera() {
-        toCamera(1);
-    }
+//    /**
+//     * 跳转至拍照或相册
+//     */
+//    public void toCamera() {
+//        toCamera(1);
+//    }
 
     /**
      * 获取缩略图

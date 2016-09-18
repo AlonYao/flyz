@@ -20,10 +20,19 @@ public class VipGalleryActivity extends BaseActivity {
 
     private static final String DELETE = "delete";
 
+    public static final String URL = "url";
+    public static final String FILE = "file";
+    public static final String INTENT_TYPE = "type";
+    public static final String INTENT_PATHS = "paths";
+    public static final String INTENT_INDEX = "index";
+    public static final String INTENT_CAN_DELETE = "can_delete";
+
     private ViewPager mViewpager;
     private VipGalleryAdapter mAdapter;
     private ArrayList<String> mPaths;
     private int mCurIndex;
+    private boolean mIsCanDelete;
+    private String mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +46,10 @@ public class VipGalleryActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-        MenuItemCompat.setShowAsAction(menu.add(DELETE).setIcon(R.drawable.vip_delete),
-                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        if (mIsCanDelete) {
+            MenuItemCompat.setShowAsAction(menu.add(DELETE).setIcon(R.drawable.vip_delete),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -76,14 +87,18 @@ public class VipGalleryActivity extends BaseActivity {
     }
 
     private void initData() {
-        mCurIndex = 0;
-        mPaths = new ArrayList<>();
-        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
+        //noinspection unchecked
+        mPaths = (ArrayList<String>) getIntent().getSerializableExtra(INTENT_PATHS);
+        mCurIndex = getIntent().getIntExtra(INTENT_INDEX, 0);
+        mType = getIntent().getStringExtra(INTENT_TYPE);
+        mIsCanDelete = getIntent().getBooleanExtra(INTENT_CAN_DELETE, false);
+//        mPaths = new ArrayList<>();
+//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
+//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
+//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
+//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
+//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
+//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
         mAdapter = new VipGalleryAdapter(this, mPaths);
     }
 

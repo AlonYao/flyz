@@ -50,8 +50,7 @@ public class VipGalleryAdapter extends PagerAdapter {
         PhotoView photoView = (PhotoView) view.findViewById(R.id.vip_gallery_item_photoview);
         String path = getPath(position);
         if (path != null && path.length() > 0) {
-            String uri = "file://" + path;
-            ImageManager.displayImage(uri, photoView);
+            ImageManager.displayImageFromFile(path, photoView);
         }
         container.addView(view);
         return view;

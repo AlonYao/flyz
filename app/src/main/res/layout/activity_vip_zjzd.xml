@@ -63,19 +63,16 @@
             <TextView
                 style="@style/Vip_Title"
                 android:text="@string/vip_myjob"/>
-            <LinearLayout
+            <org.apmem.tools.layouts.FlowLayout
+                android:id="@+id/vip_zjzd_myjob_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
                 android:background="@android:color/white"
-                android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/vip_zjzd_myjob_iv"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
-                    android:src="@drawable/vip_myjob_add"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
+                android:orientation="horizontal"
+                tools:ignore="RtlHardcoded,RtlSymmetry">
+            </org.apmem.tools.layouts.FlowLayout>
         </LinearLayout>
     </ScrollView>
 
