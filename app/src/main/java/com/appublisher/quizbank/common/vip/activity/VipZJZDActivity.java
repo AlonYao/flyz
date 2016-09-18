@@ -51,7 +51,19 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
         if (requestCode == VipManager.CAMERA_REQUEST_CODE) {
             ArrayList<String> paths =
                     data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+            if (mModel.getPaths() == null) {
+                mModel.setPaths(paths);
+            } else {
+                ArrayList<String> temp = mModel.getPaths();
+                temp.addAll(paths);
+                mModel.setPaths(temp);
+            }
+            showMyJob(mModel.getPaths(), FILE, VipZJZDModel.MAX_LENGTH);
+        } else if (requestCode == VipManager.GALLERY_REQUEST_CODE) {
+            ArrayList<String> paths =
+                    data.getStringArrayListExtra(VipGalleryActivity.INTENT_PATHS);
             showMyJob(paths, FILE, VipZJZDModel.MAX_LENGTH);
+            mModel.setPaths(paths);
         }
     }
 
@@ -80,14 +92,6 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
         mMyjobContainer = (FlowLayout) findViewById(R.id.vip_zjzd_myjob_container);
 
         mIvExample.setOnClickListener(this);
-
-//        ArrayList<String> mPaths = new ArrayList<>();
-//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
-//        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
         showMyJob(null, FILE, VipZJZDModel.MAX_LENGTH);
     }
 
@@ -132,7 +136,8 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
                                     VipGalleryActivity.INTENT_TYPE, VipGalleryActivity.FILE);
                             intent.putExtra(VipGalleryActivity.INTENT_INDEX, index);
                             intent.putExtra(VipGalleryActivity.INTENT_PATHS, paths);
-                            startActivity(intent);
+                            intent.putExtra(VipGalleryActivity.INTENT_CAN_DELETE, true);
+                            startActivityForResult(intent, VipManager.GALLERY_REQUEST_CODE);
                         }
                     });
                     mMyjobContainer.addView(imageView);

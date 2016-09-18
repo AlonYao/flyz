@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.vip.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -65,6 +66,7 @@ public class VipGalleryActivity extends BaseActivity {
         setTitle(getTitle(mCurIndex, mPaths));
         mViewpager = (ViewPager) findViewById(R.id.vip_gallery_vp);
         mViewpager.setAdapter(mAdapter);
+        mViewpager.setCurrentItem(mCurIndex, true);
         mViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position,
@@ -87,8 +89,7 @@ public class VipGalleryActivity extends BaseActivity {
     }
 
     private void initData() {
-        //noinspection unchecked
-        mPaths = (ArrayList<String>) getIntent().getSerializableExtra(INTENT_PATHS);
+        mPaths = getIntent().getStringArrayListExtra(INTENT_PATHS);
         mCurIndex = getIntent().getIntExtra(INTENT_INDEX, 0);
         mType = getIntent().getStringExtra(INTENT_TYPE);
         mIsCanDelete = getIntent().getBooleanExtra(INTENT_CAN_DELETE, false);
@@ -100,6 +101,7 @@ public class VipGalleryActivity extends BaseActivity {
 //        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
 //        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
         mAdapter = new VipGalleryAdapter(this, mPaths);
+        setResult();
     }
 
     private String getTitle(int index, ArrayList<String> paths) {
@@ -134,6 +136,13 @@ public class VipGalleryActivity extends BaseActivity {
         if (mCurIndex == mPaths.size()) mCurIndex--;
         mViewpager.setCurrentItem(mCurIndex);
         setTitle(getTitle(mCurIndex, mPaths));
+        setResult();
+    }
+
+    private void setResult() {
+        Intent intent = new Intent();
+        intent.putExtra(INTENT_PATHS, mPaths);
+        setResult(0, intent);
     }
 
 }

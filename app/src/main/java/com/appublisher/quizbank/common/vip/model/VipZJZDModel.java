@@ -11,6 +11,8 @@ import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * 小班：字迹诊断模块
  */
@@ -27,6 +29,7 @@ public class VipZJZDModel extends VipManager{
     private String mMyJobPicPath;
     private String mMyJobPicUrl;
     private boolean mCanSubmit;
+    private ArrayList<String> mPaths;
 
     public VipZJZDModel(Context context) {
         super(context);
@@ -122,5 +125,13 @@ public class VipZJZDModel extends VipManager{
 
     public String getMyJobPicPath() {
         return mMyJobPicPath;
+    }
+
+    public ArrayList<String> getPaths() {
+        return mPaths;
+    }
+
+    public void setPaths(ArrayList<String> mPaths) {
+        this.mPaths = mPaths;
     }
 }

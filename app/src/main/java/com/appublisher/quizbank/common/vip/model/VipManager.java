@@ -30,6 +30,7 @@ public class VipManager implements RequestCallback{
     public VipRequest mVipRequest;
 
     public static final int CAMERA_REQUEST_CODE = 10;
+    public static final int GALLERY_REQUEST_CODE = 11;
     public static final String PIC_CACHE_DIR =
             Environment.getExternalStorageDirectory() + "/yaoguo/vip/";
 
