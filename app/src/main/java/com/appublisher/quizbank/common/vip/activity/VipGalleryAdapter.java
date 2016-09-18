@@ -2,14 +2,17 @@ package com.appublisher.quizbank.common.vip.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.quizbank.R;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 
 import java.util.ArrayList;
 
@@ -48,8 +51,31 @@ public class VipGalleryAdapter extends PagerAdapter {
         @SuppressLint("InflateParams")
         View view = LayoutInflater.from(mContext).inflate(R.layout.vip_gallery_item, null);
         PhotoView photoView = (PhotoView) view.findViewById(R.id.vip_gallery_item_photoview);
+        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.vip_gallery_item_pb);
         String path = getPath(position);
-        if (path != null && path.length() > 0) {
+        if (isUrl(path)) {
+            ImageManager.displayImage(path, photoView, new ImageManager.LoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+        } else {
             ImageManager.displayImageFromFile(path, photoView);
         }
         container.addView(view);
@@ -65,6 +91,10 @@ public class VipGalleryAdapter extends PagerAdapter {
         viewPager.setAdapter(null);
         mPaths.remove(index);
         viewPager.setAdapter(this);
+    }
+
+    private boolean isUrl(String path) {
+        return path != null && (path.contains("http://") || path.contains("https://"));
     }
 
 }

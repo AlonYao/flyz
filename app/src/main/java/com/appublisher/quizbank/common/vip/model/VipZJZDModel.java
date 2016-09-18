@@ -24,6 +24,7 @@ public class VipZJZDModel extends VipManager{
     public static final String INTENT_EXERCISEID = "exercise_id";
 
     private int mExerciseId;
+    private int mStatus;
     private VipZJZDActivity mView;
     private String mExampleUrl;
     private String mMyJobPicPath;
@@ -69,6 +70,7 @@ public class VipZJZDModel extends VipManager{
         if (resp == null || resp.getResponse_code() != 1) return;
 
         mCanSubmit = resp.isCan_submit();
+        mStatus = resp.getStatus();
 
         VipZJZDResp.QuestionBean question = resp.getQuestion();
         if (question != null) {
@@ -80,8 +82,12 @@ public class VipZJZDModel extends VipManager{
         }
 
         VipZJZDResp.UserAnswerBean userAnswer = resp.getUser_answer();
-        if (userAnswer != null) {
-            mMyJobPicUrl = userAnswer.getImage_url();
+        if (userAnswer != null && (mStatus == 1 || mStatus == 3 || mStatus == 5)) {
+            mPaths = new ArrayList<>();
+            mPaths.add(userAnswer.getImage_url());
+            mView.showMyJob(mPaths, VipZJZDActivity.URL, MAX_LENGTH);
+        } else {
+            mView.showMyJob(null, VipZJZDActivity.FILE, MAX_LENGTH);
         }
     }
 

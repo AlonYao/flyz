@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.Utils;
-import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.model.VipManager;
 import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
@@ -29,8 +28,8 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  */
 public class VipZJZDActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static final String FILE = "file";
-    private static final String URL = "url";
+    public static final String FILE = "file";
+    public static final String URL = "url";
 
     private ImageView mIvExample;
     private TextView mTvMaterial;
@@ -72,8 +71,11 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
         int id = v.getId();
         if (id == R.id.vip_zjzd_example) {
             // 作业示例
-            Intent intent = new Intent(this, ScaleImageActivity.class);
-            intent.putExtra(ScaleImageActivity.INTENT_IMGURL, mModel.getExampleUrl());
+            ArrayList<String> list = new ArrayList<>();
+            list.add(mModel.getExampleUrl());
+            Intent intent =
+                    new Intent(VipZJZDActivity.this, VipGalleryActivity.class);
+            intent.putExtra(VipGalleryActivity.INTENT_PATHS, list);
             startActivity(intent);
         }
     }
@@ -92,7 +94,6 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
         mMyjobContainer = (FlowLayout) findViewById(R.id.vip_zjzd_myjob_container);
 
         mIvExample.setOnClickListener(this);
-        showMyJob(null, FILE, VipZJZDModel.MAX_LENGTH);
     }
 
     private void showLoading() {
@@ -132,8 +133,6 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
                         public void onClick(View v) {
                             Intent intent =
                                     new Intent(VipZJZDActivity.this, VipGalleryActivity.class);
-                            intent.putExtra(
-                                    VipGalleryActivity.INTENT_TYPE, VipGalleryActivity.FILE);
                             intent.putExtra(VipGalleryActivity.INTENT_INDEX, index);
                             intent.putExtra(VipGalleryActivity.INTENT_PATHS, paths);
                             intent.putExtra(VipGalleryActivity.INTENT_CAN_DELETE, true);
@@ -158,9 +157,21 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
             // Url
             mMyjobContainer.removeAllViews();
             if (paths == null) return;
-            for (String path : paths) {
+            int size = paths.size();
+            for (int i = 0; i < size; i++) {
+                final int index = i;
                 ImageView imageView = getMyJobItem(this);
-                ImageManager.displayImage(path, imageView);
+                ImageManager.displayImage(paths.get(i), imageView);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent =
+                                new Intent(VipZJZDActivity.this, VipGalleryActivity.class);
+                        intent.putExtra(VipGalleryActivity.INTENT_INDEX, index);
+                        intent.putExtra(VipGalleryActivity.INTENT_PATHS, paths);
+                        startActivity(intent);
+                    }
+                });
                 mMyjobContainer.addView(imageView);
             }
         }

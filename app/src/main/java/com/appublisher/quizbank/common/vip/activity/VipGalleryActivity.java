@@ -21,9 +21,6 @@ public class VipGalleryActivity extends BaseActivity {
 
     private static final String DELETE = "delete";
 
-    public static final String URL = "url";
-    public static final String FILE = "file";
-    public static final String INTENT_TYPE = "type";
     public static final String INTENT_PATHS = "paths";
     public static final String INTENT_INDEX = "index";
     public static final String INTENT_CAN_DELETE = "can_delete";
@@ -33,7 +30,6 @@ public class VipGalleryActivity extends BaseActivity {
     private ArrayList<String> mPaths;
     private int mCurIndex;
     private boolean mIsCanDelete;
-    private String mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +87,6 @@ public class VipGalleryActivity extends BaseActivity {
     private void initData() {
         mPaths = getIntent().getStringArrayListExtra(INTENT_PATHS);
         mCurIndex = getIntent().getIntExtra(INTENT_INDEX, 0);
-        mType = getIntent().getStringExtra(INTENT_TYPE);
         mIsCanDelete = getIntent().getBooleanExtra(INTENT_CAN_DELETE, false);
 //        mPaths = new ArrayList<>();
 //        mPaths.add("/storage/emulated/0/DCIM/Camera/IMG_20160913_163015.jpg");
