@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 登录注册模块 style资源 -->
+    <!-- EditText -->
+    <style name="Vip_Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:text">@string/vip_none</item>
+        <item name="android:textColor">@color/themecolor</item>
+    </style>
+
+</resources>

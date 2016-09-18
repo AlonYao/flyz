@@ -1,184 +1,169 @@
 package com.appublisher.quizbank.common.vip.model;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.os.Environment;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.AnswerSheetActivity;
-import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
-import com.appublisher.quizbank.network.ParamBuilder;
-import com.appublisher.quizbank.network.QRequest;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import me.nereo.multi_image_selector.MultiImageSelector;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 小班模块管理类
  */
 public class VipManager implements RequestCallback{
 
-    private Context mContext;
-    private IntelligentPaperListener mIntelligentPaperListener;
-    private VipRequest mVipRequest;
+    public Context mContext;
+    public VipRequest mVipRequest;
+
+    public static final int CAMERA_REQUEST_CODE = 10;
+    public static final String PIC_CACHE_DIR =
+            Environment.getExternalStorageDirectory() + "/yaoguo/vip/";
 
     public VipManager(Context context) {
         mContext = context;
-    }
-
-    public interface IntelligentPaperListener {
-        void complete(JSONObject resp);
-    }
-
-    /**
-     * 获取智能组卷
-     * @param listener IntelligentPaperListener
-     * @param exercise_id 练习id
-     */
-    public void obtainIntelligentPaper(int exercise_id, IntelligentPaperListener listener) {
-        mIntelligentPaperListener = listener;
-        ProgressDialogManager.showProgressDialog(mContext);
         mVipRequest = new VipRequest(mContext, this);
-        mVipRequest.getIntelligentPaper(exercise_id);
     }
 
     /**
-     * 处理智能组卷回调
-     * @param response JSONObject
+     * 获取缩略图
+     * @param data 图片地址
+     * @param index 图片序号
+     * @param targetWidth 缩放后宽
+     * @param targetHeight 缩放后高
+     * @return Bitmap
      */
-    private void dealIntelligentPaperResp(JSONObject response) {
-        mIntelligentPaperListener.complete(response);
-    }
+    public Bitmap getThumbnail(Intent data, int index, int targetWidth, int targetHeight) {
+        if (data == null) return null;
 
-    /**
-     * 小班系统真题作业提交
-     */
-    public void vipSubmitPaper(Context context,
-                               ArrayList<HashMap<String, Object>> list,
-                               int exercise_id) {
-        if (list == null) return;
+        Bitmap bitmap;
+        ArrayList<String> paths =
+                data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+        if (paths == null || index >= paths.size()) return null;
 
-        // 初始化数据
-        int duration_total = 0;
+        String path = paths.get(index);
+        if (path == null || path.length() == 0) return null;
 
-        JSONArray answers = new JSONArray();
+        Bitmap preBitmap = BitmapFactory.decodeFile(path);
+        if (preBitmap == null) return null;
 
-        // 标记有没有未做的题
-        boolean hasNoAnswer = false;
-
-        HashMap<String, Object> userAnswerMap;
-        for (int i = 0; i < list.size(); i++) {
-            try {
-                userAnswerMap = list.get(i);
-
-                int id = (int) userAnswerMap.get("id");
-                String answer = (String) userAnswerMap.get("answer");
-                int category = (int) userAnswerMap.get("category_id");
-                int duration = (int) userAnswerMap.get("duration");
-                String right_answer = (String) userAnswerMap.get("right_answer");
-                //noinspection unchecked
-                ArrayList<Integer> note_ids = (ArrayList<Integer>) userAnswerMap.get("note_ids");
-
-                // 判断对错
-                int is_right = 0;
-                if (answer != null && right_answer != null
-                        && !"".equals(answer) && answer.equals(right_answer)) {
-                    is_right = 1;
-                }
-
-                // 标记有没有未做的题
-                if (answer == null || answer.length() == 0) hasNoAnswer = true;
-
-                // 统计总时长
-                duration_total = duration_total + duration;
-
-                JSONObject joQuestion = new JSONObject();
-                joQuestion.put("id", id);
-                joQuestion.put("answer", answer);
-                joQuestion.put("is_right", is_right);
-                joQuestion.put("category", category);
-                joQuestion.put("note_ids", note_ids);
-                joQuestion.put("duration", duration);
-                answers.put(joQuestion);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        int scale = getScale(
+                preBitmap.getWidth(), preBitmap.getHeight(), targetWidth, targetHeight);
+        bitmap = picZoom(
+                preBitmap,
+                preBitmap.getWidth() / scale,
+                preBitmap.getHeight() / scale);
+        if (preBitmap != bitmap && !preBitmap.isRecycled()) {
+            preBitmap.recycle();
         }
 
-        if (hasNoAnswer) {
-            // 提示用户存在未完成课程
-            vipUnFinishAlert(context, exercise_id, answers.toString(), duration_total);
-        } else {
-            postPaperAnswer(context, exercise_id, answers.toString(), duration_total);
+        return bitmap;
+    }
+
+    /**
+     * 获取缩略图
+     * @param targetWidth 缩放后宽
+     * @param targetHeight 缩放后高
+     * @return Bitmap
+     */
+    public Bitmap getThumbnail(String path, int targetWidth, int targetHeight) {
+        if (path == null || path.length() == 0) return null;
+
+        Bitmap bitmap;
+        Bitmap preBitmap = BitmapFactory.decodeFile(path);
+        if (preBitmap == null) return null;
+
+        int scale = getScale(
+                preBitmap.getWidth(), preBitmap.getHeight(), targetWidth, targetHeight);
+        bitmap = picZoom(
+                preBitmap,
+                preBitmap.getWidth() / scale,
+                preBitmap.getHeight() / scale);
+        if (preBitmap != bitmap && !preBitmap.isRecycled()) {
+            preBitmap.recycle();
         }
+
+        return bitmap;
     }
 
     /**
-     * 提交真题答案
-     * @param context Context
-     * @param exercise_id 练习id
-     * @param answers 用户答案
-     * @param duration 总时长
+     * 通过序号获取图片路径
+     * @param data 数据
+     * @param index 序号
+     * @return String
      */
-    private void postPaperAnswer(Context context,
-                                 int exercise_id,
-                                 String answers,
-                                 int duration) {
-        ProgressDialogManager.showProgressDialog(context, false);
-        VipSubmitEntity entity = new VipSubmitEntity();
-        entity.exercise_id = exercise_id;
-        entity.answer_content = answers;
-        entity.duration = duration;
-        new VipRequest(context, this).submit(VipParamBuilder.submit(entity));
+    public String getPathByIndex(Intent data, int index) {
+        if (data == null) return null;
+        ArrayList<String> paths =
+                data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+        if (paths == null || index >= paths.size()) return null;
+        return paths.get(index);
     }
 
     /**
-     * 如果有未完成题目时的提示
+     * 获取比例
+     * @param oldWidth 旧宽
+     * @param oldHeight 旧高
+     * @param newWidth 新宽
+     * @param newHeight 新高
+     * @return int
      */
-    public void vipUnFinishAlert(final Context context,
-                                 final int exercise_id,
-                                 final String answers,
-                                 final int duration) {
-        new AlertDialog.Builder(context)
-                .setMessage(R.string.alert_answersheet_content)
-                .setTitle(R.string.alert_logout_title)
-                .setPositiveButton(R.string.alert_answersheet_p,
-                        new DialogInterface.OnClickListener() {// 确定
+    private static int getScale(int oldWidth, int oldHeight, int newWidth, int newHeight) {
+        if ((oldHeight > newHeight && oldWidth > newWidth)
+                || (oldHeight <= newHeight && oldWidth > newWidth)) {
+            int be = (int) (oldWidth / (float) newWidth);
+            if (be <= 1)
+                be = 1;
+            return be;
+        } else if (oldHeight > newHeight && oldWidth <= newWidth) {
+            int be = (int) (oldHeight / (float) newHeight);
+            if (be <= 1)
+                be = 1;
+            return be;
+        }
+        return 1;
+    }
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                postPaperAnswer(
-                                        context,
-                                        exercise_id,
-                                        answers,
-                                        duration);
-                                dialog.dismiss();
-                            }
-                        })
-                .setNegativeButton(R.string.alert_answersheet_n,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                .create().show();
+    /**
+     * 缩放
+     * @param bmp 原始图
+     * @param width 缩放后宽
+     * @param height 缩放后高
+     * @return Bitmap
+     */
+    private Bitmap picZoom(Bitmap bmp, int width, int height) {
+        int bmpWidth = bmp.getWidth();
+        int bmpHeght = bmp.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.postScale((float) width / bmpWidth, (float) height / bmpHeght);
+        return Bitmap.createBitmap(bmp, 0, 0, bmpWidth, bmpHeght, matrix, true);
+    }
+
+    /**
+     * 跳转至拍照
+     * @param max_length 最大能获取的图片数量
+     */
+    public void toCamera(int max_length) {
+        MultiImageSelector.create()
+                .count(max_length)
+                .start((Activity) mContext, CAMERA_REQUEST_CODE);
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (VipRequest.GET_INTELLIGENT_PAPER.equals(apiName)) {
-            dealIntelligentPaperResp(response);
-        }
         ProgressDialogManager.closeProgressDialog();
     }
 

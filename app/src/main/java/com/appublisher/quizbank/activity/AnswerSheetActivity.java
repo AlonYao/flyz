@@ -19,6 +19,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
+import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.model.business.AnswerSheetModel;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
@@ -117,7 +118,8 @@ public class AnswerSheetActivity extends BaseActivity implements RequestCallback
                                 .getServerCurrentTime();
                     } else if ("vip".equals(mPaperType)) {
                         // 小班系统特殊处理
-//                        AnswerSheetModel.(AnswerSheetActivity.this);
+                        VipXCModel xcModel = new VipXCModel(AnswerSheetActivity.this);
+                        xcModel.submitPaper(mUserAnswerList, mPaperId);
                     } else {
                         AnswerSheetModel.submitPaper(AnswerSheetActivity.this);
                     }

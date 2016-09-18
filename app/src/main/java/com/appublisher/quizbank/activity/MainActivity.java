@@ -53,8 +53,8 @@ import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
-import com.appublisher.quizbank.network.QApiConstants;
 import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.QApiConstants;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -163,6 +163,9 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
+
+//        Intent intent = new Intent(this, VipZJZDActivity.class);
+//        startActivity(intent);
 
     }
 

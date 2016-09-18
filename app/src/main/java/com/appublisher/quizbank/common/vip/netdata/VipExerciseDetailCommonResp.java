@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.common.vip.netdata;
 
+import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
 import java.util.ArrayList;
@@ -19,8 +20,13 @@ public class VipExerciseDetailCommonResp {
     private String status_text;
     private boolean can_submit;
     private ArrayList<QuestionM> question;
-    String course_name;
-    String class_name;
+    private String course_name;
+    private String class_name;
+    private ArrayList<AnswerM> user_answer;
+
+    public ArrayList<AnswerM> getUser_answer() {
+        return user_answer;
+    }
 
     public int getDuration() {
         return duration;

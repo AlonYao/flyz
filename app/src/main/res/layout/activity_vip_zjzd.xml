@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.appublisher.quizbank.common.vip.activity.VipZJZDActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        android:paddingBottom="60dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- 说明 -->
+            <TextView
+                style="@style/Vip_Title"
+                android:text="@string/vip_explain"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vip_explain_zjzd"
+                android:textColor="@color/vip_explain"
+                android:padding="15dp"
+                android:background="@color/white"/>
+            <!-- 材料 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/vip_gray"/>
+            <TextView
+                android:id="@+id/vip_zjzd_material"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vip_none"
+                android:textColor="@color/common_text"
+                android:padding="15dp"
+                android:background="@color/white"/>
+            <!-- 作业示例 -->
+            <TextView
+                style="@style/Vip_Title"
+                android:text="@string/vip_example"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/vip_zjzd_example"
+                    android:layout_width="74dp"
+                    android:layout_height="74dp"
+                    android:src="@drawable/vip_myjob_add"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+            <!-- 我的作业 -->
+            <TextView
+                style="@style/Vip_Title"
+                android:text="@string/vip_myjob"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/vip_zjzd_myjob_iv"
+                    android:layout_width="74dp"
+                    android:layout_height="74dp"
+                    android:src="@drawable/vip_myjob_add"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/vip_submit"
+        android:textColor="@android:color/white"
+        android:background="@color/vip_gray"/>
+
+</RelativeLayout>

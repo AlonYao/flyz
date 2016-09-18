@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.appublisher.quizbank"
@@ -16,27 +16,6 @@ android {
         manifestPlaceholders = [
                 GT_APPID: rootProject.ext.GT_APPID,
         ]
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        //noinspection GroovyAssignabilityCheck
-                        def apkFile = new File(
-                                output.outputFile.getParent(),
-                                "QuizBank_${variant.versionName}" +
-                                        "_${variant.flavorName}.apk")
-                        output.outputFile = apkFile
-                    }
-                }
-            }
-        }
     }
 
     sourceSets {
@@ -349,6 +328,27 @@ android {
 //                                    APP_CHANNEL: "公众号"]
 //        }
     }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        //noinspection GroovyAssignabilityCheck
+                        def apkFile = new File(
+                                output.outputFile.getParent(),
+                                "QuizBank_${variant.versionName}" +
+                                        "_${variant.flavorName}.apk")
+                        output.outputFile = apkFile
+                    }
+                }
+            }
+        }
+    }
 }
 
 repositories {
@@ -359,29 +359,14 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-//    compile 'com.android.support:appcompat-v7:22.2.1'
-//    compile 'com.android.support:support-v4:22.2.1'
-//    compile 'com.google.code.gson:gson:2.5'
-//    compile 'com.umeng.analytics:analytics:latest.integration'
-//    compile project(':umeng')
-    //    compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.2.5'
-//    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-//    compile 'com.makeramen:roundedimageview:2.0.1'
-//    compile 'com.umeng:fb:5.1.0'
     compile 'org.apmem.tools:layouts:1.8@aar'
     compile project(':treeviewlib')
     compile project(':diagramlib')
-//    compile 'com.github.chrisbanes.photoview:library:1.2.3'
-//    compile 'com.squareup.picasso:picasso:2.5.2'
-//    compile 'com.jakewharton:disklrucache:2.0.2'
-    //noinspection GradleDynamicVersion
-//    compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.coolerfall:android-http-download-manager:1.5.1'
-//    compile 'com.android.support:recyclerview-v7:22.2.1'
-//    compile 'com.nineoldandroids:library:2.4.0'
-//    compile 'cn.bingoogolapple:bga-refreshlayout:1.1.3'
     // for duobeiyun
     compile 'com.liulishuo.filedownloader:library:0.2.0'
+    // for vip
+    compile(name:'multi-image-selector', ext:'aar')
 
     compile project(':lib_basic')
     compile project(':lib_login')

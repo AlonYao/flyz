@@ -5,7 +5,6 @@ import android.content.Context;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
-import com.appublisher.quizbank.network.ParamBuilder;
 
 import java.util.Map;
 
@@ -15,6 +14,7 @@ import java.util.Map;
 public class VipRequest extends Request implements VipApi {
 
     public static final String GET_INTELLIGENT_PAPER = "get_intelligent_paper";
+    public static final String EXERCISE_DETAIL = "exercise_detail";
 
     public VipRequest(Context context) {
         super(context);
@@ -84,7 +84,7 @@ public class VipRequest extends Request implements VipApi {
         asyncRequest(
                 getFinalUrl(getExerciseDetail)
                 + "&exercise_id=" + exercise_id,
-                "exercise_detail",
+                EXERCISE_DETAIL,
                 "object");
     }
 
@@ -92,7 +92,7 @@ public class VipRequest extends Request implements VipApi {
      * 获取小班filter
      */
     public void getVipFilter() {
-        asyncRequest(ParamBuilder.finalUrl(getVipFilter), "vip_filter", "object");
+        asyncRequest(getFinalUrl(getVipFilter), "vip_filter", "object");
     }
 
     /**
@@ -103,6 +103,6 @@ public class VipRequest extends Request implements VipApi {
      * @param type_id
      */
     public void getVipExercises(int status_id, int category_id, int type_id) {
-        asyncRequest(ParamBuilder.finalUrl(getVipExercises) + "&status_id=" + status_id + "&category_id=" + category_id + "&type_id=" + type_id, "vip_exercise", "object");
+        asyncRequest(getFinalUrl(getVipExercises) + "&status_id=" + status_id + "&category_id=" + category_id + "&type_id=" + type_id, "vip_exercise", "object");
     }
 }

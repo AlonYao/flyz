@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <com.appublisher.quizbank.customui.ExpandableHeightGridView
+            <com.appublisher.lib_basic.customui.ExpandableHeightGridView
                 android:id="@+id/answer_sheet_gv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 android:clipToPadding="false"
                 android:gravity="center"
                 android:verticalSpacing="15dp">
-            </com.appublisher.quizbank.customui.ExpandableHeightGridView>
+            </com.appublisher.lib_basic.customui.ExpandableHeightGridView>
         </LinearLayout>
     </ScrollView>
 
@@ -57,7 +57,7 @@
     <TextView
         android:id="@+id/answer_sheet_submit"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="50dp"
         android:textColor="@android:color/white"
         android:textSize="17sp"
         android:gravity="center"

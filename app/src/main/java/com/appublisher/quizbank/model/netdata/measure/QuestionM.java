@@ -2,12 +2,12 @@ package com.appublisher.quizbank.model.netdata.measure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 题目数据模型
  */
 public class QuestionM implements Serializable{
+
     int id;
     String material;
     String question;
@@ -27,6 +27,20 @@ public class QuestionM implements Serializable{
     float summary_accuracy;
     int summary_count;
     String summary_fallible;
+
+    /** 小班 START **/
+    String content;
+    String image_url;
+    /** 小班 END **/
+
+    /** GET & SET **/
+    public String getContent() {
+        return content;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
 
     public ArrayList<Integer> getNote_ids() {
         return note_ids;
