@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.customui.PaintView;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -16,7 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 草稿纸
  */
-public class ScratchPaperActivity extends AppCompatActivity {
+public class ScratchPaperActivity extends BaseActivity {
 
     private PaintView mPaintView;
 
@@ -26,7 +27,7 @@ public class ScratchPaperActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scratch_paper);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,28 +35,6 @@ public class ScratchPaperActivity extends AppCompatActivity {
 
         // 修改Toolbar icon
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("ScratchPaperActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("ScratchPaperActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.appublisher.lib_basic.HomeButtonManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -39,7 +40,7 @@ import java.util.Map;
 /**
  * 练习报告Activity
  */
-public class PracticeReportActivity extends ActionBarActivity implements RequestCallback {
+public class PracticeReportActivity extends BaseActivity implements RequestCallback {
 
     public int mHierarchyId;
     public int mHierarchyLevel;
@@ -96,7 +97,7 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         setContentView(R.layout.activity_practice_report);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mTvPaperName = (TextView) findViewById(R.id.practice_report_name);
@@ -191,14 +192,6 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         });
         mHomeWatcher.startWatch();
 
-        // Umeng
-        MobclickAgent.onPageStart("PracticeReportActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-
-
     }
 
     @Override
@@ -206,13 +199,6 @@ public class PracticeReportActivity extends ActionBarActivity implements Request
         super.onPause();
         // Home键监听
         mHomeWatcher.stopWatch();
-
-        // Umeng
-        MobclickAgent.onPageEnd("PracticeReportActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -21,7 +22,7 @@ import org.json.JSONObject;
 /**
  * 专项练习
  */
-public class SpecialProjectActivity extends ActionBarActivity implements RequestCallback {
+public class SpecialProjectActivity extends BaseActivity implements RequestCallback {
 
     public LinearLayout mContainer;
 
@@ -31,7 +32,7 @@ public class SpecialProjectActivity extends ActionBarActivity implements Request
         setContentView(R.layout.activity_special_project);
 
         // ToolBar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mContainer = (LinearLayout) findViewById(R.id.specialproject_container);
@@ -39,28 +40,6 @@ public class SpecialProjectActivity extends ActionBarActivity implements Request
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new QRequest(this, this).getNoteHierarchy("all");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("SpecialProjectActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("SpecialProjectActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -21,7 +22,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 练习说明
  */
-public class PracticeDescriptionActivity extends ActionBarActivity {
+public class PracticeDescriptionActivity extends BaseActivity {
 
     private String mPaperType;
     private String mPaperName;
@@ -41,7 +42,7 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
         setContentView(R.layout.activity_practice_description);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mTvDesc = (TextView) findViewById(R.id.practicedesc_content);
@@ -98,28 +99,6 @@ public class PracticeDescriptionActivity extends ActionBarActivity {
                 skipToMeasureActivity();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("PracticeDescriptionActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("PracticeDescriptionActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

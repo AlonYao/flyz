@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.activity.BindingMobileActivity;
@@ -51,7 +52,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MockPreActivity extends ActionBarActivity implements RequestCallback, View.OnClickListener {
+public class MockPreActivity extends BaseActivity implements RequestCallback, View.OnClickListener {
     private LinearLayout examdeailContainer;
     private LinearLayout rankingContainer;
     private QRequest mQRequest;
@@ -131,7 +132,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mock_pre);
         //Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
         //获取传参
         paper_name = getIntent().getStringExtra("paper_name");
         //布局

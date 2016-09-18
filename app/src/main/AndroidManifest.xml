@@ -100,7 +100,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.BaseActivity" />
 
         <!-- 个推SDK配置开始 -->
         <receiver
@@ -214,10 +213,16 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_notification"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.vip.activity.VipExerciseIndexActivity"
+        <activity
+            android:name=".common.vip.activity.VipExerciseIndexActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_exercise"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CommonFragmentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label=""
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

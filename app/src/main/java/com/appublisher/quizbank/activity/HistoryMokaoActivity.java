@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryMokaoAdapter;
@@ -27,7 +28,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class HistoryMokaoActivity extends ActionBarActivity implements RequestCallback {
+public class HistoryMokaoActivity extends BaseActivity implements RequestCallback {
 
     private ListView mLvHistoryMokao;
     private ImageView mIvNull;
@@ -38,7 +39,7 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         setContentView(R.layout.activity_history_mokao);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mLvHistoryMokao = (ListView) findViewById(R.id.historymokao_lv);
@@ -51,24 +52,6 @@ public class HistoryMokaoActivity extends ActionBarActivity implements RequestCa
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         new QRequest(this, this).getHistoryMokao();
-
-        // Umeng
-        MobclickAgent.onPageStart("HistoryMokaoActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("HistoryMokaoActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

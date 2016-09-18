@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AppGuideAdapter;
 import com.tendcloud.tenddata.TCAgent;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * 引导页
  */
-public class AppGuideActivity extends Activity {
+public class AppGuideActivity extends BaseActivity {
 
     private LinearLayout mLlDots;
     private ViewPager mViewPager;
@@ -34,26 +35,6 @@ public class AppGuideActivity extends Activity {
         mLlDots = (LinearLayout) findViewById(R.id.appguide_dots);
 
         initPager();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("AppGuideActivity");
-        MobclickAgent.onResume(this);
-
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("AppGuideActivity");
-        MobclickAgent.onPause(this);
-
-        TCAgent.onPause(this);
     }
 
     private void initPager() {

@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.HomeButtonManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.coursecenter.CourseModel;
 import com.appublisher.lib_login.model.business.LoginModel;
@@ -46,7 +47,7 @@ import java.util.Timer;
 /**
  * WebView
  */
-public class WebViewActivity extends ActionBarActivity implements RequestCallback {
+public class WebViewActivity extends BaseActivity implements RequestCallback {
 
     private static RelativeLayout mProgressBar;
     public static WebView mWebView;
@@ -96,7 +97,7 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         setContentView(R.layout.activity_web_view);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mWebView = (WebView) findViewById(R.id.webView);
@@ -172,12 +173,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         });
         mHomeWatcher.startWatch();
 
-        // Umeng
-        MobclickAgent.onPageStart("WebViewActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
     }
 
     @Override
@@ -186,12 +181,6 @@ public class WebViewActivity extends ActionBarActivity implements RequestCallbac
         // Home键监听
         mHomeWatcher.stopWatch();
 
-        // Umeng
-        MobclickAgent.onPageEnd("WebViewActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

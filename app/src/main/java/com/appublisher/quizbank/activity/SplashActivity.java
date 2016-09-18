@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.activity.ExamChangeActivity;
@@ -32,7 +33,7 @@ import java.util.Map;
 /**
  * 启动页
  */
-public class SplashActivity extends Activity implements RequestCallback {
+public class SplashActivity extends BaseActivity implements RequestCallback {
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -53,28 +54,6 @@ public class SplashActivity extends Activity implements RequestCallback {
         // 版本更新后，更新内容是否提示
         editor.putBoolean("firstNotice", isFirstStart);
         editor.commit();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("SplashActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("SplashActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @SuppressLint("CommitPrefEdits")

@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -20,7 +21,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class MyAnalysisActivity extends ActionBarActivity implements RequestCallback {
+public class MyAnalysisActivity extends BaseActivity implements RequestCallback {
 
     private EditText mEditText;
     private String mQuestionId;
@@ -32,7 +33,7 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
         setContentView(R.layout.activity_my_analysis);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
         CommonModel.setBarTitle(this, getIntent().getStringExtra("bar_title"));
 
         // View 初始化
@@ -41,28 +42,6 @@ public class MyAnalysisActivity extends ActionBarActivity implements RequestCall
         // 获取数据
         mQuestionId = getIntent().getStringExtra("question_id");
         mType = getIntent().getStringExtra("type");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("MyAnalysisActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("MyAnalysisActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

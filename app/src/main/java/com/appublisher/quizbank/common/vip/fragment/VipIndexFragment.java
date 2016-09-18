@@ -19,6 +19,7 @@ import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.UserExamInfoModel;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
 import com.appublisher.quizbank.common.vip.activity.VipNotificationActivity;
@@ -103,9 +104,9 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         settingImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.container_view, new SettingFragment());
+                final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
+                intent.putExtra("from", "setting");
+                startActivity(intent);
             }
         });
 

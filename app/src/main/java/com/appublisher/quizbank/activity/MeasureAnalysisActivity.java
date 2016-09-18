@@ -22,6 +22,7 @@ import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
@@ -51,7 +52,7 @@ import java.util.Random;
 /**
  * 做题解析模块
  */
-public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback {
+public class MeasureAnalysisActivity extends BaseActivity implements RequestCallback {
 
     public int mScreenHeight;
     public int mCurQuestionId;
@@ -91,7 +92,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         setContentView(R.layout.activity_measure_analysis);
 
         // ToolBar
-        CommonModel.setToolBar(this);
+       setToolBar(this);
 
         // View 初始化
         mViewPager = (ViewPager) findViewById(R.id.measure_analysis_viewpager);
@@ -172,12 +173,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         });
         mHomeWatcher.startWatch();
 
-        // Umeng
-        MobclickAgent.onPageStart("MeasureAnalysisActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
     }
 
     @Override
@@ -188,12 +183,6 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
         if (mPopupWindow != null) mPopupWindow.dismiss();
 
-        // Umeng
-        MobclickAgent.onPageEnd("MeasureAnalysisActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override
