@@ -21,4 +21,9 @@
     <string name="vip_material">材料</string>
     <string name="vip_example">作业示例</string>
     <string name="vip_myjob">我的作业</string>
+
+    <string name="vip_zjzd_reject_title">
+        你的作业被驳回了\n请重新提交
+    </string>
+    <string name="vip_zjzd_reject_button">知道了</string>
 </resources>

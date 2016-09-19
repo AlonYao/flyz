@@ -60,9 +60,22 @@
                     tools:ignore="ContentDescription" />
             </LinearLayout>
             <!-- 我的作业 -->
-            <TextView
-                style="@style/Vip_Title"
-                android:text="@string/vip_myjob"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/Vip_Title"
+                    android:text="@string/vip_myjob"/>
+                <TextView
+                    android:id="@+id/vip_zjzd_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
+            </RelativeLayout>
+
             <org.apmem.tools.layouts.FlowLayout
                 android:id="@+id/vip_zjzd_myjob_container"
                 android:layout_width="match_parent"
