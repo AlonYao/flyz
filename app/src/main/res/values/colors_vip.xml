@@ -3,4 +3,7 @@
     <color name="vip_filter_item_unselect">#F5F5F5</color>
     <color name="vip_gray">#9A9A9A</color>
     <color name="vip_explain">#FF6722</color>
+
+    <color name="vip_red">#FF3737</color>
+    <color name="vip_green">#3AAD7F</color>
 </resources>

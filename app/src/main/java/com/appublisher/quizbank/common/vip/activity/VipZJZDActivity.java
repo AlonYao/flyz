@@ -198,8 +198,30 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
         return imageView;
     }
 
+    /**
+     * 显示状态文字
+     * @param status 状态
+     * @param text 文字
+     */
+    @SuppressWarnings("deprecation")
     public void showStatus(int status, String text) {
-        mTvStatus.setText(text);
+        if (status == 0) {
+            mTvStatus.setVisibility(View.GONE);
+        } else {
+            mTvStatus.setVisibility(View.VISIBLE);
+            // 文字
+            if (status == 3) {
+                mTvStatus.setText("等待审核");
+            } else {
+                mTvStatus.setText(text);
+            }
+            // 颜色
+            if (status == 1) {
+                mTvStatus.setTextColor(getResources().getColor(R.color.vip_green));
+            } else {
+                mTvStatus.setTextColor(getResources().getColor(R.color.vip_red));
+            }
+        }
     }
 
     /**

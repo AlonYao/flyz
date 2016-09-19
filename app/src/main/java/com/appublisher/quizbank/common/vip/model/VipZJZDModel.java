@@ -70,7 +70,11 @@ public class VipZJZDModel extends VipManager{
         if (resp == null || resp.getResponse_code() != 1) return;
 
         mCanSubmit = resp.isCan_submit();
+
+        // 状态
         mStatus = resp.getStatus();
+        String statusText = resp.getStatus_text();
+        mView.showStatus(mStatus, statusText);
 
         VipZJZDResp.QuestionBean question = resp.getQuestion();
         if (question != null) {
