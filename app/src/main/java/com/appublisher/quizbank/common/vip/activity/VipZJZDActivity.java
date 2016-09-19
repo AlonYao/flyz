@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.model.VipManager;
 import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
@@ -29,7 +29,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 /**
  * 小班：字迹诊断
  */
-public class VipZJZDActivity extends AppCompatActivity implements View.OnClickListener{
+public class VipZJZDActivity extends BaseActivity implements View.OnClickListener{
 
     public static final String FILE = "file";
     public static final String URL = "url";
@@ -37,6 +37,7 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView mIvExample;
     private TextView mTvMaterial;
     private TextView mTvStatus;
+    private Button mBtnSubmit;
     private FlowLayout mMyjobContainer;
     private VipZJZDModel mModel;
 
@@ -44,6 +45,7 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vip_zjzd);
+        setToolBar(this);
         initView();
         initData();
     }
@@ -96,6 +98,7 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
         mIvExample = (ImageView) findViewById(R.id.vip_zjzd_example);
         mTvMaterial = (TextView) findViewById(R.id.vip_zjzd_material);
         mTvStatus = (TextView) findViewById(R.id.vip_zjzd_status);
+        mBtnSubmit = (Button) findViewById(R.id.vip_zjzd_submit);
         mMyjobContainer = (FlowLayout) findViewById(R.id.vip_zjzd_myjob_container);
 
         mIvExample.setOnClickListener(this);
@@ -251,6 +254,14 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
                 alertDialog.dismiss();
             }
         });
+    }
+
+    public void showSubmitBtn(boolean is_show) {
+        if (is_show) {
+            mBtnSubmit.setVisibility(View.VISIBLE);
+        } else {
+            mBtnSubmit.setVisibility(View.GONE);
+        }
     }
 
 }

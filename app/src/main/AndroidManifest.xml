@@ -217,7 +217,8 @@
         <activity
             android:name=".common.vip.activity.VipZJZDActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_vip_zizd"/>
         <activity
             android:name=".common.vip.activity.VipExerciseIndexActivity"
             android:configChanges="orientation|keyboardHidden"

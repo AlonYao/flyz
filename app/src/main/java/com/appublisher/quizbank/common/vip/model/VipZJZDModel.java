@@ -28,7 +28,6 @@ public class VipZJZDModel extends VipManager{
     private VipZJZDActivity mView;
     private String mExampleUrl;
     private String mMyJobPicPath;
-    private String mMyJobPicUrl;
     private boolean mCanSubmit;
     private ArrayList<String> mPaths;
 
@@ -69,7 +68,9 @@ public class VipZJZDModel extends VipManager{
         VipZJZDResp resp = GsonManager.getModel(response, VipZJZDResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
 
+        // 提交按钮
         mCanSubmit = resp.isCan_submit();
+        mView.showSubmitBtn(mCanSubmit);
 
         // 状态
         mStatus = resp.getStatus();
@@ -127,10 +128,6 @@ public class VipZJZDModel extends VipManager{
 
     public boolean isCanSubmit() {
         return mCanSubmit;
-    }
-
-    public String getMyJobPicUrl() {
-        return mMyJobPicUrl;
     }
 
     public String getMyJobPicPath() {

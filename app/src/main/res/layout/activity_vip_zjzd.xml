@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/vip_explain_zjzd"
                 android:textColor="@color/vip_explain"
+                android:textSize="@dimen/vip_default_text"
                 android:padding="15dp"
                 android:background="@color/white"/>
             <!-- 材料 -->
@@ -40,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/vip_none"
                 android:textColor="@color/common_text"
+                android:textSize="@dimen/vip_default_text"
                 android:padding="15dp"
                 android:background="@color/white"/>
             <!-- 作业示例 -->
@@ -90,11 +92,13 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/vip_zjzd_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/vip_submit"
         android:textColor="@android:color/white"
+        android:textSize="@dimen/vip_default_text"
         android:background="@color/vip_gray"/>
 
 </RelativeLayout>
