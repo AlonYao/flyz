@@ -86,7 +86,10 @@
 # Application classes that will be serialized/deserialized over Gson
 -keep class com.google.gson.examples.android.model.** { *; }
 -keep class com.appublisher.quizbank.** { *; }
-
+-keep class com.appublisher.lib_basic.** { *; }
+-keep class com.appublisher.lib_login.** { *; }
+-keep class com.appublisher.lib_course.** { *; }
+-keep class com.appublisher.lib_pay.** { *; }
 ##---------------End: proguard configuration for Gson  ----------
 
 # TalkingData

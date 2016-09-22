@@ -14,9 +14,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         app:tabSelectedTextColor="@color/themecolor"
-        app:tabIndicatorColor="@color/themecolor">
+        app:tabIndicatorColor="@color/themecolor"/>
 
-    </android.support.design.widget.TabLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vip_msjp_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/vip_msjp_tablayout"/>
 
     <Button
         android:id="@+id/vip_msjp_submit"
