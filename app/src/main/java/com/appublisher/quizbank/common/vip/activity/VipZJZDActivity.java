@@ -83,6 +83,9 @@ public class VipZJZDActivity extends BaseActivity implements View.OnClickListene
                     new Intent(VipZJZDActivity.this, VipGalleryActivity.class);
             intent.putExtra(VipGalleryActivity.INTENT_PATHS, list);
             startActivity(intent);
+        } else if (id == R.id.vip_zjzd_submit) {
+            // 提交
+            if (mModel.isCanSubmit()) mModel.submit();
         }
     }
 
