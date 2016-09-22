@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipMSJPAdapter;
+import com.appublisher.quizbank.common.vip.model.VipMSJPModel;
 
 /**
  * 小班：名师精批
@@ -15,6 +16,7 @@ public class VipMSJPActivity extends BaseActivity {
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private VipMSJPModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,14 @@ public class VipMSJPActivity extends BaseActivity {
     }
 
     private void initData() {
+        mModel = new VipMSJPModel(this);
+    }
 
+    /**
+     * 显示材料
+     * @param material 材料
+     */
+    public void showMaterial(String material) {
+        
     }
 }
