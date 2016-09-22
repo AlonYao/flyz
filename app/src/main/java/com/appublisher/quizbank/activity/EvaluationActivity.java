@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -31,7 +32,7 @@ import java.util.Map;
 /**
  * 能力评估
  */
-public class EvaluationActivity extends ActionBarActivity implements RequestCallback {
+public class EvaluationActivity extends BaseActivity implements RequestCallback {
 
     public LineChartView mLineChart;
     public TextView mTvScore;
@@ -59,7 +60,7 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         setContentView(R.layout.activity_evaluation);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mLineChart = (LineChartView) findViewById(R.id.linechart);
@@ -86,28 +87,6 @@ public class EvaluationActivity extends ActionBarActivity implements RequestCall
         final Map<String, String> map = new HashMap<String, String>();
         map.put("Entry", "");
         UmengManager.onEvent(this, "Mine", map);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("EvaluationActivity");
-        MobclickAgent.onResume(this);
-        // TalkingData
-        TCAgent.onResume(this);
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("EvaluationActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

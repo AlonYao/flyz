@@ -7,6 +7,7 @@ import android.webkit.WebView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
@@ -22,7 +23,7 @@ import org.json.JSONObject;
 /**
  * 常见问题
  */
-public class QaActivity extends ActionBarActivity implements RequestCallback {
+public class QaActivity extends BaseActivity implements RequestCallback {
 
     private WebView mWebView;
 
@@ -32,7 +33,7 @@ public class QaActivity extends ActionBarActivity implements RequestCallback {
         setContentView(R.layout.activity_qa);
 
         // ToolBar
-        CommonModel.setToolBar(this);
+       setToolBar(this);
 
         // view初始化
         mWebView = (WebView) findViewById(R.id.qa_webview);
@@ -40,28 +41,6 @@ public class QaActivity extends ActionBarActivity implements RequestCallback {
 
         ProgressDialogManager.showProgressDialog(this, true);
         new QRequest(this, this).getQa();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("QaActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("QaActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

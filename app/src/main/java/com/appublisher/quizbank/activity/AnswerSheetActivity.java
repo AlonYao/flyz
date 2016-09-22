@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -38,7 +39,7 @@ import java.util.HashMap;
 /**
  * 答题卡
  */
-public class AnswerSheetActivity extends ActionBarActivity implements RequestCallback {
+public class AnswerSheetActivity extends BaseActivity implements RequestCallback {
 
     private String mPaperName;
     private ExpandableHeightGridView mGridView;
@@ -64,7 +65,7 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
         setContentView(R.layout.activity_answer_sheet);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mGridView = (ExpandableHeightGridView) findViewById(R.id.answer_sheet_gv);
@@ -125,28 +126,6 @@ public class AnswerSheetActivity extends ActionBarActivity implements RequestCal
                 }
             });
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("AnswerSheetActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("AnswerSheetActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     /**

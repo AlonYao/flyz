@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 /**
  * 模考&估分列表页面
  */
-public class MockActivity extends ActionBarActivity implements
+public class MockActivity extends BaseActivity implements
         RequestCallback, AdapterView.OnItemClickListener{
 
     private ListView mLvMock;
@@ -43,7 +44,7 @@ public class MockActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_mock);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // 获取数据
         String title = getIntent().getStringExtra("title");
@@ -59,28 +60,6 @@ public class MockActivity extends ActionBarActivity implements
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         QRequest.getMockExerciseList();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("MockActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("MockActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -31,7 +32,7 @@ import java.util.Date;
 /**
  * 系统通知
  */
-public class SystemNoticeActivity extends ActionBarActivity implements
+public class SystemNoticeActivity extends BaseActivity implements
         XListView.IXListViewListener, RequestCallback {
 
     public XListView mXListView;
@@ -49,7 +50,7 @@ public class SystemNoticeActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_system_notice);
 
         // ToolBar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mXListView = (XListView) findViewById(R.id.notice_lv);
@@ -67,28 +68,6 @@ public class SystemNoticeActivity extends ActionBarActivity implements
         // 获取数据
         ProgressDialogManager.showProgressDialog(this, true);
         mQRequest.getNotifications(mOffset, mCount);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("SystemNoticeActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("SystemNoticeActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

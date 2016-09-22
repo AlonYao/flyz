@@ -12,6 +12,7 @@ import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.tendcloud.tenddata.TCAgent;
@@ -20,7 +21,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 通知详情
  */
-public class NoticeDetailActivity extends ActionBarActivity {
+public class NoticeDetailActivity extends BaseActivity {
 
     private RelativeLayout mProgressBar;
 
@@ -31,7 +32,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_notice_detail);
 
         // Toolbar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         TextView textView = (TextView) findViewById(R.id.notice_text);
@@ -68,28 +69,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 }
             });
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Umeng
-        MobclickAgent.onPageStart("NoticeDetailActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Umeng
-        MobclickAgent.onPageEnd("NoticeDetailActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
     }
 
     @Override

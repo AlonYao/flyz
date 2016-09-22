@@ -28,6 +28,7 @@ import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
@@ -67,7 +68,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends ActionBarActivity implements RequestCallback {
+public class MainActivity extends BaseActivity implements RequestCallback {
 
     /**
      * Fragment
@@ -131,7 +132,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         mDrawerList.setOnItemClickListener(drawerListOnClick);
 
         // 侧边栏样式
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -171,10 +172,6 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     @Override
     protected void onResume() {
         super.onResume();
-        // Umeng
-        MobclickAgent.onResume(this);
-        // TalkingData
-        TCAgent.onResume(this);
         // 检测账号是否被合并
         mQRequest.isUserMerged(LoginModel.getUserId());
     }
@@ -184,12 +181,6 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         super.onPause();
         // 关闭定位
         LocationManager.stop();
-
-        // Umeng
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
 
         ProgressDialogManager.closeProgressDialog();
 
@@ -237,7 +228,9 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         } else if ("评分".equals(item.getTitle())) {
             OpenCourseModel.skipToMyGrade(this, mUnRateClasses, "false");
         } else if ("首页".equals(item.getTitle())) {
-
+            final Intent intent = new Intent(this, CommonFragmentActivity.class);
+            intent.putExtra("from", "homepage");
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

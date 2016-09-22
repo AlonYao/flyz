@@ -21,6 +21,7 @@ import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -53,7 +54,7 @@ import java.util.TimerTask;
 /**
  * 做题
  */
-public class MeasureActivity extends ActionBarActivity implements RequestCallback {
+public class MeasureActivity extends BaseActivity implements RequestCallback {
 
     public int mScreenHeight;
     public int mCurPosition;
@@ -174,7 +175,7 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         setContentView(R.layout.activity_measure);
 
         // ToolBar
-        CommonModel.setToolBar(this);
+        setToolBar(this);
 
         // View 初始化
         mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
@@ -253,13 +254,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
             }
         });
         mHomeWatcher.startWatch();
-
-        // Umeng
-        MobclickAgent.onPageStart("MeasureActivity");
-        MobclickAgent.onResume(this);
-
-        // TalkingData
-        TCAgent.onResume(this);
     }
 
     @Override
@@ -267,13 +261,6 @@ public class MeasureActivity extends ActionBarActivity implements RequestCallbac
         super.onPause();
         // Home键监听
         mHomeWatcher.stopWatch();
-
-        // Umeng
-        MobclickAgent.onPageEnd("MeasureActivity");
-        MobclickAgent.onPause(this);
-
-        // TalkingData
-        TCAgent.onPause(this);
 
         ProgressDialogManager.closeProgressDialog();
     }

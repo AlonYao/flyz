@@ -100,7 +100,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.BaseActivity" />
 
         <!-- 个推SDK配置开始 -->
         <receiver
@@ -224,6 +223,13 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_exercise"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CommonFragmentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label=""
+            android:screenOrientation="portrait"></activity>
+
         <!-- Image Selector Entry -->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
@@ -232,6 +238,7 @@
             android:name=".common.vip.activity.VipGalleryActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
