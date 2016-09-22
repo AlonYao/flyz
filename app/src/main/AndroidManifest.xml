@@ -216,19 +216,18 @@
         <activity
             android:name=".common.vip.activity.VipZJZDActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_vip_zizd"/>
+            android:label="@string/title_activity_vip_zizd"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".common.vip.activity.VipExerciseIndexActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_exercise"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CommonFragmentActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label=""
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <!-- Image Selector Entry -->
         <activity
@@ -237,8 +236,12 @@
         <activity
             android:name=".common.vip.activity.VipGalleryActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.vip.activity.VipMSJPActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_vip_msjp"/>
     </application>
 
 </manifest>

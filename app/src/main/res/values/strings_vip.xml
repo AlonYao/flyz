@@ -5,6 +5,7 @@
     <string name="title_activity_vip_notification">消息</string>
     <string name="title_activity_vip_exercise">我的作业</string>
     <string name="title_activity_vip_zizd">字迹诊断</string>
+    <string name="title_activity_vip_msjp">名师精批</string>
 
     <string name="vip_filter_status">作业状态</string>
     <string name="vip_filter_category">科目</string>
@@ -13,6 +14,7 @@
     <string name="vip_none">无内容</string>
 
     <string name="vip_submit">提交</string>
+    <string name="vip_msjp_submit">上传作业</string>
     <string name="vip_explain">说明</string>
     <string name="vip_explain_zjzd">
         1.请在格子纸中使用黑色字迹钢笔或签字笔认真书写如下文字并拍照上传；\n
