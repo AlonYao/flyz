@@ -43,13 +43,16 @@ public class VipMSJPMaterialFragment extends Fragment{
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.vip_msjp_material_fragment, container, false);
+
+        // 材料
         WebView webView = (WebView) view.findViewById(R.id.vip_msjp_material_webview);
+        webView.setBackgroundColor(0);
+        webView.loadDataWithBaseURL(null, getMaterial(mResp), "text/html", "UTF-8", null);
+
+        // 上滑Button
         final ScrollView scrollView =
                 (ScrollView) view.findViewById(R.id.vip_msjp_material_scrollview);
         ImageButton imageButton = (ImageButton) view.findViewById(R.id.vip_msjp_totop);
-
-        webView.setBackgroundColor(0);
-        webView.loadDataWithBaseURL(null, getMaterial(mResp), "text/html", "UTF-8", null);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +63,11 @@ public class VipMSJPMaterialFragment extends Fragment{
         return view;
     }
 
+    /**
+     * 获取材料
+     * @param resp VipMSJPResp
+     * @return String
+     */
     @NonNull
     private static String getMaterial(VipMSJPResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return "";

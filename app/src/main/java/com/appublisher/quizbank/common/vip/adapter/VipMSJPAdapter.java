@@ -39,7 +39,7 @@ public class VipMSJPAdapter extends FragmentPagerAdapter{
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return VipMSJPQuestionFragment.newInstance();
+                return VipMSJPQuestionFragment.newInstance(mVipMSJPResp);
 
             case 1:
                 return VipMSJPMaterialFragment.newInstance(mVipMSJPResp);
