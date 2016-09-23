@@ -33,4 +33,6 @@
     <string name="vip_msjp_review_remark">老师评语</string>
     <string name="vip_msjp_review_correct">老师批改</string>
     <string name="vip_msjp_review_answer">参考答案</string>
+    <string name="vip_msjp_review_score">分数：</string>
+    <string name="vip_msjp_review_point">分</string>
 </resources>
