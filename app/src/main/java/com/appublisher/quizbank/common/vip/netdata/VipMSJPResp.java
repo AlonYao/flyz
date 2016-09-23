@@ -168,7 +168,7 @@ public class VipMSJPResp {
         }
 
         public String getMaterial() {
-            return material;
+            return material == null ? "" : material;
         }
 
         public void setMaterial(String material) {

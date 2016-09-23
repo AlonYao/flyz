@@ -26,7 +26,8 @@ public class VipMSJPModel extends VipManager{
      * 获取练习详情
      */
     public void getExerciseDetail() {
-        mVipRequest.getExerciseDetail(mExerciseId);
+//        mVipRequest.getExerciseDetail(mExerciseId);
+        mVipRequest.getExerciseDetail(330);
     }
 
     @Override
@@ -43,12 +44,6 @@ public class VipMSJPModel extends VipManager{
      */
     private void dealExerciseDetailResp(JSONObject response) {
         VipMSJPResp resp = GsonManager.getModel(response, VipMSJPResp.class);
-        if (resp == null || resp.getResponse_code() != 1) return;
-
-        VipMSJPResp.QuestionBean questionBean = resp.getQuestion();
-        if (questionBean == null) return;
-
-        String material = questionBean.getMaterial();
-        mView.showMaterial(material);
+        mView.showContent(resp);
     }
 }

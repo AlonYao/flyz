@@ -8,6 +8,7 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipMSJPAdapter;
 import com.appublisher.quizbank.common.vip.model.VipMSJPModel;
+import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
 
 /**
  * 小班：名师精批
@@ -30,21 +31,16 @@ public class VipMSJPActivity extends BaseActivity {
     private void initView() {
         mTabLayout = (TabLayout) findViewById(R.id.vip_msjp_tablayout);
         mViewPager = (ViewPager) findViewById(R.id.vip_msjp_viewpager);
-
-        VipMSJPAdapter adapter = new VipMSJPAdapter(this);
-        mViewPager.setAdapter(adapter);
-        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     private void initData() {
         mModel = new VipMSJPModel(this);
+        mModel.getExerciseDetail();
     }
 
-    /**
-     * 显示材料
-     * @param material 材料
-     */
-    public void showMaterial(String material) {
-        
+    public void showContent(VipMSJPResp resp) {
+        VipMSJPAdapter adapter = new VipMSJPAdapter(getSupportFragmentManager(), resp);
+        mViewPager.setAdapter(adapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }

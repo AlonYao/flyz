@@ -1,20 +1,23 @@
 package com.appublisher.quizbank.common.vip.adapter;
 
-import android.content.Context;
-import android.support.v4.view.PagerAdapter;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import com.appublisher.quizbank.common.vip.fragment.VipMSJPMaterialFragment;
+import com.appublisher.quizbank.common.vip.fragment.VipMSJPQuestionFragment;
+import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
 
 /**
  * 小班：名师精批
  */
-public class VipMSJPAdapter extends PagerAdapter{
+public class VipMSJPAdapter extends FragmentPagerAdapter{
 
-    private Context mContext;
+    private VipMSJPResp mVipMSJPResp;
 
-    public VipMSJPAdapter(Context context) {
-        mContext = context;
+    public VipMSJPAdapter(FragmentManager fm, VipMSJPResp resp) {
+        super(fm);
+        mVipMSJPResp = resp;
     }
 
     @Override
@@ -33,20 +36,15 @@ public class VipMSJPAdapter extends PagerAdapter{
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                return VipMSJPQuestionFragment.newInstance();
+
+            case 1:
+                return VipMSJPMaterialFragment.newInstance(mVipMSJPResp);
+        }
+        return null;
     }
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        TextView textView = new TextView(mContext);
-        textView.setText("Test" + position);
-        container.addView(textView);
-        return textView;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-    }
 }
