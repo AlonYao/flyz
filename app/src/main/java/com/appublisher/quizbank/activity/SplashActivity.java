@@ -5,19 +5,25 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.activity.LoginActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
-import com.appublisher.quizbank.common.update.AppUpdate;
+import com.appublisher.quizbank.common.promote.PromoteModel;
+import com.appublisher.quizbank.common.promote.PromoteResp;
 import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -26,10 +32,51 @@ import com.umeng.analytics.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * 启动页
  */
 public class SplashActivity extends Activity implements RequestCallback {
+
+    private PromoteModel mPromoteModel;
+    private ImageView mImageView;
+    private TextView mTextView;
+
+    private static int mSec;
+    private static final int TIME_ON = 0;
+    private static final int TIME_OUT = 1;
+
+    public static class MsgHandler extends Handler {
+        private WeakReference<Activity> mActivity;
+//        private WeakReference<TextView> mTextView;
+
+        public MsgHandler(Activity activity) {
+            mActivity = new WeakReference<>(activity);
+//            mTextView = new WeakReference<>(textView);
+        }
+
+        @SuppressLint("CommitPrefEdits")
+        @Override
+        public void handleMessage(Message msg) {
+            final SplashActivity activity = (SplashActivity) mActivity.get();
+            final TextView textView = (TextView) activity.findViewById(R.id.splash_timer);
+            switch (msg.what) {
+                case TIME_ON:
+                    textView.setText(mSec);
+                    break;
+
+                case TIME_OUT:
+                    ToastManager.showToast(activity, "时间到");
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -37,8 +84,13 @@ public class SplashActivity extends Activity implements RequestCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        mImageView = (ImageView) findViewById(R.id.splash_bg);
+        mTextView = (TextView) findViewById(R.id.splash_timer);
+
         // 获取全局配置
         new Request(this, this).getGlobalSettings();
+        mPromoteModel = new PromoteModel(this);
+        mSec = 3;
 
         // 应用版本更新
         SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
@@ -92,14 +144,26 @@ public class SplashActivity extends Activity implements RequestCallback {
                         globalSettingsResp.getNew_version(), NewVersion.class));
                 editor.commit();
             }
+
+            // 获取国考公告解读宣传
+            mPromoteModel.getPromoteData(new PromoteModel.PromoteDataListener() {
+                @Override
+                public void onComplete(boolean success, PromoteResp resp) {
+                    if (success) {
+                        showPromoteImg(resp);
+                    } else {
+                        skipToMainActivity();
+                    }
+                }
+            });
         }
 
-        // 版本更新
-        boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
-        if (enable && AppUpdate.showUpGrade(this)) {
-        }else{
-            skipToMainActivity();
-        }
+//        // 版本更新
+//        boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
+//        if (enable && AppUpdate.showUpGrade(this)) {
+//        }else{
+//            skipToMainActivity();
+//        }
     }
 
     @Override
@@ -111,6 +175,48 @@ public class SplashActivity extends Activity implements RequestCallback {
     public void requestEndedWithError(VolleyError error, String apiName) {
         ToastManager.showOvertimeToash(this);
         skipToMainActivity();
+    }
+
+    private void showPromoteImg(PromoteResp resp) {
+        if (resp == null || resp.getResponse_code() != 1) {
+            skipToMainActivity();
+            return;
+        }
+
+        PromoteResp.InfoBean infoBean = resp.getInfo();
+        if (infoBean == null) {
+            skipToMainActivity();
+            return;
+        }
+
+        PromoteResp.InfoBean.ImageBean imageBean = infoBean.getImage();
+        if (imageBean == null) {
+            skipToMainActivity();
+            return;
+        }
+
+        String imgUrl = imageBean.getAndroid();
+        mPromoteModel.getRequest().loadImage(imgUrl, mImageView);
+        final Handler mHandler = new MsgHandler(this);
+
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                Logger.e("111111111");
+
+                mSec--;
+                if (mSec < 0) {
+                    mHandler.sendEmptyMessage(TIME_OUT);
+                    timer.cancel();
+                } else {
+                    mHandler.sendEmptyMessage(TIME_ON);
+                }
+            }
+
+        }, 0, 1000);
     }
 
     /**
@@ -129,7 +235,6 @@ public class SplashActivity extends Activity implements RequestCallback {
                 // 没有考试项目
                 cls = ExamChangeActivity.class;
             }
-
             // Umeng
             UmengManager.sendCountEvent(SplashActivity.this, "Home", "Entry", "Launch");
 

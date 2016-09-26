@@ -14,6 +14,7 @@ public class Request extends BaseRequest implements ApiConstants {
 
     private Context context;
 
+    public static final String GLOBAL_SETTINGS = "global_settings";
     private static Boolean imageCacheInit = false;
 
     /**
@@ -227,7 +228,7 @@ public class Request extends BaseRequest implements ApiConstants {
      * 获取全局配置
      */
     public void getGlobalSettings() {
-        asyncRequest(ParamBuilder.finalUrl(getGlobalSettings), "global_settings", "object");
+        asyncRequest(ParamBuilder.finalUrl(getGlobalSettings), GLOBAL_SETTINGS, "object");
     }
 
     /**
