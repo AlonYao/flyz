@@ -269,6 +269,7 @@ public class LoginActivity extends ActionBarActivity implements RequestCallback{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 禁用返回键
+        ToastManager.showToast(this, "请注册或登录");
         return keyCode == KeyEvent.KEYCODE_BACK;
     }
 

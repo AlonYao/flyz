@@ -27,6 +27,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
+import com.appublisher.quizbank.common.login.activity.LoginActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
@@ -157,6 +158,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     @Override
     protected void onResume() {
         super.onResume();
+        // 检查登录状态
+        checkLoginStatus();
         // Umeng
         MobclickAgent.onResume(this);
         // TalkingData
@@ -249,6 +252,23 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
                 mDoubleBackToExit = false;
             }
         }, 2000);
+    }
+
+    /**
+     * 检查登录状态
+     */
+    private void checkLoginStatus() {
+        if (!LoginModel.isLogin()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("from", "splash");
+            startActivity(intent);
+        } else if (!LoginModel.hasExamInfo()) {
+            Intent intent = new Intent(this, ExamChangeActivity.class);
+            intent.putExtra("from", "splash");
+            startActivity(intent);
+            // Umeng
+            UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
+        }
     }
 
     /**

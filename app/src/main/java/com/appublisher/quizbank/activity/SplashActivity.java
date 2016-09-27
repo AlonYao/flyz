@@ -7,13 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.login.activity.LoginActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.promote.PromoteModel;
 import com.appublisher.quizbank.common.promote.PromoteResp;
@@ -23,7 +23,6 @@ import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
-import com.appublisher.quizbank.utils.Logger;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
 import com.tendcloud.tenddata.TCAgent;
@@ -51,25 +50,25 @@ public class SplashActivity extends Activity implements RequestCallback {
 
     public static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
-//        private WeakReference<TextView> mTextView;
+        private WeakReference<TextView> mTextView;
 
-        public MsgHandler(Activity activity) {
+        public MsgHandler(Activity activity, TextView textView) {
             mActivity = new WeakReference<>(activity);
-//            mTextView = new WeakReference<>(textView);
+            mTextView = new WeakReference<>(textView);
         }
 
         @SuppressLint("CommitPrefEdits")
         @Override
         public void handleMessage(Message msg) {
             final SplashActivity activity = (SplashActivity) mActivity.get();
-            final TextView textView = (TextView) activity.findViewById(R.id.splash_timer);
+            final TextView textView = mTextView.get();
             switch (msg.what) {
                 case TIME_ON:
-                    textView.setText(mSec);
+                    textView.setText(String.valueOf(mSec));
                     break;
 
                 case TIME_OUT:
-                    ToastManager.showToast(activity, "时间到");
+                    skipToMainActivity(activity);
                     break;
 
                 default:
@@ -128,7 +127,7 @@ public class SplashActivity extends Activity implements RequestCallback {
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) {
-            skipToMainActivity();
+            skipToMainActivity(this);
             return;
         }
 
@@ -146,16 +145,20 @@ public class SplashActivity extends Activity implements RequestCallback {
             }
 
             // 获取国考公告解读宣传
-            mPromoteModel.getPromoteData(new PromoteModel.PromoteDataListener() {
-                @Override
-                public void onComplete(boolean success, PromoteResp resp) {
-                    if (success) {
-                        showPromoteImg(resp);
-                    } else {
-                        skipToMainActivity();
+            if (isFirstStart() || !LoginModel.isLogin()) {
+                skipToMainActivity(this);
+            } else {
+                mPromoteModel.getPromoteData(new PromoteModel.PromoteDataListener() {
+                    @Override
+                    public void onComplete(boolean success, PromoteResp resp) {
+                        if (success) {
+                            showPromoteImg(resp);
+                        } else {
+                            skipToMainActivity(SplashActivity.this);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
 //        // 版本更新
@@ -168,45 +171,38 @@ public class SplashActivity extends Activity implements RequestCallback {
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        skipToMainActivity();
+        skipToMainActivity(this);
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         ToastManager.showOvertimeToash(this);
-        skipToMainActivity();
+        skipToMainActivity(this);
     }
 
     private void showPromoteImg(PromoteResp resp) {
         if (resp == null || resp.getResponse_code() != 1) {
-            skipToMainActivity();
+            skipToMainActivity(this);
             return;
         }
 
-        PromoteResp.InfoBean infoBean = resp.getInfo();
-        if (infoBean == null) {
-            skipToMainActivity();
-            return;
-        }
-
-        PromoteResp.InfoBean.ImageBean imageBean = infoBean.getImage();
-        if (imageBean == null) {
-            skipToMainActivity();
+        final PromoteResp.ImageBean imageBean = resp.getImage();
+        if (imageBean == null || !imageBean.isEnable()) {
+            skipToMainActivity(this);
             return;
         }
 
         String imgUrl = imageBean.getAndroid();
         mPromoteModel.getRequest().loadImage(imgUrl, mImageView);
-        final Handler mHandler = new MsgHandler(this);
 
+        mTextView.setText("3");
+        mTextView.setVisibility(View.VISIBLE);
+        final Handler mHandler = new MsgHandler(this, mTextView);
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
 
             @Override
             public void run() {
-
-                Logger.e("111111111");
-
                 mSec--;
                 if (mSec < 0) {
                     mHandler.sendEmptyMessage(TIME_OUT);
@@ -217,48 +213,63 @@ public class SplashActivity extends Activity implements RequestCallback {
             }
 
         }, 0, 1000);
+
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String targetType = imageBean.getTarget_type();
+                if ("url".equals(targetType)) {
+                    // 外部链接
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+
+                    intent = new Intent(SplashActivity.this, WebViewActivity.class);
+                    intent.putExtra("url", imageBean.getTarget());
+                    startActivity(intent);
+                } else if ("mokao".equals(targetType)) {
+                    // 模考
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+
+                    intent = new Intent(SplashActivity.this, MockPreActivity.class);
+                    intent.putExtra("type", "mock");
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     /**
      * 跳转至主页面
      */
     @SuppressLint("CommitPrefEdits")
-    public void skipToMainActivity() {
-        // 页面跳转
-        Class<?> cls;
-        boolean is_login = Globals.sharedPreferences.getBoolean("is_login", false);
-        if (is_login) {
-            // 已登录
-            if (LoginModel.hasExamInfo()) {
-                cls = MainActivity.class;
-            } else {
-                // 没有考试项目
-                cls = ExamChangeActivity.class;
-            }
-            // Umeng
-            UmengManager.sendCountEvent(SplashActivity.this, "Home", "Entry", "Launch");
-
-        } else {
-            // 未登录
-            cls = LoginActivity.class;
-        }
-
-        Intent intent = new Intent(SplashActivity.this, cls);
+    public static void skipToMainActivity(Activity activity) {
+        Intent intent = new Intent(activity, MainActivity.class);
         intent.putExtra("from", "splash");
-        startActivity(intent);
+        activity.startActivity(intent);
 
-        boolean isFirstStart = Globals.sharedPreferences.getBoolean("isFirstStart", true);
-        if (isFirstStart) {
-            // app 引导页
-            intent = new Intent(SplashActivity.this, AppGuideActivity.class);
-            startActivity(intent);
+        // app 引导页
+        if (isFirstStart()) {
+            intent = new Intent(activity, AppGuideActivity.class);
+            activity.startActivity(intent);
 
             SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
             editor.putBoolean("isFirstStart", false);
             editor.commit();
         }
 
-        finish();
+        activity.finish();
+
+        // Umeng
+        UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
+    }
+
+    /**
+     * 是否是首次安装
+     * @return boolean
+     */
+    private static boolean isFirstStart() {
+        return Globals.sharedPreferences.getBoolean("isFirstStart", true);
     }
 
 }

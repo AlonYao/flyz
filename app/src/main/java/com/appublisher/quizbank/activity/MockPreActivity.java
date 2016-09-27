@@ -251,6 +251,7 @@ public class MockPreActivity extends ActionBarActivity implements RequestCallbac
                 if (mockPaperMs != null && mockPaperMs.size() != 0) {
                     MockPaperM mockPaperM = mockPaperMs.get(0);
                     mock_id = mockPaperM.getId();
+                    if (paper_name == null) paper_name = mockPaperM.getName();
                     if (mock_id <= 0) {
                         ToastManager.showToast(this, "没有相应的模考");
                     } else {
