@@ -443,7 +443,7 @@ public class UmengManager {
         // 获取上次记录的离开日期
         String firstLeaveDate = GradeDAO.getFirstLeaveDate(Globals.appVersion, activity);
 
-        if (firstLeaveDate != null && firstLeaveDate.equals(Utils.getCurDate())) {
+        if (firstLeaveDate != null && firstLeaveDate.equals(Utils.getCurDateString())) {
             // 如果是同一天发生的
             if (activity instanceof PracticeReportActivity)
                 // 如果是PracticeReportActivity，额外需要传送Umeng统计的数据
@@ -457,7 +457,7 @@ public class UmengManager {
         }
 
         // 更新离开日期
-        GradeDAO.updateFirstLeaveDate(Globals.appVersion, Utils.getCurDate(), activity);
+        GradeDAO.updateFirstLeaveDate(Globals.appVersion, Utils.getCurDateString(), activity);
     }
 
     /**

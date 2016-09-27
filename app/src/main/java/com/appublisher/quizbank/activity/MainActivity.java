@@ -97,6 +97,12 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     private static final String SETTING = "Setting";
     public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
 
+    /**
+     * 国考推广
+     */
+    public static final String INTENT_PROMOTE = "intent_promote";
+    private String promote_data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +118,7 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
         mRequest = new Request(this, this);
+        promote_data = getIntent().getStringExtra(INTENT_PROMOTE);
 
         /** 侧边栏设置 */
 

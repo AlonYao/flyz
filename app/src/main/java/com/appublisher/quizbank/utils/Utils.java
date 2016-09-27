@@ -136,7 +136,7 @@ public class Utils {
      *
      * @return 当前日期
      */
-    public static String getCurDate() {
+    public static String getCurDateString() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         Date curDate = new Date(System.currentTimeMillis());
         return format.format(curDate);
@@ -499,6 +499,48 @@ public class Utils {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    /**
+     * 日期转换：String To Date
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static Date stringToDate(String s) {
+        try {
+            if (s == null || s.equals("")) return null;
+
+            SimpleDateFormat sdf;
+
+            if (s.length() == 19) {
+                sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            } else {
+                sdf = new SimpleDateFormat("yyyy-MM-dd");
+            }
+
+            return sdf.parse(s);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取当前日期
+     *
+     * @return 当前日期
+     */
+    public static Date getCurDate() {
+        return new Date(System.currentTimeMillis());
+    }
+
+    /**
+     * 获取日期间隔
+     * @param start 开始日期
+     * @param end 结束日期
+     * @return 日期间隔
+     */
+    public static long getDateInterval(Date start, Date end) {
+        if (start == null || end == null) return 0;
+        return (end.getTime() - start.getTime()) / (1000*60*60*24);
     }
 
 }
