@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,8 +26,10 @@ import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
+import com.appublisher.quizbank.utils.ImageManager;
 import com.appublisher.quizbank.utils.ToastManager;
 import com.appublisher.quizbank.utils.UmengManager;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -203,47 +206,65 @@ public class SplashActivity extends Activity implements RequestCallback {
         }
 
         String imgUrl = imageBean.getAndroid();
-        mPromoteModel.getRequest().loadImage(imgUrl, mImageView);
-
-        mTextView.setText(String.valueOf(mSec));
-        mTextView.setVisibility(View.VISIBLE);
-        final Handler mHandler = new MsgHandler(this, mTextView);
-        final Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-
+        ImageManager.displayImage(imgUrl, mImageView, new ImageManager.LoadingListener() {
             @Override
-            public void run() {
-                mSec--;
-                if (mSec < 1) {
-                    mHandler.sendEmptyMessage(TIME_OUT);
-                    timer.cancel();
-                } else {
-                    mHandler.sendEmptyMessage(TIME_ON);
-                }
+            public void onLoadingStarted(String imageUri, View view) {
+
             }
 
-        }, 1000, 1000);
-
-        mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String targetType = imageBean.getTarget_type();
-                if ("url".equals(targetType)) {
-                    // 外部链接
-                    toMainActivity();
-                    Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
-                    intent.putExtra("url", imageBean.getTarget());
-                    startActivity(intent);
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                skipToMainActivity();
+            }
 
-                } else if ("mokao".equals(targetType)) {
-                    // 模考
-                    toMainActivity();
-                    Intent intent = new Intent(SplashActivity.this, MockPreActivity.class);
-                    intent.putExtra("type", "mock");
-                    startActivity(intent);
-                }
-                timer.cancel();
-                finish();
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                mTextView.setText(String.valueOf(mSec));
+                mTextView.setVisibility(View.VISIBLE);
+                final Handler mHandler = new MsgHandler(SplashActivity.this, mTextView);
+                final Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        mSec--;
+                        if (mSec < 1) {
+                            mHandler.sendEmptyMessage(TIME_OUT);
+                            timer.cancel();
+                        } else {
+                            mHandler.sendEmptyMessage(TIME_ON);
+                        }
+                    }
+
+                }, 1000, 1000);
+
+                mImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String targetType = imageBean.getTarget_type();
+                        if ("url".equals(targetType)) {
+                            // 外部链接
+                            toMainActivity();
+                            Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
+                            intent.putExtra("url", imageBean.getTarget());
+                            startActivity(intent);
+
+                        } else if ("mokao".equals(targetType)) {
+                            // 模考
+                            toMainActivity();
+                            Intent intent = new Intent(SplashActivity.this, MockPreActivity.class);
+                            intent.putExtra("type", "mock");
+                            startActivity(intent);
+                        }
+                        timer.cancel();
+                        finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                skipToMainActivity();
             }
         });
     }

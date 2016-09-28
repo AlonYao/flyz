@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.utils.ImageManager;
 import com.appublisher.quizbank.utils.OpenUDID_manager;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
@@ -72,6 +73,8 @@ public class QuizBankApp extends Application{
         FileDownloader.init(this);
         FileDownloadUtils.setDefaultSaveRootPath(
                 Environment.getExternalStorageDirectory().toString());
+
+        ImageManager.init(this);
     }
 
     // 单例模式中获取唯一的QuizBankApp实例

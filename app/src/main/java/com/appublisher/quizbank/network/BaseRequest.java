@@ -35,7 +35,7 @@ public class BaseRequest {
     protected static RequestQueue mQueue = null;
     protected RequestCallback listener = null;
     protected String encode = null;
-    protected static final int TIMEOUT_S = 15;
+    protected static final int TIMEOUT_S = 10;
     protected static final int RETRY_NUM = 1;
     private MultipartEntity entity = new MultipartEntity();
 
