@@ -12,6 +12,8 @@ import com.appublisher.quizbank.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -78,6 +80,25 @@ public class PromoteModel implements RequestCallback{
                 mContext.getSharedPreferences(YAOGUO_PROMOTE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(PARAM_DATE, Utils.getCurDateString());
+        editor.commit();
+    }
+
+    /**
+     * 保存时间(当前时间+1天)
+     */
+    @SuppressLint("CommitPrefEdits")
+    public void saveDateAdd1() {
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, 1);
+        String date = sdf.format(calendar.getTime());
+
+        SharedPreferences sp =
+                mContext.getSharedPreferences(YAOGUO_PROMOTE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(PARAM_DATE, date);
         editor.commit();
     }
 

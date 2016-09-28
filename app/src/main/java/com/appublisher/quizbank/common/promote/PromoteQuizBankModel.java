@@ -27,7 +27,7 @@ public class PromoteQuizBankModel extends PromoteModel {
     }
 
     public void showPromoteAlert(String promoteData) {
-//        if (!isShow()) return;
+        if (!isShow()) return;
 
         PromoteResp resp = GsonManager.getModel(promoteData, PromoteResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
@@ -60,6 +60,7 @@ public class PromoteQuizBankModel extends PromoteModel {
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveDateAdd1();
                 alertDialog.dismiss();
             }
         });

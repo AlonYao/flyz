@@ -245,8 +245,11 @@ public class SplashActivity extends Activity implements RequestCallback {
                         if ("url".equals(targetType)) {
                             // 外部链接
                             toMainActivity();
+                            String url = imageBean.getTarget()
+                                    + "?user_id=" + LoginModel.getUserId()
+                                    + "&user_token=" + LoginModel.getUserToken();
                             Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
-                            intent.putExtra("url", imageBean.getTarget());
+                            intent.putExtra("url", url);
                             startActivity(intent);
 
                         } else if ("mokao".equals(targetType)) {
