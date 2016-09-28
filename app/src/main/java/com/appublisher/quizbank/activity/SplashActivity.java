@@ -17,6 +17,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.common.promote.PromoteModel;
 import com.appublisher.quizbank.common.promote.PromoteResp;
+import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
@@ -43,6 +44,7 @@ public class SplashActivity extends Activity implements RequestCallback {
     private PromoteModel mPromoteModel;
     private ImageView mImageView;
     private TextView mTextView;
+    private PromoteResp mPromoteResp;
 
     private static int mSec;
     private static final int TIME_ON = 0;
@@ -68,7 +70,7 @@ public class SplashActivity extends Activity implements RequestCallback {
                     break;
 
                 case TIME_OUT:
-                    skipToMainActivity(activity);
+                    activity.skipToMainActivity();
                     break;
 
                 default:
@@ -127,7 +129,7 @@ public class SplashActivity extends Activity implements RequestCallback {
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) {
-            skipToMainActivity(this);
+            skipToMainActivity();
             return;
         }
 
@@ -145,20 +147,18 @@ public class SplashActivity extends Activity implements RequestCallback {
             }
 
             // 获取国考公告解读宣传
-            if (isFirstStart() || !LoginModel.isLogin()) {
-                skipToMainActivity(this);
-            } else {
-                mPromoteModel.getPromoteData(new PromoteModel.PromoteDataListener() {
-                    @Override
-                    public void onComplete(boolean success, PromoteResp resp) {
-                        if (success) {
-                            showPromoteImg(resp);
-                        } else {
-                            skipToMainActivity(SplashActivity.this);
-                        }
+            mPromoteModel.getPromoteData(new PromoteModel.PromoteDataListener() {
+                @Override
+                public void onComplete(boolean success, PromoteResp resp) {
+                    mPromoteResp = resp;
+                    if (success && LoginModel.isLogin() && !isFirstStart()
+                            && !AppUpdate.showUpGrade(SplashActivity.this)) {
+                        showPromoteImg(resp);
+                    } else {
+                        skipToMainActivity();
                     }
-                });
-            }
+                }
+            });
         }
 
 //        // 版本更新
@@ -171,24 +171,24 @@ public class SplashActivity extends Activity implements RequestCallback {
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        skipToMainActivity(this);
+        skipToMainActivity();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         ToastManager.showOvertimeToash(this);
-        skipToMainActivity(this);
+        skipToMainActivity();
     }
 
     private void showPromoteImg(PromoteResp resp) {
         if (resp == null || resp.getResponse_code() != 1) {
-            skipToMainActivity(this);
+            skipToMainActivity();
             return;
         }
 
         final PromoteResp.ImageBean imageBean = resp.getImage();
         if (imageBean == null || !imageBean.isEnable()) {
-            skipToMainActivity(this);
+            skipToMainActivity();
             return;
         }
 
@@ -220,18 +220,15 @@ public class SplashActivity extends Activity implements RequestCallback {
                 String targetType = imageBean.getTarget_type();
                 if ("url".equals(targetType)) {
                     // 外部链接
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-
-                    intent = new Intent(SplashActivity.this, WebViewActivity.class);
+                    toMainActivity();
+                    Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
                     intent.putExtra("url", imageBean.getTarget());
                     startActivity(intent);
+
                 } else if ("mokao".equals(targetType)) {
                     // 模考
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-
-                    intent = new Intent(SplashActivity.this, MockPreActivity.class);
+                    toMainActivity();
+                    Intent intent = new Intent(SplashActivity.this, MockPreActivity.class);
                     intent.putExtra("type", "mock");
                     startActivity(intent);
                 }
@@ -243,25 +240,31 @@ public class SplashActivity extends Activity implements RequestCallback {
      * 跳转至主页面
      */
     @SuppressLint("CommitPrefEdits")
-    public static void skipToMainActivity(Activity activity) {
-        Intent intent = new Intent(activity, MainActivity.class);
-        intent.putExtra("from", "splash");
-        activity.startActivity(intent);
+    public void skipToMainActivity() {
+        toMainActivity();
 
         // app 引导页
         if (isFirstStart()) {
-            intent = new Intent(activity, AppGuideActivity.class);
-            activity.startActivity(intent);
-
+            Intent intent = new Intent(this, AppGuideActivity.class);
+            startActivity(intent);
             SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
             editor.putBoolean("isFirstStart", false);
             editor.commit();
         }
 
-        activity.finish();
+        finish();
 
         // Umeng
-        UmengManager.sendCountEvent(activity, "Home", "Entry", "Launch");
+        UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
+    }
+
+    public void toMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("from", "splash");
+        intent.putExtra(
+                MainActivity.INTENT_PROMOTE,
+                GsonManager.modelToString(mPromoteResp, PromoteResp.class));
+        startActivity(intent);
     }
 
     /**

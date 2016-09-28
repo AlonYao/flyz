@@ -60,7 +60,7 @@ public class AppUpdate {
                             public void onClick(DialogInterface dialog, int which) {
                                 downloadApk(activity, appDwonUrl);
                                 if(activity instanceof SplashActivity){
-                                    SplashActivity.skipToMainActivity(activity);
+                                    ((SplashActivity) activity).skipToMainActivity();
                                 }
                             }
                         })
@@ -75,7 +75,7 @@ public class AppUpdate {
                             public void onClick(DialogInterface dialog, int which) {
                                 downloadApk(activity, appDwonUrl);
                                 if(activity instanceof SplashActivity){
-                                    SplashActivity.skipToMainActivity(activity);
+                                    ((SplashActivity) activity).skipToMainActivity();
                                 }
                             }
 
@@ -85,7 +85,7 @@ public class AppUpdate {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(activity instanceof SplashActivity){
-                                    SplashActivity.skipToMainActivity(activity);
+                                    ((SplashActivity) activity).skipToMainActivity();
                                 }
                             }
                         })

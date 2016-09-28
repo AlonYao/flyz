@@ -33,6 +33,7 @@ import com.appublisher.quizbank.common.login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.quizbank.common.promote.PromoteQuizBankModel;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -101,7 +102,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
      * 国考推广
      */
     public static final String INTENT_PROMOTE = "intent_promote";
-    private String promote_data;
+    private String mPromoteData;
+    private PromoteQuizBankModel mPromoteQuizBankModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +120,8 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
         mRequest = new Request(this, this);
-        promote_data = getIntent().getStringExtra(INTENT_PROMOTE);
+        mPromoteData = getIntent().getStringExtra(INTENT_PROMOTE);
+        mPromoteQuizBankModel = new PromoteQuizBankModel(this);
 
         /** 侧边栏设置 */
 
@@ -167,12 +170,14 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
         super.onResume();
         // 检查登录状态
         checkLoginStatus();
+        // 国考推广Alert
+        mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
+        // 检测账号是否被合并
+        mRequest.isUserMerged(LoginModel.getUserId());
         // Umeng
         MobclickAgent.onResume(this);
         // TalkingData
         TCAgent.onResume(this);
-        // 检测账号是否被合并
-        mRequest.isUserMerged(LoginModel.getUserId());
     }
 
     @Override

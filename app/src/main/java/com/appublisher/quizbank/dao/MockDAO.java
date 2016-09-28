@@ -68,10 +68,12 @@ public class MockDAO {
      * @return 0表示没有预约，1表示预约
      */
     public static int getIsDateById(int paper_id) {
-        Mock paper = findById(paper_id);
-
-        if (paper == null) return 0;
-
-        return paper.date;
+        try {
+            Mock paper = findById(paper_id);
+            if (paper == null) return 0;
+            return paper.date;
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

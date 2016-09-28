@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.common.promote;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -49,20 +50,29 @@ public class PromoteModel implements RequestCallback{
         }
     }
 
+    @SuppressLint("CommitPrefEdits")
     public boolean isShow() {
+        boolean show;
         SharedPreferences sp =
                 mContext.getSharedPreferences(YAOGUO_PROMOTE, Context.MODE_PRIVATE);
         String updateDate = sp.getString(PARAM_DATE, "");
         if (updateDate.length() == 0) {
             // 首次，直接显示
-            return true;
+            show = true;
         } else {
             // 当天显示过一次后不显示，第二天再显示
             Date preDate = Utils.stringToDate(updateDate);
             Date curDate = Utils.getCurDate();
             long interval = Utils.getDateInterval(preDate, curDate);
-            return interval >= 1;
+            show = interval >= 1;
         }
+
+        // 更新缓存
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(PARAM_DATE, Utils.getCurDateString());
+        editor.commit();
+
+        return show;
     }
 
     @Override
