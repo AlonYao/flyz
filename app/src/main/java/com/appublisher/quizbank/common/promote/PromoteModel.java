@@ -66,13 +66,19 @@ public class PromoteModel implements RequestCallback{
             long interval = Utils.getDateInterval(preDate, curDate);
             show = interval >= 1;
         }
+        return show;
+    }
 
-        // 更新缓存
+    /**
+     * 保存时间
+     */
+    @SuppressLint("CommitPrefEdits")
+    public void saveDate() {
+        SharedPreferences sp =
+                mContext.getSharedPreferences(YAOGUO_PROMOTE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(PARAM_DATE, Utils.getCurDateString());
         editor.commit();
-
-        return show;
     }
 
     @Override

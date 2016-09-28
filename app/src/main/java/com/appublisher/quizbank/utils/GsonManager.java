@@ -84,6 +84,23 @@ public class GsonManager {
      * @return 字符串
      */
     public static String modelToString(Object object, Class<?> cls) {
-        return getGson().toJson(object, cls);
+        try {
+            return getGson().toJson(object, cls);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /**
+     * 将模型转换成字符串
+     * @param object 数据模型
+     * @return 字符串
+     */
+    public static String modelToString(Object object) {
+        try {
+            return getGson().toJson(object);
+        } catch (Exception e) {
+            return "";
+        }
     }
 }

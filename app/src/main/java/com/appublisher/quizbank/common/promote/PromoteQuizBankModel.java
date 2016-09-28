@@ -14,6 +14,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
+import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.utils.GsonManager;
 
 /**
@@ -26,13 +27,18 @@ public class PromoteQuizBankModel extends PromoteModel {
     }
 
     public void showPromoteAlert(String promoteData) {
-        if (!isShow()) return;
+//        if (!isShow()) return;
 
         PromoteResp resp = GsonManager.getModel(promoteData, PromoteResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
 
         final PromoteResp.AlertBean alertBean = resp.getAlert();
         if (alertBean == null || !alertBean.isEnable()) return;
+
+        if ("mokao".equals(alertBean.getTarget_type())) {
+            int isBook = MockDAO.getIsDateById(alertBean.getTarget());
+            if (isBook == 1) return;
+        }
 
         final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setCancelable(true);
@@ -80,8 +86,12 @@ public class PromoteQuizBankModel extends PromoteModel {
                     intent.putExtra("type", "mock");
                     getContext().startActivity(intent);
                 }
+                alertDialog.dismiss();
             }
         });
+
+        // 保存时间
+        saveDate();
     }
 
 }

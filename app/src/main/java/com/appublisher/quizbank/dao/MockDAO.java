@@ -62,6 +62,7 @@ public class MockDAO {
             e.printStackTrace();
         }
     }
+
     /**
      * 获取是否预约
      * @param paper_id 试卷id
@@ -70,6 +71,21 @@ public class MockDAO {
     public static int getIsDateById(int paper_id) {
         try {
             Mock paper = findById(paper_id);
+            if (paper == null) return 0;
+            return paper.date;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
+     * 获取是否预约
+     * @param paper_id 试卷id
+     * @return 0表示没有预约，1表示预约
+     */
+    public static int getIsDateById(String paper_id) {
+        try {
+            Mock paper = findById(Integer.parseInt(paper_id));
             if (paper == null) return 0;
             return paper.date;
         } catch (Exception e) {

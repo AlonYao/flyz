@@ -33,7 +33,9 @@ import com.appublisher.quizbank.common.login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.common.offline.activity.OfflineActivity;
 import com.appublisher.quizbank.common.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.common.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.quizbank.common.promote.PromoteModel;
 import com.appublisher.quizbank.common.promote.PromoteQuizBankModel;
+import com.appublisher.quizbank.common.promote.PromoteResp;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.CourseFragment;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
@@ -168,15 +170,27 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     @Override
     protected void onResume() {
         super.onResume();
-        // 检查登录状态
-        checkLoginStatus();
-        // 国考推广Alert
-        mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
-        // 检测账号是否被合并
-        mRequest.isUserMerged(LoginModel.getUserId());
-        // Umeng
+        // 检查登录&考试项目状态
+        if (checkLoginStatus()) {
+            // 国考推广Alert
+            if (mPromoteData == null) {
+                mPromoteQuizBankModel.getPromoteData(new PromoteModel.PromoteDataListener() {
+                    @Override
+                    public void onComplete(boolean success, PromoteResp resp) {
+                        if (success) {
+                            mPromoteQuizBankModel.showPromoteAlert(GsonManager.modelToString(resp));
+                        }
+                    }
+                });
+            } else {
+                mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
+            }
+            // 检测账号是否被合并
+            mRequest.isUserMerged(LoginModel.getUserId());
+        }
+
+        // Umeng & TalkingData
         MobclickAgent.onResume(this);
-        // TalkingData
         TCAgent.onResume(this);
     }
 
@@ -269,18 +283,25 @@ public class MainActivity extends ActionBarActivity implements RequestCallback {
     /**
      * 检查登录状态
      */
-    private void checkLoginStatus() {
+    private boolean checkLoginStatus() {
         if (!LoginModel.isLogin()) {
+            // 未登录
             Intent intent = new Intent(this, LoginActivity.class);
             intent.putExtra("from", "splash");
             startActivity(intent);
+            return false;
+
         } else if (!LoginModel.hasExamInfo()) {
+            // 没有考试项目
             Intent intent = new Intent(this, ExamChangeActivity.class);
             intent.putExtra("from", "splash");
             startActivity(intent);
             // Umeng
             UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
+            return false;
         }
+
+        return true;
     }
 
     /**

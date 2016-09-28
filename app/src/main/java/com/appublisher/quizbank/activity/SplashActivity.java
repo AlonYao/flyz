@@ -20,6 +20,7 @@ import com.appublisher.quizbank.common.promote.PromoteResp;
 import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
@@ -128,12 +129,8 @@ public class SplashActivity extends Activity implements RequestCallback {
     @SuppressLint("CommitPrefEdits")
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (response == null) {
-            skipToMainActivity();
-            return;
-        }
-
         if ("global_settings".equals(apiName)) {
+            if (response == null) response = new JSONObject();
             GlobalSettingDAO.save(response.toString());
             GlobalSettingsResp globalSettingsResp =
                     GsonManager.getObejctFromJSON(response.toString(), GlobalSettingsResp.class);
@@ -153,7 +150,20 @@ public class SplashActivity extends Activity implements RequestCallback {
                     mPromoteResp = resp;
                     if (success && LoginModel.isLogin() && !isFirstStart()
                             && !AppUpdate.showUpGrade(SplashActivity.this)) {
-                        showPromoteImg(resp);
+                        PromoteResp.ImageBean imageBean = resp.getImage();
+                        if (imageBean == null) {
+                            // 数据异常
+                            skipToMainActivity();
+                        } else {
+                            String target = imageBean.getTarget();
+                            int isBook = MockDAO.getIsDateById(target);
+                            if (isBook == 1) {
+                                // 已预约
+                                skipToMainActivity();
+                            } else {
+                                showPromoteImg(resp);
+                            }
+                        }
                     } else {
                         skipToMainActivity();
                     }
@@ -195,7 +205,7 @@ public class SplashActivity extends Activity implements RequestCallback {
         String imgUrl = imageBean.getAndroid();
         mPromoteModel.getRequest().loadImage(imgUrl, mImageView);
 
-        mTextView.setText("3");
+        mTextView.setText(String.valueOf(mSec));
         mTextView.setVisibility(View.VISIBLE);
         final Handler mHandler = new MsgHandler(this, mTextView);
         final Timer timer = new Timer();
@@ -204,7 +214,7 @@ public class SplashActivity extends Activity implements RequestCallback {
             @Override
             public void run() {
                 mSec--;
-                if (mSec < 0) {
+                if (mSec < 1) {
                     mHandler.sendEmptyMessage(TIME_OUT);
                     timer.cancel();
                 } else {
@@ -212,7 +222,7 @@ public class SplashActivity extends Activity implements RequestCallback {
                 }
             }
 
-        }, 0, 1000);
+        }, 1000, 1000);
 
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,6 +242,8 @@ public class SplashActivity extends Activity implements RequestCallback {
                     intent.putExtra("type", "mock");
                     startActivity(intent);
                 }
+                timer.cancel();
+                finish();
             }
         });
     }
