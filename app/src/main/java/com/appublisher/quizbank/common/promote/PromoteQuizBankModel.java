@@ -81,7 +81,7 @@ public class PromoteQuizBankModel extends PromoteModel {
                     Intent intent = new Intent(getContext(), WebViewActivity.class);
                     intent.putExtra("url", url);
                     getContext().startActivity(intent);
-                } else if ("mock".equals(target_type)) {
+                } else if ("mokao".equals(target_type)) {
                     // 模考
                     Intent intent = new Intent(getContext(), MockPreActivity.class);
                     intent.putExtra("type", "mock");

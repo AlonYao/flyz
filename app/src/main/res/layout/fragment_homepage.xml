@@ -129,7 +129,7 @@
             <LinearLayout
                 android:id="@+id/homepage_mock"
                 android:layout_width="300dp"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_vertical"
