@@ -42,10 +42,10 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
     private RoundedImageView avatarImage;
     private TextView evaluationText;
     private TextView examText;
-    private TextView messageTips;
-    private TextView classTime;
-    private TextView homeworkTimeText;
-    private TextView homeworkTipsText;
+    public TextView messageTips;
+    public TextView classTime;
+    public TextView homeworkTimeText;
+    public TextView homeworkTipsText;
     private ImageView settingImage;
     private View notificationView;
     private View exerciseView;
@@ -126,20 +126,14 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             }
         });
 
-        mRequest.getVipNotifications(1);
-        new QRequest(getActivity(), this).getCourseList(0, "ALL", 1);
-        mRequest.getExerciseList(-1, -1, -1);
+        mRequest.getVipIndexEntryData();
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) return;
-        if ("notification_list".equals(apiName)) {
-            VipIndexModel.dealNotifications(response, messageTips);
-        } else if ("course_list".equals(apiName)) {
-            VipIndexModel.dealCourseList(response, classTime);
-        } else if ("exercise_list".equals(apiName)) {
-            VipIndexModel.dealExerciseList(response, homeworkTimeText, homeworkTipsText);
+        if ("vip_index_entry_data".equals(apiName)) {
+            VipIndexModel.dealEntryData(response, this);
         }
     }
 

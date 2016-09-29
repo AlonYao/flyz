@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -69,6 +70,7 @@ public class VipBDGXAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(final ViewGroup container, final int position) {
         final View view = LayoutInflater.from(context).inflate(R.layout.vip_bdgx_item, null);
+        final ScrollView scrollView = (ScrollView) view.findViewById(R.id.scrollView);
         final TextView explainText = (TextView) view.findViewById(R.id.explain_text);
         final TextView content = (TextView) view.findViewById(R.id.content);
         final EditText inputAnswer = (EditText) view.findViewById(R.id.textinput);
@@ -144,6 +146,19 @@ public class VipBDGXAdapter extends PagerAdapter {
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        });
+
+        submit.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (submit.getVisibility() == View.VISIBLE && inputAnswer.hasFocus() && submit.getRootView().getHeight() > 500) {
+                    scrollView.postDelayed(new Runnable() {
+                        public void run() {
+                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    }, 200);
+                }
             }
         });
 
