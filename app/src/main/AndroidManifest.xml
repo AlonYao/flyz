@@ -222,12 +222,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_exercise"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CommonFragmentActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label=""
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <!-- Image Selector Entry -->
         <activity
@@ -236,8 +235,17 @@
         <activity
             android:name=".common.vip.activity.VipGalleryActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.vip.activity.VipBDGXActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.vip.activity.VipExerciseDescriptionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_vip_exercise_description"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

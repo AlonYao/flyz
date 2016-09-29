@@ -34,7 +34,6 @@
             <ImageView
                 android:id="@+id/vip_status_arrow"
                 style="@style/WholePagePopupMenuIv"
-                android:background="@drawable/wholepage_arrowdown"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
 
@@ -60,7 +59,6 @@
             <ImageView
                 android:id="@+id/vip_category_arrow"
                 style="@style/WholePagePopupMenuIv"
-                android:background="@drawable/wholepage_arrowdown"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
 
@@ -86,7 +84,6 @@
             <ImageView
                 android:id="@+id/vip_type_arrow"
                 style="@style/WholePagePopupMenuIv"
-                android:background="@drawable/wholepage_arrowdown"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
     </LinearLayout>

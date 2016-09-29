@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -20,7 +21,10 @@ import android.widget.TextView;
 
 import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
+import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterCategoryAdapter;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterStatusAdapter;
@@ -112,14 +116,17 @@ public class VipExerciseIndexModel {
      * @param activity
      */
     public static void showStatusPop(VipExerciseIndexActivity activity) {
-        if (statusPop == null)
+        if (statusPop == null) {
             initStatusPop(activity);
-        statusPop.showAsDropDown(activity.statusView, 0, 2);
-        arrowOpenAnimation(activity.statusArrow);
+        } else {
+            statusPop.showAsDropDown(activity.statusView, 0, 2);
+            activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
+        }
     }
 
     public static void initStatusPop(final VipExerciseIndexActivity activity) {
-        //initPops
+        if (mVipExerciseFilterResp == null) return;
+
         View statusView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
         GridView gridView = (GridView) statusView.findViewById(R.id.gridview);
         VipExerciseFilterStatusAdapter adapter = new VipExerciseFilterStatusAdapter(activity, mVipExerciseFilterResp.getStatus_filter());
@@ -149,7 +156,8 @@ public class VipExerciseIndexModel {
         statusPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                arrowCloseAnimation(activity.statusArrow);
+                activity.statusArrow.setImageResource(R.drawable.wholepage_arrowdown);
+//                arrowCloseAnimation(activity.statusArrow);
             }
         });
         TextView statusCancle = (TextView) statusView.findViewById(R.id.vip_filter_cancel);
@@ -171,6 +179,9 @@ public class VipExerciseIndexModel {
 
             }
         });
+
+        statusPop.showAsDropDown(activity.statusView, 0, 2);
+        activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
 
     /**
@@ -179,13 +190,16 @@ public class VipExerciseIndexModel {
      * @param activity
      */
     public static void showCategoryPop(VipExerciseIndexActivity activity) {
-        if (categoryPop == null)
+        if (categoryPop == null) {
             initCategoryPop(activity);
-        categoryPop.showAsDropDown(activity.categoryView, 0, 2);
-        arrowOpenAnimation(activity.categoryArrow);
+        } else {
+            categoryPop.showAsDropDown(activity.categoryView, 0, 2);
+            activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
+        }
     }
 
     public static void initCategoryPop(final VipExerciseIndexActivity activity) {
+        if (mVipExerciseFilterResp == null) return;
         View categoryView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
         GridView categoryGridView = (GridView) categoryView.findViewById(R.id.gridview);
         VipExerciseFilterCategoryAdapter categoryAdapter = new VipExerciseFilterCategoryAdapter(activity, mVipExerciseFilterResp.getCategory_filter());
@@ -201,7 +215,8 @@ public class VipExerciseIndexModel {
         categoryPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                arrowCloseAnimation(activity.categoryArrow);
+                activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowdown);
+//                arrowCloseAnimation(activity.categoryArrow);
             }
         });
         categoryGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -238,6 +253,9 @@ public class VipExerciseIndexModel {
 
             }
         });
+
+        categoryPop.showAsDropDown(activity.categoryView, 0, 2);
+        activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
 
     public static void showTypePop(VipExerciseIndexActivity activity) {
@@ -245,11 +263,14 @@ public class VipExerciseIndexModel {
             initTypePop(activity);
 
         typePop.showAsDropDown(activity.typeView, 0, 2);
-        arrowOpenAnimation(activity.typeArrow);
+        activity.typeArrow.setImageResource(R.drawable.wholepage_arrowup);
+
     }
 
 
     public static void initTypePop(final VipExerciseIndexActivity activity) {
+        if (mVipExerciseFilterResp == null) return;
+
         View typeView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
         GridView typeGridView = (GridView) typeView.findViewById(R.id.gridview);
         final List<VipExerciseFilterResp.CategoryFilterBean.ExerciseTypeBean> typeBeanList = new ArrayList<>();
@@ -279,7 +300,8 @@ public class VipExerciseIndexModel {
         typePop.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                arrowCloseAnimation(activity.typeArrow);
+                activity.typeArrow.setImageResource(R.drawable.wholepage_arrowdown);
+//                arrowCloseAnimation(activity.typeArrow);
             }
         });
         typeGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -315,6 +337,7 @@ public class VipExerciseIndexModel {
 
             }
         });
+
     }
 
     /**
@@ -332,35 +355,47 @@ public class VipExerciseIndexModel {
         }
     }
 
-    /**
-     * 箭头打开动画
-     *
-     * @param imageView
-     */
-    public static void arrowOpenAnimation(ImageView imageView) {
-        final AnimationSet animationSet = new AnimationSet(true);
-        final RotateAnimation rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateAnimation.setDuration(300);
-        rotateAnimation.setFillBefore(false);
-        rotateAnimation.setFillAfter(true);
-        animationSet.addAnimation(rotateAnimation);
-        imageView.startAnimation(animationSet);
-        imageView.setBackgroundResource(R.drawable.wholepage_arrowup);
-    }
-
-    /**
-     * 箭头关闭动画
-     *
-     * @param imageView
-     */
-    public static void arrowCloseAnimation(ImageView imageView) {
-        final AnimationSet animationSet = new AnimationSet(true);
-        final RotateAnimation rotateAnimation = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateAnimation.setDuration(100);
-        rotateAnimation.setFillBefore(false);
-        rotateAnimation.setFillAfter(true);
-        animationSet.addAnimation(rotateAnimation);
-        imageView.startAnimation(animationSet);
-        imageView.setBackgroundResource(R.drawable.wholepage_arrowdown);
+    public static void dealExerciseSkip(VipExerciseIndexActivity activity, int exerciseId, int exerciseTypeId) {
+        Class<?> cls = null;
+        switch (exerciseTypeId) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                if (Globals.sharedPreferences.getBoolean("vip_description_bdgx", false)) {
+                    cls = VipBDGXActivity.class;
+                } else {
+                    cls = VipExerciseDescriptionActivity.class;
+                }
+                break;
+            case 6:
+                if (Globals.sharedPreferences.getBoolean("vip_description_yytl", false)) {
+                    cls = VipBDGXActivity.class;
+                } else {
+                    cls = VipExerciseDescriptionActivity.class;
+                }
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            default:
+                break;
+        }
+        if (cls != null) {
+            final Intent intent = new Intent(activity, cls);
+            intent.putExtra("exerciseId", exerciseId);
+            intent.putExtra("exerciseType", exerciseTypeId);
+            activity.startActivity(intent);
+        }
     }
 }

@@ -11,7 +11,7 @@ import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 public class Globals {
 
     // 调试模式
-    public static final boolean IS_DEBUG = false;
+    public static final boolean IS_DEBUG = true;
 
     // 版本号
     public static String appVersion;

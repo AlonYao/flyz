@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -103,6 +104,13 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
                 VipExerciseIndexModel.showTypePop(VipExerciseIndexActivity.this);
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                VipExerciseIndexModel.dealExerciseSkip(VipExerciseIndexActivity.this, list.get(position).getExercise_id(), list.get(position).getExercise_type());
+            }
+        });
     }
 
     public void refreshData() {
@@ -131,5 +139,11 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        VipExerciseIndexModel.statusPop = null;
+        VipExerciseIndexModel.categoryPop = null;
+        VipExerciseIndexModel.typePop = null;
+        super.onDestroy();
+    }
 }

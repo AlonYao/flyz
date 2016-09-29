@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
@@ -34,10 +35,10 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
     private RoundedImageView avatarImage;
     private TextView evaluationText;
     private TextView examText;
-    private TextView messageTips;
-    private TextView classTime;
-    private TextView homeworkTimeText;
-    private TextView homeworkTipsText;
+    public TextView messageTips;
+    public TextView classTime;
+    public TextView homeworkTimeText;
+    public TextView homeworkTipsText;
     private ImageView settingImage;
     private View notificationView;
     private View exerciseView;
@@ -118,30 +119,24 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
             }
         });
 
-        mRequest.getVipNotifications(1);
-        new QRequest(this, this).getCourseList(0, "ALL", 1);
-        mRequest.getExerciseList(-1, -1, -1);
+        mRequest.getVipIndexEntryData();
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null) return;
-        if ("notification_list".equals(apiName)) {
-            VipIndexModel.dealNotifications(response, messageTips);
-        } else if ("course_list".equals(apiName)) {
-            VipIndexModel.dealCourseList(response, classTime);
-        } else if ("exercise_list".equals(apiName)) {
-            VipIndexModel.dealExerciseList(response, homeworkTimeText, homeworkTipsText);
+        if ("vip_index_entry_data".equals(apiName)) {
+            VipIndexModel.dealEntryData(response, this);
         }
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        ProgressDialogManager.closeProgressDialog();
     }
 }

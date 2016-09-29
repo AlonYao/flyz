@@ -10,6 +10,7 @@ import com.appublisher.lib_basic.ActiveAndroidManager;
 import com.appublisher.lib_basic.LibBasicManager;
 import com.appublisher.lib_basic.OpenUDIDManager;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.igexin.sdk.PushManager;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.tendcloud.tenddata.TCAgent;
@@ -45,10 +46,10 @@ public class QuizBankApp extends Application {
         }
 
         // TalkingData
-        TCAgent.init(this);
+//        TCAgent.init(this);
 
         // 初始化UUID
-        OpenUDIDManager.sync(this);
+//        OpenUDIDManager.sync(this);
 
         // 初始化本地缓存
         Globals.sharedPreferences = getSharedPreferences("quizbank_store", 0);

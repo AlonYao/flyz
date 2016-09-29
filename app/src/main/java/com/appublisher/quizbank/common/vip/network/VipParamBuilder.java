@@ -57,16 +57,16 @@ public class VipParamBuilder {
     public static Map<String, String> submit(VipSubmitEntity entity) {
         if (entity == null) return new HashMap<>();
         Map<String, String> params = new HashMap<>();
-        params.put("exercise_id", String.valueOf(entity.exercise_id));
-        params.put("question_id", String.valueOf(entity.question_id));
-        params.put("image_url", entity.image_url);
-        params.put("record_id", String.valueOf(entity.record_id));
-        params.put("postil", entity.postil);
-        params.put("level", String.valueOf(entity.level));
-        params.put("answer_content", entity.answer_content);
-        params.put("duration", String.valueOf(entity.duration));
-        params.put("summary", entity.summary);
-        params.put("done", String.valueOf(entity.done));
+        params.put("exercise_id", String.valueOf(entity.getExercise_id()));
+        params.put("question_id", String.valueOf(entity.getQuestion_id()));
+        params.put("image_url", entity.getImage_url());
+        params.put("record_id", String.valueOf(entity.getRecord_id()));
+        params.put("postil", entity.getPostil());
+        params.put("level", String.valueOf(entity.getLevel()));
+        params.put("answer_content", entity.getAnswer_content());
+        params.put("duration", String.valueOf(entity.getDuration()));
+        params.put("summary", entity.getSummary());
+        params.put("done", String.valueOf(entity.getDone()));
         return params;
     }
 

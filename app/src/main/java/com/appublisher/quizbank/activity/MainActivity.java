@@ -113,6 +113,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         }
 
 
+
         // View初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);

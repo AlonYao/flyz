@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        android:paddingBottom="50dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/explain_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/common_bg"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="说明"
+                    android:textColor="@color/themecolor"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/explain_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:textColor="@color/vip_explain"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/common_line" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/textinput"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/vip_textinput_shape"
+                android:gravity="left|top"
+                android:padding="5dp"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/answer_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/common_bg"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="我的答案"
+                    android:textColor="@color/themecolor"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/my_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/common_bg"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="参考答案"
+                    android:textColor="@color/themecolor"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/standard_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/themecolor"
+        android:gravity="center"
+        android:text="提交并查看答案"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</RelativeLayout>
