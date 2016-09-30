@@ -23,6 +23,7 @@ import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.Request;
 import com.appublisher.quizbank.network.RequestCallback;
 import com.appublisher.quizbank.utils.GsonManager;
@@ -245,11 +246,9 @@ public class SplashActivity extends Activity implements RequestCallback {
                         if ("url".equals(targetType)) {
                             // 外部链接
                             toMainActivity();
-                            String url = imageBean.getTarget()
-                                    + "?user_id=" + LoginModel.getUserId()
-                                    + "&user_token=" + LoginModel.getUserToken();
+
                             Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
-                            intent.putExtra("url", url);
+                            intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(imageBean.getTarget()));
                             startActivity(intent);
 
                         } else if ("mokao".equals(targetType)) {

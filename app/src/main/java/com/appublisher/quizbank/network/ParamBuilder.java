@@ -48,10 +48,11 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 非本地用户 动态指定user_id , user_token
+     *
      * @param url 拼接前的url
      * @return 拼接后的url
      */
-    public static String finalUserUrl(String url,String user_id,String user_token) {
+    public static String finalUserUrl(String url, String user_id, String user_token) {
         //noinspection StringBufferReplaceableByString
         StringBuilder finalUrl = new StringBuilder();
 
@@ -80,6 +81,47 @@ public class ParamBuilder implements ApiConstants {
 
         return finalUrl.toString();
     }
+
+    /**
+     * 获取国考推广跳转课程链接
+     *
+     * @param url
+     * @return
+     */
+    public static String getPromoteCourseUrl(String url) {
+        StringBuilder finalUrl = new StringBuilder();
+        if (url.contains("?")) {
+            finalUrl.append(url)
+                    .append("&terminal_type=android_phone")
+                    .append("&app_type=quizbank")
+                    .append("&app_version=")
+                    .append(Globals.appVersion)
+                    .append("&uuid=")
+                    .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
+                    .append("&user_id=")
+                    .append(Globals.sharedPreferences.getString("user_id", ""))
+                    .append("&user_token=")
+                    .append(Globals.sharedPreferences.getString("user_token", ""))
+                    .append("&timestamp=")
+                    .append(System.currentTimeMillis());
+        } else {
+            finalUrl.append(url)
+                    .append("?terminal_type=android_phone")
+                    .append("&app_type=quizbank")
+                    .append("&app_version=")
+                    .append(Globals.appVersion)
+                    .append("&uuid=")
+                    .append(OpenUDID_manager.getID() == null ? "" : OpenUDID_manager.getID())
+                    .append("&user_id=")
+                    .append(Globals.sharedPreferences.getString("user_id", ""))
+                    .append("&user_token=")
+                    .append(Globals.sharedPreferences.getString("user_token", ""))
+                    .append("&timestamp=")
+                    .append(System.currentTimeMillis());
+        }
+        return finalUrl.toString();
+    }
+
     /**
      * 用户登录参数
      *
@@ -428,12 +470,13 @@ public class ParamBuilder implements ApiConstants {
 
     /**
      * 预约模考
+     *
      * @param mock_id
      * @return
      */
-    public static Map<String,String> getBookMock(String mock_id){
-        Map<String,String> params = new HashMap<>();
-        params.put("mock_id",mock_id);
+    public static Map<String, String> getBookMock(String mock_id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("mock_id", mock_id);
         return params;
     }
 }

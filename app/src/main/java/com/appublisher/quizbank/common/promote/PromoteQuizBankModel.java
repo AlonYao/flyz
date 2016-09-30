@@ -15,6 +15,7 @@ import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.login.model.LoginModel;
 import com.appublisher.quizbank.dao.MockDAO;
+import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.utils.GsonManager;
 
 /**
@@ -75,11 +76,9 @@ public class PromoteQuizBankModel extends PromoteModel {
                 String target_type = alertBean.getTarget_type();
                 if ("url".equals(target_type)) {
                     // 外部链接
-                    String url = alertBean.getTarget()
-                            + "?user_id=" + LoginModel.getUserId()
-                            + "&user_token=" + LoginModel.getUserToken();
+
                     Intent intent = new Intent(getContext(), WebViewActivity.class);
-                    intent.putExtra("url", url);
+                    intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(alertBean.getTarget()));
                     getContext().startActivity(intent);
                 } else if ("mokao".equals(target_type)) {
                     // 模考
