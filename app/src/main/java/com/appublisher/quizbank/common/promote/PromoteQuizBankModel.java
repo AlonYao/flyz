@@ -79,6 +79,8 @@ public class PromoteQuizBankModel extends PromoteModel {
 
                     Intent intent = new Intent(getContext(), WebViewActivity.class);
                     intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(alertBean.getTarget()));
+                    if (alertBean.getTarget() != null && alertBean.getTarget().contains("course_id"))
+                        intent.putExtra("from", "course");
                     getContext().startActivity(intent);
                 } else if ("mokao".equals(target_type)) {
                     // 模考

@@ -51,7 +51,7 @@ import java.util.HashMap;
 /**
  * 做题解析模块
  */
-public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback{
+public class MeasureAnalysisActivity extends ActionBarActivity implements RequestCallback {
 
     public int mScreenHeight;
     public int mCurQuestionId;
@@ -73,7 +73,9 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
     public Request mRequest;
     private HomeWatcher mHomeWatcher;
 
-    /** Umeng */
+    /**
+     * Umeng
+     */
     public boolean mUmengIsPressHome;
     public long mUmengTimestamp;
     public String mUmengEntry;
@@ -124,7 +126,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
         if (mIsFromError) mDeleteErrorQuestions = new ArrayList<>();
 
         //noinspection IfCanBeSwitch
-        if (("collect".equals(mAnalysisType) || "error".equals(mAnalysisType))
+        if (("collect".equals(mAnalysisType) || "collect_error".equals(mAnalysisType))
                 && !"study_record".equals(mFrom)) {
             ProgressDialogManager.showProgressDialog(this, true);
             mRequest.collectErrorQuestions(String.valueOf(mHierarchyId), mAnalysisType);
@@ -339,7 +341,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
         /**使用SSO授权必须添加如下代码 */
         UMSsoHandler ssoHandler = UmengManager.mController.getConfig().getSsoHandler(requestCode);
-        if(ssoHandler != null){
+        if (ssoHandler != null) {
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
 
@@ -452,6 +454,7 @@ public class MeasureAnalysisActivity extends ActionBarActivity implements Reques
 
     /**
      * 处理解析回调
+     *
      * @param response 解析数据回调
      */
     private void dealMeasureAnalysisResp(JSONObject response) {

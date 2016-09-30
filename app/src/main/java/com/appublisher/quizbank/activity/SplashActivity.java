@@ -249,6 +249,8 @@ public class SplashActivity extends Activity implements RequestCallback {
 
                             Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
                             intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(imageBean.getTarget()));
+                            if (imageBean.getTarget() != null && imageBean.getTarget().contains("course_id"))
+                                intent.putExtra("from", "course");
                             startActivity(intent);
 
                         } else if ("mokao".equals(targetType)) {
@@ -304,6 +306,7 @@ public class SplashActivity extends Activity implements RequestCallback {
 
     /**
      * 是否是首次安装
+     *
      * @return boolean
      */
     private static boolean isFirstStart() {

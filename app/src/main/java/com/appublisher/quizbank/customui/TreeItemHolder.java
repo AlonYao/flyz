@@ -14,6 +14,7 @@ import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
+import com.appublisher.quizbank.utils.Logger;
 import com.unnamed.b.atv.model.TreeNode;
 
 import java.util.ArrayList;
@@ -155,7 +156,11 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MeasureAnalysisActivity.class);
-                intent.putExtra("analysis_type", value.type);
+                if ("error".equals(value.type)) {
+                    intent.putExtra("analysis_type", "collect_error");
+                } else {
+                    intent.putExtra("analysis_type", value.type);
+                }
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);
                 intent.putExtra("umeng_entry", "List");
