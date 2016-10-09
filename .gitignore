@@ -12,3 +12,4 @@
 /app/app.iml
 *.iml
 /*/build
+/gradle.properties
