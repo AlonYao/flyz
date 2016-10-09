@@ -19,7 +19,7 @@ import java.util.HashMap;
 /**
  * 小班：行测模块
  */
-public class VipXCModel extends VipManager{
+public class VipXCModel extends VipBaseModel {
 
     private IntelligentPaperListener mIntelligentPaperListener;
 

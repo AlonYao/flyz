@@ -12,7 +12,7 @@ import org.json.JSONObject;
 /**
  * 小班：名师精批
  */
-public class VipMSJPModel extends VipManager{
+public class VipMSJPModel extends VipBaseModel {
 
     private int mExerciseId;
     private VipMSJPActivity mView;

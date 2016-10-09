@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * 小班：字迹诊断模块
  */
-public class VipZJZDModel extends VipManager{
+public class VipZJZDModel extends VipBaseModel {
 
     private static final int PIC_SIDE = 147;
 
@@ -71,13 +71,14 @@ public class VipZJZDModel extends VipManager{
             mView.showIvExample(mExampleUrl + "!/fw/" + PIC_SIDE);
         }
 
+        // 我的作业处理
         VipZJZDResp.UserAnswerBean userAnswer = resp.getUser_answer();
-        if (userAnswer != null && (mStatus == 1 || mStatus == 3 || mStatus == 5)) {
+        if (mCanSubmit) {
+            mView.showMyJob(null, VipZJZDActivity.FILE, MAX_LENGTH);
+        } else {
             mPaths = new ArrayList<>();
             mPaths.add(userAnswer.getImage_url());
             mView.showMyJob(mPaths, VipZJZDActivity.URL, MAX_LENGTH);
-        } else {
-            mView.showMyJob(null, VipZJZDActivity.FILE, MAX_LENGTH);
         }
     }
 

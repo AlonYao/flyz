@@ -5,7 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.appublisher.lib_basic.ProgressDialogManager;
-import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipMSJPAdapter;
 import com.appublisher.quizbank.common.vip.model.VipMSJPModel;
@@ -14,7 +13,7 @@ import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
 /**
  * 小班：名师精批
  */
-public class VipMSJPActivity extends BaseActivity {
+public class VipMSJPActivity extends VipBaseActivity {
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;

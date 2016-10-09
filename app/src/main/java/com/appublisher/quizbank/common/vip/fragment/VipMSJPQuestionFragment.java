@@ -10,7 +10,10 @@ import android.webkit.WebView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
+
+import org.apmem.tools.layouts.FlowLayout;
 
 /**
  * 小班：名师精批 问题Tab
@@ -22,6 +25,8 @@ public class VipMSJPQuestionFragment extends Fragment {
     private VipMSJPResp mResp;
     private View mRoot;
     private WebView mWvQuestion;
+    private VipMSJPActivity mActivity;
+    private FlowLayout mMyjobContainer;
 
     public static VipMSJPQuestionFragment newInstance(VipMSJPResp resp) {
         Bundle args = new Bundle();
@@ -35,6 +40,7 @@ public class VipMSJPQuestionFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mResp = GsonManager.getModel(getArguments().getString(ARGS_DATA), VipMSJPResp.class);
+        mActivity = (VipMSJPActivity) getActivity();
     }
 
     @Nullable
@@ -50,11 +56,19 @@ public class VipMSJPQuestionFragment extends Fragment {
     private void showContent() {
         if (mResp == null || mResp.getResponse_code() != 1) return;
         VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
+        boolean canSubmit = mResp.isCan_submit();
         if (questionBean != null) {
             // 题目
             mWvQuestion.setBackgroundColor(0);
             mWvQuestion.loadDataWithBaseURL(
                     null, questionBean.getQuestion(), "text/html", "UTF-8", null);
+        }
+
+        // 我的作业处理
+        if (canSubmit) {
+//            mActivity.showMyJob();
+        } else {
+
         }
     }
 
@@ -62,6 +76,13 @@ public class VipMSJPQuestionFragment extends Fragment {
                           @Nullable ViewGroup container) {
         mRoot = inflater.inflate(R.layout.vip_msjp_question_fragment, container, false);
         mWvQuestion = (WebView) mRoot.findViewById(R.id.vip_msjp_question_webview);
+        mMyjobContainer = (FlowLayout) mRoot.findViewById(R.id.vip_msjp_myjob_container);
     }
 
+    /**
+     * get & set
+     */
+    public FlowLayout getMyjobContainer() {
+        return mMyjobContainer;
+    }
 }

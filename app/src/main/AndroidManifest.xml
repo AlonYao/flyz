@@ -240,8 +240,9 @@
         <activity
             android:name=".common.vip.activity.VipMSJPActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_vip_msjp"/>
+            android:label="@string/title_activity_vip_msjp"
+            android:screenOrientation="portrait" />
+        <activity android:name=".common.vip.activity.VipBaseActivity"></activity>
     </application>
 
 </manifest>
