@@ -14,6 +14,7 @@ import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
 public class VipMSJPAdapter extends FragmentPagerAdapter{
 
     private VipMSJPResp mVipMSJPResp;
+    private VipMSJPQuestionFragment mQuestionFragment;
 
     public VipMSJPAdapter(FragmentManager fm, VipMSJPResp resp) {
         super(fm);
@@ -39,7 +40,10 @@ public class VipMSJPAdapter extends FragmentPagerAdapter{
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return VipMSJPQuestionFragment.newInstance(mVipMSJPResp);
+                if (mQuestionFragment == null) {
+                    mQuestionFragment = VipMSJPQuestionFragment.newInstance(mVipMSJPResp);
+                }
+                return mQuestionFragment;
 
             case 1:
                 return VipMSJPMaterialFragment.newInstance(mVipMSJPResp);

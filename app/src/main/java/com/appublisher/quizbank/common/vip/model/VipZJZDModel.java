@@ -28,10 +28,11 @@ public class VipZJZDModel extends VipBaseModel {
     private int mStatus;
     private VipZJZDActivity mView;
     private String mExampleUrl;
-    private boolean mCanSubmit;
-    private ArrayList<String> mPaths;
     private ProgressDialog mProgressDialog;
     private String mSubmitImgUrl;
+
+    public boolean mCanSubmit;
+    public ArrayList<String> mPaths;
 
     public VipZJZDModel(Context context) {
         super(context);
