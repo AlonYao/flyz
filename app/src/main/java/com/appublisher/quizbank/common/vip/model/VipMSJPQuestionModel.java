@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
+import android.widget.Button;
 
 import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
 import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 public class VipMSJPQuestionModel extends VipMSJPModel{
 
-    public static final int MAX_LENGTH = 1;
+    public static final int MAX_LENGTH = 6;
 
     public ArrayList<String> mPaths;
     public boolean mCanSubmit;
@@ -36,4 +37,7 @@ public class VipMSJPQuestionModel extends VipMSJPModel{
         mView.showMyJob(mPaths, type, maxLength, mMyjobContainer, context, listener);
     }
 
+    public void updateSubmitButton(int curLength, int maxLength, Button btnSubmit) {
+        mView.updateSubmitButton(curLength, maxLength, btnSubmit);
+    }
 }

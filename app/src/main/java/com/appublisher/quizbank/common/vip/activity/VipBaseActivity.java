@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.appublisher.lib_basic.ImageManager;
@@ -32,6 +33,15 @@ public class VipBaseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * 显示我的作业
+     * @param paths file path or Url
+     * @param type file or Url
+     * @param max_length 最大长度
+     * @param myJobContainer 父容器
+     * @param context 上下文
+     * @param listener 动作监听
+     */
     public void showMyJob(final ArrayList<String> paths,
                           String type,
                           final int max_length,
@@ -119,6 +129,21 @@ public class VipBaseActivity extends BaseActivity {
         params.setMargins(0, 0, Utils.dip2px(this, 10), Utils.dip2px(this, 10));
         imageView.setLayoutParams(params);
         return imageView;
+    }
+
+    /**
+     * 更新提交按钮
+     * @param curLength 当前长度
+     * @param maxLength 最大长度
+     * @param button Button
+     */
+    @SuppressWarnings("deprecation")
+    public void updateSubmitButton(int curLength, int maxLength, Button button) {
+        if (curLength == maxLength) {
+            button.setBackgroundColor(getResources().getColor(R.color.themecolor));
+        } else {
+            button.setBackgroundColor(getResources().getColor(R.color.vip_gray));
+        }
     }
 
 }

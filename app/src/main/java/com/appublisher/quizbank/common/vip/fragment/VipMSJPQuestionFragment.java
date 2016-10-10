@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
@@ -35,6 +36,7 @@ public class VipMSJPQuestionFragment extends Fragment {
     private WebView mWvQuestion;
     private FlowLayout mMyjobContainer;
     private VipMSJPQuestionModel mModel;
+    private Button mBtnSubmit;
 
     public static VipMSJPQuestionFragment newInstance(VipMSJPResp resp) {
         Bundle args = new Bundle();
@@ -75,20 +77,26 @@ public class VipMSJPQuestionFragment extends Fragment {
                 mModel.mPaths = paths;
             }
             showMyJob();
+            updateSubmitButton();
 
         } else if (requestCode == VipBaseModel.GALLERY_REQUEST_CODE) {
             // 图片浏览回调
             mModel.mPaths = data.getStringArrayListExtra(VipGalleryActivity.INTENT_PATHS);
             showMyJob();
+            updateSubmitButton();
         }
     }
 
+    /**
+     * 显示内容
+     */
     private void showContent() {
         if (mResp == null || mResp.getResponse_code() != 1) return;
         VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
         mModel.mCanSubmit = mResp.isCan_submit();
+
+        // 题目
         if (questionBean != null) {
-            // 题目
             mWvQuestion.setBackgroundColor(0);
             mWvQuestion.loadDataWithBaseURL(
                     null, questionBean.getQuestion(), "text/html", "UTF-8", null);
@@ -96,6 +104,20 @@ public class VipMSJPQuestionFragment extends Fragment {
 
         // 我的作业处理
         showMyJob();
+
+        // 提交按钮
+        if (mModel.mCanSubmit) {
+            mBtnSubmit.setVisibility(View.VISIBLE);
+        } else {
+            mBtnSubmit.setVisibility(View.GONE);
+        }
+
+        mBtnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void initView(LayoutInflater inflater,
@@ -103,6 +125,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         mRoot = inflater.inflate(R.layout.vip_msjp_question_fragment, container, false);
         mWvQuestion = (WebView) mRoot.findViewById(R.id.vip_msjp_question_webview);
         mMyjobContainer = (FlowLayout) mRoot.findViewById(R.id.vip_msjp_myjob_container);
+        mBtnSubmit = (Button) mRoot.findViewById(R.id.vip_msjp_submit);
     }
 
     /**
@@ -110,7 +133,8 @@ public class VipMSJPQuestionFragment extends Fragment {
      */
     private void showMyJob() {
         String type;
-        if (!mModel.mCanSubmit) {
+        mModel.mCanSubmit = true;
+        if (mModel.mCanSubmit) {
             type = VipBaseActivity.FILE;
         } else {
             type = VipBaseActivity.URL;
@@ -128,6 +152,15 @@ public class VipMSJPQuestionFragment extends Fragment {
                         mModel.toCamera(maxLength);
                     }
                 });
+    }
+
+    /**
+     * 更新提交按钮
+     */
+    private void updateSubmitButton() {
+        int curLength = mModel.mPaths == null ? 0 : mModel.mPaths.size();
+        int maxLength = VipMSJPQuestionModel.MAX_LENGTH;
+        mModel.updateSubmitButton(curLength, maxLength, mBtnSubmit);
     }
 
 }
