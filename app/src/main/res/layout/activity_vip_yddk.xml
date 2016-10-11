@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_vip_yddk"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.appublisher.quizbank.common.vip.activity.VipYDDKActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:id="@+id/question_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/common_bg"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="说明"
+                android:textColor="@color/themecolor"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/explain_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="@string/vip_explain_yddk"
+                android:textColor="@color/vip_explain"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/common_line" />
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:textColor="@color/common_text"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/answer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/question_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/common_bg"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="我的笔记"
+                android:textColor="@color/themecolor"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/answer_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common_text"
+                android:textSize="18sp"
+                android:padding="15dp"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/user_answer_iv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/answer_view"
+        android:clickable="true"
+        android:paddingTop="10dp"
+        android:src="@drawable/measure_pull"
+        tools:ignore="ContentDescription" />
+
+    <RelativeLayout
+        android:id="@+id/submit_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_line"
+        android:padding="5dp">
+
+        <EditText
+            android:id="@+id/textinput"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/submit"
+            android:layout_toStartOf="@+id/submit"
+            android:background="@drawable/vip_textinput_shape"
+            android:gravity="left|top"
+            android:hint="输入笔记"
+            android:padding="5dp"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/vip_yddk_submit" />
+    </RelativeLayout>
+
+</RelativeLayout>

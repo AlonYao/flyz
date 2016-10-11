@@ -79,7 +79,6 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
 
         ProgressDialogManager.showProgressDialog(this);
         mRequest.getVipFilter();
-        mRequest.getVipExercises(status_id, category_id, type_id);
     }
 
     public void setValues() {
@@ -108,9 +107,15 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                VipExerciseIndexModel.dealExerciseSkip(VipExerciseIndexActivity.this, list.get(position).getExercise_id(), list.get(position).getExercise_type());
+                VipExerciseIndexModel.dealExerciseSkip(VipExerciseIndexActivity.this, position);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshData();
     }
 
     public void refreshData() {

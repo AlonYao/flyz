@@ -239,12 +239,18 @@
         <activity
             android:name=".common.vip.activity.VipBDGXActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".common.vip.activity.VipExerciseDescriptionActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_exercise_description"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.vip.activity.VipYDDKActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_vip_exercise_yddk"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:screenOrientation="portrait" />
     </application>
 

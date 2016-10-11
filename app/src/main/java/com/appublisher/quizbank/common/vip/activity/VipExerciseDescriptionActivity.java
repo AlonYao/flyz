@@ -17,6 +17,7 @@ import com.appublisher.quizbank.R;
 public class VipExerciseDescriptionActivity extends BaseActivity {
 
     private TextView descriptionText;
+    private View descriptionHideView;
     private CheckBox descriptionCheckBox;
     private Button beginExercise;
     //考虑from和exerciseType是否重复
@@ -36,6 +37,7 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
         exerciseType = getIntent().getIntExtra("exerciseType", -1);
 
         descriptionText = (TextView) findViewById(R.id.vip_description_text);
+        descriptionHideView = findViewById(R.id.vip_description_hide_view);
         descriptionCheckBox = (CheckBox) findViewById(R.id.vip_description_hide_cb);
         beginExercise = (Button) findViewById(R.id.begin_exercise);
 
@@ -48,7 +50,20 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
             descriptionText.setText(getResources().getString(R.string.vip_description_bdgx));
         } else if (exerciseType == 6) {
             descriptionText.setText(getResources().getString(R.string.vip_description_yytl));
+        } else if (exerciseType == 7) {
+            descriptionText.setText(getResources().getString(R.string.vip_description_yddk));
         }
+
+        descriptionHideView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (descriptionCheckBox.isChecked()) {
+                    descriptionCheckBox.setChecked(false);
+                } else {
+                    descriptionCheckBox.setChecked(true);
+                }
+            }
+        });
 
         beginExercise.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +101,12 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
                 cls = VipBDGXActivity.class;
                 break;
             case 7:
+                if (descriptionCheckBox.isChecked()) {
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("vip_description_yddk", true);
+                    editor.commit();
+                }
+                cls = VipYDDKActivity.class;
                 break;
             case 8:
                 break;

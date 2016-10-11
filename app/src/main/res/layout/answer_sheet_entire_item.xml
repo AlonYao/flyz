@@ -14,7 +14,7 @@
         android:textColor="@color/common_text"
         android:text="第一部分 科目名"/>
 
-    <com.appublisher.quizbank.customui.ExpandableHeightGridView
+    <com.appublisher.lib_basic.customui.ExpandableHeightGridView
         android:id="@+id/answer_sheet_entire_item_gv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,5 +24,5 @@
         android:clipToPadding="false"
         android:gravity="center"
         android:verticalSpacing="15dp">
-    </com.appublisher.quizbank.customui.ExpandableHeightGridView>
+    </com.appublisher.lib_basic.customui.ExpandableHeightGridView>
 </LinearLayout>

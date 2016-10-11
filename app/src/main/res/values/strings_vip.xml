@@ -5,6 +5,7 @@
     <string name="title_activity_vip_notification">消息</string>
     <string name="title_activity_vip_exercise">我的作业</string>
     <string name="title_activity_vip_exercise_description">练习说明</string>
+    <string name="title_activity_vip_exercise_yddk">阅读打卡</string>
 
     <string name="vip_filter_status">作业状态</string>
     <string name="vip_filter_category">科目</string>
@@ -19,6 +20,8 @@
         2.标点符号应单独占格；\n
         3.建议使用微距模式对焦在文字上拍照，注意拍摄角度应俯视无倾斜，字迹清晰可辨认，图片应摆正再上传
     </string>
+    <string name="vip_explain_yddk">1.完成给定热点材料的阅读，输入阅读笔记。</string>
+
     <string name="vip_material">材料</string>
     <string name="vip_example">作业示例</string>
     <string name="vip_myjob">我的作业</string>
@@ -37,4 +40,6 @@
 
     <string name="vip_description_bdgx">通俗地讲，申论作答就是从大段材料中抽离关键信息，并用简洁的语言表达出来的过程，而句子是完整表达的最小单元，怎样在找到材料关键词的基础上写出题目的要点，是我们必须解决的问题，为此我们设计了表达改写这个模块。\n\n 1、保留材料原句中最关键的词语。\n 2、表达成完整的句子。\n 3、语言尽量简洁。\n\n 示例：\n 原句：顺应大数据时代的治理趋势，必须树立智慧治理观，并以之作为政府治理实践的先导和核心驱动力。\n\n 改写：大数据时代，智慧治理是政府治理实践的关键。\n\n 树立智慧治理观，促进政府治理创新与实践。</string>
     <string name="vip_description_yytl">很多申论材料以通俗的案例、具体的数据、直白的观点为主，此类材料并没有规范的关键词可以摘抄和改写，需要考生根据语意提炼出规范的关键词句。\n\n示例：深圳网民吴某在微信朋友圈发布假消息称：“龙华已经出现了恐怖分子连砍五人”，并配有虚假视频，一时间搞得人心惶惶。\n\n 提炼：网络谣言影响社会秩序稳定。</string>
+    <string name="vip_description_yddk">申论底子好，答题才能更得心应手，怎样积累才能让自己更有“底蕴”？怎样才能在写文章时有话可说？建议坚持每天阅读一些热点资料，仔细分析，争取内化成自己的知识。所以，在本模块中，给大家提供最新的社会热点和时评，请认真阅读，写阅读笔记，可以摘抄你觉得对写作有帮助的句子，也可以多从现象、影响、原因、对策等申论问题的角度去分析文章。体会思路，学习表达，积少成多，聚沙成塔。</string>
+
 </resources>

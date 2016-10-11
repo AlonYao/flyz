@@ -26,6 +26,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
+import com.appublisher.quizbank.common.vip.activity.VipYDDKActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterCategoryAdapter;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterStatusAdapter;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterTypeAdapter;
@@ -355,7 +356,11 @@ public class VipExerciseIndexModel {
         }
     }
 
-    public static void dealExerciseSkip(VipExerciseIndexActivity activity, int exerciseId, int exerciseTypeId) {
+    public static void dealExerciseSkip(VipExerciseIndexActivity activity, int position) {
+
+        int exerciseTypeId = activity.list.get(position).getExercise_type();
+        int exerciseId = activity.list.get(position).getExercise_id();
+        int status = activity.list.get(position).getStatus();
         Class<?> cls = null;
         switch (exerciseTypeId) {
             case 1:
@@ -367,20 +372,25 @@ public class VipExerciseIndexModel {
             case 4:
                 break;
             case 5:
-                if (Globals.sharedPreferences.getBoolean("vip_description_bdgx", false)) {
+                if (Globals.sharedPreferences.getBoolean("vip_description_bdgx", false) || (status != 0 && status != 6)) {
                     cls = VipBDGXActivity.class;
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
                 break;
             case 6:
-                if (Globals.sharedPreferences.getBoolean("vip_description_yytl", false)) {
+                if (Globals.sharedPreferences.getBoolean("vip_description_yytl", false) || (status != 0 && status != 6)) {
                     cls = VipBDGXActivity.class;
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
                 break;
             case 7:
+                if (Globals.sharedPreferences.getBoolean("vip_description_yddk", false) || (status != 0 && status != 6)) {
+                    cls = VipYDDKActivity.class;
+                } else {
+                    cls = VipExerciseDescriptionActivity.class;
+                }
                 break;
             case 8:
                 break;
