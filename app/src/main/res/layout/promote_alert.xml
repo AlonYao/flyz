@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="125dp"
             android:scaleType="fitXY"
-            android:src="@drawable/measure_loading_img"
             tools:ignore="ContentDescription" />
         <ImageButton
             android:id="@+id/promote_alert_close"
