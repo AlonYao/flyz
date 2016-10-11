@@ -242,7 +242,12 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_msjp"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.vip.activity.VipBaseActivity"></activity>
+        <activity android:name=".common.vip.activity.VipBaseActivity" />
+        <activity
+            android:name=".common.vip.activity.VipDTTPActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_vip_dttp"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
