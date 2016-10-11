@@ -42,7 +42,7 @@ public class VipMSJPQuestionFragment extends Fragment {
     private FlowLayout mMyjobContainer;
     private VipMSJPQuestionModel mModel;
     private Button mBtnSubmit;
-    private ViewStub mVsReview;
+    private TextView mTvStatus;
 
     public static VipMSJPQuestionFragment newInstance(VipMSJPResp resp) {
         Bundle args = new Bundle();
@@ -101,6 +101,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
         mModel.mCanSubmit = mResp.isCan_submit();
         int status = mResp.getStatus();
+        String statusText = mResp.getStatus_text();
 
         // 题目
         if (questionBean != null) {
@@ -112,6 +113,9 @@ public class VipMSJPQuestionFragment extends Fragment {
         // 我的作业处理
         mModel.mPaths = getOriginImgs();
         showMyJob();
+
+        // 状态问题
+        showStatus(status, statusText);
 
         // 提交按钮
         if (mModel.mCanSubmit) {
@@ -151,6 +155,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         mWvQuestion = (WebView) mRoot.findViewById(R.id.vip_msjp_question_webview);
         mMyjobContainer = (FlowLayout) mRoot.findViewById(R.id.vip_msjp_myjob_container);
         mBtnSubmit = (Button) mRoot.findViewById(R.id.vip_msjp_submit);
+        mTvStatus = (TextView) mRoot.findViewById(R.id.vip_msjp_status);
     }
 
     /**
@@ -192,8 +197,8 @@ public class VipMSJPQuestionFragment extends Fragment {
      * 显示教师评语部分
      */
     private void showReview() {
-        mVsReview = (ViewStub) mRoot.findViewById(R.id.vip_msjp_review_viewstub);
-        mVsReview.inflate();
+        ViewStub vsReview = (ViewStub) mRoot.findViewById(R.id.vip_msjp_review_viewstub);
+        vsReview.inflate();
         RoundedImageView ivAvatar =
                 (RoundedImageView) mRoot.findViewById(R.id.vip_msjp_review_avatar);
         TextView tvName = (TextView) mRoot.findViewById(R.id.vip_msjp_review_teacher_name);
@@ -250,6 +255,32 @@ public class VipMSJPQuestionFragment extends Fragment {
             reviewAnswer.setBackgroundColor(0);
             reviewAnswer.loadDataWithBaseURL(
                     null, questionBean.getAnswer(), "text/html", "UTF-8", null);
+        }
+    }
+
+    /**
+     * 显示状态文字
+     * @param status 状态
+     * @param text 文字
+     */
+    @SuppressWarnings("deprecation")
+    public void showStatus(int status, String text) {
+        if (status == 0) {
+            mTvStatus.setVisibility(View.GONE);
+        } else {
+            mTvStatus.setVisibility(View.VISIBLE);
+            // 文字
+            if (status == 3) {
+                mTvStatus.setText("等待批改");
+            } else {
+                mTvStatus.setText(text);
+            }
+            // 颜色
+            if (status == 1) {
+                mTvStatus.setTextColor(getResources().getColor(R.color.vip_green));
+            } else {
+                mTvStatus.setTextColor(getResources().getColor(R.color.vip_red));
+            }
         }
     }
 
