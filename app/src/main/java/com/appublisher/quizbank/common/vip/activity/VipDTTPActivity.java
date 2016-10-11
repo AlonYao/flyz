@@ -29,12 +29,12 @@ public class VipDTTPActivity extends VipBaseActivity {
     private void initData() {
         mModel = new VipDTTPModel(this);
         showLoading();
-
+        mModel.getExerciseDetail();
     }
 
     private void initView() {
-        mTabLayout = (TabLayout) findViewById(R.id.vip_msjp_tablayout);
-        mViewPager = (ViewPager) findViewById(R.id.vip_msjp_viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.vip_dttp_tablayout);
+        mViewPager = (ViewPager) findViewById(R.id.vip_dttp_viewpager);
     }
 
     public void showContent(VipDTTPResp resp) {

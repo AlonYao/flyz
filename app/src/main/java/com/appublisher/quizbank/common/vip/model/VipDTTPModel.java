@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
-import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
+import com.appublisher.quizbank.common.vip.netdata.VipDTTPResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
@@ -19,6 +19,7 @@ public class VipDTTPModel extends VipBaseModel{
 
     public VipDTTPModel(Context context) {
         super(context);
+        mView = (VipDTTPActivity) context;
     }
 
     /**
@@ -34,7 +35,7 @@ public class VipDTTPModel extends VipBaseModel{
      * @param response JSONObject
      */
     private void dealExerciseDetailResp(JSONObject response) {
-        VipMSJPResp resp = GsonManager.getModel(response, VipMSJPResp.class);
+        VipDTTPResp resp = GsonManager.getModel(response, VipDTTPResp.class);
         mView.showContent(resp);
     }
 

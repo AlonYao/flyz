@@ -37,7 +37,7 @@ public class VipDTTPAdapter extends FragmentPagerAdapter{
         switch (position) {
             case 0:
                 if (mQuestionFragment == null) {
-//                    mQuestionFragment = VipDTTPQuestionFragment.newInstance(mVipMSJPResp);
+                    mQuestionFragment = VipDTTPQuestionFragment.newInstance(mResp);
                 }
                 return mQuestionFragment;
 
