@@ -120,7 +120,7 @@ public class VipBaseActivity extends BaseActivity {
      * 获取我的作业item
      * @return ImageView
      */
-    private ImageView getMyJobItem() {
+    public ImageView getMyJobItem() {
         @SuppressLint("InflateParams")
         ImageView imageView = (ImageView)
                 LayoutInflater.from(this).inflate(R.layout.vip_myjob_item, null);

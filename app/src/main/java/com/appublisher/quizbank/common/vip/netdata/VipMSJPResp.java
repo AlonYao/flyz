@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.common.vip.netdata;
 
+import java.util.ArrayList;
+
 /**
  * 小班：名师精批
  */
@@ -16,7 +18,7 @@ public class VipMSJPResp {
     private String status_text;
     private boolean can_submit;
     private QuestionBean question;
-    private Object user_answer;
+    private UserAnswerBean user_answer;
     private Object summary;
 
     public int getResponse_code() {
@@ -99,11 +101,19 @@ public class VipMSJPResp {
         this.can_submit = can_submit;
     }
 
-    public Object getUser_answer() {
+    public QuestionBean getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(QuestionBean question) {
+        this.question = question;
+    }
+
+    public UserAnswerBean getUser_answer() {
         return user_answer;
     }
 
-    public void setUser_answer(Object user_answer) {
+    public void setUser_answer(UserAnswerBean user_answer) {
         this.user_answer = user_answer;
     }
 
@@ -113,14 +123,6 @@ public class VipMSJPResp {
 
     public void setSummary(Object summary) {
         this.summary = summary;
-    }
-
-    public QuestionBean getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(QuestionBean question) {
-        this.question = question;
     }
 
     public static class RemarkBean {
@@ -168,7 +170,7 @@ public class VipMSJPResp {
         }
 
         public String getMaterial() {
-            return material == null ? "" : material;
+            return material;
         }
 
         public void setMaterial(String material) {
@@ -189,6 +191,126 @@ public class VipMSJPResp {
 
         public void setAnswer(String answer) {
             this.answer = answer;
+        }
+    }
+
+    public static class UserAnswerBean {
+        private OriginBean origin;
+        private ReviewBean review;
+
+        public OriginBean getOrigin() {
+            return origin;
+        }
+
+        public void setOrigin(OriginBean origin) {
+            this.origin = origin;
+        }
+
+        public ReviewBean getReview() {
+            return review;
+        }
+
+        public void setReview(ReviewBean review) {
+            this.review = review;
+        }
+
+        public static class OriginBean {
+            private String submit_time;
+            private ArrayList<String> images;
+
+            public String getSubmit_time() {
+                return submit_time;
+            }
+
+            public void setSubmit_time(String submit_time) {
+                this.submit_time = submit_time;
+            }
+
+            public ArrayList<String> getImages() {
+                return images;
+            }
+
+            public void setImages(ArrayList<String> images) {
+                this.images = images;
+            }
+        }
+
+        public static class ReviewBean {
+            private LectorBean lector;
+            private String review_time;
+            private String review_postil;
+            private int score;
+            private ArrayList<String> images;
+
+            public LectorBean getLector() {
+                return lector;
+            }
+
+            public void setLector(LectorBean lector) {
+                this.lector = lector;
+            }
+
+            public String getReview_time() {
+                return review_time;
+            }
+
+            public void setReview_time(String review_time) {
+                this.review_time = review_time;
+            }
+
+            public String getReview_postil() {
+                return review_postil;
+            }
+
+            public void setReview_postil(String review_postil) {
+                this.review_postil = review_postil;
+            }
+
+            public int getScore() {
+                return score;
+            }
+
+            public void setScore(int score) {
+                this.score = score;
+            }
+
+            public ArrayList<String> getImages() {
+                return images;
+            }
+
+            public void setImages(ArrayList<String> images) {
+                this.images = images;
+            }
+
+            public static class LectorBean {
+                private int id;
+                private String name;
+                private String avatar;
+
+                public int getId() {
+                    return id;
+                }
+
+                public void setId(int id) {
+                    this.id = id;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public void setName(String name) {
+                    this.name = name;
+                }
+
+                public String getAvatar() {
+                    return avatar;
+                }
+
+                public void setAvatar(String avatar) {
+                    this.avatar = avatar;
+                }
+            }
         }
     }
 }

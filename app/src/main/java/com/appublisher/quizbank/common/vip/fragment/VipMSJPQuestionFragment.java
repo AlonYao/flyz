@@ -7,9 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
@@ -17,6 +21,7 @@ import com.appublisher.quizbank.common.vip.activity.VipGalleryActivity;
 import com.appublisher.quizbank.common.vip.model.VipBaseModel;
 import com.appublisher.quizbank.common.vip.model.VipMSJPQuestionModel;
 import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -37,6 +42,7 @@ public class VipMSJPQuestionFragment extends Fragment {
     private FlowLayout mMyjobContainer;
     private VipMSJPQuestionModel mModel;
     private Button mBtnSubmit;
+    private ViewStub mVsReview;
 
     public static VipMSJPQuestionFragment newInstance(VipMSJPResp resp) {
         Bundle args = new Bundle();
@@ -94,6 +100,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         if (mResp == null || mResp.getResponse_code() != 1) return;
         VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
         mModel.mCanSubmit = mResp.isCan_submit();
+        int status = mResp.getStatus();
 
         // 题目
         if (questionBean != null) {
@@ -103,6 +110,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         }
 
         // 我的作业处理
+        mModel.mPaths = getOriginImgs();
         showMyJob();
 
         // 提交按钮
@@ -118,6 +126,23 @@ public class VipMSJPQuestionFragment extends Fragment {
 
             }
         });
+
+        // 完成状态
+        if (status == 1) {
+            showReview();
+        }
+    }
+
+    /**
+     * 获取用户原始做题答案
+     * @return ArrayList
+     */
+    private ArrayList<String> getOriginImgs() {
+        VipMSJPResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
+        if (userAnswerBean == null) return null;
+        VipMSJPResp.UserAnswerBean.OriginBean originBean = userAnswerBean.getOrigin();
+        if (originBean == null) return null;
+        return originBean.getImages();
     }
 
     private void initView(LayoutInflater inflater,
@@ -133,7 +158,7 @@ public class VipMSJPQuestionFragment extends Fragment {
      */
     private void showMyJob() {
         String type;
-        mModel.mCanSubmit = true;
+//        mModel.mCanSubmit = true;
         if (mModel.mCanSubmit) {
             type = VipBaseActivity.FILE;
         } else {
@@ -161,6 +186,71 @@ public class VipMSJPQuestionFragment extends Fragment {
         int curLength = mModel.mPaths == null ? 0 : mModel.mPaths.size();
         int maxLength = VipMSJPQuestionModel.MAX_LENGTH;
         mModel.updateSubmitButton(curLength, maxLength, mBtnSubmit);
+    }
+
+    /**
+     * 显示教师评语部分
+     */
+    private void showReview() {
+        mVsReview = (ViewStub) mRoot.findViewById(R.id.vip_msjp_review_viewstub);
+        mVsReview.inflate();
+        RoundedImageView ivAvatar =
+                (RoundedImageView) mRoot.findViewById(R.id.vip_msjp_review_avatar);
+        TextView tvName = (TextView) mRoot.findViewById(R.id.vip_msjp_review_teacher_name);
+        TextView tvDate = (TextView) mRoot.findViewById(R.id.vip_msjp_review_date);
+        TextView tvScore = (TextView) mRoot.findViewById(R.id.vip_msjp_review_score);
+        TextView tvRemark = (TextView) mRoot.findViewById(R.id.vip_msjp_review_remark);
+        FlowLayout reviewImgContainer =
+                (FlowLayout) mRoot.findViewById(R.id.vip_msjp_review_img_container);
+        WebView reviewAnswer = (WebView) mRoot.findViewById(R.id.vip_msjp_review_answer);
+
+        if (mResp == null) return;
+        VipMSJPResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
+        if (userAnswerBean == null) return;
+
+        VipMSJPResp.UserAnswerBean.ReviewBean reviewBean = userAnswerBean.getReview();
+        if (reviewBean == null) return;
+
+        // 老师评论
+        VipMSJPResp.UserAnswerBean.ReviewBean.LectorBean lectorBean = reviewBean.getLector();
+        if (lectorBean != null) {
+            ImageManager.displayImage(lectorBean.getAvatar(), ivAvatar);
+            tvName.setText(lectorBean.getName());
+        }
+        tvDate.setText(reviewBean.getReview_time());
+        tvScore.setText(String.valueOf(reviewBean.getScore()));
+
+        // 老师评语
+        tvRemark.setText(reviewBean.getReview_postil());
+
+        // 老师批改
+        reviewImgContainer.removeAllViews();
+        final ArrayList<String> imgs = reviewBean.getImages();
+        int size = imgs.size();
+        for (int i = 0; i < size; i++) {
+            final int index = i;
+            ImageView imageView = mModel.getMyJobItem();
+            ImageManager.displayImage(imgs.get(i), imageView);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =
+                            new Intent(getContext(), VipGalleryActivity.class);
+                    intent.putExtra(VipGalleryActivity.INTENT_INDEX, index);
+                    intent.putExtra(VipGalleryActivity.INTENT_PATHS, imgs);
+                    startActivity(intent);
+                }
+            });
+            reviewImgContainer.addView(imageView);
+        }
+
+        // 参考答案
+        VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
+        if (questionBean != null) {
+            reviewAnswer.setBackgroundColor(0);
+            reviewAnswer.loadDataWithBaseURL(
+                    null, questionBean.getAnswer(), "text/html", "UTF-8", null);
+        }
     }
 
 }

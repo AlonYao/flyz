@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
 import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
@@ -39,5 +40,9 @@ public class VipMSJPQuestionModel extends VipMSJPModel{
 
     public void updateSubmitButton(int curLength, int maxLength, Button btnSubmit) {
         mView.updateSubmitButton(curLength, maxLength, btnSubmit);
+    }
+
+    public ImageView getMyJobItem() {
+        return mView.getMyJobItem();
     }
 }
