@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.common.vip.netdata;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -196,46 +197,28 @@ public class VipDTTPResp {
     }
 
     public static class UserAnswerBean {
-        private UserRecordBean user_record;
-        private MyPostilBean my_postil;
+        private OriginBean origin;
+        private List<ReviewsBean> reviews;
 
-        public UserRecordBean getUser_record() {
-            return user_record;
+        public OriginBean getOrigin() {
+            return origin;
         }
 
-        public void setUser_record(UserRecordBean user_record) {
-            this.user_record = user_record;
+        public void setOrigin(OriginBean origin) {
+            this.origin = origin;
         }
 
-        public MyPostilBean getMy_postil() {
-            return my_postil;
+        public List<ReviewsBean> getReviews() {
+            return reviews;
         }
 
-        public void setMy_postil(MyPostilBean my_postil) {
-            this.my_postil = my_postil;
+        public void setReviews(List<ReviewsBean> reviews) {
+            this.reviews = reviews;
         }
 
-        public static class UserRecordBean {
-            private int record_id;
-            private UserInfoBean user_info;
+        public static class OriginBean {
             private String submit_time;
-            private List<String> images;
-
-            public int getRecord_id() {
-                return record_id;
-            }
-
-            public void setRecord_id(int record_id) {
-                this.record_id = record_id;
-            }
-
-            public UserInfoBean getUser_info() {
-                return user_info;
-            }
-
-            public void setUser_info(UserInfoBean user_info) {
-                this.user_info = user_info;
-            }
+            private ArrayList<String> images;
 
             public String getSubmit_time() {
                 return submit_time;
@@ -245,56 +228,28 @@ public class VipDTTPResp {
                 this.submit_time = submit_time;
             }
 
-            public List<String> getImages() {
+            public ArrayList<String> getImages() {
                 return images;
             }
 
-            public void setImages(List<String> images) {
+            public void setImages(ArrayList<String> images) {
                 this.images = images;
-            }
-
-            public static class UserInfoBean {
-                private int user_id;
-                private String nickname;
-                private String avatar;
-
-                public int getUser_id() {
-                    return user_id;
-                }
-
-                public void setUser_id(int user_id) {
-                    this.user_id = user_id;
-                }
-
-                public String getNickname() {
-                    return nickname;
-                }
-
-                public void setNickname(String nickname) {
-                    this.nickname = nickname;
-                }
-
-                public String getAvatar() {
-                    return avatar;
-                }
-
-                public void setAvatar(String avatar) {
-                    this.avatar = avatar;
-                }
             }
         }
 
-        public static class MyPostilBean {
-            private String review_level;
+        public static class ReviewsBean {
+            private StudentBean student;
             private String review_time;
             private String review_postil;
+            private String review_level;
+            private int score;
 
-            public String getReview_level() {
-                return review_level;
+            public StudentBean getStudent() {
+                return student;
             }
 
-            public void setReview_level(String review_level) {
-                this.review_level = review_level;
+            public void setStudent(StudentBean student) {
+                this.student = student;
             }
 
             public String getReview_time() {
@@ -311,6 +266,52 @@ public class VipDTTPResp {
 
             public void setReview_postil(String review_postil) {
                 this.review_postil = review_postil;
+            }
+
+            public String getReview_level() {
+                return review_level;
+            }
+
+            public void setReview_level(String review_level) {
+                this.review_level = review_level;
+            }
+
+            public int getScore() {
+                return score;
+            }
+
+            public void setScore(int score) {
+                this.score = score;
+            }
+
+            public static class StudentBean {
+                private int id;
+                private String avatar;
+                private String name;
+
+                public int getId() {
+                    return id;
+                }
+
+                public void setId(int id) {
+                    this.id = id;
+                }
+
+                public String getAvatar() {
+                    return avatar;
+                }
+
+                public void setAvatar(String avatar) {
+                    this.avatar = avatar;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public void setName(String name) {
+                    this.name = name;
+                }
             }
         }
     }

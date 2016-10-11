@@ -27,7 +27,7 @@ public class VipDTTPModel extends VipBaseModel{
      */
     public void getExerciseDetail() {
 //        mVipRequest.getExerciseDetail(mExerciseId);
-        mVipRequest.getExerciseDetail(70);
+        mVipRequest.getExerciseDetail(334);
     }
 
     /**
