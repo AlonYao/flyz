@@ -21,8 +21,6 @@ public class VipMSJPActivity extends VipBaseActivity {
     private ViewPager mViewPager;
     private VipMSJPAdapter mAdapter;
 
-    public VipMSJPModel mModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +46,9 @@ public class VipMSJPActivity extends VipBaseActivity {
     }
 
     private void initData() {
-        mModel = new VipMSJPModel(this);
+        VipMSJPModel model = new VipMSJPModel(this);
         showLoading();
-        mModel.getExerciseDetail();
+        model.getExerciseDetail();
     }
 
     public void showContent(VipMSJPResp resp) {

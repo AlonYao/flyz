@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -142,6 +143,7 @@ public class VipDTTPQuestionFragment extends Fragment{
      * @return ArrayList
      */
     private ArrayList<String> getOriginImgs() {
+        if (mResp == null || mResp.isCan_submit()) return null;
         VipDTTPResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
         if (userAnswerBean == null) return null;
         VipDTTPResp.UserAnswerBean.OriginBean originBean = userAnswerBean.getOrigin();
@@ -163,7 +165,6 @@ public class VipDTTPQuestionFragment extends Fragment{
      */
     private void showMyJob() {
         String type;
-//        mModel.mCanSubmit = true;
         if (mModel.mCanSubmit) {
             type = VipBaseActivity.FILE;
         } else {
@@ -205,7 +206,7 @@ public class VipDTTPQuestionFragment extends Fragment{
         // 参考答案
         VipDTTPResp.QuestionBean questionBean = mResp.getQuestion();
         if (questionBean != null) {
-            reviewAnswer.setBackgroundColor(0);
+            reviewAnswer.setBackgroundColor(Color.WHITE);
             reviewAnswer.loadDataWithBaseURL(
                     null, questionBean.getAnswer(), "text/html", "UTF-8", null);
         }
