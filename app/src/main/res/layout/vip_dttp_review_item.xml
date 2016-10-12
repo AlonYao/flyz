@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 参考答案 -->
+    <TextView
+        style="@style/Vip_Title"
+        android:text="@string/vip_msjp_review_answer"/>
+    <WebView
+        android:id="@+id/vip_dttp_review_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <!-- 老师评论 -->
+    <TextView
+        style="@style/Vip_Title"
+        android:text="@string/vip_dttp_review_student"/>
+    <com.appublisher.lib_basic.customui.MultiListView
+        android:id="@+id/vip_dttp_review_student"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

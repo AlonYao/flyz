@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.vip.netdata;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 小班：单题突破
@@ -198,7 +197,7 @@ public class VipDTTPResp {
 
     public static class UserAnswerBean {
         private OriginBean origin;
-        private List<ReviewsBean> reviews;
+        private ArrayList<ReviewsBean> reviews;
 
         public OriginBean getOrigin() {
             return origin;
@@ -208,11 +207,11 @@ public class VipDTTPResp {
             this.origin = origin;
         }
 
-        public List<ReviewsBean> getReviews() {
+        public ArrayList<ReviewsBean> getReviews() {
             return reviews;
         }
 
-        public void setReviews(List<ReviewsBean> reviews) {
+        public void setReviews(ArrayList<ReviewsBean> reviews) {
             this.reviews = reviews;
         }
 

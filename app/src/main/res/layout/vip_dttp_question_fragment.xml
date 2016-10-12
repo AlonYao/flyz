@@ -44,12 +44,12 @@
                 tools:ignore="RtlHardcoded,RtlSymmetry">
             </org.apmem.tools.layouts.FlowLayout>
 
-            <!--&lt;!&ndash; 教师评语 &ndash;&gt;-->
-            <!--<ViewStub-->
-                <!--android:id="@+id/vip_dttp_review_viewstub"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout="@layout/vip_msjp_review_item"/>-->
+            <!-- 学生评论 -->
+            <ViewStub
+                android:id="@+id/vip_dttp_review_viewstub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/vip_dttp_review_item"/>
 
         </LinearLayout>
     </ScrollView>
