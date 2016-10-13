@@ -129,14 +129,17 @@
             <LinearLayout
                 android:id="@+id/homepage_mock"
                 android:layout_width="300dp"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_vertical"
                 android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:orientation="vertical"
                 android:background="@drawable/homepage_mokao_bg"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:ignore="RtlHardcoded,RtlSymmetry">
                 <TextView
                     android:id="@+id/homepage_mock_title"
