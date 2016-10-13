@@ -1,9 +1,10 @@
 package com.appublisher.quizbank.common.vip.model;
 
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 
+import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.YaoguoUploadManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipZJZDResp;
@@ -11,42 +12,31 @@ import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * 小班：字迹诊断模块
  */
-public class VipZJZDModel extends VipManager{
+public class VipZJZDModel extends VipBaseModel {
 
     private static final int PIC_SIDE = 147;
 
+    public static final int MAX_LENGTH = 1;
     public static final String INTENT_EXERCISEID = "exercise_id";
 
     private int mExerciseId;
+    private int mStatus;
     private VipZJZDActivity mView;
     private String mExampleUrl;
-    private String mMyJobPicPath;
-    private String mMyJobPicUrl;
-    private boolean mCanSubmit;
+    private ProgressDialog mProgressDialog;
+    private String mSubmitImgUrl;
+
+    public boolean mCanSubmit;
+    public ArrayList<String> mPaths;
 
     public VipZJZDModel(Context context) {
         super(context);
         mView = (VipZJZDActivity) context;
-    }
-
-    /**
-     * 跳转至拍照或相册
-     */
-    public void toCamera() {
-        toCamera(1);
-    }
-
-    /**
-     * 获取缩略图
-     * @param data 图片地址
-     * @return Bitmap
-     */
-    public Bitmap getThumbnail(Intent data) {
-        mMyJobPicPath = getPathByIndex(data, 0);
-        return getThumbnail(mMyJobPicPath, PIC_SIDE, PIC_SIDE);
     }
 
     /**
@@ -64,7 +54,14 @@ public class VipZJZDModel extends VipManager{
         VipZJZDResp resp = GsonManager.getModel(response, VipZJZDResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
 
+        // 提交按钮
         mCanSubmit = resp.isCan_submit();
+        mView.showSubmitBtn(mCanSubmit);
+
+        // 状态
+        mStatus = resp.getStatus();
+        String statusText = resp.getStatus_text();
+        mView.showStatus(mStatus, statusText);
 
         VipZJZDResp.QuestionBean question = resp.getQuestion();
         if (question != null) {
@@ -75,18 +72,58 @@ public class VipZJZDModel extends VipManager{
             mView.showIvExample(mExampleUrl + "!/fw/" + PIC_SIDE);
         }
 
+        // 我的作业处理
         VipZJZDResp.UserAnswerBean userAnswer = resp.getUser_answer();
-        if (userAnswer != null) {
-            mMyJobPicUrl = userAnswer.getImage_url();
+        if (mCanSubmit) {
+            mView.showMyJob(null, VipZJZDActivity.FILE, MAX_LENGTH);
+        } else {
+            mPaths = new ArrayList<>();
+            mPaths.add(userAnswer.getImage_url());
+            mView.showMyJob(mPaths, VipZJZDActivity.URL, MAX_LENGTH);
         }
     }
 
-    /**
-     * 是否可以添加用户照片
-     * @return boolean
-     */
-    public boolean isCanAdd() {
-        return mCanSubmit && (mMyJobPicPath == null || mMyJobPicPath.length() == 0);
+    public void submit() {
+        if (mPaths == null || mPaths.size() == 0) return;
+        mSubmitImgUrl = "";
+        upload(mPaths, getSavePath(), 0);
+    }
+
+    private void upload(final ArrayList<String> paths , String savePath, final int index) {
+        if (paths == null || paths.size() == 0 || index >= paths.size()) return;
+        if (mProgressDialog == null)
+            mProgressDialog = YaoguoUploadManager.getProgressDialog(mContext);
+        mProgressDialog.setTitle(index + 1 + "/" + paths.size());
+        mProgressDialog.show();
+
+        String localPath = paths.get(index);
+        YaoguoUploadManager.blockUpload(localPath, savePath,
+                new YaoguoUploadManager.CompleteListener() {
+                    @Override
+                    public void onComplete(boolean isSuccess, String result, String url) {
+                        if (isSuccess) {
+                            mSubmitImgUrl = mSubmitImgUrl + url;
+                            if (index == paths.size()) {
+                                mProgressDialog.cancel();
+                            } else {
+                                upload(paths, getSavePath(), index + 1);
+                            }
+                        } else {
+                            mProgressDialog.cancel();
+                            ToastManager.showToast(mContext, "上传失败，请重试……");
+                        }
+                    }
+                },
+                new YaoguoUploadManager.ProgressListener() {
+                    @Override
+                    public void onRequestProgress(long bytesWrite, long contentLength) {
+                        mProgressDialog.setProgress((int) ((100 * bytesWrite) / contentLength));
+                    }
+                });
+    }
+
+    private String getSavePath() {
+        return "/huaxiao_test.jpg";
     }
 
     @Override
@@ -112,14 +149,14 @@ public class VipZJZDModel extends VipManager{
     }
 
     public boolean isCanSubmit() {
-        return mCanSubmit;
+        return mCanSubmit && (mPaths != null && mPaths.size() > 0);
     }
 
-    public String getMyJobPicUrl() {
-        return mMyJobPicUrl;
+    public ArrayList<String> getPaths() {
+        return mPaths;
     }
 
-    public String getMyJobPicPath() {
-        return mMyJobPicPath;
+    public void setPaths(ArrayList<String> mPaths) {
+        this.mPaths = mPaths;
     }
 }

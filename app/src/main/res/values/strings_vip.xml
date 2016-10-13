@@ -6,14 +6,18 @@
     <string name="title_activity_vip_exercise">我的作业</string>
     <string name="title_activity_vip_exercise_description">练习说明</string>
     <string name="title_activity_vip_exercise_yddk">阅读打卡</string>
+    <string name="title_activity_vip_zizd">字迹诊断</string>
+    <string name="title_activity_vip_msjp">名师精批</string>
+    <string name="title_activity_vip_dttp">单题突破</string>
+    <string name="title_activity_vip_hpts">互评提升</string>
 
     <string name="vip_filter_status">作业状态</string>
     <string name="vip_filter_category">科目</string>
     <string name="vip_filter_type">作业类型</string>
 
     <string name="vip_none">无内容</string>
-
     <string name="vip_submit">提交</string>
+
     <string name="vip_explain">说明</string>
     <string name="vip_explain_zjzd">
         1.请在格子纸中使用黑色字迹钢笔或签字笔认真书写如下文字并拍照上传；\n
@@ -42,4 +46,30 @@
     <string name="vip_description_yytl">很多申论材料以通俗的案例、具体的数据、直白的观点为主，此类材料并没有规范的关键词可以摘抄和改写，需要考生根据语意提炼出规范的关键词句。\n\n示例：深圳网民吴某在微信朋友圈发布假消息称：“龙华已经出现了恐怖分子连砍五人”，并配有虚假视频，一时间搞得人心惶惶。\n\n 提炼：网络谣言影响社会秩序稳定。</string>
     <string name="vip_description_yddk">申论底子好，答题才能更得心应手，怎样积累才能让自己更有“底蕴”？怎样才能在写文章时有话可说？建议坚持每天阅读一些热点资料，仔细分析，争取内化成自己的知识。所以，在本模块中，给大家提供最新的社会热点和时评，请认真阅读，写阅读笔记，可以摘抄你觉得对写作有帮助的句子，也可以多从现象、影响、原因、对策等申论问题的角度去分析文章。体会思路，学习表达，积少成多，聚沙成塔。</string>
 
+    <!-- 字迹诊断 -->
+    <string name="vip_zjzd_reject_title">
+        你的作业被驳回了\n请重新提交
+    </string>
+    <string name="vip_zjzd_reject_button">知道了</string>
+
+    <!-- 名师精批 -->
+    <string name="vip_msjp_submit">上传作业</string>
+    <string name="vip_msjp_review_comment">老师评论</string>
+    <string name="vip_msjp_review_remark">老师评语</string>
+    <string name="vip_msjp_review_correct">老师批改</string>
+    <string name="vip_msjp_review_answer">参考答案</string>
+    <string name="vip_msjp_review_score">分数：</string>
+    <string name="vip_msjp_review_point">分</string>
+
+    <!-- 单题突破 -->
+    <string name="vip_dttp_review_student">同学评论</string>
+
+    <!-- 互评提升 -->
+    <string name="vip_hpts_other">他的作业</string>
+    <string name="vip_hpts_mycomment">我的评论</string>
+    <string name="vip_hpts_negative">差评</string>
+    <string name="vip_hpts_middle">中评</string>
+    <string name="vip_hpts_good">好评</string>
+    <string name="vip_hpts_ceng">蹭解锁</string>
+    <string name="vip_hpts_input">请输入评论</string>
 </resources>

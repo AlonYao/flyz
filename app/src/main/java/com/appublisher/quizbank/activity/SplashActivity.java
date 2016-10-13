@@ -1,12 +1,11 @@
 package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
@@ -21,12 +20,10 @@ import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.network.QRequest;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,8 +38,6 @@ public class SplashActivity extends BaseActivity implements RequestCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        File file=  getApplicationContext().getCacheDir();
-        Logger.i("file=="+file.getAbsolutePath());
         // 获取全局配置
         new QRequest(this, this).getGlobalSettings();
 

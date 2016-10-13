@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -57,8 +56,6 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QApiConstants;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -112,8 +109,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             startActivity(intent);
         }
 
-
-
         // View初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
@@ -133,7 +128,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         mDrawerList.setOnItemClickListener(drawerListOnClick);
 
         // 侧边栏样式
-        setToolBar(this);
+        CommonModel.setToolBar(this);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -164,10 +159,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
-
-//        Intent intent = new Intent(this, VipZJZDActivity.class);
-//        startActivity(intent);
-
     }
 
     @Override

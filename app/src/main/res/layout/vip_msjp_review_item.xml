@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 老师评论 -->
+    <TextView
+        style="@style/Vip_Title"
+        android:text="@string/vip_msjp_review_comment"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@android:color/white">
+        <!-- 头像 -->
+        <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/vip_msjp_review_avatar"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/login_avatar"
+            android:scaleType="fitCenter"
+            app:riv_border_width="1dp"
+            app:riv_border_color="#979AA4"
+            app:riv_oval="true" />
+        <View
+            android:id="@+id/vip_msjp_review_divider"
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@id/vip_msjp_review_avatar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:background="@color/vip_gray"
+            tools:ignore="RtlHardcoded" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/vip_msjp_review_divider"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
+            <TextView
+                android:id="@+id/vip_msjp_review_teacher_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:textSize="@dimen/vip_default_text"
+                android:textColor="@color/common_text"
+                android:text="@string/vip_none"/>
+            <TextView
+                android:id="@+id/vip_msjp_review_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/vip_msjp_review_teacher_name"
+                android:text="@string/vip_none"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@id/vip_msjp_review_date"
+                android:orientation="horizontal"
+                tools:ignore="RtlHardcoded">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/vip_default_text"
+                    android:text="@string/vip_msjp_review_score"/>
+                <TextView
+                    android:id="@+id/vip_msjp_review_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/vip_red"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/vip_default_text"
+                    android:text="@string/vip_msjp_review_point"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!-- 老师评语 -->
+    <TextView
+        style="@style/Vip_Title"
+        android:text="@string/vip_msjp_review_remark"/>
+    <TextView
+        android:id="@+id/vip_msjp_review_remark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="@android:color/white"/>
+
+    <!-- 老师批改 -->
+    <TextView
+        style="@style/Vip_Title"
+        android:text="@string/vip_msjp_review_correct"/>
+    <org.apmem.tools.layouts.FlowLayout
+        android:id="@+id/vip_msjp_review_img_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+    </org.apmem.tools.layouts.FlowLayout>
+
+    <!-- 参考答案 -->
+    <TextView
+        style="@style/Vip_Title"
+        android:text="@string/vip_msjp_review_answer"/>
+    <WebView
+        android:id="@+id/vip_msjp_review_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

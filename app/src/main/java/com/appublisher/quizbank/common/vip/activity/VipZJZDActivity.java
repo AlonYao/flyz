@@ -1,34 +1,43 @@
 package com.appublisher.quizbank.common.vip.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
-import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.vip.model.VipManager;
+import com.appublisher.quizbank.common.vip.model.VipBaseModel;
 import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
+
+import org.apmem.tools.layouts.FlowLayout;
+
+import java.util.ArrayList;
+
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 小班：字迹诊断
  */
-public class VipZJZDActivity extends AppCompatActivity implements View.OnClickListener {
+public class VipZJZDActivity extends VipBaseActivity implements View.OnClickListener{
 
-    private ImageView mIvMyjobAdd;
     private ImageView mIvExample;
     private TextView mTvMaterial;
+    private TextView mTvStatus;
+    private Button mBtnSubmit;
+    private FlowLayout mMyjobContainer;
     private VipZJZDModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vip_zjzd);
+        setToolBar(this);
         initView();
         initData();
     }
@@ -36,24 +45,43 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == VipManager.CAMERA_REQUEST_CODE) {
-            // 将保存在本地的图片取出并缩小后显示在界面上
-            Bitmap bitmap = mModel.getThumbnail(data);
-            if (bitmap != null) mIvMyjobAdd.setImageBitmap(bitmap);
+        if (data == null) return;
+        if (requestCode == VipBaseModel.CAMERA_REQUEST_CODE) {
+            // 拍照回调
+            ArrayList<String> paths =
+                    data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+            if (mModel.mPaths != null) {
+                mModel.mPaths.addAll(paths);
+            }
+            showMyJob(mModel.mPaths, FILE, VipZJZDModel.MAX_LENGTH);
+
+        } else if (requestCode == VipBaseModel.GALLERY_REQUEST_CODE) {
+            // 图片浏览回调
+            ArrayList<String> paths =
+                    data.getStringArrayListExtra(VipGalleryActivity.INTENT_PATHS);
+            if (mModel.mCanSubmit) {
+                showMyJob(paths, FILE, VipZJZDModel.MAX_LENGTH);
+            } else {
+                showMyJob(paths, URL, VipZJZDModel.MAX_LENGTH);
+            }
+            mModel.mPaths = paths;
         }
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.vip_zjzd_myjob_iv) {
-            // 添加图片
-            mModel.toCamera();
-        } else if (id == R.id.vip_zjzd_example) {
+        if (id == R.id.vip_zjzd_example) {
             // 作业示例
-            Intent intent = new Intent(this, ScaleImageActivity.class);
-            intent.putExtra(ScaleImageActivity.INTENT_IMGURL, mModel.getExampleUrl());
+            ArrayList<String> list = new ArrayList<>();
+            list.add(mModel.getExampleUrl());
+            Intent intent =
+                    new Intent(VipZJZDActivity.this, VipGalleryActivity.class);
+            intent.putExtra(VipGalleryActivity.INTENT_PATHS, list);
             startActivity(intent);
+        } else if (id == R.id.vip_zjzd_submit) {
+            // 提交
+            if (mModel.isCanSubmit()) mModel.submit();
         }
     }
 
@@ -66,11 +94,12 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
-        mIvMyjobAdd = (ImageView) findViewById(R.id.vip_zjzd_myjob_iv);
         mIvExample = (ImageView) findViewById(R.id.vip_zjzd_example);
         mTvMaterial = (TextView) findViewById(R.id.vip_zjzd_material);
+        mTvStatus = (TextView) findViewById(R.id.vip_zjzd_status);
+        mBtnSubmit = (Button) findViewById(R.id.vip_zjzd_submit);
+        mMyjobContainer = (FlowLayout) findViewById(R.id.vip_zjzd_myjob_container);
 
-        mIvMyjobAdd.setOnClickListener(this);
         mIvExample.setOnClickListener(this);
     }
 
@@ -85,4 +114,77 @@ public class VipZJZDActivity extends AppCompatActivity implements View.OnClickLi
     public void showIvExample(String url) {
         ImageManager.displayImage(url, mIvExample);
     }
+
+    public void showMyJob(ArrayList<String> paths, String type, int max_length) {
+        showMyJob(paths, type, max_length, mMyjobContainer, this, new MyJobActionListener() {
+            @Override
+            public void toCamera(int maxLength) {
+                mModel.toCamera(maxLength);
+            }
+        });
+    }
+
+    /**
+     * 显示状态文字
+     * @param status 状态
+     * @param text 文字
+     */
+    @SuppressWarnings("deprecation")
+    public void showStatus(int status, String text) {
+        if (status == 0) {
+            mTvStatus.setVisibility(View.GONE);
+        } else {
+            mTvStatus.setVisibility(View.VISIBLE);
+            // 文字
+            if (status == 3) {
+                mTvStatus.setText("等待审核");
+            } else {
+                mTvStatus.setText(text);
+            }
+            // 颜色
+            if (status == 1) {
+                mTvStatus.setTextColor(getResources().getColor(R.color.vip_green));
+            } else {
+                mTvStatus.setTextColor(getResources().getColor(R.color.vip_red));
+            }
+        }
+    }
+
+    /**
+     * 驳回Alert
+     * @param msg 驳回原因
+     * @param date 下次提交时间
+     */
+    public void showRejectAlert(String msg, String date) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.show();
+
+        Window window = alertDialog.getWindow();
+        window.setContentView(R.layout.vip_zjzd_reject_alert);
+        window.setBackgroundDrawableResource(R.color.transparency);
+
+        TextView tvMsg = (TextView) window.findViewById(R.id.vip_zjzd_reject_msg);
+        Button btn = (Button) window.findViewById(R.id.vip_zjzd_reject_btn);
+
+        String text;
+        text = "驳回原因：" + msg + "\n";
+        text = text + "下次提交时间：" + date;
+        tvMsg.setText(text);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    public void showSubmitBtn(boolean is_show) {
+        if (is_show) {
+            mBtnSubmit.setVisibility(View.VISIBLE);
+        } else {
+            mBtnSubmit.setVisibility(View.GONE);
+        }
+    }
+
 }

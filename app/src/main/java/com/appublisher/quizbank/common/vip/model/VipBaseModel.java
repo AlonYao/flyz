@@ -24,16 +24,17 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 /**
  * 小班模块管理类
  */
-public class VipManager implements RequestCallback{
+public class VipBaseModel implements RequestCallback{
 
     public Context mContext;
-    public VipRequest mVipRequest;
+    VipRequest mVipRequest;
 
     public static final int CAMERA_REQUEST_CODE = 10;
+    public static final int GALLERY_REQUEST_CODE = 11;
     public static final String PIC_CACHE_DIR =
             Environment.getExternalStorageDirectory() + "/yaoguo/vip/";
 
-    public VipManager(Context context) {
+    VipBaseModel(Context context) {
         mContext = context;
         mVipRequest = new VipRequest(mContext, this);
     }

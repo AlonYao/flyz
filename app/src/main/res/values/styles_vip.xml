@@ -10,6 +10,7 @@
         <item name="android:layout_marginBottom">5dp</item>
         <item name="android:text">@string/vip_none</item>
         <item name="android:textColor">@color/themecolor</item>
+        <item name="android:textSize">@dimen/vip_default_text</item>
     </style>
 
 </resources>
