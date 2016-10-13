@@ -50,6 +50,7 @@ import com.appublisher.quizbank.fragment.SettingFragment;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QApiConstants;
@@ -108,7 +109,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             startActivity(intent);
         }
 
-
         // View初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         mDrawerList.setOnItemClickListener(drawerListOnClick);
 
         // 侧边栏样式
-        setToolBar(this);
+        CommonModel.setToolBar(this);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
