@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:ignore="ScrollViewSize">
+            <WebView
+                android:id="@+id/vip_hpts_question_webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <!-- 我的作业 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/Vip_Title"
+                    android:text="@string/vip_myjob"/>
+                <TextView
+                    android:id="@+id/vip_hpts_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
+            </RelativeLayout>
+
+            <org.apmem.tools.layouts.FlowLayout
+                android:id="@+id/vip_hpts_myjob_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                tools:ignore="RtlHardcoded,RtlSymmetry">
+            </org.apmem.tools.layouts.FlowLayout>
+
+            <!-- 学生评论 -->
+            <ViewStub
+                android:id="@+id/vip_hpts_review_viewstub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/vip_hpts_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/vip_msjp_submit"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/vip_default_text"
+        android:background="@color/vip_gray"/>
+
+</RelativeLayout>

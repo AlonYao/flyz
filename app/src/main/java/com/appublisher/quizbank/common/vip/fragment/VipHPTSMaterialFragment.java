@@ -13,20 +13,21 @@ import android.widget.ScrollView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
+import com.appublisher.quizbank.common.vip.netdata.VipHPTSResp;
 
 /**
- * 小班：名师精批 材料Tab
+ * 小班：互评提升 材料Tab
  */
-public class VipMSJPMaterialFragment extends Fragment{
+
+public class VipHPTSMaterialFragment extends Fragment{
 
     private static final String ARGS_DATA = "data";
-    private VipMSJPResp mResp;
+    private VipHPTSResp mResp;
 
-    public static VipMSJPMaterialFragment newInstance(VipMSJPResp resp) {
+    public static VipHPTSMaterialFragment newInstance(VipHPTSResp resp) {
         Bundle args = new Bundle();
         args.putString(ARGS_DATA, GsonManager.modelToString(resp));
-        VipMSJPMaterialFragment fragment = new VipMSJPMaterialFragment();
+        VipHPTSMaterialFragment fragment = new VipHPTSMaterialFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -34,7 +35,7 @@ public class VipMSJPMaterialFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mResp = GsonManager.getModel(getArguments().getString(ARGS_DATA), VipMSJPResp.class);
+        mResp = GsonManager.getModel(getArguments().getString(ARGS_DATA), VipHPTSResp.class);
     }
 
     @Nullable
@@ -42,17 +43,17 @@ public class VipMSJPMaterialFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.vip_msjp_material_fragment, container, false);
+        View view = inflater.inflate(R.layout.vip_hpts_material_fragment, container, false);
 
         // 材料
-        WebView webView = (WebView) view.findViewById(R.id.vip_msjp_material_webview);
+        WebView webView = (WebView) view.findViewById(R.id.vip_hpts_material_webview);
         webView.setBackgroundColor(0);
         webView.loadDataWithBaseURL(null, getMaterial(mResp), "text/html", "UTF-8", null);
 
         // 上滑Button
         final ScrollView scrollView =
-                (ScrollView) view.findViewById(R.id.vip_msjp_material_scrollview);
-        ImageButton imageButton = (ImageButton) view.findViewById(R.id.vip_msjp_totop);
+                (ScrollView) view.findViewById(R.id.vip_hpts_material_scrollview);
+        ImageButton imageButton = (ImageButton) view.findViewById(R.id.vip_hpts_totop);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,10 +70,11 @@ public class VipMSJPMaterialFragment extends Fragment{
      * @return String
      */
     @NonNull
-    private static String getMaterial(VipMSJPResp resp) {
+    private static String getMaterial(VipHPTSResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return "";
-        VipMSJPResp.QuestionBean questionBean = resp.getQuestion();
+        VipHPTSResp.QuestionBean questionBean = resp.getQuestion();
         if (questionBean == null) return "";
         return questionBean.getMaterial();
     }
+
 }
