@@ -8,26 +8,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.customui.MultiListView;
+import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
 import com.appublisher.quizbank.common.vip.activity.VipGalleryActivity;
-import com.appublisher.quizbank.common.vip.model.VipBaseModel;
-import com.appublisher.quizbank.common.vip.model.VipDTTPQuestionModel;
 import com.appublisher.quizbank.common.vip.model.VipHPTSQuestionModel;
 import com.appublisher.quizbank.common.vip.netdata.VipHPTSResp;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
-
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 小班：互评提升 问题Tab
@@ -40,10 +37,16 @@ public class VipHPTSQuestionFragment extends Fragment {
     private VipHPTSResp mResp;
     private View mRoot;
     private WebView mWvQuestion;
-    private FlowLayout mMyjobContainer;
+    private WebView mWvAnswer;
     private VipHPTSQuestionModel mModel;
     private Button mBtnSubmit;
-    private TextView mTvStatus;
+    private FlowLayout mOtherContainer;
+    private TextView mTvLevel;
+    private TextView mTvOtherName;
+    private TextView mTvOtherDate;
+    private TextView mTvFinish;
+    private RoundedImageView mIvOtherAvatar;
+    private LinearLayout mLlUnFinish;
 
     public static VipHPTSQuestionFragment newInstance(VipHPTSResp resp) {
         Bundle args = new Bundle();
@@ -70,30 +73,6 @@ public class VipHPTSQuestionFragment extends Fragment {
         return mRoot;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) return;
-        if (requestCode == VipBaseModel.CAMERA_REQUEST_CODE) {
-            // 拍照回调
-            ArrayList<String> paths =
-                    data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-            if (mModel.mPaths != null) {
-                mModel.mPaths.addAll(paths);
-            } else {
-                mModel.mPaths = paths;
-            }
-            showMyJob();
-            updateSubmitButton();
-
-        } else if (requestCode == VipBaseModel.GALLERY_REQUEST_CODE) {
-            // 图片浏览回调
-            mModel.mPaths = data.getStringArrayListExtra(VipGalleryActivity.INTENT_PATHS);
-            showMyJob();
-            updateSubmitButton();
-        }
-    }
-
     /**
      * 显示内容
      */
@@ -102,21 +81,20 @@ public class VipHPTSQuestionFragment extends Fragment {
         VipHPTSResp.QuestionBean questionBean = mResp.getQuestion();
         mModel.mCanSubmit = mResp.isCan_submit();
         int status = mResp.getStatus();
-        String statusText = mResp.getStatus_text();
 
-        // 题目
         if (questionBean != null) {
-            mWvQuestion.setBackgroundColor(0);
+            // 题目
+            mWvQuestion.setBackgroundColor(Color.WHITE);
             mWvQuestion.loadDataWithBaseURL(
                     null, questionBean.getQuestion(), "text/html", "UTF-8", null);
+            // 参考答案
+            mWvAnswer.setBackgroundColor(Color.WHITE);
+            mWvAnswer.loadDataWithBaseURL(
+                    null, questionBean.getAnswer(), "text/html", "UTF-8", null);
         }
 
-        // 我的作业处理
-        mModel.mPaths = getOriginImgs();
-        showMyJob();
-
-        // 状态问题
-        showStatus(status, statusText);
+        // 他的作业处理
+        showOther();
 
         // 提交按钮
         if (mModel.mCanSubmit) {
@@ -132,116 +110,85 @@ public class VipHPTSQuestionFragment extends Fragment {
             }
         });
 
-        // 完成状态
-        if (status == 1) {
-            showReview();
-        }
+        showMyComment(status);
     }
 
     /**
-     * 获取用户原始做题答案
-     * @return ArrayList
+     * 显示我的评论
      */
-    private ArrayList<String> getOriginImgs() {
-        if (mResp == null || mResp.isCan_submit()) return null;
-        VipHPTSResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
-        if (userAnswerBean == null) return null;
-        VipHPTSResp.UserAnswerBean.UserRecordBean userRecordBean = userAnswerBean.getUser_record();
-        if (userRecordBean == null) return null;
-        return userRecordBean.getImages();
+    private void showMyComment(int status) {
+        if (status == 1) {
+            // 已完成
+            mTvFinish.setVisibility(View.VISIBLE);
+            mLlUnFinish.setVisibility(View.GONE);
+            if (mResp == null) return;
+            VipHPTSResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
+            if (userAnswerBean == null) return;
+            VipHPTSResp.UserAnswerBean.MyPostilBean myPostilBean = userAnswerBean.getMy_postil();
+            if (myPostilBean == null) return;
+            mTvFinish.setText(myPostilBean.getReview_postil());
+            mTvLevel.setText(myPostilBean.getReview_level());
+        } else {
+            // 未完成
+            mTvFinish.setVisibility(View.GONE);
+            mLlUnFinish.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initView(LayoutInflater inflater,
                           @Nullable ViewGroup container) {
-        mRoot = inflater.inflate(R.layout.vip_dttp_question_fragment, container, false);
-        mWvQuestion = (WebView) mRoot.findViewById(R.id.vip_dttp_question_webview);
-        mMyjobContainer = (FlowLayout) mRoot.findViewById(R.id.vip_dttp_myjob_container);
-        mBtnSubmit = (Button) mRoot.findViewById(R.id.vip_dttp_submit);
-        mTvStatus = (TextView) mRoot.findViewById(R.id.vip_dttp_status);
+        mRoot = inflater.inflate(R.layout.vip_hpts_question_fragment, container, false);
+        mWvQuestion = (WebView) mRoot.findViewById(R.id.vip_hpts_question_webview);
+        mOtherContainer = (FlowLayout) mRoot.findViewById(R.id.vip_hpts_other_container);
+        mBtnSubmit = (Button) mRoot.findViewById(R.id.vip_hpts_submit);
+        mWvAnswer = (WebView) mRoot.findViewById(R.id.vip_hpts_answer);
+        mIvOtherAvatar = (RoundedImageView) mRoot.findViewById(R.id.vip_hpts_other_avatar);
+        mTvOtherName = (TextView) mRoot.findViewById(R.id.vip_hpts_other_name);
+        mTvOtherDate = (TextView) mRoot.findViewById(R.id.vip_hpts_other_date);
+        mTvFinish = (TextView) mRoot.findViewById(R.id.vip_hpts_mycomment_finish);
+        mLlUnFinish = (LinearLayout) mRoot.findViewById(R.id.vip_hpts_mycomment_unfinish);
+        mTvLevel = (TextView) mRoot.findViewById(R.id.vip_hpts_level);
     }
 
     /**
-     * 显示我的作业
+     * 显示他的作业
      */
-    private void showMyJob() {
-        String type;
-        if (mModel.mCanSubmit) {
-            type = VipBaseActivity.FILE;
-        } else {
-            type = VipBaseActivity.URL;
+    private void showOther() {
+        if (mResp == null) return;
+        VipHPTSResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
+        if (userAnswerBean == null) return;
+        VipHPTSResp.UserAnswerBean.UserRecordBean userRecordBean = userAnswerBean.getUser_record();
+        if (userRecordBean == null) return;
+
+        VipHPTSResp.UserAnswerBean.UserRecordBean.UserInfoBean userInfoBean =
+                userRecordBean.getUser_info();
+        if (userInfoBean != null) {
+            ImageManager.displayImage(userInfoBean.getAvatar(), mIvOtherAvatar);
+            mTvOtherName.setText(userInfoBean.getNickname());
         }
 
-        mModel.showMyJob(
-                mModel.mPaths,
-                type,
-                VipDTTPQuestionModel.MAX_LENGTH,
-                mMyjobContainer,
-                getContext(),
-                new VipBaseActivity.MyJobActionListener() {
+        mTvOtherDate.setText(userRecordBean.getSubmit_time());
+
+        // 他的作业图片
+        final ArrayList<String> paths = userRecordBean.getImages();
+        if (paths != null) {
+            mOtherContainer.removeAllViews();
+            int size = paths.size();
+            for (int i = 0; i < size; i++) {
+                final int index = i;
+                ImageView imageView = mModel.getMyJobItem();
+                ImageManager.displayImage(paths.get(i), imageView);
+                imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void toCamera(int maxLength) {
-                        mModel.toCamera(maxLength);
+                    public void onClick(View v) {
+                        Intent intent =
+                                new Intent(getContext(), VipGalleryActivity.class);
+                        intent.putExtra(VipGalleryActivity.INTENT_INDEX, index);
+                        intent.putExtra(VipGalleryActivity.INTENT_PATHS, paths);
+                        startActivity(intent);
                     }
                 });
-    }
-
-    /**
-     * 更新提交按钮
-     */
-    private void updateSubmitButton() {
-        int curLength = mModel.mPaths == null ? 0 : mModel.mPaths.size();
-        int maxLength = VipDTTPQuestionModel.MAX_LENGTH;
-        mModel.updateSubmitButton(curLength, maxLength, mBtnSubmit);
-    }
-
-    /**
-     * 显示学生评论部分
-     */
-    private void showReview() {
-        ViewStub vsReview = (ViewStub) mRoot.findViewById(R.id.vip_dttp_review_viewstub);
-        vsReview.inflate();
-        WebView reviewAnswer = (WebView) mRoot.findViewById(R.id.vip_dttp_review_answer);
-        MultiListView lvStudent = (MultiListView) mRoot.findViewById(R.id.vip_dttp_review_student);
-
-        // 参考答案
-        VipHPTSResp.QuestionBean questionBean = mResp.getQuestion();
-        if (questionBean != null) {
-            reviewAnswer.setBackgroundColor(Color.WHITE);
-            reviewAnswer.loadDataWithBaseURL(
-                    null, questionBean.getAnswer(), "text/html", "UTF-8", null);
-        }
-
-//        // 学生评论
-//        VipHPTSResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
-//        if (userAnswerBean != null) {
-//            VipDTTPReviewAdapter adapter =
-//                    new VipDTTPReviewAdapter(getContext(), userAnswerBean.getReviews());
-//            lvStudent.setAdapter(adapter);
-//        }
-    }
-
-    /**
-     * 显示状态文字
-     * @param status 状态
-     * @param text 文字
-     */
-    @SuppressWarnings("deprecation")
-    public void showStatus(int status, String text) {
-        if (status == 0) {
-            mTvStatus.setVisibility(View.GONE);
-        } else {
-            mTvStatus.setVisibility(View.VISIBLE);
-            // 文字
-            if (status == 3) {
-                mTvStatus.setText("等待批改");
-            } else {
-                mTvStatus.setText(text);
-            }
-            // 颜色
-            if (status == 1) {
-                mTvStatus.setTextColor(getResources().getColor(R.color.vip_green));
-            } else {
-                mTvStatus.setTextColor(getResources().getColor(R.color.vip_red));
+                mOtherContainer.addView(imageView);
             }
         }
     }

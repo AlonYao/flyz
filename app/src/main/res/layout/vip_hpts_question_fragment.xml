@@ -16,25 +16,67 @@
                 android:id="@+id/vip_hpts_question_webview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <!-- 我的作业 -->
+
+            <!-- 参考答案 -->
+            <TextView
+                style="@style/Vip_Title"
+                android:text="@string/vip_msjp_review_answer"/>
+            <WebView
+                android:id="@+id/vip_hpts_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!-- 他的作业 -->
+            <TextView
+                style="@style/Vip_Title"
+                android:text="@string/vip_hpts_other"/>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/Vip_Title"
-                    android:text="@string/vip_myjob"/>
-                <TextView
-                    android:id="@+id/vip_hpts_status"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@android:color/white">
+                <!-- 头像 -->
+                <com.makeramen.roundedimageview.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/vip_hpts_other_avatar"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/login_avatar"
+                    android:scaleType="fitCenter"
+                    app:riv_border_width="1dp"
+                    app:riv_border_color="#979AA4"
+                    app:riv_oval="true" />
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_toRightOf="@id/vip_hpts_other_avatar"
                     android:layout_centerVertical="true"
-                    tools:ignore="RelativeOverlap,RtlHardcoded" />
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical"
+                    tools:ignore="RtlHardcoded">
+                    <TextView
+                        android:id="@+id/vip_hpts_other_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="@dimen/vip_default_text"
+                        android:textColor="@color/common_text"
+                        android:text="@string/vip_none"/>
+                    <TextView
+                        android:id="@+id/vip_hpts_other_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/vip_hpts_other_name"
+                        android:text="@string/vip_none"/>
+                </RelativeLayout>
             </RelativeLayout>
-
             <org.apmem.tools.layouts.FlowLayout
-                android:id="@+id/vip_hpts_myjob_container"
+                android:id="@+id/vip_hpts_other_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
@@ -44,12 +86,90 @@
                 tools:ignore="RtlHardcoded,RtlSymmetry">
             </org.apmem.tools.layouts.FlowLayout>
 
-            <!-- 学生评论 -->
-            <ViewStub
-                android:id="@+id/vip_hpts_review_viewstub"
+            <!-- 我的评论 -->
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/Vip_Title"
+                    android:text="@string/vip_hpts_mycomment"/>
+                <TextView
+                    android:id="@+id/vip_hpts_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/vip_red"
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
+            </RelativeLayout>
 
+            <TextView
+                android:id="@+id/vip_hpts_mycomment_finish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:visibility="gone"
+                android:background="@android:color/white"/>
+
+            <LinearLayout
+                android:id="@+id/vip_hpts_mycomment_unfinish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:background="@android:color/white"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/vip_hpts_mycomment"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="5dp"
+                    android:gravity="top"
+                    android:background="@drawable/vip_hpts_edt_bg"
+                    android:scrollbars="vertical"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/vip_hpts_input"/>
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/themecolor"
+                        android:text="@string/vip_hpts_good"
+                        tools:ignore="UnusedAttribute" />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/themecolor"
+                        android:text="@string/vip_hpts_middle"
+                        tools:ignore="UnusedAttribute"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/themecolor"
+                        android:text="@string/vip_hpts_negative"
+                        tools:ignore="UnusedAttribute"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/themecolor"
+                        android:text="@string/vip_hpts_ceng"
+                        tools:ignore="UnusedAttribute"/>
+                </RadioGroup>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

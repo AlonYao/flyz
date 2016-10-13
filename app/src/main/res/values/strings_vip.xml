@@ -40,4 +40,12 @@
     <string name="vip_msjp_review_point">分</string>
 
     <string name="vip_dttp_review_student">同学评论</string>
+
+    <string name="vip_hpts_other">他的作业</string>
+    <string name="vip_hpts_mycomment">我的评论</string>
+    <string name="vip_hpts_negative">差评</string>
+    <string name="vip_hpts_middle">中评</string>
+    <string name="vip_hpts_good">好评</string>
+    <string name="vip_hpts_ceng">蹭解锁</string>
+    <string name="vip_hpts_input">请输入评论</string>
 </resources>
