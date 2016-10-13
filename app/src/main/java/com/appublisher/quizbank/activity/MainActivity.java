@@ -41,7 +41,6 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.DrawerAdapter;
-import com.appublisher.quizbank.common.vip.activity.VipHPTSActivity;
 import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
@@ -160,10 +159,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
-
-        Intent intent = new Intent(this, VipHPTSActivity.class);
-        startActivity(intent);
-
     }
 
     @Override

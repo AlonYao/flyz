@@ -12,11 +12,14 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.vip.model.VipBaseModel;
 import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
 
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
+
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * 小班：字迹诊断
@@ -39,31 +42,31 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
         initData();
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (data == null) return;
-//        if (requestCode == VipBaseModel.CAMERA_REQUEST_CODE) {
-//            // 拍照回调
-//            ArrayList<String> paths =
-//                    data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-//            if (mModel.mPaths != null) {
-//                mModel.mPaths.addAll(paths);
-//            }
-//            showMyJob(mModel.mPaths, FILE, VipZJZDModel.MAX_LENGTH, mMyjobContainer);
-//
-//        } else if (requestCode == VipBaseModel.GALLERY_REQUEST_CODE) {
-//            // 图片浏览回调
-//            ArrayList<String> paths =
-//                    data.getStringArrayListExtra(VipGalleryActivity.INTENT_PATHS);
-//            if (mModel.mCanSubmit) {
-//                showMyJob(paths, FILE, VipZJZDModel.MAX_LENGTH, mMyjobContainer);
-//            } else {
-//                showMyJob(paths, URL, VipZJZDModel.MAX_LENGTH, mMyjobContainer);
-//            }
-//            mModel.mPaths = paths;
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) return;
+        if (requestCode == VipBaseModel.CAMERA_REQUEST_CODE) {
+            // 拍照回调
+            ArrayList<String> paths =
+                    data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+            if (mModel.mPaths != null) {
+                mModel.mPaths.addAll(paths);
+            }
+            showMyJob(mModel.mPaths, FILE, VipZJZDModel.MAX_LENGTH);
+
+        } else if (requestCode == VipBaseModel.GALLERY_REQUEST_CODE) {
+            // 图片浏览回调
+            ArrayList<String> paths =
+                    data.getStringArrayListExtra(VipGalleryActivity.INTENT_PATHS);
+            if (mModel.mCanSubmit) {
+                showMyJob(paths, FILE, VipZJZDModel.MAX_LENGTH);
+            } else {
+                showMyJob(paths, URL, VipZJZDModel.MAX_LENGTH);
+            }
+            mModel.mPaths = paths;
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -113,28 +116,13 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     }
 
     public void showMyJob(ArrayList<String> paths, String type, int max_length) {
-//        showMyJob(paths, type, max_length, mMyjobContainer);
+        showMyJob(paths, type, max_length, mMyjobContainer, this, new MyJobActionListener() {
+            @Override
+            public void toCamera(int maxLength) {
+                mModel.toCamera(maxLength);
+            }
+        });
     }
-
-    //    public void showMyJob(final ArrayList<String> paths, String type, int max_length) {
-//        showMyJob(paths, type, max_length);
-//    }
-
-//    /**
-//     * 获取我的作业item
-//     * @param context Context
-//     * @return ImageView
-//     */
-//    private ImageView getMyJobItem(Context context) {
-//        @SuppressLint("InflateParams")
-//        ImageView imageView = (ImageView)
-//                LayoutInflater.from(this).inflate(R.layout.vip_myjob_item, null);
-//        int px = Utils.dip2px(context, 75);
-//        FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(px, px);
-//        params.setMargins(0, 0, Utils.dip2px(context, 10), Utils.dip2px(context, 10));
-//        imageView.setLayoutParams(params);
-//        return imageView;
-//    }
 
     /**
      * 显示状态文字
