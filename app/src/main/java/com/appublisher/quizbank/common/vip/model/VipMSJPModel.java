@@ -14,7 +14,7 @@ import org.json.JSONObject;
  */
 public class VipMSJPModel extends VipBaseModel {
 
-    private int mExerciseId;
+    public int mExerciseId;
     private VipMSJPActivity mView;
 
     public VipMSJPModel(Context context) {
@@ -26,8 +26,7 @@ public class VipMSJPModel extends VipBaseModel {
      * 获取练习详情
      */
     public void getExerciseDetail() {
-//        mVipRequest.getExerciseDetail(mExerciseId);
-        mVipRequest.getExerciseDetail(330);
+        mVipRequest.getExerciseDetail(mExerciseId);
     }
 
     @Override

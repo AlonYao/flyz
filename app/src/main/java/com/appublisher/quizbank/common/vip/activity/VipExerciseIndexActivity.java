@@ -1,27 +1,19 @@
 package com.appublisher.quizbank.common.vip.activity;
 
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
-import com.appublisher.lib_basic.customui.XListView;
-import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseAdapter;
 import com.appublisher.quizbank.common.vip.model.VipExerciseIndexModel;
-import com.appublisher.quizbank.common.vip.netdata.VipExerciseFilterResp;
 import com.appublisher.quizbank.common.vip.netdata.VipExerciseResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
@@ -31,6 +23,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 小班：我的作业
+ */
 public class VipExerciseIndexActivity extends BaseActivity implements RequestCallback {
 
     public View statusView;

@@ -38,11 +38,15 @@ public class VipMSJPQuestionModel extends VipMSJPModel{
         mView.showMyJob(mPaths, type, maxLength, mMyjobContainer, context, listener);
     }
 
-    public void updateSubmitButton(int curLength, int maxLength, Button btnSubmit) {
-        mView.updateSubmitButton(curLength, maxLength, btnSubmit);
+    public void updateSubmitButton(int curLength, Button btnSubmit) {
+        mView.updateSubmitButton(curLength, btnSubmit);
     }
 
     public ImageView getMyJobItem() {
         return mView.getMyJobItem();
+    }
+
+    public void showRejectAlert(String review_postil, String review_time) {
+        mView.showRejectAlert(review_postil, review_time);
     }
 }

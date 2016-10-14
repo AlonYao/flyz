@@ -5,27 +5,21 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
+import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
 import com.appublisher.quizbank.common.vip.activity.VipYDDKActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterCategoryAdapter;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterStatusAdapter;
@@ -35,7 +29,6 @@ import com.appublisher.quizbank.common.vip.netdata.VipExerciseResp;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -356,6 +349,11 @@ public class VipExerciseIndexModel {
         }
     }
 
+    /**
+     * 练习跳转
+     * @param activity VipExerciseIndexActivity
+     * @param position position
+     */
     public static void dealExerciseSkip(VipExerciseIndexActivity activity, int position) {
 
         int exerciseTypeId = activity.list.get(position).getExercise_type();
@@ -364,14 +362,24 @@ public class VipExerciseIndexModel {
         Class<?> cls = null;
         switch (exerciseTypeId) {
             case 1:
+                // 名师精批
+                if (Globals.sharedPreferences.getBoolean("vip_description_msjp", false) || (status != 0 && status != 6)) {
+                    cls = VipMSJPActivity.class;
+                } else {
+                    cls = VipExerciseDescriptionActivity.class;
+                }
                 break;
             case 2:
+                // 单题突破
                 break;
             case 3:
+                // 字迹诊断
                 break;
             case 4:
+                // 词句摘抄
                 break;
             case 5:
+                // 表达改写
                 if (Globals.sharedPreferences.getBoolean("vip_description_bdgx", false) || (status != 0 && status != 6)) {
                     cls = VipBDGXActivity.class;
                 } else {
@@ -379,6 +387,7 @@ public class VipExerciseIndexModel {
                 }
                 break;
             case 6:
+                // 语义提炼
                 if (Globals.sharedPreferences.getBoolean("vip_description_yytl", false) || (status != 0 && status != 6)) {
                     cls = VipBDGXActivity.class;
                 } else {
@@ -386,6 +395,7 @@ public class VipExerciseIndexModel {
                 }
                 break;
             case 7:
+                // 阅读打卡
                 if (Globals.sharedPreferences.getBoolean("vip_description_yddk", false) || (status != 0 && status != 6)) {
                     cls = VipYDDKActivity.class;
                 } else {
@@ -393,10 +403,10 @@ public class VipExerciseIndexModel {
                 }
                 break;
             case 8:
+                // 行测_智能组卷
                 break;
             case 9:
-                break;
-            case 10:
+                // 互评提升
                 break;
             default:
                 break;

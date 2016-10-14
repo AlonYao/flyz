@@ -38,8 +38,8 @@ public class VipDTTPQuestionModel extends VipDTTPModel {
         mView.showMyJob(mPaths, type, maxLength, mMyjobContainer, context, listener);
     }
 
-    public void updateSubmitButton(int curLength, int maxLength, Button btnSubmit) {
-        mView.updateSubmitButton(curLength, maxLength, btnSubmit);
+    public void updateSubmitButton(int curLength, Button btnSubmit) {
+        mView.updateSubmitButton(curLength, btnSubmit);
     }
 
     public ImageView getMyJobItem() {

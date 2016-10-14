@@ -1,8 +1,8 @@
 package com.appublisher.quizbank.common.vip.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -73,18 +73,30 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
         });
     }
 
+    @SuppressLint("CommitPrefEdits")
     public void skipExercise() {
         Class<?> cls = null;
         switch (exerciseType) {
             case 1:
+                // 名师精批
+                if (descriptionCheckBox.isChecked()) {
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("vip_description_msjp", true);
+                    editor.commit();
+                }
+                cls = VipMSJPActivity.class;
                 break;
             case 2:
+                // 单题突破
                 break;
             case 3:
+                // 字迹诊断
                 break;
             case 4:
+                // 词句摘抄
                 break;
             case 5:
+                // 表达改写
                 if (descriptionCheckBox.isChecked()) {
                     SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                     editor.putBoolean("vip_description_bdgx", true);
@@ -93,6 +105,7 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
                 cls = VipBDGXActivity.class;
                 break;
             case 6:
+                // 语义提炼
                 if (descriptionCheckBox.isChecked()) {
                     SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                     editor.putBoolean("vip_description_yytl", true);
@@ -101,6 +114,7 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
                 cls = VipBDGXActivity.class;
                 break;
             case 7:
+                // 阅读打卡
                 if (descriptionCheckBox.isChecked()) {
                     SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                     editor.putBoolean("vip_description_yddk", true);
@@ -109,10 +123,10 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
                 cls = VipYDDKActivity.class;
                 break;
             case 8:
+                // 行测_智能组卷
                 break;
             case 9:
-                break;
-            case 10:
+                // 互评提升
                 break;
             default:
                 break;

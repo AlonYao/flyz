@@ -48,6 +48,7 @@ public class VipMSJPActivity extends VipBaseActivity {
     private void initData() {
         VipMSJPModel model = new VipMSJPModel(this);
         showLoading();
+        model.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
         model.getExerciseDetail();
     }
 
