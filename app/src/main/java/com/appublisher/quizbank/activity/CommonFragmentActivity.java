@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.SettingFragment;
@@ -38,6 +39,13 @@ public class CommonFragmentActivity extends BaseActivity {
         } else if ("setting".equals(mFrom)) {
             fragmentTransaction.add(R.id.container_view, new SettingFragment(), "Setting");
             setTitle("设置页");
+        } else if ("course".equals(mFrom)) {
+            final CourseFragment courseFragment = new CourseFragment();
+            final Bundle bundle = new Bundle();
+            bundle.putString("status", "purchased");
+            courseFragment.setArguments(bundle);
+            fragmentTransaction.add(R.id.container_view, courseFragment, "Course");
+            setTitle("课程中心");
         }
         fragmentTransaction.commit();
     }

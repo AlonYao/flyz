@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.model.business.LoginModel;
@@ -22,6 +23,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
+import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
 import com.appublisher.quizbank.common.vip.activity.VipNotificationActivity;
 import com.appublisher.quizbank.common.vip.model.VipIndexModel;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
@@ -49,6 +51,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
     private ImageView settingImage;
     private View notificationView;
     private View exerciseView;
+    private View courseView;
     private VipRequest mRequest;
 
     @Override
@@ -74,6 +77,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         messageTips = (TextView) mView.findViewById(R.id.message_tips);
         notificationView = mView.findViewById(R.id.message);
         exerciseView = mView.findViewById(R.id.homework);
+        courseView = mView.findViewById(R.id.course);
         settingImage = (ImageView) mView.findViewById(R.id.setting_image);
     }
 
@@ -123,6 +127,14 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), VipExerciseIndexActivity.class);
                 startActivity(intent);
+            }
+        });
+        courseView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
+                intent.putExtra("from", "course");
+                getActivity().startActivity(intent);
             }
         });
 

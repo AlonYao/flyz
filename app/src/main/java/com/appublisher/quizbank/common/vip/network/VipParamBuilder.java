@@ -14,16 +14,17 @@ public class VipParamBuilder {
 
     /**
      * 小班提交
-     * @param exercise_id 作业id
-     * @param question_id 题目id
-     * @param image_url 答题图片链接
-     * @param record_id 用户答题记录id
-     * @param postil 评论内容
-     * @param level 评论级别
+     *
+     * @param exercise_id    作业id
+     * @param question_id    题目id
+     * @param image_url      答题图片链接
+     * @param record_id      用户答题记录id
+     * @param postil         评论内容
+     * @param level          评论级别
      * @param answer_content 答案内容
-     * @param duration 总时长
-     * @param summary 单题统计
-     * @param done 是否是最后一道题
+     * @param duration       总时长
+     * @param summary        单题统计
+     * @param done           是否是最后一道题
      * @return Map
      */
     public static Map<String, String> submit(String exercise_id,
@@ -52,6 +53,7 @@ public class VipParamBuilder {
 
     /**
      * 小班提交
+     *
      * @return Map
      */
     public static Map<String, String> submit(VipSubmitEntity entity) {
@@ -67,6 +69,18 @@ public class VipParamBuilder {
         params.put("duration", String.valueOf(entity.getDuration()));
         params.put("summary", entity.getSummary());
         params.put("done", String.valueOf(entity.getDone()));
+        return params;
+    }
+
+    /**
+     * 消息已读
+     *
+     * @param notificationId
+     * @return
+     */
+    public static Map<String, String> readNotification(int notificationId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("notification_id", String.valueOf(notificationId));
         return params;
     }
 

@@ -115,4 +115,13 @@ public class VipRequest extends Request implements VipApi {
     public void getVipIndexEntryData() {
         asyncRequest(getFinalUrl(getVipIndexEntryData), "vip_index_entry_data", "object");
     }
+
+    /**
+     * 消息已读
+     *
+     * @param map
+     */
+    public void postReadNotification(Map<String, String> map) {
+        postRequest(getFinalUrl(getReadNotification), map, "read_notification", "object");
+    }
 }

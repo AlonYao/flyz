@@ -7,17 +7,22 @@ import android.widget.AdapterView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipNotificationAdapter;
 import com.appublisher.quizbank.common.vip.netdata.VipNotificationResp;
+import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,8 +77,10 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
                     intent.putExtra("url", url);
                     startActivity(intent);
                 } else {
-                    int exercise_id = notificationsBean.getExercise_id();
-                    mRequest.getExerciseDetail(exercise_id);
+                    mRequest.postReadNotification(VipParamBuilder.readNotification(notificationsBean.getId()));
+                    list.get(position - 1).setIs_read(true);
+                    adapter.notifyDataSetChanged();
+                    skipExerciseDetail(notificationsBean.getExercise_id(), notificationsBean.getExercise_type());
                 }
             }
         });
@@ -91,8 +98,6 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
                 list.clear();
             list.addAll(notificationResp.getNotifications());
             adapter.notifyDataSetChanged();
-        } else if ("exercise_detail".equals(apiName)) {
-            //未完待续
         }
     }
 
@@ -105,4 +110,46 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
     public void requestEndedWithError(VolleyError error, String apiName) {
 
     }
+
+    public void skipExerciseDetail(int exerciseId, int exerciseType) {
+        Class<?> cls = null;
+        switch (exerciseType) {
+            case 1:
+                cls = VipMSJPActivity.class;
+                break;
+            case 2:
+                cls = VipDTTPActivity.class;
+                break;
+            case 3:
+                cls = VipZJZDActivity.class;
+                break;
+            case 4:
+                ToastManager.showToast(this, "此消息请在电脑端查看");
+                break;
+            case 5:
+                cls = VipBDGXActivity.class;
+                break;
+            case 6:
+                cls = VipBDGXActivity.class;
+                break;
+            case 7:
+                cls = VipYDDKActivity.class;
+                break;
+            case 8:
+
+                break;
+            case 9:
+                cls = VipHPTSActivity.class;
+                break;
+            default:
+                break;
+        }
+        if (cls != null) {
+            final Intent intent = new Intent(this, cls);
+            intent.putExtra("exerciseId", exerciseId);
+            intent.putExtra("exerciseType", exerciseType);
+            startActivity(intent);
+        }
+    }
 }
+

@@ -41,4 +41,9 @@ public interface VipApi extends ApiConstants {
      * 获取小班首页数据
      */
     String getVipIndexEntryData = baseUrl + "vip/get_entry_data";
+
+    /**
+     * 消息已读
+     */
+    String getReadNotification = baseUrl + "vip/read_notification";
 }

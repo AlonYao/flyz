@@ -36,8 +36,9 @@ public class VipNotificationResp {
         private String redirect_url;
         private String send_time;
         private boolean is_read;
-
         private SenderBean sender;
+        private int exercise_type;
+        private String mobile_redirect_url;
 
         public int getId() {
             return id;
@@ -109,6 +110,22 @@ public class VipNotificationResp {
 
         public void setSender(SenderBean sender) {
             this.sender = sender;
+        }
+
+        public int getExercise_type() {
+            return exercise_type;
+        }
+
+        public void setExercise_type(int exercise_type) {
+            this.exercise_type = exercise_type;
+        }
+
+        public String getMobile_redirect_url() {
+            return mobile_redirect_url;
+        }
+
+        public void setMobile_redirect_url(String mobile_redirect_url) {
+            this.mobile_redirect_url = mobile_redirect_url;
         }
 
         public static class SenderBean {

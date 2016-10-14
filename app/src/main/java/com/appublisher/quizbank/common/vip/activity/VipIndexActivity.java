@@ -42,6 +42,7 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
     private ImageView settingImage;
     private View notificationView;
     private View exerciseView;
+    private View courseView;
     private VipRequest mRequest;
 
     @Override
@@ -67,11 +68,11 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
         messageTips = (TextView) findViewById(R.id.message_tips);
         notificationView = findViewById(R.id.message);
         exerciseView = findViewById(R.id.homework);
+        courseView = findViewById(R.id.course);
         settingImage = (ImageView) findViewById(R.id.setting_image);
     }
 
     public void setValues() {
-
         final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
         nickname.setText(userInfoModel.getNickname());
         LoginModel.setAvatar(this, avatarImage);
@@ -115,6 +116,14 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(VipIndexActivity.this, VipExerciseIndexActivity.class);
+                startActivity(intent);
+            }
+        });
+        courseView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(VipIndexActivity.this, CommonFragmentActivity.class);
+                intent.putExtra("from", "course");
                 startActivity(intent);
             }
         });
