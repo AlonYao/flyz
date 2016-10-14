@@ -9,6 +9,8 @@ import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * 小班：名师精批
  */
@@ -43,6 +45,21 @@ public class VipMSJPModel extends VipBaseModel {
      */
     private void dealExerciseDetailResp(JSONObject response) {
         VipMSJPResp resp = GsonManager.getModel(response, VipMSJPResp.class);
+        // 约束作业处理
+        if (resp != null) {
+            ArrayList<VipMSJPResp.PreExercisesBean> preExercises = resp.getPre_exercises();
+            if (preExercises != null && preExercises.size() != 0) {
+                String nameList = "";
+                for (VipMSJPResp.PreExercisesBean preExercise : preExercises) {
+                    if (preExercise == null) continue;
+                    nameList = nameList + preExercise.getExercise_name() + "\n";
+                }
+                if (nameList.length() > 0) {
+                    mView.showPreExercisesAlert(nameList);
+                    return;
+                }
+            }
+        }
         mView.showContent(resp);
     }
 }

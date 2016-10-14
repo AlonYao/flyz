@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.common.vip.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -60,5 +62,24 @@ public class VipMSJPActivity extends VipBaseActivity {
 
     public void showLoading() {
         ProgressDialogManager.showProgressDialog(this);
+    }
+
+    /**
+     * 显示约束作业列表
+     * @param nameList 作业列表
+     */
+    public void showPreExercisesAlert(String nameList) {
+        String msg = "完成对其他同学的评论可以解锁本作业\n\n" + nameList;
+        String p = "确认";
+        new AlertDialog.Builder(this)
+                .setMessage(msg)
+                .setPositiveButton(p,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        }).show();
     }
 }
