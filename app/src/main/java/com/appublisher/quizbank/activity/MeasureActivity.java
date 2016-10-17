@@ -667,7 +667,8 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
             case "server_current_time":
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
-                MeasureModel.dealServerCurrentTimeResp(this, resp);
+                if (!isFinishing())
+                    MeasureModel.dealServerCurrentTimeResp(this, resp);
                 break;
         }
 

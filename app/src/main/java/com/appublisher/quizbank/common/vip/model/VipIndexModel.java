@@ -49,7 +49,7 @@ public class VipIndexModel {
                 activity.homeworkTipsText.setVisibility(View.VISIBLE);
             }
 
-            int messageTips = vipIndexEntryDataResp.getNotifications().getTotal();
+            int messageTips = vipIndexEntryDataResp.getNotifications().getUnread_total();
             if (messageTips > 99)
                 messageTips = 99;
             if (messageTips > 0) {
@@ -124,7 +124,7 @@ public class VipIndexModel {
                 fragment.homeworkTipsText.setVisibility(View.VISIBLE);
             }
 
-            int messageTips = vipIndexEntryDataResp.getNotifications().getTotal();
+            int messageTips = vipIndexEntryDataResp.getNotifications().getUnread_total();
             if (messageTips > 99)
                 messageTips = 99;
             if (messageTips > 0) {

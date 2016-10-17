@@ -166,6 +166,7 @@ public class AnswerSheetActivity extends BaseActivity implements RequestCallback
 
     /**
      * 处理提交试卷的回调
+     *
      * @param response 回调
      */
     private void dealSubmitPaperResp(JSONObject response) {
@@ -211,7 +212,8 @@ public class AnswerSheetActivity extends BaseActivity implements RequestCallback
             case "server_current_time":
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
-                AnswerSheetModel.dealServerCurrentTimeResp(resp, this);
+                if (!isFinishing())
+                    AnswerSheetModel.dealServerCurrentTimeResp(resp, this);
                 break;
         }
 

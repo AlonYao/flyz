@@ -3,6 +3,7 @@ package com.appublisher.quizbank.model.business;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.view.View;
+
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -22,7 +23,9 @@ import com.db.chart.view.LineChartView;
 import com.db.chart.view.XController;
 import com.db.chart.view.YController;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -153,7 +156,8 @@ public class EvaluationModel {
         boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
         boolean detailCategory = Globals.sharedPreferences.getBoolean("detailCategory", true);
         if (!isFirstStart && detailCategory) {
-            PopupWindowManager.showUpdateEvaluation(activity.parentView, activity);
+            if (!activity.isFinishing())
+                PopupWindowManager.showUpdateEvaluation(activity.parentView, activity);
         }
     }
 

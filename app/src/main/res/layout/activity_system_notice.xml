@@ -8,7 +8,7 @@
 
     <include layout="@layout/toolbar"/>
 
-    <com.appublisher.quizbank.customui.XListView
+    <com.appublisher.lib_basic.customui.XListView
         android:id="@+id/notice_lv"
         style="@style/CommonListView"
         android:paddingTop="15dp"
