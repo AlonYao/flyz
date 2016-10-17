@@ -46,4 +46,16 @@ public class VipDTTPQuestionModel extends VipDTTPModel {
         return mView.getMyJobItem();
     }
 
+    public void submit() {
+        upload(mExerciseId, "", mPaths, new UpLoadListener() {
+            @Override
+            public void onComplete(String submitImgUrl) {
+                VipSubmitEntity entity = new VipSubmitEntity();
+                entity.exercise_id = mExerciseId;
+                entity.image_url = submitImgUrl;
+                mView.showLoading();
+                submit(entity);
+            }
+        });
+    }
 }

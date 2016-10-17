@@ -16,6 +16,7 @@ import org.json.JSONObject;
 public class VipDTTPModel extends VipBaseModel{
 
     private VipDTTPActivity mView;
+    public int mExerciseId;
 
     public VipDTTPModel(Context context) {
         super(context);
@@ -26,8 +27,7 @@ public class VipDTTPModel extends VipBaseModel{
      * 获取练习详情
      */
     public void getExerciseDetail() {
-//        mVipRequest.getExerciseDetail(mExerciseId);
-        mVipRequest.getExerciseDetail(334);
+        mVipRequest.getExerciseDetail(mExerciseId);
     }
 
     /**
@@ -43,6 +43,9 @@ public class VipDTTPModel extends VipBaseModel{
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             dealExerciseDetailResp(response);
+        } else if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
+            mView.showLoading();
+            getExerciseDetail();
         }
         super.requestCompleted(response, apiName);
     }

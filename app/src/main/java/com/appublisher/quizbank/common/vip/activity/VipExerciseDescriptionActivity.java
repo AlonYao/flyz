@@ -56,8 +56,6 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
             descriptionText.setText(getResources().getString(R.string.vip_description_yytl));
         } else if (exerciseType == 7) {
             descriptionText.setText(getResources().getString(R.string.vip_description_yddk));
-        } else if (exerciseType == 8) {
-
         } else if (exerciseType == 9) {
             descriptionText.setText(getResources().getString(R.string.vip_description_hpts));
         }

@@ -128,7 +128,7 @@ public class VipDTTPQuestionFragment extends Fragment{
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mModel.submit();
             }
         });
 
