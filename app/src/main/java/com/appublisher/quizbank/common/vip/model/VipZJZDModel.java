@@ -1,9 +1,7 @@
 package com.appublisher.quizbank.common.vip.model;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipZJZDResp;
@@ -24,11 +22,8 @@ public class VipZJZDModel extends VipBaseModel {
     public static final String INTENT_EXERCISEID = "exercise_id";
 
     private int mExerciseId;
-    private int mStatus;
     private VipZJZDActivity mView;
     private String mExampleUrl;
-    private ProgressDialog mProgressDialog;
-    private String mSubmitImgUrl;
 
     public boolean mCanSubmit;
     public ArrayList<String> mPaths;
@@ -58,9 +53,9 @@ public class VipZJZDModel extends VipBaseModel {
         mView.showSubmitBtn(mCanSubmit);
 
         // 状态
-        mStatus = resp.getStatus();
+        int status = resp.getStatus();
         String statusText = resp.getStatus_text();
-        mView.showStatus(mStatus, statusText);
+        mView.showStatus(status, statusText);
 
         VipZJZDResp.QuestionBean question = resp.getQuestion();
         if (question != null) {
@@ -89,7 +84,11 @@ public class VipZJZDModel extends VipBaseModel {
         upload(mExerciseId, ZJZD, mPaths, new UpLoadListener() {
             @Override
             public void onComplete(String submitImgUrl) {
-                Logger.e(submitImgUrl);
+                VipSubmitEntity entity = new VipSubmitEntity();
+                entity.exercise_id = mExerciseId;
+                entity.image_url = submitImgUrl;
+                mView.showLoading();
+                submit(entity);
             }
         });
     }
@@ -98,6 +97,9 @@ public class VipZJZDModel extends VipBaseModel {
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             dealExerciseDetailResp(response);
+        } else if (VipRequest.SUBMIT.equals(apiName)) {
+            mView.showLoading();
+            getExerciseDetail();
         }
         super.requestCompleted(response, apiName);
     }

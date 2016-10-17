@@ -101,7 +101,7 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
         mIvExample.setOnClickListener(this);
     }
 
-    private void showLoading() {
+    public void showLoading() {
         ProgressDialogManager.showProgressDialog(this);
     }
 

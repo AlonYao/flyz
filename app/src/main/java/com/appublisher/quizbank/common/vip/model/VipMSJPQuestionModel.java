@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
 import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
 
@@ -55,7 +54,11 @@ public class VipMSJPQuestionModel extends VipMSJPModel{
         upload(mExerciseId, "", mPaths, new UpLoadListener() {
             @Override
             public void onComplete(String submitImgUrl) {
-                Logger.e(submitImgUrl);
+                VipSubmitEntity entity = new VipSubmitEntity();
+                entity.exercise_id = mExerciseId;
+                entity.image_url = submitImgUrl;
+                mView.showLoading();
+                submit(entity);
             }
         });
     }

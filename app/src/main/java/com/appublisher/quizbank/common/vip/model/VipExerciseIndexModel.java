@@ -17,10 +17,13 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
+import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
+import com.appublisher.quizbank.common.vip.activity.VipHPTSActivity;
 import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
 import com.appublisher.quizbank.common.vip.activity.VipYDDKActivity;
+import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterCategoryAdapter;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterStatusAdapter;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterTypeAdapter;
@@ -371,9 +374,19 @@ public class VipExerciseIndexModel {
                 break;
             case 2:
                 // 单题突破
+                if (Globals.sharedPreferences.getBoolean("vip_description_dttp", false) || (status != 0 && status != 6)) {
+                    cls = VipDTTPActivity.class;
+                } else {
+                    cls = VipExerciseDescriptionActivity.class;
+                }
                 break;
             case 3:
                 // 字迹诊断
+                if (Globals.sharedPreferences.getBoolean("vip_description_zjzd", false) || (status != 0 && status != 6)) {
+                    cls = VipZJZDActivity.class;
+                } else {
+                    cls = VipExerciseDescriptionActivity.class;
+                }
                 break;
             case 4:
                 // 词句摘抄
@@ -407,6 +420,11 @@ public class VipExerciseIndexModel {
                 break;
             case 9:
                 // 互评提升
+                if (Globals.sharedPreferences.getBoolean("vip_description_hpts", false) || (status != 0 && status != 6)) {
+                    cls = VipHPTSActivity.class;
+                } else {
+                    cls = VipExerciseDescriptionActivity.class;
+                }
                 break;
             default:
                 break;

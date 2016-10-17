@@ -11,6 +11,7 @@ import com.appublisher.lib_basic.YaoguoUploadManager;
 import com.appublisher.lib_basic.volley.ApiConstants;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONArray;
@@ -121,6 +122,10 @@ public class VipBaseModel implements RequestCallback{
                     + exericiseId + "_"
                     + String.valueOf(System.currentTimeMillis()) + ".jpg";
         }
+    }
+
+    public void submit(VipSubmitEntity entity) {
+        mVipRequest.submit(VipParamBuilder.submit(entity));
     }
 
     @Override

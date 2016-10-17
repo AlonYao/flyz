@@ -46,4 +46,13 @@ public class VipHPTSQuestionModel extends VipHPTSModel {
         return mView.getMyJobItem();
     }
 
+    public void submit(int recordId, String postil, String level) {
+        VipSubmitEntity entity = new VipSubmitEntity();
+        entity.exercise_id = mExerciseId;
+        entity.record_id = recordId;
+        entity.postil = postil;
+        entity.level = level;
+        mView.showLoading();
+        submit(entity);
+    }
 }

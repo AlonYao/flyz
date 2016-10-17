@@ -35,6 +35,9 @@ public class VipMSJPModel extends VipBaseModel {
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             dealExerciseDetailResp(response);
+        } else if (VipRequest.SUBMIT.equals(apiName)) {
+            mView.showLoading();
+            getExerciseDetail();
         }
         super.requestCompleted(response, apiName);
     }

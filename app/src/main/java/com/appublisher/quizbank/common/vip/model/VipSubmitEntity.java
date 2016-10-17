@@ -10,7 +10,7 @@ public class VipSubmitEntity {
     public String image_url;
     public int record_id;
     public String postil;
-    public int level;
+    public String level;
     public String answer_content;
     public int duration;
     public String summary;
@@ -41,7 +41,7 @@ public class VipSubmitEntity {
         return this;
     }
 
-    public VipSubmitEntity setLevel(int level) {
+    public VipSubmitEntity setLevel(String level) {
         this.level = level;
         return this;
     }
@@ -88,7 +88,7 @@ public class VipSubmitEntity {
         return postil;
     }
 
-    public int getLevel() {
+    public String getLevel() {
         return level;
     }
 

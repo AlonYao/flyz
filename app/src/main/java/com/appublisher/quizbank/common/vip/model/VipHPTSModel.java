@@ -5,7 +5,6 @@ import android.content.Context;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipHPTSActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipHPTSResp;
-import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
@@ -17,6 +16,7 @@ import org.json.JSONObject;
 public class VipHPTSModel extends VipBaseModel {
 
     private VipHPTSActivity mView;
+    public int mExerciseId;
 
     public VipHPTSModel(Context context) {
         super(context);
@@ -27,14 +27,16 @@ public class VipHPTSModel extends VipBaseModel {
      * 获取练习详情
      */
     public void getExerciseDetail() {
-//        mVipRequest.getExerciseDetail(mExerciseId);
-        mVipRequest.getExerciseDetail(10);
+        mVipRequest.getExerciseDetail(mExerciseId);
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             dealExerciseDetailResp(response);
+        } else if (VipRequest.SUBMIT.equals(apiName)) {
+            mView.showLoading();
+            getExerciseDetail();
         }
         super.requestCompleted(response, apiName);
     }

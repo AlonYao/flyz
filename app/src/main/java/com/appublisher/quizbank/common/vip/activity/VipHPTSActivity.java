@@ -28,6 +28,7 @@ public class VipHPTSActivity extends VipBaseActivity {
     private void initData() {
         VipHPTSModel model = new VipHPTSModel(this);
         showLoading();
+        model.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
         model.getExerciseDetail();
     }
 

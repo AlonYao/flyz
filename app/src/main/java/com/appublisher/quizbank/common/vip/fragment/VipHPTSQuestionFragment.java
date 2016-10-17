@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ImageManager;
@@ -47,6 +50,14 @@ public class VipHPTSQuestionFragment extends Fragment {
     private TextView mTvFinish;
     private RoundedImageView mIvOtherAvatar;
     private LinearLayout mLlUnFinish;
+    private EditText mEtMyComment;
+    private RadioGroup mRgLevel;
+    private RadioButton mRbLevelGood;
+    private RadioButton mRbLevelMiddle;
+    private RadioButton mRbLevelNegative;
+    private RadioButton mRbLevelCeng;
+    private String mLevel;
+    private int mRecordId;
 
     public static VipHPTSQuestionFragment newInstance(VipHPTSResp resp) {
         Bundle args = new Bundle();
@@ -106,7 +117,7 @@ public class VipHPTSQuestionFragment extends Fragment {
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mModel.submit(mRecordId, mEtMyComment.getText().toString(), mLevel);
             }
         });
 
@@ -132,6 +143,21 @@ public class VipHPTSQuestionFragment extends Fragment {
             // 未完成
             mTvFinish.setVisibility(View.GONE);
             mLlUnFinish.setVisibility(View.VISIBLE);
+
+            mRgLevel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    if (checkedId == R.id.vip_hpts_level_good) {
+                        mLevel = mRbLevelGood.getText().toString();
+                    } else if (checkedId == R.id.vip_hpts_level_middle) {
+                        mLevel = mRbLevelMiddle.getText().toString();
+                    } else if (checkedId == R.id.vip_hpts_level_negative) {
+                        mLevel = mRbLevelNegative.getText().toString();
+                    } else if (checkedId == R.id.vip_hpts_level_ceng) {
+                        mLevel = mRbLevelCeng.getText().toString();
+                    }
+                }
+            });
         }
     }
 
@@ -148,6 +174,12 @@ public class VipHPTSQuestionFragment extends Fragment {
         mTvFinish = (TextView) mRoot.findViewById(R.id.vip_hpts_mycomment_finish);
         mLlUnFinish = (LinearLayout) mRoot.findViewById(R.id.vip_hpts_mycomment_unfinish);
         mTvLevel = (TextView) mRoot.findViewById(R.id.vip_hpts_level);
+        mEtMyComment = (EditText) mRoot.findViewById(R.id.vip_hpts_mycomment);
+        mRgLevel = (RadioGroup) mRoot.findViewById(R.id.vip_hpts_level_rg);
+        mRbLevelGood = (RadioButton) mRoot.findViewById(R.id.vip_hpts_level_good);
+        mRbLevelMiddle = (RadioButton) mRoot.findViewById(R.id.vip_hpts_level_middle);
+        mRbLevelNegative = (RadioButton) mRoot.findViewById(R.id.vip_hpts_level_negative);
+        mRbLevelCeng = (RadioButton) mRoot.findViewById(R.id.vip_hpts_level_ceng);
     }
 
     /**
@@ -159,6 +191,8 @@ public class VipHPTSQuestionFragment extends Fragment {
         if (userAnswerBean == null) return;
         VipHPTSResp.UserAnswerBean.UserRecordBean userRecordBean = userAnswerBean.getUser_record();
         if (userRecordBean == null) return;
+
+        mRecordId = userRecordBean.getRecord_id();
 
         VipHPTSResp.UserAnswerBean.UserRecordBean.UserInfoBean userInfoBean =
                 userRecordBean.getUser_info();

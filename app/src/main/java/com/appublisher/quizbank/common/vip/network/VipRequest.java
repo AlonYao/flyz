@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.vip.network;
 
 import android.content.Context;
-import android.os.ParcelUuid;
 
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -16,6 +15,7 @@ public class VipRequest extends Request implements VipApi {
 
     public static final String GET_INTELLIGENT_PAPER = "get_intelligent_paper";
     public static final String EXERCISE_DETAIL = "exercise_detail";
+    public static final String SUBMIT = "submit";
 
 
     public VipRequest(Context context) {
@@ -34,7 +34,7 @@ public class VipRequest extends Request implements VipApi {
      * 提交作业
      */
     public void submit(Map<String, String> params) {
-        postRequest(getFinalUrl(submit), params, "submit", "object");
+        postRequest(getFinalUrl(submit), params, SUBMIT, "object");
     }
 
     /**
