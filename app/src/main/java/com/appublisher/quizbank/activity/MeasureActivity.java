@@ -153,7 +153,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
                         if (mMins == 15 && mSec == 0) {
                             ToastManager.showToast(activity, "距离考试结束还有15分钟");
                         }
-                        if (mock_duration == 0) {
+                        if (mock_duration <= 0) {
                             // 停止发消息
                             mQRequest.getServerCurrentTime();
                         } else {
