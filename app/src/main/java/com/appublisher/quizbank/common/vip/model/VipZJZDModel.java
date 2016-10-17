@@ -3,8 +3,7 @@ package com.appublisher.quizbank.common.vip.model;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.appublisher.lib_basic.ToastManager;
-import com.appublisher.lib_basic.YaoguoUploadManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipZJZDResp;
@@ -83,47 +82,16 @@ public class VipZJZDModel extends VipBaseModel {
         }
     }
 
+    /**
+     * 提交
+     */
     public void submit() {
-        if (mPaths == null || mPaths.size() == 0) return;
-        mSubmitImgUrl = "";
-        upload(mPaths, getSavePath(), 0);
-    }
-
-    private void upload(final ArrayList<String> paths , String savePath, final int index) {
-        if (paths == null || paths.size() == 0 || index >= paths.size()) return;
-        if (mProgressDialog == null)
-            mProgressDialog = YaoguoUploadManager.getProgressDialog(mContext);
-        mProgressDialog.setTitle(index + 1 + "/" + paths.size());
-        mProgressDialog.show();
-
-        String localPath = paths.get(index);
-        YaoguoUploadManager.blockUpload(localPath, savePath,
-                new YaoguoUploadManager.CompleteListener() {
-                    @Override
-                    public void onComplete(boolean isSuccess, String result, String url) {
-                        if (isSuccess) {
-                            mSubmitImgUrl = mSubmitImgUrl + url;
-                            if (index == paths.size()) {
-                                mProgressDialog.cancel();
-                            } else {
-                                upload(paths, getSavePath(), index + 1);
-                            }
-                        } else {
-                            mProgressDialog.cancel();
-                            ToastManager.showToast(mContext, "上传失败，请重试……");
-                        }
-                    }
-                },
-                new YaoguoUploadManager.ProgressListener() {
-                    @Override
-                    public void onRequestProgress(long bytesWrite, long contentLength) {
-                        mProgressDialog.setProgress((int) ((100 * bytesWrite) / contentLength));
-                    }
-                });
-    }
-
-    private String getSavePath() {
-        return "/huaxiao_test.jpg";
+        upload(mExerciseId, ZJZD, mPaths, new UpLoadListener() {
+            @Override
+            public void onComplete(String submitImgUrl) {
+                Logger.e(submitImgUrl);
+            }
+        });
     }
 
     @Override

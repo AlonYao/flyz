@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
 import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
 
@@ -48,5 +49,14 @@ public class VipMSJPQuestionModel extends VipMSJPModel{
 
     public void showRejectAlert(String review_postil, String review_time) {
         mView.showRejectAlert(review_postil, review_time);
+    }
+
+    public void submit() {
+        upload(mExerciseId, "", mPaths, new UpLoadListener() {
+            @Override
+            public void onComplete(String submitImgUrl) {
+                Logger.e(submitImgUrl);
+            }
+        });
     }
 }
