@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 48
-        versionName "1.8.5"
+        versionCode 49
+        versionName "1.8.6"
     }
 
     buildTypes {
@@ -180,79 +180,79 @@ android {
          * weibo-feeds
          */
 
-        "weibo-feeds-28" {
+        "weibo-feeds-36" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-28"]
+                                    APP_CHANNEL: "weibo-feeds-36"]
         }
 
-        "weibo-feeds-29" {
+        "weibo-feeds-37" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-29"]
+                                    APP_CHANNEL: "weibo-feeds-37"]
         }
 
-        "weibo-feeds-30" {
+        "weibo-feeds-38" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-30"]
+                                    APP_CHANNEL: "weibo-feeds-38"]
         }
 
-        "weibo-feeds-31" {
+        "weibo-feeds-39" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-31"]
+                                    APP_CHANNEL: "weibo-feeds-39"]
         }
 
-        "weibo-feeds-32" {
+        "weibo-feeds-40" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-32"]
+                                    APP_CHANNEL: "weibo-feeds-40"]
         }
 
-        "weibo-feeds-33" {
+        "weibo-feeds-41" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-33"]
+                                    APP_CHANNEL: "weibo-feeds-41"]
         }
 
-        "weibo-feeds-34" {
+        "weibo-feeds-42" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-34"]
+                                    APP_CHANNEL: "weibo-feeds-42"]
         }
 
-        "weibo-feeds-35" {
+        "weibo-feeds-43" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "weibo-feeds-35"]
+                                    APP_CHANNEL: "weibo-feeds-43"]
         }
 
         /**
          * 360
          */
 
-        "360-sousuo-3" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "360-sousuo-3"]
-        }
-
-        "360-tuijian-3" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "360-tuijian-3"]
-        }
-
-        "360-jiaoyu-3" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "360-jiaoyu-3"]
-        }
-
-        "360-ruanjian-3" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "360-ruanjian-3"]
-        }
-
-        "360-bibei-3" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "360-bibei-3"]
-        }
-
-        "360-huodong-3" {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "360-huodong-3"]
-        }
+//        "360-sousuo-3" {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+//                                    APP_CHANNEL: "360-sousuo-3"]
+//        }
+//
+//        "360-tuijian-3" {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+//                                    APP_CHANNEL: "360-tuijian-3"]
+//        }
+//
+//        "360-jiaoyu-3" {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+//                                    APP_CHANNEL: "360-jiaoyu-3"]
+//        }
+//
+//        "360-ruanjian-3" {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+//                                    APP_CHANNEL: "360-ruanjian-3"]
+//        }
+//
+//        "360-bibei-3" {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+//                                    APP_CHANNEL: "360-bibei-3"]
+//        }
+//
+//        "360-huodong-3" {
+//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+//                                    APP_CHANNEL: "360-huodong-3"]
+//        }
 
         /**
          * baidu-sem
