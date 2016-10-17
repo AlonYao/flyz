@@ -40,6 +40,7 @@ public class VipDTTPActivity extends VipBaseActivity {
     private void initData() {
         VipDTTPModel model = new VipDTTPModel(this);
         showLoading();
+        model.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
         model.getExerciseDetail();
     }
 

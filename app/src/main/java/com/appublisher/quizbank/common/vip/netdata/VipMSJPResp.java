@@ -20,6 +20,36 @@ public class VipMSJPResp {
     private QuestionBean question;
     private UserAnswerBean user_answer;
     private Object summary;
+    private ArrayList<PreExercisesBean> pre_exercises;
+
+    public static class PreExercisesBean {
+        private int exercise_id;
+        private String exercise_name;
+
+        public int getExercise_id() {
+            return exercise_id;
+        }
+
+        public void setExercise_id(int exercise_id) {
+            this.exercise_id = exercise_id;
+        }
+
+        public String getExercise_name() {
+            return exercise_name;
+        }
+
+        public void setExercise_name(String exercise_name) {
+            this.exercise_name = exercise_name;
+        }
+    }
+
+    public ArrayList<PreExercisesBean> getPre_exercises() {
+        return pre_exercises;
+    }
+
+    public void setPre_exercises(ArrayList<PreExercisesBean> pre_exercises) {
+        this.pre_exercises = pre_exercises;
+    }
 
     public int getResponse_code() {
         return response_code;

@@ -1,10 +1,8 @@
 package com.appublisher.quizbank.common.vip.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -103,7 +101,7 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
         mIvExample.setOnClickListener(this);
     }
 
-    private void showLoading() {
+    public void showLoading() {
         ProgressDialogManager.showProgressDialog(this);
     }
 
@@ -148,35 +146,6 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
                 mTvStatus.setTextColor(getResources().getColor(R.color.vip_red));
             }
         }
-    }
-
-    /**
-     * 驳回Alert
-     * @param msg 驳回原因
-     * @param date 下次提交时间
-     */
-    public void showRejectAlert(String msg, String date) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.show();
-
-        Window window = alertDialog.getWindow();
-        window.setContentView(R.layout.vip_zjzd_reject_alert);
-        window.setBackgroundDrawableResource(R.color.transparency);
-
-        TextView tvMsg = (TextView) window.findViewById(R.id.vip_zjzd_reject_msg);
-        Button btn = (Button) window.findViewById(R.id.vip_zjzd_reject_btn);
-
-        String text;
-        text = "驳回原因：" + msg + "\n";
-        text = text + "下次提交时间：" + date;
-        tvMsg.setText(text);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
     }
 
     public void showSubmitBtn(boolean is_show) {

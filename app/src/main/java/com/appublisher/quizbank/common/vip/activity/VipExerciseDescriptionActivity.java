@@ -1,15 +1,14 @@
 package com.appublisher.quizbank.common.vip.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
@@ -45,13 +44,20 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
     }
 
     public void setValue() {
-        Logger.i("exerciseType=" + exerciseType);
-        if (exerciseType == 5) {
+        if (exerciseType == 1) {
+            descriptionText.setText(getResources().getString(R.string.vip_description_msjp));
+        } else if (exerciseType == 2) {
+            descriptionText.setText(getResources().getString(R.string.vip_description_dttp));
+        } else if (exerciseType == 3) {
+            descriptionText.setText(getResources().getString(R.string.vip_description_zjzd));
+        } else if (exerciseType == 5) {
             descriptionText.setText(getResources().getString(R.string.vip_description_bdgx));
         } else if (exerciseType == 6) {
             descriptionText.setText(getResources().getString(R.string.vip_description_yytl));
         } else if (exerciseType == 7) {
             descriptionText.setText(getResources().getString(R.string.vip_description_yddk));
+        } else if (exerciseType == 9) {
+            descriptionText.setText(getResources().getString(R.string.vip_description_hpts));
         }
 
         descriptionHideView.setOnClickListener(new View.OnClickListener() {
@@ -73,18 +79,42 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
         });
     }
 
+    @SuppressLint("CommitPrefEdits")
     public void skipExercise() {
         Class<?> cls = null;
         switch (exerciseType) {
             case 1:
+                // 名师精批
+                if (descriptionCheckBox.isChecked()) {
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("vip_description_msjp", true);
+                    editor.commit();
+                }
+                cls = VipMSJPActivity.class;
                 break;
             case 2:
+                // 单题突破
+                if (descriptionCheckBox.isChecked()) {
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("vip_description_dttp", true);
+                    editor.commit();
+                }
+                cls = VipDTTPActivity.class;
                 break;
             case 3:
+                // 字迹诊断
+                if (descriptionCheckBox.isChecked()) {
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("vip_description_zjzd", true);
+                    editor.commit();
+                }
+                cls = VipZJZDActivity.class;
                 break;
             case 4:
+                // 词句摘抄
                 break;
             case 5:
+                // 表达改写
                 if (descriptionCheckBox.isChecked()) {
                     SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                     editor.putBoolean("vip_description_bdgx", true);
@@ -93,6 +123,7 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
                 cls = VipBDGXActivity.class;
                 break;
             case 6:
+                // 语义提炼
                 if (descriptionCheckBox.isChecked()) {
                     SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                     editor.putBoolean("vip_description_yytl", true);
@@ -101,6 +132,7 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
                 cls = VipBDGXActivity.class;
                 break;
             case 7:
+                // 阅读打卡
                 if (descriptionCheckBox.isChecked()) {
                     SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                     editor.putBoolean("vip_description_yddk", true);
@@ -109,10 +141,16 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
                 cls = VipYDDKActivity.class;
                 break;
             case 8:
+                // 行测_智能组卷
                 break;
             case 9:
-                break;
-            case 10:
+                // 互评提升
+                if (descriptionCheckBox.isChecked()) {
+                    SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
+                    editor.putBoolean("vip_description_hpts", true);
+                    editor.commit();
+                }
+                cls = VipHPTSActivity.class;
                 break;
             default:
                 break;

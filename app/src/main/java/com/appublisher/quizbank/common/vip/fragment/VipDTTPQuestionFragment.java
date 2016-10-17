@@ -128,7 +128,7 @@ public class VipDTTPQuestionFragment extends Fragment{
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mModel.submit();
             }
         });
 
@@ -190,8 +190,7 @@ public class VipDTTPQuestionFragment extends Fragment{
      */
     private void updateSubmitButton() {
         int curLength = mModel.mPaths == null ? 0 : mModel.mPaths.size();
-        int maxLength = VipDTTPQuestionModel.MAX_LENGTH;
-        mModel.updateSubmitButton(curLength, maxLength, mBtnSubmit);
+        mModel.updateSubmitButton(curLength, mBtnSubmit);
     }
 
     /**

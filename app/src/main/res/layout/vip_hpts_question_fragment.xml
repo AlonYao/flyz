@@ -108,6 +108,7 @@
                 android:id="@+id/vip_hpts_mycomment_finish"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="10dp"
@@ -119,6 +120,7 @@
                 android:id="@+id/vip_hpts_mycomment_unfinish"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:background="@android:color/white"
@@ -137,10 +139,12 @@
                     android:inputType="textMultiLine"
                     android:hint="@string/vip_hpts_input"/>
                 <RadioGroup
+                    android:id="@+id/vip_hpts_level_rg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <RadioButton
+                        android:id="@+id/vip_hpts_level_good"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -148,6 +152,7 @@
                         android:text="@string/vip_hpts_good"
                         tools:ignore="UnusedAttribute" />
                     <RadioButton
+                        android:id="@+id/vip_hpts_level_middle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -155,6 +160,7 @@
                         android:text="@string/vip_hpts_middle"
                         tools:ignore="UnusedAttribute"/>
                     <RadioButton
+                        android:id="@+id/vip_hpts_level_negative"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -162,6 +168,7 @@
                         android:text="@string/vip_hpts_negative"
                         tools:ignore="UnusedAttribute"/>
                     <RadioButton
+                        android:id="@+id/vip_hpts_level_ceng"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

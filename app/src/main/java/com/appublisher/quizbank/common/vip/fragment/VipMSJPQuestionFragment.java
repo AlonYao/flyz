@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -105,7 +106,7 @@ public class VipMSJPQuestionFragment extends Fragment {
 
         // 题目
         if (questionBean != null) {
-            mWvQuestion.setBackgroundColor(0);
+            mWvQuestion.setBackgroundColor(Color.WHITE);
             mWvQuestion.loadDataWithBaseURL(
                     null, questionBean.getQuestion(), "text/html", "UTF-8", null);
         }
@@ -127,7 +128,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mModel.submit();
             }
         });
 
@@ -135,6 +136,23 @@ public class VipMSJPQuestionFragment extends Fragment {
         if (status == 1) {
             showReview();
         }
+
+        // 被驳回状态
+        if (status == 4) {
+            showRejectAlert();
+        }
+    }
+
+    /**
+     * 显示被驳回Alert
+     */
+    private void showRejectAlert() {
+        if (mResp == null) return;
+        VipMSJPResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
+        if (userAnswerBean == null) return;
+        VipMSJPResp.UserAnswerBean.ReviewBean reviewBean = userAnswerBean.getReview();
+        if (reviewBean == null) return;
+        mModel.showRejectAlert(reviewBean.getReview_postil(), reviewBean.getReview_time());
     }
 
     /**
@@ -142,6 +160,7 @@ public class VipMSJPQuestionFragment extends Fragment {
      * @return ArrayList
      */
     private ArrayList<String> getOriginImgs() {
+        if (mResp == null || mResp.isCan_submit()) return null;
         VipMSJPResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
         if (userAnswerBean == null) return null;
         VipMSJPResp.UserAnswerBean.OriginBean originBean = userAnswerBean.getOrigin();
@@ -163,7 +182,6 @@ public class VipMSJPQuestionFragment extends Fragment {
      */
     private void showMyJob() {
         String type;
-//        mModel.mCanSubmit = true;
         if (mModel.mCanSubmit) {
             type = VipBaseActivity.FILE;
         } else {
@@ -189,8 +207,7 @@ public class VipMSJPQuestionFragment extends Fragment {
      */
     private void updateSubmitButton() {
         int curLength = mModel.mPaths == null ? 0 : mModel.mPaths.size();
-        int maxLength = VipMSJPQuestionModel.MAX_LENGTH;
-        mModel.updateSubmitButton(curLength, maxLength, mBtnSubmit);
+        mModel.updateSubmitButton(curLength, mBtnSubmit);
     }
 
     /**
