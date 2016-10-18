@@ -8,7 +8,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
@@ -72,7 +71,7 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
         listView = (ListView) findViewById(R.id.listView);
         emptyView = findViewById(R.id.empty_view);
 
-        ProgressDialogManager.showProgressDialog(this);
+        showLoading();
         mRequest.getVipFilter();
     }
 
@@ -115,12 +114,12 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
 
     public void refreshData() {
         mRequest.getVipExercises(status_id, category_id, type_id);
-        ProgressDialogManager.showProgressDialog(this);
+        showLoading();
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
         if (response == null) return;
         if ("vip_filter".equals(apiName)) {
             VipExerciseIndexModel.dealExerciseFilter(response, this);
@@ -131,12 +130,12 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        hideLoading();
     }
 
     @Override

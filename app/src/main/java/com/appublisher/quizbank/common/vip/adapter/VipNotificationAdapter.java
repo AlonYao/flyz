@@ -1,24 +1,17 @@
 package com.appublisher.quizbank.common.vip.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.volley.Request;
-import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.netdata.VipNotificationResp;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nineoldandroids.view.ViewHelper;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 

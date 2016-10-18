@@ -2,38 +2,27 @@ package com.appublisher.quizbank.common.vip.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.PagerAdapter;
-import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.model.VipSubmitEntity;
 import com.appublisher.quizbank.common.vip.netdata.VipBDGXResp;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
-
-import java.util.List;
 
 /**
  * Created by jinbao on 2016/9/19.
@@ -131,7 +120,7 @@ public class VipBDGXAdapter extends PagerAdapter {
                         questionBean.setUser_answer(new VipBDGXResp.QuestionBean.UserAnswerBean().setAnswer(inputText));
                         vipBDGXResp.getQuestion().set(position, questionBean);
 
-                        ProgressDialogManager.showProgressDialog(context);
+                        if (context instanceof BaseActivity) ((BaseActivity) context).showLoading();
                     }
 
                 } else if ("返回列表".equals(text)) {
