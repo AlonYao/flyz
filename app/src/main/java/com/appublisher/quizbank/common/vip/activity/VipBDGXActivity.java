@@ -1,11 +1,9 @@
 package com.appublisher.quizbank.common.vip.activity;
 
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -20,9 +18,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * 表达改写&语义提炼
+ */
 public class VipBDGXActivity extends BaseActivity implements RequestCallback {
 
     private CustomViewPager mViewPager;
@@ -52,7 +50,7 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
 
         if (exerciseId != -1) {
             mRequest.getExerciseDetail(exerciseId);
-            ProgressDialogManager.showProgressDialog(this);
+            showLoading();
         }
     }
 
@@ -90,8 +88,6 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
-
         if (response == null) return;
 
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
@@ -116,15 +112,16 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
                 e.printStackTrace();
             }
         }
+        hideLoading();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        hideLoading();
     }
 }

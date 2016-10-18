@@ -1,16 +1,12 @@
 package com.appublisher.quizbank.common.vip.activity;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.ProgressDialogManager;
-import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -22,8 +18,6 @@ import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.common.vip.model.VipIndexModel;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
-import com.appublisher.quizbank.fragment.SettingFragment;
-import com.appublisher.quizbank.network.QRequest;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
@@ -141,11 +135,11 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 }

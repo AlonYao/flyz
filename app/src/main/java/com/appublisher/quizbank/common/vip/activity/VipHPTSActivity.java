@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipHPTSAdapter;
 import com.appublisher.quizbank.common.vip.model.VipHPTSModel;
@@ -35,10 +34,6 @@ public class VipHPTSActivity extends VipBaseActivity {
     private void initView() {
         mTabLayout = (TabLayout) findViewById(R.id.vip_hpts_tablayout);
         mViewPager = (ViewPager) findViewById(R.id.vip_hpts_viewpager);
-    }
-
-    public void showLoading() {
-        ProgressDialogManager.showProgressDialog(this);
     }
 
     public void showContent(VipHPTSResp resp) {

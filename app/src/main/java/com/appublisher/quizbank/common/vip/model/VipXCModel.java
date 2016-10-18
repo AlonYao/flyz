@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
@@ -41,7 +41,7 @@ public class VipXCModel extends VipBaseModel {
      */
     public void obtainIntelligentPaper(int exercise_id, IntelligentPaperListener listener) {
         mIntelligentPaperListener = listener;
-        ProgressDialogManager.showProgressDialog(mContext);
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
         mVipRequest.getIntelligentPaper(exercise_id);
     }
 
@@ -127,7 +127,7 @@ public class VipXCModel extends VipBaseModel {
                                  int exercise_id,
                                  String answers,
                                  int duration) {
-        ProgressDialogManager.showProgressDialog(context, false);
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
         VipSubmitEntity entity = new VipSubmitEntity();
         entity.exercise_id = exercise_id;
         entity.answer_content = answers;

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipMSJPAdapter;
 import com.appublisher.quizbank.common.vip.fragment.VipMSJPQuestionFragment;
@@ -58,10 +57,6 @@ public class VipMSJPActivity extends VipBaseActivity {
         mAdapter = new VipMSJPAdapter(getSupportFragmentManager(), resp);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-    }
-
-    public void showLoading() {
-        ProgressDialogManager.showProgressDialog(this);
     }
 
     /**

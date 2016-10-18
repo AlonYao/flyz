@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ImageManager;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.model.VipBaseModel;
 import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
@@ -99,10 +98,6 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
         mMyjobContainer = (FlowLayout) findViewById(R.id.vip_zjzd_myjob_container);
 
         mIvExample.setOnClickListener(this);
-    }
-
-    public void showLoading() {
-        ProgressDialogManager.showProgressDialog(this);
     }
 
     public void showTvMaterial(String text) {

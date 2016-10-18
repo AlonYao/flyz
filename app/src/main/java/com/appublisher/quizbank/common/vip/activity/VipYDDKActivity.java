@@ -16,8 +16,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -32,6 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * 阅读打卡
+ */
 public class VipYDDKActivity extends BaseActivity implements RequestCallback {
     private VipRequest mRequest;
     private int exerciseId;
@@ -88,7 +89,7 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
                     if (questionId != -1) {
                         mRequest.submit(VipParamBuilder.submit(new VipSubmitEntity().setExercise_id(exerciseId).setAnswer_content(userAnswer).setQuestion_id(questionId)));
                         hideInputKeyboard(v);
-                        ProgressDialogManager.showProgressDialog(VipYDDKActivity.this);
+                        showLoading();
                     }
                 }
             }
@@ -105,13 +106,13 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
     public void initData() {
         if (exerciseId != -1) {
             mRequest.getExerciseDetail(exerciseId);
-            ProgressDialogManager.showProgressDialog(this);
+            showLoading();
         }
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
         if (response == null) return;
 
         if ("exercise_detail".equals(apiName)) {
@@ -153,12 +154,12 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
     public void questionDone() {

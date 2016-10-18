@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipDTTPAdapter;
 import com.appublisher.quizbank.common.vip.fragment.VipDTTPQuestionFragment;
@@ -53,9 +52,5 @@ public class VipDTTPActivity extends VipBaseActivity {
         mAdapter = new VipDTTPAdapter(getSupportFragmentManager(), resp);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-    }
-
-    public void showLoading() {
-        ProgressDialogManager.showProgressDialog(this);
     }
 }

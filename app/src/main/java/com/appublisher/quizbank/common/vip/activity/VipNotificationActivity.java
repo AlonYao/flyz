@@ -6,13 +6,11 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipNotificationAdapter;
@@ -43,7 +41,7 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
         list = new ArrayList<VipNotificationResp.NotificationsBean>();
         adapter = new VipNotificationAdapter(this, list);
         mRequest.getVipNotifications(page);
-        ProgressDialogManager.showProgressDialog(this);
+        showLoading();
         initViews();
     }
 
@@ -88,7 +86,7 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
         if (response == null) return;
         if ("notification_list".equals(apiName)) {
             listView.stopLoadMore();
@@ -103,12 +101,12 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        hideLoading();
     }
 
     public void skipExerciseDetail(int exerciseId, int exerciseType) {

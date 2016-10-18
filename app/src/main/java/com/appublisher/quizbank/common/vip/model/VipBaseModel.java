@@ -5,12 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.YaoguoUploadManager;
 import com.appublisher.lib_basic.volley.ApiConstants;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
@@ -130,16 +130,22 @@ public class VipBaseModel implements RequestCallback{
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        if (mContext instanceof VipBaseActivity) {
+            ((VipBaseActivity) mContext).hideLoading();
+        }
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        if (mContext instanceof VipBaseActivity) {
+            ((VipBaseActivity) mContext).hideLoading();
+        }
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        if (mContext instanceof VipBaseActivity) {
+            ((VipBaseActivity) mContext).hideLoading();
+        }
     }
 }
