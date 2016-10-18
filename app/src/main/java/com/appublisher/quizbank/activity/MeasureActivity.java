@@ -328,7 +328,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
             mUmengDraft = "1";
         }
 
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @SuppressWarnings("unchecked")
