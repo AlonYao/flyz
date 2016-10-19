@@ -3,7 +3,6 @@ package com.appublisher.quizbank.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.HomeButtonManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
@@ -20,18 +20,17 @@ import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.UMengManager;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,6 +79,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
     public ArrayList<HashMap<String, Object>> mUserAnswerList;
     public HashMap<String, HashMap<String, Object>> mCategoryMap;
     public MeasureEntity mMeasureEntity;
+    public PracticeReportModel mModel;
 
     /**
      * Umeng
@@ -125,6 +125,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
         // 成员变量初始化
         mUmengStatus = "1";
         mHomeWatcher = new HomeButtonManager(this);
+        mModel = new PracticeReportModel(this);
 
         // 获取数据
         mFrom = getIntent().getStringExtra("from");
@@ -146,10 +147,10 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
         }
 
         // 显示考试类型
-        PracticeReportModel.showPaperType(this);
+        mModel.showPaperType();
 
         // 显示考试描述
-        PracticeReportModel.showPaperDesc(this);
+        mModel.showPaperDesc();
 
         if ("study_record".equals(mFrom)
                 || "mokao_homepage".equals(mFrom)
@@ -160,7 +161,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
             ProgressDialogManager.showProgressDialog(this, true);
             new QRequest(this, this).getHistoryExerciseDetail(mExerciseId, mPaperType);
         } else {
-            PracticeReportModel.getData(this);
+            mModel.getData();
         }
     }
 
@@ -205,7 +206,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
     protected void onDestroy() {
         super.onDestroy();
         // Umeng
-        final Map<String, String> um_map = new HashMap<String, String>();
+        final Map<String, String> um_map = new HashMap<>();
         um_map.put("Analysis", mUmengStatus);
         UmengManager.onEvent(this, "Report", um_map);
     }
@@ -227,7 +228,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
         if (item.getItemId() == android.R.id.home) {
             UMengManager.checkUmengShare(this);
         } else if ("分享".equals(item.getTitle())) {
-            PracticeReportModel.setUmengShare(this);
+            mModel.setUmengShare();
         }
 
         return super.onOptionsItemSelected(item);
@@ -243,7 +244,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("history_exercise_detail".equals(apiName))
-            PracticeReportModel.dealHistoryExerciseDetailResp(this, response);
+            mModel.dealHistoryExerciseDetailResp(response);
 
         ProgressDialogManager.closeProgressDialog();
     }
@@ -261,6 +262,6 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        PracticeReportModel.updateNotice(this);
+        mModel.updateNotice();
     }
 }

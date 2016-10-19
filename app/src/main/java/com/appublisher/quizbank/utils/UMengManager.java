@@ -12,7 +12,6 @@ import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.model.business.EvaluationModel;
-import com.appublisher.quizbank.model.business.PracticeReportModel;
 
 /**
  * Created by jinbao on 2016/7/22.
@@ -62,8 +61,7 @@ public class UMengManager {
                                 if (activity instanceof EvaluationActivity) {
                                     EvaluationModel.setUmengShare((EvaluationActivity) activity);
                                 } else if (activity instanceof PracticeReportActivity) {
-                                    PracticeReportModel.setUmengShare(
-                                            (PracticeReportActivity) activity);
+                                    ((PracticeReportActivity) activity).mModel.setUmengShare();
                                 }
 
                                 dialog.dismiss();
