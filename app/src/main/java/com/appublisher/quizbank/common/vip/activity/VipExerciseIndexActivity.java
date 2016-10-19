@@ -44,6 +44,7 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
     private VipRequest mRequest;
     public List<VipExerciseResp.ExercisesBean> list;
     public VipExerciseAdapter adapter;
+    private VipExerciseIndexModel mExerciseModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
 
         setToolBar(this);
         mRequest = new VipRequest(this, this);
+        mExerciseModel = new VipExerciseIndexModel();
         list = new ArrayList<>();
         adapter = new VipExerciseAdapter(this, list);
         initViews();
@@ -80,28 +82,28 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
         statusView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VipExerciseIndexModel.showStatusPop(VipExerciseIndexActivity.this);
+                mExerciseModel.showStatusPop(VipExerciseIndexActivity.this);
             }
         });
 
         categoryView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VipExerciseIndexModel.showCategoryPop(VipExerciseIndexActivity.this);
+                mExerciseModel.showCategoryPop(VipExerciseIndexActivity.this);
             }
         });
 
         typeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VipExerciseIndexModel.showTypePop(VipExerciseIndexActivity.this);
+                mExerciseModel.showTypePop(VipExerciseIndexActivity.this);
             }
         });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                VipExerciseIndexModel.dealExerciseSkip(VipExerciseIndexActivity.this, position);
+                mExerciseModel.dealExerciseSkip(VipExerciseIndexActivity.this, position);
             }
         });
     }
@@ -122,9 +124,9 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
         hideLoading();
         if (response == null) return;
         if ("vip_filter".equals(apiName)) {
-            VipExerciseIndexModel.dealExerciseFilter(response, this);
+            mExerciseModel.dealExerciseFilter(response, this);
         } else if ("vip_exercise".equals(apiName)) {
-            VipExerciseIndexModel.dealExercises(response, this);
+            mExerciseModel.dealExercises(response, this);
         }
     }
 
@@ -140,9 +142,9 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
 
     @Override
     protected void onDestroy() {
-        VipExerciseIndexModel.statusPop = null;
-        VipExerciseIndexModel.categoryPop = null;
-        VipExerciseIndexModel.typePop = null;
+//        VipExerciseIndexModel.statusPop = null;
+//        VipExerciseIndexModel.categoryPop = null;
+//        VipExerciseIndexModel.typePop = null;
         super.onDestroy();
     }
 }

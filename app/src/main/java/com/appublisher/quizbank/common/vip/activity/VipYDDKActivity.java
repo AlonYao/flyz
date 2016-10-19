@@ -127,7 +127,7 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
                         submitView.setVisibility(View.GONE);
                         answerView.setVisibility(View.VISIBLE);
                         userAnswerArrow.setVisibility(View.VISIBLE);
-                        answerContent.setText(vipYDDKResp.getQuestion().get(0).getUser_answer().getContent());
+                        answerContent.setText(Html.fromHtml(vipYDDKResp.getQuestion().get(0).getUser_answer().getContent()));
                         questionDone();
                     } else {
                         answerView.setVisibility(View.GONE);

@@ -13,6 +13,7 @@ import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
@@ -41,15 +42,15 @@ import java.util.List;
  */
 public class VipExerciseIndexModel {
 
-    public static PopupWindow statusPop;
-    public static PopupWindow categoryPop;
-    public static PopupWindow typePop;
-    public static TextView statusSelectedText;
-    public static TextView categorySelectedText;
-    public static TextView typeSelectedText;
-    public static VipExerciseFilterResp mVipExerciseFilterResp;
+    public PopupWindow statusPop;
+    public PopupWindow categoryPop;
+    public PopupWindow typePop;
+    public TextView statusSelectedText;
+    public TextView categorySelectedText;
+    public TextView typeSelectedText;
+    public VipExerciseFilterResp mVipExerciseFilterResp;
 
-    public static void dealExerciseFilter(JSONObject response, final VipExerciseIndexActivity activity) {
+    public void dealExerciseFilter(JSONObject response, final VipExerciseIndexActivity activity) {
         final VipExerciseFilterResp vipExerciseFilterResp = GsonManager.getModel(response, VipExerciseFilterResp.class);
         if (vipExerciseFilterResp.getResponse_code() == 1) {
             mVipExerciseFilterResp = vipExerciseFilterResp;
@@ -64,7 +65,7 @@ public class VipExerciseIndexModel {
      * @param textView
      * @param context
      */
-    public static void itemCancel(TextView textView, Context context) {
+    public void itemCancel(TextView textView, Context context) {
         textView.setTextColor(context.getResources().getColor(R.color.common_text));
         Drawable drawable = textView.getBackground();
         if (drawable instanceof GradientDrawable) {
@@ -79,7 +80,7 @@ public class VipExerciseIndexModel {
      * @param textView
      * @param context
      */
-    public static void itemSelected(TextView textView, Context context) {
+    public void itemSelected(TextView textView, Context context) {
         textView.setTextColor(Color.WHITE);
         Drawable drawable = textView.getBackground();
         if (drawable instanceof GradientDrawable) {
@@ -93,11 +94,22 @@ public class VipExerciseIndexModel {
      * @param response
      * @param activity
      */
-    public static void dealExercises(JSONObject response, VipExerciseIndexActivity activity) {
+    public void dealExercises(JSONObject response, VipExerciseIndexActivity activity) {
         VipExerciseResp vipExerciseResp = GsonManager.getModel(response, VipExerciseResp.class);
         if (vipExerciseResp.getResponse_code() == 1) {
             activity.list.clear();
-            activity.list.addAll(vipExerciseResp.getExercises());
+            List<VipExerciseResp.ExercisesBean> able = new ArrayList<>();
+            List<VipExerciseResp.ExercisesBean> unable = new ArrayList<>();
+            for (int i = 0; i < vipExerciseResp.getExercises().size(); i++) {
+                final int type = vipExerciseResp.getExercises().get(i).getExercise_type();
+                if (type == 1 || type == 2 || type == 3 || type == 5 || type == 6 | type == 7 || type == 8 || type == 9) {
+                    able.add(vipExerciseResp.getExercises().get(i));
+                } else {
+                    unable.add(vipExerciseResp.getExercises().get(i));
+                }
+            }
+            able.addAll(unable);
+            activity.list.addAll(able);
             activity.adapter.notifyDataSetChanged();
             if (activity.list.size() == 0) {
                 activity.emptyView.setVisibility(View.VISIBLE);
@@ -112,7 +124,7 @@ public class VipExerciseIndexModel {
      *
      * @param activity
      */
-    public static void showStatusPop(VipExerciseIndexActivity activity) {
+    public void showStatusPop(VipExerciseIndexActivity activity) {
         if (statusPop == null) {
             initStatusPop(activity);
         } else {
@@ -121,7 +133,7 @@ public class VipExerciseIndexModel {
         }
     }
 
-    public static void initStatusPop(final VipExerciseIndexActivity activity) {
+    public void initStatusPop(final VipExerciseIndexActivity activity) {
         if (mVipExerciseFilterResp == null) return;
 
         View statusView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
@@ -186,7 +198,7 @@ public class VipExerciseIndexModel {
      *
      * @param activity
      */
-    public static void showCategoryPop(VipExerciseIndexActivity activity) {
+    public void showCategoryPop(VipExerciseIndexActivity activity) {
         if (categoryPop == null) {
             initCategoryPop(activity);
         } else {
@@ -195,7 +207,7 @@ public class VipExerciseIndexModel {
         }
     }
 
-    public static void initCategoryPop(final VipExerciseIndexActivity activity) {
+    public void initCategoryPop(final VipExerciseIndexActivity activity) {
         if (mVipExerciseFilterResp == null) return;
         View categoryView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
         GridView categoryGridView = (GridView) categoryView.findViewById(R.id.gridview);
@@ -255,7 +267,7 @@ public class VipExerciseIndexModel {
         activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
 
-    public static void showTypePop(VipExerciseIndexActivity activity) {
+    public void showTypePop(VipExerciseIndexActivity activity) {
         if (typePop == null)
             initTypePop(activity);
 
@@ -265,7 +277,7 @@ public class VipExerciseIndexModel {
     }
 
 
-    public static void initTypePop(final VipExerciseIndexActivity activity) {
+    public void initTypePop(final VipExerciseIndexActivity activity) {
         if (mVipExerciseFilterResp == null) return;
 
         View typeView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
@@ -342,7 +354,7 @@ public class VipExerciseIndexModel {
      *
      * @param popupWindow
      */
-    public static void dealPopEventDispatch(PopupWindow popupWindow) {
+    public void dealPopEventDispatch(PopupWindow popupWindow) {
         try {
             Method method = PopupWindow.class.getDeclaredMethod("setTouchModal", boolean.class);
             method.setAccessible(true);
@@ -354,10 +366,11 @@ public class VipExerciseIndexModel {
 
     /**
      * 练习跳转
+     *
      * @param activity VipExerciseIndexActivity
      * @param position position
      */
-    public static void dealExerciseSkip(VipExerciseIndexActivity activity, int position) {
+    public void dealExerciseSkip(VipExerciseIndexActivity activity, int position) {
 
         int exerciseTypeId = activity.list.get(position).getExercise_type();
         int exerciseId = activity.list.get(position).getExercise_id();
@@ -390,6 +403,7 @@ public class VipExerciseIndexModel {
                 break;
             case 4:
                 // 词句摘抄
+                ToastManager.showToast(activity, "请在电脑查看哦");
                 break;
             case 5:
                 // 表达改写

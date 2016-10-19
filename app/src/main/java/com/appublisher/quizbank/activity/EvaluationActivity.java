@@ -112,7 +112,7 @@ public class EvaluationActivity extends BaseActivity implements RequestCallback 
             EvaluationModel.setUmengShare(this);
         }
 
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override

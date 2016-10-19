@@ -139,6 +139,8 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
             case 9:
                 cls = VipHPTSActivity.class;
                 break;
+            case 10:
+                ToastManager.showToast(this, "此消息请在电脑端查看");
             default:
                 break;
         }
