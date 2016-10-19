@@ -26,7 +26,7 @@ import me.nereo.multi_image_selector.MultiImageSelector;
  */
 public class VipBaseModel implements RequestCallback{
 
-    public Context mContext;
+    Context mContext;
     VipRequest mVipRequest;
     private ProgressDialog mProgressDialog;
     private String mSubmitImgUrl;
@@ -34,14 +34,14 @@ public class VipBaseModel implements RequestCallback{
 
     public static final int CAMERA_REQUEST_CODE = 10;
     public static final int GALLERY_REQUEST_CODE = 11;
-    public static final String ZJZD = "zjzd";
+    static final String ZJZD = "zjzd";
 
     VipBaseModel(Context context) {
         mContext = context;
         mVipRequest = new VipRequest(mContext, this);
     }
 
-    public interface UpLoadListener {
+    interface UpLoadListener {
         void onComplete(String submitImgUrl);
     }
 
@@ -55,10 +55,10 @@ public class VipBaseModel implements RequestCallback{
                 .start((Activity) mContext, CAMERA_REQUEST_CODE);
     }
 
-    public void upload(final int exericiseId,
-                       final String type,
-                       final ArrayList<String> paths,
-                       final UpLoadListener listener) {
+    void upload(final int exericiseId,
+                final String type,
+                final ArrayList<String> paths,
+                final UpLoadListener listener) {
         if (paths == null || paths.size() == 0 || mCurUpLoadIndex >= paths.size()) return;
         if (mProgressDialog == null)
             mProgressDialog = YaoguoUploadManager.getProgressDialog(mContext);
