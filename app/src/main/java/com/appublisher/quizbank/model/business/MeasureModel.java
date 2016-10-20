@@ -396,7 +396,6 @@ public class MeasureModel {
                                               JSONObject response) {
         if (response == null) return;
 
-
         HistoryExerciseResp historyExerciseResp =
                 GsonManager.getModel(response.toString(), HistoryExerciseResp.class);
 
