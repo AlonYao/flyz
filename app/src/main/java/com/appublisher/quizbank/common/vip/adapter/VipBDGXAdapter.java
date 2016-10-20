@@ -82,7 +82,7 @@ public class VipBDGXAdapter extends PagerAdapter {
         String contentText = index + "   " + vipBDGXResp.getQuestion().get(position).getQuestion();
         final SpannableStringBuilder sp = new SpannableStringBuilder(contentText);
         sp.setSpan(new AbsoluteSizeSpan(20, true), 0, index.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        content.setText(contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText + contentText);
+        content.setText(contentText);
 
         if (questionBean.getUser_answer() == null) {
             inputAnswer.setVisibility(View.VISIBLE);

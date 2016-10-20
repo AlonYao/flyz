@@ -296,7 +296,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         switch (position) {
             case 0:
-
                 if (Globals.sharedPreferences.getBoolean("vip" + LoginModel.getUserId(), false)) {
                     if (mVipIndexFragment == null) {
                         mVipIndexFragment = new VipIndexFragment();

@@ -122,6 +122,12 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
             }
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mRequest.getVipIndexEntryData();
     }
 

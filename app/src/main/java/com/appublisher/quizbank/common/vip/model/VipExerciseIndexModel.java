@@ -401,10 +401,6 @@ public class VipExerciseIndexModel {
                     cls = VipExerciseDescriptionActivity.class;
                 }
                 break;
-            case 4:
-                // 词句摘抄
-                ToastManager.showToast(activity, "请在电脑查看哦");
-                break;
             case 5:
                 // 表达改写
                 if (Globals.sharedPreferences.getBoolean("vip_description_bdgx", false) || (status != 0 && status != 6)) {
@@ -441,6 +437,7 @@ public class VipExerciseIndexModel {
                 }
                 break;
             default:
+                ToastManager.showToast(activity, "请在电脑查看哦");
                 break;
         }
         if (cls != null) {

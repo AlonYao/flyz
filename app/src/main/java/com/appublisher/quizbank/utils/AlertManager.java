@@ -16,6 +16,7 @@ import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
 import com.appublisher.lib_login.activity.UserInfoActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
@@ -624,7 +625,7 @@ public class AlertManager {
      */
     public static void reportErrorAlert(final MeasureAnalysisActivity activity,
                                         final String type) {
-        new AlertDialog.Builder(activity)
+        new AlertDialog.Builder(QuizBankApp.getInstance().getApplicationContext())
                 .setMessage(R.string.alert_report_error_content)
                 .setTitle(R.string.alert_logout_title)
                 .setPositiveButton(R.string.alert_report_error_p,

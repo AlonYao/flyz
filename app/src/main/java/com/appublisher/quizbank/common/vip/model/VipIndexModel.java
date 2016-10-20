@@ -47,6 +47,8 @@ public class VipIndexModel {
             if (exerciseTips > 0) {
                 activity.homeworkTipsText.setText(String.valueOf(exerciseTips));
                 activity.homeworkTipsText.setVisibility(View.VISIBLE);
+            } else {
+                activity.homeworkTipsText.setVisibility(View.INVISIBLE);
             }
 
             int messageTips = vipIndexEntryDataResp.getNotifications().getUnread_total();
@@ -55,6 +57,8 @@ public class VipIndexModel {
             if (messageTips > 0) {
                 activity.messageTips.setText(String.valueOf(messageTips));
                 activity.messageTips.setVisibility(View.VISIBLE);
+            } else {
+                activity.messageTips.setVisibility(View.INVISIBLE);
             }
 
 
@@ -122,6 +126,8 @@ public class VipIndexModel {
             if (exerciseTips > 0) {
                 fragment.homeworkTipsText.setText(String.valueOf(exerciseTips));
                 fragment.homeworkTipsText.setVisibility(View.VISIBLE);
+            } else {
+                fragment.homeworkTipsText.setVisibility(View.INVISIBLE);
             }
 
             int messageTips = vipIndexEntryDataResp.getNotifications().getUnread_total();
@@ -130,6 +136,8 @@ public class VipIndexModel {
             if (messageTips > 0) {
                 fragment.messageTips.setText(String.valueOf(messageTips));
                 fragment.messageTips.setVisibility(View.VISIBLE);
+            } else {
+                fragment.messageTips.setVisibility(View.INVISIBLE);
             }
 
 

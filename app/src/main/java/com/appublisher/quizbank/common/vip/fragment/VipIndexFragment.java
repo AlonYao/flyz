@@ -138,6 +138,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mRequest.getVipIndexEntryData();
     }
 

@@ -140,11 +140,4 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
         hideLoading();
     }
 
-    @Override
-    protected void onDestroy() {
-//        VipExerciseIndexModel.statusPop = null;
-//        VipExerciseIndexModel.categoryPop = null;
-//        VipExerciseIndexModel.typePop = null;
-        super.onDestroy();
-    }
 }

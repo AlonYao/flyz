@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 
 /**
@@ -22,7 +23,7 @@ public class PopupWindowManager {
      * @param context
      */
     public static void showUpdateEvaluation(View view, Context context) {
-        View contentView = LayoutInflater.from(context).inflate(R.layout.update_evaluation, null);
+        View contentView = LayoutInflater.from(QuizBankApp.getInstance().getApplicationContext()).inflate(R.layout.update_evaluation, null);
         final PopupWindow popupWindow = new PopupWindow(contentView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         popupWindow.setFocusable(true);
         popupWindow.setClippingEnabled(true);
