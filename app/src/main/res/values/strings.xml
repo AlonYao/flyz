@@ -86,6 +86,10 @@
     <string name="practice_report_shenlun">申论</string>
     <string name="practice_report_entire_rank">在全站排名前</string>
     <string name="practice_report_entire_score">全站平均分数</string>
+    <string name="practice_report_borderline_desc">
+        根据实际情况，各省分数线包括行测分、申论分、总分（可能只有其中一项或两项），
+        此处“总分”是指行测与申论分数之和。
+    </string>
 
     <!--模考总动员  -->
     <string name="mockpre_exam_join">课程报名</string>

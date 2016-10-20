@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.model.business;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.text.Spannable;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -32,7 +34,9 @@ import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.PopupWindowManager;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,31 +46,31 @@ import java.util.Map;
  */
 public class PracticeReportModel {
 
-    private static PracticeReportActivity mActivity;
+    private PracticeReportActivity mActivity;
+
+    public PracticeReportModel(Context context) {
+        mActivity = (PracticeReportActivity) context;
+    }
 
     /**
      * 获取数据
-     *
-     * @param activity PracticeReportActivity
      */
-    public static void getData(final PracticeReportActivity activity) {
-        mActivity = activity;
-
-        activity.mRightNum = activity.getIntent().getIntExtra("right_num", 0);
-        activity.mTotalNum = activity.getIntent().getIntExtra("total_num", 0);
+    public void getData() {
+        mActivity.mRightNum = mActivity.getIntent().getIntExtra("right_num", 0);
+        mActivity.mTotalNum = mActivity.getIntent().getIntExtra("total_num", 0);
         //noinspection unchecked
-        activity.mCategoryMap = (HashMap<String, HashMap<String, Object>>)
-                activity.getIntent().getSerializableExtra("category");
+        mActivity.mCategoryMap = (HashMap<String, HashMap<String, Object>>)
+                mActivity.getIntent().getSerializableExtra("category");
         //noinspection unchecked
-        activity.mNotes = (ArrayList<NoteM>) activity.getIntent().getSerializableExtra("notes");
+        mActivity.mNotes = (ArrayList<NoteM>) mActivity.getIntent().getSerializableExtra("notes");
 
         //noinspection unchecked
-        activity.mQuestions = (ArrayList<QuestionM>)
-                activity.getIntent().getSerializableExtra("questions");
+        mActivity.mQuestions = (ArrayList<QuestionM>)
+                mActivity.getIntent().getSerializableExtra("questions");
 
         //noinspection unchecked
-        activity.mUserAnswerList = (ArrayList<HashMap<String, Object>>)
-                activity.getIntent().getSerializableExtra("user_answer");
+        mActivity.mUserAnswerList = (ArrayList<HashMap<String, Object>>)
+                mActivity.getIntent().getSerializableExtra("user_answer");
 
         // 显示内容
         setContent();
@@ -75,7 +79,7 @@ public class PracticeReportModel {
     /**
      * 设置内容
      */
-    private static void setContent() {
+    private void setContent() {
         // 如果是今日Mini模考，显示击败信息
         if ("mokao".equals(mActivity.mPaperType)) {
             mActivity.mRlMiniMokao.setVisibility(View.VISIBLE);
@@ -89,6 +93,7 @@ public class PracticeReportModel {
                     2,
                     defeat.indexOf("的考生"),
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            //noinspection deprecation
             word.setSpan(
                     new ForegroundColorSpan(
                             mActivity.getResources().getColor(R.color.practice_report_all)),
@@ -170,7 +175,7 @@ public class PracticeReportModel {
     /**
      * 显示全站统计信息
      */
-    private static void showEntireInfo() {
+    private void showEntireInfo() {
         if (mActivity.mMeasureEntity == null) return;
 
         mActivity.mRlEntireInfo.setVisibility(View.VISIBLE);
@@ -184,7 +189,7 @@ public class PracticeReportModel {
     /**
      * 往年分数线
      */
-    private static void setBorderLine() {
+    private void setBorderLine() {
         if (mActivity.mMeasureEntity == null || mActivity.mMeasureEntity.getScores() == null)
             return;
 
@@ -216,20 +221,30 @@ public class PracticeReportModel {
             mActivity.mLlBorderLine.addView(child);
         }
 
+        // 说明文字
+        TextView textView = new TextView(mActivity);
+        textView.setText(mActivity.getString(R.string.practice_report_borderline_desc));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(
+                Utils.dip2px(mActivity, 36),
+                Utils.dip2px(mActivity, 5),
+                Utils.dip2px(mActivity, 36),
+                0);
+        textView.setLayoutParams(layoutParams);
+        mActivity.mLlBorderLine.addView(textView);
     }
 
     /**
      * 1.5练习报告页版本更新
-     *
-     * @param activity
      */
-    public static void updateNotice(PracticeReportActivity activity) {
+    public void updateNotice() {
         //1.5版本加排名信息提示
-        if ("entire".equals(activity.mPaperType)) {
+        if ("entire".equals(mActivity.mPaperType)) {
             boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
             boolean detailCategory = Globals.sharedPreferences.getBoolean("rankInfo", true);
             if (!isFirstStart && detailCategory) {
-                PopupWindowManager.showUpdatePracticeReport(activity.parentView, activity);
+                PopupWindowManager.showUpdatePracticeReport(mActivity.parentView, mActivity);
             }
         }
     }
@@ -237,7 +252,7 @@ public class PracticeReportModel {
     /**
      * 全部点击事件
      */
-    private static View.OnClickListener allOnClick = new View.OnClickListener() {
+    private View.OnClickListener allOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (mActivity.mQuestions == null || mActivity.mQuestions.size() == 0) return;
@@ -284,7 +299,7 @@ public class PracticeReportModel {
     /**
      * 错题点击事件
      */
-    private static View.OnClickListener errorOnClick = new View.OnClickListener() {
+    private View.OnClickListener errorOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (mActivity.mUserAnswerList == null || mActivity.mUserAnswerList.size() == 0) return;
@@ -333,7 +348,7 @@ public class PracticeReportModel {
      * @param questions 题目
      * @param answers   答案
      */
-    private static void skipToMeasureAnalysisActivity(ArrayList<QuestionM> questions,
+    private void skipToMeasureAnalysisActivity(ArrayList<QuestionM> questions,
                                                       ArrayList<AnswerM> answers) {
         Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
         intent.putExtra("questions", questions);
@@ -364,7 +379,7 @@ public class PracticeReportModel {
     /**
      * 添加知识点
      */
-    private static void addNote() {
+    private void addNote() {
         if (mActivity.mNotes == null || mActivity.mNotes.size() == 0) {
             mActivity.mIvNoteNoChange.setVisibility(View.VISIBLE);
         } else {
@@ -408,7 +423,7 @@ public class PracticeReportModel {
     /**
      * 添加科目
      */
-    private static void addCategory() {
+    private void addCategory() {
         if (mActivity.mCategoryMap == null) return;
 
         for (Object o : mActivity.mCategoryMap.entrySet()) {
@@ -490,31 +505,29 @@ public class PracticeReportModel {
      *
      * @param response 回调数据
      */
-    public static void dealHistoryExerciseDetailResp(PracticeReportActivity activity,
-                                                     JSONObject response) {
+    public void dealHistoryExerciseDetailResp(JSONObject response) {
         // 解析HistoryExerciseResp模型
         if (response == null) return;
-        mActivity = activity;
         HistoryExerciseResp historyExerciseResp =
                 GsonManager.getModel(response.toString(), HistoryExerciseResp.class);
         if (historyExerciseResp == null || historyExerciseResp.getResponse_code() != 1) return;
 
         // 成员变量赋值
-        activity.mQuestions = historyExerciseResp.getQuestions();
+        mActivity.mQuestions = historyExerciseResp.getQuestions();
         ArrayList<CategoryM> categorys = historyExerciseResp.getCategory();
-        if (activity.mMeasureEntity == null) activity.mMeasureEntity = new MeasureEntity();
-        activity.mMeasureEntity.setDefeat(historyExerciseResp.getDefeat());
-        activity.mMeasureEntity.setScore(historyExerciseResp.getScore());
-        activity.mMeasureEntity.setScores(historyExerciseResp.getScores());
-        activity.mMeasureEntity.setAvg_score(historyExerciseResp.getAvg_score());
+        if (mActivity.mMeasureEntity == null) mActivity.mMeasureEntity = new MeasureEntity();
+        mActivity.mMeasureEntity.setDefeat(historyExerciseResp.getDefeat());
+        mActivity.mMeasureEntity.setScore(historyExerciseResp.getScore());
+        mActivity.mMeasureEntity.setScores(historyExerciseResp.getScores());
+        mActivity.mMeasureEntity.setAvg_score(historyExerciseResp.getAvg_score());
 
-        if (activity.mQuestions != null && categorys == null) {
+        if (mActivity.mQuestions != null && categorys == null) {
             // 非整卷
             ArrayList<AnswerM> answers = historyExerciseResp.getAnswers();
             jointUserAnswer(answers);
-        } else if (activity.mQuestions == null && categorys != null) {
+        } else if (mActivity.mQuestions == null && categorys != null) {
             // 整卷
-            activity.mQuestions = new ArrayList<>();
+            mActivity.mQuestions = new ArrayList<>();
             ArrayList<AnswerM> answers = new ArrayList<>();
 
             int size = categorys.size();
@@ -525,7 +538,7 @@ public class PracticeReportModel {
                 ArrayList<QuestionM> categoryQuestions = category.getQuestions();
                 if (categoryQuestions == null || categoryQuestions.size() == 0) continue;
 
-                activity.mQuestions.addAll(categoryQuestions);
+                mActivity.mQuestions.addAll(categoryQuestions);
                 answers.addAll(category.getAnswers());
             }
 
@@ -533,7 +546,7 @@ public class PracticeReportModel {
         }
 
         // 知识点变化
-        activity.mNotes = historyExerciseResp.getNotes();
+        mActivity.mNotes = historyExerciseResp.getNotes();
 
         // 拼接科目
         jointCategoryMap();
@@ -545,7 +558,7 @@ public class PracticeReportModel {
     /**
      * 拼接科目
      */
-    private static void jointCategoryMap() {
+    private void jointCategoryMap() {
         if (mActivity.mUserAnswerList == null) return;
 
         mActivity.mTotalNum = mActivity.mUserAnswerList.size();
@@ -615,7 +628,7 @@ public class PracticeReportModel {
      *
      * @param answers 用户答案
      */
-    private static void jointUserAnswer(ArrayList<AnswerM> answers) {
+    private void jointUserAnswer(ArrayList<AnswerM> answers) {
         if (mActivity.mUserAnswerList == null)
             mActivity.mUserAnswerList = new ArrayList<>();
 
@@ -653,59 +666,53 @@ public class PracticeReportModel {
 
     /**
      * 显示试卷类型
-     *
-     * @param activity PracticeReportActivity
      */
-    public static void showPaperType(PracticeReportActivity activity) {
+    public void showPaperType() {
         String sPaperType = "";
 
-        if ("auto".equals(activity.mPaperType)) {
+        if ("auto".equals(mActivity.mPaperType)) {
             sPaperType = "快速智能练习";
-        } else if ("note".equals(activity.mPaperType)) {
+        } else if ("note".equals(mActivity.mPaperType)) {
             sPaperType = "专项练习";
-        } else if ("mokao".equals(activity.mPaperType)) {
+        } else if ("mokao".equals(mActivity.mPaperType)) {
             sPaperType = "mini模考";
-        } else if ("collect".equals(activity.mPaperType)) {
+        } else if ("collect".equals(mActivity.mPaperType)) {
             sPaperType = "收藏夹练习";
-        } else if ("error".equals(activity.mPaperType)) {
+        } else if ("error".equals(mActivity.mPaperType)) {
             sPaperType = "错题本练习";
-        } else if ("entire".equals(activity.mPaperType)) {
+        } else if ("entire".equals(mActivity.mPaperType)) {
             sPaperType = "真题演练";
-        } else if ("evaluate".equals(activity.mPaperType)) {
+        } else if ("evaluate".equals(mActivity.mPaperType)) {
             sPaperType = "估分";
-        } else if ("mock".equals(activity.mPaperType)) {
+        } else if ("mock".equals(mActivity.mPaperType)) {
             sPaperType = "模考";
         }
 
-        activity.mTvPaperType.setText(sPaperType);
+        mActivity.mTvPaperType.setText(sPaperType);
     }
 
     /**
      * 显示试卷描述
-     *
-     * @param activity PracticeReportActivity
      */
-    public static void showPaperDesc(PracticeReportActivity activity) {
-        if ("auto".equals(activity.mPaperType)) {
+    public void showPaperDesc() {
+        if ("auto".equals(mActivity.mPaperType)) {
             // 显示日期
-            if (activity.mPaperTime != null && activity.mPaperTime.length() > 10) {
-                activity.mTvPaperName.setText(
-                        activity.mPaperTime.substring(0, 10).replaceAll("-", "/"));
+            if (mActivity.mPaperTime != null && mActivity.mPaperTime.length() > 10) {
+                mActivity.mTvPaperName.setText(
+                        mActivity.mPaperTime.substring(0, 10).replaceAll("-", "/"));
             } else {
-                activity.mTvPaperName.setText(activity.mPaperTime);
+                mActivity.mTvPaperName.setText(mActivity.mPaperTime);
             }
         } else {
             // 显示试卷名称
-            activity.mTvPaperName.setText(activity.mPaperName);
+            mActivity.mTvPaperName.setText(mActivity.mPaperName);
         }
     }
 
     /**
      * 设置友盟分享
-     *
-     * @param activity PracticeReportActivity
      */
-    public static void setUmengShare(PracticeReportActivity activity) {
+    public void setUmengShare() {
 
         // 练习报告
         GlobalSettingsResp globalSettingsResp = GlobalSettingDAO.getGlobalSettingsResp();
@@ -713,78 +720,48 @@ public class PracticeReportModel {
         if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
             baseUrl = globalSettingsResp.getReport_share_url();
         }
-        int exerciseId = activity.mExerciseId == 0 ? activity.mPaperId : activity.mExerciseId;
-        String paperName = activity.mTvPaperName.getText() == null ? "" : activity.mTvPaperName.getText().toString();
+        int exerciseId = mActivity.mExerciseId == 0 ? mActivity.mPaperId : mActivity.mExerciseId;
+        String paperName = mActivity.mTvPaperName.getText() == null ? "" : mActivity.mTvPaperName.getText().toString();
         baseUrl += baseUrl + "user_id=" + LoginModel.getUserId()
                 + "&user_token=" + LoginModel.getUserToken()
                 + "&exercise_id=" + exerciseId
-                + "&paper_type=" + activity.mPaperType
+                + "&paper_type=" + mActivity.mPaperType
                 + "&name=" + paperName;
 
         // 练习报告
         String content;
-        if ("mokao".equals(activity.mPaperType)) {
+        if ("mokao".equals(mActivity.mPaperType)) {
             content = "刚刚打败了全国"
-                    + Utils.rateToPercent(activity.mDefeat)
+                    + Utils.rateToPercent(mActivity.mDefeat)
                     + "%的小伙伴，学霸非我莫属！";
-        } else if ("evaluate".equals(activity.mPaperType)) {
-            content = activity.mPaperName
+        } else if ("evaluate".equals(mActivity.mPaperType)) {
+            content = mActivity.mPaperName
                     + "我估计能"
-                    + activity.mScore
+                    + mActivity.mScore
                     + "分，快来看看~";
-        } else if ("mock".equals(activity.mPaperType)) {
+        } else if ("mock".equals(mActivity.mPaperType)) {
             content = "我在"
-                    + activity.mPaperName
+                    + mActivity.mPaperName
                     + "中拿了"
-                    + activity.mScore
+                    + mActivity.mScore
                     + "分，棒棒哒！";
         } else {
             content = "刷了一套题，正确率竟然达到了"
-                    + Utils.getPercent1(activity.mRightNum, activity.mTotalNum)
+                    + Utils.getPercent1(mActivity.mRightNum, mActivity.mTotalNum)
                     + "呢~";
         }
-        Resources resources = activity.getResources();
+        Resources resources = mActivity.getResources();
+        //noinspection ConstantConditions
         UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
                 .setTitle(resources.getString(R.string.share_title))
                 .setText(content)
                 .setTargetUrl(baseUrl)
-                .setUmImage(new UMImage(activity, Utils.getBitmapByView(activity.mSvMain)));
-        UmengManager.shareAction(activity, umShareEntity, UmengManager.APP_TYPE_QUIZBANK, new UmengManager.PlatformInter() {
+                .setUmImage(new UMImage(mActivity, Utils.getBitmapByView(mActivity.mSvMain)));
+        UmengManager.shareAction(mActivity, umShareEntity, UmengManager.APP_TYPE_QUIZBANK, new UmengManager.PlatformInter() {
             @Override
             public void platform(SHARE_MEDIA platformType) {
 
             }
         });
-
-
-//        UmengShareEntity umengShareEntity = new UmengShareEntity();
-//        umengShareEntity.setActivity(activity);
-//        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
-//        umengShareEntity.setFrom("practice_report");
-
-//        // 友盟分享文字处理
-//        UMShareContentEntity contentEntity = new UMShareContentEntity();
-//        contentEntity.setType("practice_report");
-//        contentEntity.setPaperType(activity.mPaperType);
-//        contentEntity.setDefeat(activity.mDefeat);
-//        contentEntity.setAccuracy(Utils.getPercent1(activity.mRightNum, activity.mTotalNum));
-//        contentEntity.setScore(activity.mScore);
-//        contentEntity.setExamName(activity.mPaperName);
-//        umengShareEntity.setContent(UmengManager.getShareContent(contentEntity));
-//
-//        // 友盟分享跳转链接处理
-//        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-//        urlEntity.setType("practice_report");
-//        urlEntity.setUser_id(LoginModel.getUserId());
-//        urlEntity.setUser_token(LoginModel.getUserToken());
-//        urlEntity.setPaper_type(activity.mPaperType);
-//        urlEntity.setName(
-//                activity.mTvPaperName.getText() == null
-//                        ? "" : activity.mTvPaperName.getText().toString());
-//        urlEntity.setExercise_id(
-//                activity.mExerciseId == 0 ? activity.mPaperId : activity.mExerciseId);
-//        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
-//
-//        UmengManager.openShare(umengShareEntity);
     }
 }
