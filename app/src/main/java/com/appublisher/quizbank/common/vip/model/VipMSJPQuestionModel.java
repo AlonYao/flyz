@@ -21,6 +21,7 @@ public class VipMSJPQuestionModel extends VipMSJPModel{
 
     public ArrayList<String> mPaths;
     public boolean mCanSubmit;
+    public int mQuestionId;
 
     private VipMSJPActivity mView;
 
@@ -56,6 +57,7 @@ public class VipMSJPQuestionModel extends VipMSJPModel{
             public void onComplete(String submitImgUrl) {
                 VipSubmitEntity entity = new VipSubmitEntity();
                 entity.exercise_id = mExerciseId;
+                entity.question_id = mQuestionId;
                 entity.image_url = submitImgUrl;
                 mView.showLoading();
                 submit(entity);

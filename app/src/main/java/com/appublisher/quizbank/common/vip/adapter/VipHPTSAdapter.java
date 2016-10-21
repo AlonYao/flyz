@@ -2,7 +2,7 @@ package com.appublisher.quizbank.common.vip.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.appublisher.quizbank.common.vip.fragment.VipHPTSMaterialFragment;
 import com.appublisher.quizbank.common.vip.fragment.VipHPTSQuestionFragment;
@@ -12,7 +12,7 @@ import com.appublisher.quizbank.common.vip.netdata.VipHPTSResp;
  * 小班：互评提升
  */
 
-public class VipHPTSAdapter extends FragmentPagerAdapter{
+public class VipHPTSAdapter extends FragmentStatePagerAdapter{
 
     private VipHPTSResp mResp;
     private VipHPTSQuestionFragment mQuestionFragment;

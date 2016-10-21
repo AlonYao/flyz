@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.Utils;
@@ -103,6 +104,7 @@ public class VipBaseActivity extends BaseActivity {
             for (int i = 0; i < size; i++) {
                 final int index = i;
                 ImageView imageView = getMyJobItem();
+                imageView.setImageResource(R.drawable.vip_loading);
                 ImageManager.displayImage(paths.get(i), imageView);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -176,6 +178,10 @@ public class VipBaseActivity extends BaseActivity {
                 alertDialog.dismiss();
             }
         });
+    }
+
+    public void showSubmitErrorToast() {
+        Toast.makeText(this, "提交失败，请重试……", Toast.LENGTH_SHORT).show();
     }
 
 }

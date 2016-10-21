@@ -2,7 +2,7 @@ package com.appublisher.quizbank.common.vip.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.appublisher.quizbank.common.vip.fragment.VipDTTPMaterialFragment;
 import com.appublisher.quizbank.common.vip.fragment.VipDTTPQuestionFragment;
@@ -12,7 +12,7 @@ import com.appublisher.quizbank.common.vip.netdata.VipDTTPResp;
  * 小班：单题突破
  */
 
-public class VipDTTPAdapter extends FragmentPagerAdapter{
+public class VipDTTPAdapter extends FragmentStatePagerAdapter{
 
     private VipDTTPResp mResp;
     private VipDTTPQuestionFragment mQuestionFragment;

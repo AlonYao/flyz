@@ -72,6 +72,13 @@ public class VipHPTSQuestionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mResp = GsonManager.getModel(getArguments().getString(ARGS_DATA), VipHPTSResp.class);
         mModel = new VipHPTSQuestionModel(getContext());
+        if (mResp != null) {
+            mModel.mExerciseId = mResp.getExercise_id();
+            VipHPTSResp.QuestionBean questionBean = mResp.getQuestion();
+            if (questionBean != null) {
+                mModel.mQuestionId = questionBean.getQuestion_id();
+            }
+        }
     }
 
     @Nullable

@@ -58,6 +58,13 @@ public class VipDTTPQuestionFragment extends Fragment{
         super.onCreate(savedInstanceState);
         mResp = GsonManager.getModel(getArguments().getString(ARGS_DATA), VipDTTPResp.class);
         mModel = new VipDTTPQuestionModel(getContext());
+        if (mResp != null) {
+            mModel.mExerciseId = mResp.getExercise_id();
+            VipDTTPResp.QuestionBean questionBean = mResp.getQuestion();
+            if (questionBean != null) {
+                mModel.mQuestionId = questionBean.getQuestion_id();
+            }
+        }
     }
 
     @Nullable

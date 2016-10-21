@@ -2,7 +2,7 @@ package com.appublisher.quizbank.common.vip.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.appublisher.quizbank.common.vip.fragment.VipMSJPMaterialFragment;
 import com.appublisher.quizbank.common.vip.fragment.VipMSJPQuestionFragment;
@@ -11,7 +11,7 @@ import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
 /**
  * 小班：名师精批
  */
-public class VipMSJPAdapter extends FragmentPagerAdapter{
+public class VipMSJPAdapter extends FragmentStatePagerAdapter{
 
     private VipMSJPResp mVipMSJPResp;
     private VipMSJPQuestionFragment mQuestionFragment;
@@ -50,5 +50,4 @@ public class VipMSJPAdapter extends FragmentPagerAdapter{
         }
         return null;
     }
-
 }

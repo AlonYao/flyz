@@ -21,6 +21,7 @@ public class VipDTTPQuestionModel extends VipDTTPModel {
 
     public ArrayList<String> mPaths;
     public boolean mCanSubmit;
+    public int mQuestionId;
 
     private VipDTTPActivity mView;
 
@@ -52,6 +53,7 @@ public class VipDTTPQuestionModel extends VipDTTPModel {
             public void onComplete(String submitImgUrl) {
                 VipSubmitEntity entity = new VipSubmitEntity();
                 entity.exercise_id = mExerciseId;
+                entity.question_id = mQuestionId;
                 entity.image_url = submitImgUrl;
                 mView.showLoading();
                 submit(entity);
