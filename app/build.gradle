@@ -308,6 +308,31 @@ android {
                                     APP_CHANNEL: "baidu-sem-10"]
         }
 
+        "baidu-sem-11" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-sem-11"]
+        }
+
+        "baidu-sem-12" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-sem-12"]
+        }
+
+        "baidu-sem-13" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-sem-13"]
+        }
+
+        "baidu-sem-14" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-sem-14"]
+        }
+
+        "baidu-sem-15" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-sem-15"]
+        }
+
         /**
          * baidu
          */
