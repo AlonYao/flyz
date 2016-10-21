@@ -125,12 +125,12 @@ public class VipExerciseIndexModel {
      * @param activity
      */
     public void showStatusPop(VipExerciseIndexActivity activity) {
-        if (statusPop == null) {
+        if (statusPop == null)
             initStatusPop(activity);
-        } else {
-            statusPop.showAsDropDown(activity.statusView, 0, 2);
-            activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
-        }
+
+        statusPop.showAsDropDown(activity.statusView, 0, 2);
+        activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
+
     }
 
     public void initStatusPop(final VipExerciseIndexActivity activity) {
@@ -161,12 +161,11 @@ public class VipExerciseIndexModel {
         statusPop.setOutsideTouchable(true);
         statusPop.setBackgroundDrawable(
                 activity.getResources().getDrawable(com.appublisher.quizbank.R.color.transparency));
-        dealPopEventDispatch(statusPop);
+
         statusPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 activity.statusArrow.setImageResource(R.drawable.wholepage_arrowdown);
-//                arrowCloseAnimation(activity.statusArrow);
             }
         });
         TextView statusCancle = (TextView) statusView.findViewById(R.id.vip_filter_cancel);
@@ -189,8 +188,6 @@ public class VipExerciseIndexModel {
             }
         });
 
-        statusPop.showAsDropDown(activity.statusView, 0, 2);
-        activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
 
     /**
@@ -199,12 +196,12 @@ public class VipExerciseIndexModel {
      * @param activity
      */
     public void showCategoryPop(VipExerciseIndexActivity activity) {
-        if (categoryPop == null) {
+        if (categoryPop == null)
             initCategoryPop(activity);
-        } else {
-            categoryPop.showAsDropDown(activity.categoryView, 0, 2);
-            activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
-        }
+
+        categoryPop.showAsDropDown(activity.categoryView, 0, 2);
+        activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
+
     }
 
     public void initCategoryPop(final VipExerciseIndexActivity activity) {
@@ -220,12 +217,11 @@ public class VipExerciseIndexModel {
         categoryPop.setOutsideTouchable(true);
         categoryPop.setBackgroundDrawable(
                 activity.getResources().getDrawable(com.appublisher.quizbank.R.color.transparency));
-        dealPopEventDispatch(categoryPop);
+
         categoryPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowdown);
-//                arrowCloseAnimation(activity.categoryArrow);
             }
         });
         categoryGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -263,8 +259,6 @@ public class VipExerciseIndexModel {
             }
         });
 
-        categoryPop.showAsDropDown(activity.categoryView, 0, 2);
-        activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
 
     public void showTypePop(VipExerciseIndexActivity activity) {
@@ -305,12 +299,12 @@ public class VipExerciseIndexModel {
         typePop.setOutsideTouchable(true);
         typePop.setBackgroundDrawable(
                 activity.getResources().getDrawable(com.appublisher.quizbank.R.color.transparency));
-        dealPopEventDispatch(typePop);
+
         typePop.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 activity.typeArrow.setImageResource(R.drawable.wholepage_arrowdown);
-//                arrowCloseAnimation(activity.typeArrow);
+
             }
         });
         typeGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -347,21 +341,6 @@ public class VipExerciseIndexModel {
             }
         });
 
-    }
-
-    /**
-     * 处理pop outside事件分发
-     *
-     * @param popupWindow
-     */
-    public void dealPopEventDispatch(PopupWindow popupWindow) {
-        try {
-            Method method = PopupWindow.class.getDeclaredMethod("setTouchModal", boolean.class);
-            method.setAccessible(true);
-            method.invoke(popupWindow, false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
