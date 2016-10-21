@@ -49,8 +49,11 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
                     data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
             if (mModel.mPaths != null) {
                 mModel.mPaths.addAll(paths);
+            } else {
+                mModel.mPaths = paths;
             }
             showMyJob(mModel.mPaths, FILE, VipZJZDModel.MAX_LENGTH);
+            updateSubmitButton();
 
         } else if (requestCode == VipBaseModel.GALLERY_REQUEST_CODE) {
             // 图片浏览回调
@@ -62,6 +65,7 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
                 showMyJob(paths, URL, VipZJZDModel.MAX_LENGTH);
             }
             mModel.mPaths = paths;
+            updateSubmitButton();
         }
     }
 
@@ -84,7 +88,7 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
 
     private void initData() {
         mModel = new VipZJZDModel(this);
-        mModel.setExerciseId(getIntent().getIntExtra(VipZJZDModel.INTENT_EXERCISEID, 0));
+        mModel.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
         // 获取练习详情
         showLoading();
         mModel.getExerciseDetail();
@@ -98,6 +102,7 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
         mMyjobContainer = (FlowLayout) findViewById(R.id.vip_zjzd_myjob_container);
 
         mIvExample.setOnClickListener(this);
+        mBtnSubmit.setOnClickListener(this);
     }
 
     public void showTvMaterial(String text) {
@@ -115,6 +120,11 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
                 mModel.toCamera(maxLength);
             }
         });
+    }
+
+    private void updateSubmitButton() {
+        int curLength = mModel.mPaths == null ? 0 : mModel.mPaths.size();
+        updateSubmitButton(curLength, mBtnSubmit);
     }
 
     /**
