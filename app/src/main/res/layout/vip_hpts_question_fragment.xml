@@ -10,13 +10,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="60dp"
             android:orientation="vertical"
             tools:ignore="ScrollViewSize">
+            <!-- 说明 -->
+            <TextView
+                style="@style/Vip_Title"
+                android:text="@string/vip_explain"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vip_explain_hpts"
+                android:textColor="@color/vip_explain"
+                android:textSize="@dimen/vip_default_text"
+                android:padding="15dp"
+                android:background="@color/white"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/vip_gray"/>
+            <!-- 问题 -->
             <WebView
                 android:id="@+id/vip_hpts_question_webview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
             <!-- 参考答案 -->
             <TextView
                 style="@style/Vip_Title"

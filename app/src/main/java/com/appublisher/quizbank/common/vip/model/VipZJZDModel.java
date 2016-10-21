@@ -17,16 +17,15 @@ import java.util.ArrayList;
 public class VipZJZDModel extends VipBaseModel {
 
     private static final int PIC_SIDE = 147;
-
     public static final int MAX_LENGTH = 1;
-    public static final String INTENT_EXERCISEID = "exercise_id";
 
-    private int mExerciseId;
     private VipZJZDActivity mView;
     private String mExampleUrl;
+    private int mQuestionId;
 
     public boolean mCanSubmit;
     public ArrayList<String> mPaths;
+    public int mExerciseId;
 
     public VipZJZDModel(Context context) {
         super(context);
@@ -59,6 +58,8 @@ public class VipZJZDModel extends VipBaseModel {
 
         VipZJZDResp.QuestionBean question = resp.getQuestion();
         if (question != null) {
+            // 更新questionId
+            mQuestionId = question.getQuestion_id();
             // 材料
             mView.showTvMaterial(question.getContent());
             // 作业示例
@@ -86,6 +87,7 @@ public class VipZJZDModel extends VipBaseModel {
             public void onComplete(String submitImgUrl) {
                 VipSubmitEntity entity = new VipSubmitEntity();
                 entity.exercise_id = mExerciseId;
+                entity.question_id = mQuestionId;
                 entity.image_url = submitImgUrl;
                 mView.showLoading();
                 submit(entity);

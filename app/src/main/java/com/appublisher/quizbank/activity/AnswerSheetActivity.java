@@ -2,7 +2,6 @@ package com.appublisher.quizbank.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,14 +20,11 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.AnswerSheetAdapter;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.model.business.AnswerSheetModel;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.QRequest;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -75,8 +71,6 @@ public class AnswerSheetActivity extends BaseActivity implements RequestCallback
         ScrollView svEntire = (ScrollView) findViewById(R.id.answer_sheet_sv_entire);
 
         // 成员变量初始化
-
-        // 获取数据
         mUserAnswerList = (ArrayList<HashMap<String, Object>>)
                 getIntent().getSerializableExtra("user_answer");
         mPaperName = getIntent().getStringExtra("paper_name");

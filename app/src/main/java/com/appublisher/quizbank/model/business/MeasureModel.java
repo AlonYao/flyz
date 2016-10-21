@@ -2,7 +2,9 @@ package com.appublisher.quizbank.model.business;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Handler;
@@ -31,6 +33,7 @@ import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
+import com.appublisher.quizbank.common.measure.UserAnswerEntity;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.common.vip.netdata.VipExerciseDetailCommonResp;
 import com.appublisher.quizbank.dao.PaperDAO;
@@ -67,6 +70,8 @@ public class MeasureModel {
 
     private static boolean mOptionClick;
     private MeasureActivity mActivity;
+
+    public static final String CACHE_USER_ANSWER = "cache_user_answer";
 
     public MeasureModel(MeasureActivity activity) {
         mActivity = activity;
@@ -396,7 +401,6 @@ public class MeasureModel {
                                               JSONObject response) {
         if (response == null) return;
 
-
         HistoryExerciseResp historyExerciseResp =
                 GsonManager.getModel(response.toString(), HistoryExerciseResp.class);
 
@@ -509,6 +513,84 @@ public class MeasureModel {
 
         userAnswerMap.put("duration", duration);
         activity.mUserAnswerList.set(activity.mCurPosition, userAnswerMap);
+    }
+
+    /**
+     * 更新做题缓存（后期会去掉HashMap，这里暂时这样处理）
+     * @param userAnswerList 用户答案
+     * @param curIndex 当前索引
+     */
+    private void updatePaperCache(ArrayList<HashMap<String, Object>> userAnswerList,
+                                  int curIndex) {
+        if (userAnswerList == null || curIndex >= userAnswerList.size()) return;
+
+        HashMap<String, Object> userAnswerMap = userAnswerList.get(curIndex);
+        if (userAnswerMap == null) return;
+
+//        UserAnswerEntity entity = new UserAnswerEntity();
+//        entity.setId((int) userAnswerMap.get("id"));
+//        entity.setAnswer((String) userAnswerMap.get("answer"));
+//        entity.setCategory((int) userAnswerMap.get("category_id"));
+//        entity.setCategory_name((String) userAnswerMap.get("category_name"));
+//        entity.setNote_id((int) userAnswerMap.get("note_id"));
+//        entity.setDuration((int) userAnswerMap.get("duration"));
+//        entity.setRight_answer((String) userAnswerMap.get("right_answer"));
+//        boolean is_right = false;
+
+        int id = (int) userAnswerMap.get("id");
+        String answer = (String) userAnswerMap.get("answer");
+        int category = (int) userAnswerMap.get("category_id");
+        String category_name = (String) userAnswerMap.get("category_name");
+        int note_id = (int) userAnswerMap.get("note_id");
+        int duration = (int) userAnswerMap.get("duration");
+        String right_answer = (String) userAnswerMap.get("right_answer");
+
+        // 判断对错
+        boolean is_right = false;
+        if (answer == null) answer = "";
+        if (answer.equals(right_answer)) {
+            is_right = true;
+        }
+
+
+
+    }
+
+    private JSONArray getUserAnswerCache(Context context) {
+        JSONArray array = new JSONArray();
+
+        SharedPreferences cache =
+                context.getSharedPreferences("yaoguo_measure", Context.MODE_PRIVATE);
+//        String userAnswer = cache.getString()
+
+        return array;
+    }
+
+    private JSONObject getAnswerObject(UserAnswerEntity entity) {
+        JSONObject object = new JSONObject();
+        if (entity == null) return object;
+
+        try {
+            // 判断对错
+            String answer = entity.getAnswer();
+            String rightAnswer = entity.getRight_answer();
+            if (answer.equals(rightAnswer)) {
+                entity.setIs_right(true);
+            } else {
+                entity.setIs_right(false);
+            }
+
+            object.put("id", entity.getId());
+            object.put("answer", answer);
+            object.put("is_right", entity.is_right());
+            object.put("category", entity.getCategory());
+            object.put("note_id", entity.getNote_id());
+            object.put("duration", entity.getDuration());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
     }
 
     /**

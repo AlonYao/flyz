@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -27,7 +26,6 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
@@ -38,7 +36,6 @@ import com.appublisher.quizbank.model.netdata.measure.SubmitPaperResp;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.google.gson.Gson;
-import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
@@ -558,6 +555,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
      * 是否记录本次练习
      */
     private void checkSave() {
+        if (mUserAnswerList == null || mUserAnswerList.size() == 0) finish();
         if (mockpre) {
             ProgressDialogManager.showProgressDialog(this);
             mQRequest.getServerCurrentTime();

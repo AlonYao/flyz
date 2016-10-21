@@ -58,6 +58,13 @@ public class VipMSJPQuestionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mResp = GsonManager.getModel(getArguments().getString(ARGS_DATA), VipMSJPResp.class);
         mModel = new VipMSJPQuestionModel(getContext());
+        if (mResp != null) {
+            mModel.mExerciseId = mResp.getExercise_id();
+            VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
+            if (questionBean != null) {
+                mModel.mQuestionId = questionBean.getQuestion_id();
+            }
+        }
     }
 
     @Nullable
@@ -269,7 +276,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         // 参考答案
         VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
         if (questionBean != null) {
-            reviewAnswer.setBackgroundColor(0);
+            reviewAnswer.setBackgroundColor(Color.WHITE);
             reviewAnswer.loadDataWithBaseURL(
                     null, questionBean.getAnswer(), "text/html", "UTF-8", null);
         }
