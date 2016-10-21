@@ -113,7 +113,7 @@ public class VipDTTPQuestionFragment extends Fragment{
 
         // 题目
         if (questionBean != null) {
-            mWvQuestion.setBackgroundColor(0);
+            mWvQuestion.setBackgroundColor(Color.WHITE);
             mWvQuestion.loadDataWithBaseURL(
                     null, questionBean.getQuestion(), "text/html", "UTF-8", null);
         }

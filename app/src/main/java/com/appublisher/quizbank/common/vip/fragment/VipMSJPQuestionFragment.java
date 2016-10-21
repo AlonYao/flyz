@@ -276,7 +276,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         // 参考答案
         VipMSJPResp.QuestionBean questionBean = mResp.getQuestion();
         if (questionBean != null) {
-            reviewAnswer.setBackgroundColor(0);
+            reviewAnswer.setBackgroundColor(Color.WHITE);
             reviewAnswer.loadDataWithBaseURL(
                     null, questionBean.getAnswer(), "text/html", "UTF-8", null);
         }
