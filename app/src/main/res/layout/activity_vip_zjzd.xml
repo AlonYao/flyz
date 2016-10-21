@@ -30,11 +30,11 @@
                 android:textSize="@dimen/vip_default_text"
                 android:padding="15dp"
                 android:background="@color/white"/>
-            <!-- 材料 -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/vip_gray"/>
+            <!-- 材料 -->
             <TextView
                 android:id="@+id/vip_zjzd_material"
                 android:layout_width="match_parent"
