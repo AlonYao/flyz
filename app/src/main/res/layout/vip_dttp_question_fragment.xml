@@ -28,7 +28,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/vip_gray"/>
+                android:background="@color/vip_divider"/>
             <!-- 问题 -->
             <RelativeLayout
                 android:layout_width="match_parent"
