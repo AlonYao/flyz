@@ -8,10 +8,16 @@
     <TextView
         style="@style/Vip_Title"
         android:text="@string/vip_msjp_review_answer"/>
-    <WebView
-        android:id="@+id/vip_dttp_review_answer"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:padding="15dp">
+        <WebView
+            android:id="@+id/vip_dttp_review_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 
     <!-- 老师评论 -->
     <TextView

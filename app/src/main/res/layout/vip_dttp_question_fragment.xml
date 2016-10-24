@@ -27,13 +27,19 @@
                 android:background="@color/white"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="1px"
                 android:background="@color/vip_gray"/>
             <!-- 问题 -->
-            <WebView
-                android:id="@+id/vip_dttp_question_webview"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:padding="15dp">
+                <WebView
+                    android:id="@+id/vip_dttp_question_webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
             <!-- 我的作业 -->
             <RelativeLayout
                 android:layout_width="match_parent"
