@@ -2,7 +2,6 @@ package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.appublisher.quizbank.common.vip.activity.VipBaseActivity;
 import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
@@ -41,10 +40,6 @@ public class VipDTTPQuestionModel extends VipDTTPModel {
 
     public void updateSubmitButton(int curLength, Button btnSubmit) {
         mView.updateSubmitButton(curLength, btnSubmit);
-    }
-
-    public ImageView getMyJobItem() {
-        return mView.getMyJobItem();
     }
 
     public void submit() {

@@ -209,6 +209,7 @@ public class VipDTTPQuestionFragment extends Fragment{
         vsReview.inflate();
         WebView reviewAnswer = (WebView) mRoot.findViewById(R.id.vip_dttp_review_answer);
         MultiListView lvStudent = (MultiListView) mRoot.findViewById(R.id.vip_dttp_review_student);
+        TextView tvStudentTitle = (TextView) mRoot.findViewById(R.id.vip_dttp_review_student_title);
 
         // 参考答案
         VipDTTPResp.QuestionBean questionBean = mResp.getQuestion();
@@ -221,10 +222,12 @@ public class VipDTTPQuestionFragment extends Fragment{
 
         // 学生评论
         VipDTTPResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
-        if (userAnswerBean != null) {
+        if (userAnswerBean != null && userAnswerBean.getReviews().size() > 0) {
             VipDTTPReviewAdapter adapter =
                     new VipDTTPReviewAdapter(getContext(), userAnswerBean.getReviews());
             lvStudent.setAdapter(adapter);
+        } else {
+            tvStudentTitle.setVisibility(View.GONE);
         }
     }
 
