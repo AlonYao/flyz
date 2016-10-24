@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,11 +129,39 @@ public class VipHPTSQuestionFragment extends Fragment {
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mModel.submit(mRecordId, mEtMyComment.getText().toString(), mLevel);
+                String edt = mEtMyComment.getText().toString();
+                if (edt.length() == 0) return;
+                mModel.submit(mRecordId, edt, mLevel);
+            }
+        });
+
+        mEtMyComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateSubmitButton();
             }
         });
 
         showMyComment(status);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void updateSubmitButton() {
+        if (mEtMyComment.getText().length() == 0) {
+            mBtnSubmit.setBackgroundColor(getContext().getResources().getColor(R.color.vip_gray));
+        } else {
+            mBtnSubmit.setBackgroundColor(getContext().getResources().getColor(R.color.vip_green));
+        }
     }
 
     /**
@@ -153,6 +183,7 @@ public class VipHPTSQuestionFragment extends Fragment {
             // 未完成
             mTvFinish.setVisibility(View.GONE);
             mLlUnFinish.setVisibility(View.VISIBLE);
+            mRbLevelGood.setChecked(true);
 
             mRgLevel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
