@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -29,6 +30,9 @@ import com.appublisher.quizbank.common.vip.network.VipRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 阅读打卡
@@ -47,6 +51,13 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
     private ScrollView answerView;
     private int mScreenHeight;
     private int mLastY;
+
+    //um
+    public Map<String, String> umMap = new HashMap<>();
+    public long umDurationBegin = 0;
+    public long umDurationEnd = 0;
+    public int isDone = 0;
+    public String eventId = "Yuedudaka";
 
 
     @Override
@@ -67,6 +78,9 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
 
         initView();
         initData();
+
+        //um
+        umDurationBegin = System.currentTimeMillis();
     }
 
     public void initView() {
@@ -142,6 +156,10 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
                 if (responseCode == 1) {
                     ToastManager.showToast(this, "提交成功");
                     initData();
+
+                    //um
+                    umDurationEnd = System.currentTimeMillis();
+                    isDone = 1;
                 } else {
                     ToastManager.showToast(this, "提交失败，请重新提交");
                 }
@@ -222,5 +240,22 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
     public void hideInputKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (isDone == 0) {
+            int des = (int) (umDurationEnd - umDurationBegin) / 1000;
+            umMap.clear();
+            umMap.put("Done", "0");
+            UmengManager.onEventValue(this, eventId, umMap, des);
+        } else if (isDone == 1) {
+            int des = (int) (umDurationEnd - umDurationBegin) / 1000;
+            umMap.clear();
+            umMap.put("Done", "1");
+            UmengManager.onEventValue(this, eventId, umMap, des);
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -23,6 +24,9 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VipIndexActivity extends BaseActivity implements RequestCallback {
 
     private TextView nickname;
@@ -38,6 +42,9 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
     private View exerciseView;
     private View courseView;
     private VipRequest mRequest;
+    //um
+    private boolean isEntryClick = false;
+    private Map<String, String> actionMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,19 +74,6 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
     }
 
     public void setValues() {
-        final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-        nickname.setText(userInfoModel.getNickname());
-        LoginModel.setAvatar(this, avatarImage);
-        final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
-        String name = userExamInfoModel.getName();
-        String date = userExamInfoModel.getDate();
-
-        long day = Utils.dateMinusNow(date);
-        if (day < 0) {
-            day = 0;
-        }
-        String text = "距离" + name + "还有" + String.valueOf(day) + "天";
-        examText.setText(text);
 
         evaluationText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +95,13 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
         notificationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //um
+                actionMap.clear();
+                actionMap.put("Action", "Message");
+                UmengManager.onEvent(VipIndexActivity.this, "VipHome", actionMap);
+                isEntryClick = true;
+
+
                 final Intent intent = new Intent(VipIndexActivity.this, VipNotificationActivity.class);
                 startActivity(intent);
             }
@@ -109,6 +110,12 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
         exerciseView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //um
+                actionMap.clear();
+                actionMap.put("Action", "Homework");
+                UmengManager.onEvent(VipIndexActivity.this, "VipHome", actionMap);
+                isEntryClick = true;
+
                 final Intent intent = new Intent(VipIndexActivity.this, VipExerciseIndexActivity.class);
                 startActivity(intent);
             }
@@ -128,6 +135,20 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
     @Override
     protected void onResume() {
         super.onResume();
+
+        final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
+        nickname.setText(userInfoModel.getNickname());
+        LoginModel.setAvatar(this, avatarImage);
+        final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
+        String name = userExamInfoModel.getName();
+        String date = userExamInfoModel.getDate();
+
+        long day = Utils.dateMinusNow(date);
+        if (day < 0) {
+            day = 0;
+        }
+        final String text = "距离" + name + "还有" + String.valueOf(day) + "天";
+        examText.setText(text);
         mRequest.getVipIndexEntryData();
     }
 
@@ -147,5 +168,19 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         hideLoading();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //um
+        if (!isEntryClick) {
+            actionMap.clear();
+            actionMap.put("Action", "0");
+            UmengManager.onEvent(VipIndexActivity.this, "VipHome", actionMap);
+            isEntryClick = true;
+        }
+
     }
 }

@@ -19,10 +19,12 @@ import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
 import com.appublisher.quizbank.common.vip.model.VipSubmitEntity;
 import com.appublisher.quizbank.common.vip.netdata.VipBDGXResp;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
+import com.appublisher.quizbank.utils.Utils;
 
 /**
  * Created by jinbao on 2016/9/19.
@@ -108,6 +110,8 @@ public class VipBDGXAdapter extends PagerAdapter {
                     int done = 0;
                     if (position == getCount() - 1) {
                         done = 1;
+                        ((VipBDGXActivity) context).isDone = 1;
+
                     }
 
                     String inputText = inputAnswer.getText().toString();

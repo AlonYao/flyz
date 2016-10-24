@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -22,7 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VipNotificationActivity extends BaseActivity implements RequestCallback {
 
@@ -31,6 +34,10 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
     private VipNotificationAdapter adapter;
     private XListView listView;
     private int page = 1;
+
+    //um
+    private Map<String, String> umMap = new HashMap<>();
+    private boolean umIsClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,11 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //um
+                umMap.clear();
+                umMap.put("Click", "1");
+                UmengManager.onEvent(VipNotificationActivity.this, "MessageList", umMap);
+
                 VipNotificationResp.NotificationsBean notificationsBean = list.get(position - 1);
                 int type = notificationsBean.getType();
                 if (type == 3) {
@@ -149,6 +161,17 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
             intent.putExtra("exerciseId", exerciseId);
             intent.putExtra("exerciseType", exerciseType);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //um
+        if (!umIsClick) {
+            umMap.clear();
+            umMap.put("Click", "0");
+            UmengManager.onEvent(VipNotificationActivity.this, "MessageList", umMap);
         }
     }
 }
