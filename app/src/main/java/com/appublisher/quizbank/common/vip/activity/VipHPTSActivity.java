@@ -13,7 +13,6 @@ public class VipHPTSActivity extends VipBaseActivity {
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
-    private VipHPTSAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +36,8 @@ public class VipHPTSActivity extends VipBaseActivity {
     }
 
     public void showContent(VipHPTSResp resp) {
-        mAdapter = new VipHPTSAdapter(getSupportFragmentManager(), resp);
-        mViewPager.setAdapter(mAdapter);
+        VipHPTSAdapter adapter = new VipHPTSAdapter(getSupportFragmentManager(), resp);
+        mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 

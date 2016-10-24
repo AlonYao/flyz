@@ -5,6 +5,7 @@ import android.content.Context;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipHPTSActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipHPTSResp;
+import com.appublisher.quizbank.common.vip.netdata.VipSubmitResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
@@ -35,8 +36,13 @@ public class VipHPTSModel extends VipBaseModel {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             dealExerciseDetailResp(response);
         } else if (VipRequest.SUBMIT.equals(apiName)) {
-            mView.showLoading();
-            getExerciseDetail();
+            VipSubmitResp resp = GsonManager.getModel(response, VipSubmitResp.class);
+            if (resp != null && resp.getResponse_code() == 1) {
+                mView.showLoading();
+                getExerciseDetail();
+            } else {
+                mView.showSubmitErrorToast();
+            }
         }
         super.requestCompleted(response, apiName);
     }

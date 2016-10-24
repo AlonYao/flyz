@@ -69,12 +69,19 @@ public class VipZJZDModel extends VipBaseModel {
 
         // 我的作业处理
         VipZJZDResp.UserAnswerBean userAnswer = resp.getUser_answer();
-        if (mCanSubmit) {
-            mView.showMyJob(null, VipZJZDActivity.FILE, MAX_LENGTH);
-        } else {
-            mPaths = new ArrayList<>();
-            mPaths.add(userAnswer.getImage_url());
-            mView.showMyJob(mPaths, VipZJZDActivity.URL, MAX_LENGTH);
+        if (userAnswer != null) {
+            if (mCanSubmit) {
+                mView.showMyJob(null, VipZJZDActivity.FILE, MAX_LENGTH);
+            } else {
+                mPaths = new ArrayList<>();
+                mPaths.add(userAnswer.getImage_url());
+                mView.showMyJob(mPaths, VipZJZDActivity.URL, MAX_LENGTH);
+            }
+
+            // 被驳回状态
+            if (status == 4) {
+                mView.showRejectAlert(userAnswer.getReview_postil(), userAnswer.getSubmit_time());
+            }
         }
     }
 

@@ -21,6 +21,7 @@ import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.activity.VipGalleryActivity;
+import com.appublisher.quizbank.common.vip.model.VipBaseModel;
 import com.appublisher.quizbank.common.vip.model.VipHPTSQuestionModel;
 import com.appublisher.quizbank.common.vip.netdata.VipHPTSResp;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -104,11 +105,13 @@ public class VipHPTSQuestionFragment extends Fragment {
             // 题目
             mWvQuestion.setBackgroundColor(Color.WHITE);
             mWvQuestion.loadDataWithBaseURL(
-                    null, questionBean.getQuestion(), "text/html", "UTF-8", null);
+                    null, VipBaseModel.CUSTOM_STYLE + questionBean.getQuestion(),
+                    "text/html", "UTF-8", null);
             // 参考答案
             mWvAnswer.setBackgroundColor(Color.WHITE);
             mWvAnswer.loadDataWithBaseURL(
-                    null, questionBean.getAnswer(), "text/html", "UTF-8", null);
+                    null, VipBaseModel.CUSTOM_STYLE + questionBean.getAnswer(),
+                    "text/html", "UTF-8", null);
         }
 
         // 他的作业处理

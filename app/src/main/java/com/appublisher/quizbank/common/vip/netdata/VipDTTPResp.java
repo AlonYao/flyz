@@ -208,7 +208,7 @@ public class VipDTTPResp {
         }
 
         public ArrayList<ReviewsBean> getReviews() {
-            return reviews;
+            return reviews == null ? new ArrayList<ReviewsBean>() : reviews;
         }
 
         public void setReviews(ArrayList<ReviewsBean> reviews) {

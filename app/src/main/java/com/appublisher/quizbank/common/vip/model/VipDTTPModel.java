@@ -5,6 +5,7 @@ import android.content.Context;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipDTTPResp;
+import com.appublisher.quizbank.common.vip.netdata.VipSubmitResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
@@ -43,9 +44,14 @@ public class VipDTTPModel extends VipBaseModel{
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             dealExerciseDetailResp(response);
-        } else if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
-            mView.showLoading();
-            getExerciseDetail();
+        } else if (VipRequest.SUBMIT.equals(apiName)) {
+            VipSubmitResp resp = GsonManager.getModel(response, VipSubmitResp.class);
+            if (resp != null && resp.getResponse_code() == 1) {
+                mView.showLoading();
+                getExerciseDetail();
+            } else {
+                mView.showSubmitErrorToast();
+            }
         }
         super.requestCompleted(response, apiName);
     }

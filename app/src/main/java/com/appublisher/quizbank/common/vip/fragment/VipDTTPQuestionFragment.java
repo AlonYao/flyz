@@ -115,7 +115,8 @@ public class VipDTTPQuestionFragment extends Fragment{
         if (questionBean != null) {
             mWvQuestion.setBackgroundColor(Color.WHITE);
             mWvQuestion.loadDataWithBaseURL(
-                    null, questionBean.getQuestion(), "text/html", "UTF-8", null);
+                    null, VipBaseModel.CUSTOM_STYLE + questionBean.getQuestion(),
+                    "text/html", "UTF-8", null);
         }
 
         // 我的作业处理
@@ -208,21 +209,25 @@ public class VipDTTPQuestionFragment extends Fragment{
         vsReview.inflate();
         WebView reviewAnswer = (WebView) mRoot.findViewById(R.id.vip_dttp_review_answer);
         MultiListView lvStudent = (MultiListView) mRoot.findViewById(R.id.vip_dttp_review_student);
+        TextView tvStudentTitle = (TextView) mRoot.findViewById(R.id.vip_dttp_review_student_title);
 
         // 参考答案
         VipDTTPResp.QuestionBean questionBean = mResp.getQuestion();
         if (questionBean != null) {
             reviewAnswer.setBackgroundColor(Color.WHITE);
             reviewAnswer.loadDataWithBaseURL(
-                    null, questionBean.getAnswer(), "text/html", "UTF-8", null);
+                    null, VipBaseModel.CUSTOM_STYLE + questionBean.getAnswer(),
+                    "text/html", "UTF-8", null);
         }
 
         // 学生评论
         VipDTTPResp.UserAnswerBean userAnswerBean = mResp.getUser_answer();
-        if (userAnswerBean != null) {
+        if (userAnswerBean != null && userAnswerBean.getReviews().size() > 0) {
             VipDTTPReviewAdapter adapter =
                     new VipDTTPReviewAdapter(getContext(), userAnswerBean.getReviews());
             lvStudent.setAdapter(adapter);
+        } else {
+            tvStudentTitle.setVisibility(View.GONE);
         }
     }
 

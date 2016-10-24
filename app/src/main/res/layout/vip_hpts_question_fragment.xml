@@ -27,21 +27,33 @@
                 android:background="@color/white"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/vip_gray"/>
+                android:layout_height="1px"
+                android:background="@color/vip_divider"/>
             <!-- 问题 -->
-            <WebView
-                android:id="@+id/vip_hpts_question_webview"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:padding="15dp">
+                <WebView
+                    android:id="@+id/vip_hpts_question_webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
             <!-- 参考答案 -->
             <TextView
                 style="@style/Vip_Title"
                 android:text="@string/vip_msjp_review_answer"/>
-            <WebView
-                android:id="@+id/vip_hpts_answer"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:padding="15dp">
+                <WebView
+                    android:id="@+id/vip_hpts_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
 
             <!-- 他的作业 -->
             <TextView
