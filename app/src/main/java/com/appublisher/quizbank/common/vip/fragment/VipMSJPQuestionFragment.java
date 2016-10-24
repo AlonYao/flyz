@@ -115,7 +115,8 @@ public class VipMSJPQuestionFragment extends Fragment {
         if (questionBean != null) {
             mWvQuestion.setBackgroundColor(Color.WHITE);
             mWvQuestion.loadDataWithBaseURL(
-                    null, questionBean.getQuestion(), "text/html", "UTF-8", null);
+                    null, VipBaseModel.CUSTOM_STYLE + questionBean.getQuestion(),
+                    "text/html", "UTF-8", null);
         }
 
         // 我的作业处理

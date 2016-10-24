@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.vip.model.VipBaseModel;
 import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
 
 /**
@@ -47,7 +48,8 @@ public class VipMSJPMaterialFragment extends Fragment{
         // 材料
         WebView webView = (WebView) view.findViewById(R.id.vip_msjp_material_webview);
         webView.setBackgroundColor(0);
-        webView.loadDataWithBaseURL(null, getMaterial(mResp), "text/html", "UTF-8", null);
+        webView.loadDataWithBaseURL(null, VipBaseModel.CUSTOM_STYLE + getMaterial(mResp),
+                "text/html", "UTF-8", null);
 
         // 上滑Button
         final ScrollView scrollView =

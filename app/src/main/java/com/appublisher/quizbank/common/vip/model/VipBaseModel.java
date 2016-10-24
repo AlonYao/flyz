@@ -34,6 +34,9 @@ public class VipBaseModel implements RequestCallback{
 
     public static final int CAMERA_REQUEST_CODE = 10;
     public static final int GALLERY_REQUEST_CODE = 11;
+    public static final String CUSTOM_STYLE = "<style type='text/css'>html, " +
+            "body {width:100%;height:100%;margin: " +
+            "0px;padding: 0px}</style>";
     static final String ZJZD = "zjzd";
 
     VipBaseModel(Context context) {
