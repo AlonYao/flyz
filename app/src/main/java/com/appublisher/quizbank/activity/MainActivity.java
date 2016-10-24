@@ -214,6 +214,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         if ("小班".equals(item.getTitle())) {
             final Intent intent = new Intent(this, VipIndexActivity.class);
             startActivity(intent);
+
+            //um
+            Map<String, String> umMap = new HashMap<>();
+            umMap.put("Action", "Entry");
+            UmengManager.onEvent(this, "VipHome", umMap);
+
         } else if ("下载".equals(item.getTitle())) {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);

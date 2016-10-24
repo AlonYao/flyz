@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
@@ -35,7 +36,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jinbao on 2016/9/2.
@@ -49,6 +52,7 @@ public class VipExerciseIndexModel {
     public TextView categorySelectedText;
     public TextView typeSelectedText;
     public VipExerciseFilterResp mVipExerciseFilterResp;
+    public Map<String, String> umMap = new HashMap<>();
 
     public void dealExerciseFilter(JSONObject response, final VipExerciseIndexActivity activity) {
         final VipExerciseFilterResp vipExerciseFilterResp = GsonManager.getModel(response, VipExerciseFilterResp.class);
@@ -96,8 +100,8 @@ public class VipExerciseIndexModel {
      */
     public void dealExercises(JSONObject response, VipExerciseIndexActivity activity) {
         VipExerciseResp vipExerciseResp = GsonManager.getModel(response, VipExerciseResp.class);
+        activity.list.clear();
         if (vipExerciseResp.getResponse_code() == 1) {
-            activity.list.clear();
             List<VipExerciseResp.ExercisesBean> able = new ArrayList<>();
             List<VipExerciseResp.ExercisesBean> unable = new ArrayList<>();
             for (int i = 0; i < vipExerciseResp.getExercises().size(); i++) {
@@ -110,12 +114,12 @@ public class VipExerciseIndexModel {
             }
             able.addAll(unable);
             activity.list.addAll(able);
-            activity.adapter.notifyDataSetChanged();
-            if (activity.list.size() == 0) {
-                activity.emptyView.setVisibility(View.VISIBLE);
-            } else {
-                activity.emptyView.setVisibility(View.INVISIBLE);
-            }
+        }
+        activity.adapter.notifyDataSetChanged();
+        if (activity.list.size() == 0) {
+            activity.emptyView.setVisibility(View.VISIBLE);
+        } else {
+            activity.emptyView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -130,6 +134,11 @@ public class VipExerciseIndexModel {
 
         statusPop.showAsDropDown(activity.statusView, 0, 2);
         activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
+
+        //um
+        umMap.clear();
+        umMap.put("Action", "State");
+        UmengManager.onEvent(activity, "VipFilter", umMap);
 
     }
 
@@ -202,6 +211,10 @@ public class VipExerciseIndexModel {
         categoryPop.showAsDropDown(activity.categoryView, 0, 2);
         activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
 
+        //um
+        umMap.clear();
+        umMap.put("Action", "Subject");
+        UmengManager.onEvent(activity, "VipFilter", umMap);
     }
 
     public void initCategoryPop(final VipExerciseIndexActivity activity) {
@@ -268,6 +281,10 @@ public class VipExerciseIndexModel {
         typePop.showAsDropDown(activity.typeView, 0, 2);
         activity.typeArrow.setImageResource(R.drawable.wholepage_arrowup);
 
+        //um
+        umMap.clear();
+        umMap.put("Action", "Type");
+        UmengManager.onEvent(activity, "VipFilter", umMap);
     }
 
 

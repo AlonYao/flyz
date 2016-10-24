@@ -1,11 +1,14 @@
 package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatDelegate;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,20 +86,6 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
 
     public void setValues() {
 
-        final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-        nickname.setText(userInfoModel.getNickname());
-        LoginModel.setAvatar(getActivity(), avatarImage);
-        final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
-        String name = userExamInfoModel.getName();
-        String date = userExamInfoModel.getDate();
-
-        long day = Utils.dateMinusNow(date);
-        if (day < 0) {
-            day = 0;
-        }
-        String text = "距离" + name + "还有" + String.valueOf(day) + "天";
-        examText.setText(text);
-
         evaluationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +132,20 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
     @Override
     public void onResume() {
         super.onResume();
+
+        final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
+        nickname.setText(userInfoModel.getNickname());
+        LoginModel.setAvatar(getActivity(), avatarImage);
+        final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
+        String name = userExamInfoModel.getName();
+        String date = userExamInfoModel.getDate();
+
+        long day = Utils.dateMinusNow(date);
+        if (day < 0) {
+            day = 0;
+        }
+        String text = "距离" + name + "还有" + String.valueOf(day) + "天";
+        examText.setText(text);
         mRequest.getVipIndexEntryData();
     }
 

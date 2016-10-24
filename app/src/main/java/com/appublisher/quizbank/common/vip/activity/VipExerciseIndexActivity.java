@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
@@ -20,7 +21,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 小班：我的作业
@@ -45,6 +49,10 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
     public List<VipExerciseResp.ExercisesBean> list;
     public VipExerciseAdapter adapter;
     private VipExerciseIndexModel mExerciseModel;
+
+    //um
+    private boolean umIsClick = false;
+    private Map<String, String> umMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +111,11 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //um
+                umMap.clear();
+                umMap.put("Click", "1");
+                UmengManager.onEvent(VipExerciseIndexActivity.this, "HomeworkList", umMap);
+
                 mExerciseModel.dealExerciseSkip(VipExerciseIndexActivity.this, position);
             }
         });
@@ -140,4 +153,14 @@ public class VipExerciseIndexActivity extends BaseActivity implements RequestCal
         hideLoading();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!umIsClick) {
+            //um
+            umMap.clear();
+            umMap.put("Click", "0");
+            UmengManager.onEvent(this, "HomeworkList", umMap);
+        }
+    }
 }
