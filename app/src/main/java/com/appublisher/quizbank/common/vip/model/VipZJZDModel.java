@@ -80,7 +80,7 @@ public class VipZJZDModel extends VipBaseModel {
 
             // 被驳回状态
             if (status == 4) {
-                mView.showRejectAlert(userAnswer.getReview_postil(), userAnswer.getSubmit_time());
+                mView.showRejectAlert(userAnswer.getReview_postil(), resp.getEnd_time());
             }
         }
     }

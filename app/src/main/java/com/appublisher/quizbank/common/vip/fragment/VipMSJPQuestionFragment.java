@@ -160,7 +160,7 @@ public class VipMSJPQuestionFragment extends Fragment {
         if (userAnswerBean == null) return;
         VipMSJPResp.UserAnswerBean.ReviewBean reviewBean = userAnswerBean.getReview();
         if (reviewBean == null) return;
-        mModel.showRejectAlert(reviewBean.getReview_postil(), reviewBean.getReview_time());
+        mModel.showRejectAlert(reviewBean.getReview_postil(), mResp.getEnd_time());
     }
 
     /**
