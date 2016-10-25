@@ -368,6 +368,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         // 缓存模考时间
         MeasureModel measureModel = new MeasureModel(this);
         measureModel.updateMockTime(mock_time);
+        measureModel.updatePaperName(paper_name);
 
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         int date = MockDAO.getIsDateById(mock_id);

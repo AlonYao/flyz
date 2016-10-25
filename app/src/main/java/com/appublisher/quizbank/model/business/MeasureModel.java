@@ -83,6 +83,7 @@ public class MeasureModel implements RequestCallback{
     public static final String CACHE_PAPER_TYPE = "cache_paper_type";
     public static final String CACHE_REDO = "cache_redo";
     public static final String CACHE_MOCK_TIME = "cache_mock_time";
+    public static final String CACHE_PAPER_NAME = "cache_paper_name";
     public static final String YAOGUO_MEASURE = "yaoguo_measure";
 
     public MeasureModel(MeasureActivity activity) {
@@ -443,6 +444,13 @@ public class MeasureModel implements RequestCallback{
             activity.mQuestions = new ArrayList<>();
             activity.mEntirePaperCategory = new ArrayList<>();
             activity.mUserAnswerList = new ArrayList<>();
+            // 用户答案缓存处理
+            String cacheUserAnswer =
+                    activity.getIntent().getStringExtra("cache_userAnswer");
+            boolean isUseCache = false;
+            if (cacheUserAnswer != null && cacheUserAnswer.length() > 0) {
+                isUseCache = true;
+            }
 
             int size = categorys.size();
             for (int i = 0; i < size; i++) {
@@ -462,9 +470,26 @@ public class MeasureModel implements RequestCallback{
                 map.put(categoryName, categoryQuestions.size());
                 activity.mEntirePaperCategory.add(map);
 
-                // 拼接用户答案
-                ArrayList<AnswerM> answers = category.getAnswers();
-                jointUserAnswer(categoryQuestions, answers, activity.mUserAnswerList);
+                if (!isUseCache) {
+                    ArrayList<AnswerM> answers = category.getAnswers();
+                    jointUserAnswer(categoryQuestions, answers, activity.mUserAnswerList);
+                }
+            }
+            // 做题缓存处理
+            if (isUseCache) {
+                ArrayList<AnswerM> answers = new ArrayList<>();
+                try {
+                    JSONArray array = new JSONArray(cacheUserAnswer);
+                    int length = array.length();
+                    for (int i = 0; i < length; i++) {
+                        JSONObject jo = array.getJSONObject(i);
+                        AnswerM answerM = GsonManager.getModel(jo, AnswerM.class);
+                        answers.add(answerM);
+                    }
+                    jointUserAnswer(mActivity.mQuestions, answers, activity.mUserAnswerList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         } else {
@@ -1024,6 +1049,14 @@ public class MeasureModel implements RequestCallback{
         editor.commit();
     }
 
+    @SuppressLint("CommitPrefEdits")
+    public void updatePaperName(String paper_name) {
+        SharedPreferences cache = getUserAnswerCache(mContext);
+        SharedPreferences.Editor editor = cache.edit();
+        editor.putString(CACHE_PAPER_NAME, paper_name);
+        editor.commit();
+    }
+
     private void showMockCacheSubmitAlert() {
         if (mContext == null || ((Activity) mContext).isFinishing()) return;
         String msg = "你的模考正在进行中";
@@ -1046,13 +1079,14 @@ public class MeasureModel implements RequestCallback{
                             int paperId = cache.getInt(CACHE_PAPER_ID, 0);
                             String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
                             String mockTime = cache.getString(CACHE_MOCK_TIME, "");
+                            String paperName = cache.getString(CACHE_PAPER_NAME, "");
                             // 跳转
                             Intent intent = new Intent(mContext, MeasureActivity.class);
                             intent.putExtra("from", "mockpre");
                             intent.putExtra("paper_id", paperId);
                             intent.putExtra("paper_type", "mock");
                             intent.putExtra("mock_time", mockTime);
-                            intent.putExtra("paper_name", "模考总动员");
+                            intent.putExtra("paper_name", paperName);
                             intent.putExtra("cache_userAnswer", userAnswer);
                             intent.putExtra("redo", false);
                             mContext.startActivity(intent);
@@ -1108,6 +1142,7 @@ public class MeasureModel implements RequestCallback{
         editor.putString(CACHE_USER_ANSWER, "");
         editor.putString(CACHE_REDO, "");
         editor.putString(CACHE_MOCK_TIME, "");
+        editor.putString(CACHE_PAPER_NAME, "");
         editor.commit();
     }
 
@@ -1178,4 +1213,5 @@ public class MeasureModel implements RequestCallback{
     public void requestEndedWithError(VolleyError error, String apiName) {
 
     }
+
 }
