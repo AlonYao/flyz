@@ -8,14 +8,9 @@ import android.os.Environment;
 
 import com.appublisher.lib_basic.ActiveAndroidManager;
 import com.appublisher.lib_basic.LibBasicManager;
-import com.appublisher.lib_basic.OpenUDIDManager;
 import com.appublisher.lib_login.model.business.LoginModel;
-import com.igexin.sdk.PushManager;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.fb.FeedbackAgent;
 
 import java.util.LinkedList;
 
@@ -26,9 +21,6 @@ public class QuizBankApp extends Application {
 
     public LinkedList<Activity> mActivityList = new LinkedList<>();
     public static QuizBankApp mInstance;
-
-    public QuizBankApp() {
-    }
 
     @Override
     public void onCreate() {
@@ -82,13 +74,13 @@ public class QuizBankApp extends Application {
         FileDownloader.init(this);
         FileDownloadUtils.setDefaultSaveRootPath(
                 Environment.getExternalStorageDirectory().toString());
+
+
+        mInstance = this;
     }
 
     // 单例模式中获取唯一的QuizBankApp实例
     public static QuizBankApp getInstance() {
-        if (null == mInstance) {
-            mInstance = new QuizBankApp();
-        }
         return mInstance;
     }
 
@@ -107,4 +99,5 @@ public class QuizBankApp extends Application {
             activity.finish();
         }
     }
+
 }
