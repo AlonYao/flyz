@@ -251,8 +251,8 @@
             android:name=".common.vip.activity.VipYDDKActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_exercise_yddk"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".common.vip.activity.VipMSJPActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -268,8 +268,12 @@
             android:name=".common.vip.activity.VipHPTSActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_hpts"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.vip.activity.VipXCReportActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_vip_xc_report"
             android:screenOrientation="portrait"/>
-
     </application>
 
 </manifest>

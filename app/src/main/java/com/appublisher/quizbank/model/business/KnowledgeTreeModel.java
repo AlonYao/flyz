@@ -23,6 +23,7 @@ public class KnowledgeTreeModel {
     public static final String TYPE_COLLECT = "collect";
     public static final String TYPE_ERROR = "error";
     public static final String TYPE_EVALUATION = "evaluation";
+    public static final String TYPE_VIP_XC_REPORT = "vip_xc_report";
 
     private Context mContext;
     private LinearLayout mContainer;
@@ -103,6 +104,18 @@ public class KnowledgeTreeModel {
         }
     }
 
+    public void showHierarchys(ArrayList<HierarchyM> hierarchys) {
+        if (hierarchys == null) return;
+        mContainer.removeAllViews();
+        int hierarchysSize = hierarchys.size();
+        for (int i = 0; i < hierarchysSize; i++) {
+            HierarchyM hierarchy = hierarchys.get(i);
+
+            if (hierarchy == null) continue;
+            addFirstRoot(hierarchy);
+        }
+    }
+
     /**
      * 添加第一层
      * @param hierarchy HierarchyM
@@ -116,6 +129,8 @@ public class KnowledgeTreeModel {
 
         // 添加第二层
         ArrayList<HierarchyM> hierarchys = hierarchy.getChilds();
+        // 小班特殊处理
+        if (TYPE_VIP_XC_REPORT.equals(mType)) hierarchys = hierarchy.getNotes();
         addSecondRoot(firstRoot, hierarchys);
 
         // rootContainer
@@ -152,7 +167,11 @@ public class KnowledgeTreeModel {
             TreeNode childNode = getTreeNode(hierarchy, 2);
             node.addChild(childNode);
 
-            addRoot(childNode, hierarchy.getChilds());
+            if (TYPE_VIP_XC_REPORT.equals(mType)) {
+                addRoot(childNode, hierarchy.getNotes());
+            } else {
+                addRoot(childNode, hierarchy.getChilds());
+            }
         }
     }
 
@@ -164,16 +183,31 @@ public class KnowledgeTreeModel {
      */
     private TreeNode getTreeNode(HierarchyM hierarchy, int level) {
         if (hierarchy == null) hierarchy = new HierarchyM();
-        return new TreeNode(
-                new TreeItemHolder.TreeItem(
-                        level,
-                        hierarchy.getId(),
-                        hierarchy.getName(),
-                        hierarchy.getDone(),
-                        hierarchy.getTotal(),
-                        mType,
-                        hierarchy.getChilds(),
-                        hierarchy.getLevel()));
+        if (TYPE_VIP_XC_REPORT.equals(mType)) {
+            return new TreeNode(
+                    new TreeItemHolder.TreeItem(
+                            level,
+                            hierarchy.getId(),
+                            hierarchy.getName(),
+                            hierarchy.getDone(),
+                            hierarchy.getTotal(),
+                            mType,
+                            hierarchy.getNotes(),
+                            hierarchy.getLevel(),
+                            hierarchy.getRight(),
+                            hierarchy.getDuration()));
+        } else {
+            return new TreeNode(
+                    new TreeItemHolder.TreeItem(
+                            level,
+                            hierarchy.getId(),
+                            hierarchy.getName(),
+                            hierarchy.getDone(),
+                            hierarchy.getTotal(),
+                            mType,
+                            hierarchy.getChilds(),
+                            hierarchy.getLevel()));
+        }
     }
 
     /**
@@ -192,7 +226,11 @@ public class KnowledgeTreeModel {
             TreeNode childNode = getTreeNode(hierarchy, 0);
             node.addChild(childNode);
 
-            addRoot(childNode, hierarchy.getChilds());
+            if (TYPE_VIP_XC_REPORT.equals(mType)) {
+                addRoot(childNode, hierarchy.getNotes());
+            } else {
+                addRoot(childNode, hierarchy.getChilds());
+            }
         }
     }
 

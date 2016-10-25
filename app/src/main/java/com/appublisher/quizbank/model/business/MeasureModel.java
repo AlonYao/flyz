@@ -35,7 +35,7 @@ import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.UserAnswerEntity;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
-import com.appublisher.quizbank.common.vip.netdata.VipExerciseDetailCommonResp;
+import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
@@ -81,19 +81,31 @@ public class MeasureModel {
      * 获取小班智能组卷
      */
     public void getVipIntelligentPaper() {
-        VipXCModel xcModel = new VipXCModel(mActivity);
+        final VipXCModel xcModel = new VipXCModel(mActivity);
         xcModel.obtainIntelligentPaper(
                 mActivity.mPaperId,
                 new VipXCModel.IntelligentPaperListener() {
                     @Override
                     public void complete(JSONObject resp) {
                         if (resp == null) return;
-                        VipExerciseDetailCommonResp model =
-                                GsonManager.getModel(resp, VipExerciseDetailCommonResp.class);
-                        if (model == null || model.getResponse_code() != 1) return;
+                        VipXCResp xcResp = GsonManager.getModel(resp, VipXCResp.class);
+                        if (xcResp == null || xcResp.getResponse_code() != 1) return;
 
-                        mActivity.mQuestions = model.getQuestion();
-                        MeasureActivity.mDuration = model.getDuration();
+                        ArrayList<VipXCResp.QuestionBean> questionBeanList = xcResp.getQuestion();
+                        if (questionBeanList == null) return;
+
+                        ArrayList<QuestionM> questions = new ArrayList<>();
+                        for (VipXCResp.QuestionBean questionBean : questionBeanList) {
+                            if (questionBean == null) continue;
+                            String question = GsonManager.modelToString(questionBean);
+                            QuestionM questionM = GsonManager.getModel(question, QuestionM.class);
+                            if (questionM == null) continue;
+                            questionM.setId(questionM.getQuestion_id());
+                            questions.add(questionM);
+                        }
+
+                        mActivity.mQuestions = questions;
+                        MeasureActivity.mDuration = xcResp.getDuration();
                         mActivity.setContent();
                     }
         });

@@ -1,11 +1,18 @@
 package com.appublisher.quizbank.common.vip.model;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.vip.activity.VipXCReportActivity;
+import com.appublisher.quizbank.common.vip.netdata.VipSubmitResp;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
@@ -22,6 +29,7 @@ import java.util.HashMap;
 public class VipXCModel extends VipBaseModel {
 
     private IntelligentPaperListener mIntelligentPaperListener;
+    private int mExerciseId;
 
     public VipXCModel(Context context) {
         super(context);
@@ -62,6 +70,7 @@ public class VipXCModel extends VipBaseModel {
 
         // 初始化数据
         int duration_total = 0;
+        mExerciseId = exercise_id;
 
         JSONArray answers = new JSONArray();
 
@@ -79,7 +88,8 @@ public class VipXCModel extends VipBaseModel {
                 int duration = (int) userAnswerMap.get("duration");
                 String right_answer = (String) userAnswerMap.get("right_answer");
                 //noinspection unchecked
-                ArrayList<Integer> note_ids = (ArrayList<Integer>) userAnswerMap.get("note_ids");
+                ArrayList<Integer> noteIdsList = (ArrayList<Integer>) userAnswerMap.get("note_ids");
+                JSONArray note_ids = new JSONArray(noteIdsList);
 
                 // 判断对错
                 int is_right = 0;
@@ -132,6 +142,8 @@ public class VipXCModel extends VipBaseModel {
         entity.exercise_id = exercise_id;
         entity.answer_content = answers;
         entity.duration = duration;
+
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
         new VipRequest(context, this).submit(VipParamBuilder.submit(entity));
     }
 
@@ -168,11 +180,38 @@ public class VipXCModel extends VipBaseModel {
                 .create().show();
     }
 
+    private void dealSubmitResp(JSONObject response) {
+        VipSubmitResp resp = GsonManager.getModel(response, VipSubmitResp.class);
+        if (resp == null || resp.getResponse_code() != 1) {
+            Toast.makeText(mContext, "提交失败……", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(mContext, VipXCReportActivity.class);
+            intent.putExtra("exerciseId", mExerciseId);
+            mContext.startActivity(intent);
+            ((Activity) mContext).finish();
+        }
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.GET_INTELLIGENT_PAPER.equals(apiName)) {
             dealIntelligentPaperResp(response);
+        } else if (VipRequest.SUBMIT.equals(apiName)) {
+            dealSubmitResp(response);
         }
         super.requestCompleted(response, apiName);
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).hideLoading();
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        super.requestCompleted(response, apiName);
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).hideLoading();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        super.requestEndedWithError(error, apiName);
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).hideLoading();
     }
 }

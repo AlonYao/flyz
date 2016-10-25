@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:minHeight="55dp"
     android:orientation="vertical">
@@ -70,6 +71,16 @@
         android:src="@drawable/treeview_watch" />
 
     <include layout="@layout/knowledge_tree_ev"/>
+
+    <include
+        android:id="@+id/treeview_vip"
+        layout="@layout/vip_xc_report_tree_rate_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/treeview_name"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

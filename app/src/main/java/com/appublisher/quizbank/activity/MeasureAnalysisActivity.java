@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.HomeButtonManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
@@ -26,7 +26,6 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
@@ -36,7 +35,6 @@ import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.google.gson.Gson;
-import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -63,6 +61,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
     public String mAnalysisType;
     public String mCollect;
     public String mPaperName;
+    public int mPaperId;
     public String mFrom;
     public AnswerM mCurAnswerModel;
     public ArrayList<Integer> mDeleteErrorQuestions;
@@ -116,6 +115,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
         // 获取数据
         mAnalysisType = getIntent().getStringExtra("analysis_type");
         mPaperName = getIntent().getStringExtra("paper_name");
+        mPaperId = getIntent().getIntExtra("paper_id", 0);
         mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mFrom = getIntent().getStringExtra("from");
@@ -136,11 +136,9 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
             //noinspection unchecked
             ArrayList<QuestionM> questions =
                     (ArrayList<QuestionM>) getIntent().getSerializableExtra("questions");
-
             //noinspection unchecked
             ArrayList<AnswerM> answers =
                     (ArrayList<AnswerM>) getIntent().getSerializableExtra("answers");
-
             MeasureAnalysisModel.setViewPager(this, questions, answers);
         }
     }
