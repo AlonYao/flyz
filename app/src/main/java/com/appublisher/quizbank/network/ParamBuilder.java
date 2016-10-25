@@ -396,4 +396,44 @@ public class ParamBuilder implements QApiConstants {
         params.put("mock_id",mock_id);
         return params;
     }
+
+    /**
+     * 获取国考推广跳转课程链接
+     *
+     * @param url
+     * @return
+     */
+    public static String getPromoteCourseUrl(String url) {
+        StringBuilder finalUrl = new StringBuilder();
+        if (url.contains("?")) {
+            finalUrl.append(url)
+                    .append("&terminal_type=android_phone")
+                    .append("&app_type=quizbank")
+                    .append("&app_version=")
+                    .append(Globals.appVersion)
+                    .append("&uuid=")
+                    .append(OpenUDIDManager.getID() == null ? "" : OpenUDIDManager.getID())
+                    .append("&user_id=")
+                    .append(Globals.sharedPreferences.getString("user_id", ""))
+                    .append("&user_token=")
+                    .append(Globals.sharedPreferences.getString("user_token", ""))
+                    .append("&timestamp=")
+                    .append(System.currentTimeMillis());
+        } else {
+            finalUrl.append(url)
+                    .append("?terminal_type=android_phone")
+                    .append("&app_type=quizbank")
+                    .append("&app_version=")
+                    .append(Globals.appVersion)
+                    .append("&uuid=")
+                    .append(OpenUDIDManager.getID() == null ? "" : OpenUDIDManager.getID())
+                    .append("&user_id=")
+                    .append(Globals.sharedPreferences.getString("user_id", ""))
+                    .append("&user_token=")
+                    .append(Globals.sharedPreferences.getString("user_token", ""))
+                    .append("&timestamp=")
+                    .append(System.currentTimeMillis());
+        }
+        return finalUrl.toString();
+    }
 }

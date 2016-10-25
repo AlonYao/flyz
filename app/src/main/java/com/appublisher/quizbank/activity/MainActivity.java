@@ -34,6 +34,9 @@ import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.lib_course.opencourse.netdata.OpenCourseUnrateClassItem;
+import com.appublisher.lib_course.promote.PromoteModel;
+import com.appublisher.lib_course.promote.PromoteResp;
+import com.appublisher.lib_login.activity.ExamChangeActivity;
 import com.appublisher.lib_login.activity.LoginActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.IsUserMergedResp;
@@ -51,6 +54,7 @@ import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.PromoteQuizBankModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QApiConstants;
@@ -99,15 +103,17 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private static final String VIP = "Vip";
     public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
 
+    /**
+     * 国考推广
+     */
+    public static final String INTENT_PROMOTE = "intent_promote";
+    private String mPromoteData;
+    private PromoteQuizBankModel mPromoteQuizBankModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (!LoginModel.isLogin()) {
-            final Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
 
         // View初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -119,6 +125,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
         mQRequest = new QRequest(this, this);
+        mPromoteData = getIntent().getStringExtra(INTENT_PROMOTE);
+        mPromoteQuizBankModel = new PromoteQuizBankModel(this);
 
         /** 侧边栏设置 */
 
@@ -164,8 +172,49 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     @Override
     protected void onResume() {
         super.onResume();
-        // 检测账号是否被合并
-        mQRequest.isUserMerged(LoginModel.getUserId());
+        // 检查登录&考试项目状态
+        if (checkLoginStatus()) {
+            // 国考推广Alert
+            if (mPromoteData == null) {
+                mPromoteQuizBankModel.getPromoteData(new PromoteModel.PromoteDataListener() {
+                    @Override
+                    public void onComplete(boolean success, PromoteResp resp) {
+                        if (success) {
+                            mPromoteQuizBankModel.showPromoteAlert(GsonManager.modelToString(resp));
+                        }
+                    }
+                });
+            } else {
+                mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
+            }
+            // 检测账号是否被合并
+            mQRequest.isUserMerged(LoginModel.getUserId());
+        }
+    }
+
+
+    /**
+     * 检查登录状态
+     */
+    private boolean checkLoginStatus() {
+        if (!LoginModel.isLogin()) {
+            // 未登录
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("from", "splash");
+            startActivity(intent);
+            return false;
+
+        } else if (!LoginModel.hasExamInfo()) {
+            // 没有考试项目
+            Intent intent = new Intent(this, ExamChangeActivity.class);
+            intent.putExtra("from", "splash");
+            startActivity(intent);
+            // Umeng
+//            UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
+            return false;
+        }
+
+        return true;
     }
 
     @Override
