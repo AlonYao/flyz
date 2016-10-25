@@ -129,6 +129,8 @@ public class KnowledgeTreeModel {
 
         // 添加第二层
         ArrayList<HierarchyM> hierarchys = hierarchy.getChilds();
+        // 小班特殊处理
+        if (TYPE_VIP_XC_REPORT.equals(mType)) hierarchys = hierarchy.getNotes();
         addSecondRoot(firstRoot, hierarchys);
 
         // rootContainer
@@ -165,7 +167,11 @@ public class KnowledgeTreeModel {
             TreeNode childNode = getTreeNode(hierarchy, 2);
             node.addChild(childNode);
 
-            addRoot(childNode, hierarchy.getChilds());
+            if (TYPE_VIP_XC_REPORT.equals(mType)) {
+                addRoot(childNode, hierarchy.getNotes());
+            } else {
+                addRoot(childNode, hierarchy.getChilds());
+            }
         }
     }
 
@@ -220,7 +226,11 @@ public class KnowledgeTreeModel {
             TreeNode childNode = getTreeNode(hierarchy, 0);
             node.addChild(childNode);
 
-            addRoot(childNode, hierarchy.getChilds());
+            if (TYPE_VIP_XC_REPORT.equals(mType)) {
+                addRoot(childNode, hierarchy.getNotes());
+            } else {
+                addRoot(childNode, hierarchy.getChilds());
+            }
         }
     }
 

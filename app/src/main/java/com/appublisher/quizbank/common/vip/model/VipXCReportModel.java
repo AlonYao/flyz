@@ -50,7 +50,7 @@ public class VipXCReportModel extends VipBaseModel{
         if (mResp == null || mResp.getResponse_code() != 1) return;
         mView.showCourseName(mResp.getCourse_name());
         mView.showExerciseName(mResp.getExercise_name());
-        mView.showJYYS(mResp.getDuration());
+        mView.showJYYS(timeFormat(mResp.getDuration()));
 
         int questionCount = mResp.getQuestion() == null ? 0 : mResp.getQuestion().size();
 
@@ -62,6 +62,8 @@ public class VipXCReportModel extends VipBaseModel{
             mView.showSpeed(summaryBean.getDuration()/questionCount);
             // 次序
             mView.showPosition(summaryBean.getPosition());
+            // 实际用时
+            mView.showSJYS(timeFormat(summaryBean.getDuration()));
             // 知识点
             ArrayList<VipXCResp.SummaryBean.CategoryInfoBean> categorys =
                     summaryBean.getCategory_info();
@@ -82,7 +84,12 @@ public class VipXCReportModel extends VipBaseModel{
                 knowledgeTreeModel.showHierarchys(hierarchys);
             }
         }
+    }
 
+    private String timeFormat(int duration) {
+        int hour = duration / (60*60);
+        int min = (duration % (60*60)) / 60;
+        return String.valueOf(hour) + ":" + String.valueOf(min);
     }
 
     public ArrayList<QuestionM> getAllQuestions() {

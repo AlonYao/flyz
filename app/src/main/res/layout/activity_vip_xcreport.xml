@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
+        android:clipToPadding="false"
         android:paddingBottom="60dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,8 +27,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="2dp"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/common_text"
-                android:text="@string/practice_report_name"/>
+                android:textColor="@color/common_text"/>
             <!-- 作业名称 -->
             <TextView
                 android:id="@+id/vip_xc_report_exercise_name"
@@ -37,8 +37,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:textSize="@dimen/vip_default_text"
-                android:textColor="@color/common_text"
-                android:text="@string/practice_report_name"/>
+                android:textColor="@color/common_text"/>
             <!-- 提交顺序 -->
             <TextView
                 android:id="@+id/vip_xc_report_position"
@@ -46,8 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="15dp"
-                android:textColor="@color/themecolor"
-                android:text="@string/practice_report_name"/>
+                android:textColor="@color/themecolor"/>
             <!-- 做题统计 -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,15 +93,13 @@
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@id/vip_xc_report_sjys"
                         android:layout_alignParentRight="true"
-                        android:textSize="@dimen/vip_default_text"
-                        android:text="01:50"/>
+                        android:textSize="@dimen/vip_default_text"/>
                     <TextView
                         android:id="@+id/vip_xc_report_jyys_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_alignBottom="@id/vip_xc_report_jyys"
-                        android:text="01:50"/>
+                        android:layout_alignBottom="@id/vip_xc_report_jyys"/>
                 </RelativeLayout>
                 <View
                     android:layout_width="match_parent"
@@ -142,8 +138,7 @@
                             android:id="@+id/vip_xc_report_accuracy_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="90"/>
+                            android:textSize="20sp"/>
                         <TextView
                             android:id="@+id/vip_xc_report_accuracy_flag"
                             android:layout_width="wrap_content"
@@ -188,8 +183,7 @@
                             android:id="@+id/vip_xc_report_speed_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="10"/>
+                            android:textSize="20sp"/>
                         <TextView
                             android:id="@+id/vip_xc_report_speed_flag"
                             android:layout_width="wrap_content"

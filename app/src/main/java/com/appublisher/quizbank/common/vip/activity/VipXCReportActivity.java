@@ -68,8 +68,8 @@ public class VipXCReportActivity extends VipBaseActivity implements View.OnClick
         mTvExerciseName.setText(name);
     }
 
-    public void showJYYS(int duration) {
-        mTvJYYS.setText(String.valueOf(duration));
+    public void showJYYS(String time) {
+        mTvJYYS.setText(time);
     }
 
     public void showAccuracy(int accuracy) {
@@ -139,5 +139,9 @@ public class VipXCReportActivity extends VipBaseActivity implements View.OnClick
             startActivity(intent);
             finish();
         }
+    }
+
+    public void showSJYS(String time) {
+        mTvSJYS.setText(time);
     }
 }
