@@ -18,12 +18,14 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
 import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
 import com.appublisher.quizbank.common.vip.activity.VipHPTSActivity;
 import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
+import com.appublisher.quizbank.common.vip.activity.VipXCReportActivity;
 import com.appublisher.quizbank.common.vip.activity.VipYDDKActivity;
 import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterCategoryAdapter;
@@ -34,7 +36,6 @@ import com.appublisher.quizbank.common.vip.netdata.VipExerciseResp;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -423,7 +424,17 @@ public class VipExerciseIndexModel {
                 break;
             case 8:
                 // 行测_智能组卷
-                break;
+                if (status == 0 || status == 4 || status == 6) {
+                    Intent intent = new Intent(activity, MeasureActivity.class);
+                    intent.putExtra("paper_id", exerciseId);
+                    intent.putExtra("paper_type", "vip");
+                    activity.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(activity, VipXCReportActivity.class);
+                    intent.putExtra("exerciseId", exerciseId);
+                    activity.startActivity(intent);
+                }
+                return;
             case 9:
                 // 互评提升
                 if (Globals.sharedPreferences.getBoolean("vip_description_hpts", false) || (status != 0 && status != 6)) {

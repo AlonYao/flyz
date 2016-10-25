@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class QuestionM implements Serializable{
 
     int id;
+    int question_id;
     String material;
     String question;
     String option_a;
@@ -176,5 +177,13 @@ public class QuestionM implements Serializable{
 
     public String getSummary_fallible() {
         return summary_fallible == null ? "" : summary_fallible;
+    }
+
+    public int getQuestion_id() {
+        return question_id;
+    }
+
+    public void setQuestion_id(int question_id) {
+        this.question_id = question_id;
     }
 }

@@ -57,7 +57,8 @@ public class MeasureAnalysisModel {
                 if (mCurPosition == questions.size() - 1
                         && positionOffsetPixels == 0
                         && !"study_record".equals(activity.mFrom)
-                        && !"collect_or_error".equals(activity.mFrom)) {
+                        && !"collect_or_error".equals(activity.mFrom)
+                        && !"vip".equals(activity.mFrom)) {
 
                     if (!mIsShowAlert) {
                         mIsShowAlert = true;
@@ -80,7 +81,6 @@ public class MeasureAnalysisModel {
 
                 // 设置页面的状态
                 setCurPageStatus(position, activity, answers);
-
             }
 
             @Override

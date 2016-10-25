@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:minHeight="55dp"
     android:orientation="vertical">
@@ -70,6 +71,83 @@
         android:src="@drawable/treeview_watch" />
 
     <include layout="@layout/knowledge_tree_ev"/>
+
+    <RelativeLayout
+        android:id="@+id/treeview_vip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/treeview_name"
+        android:visibility="visible"
+        android:layout_centerVertical="true">
+        <LinearLayout
+            android:id="@+id/treeview_speed_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="36dp"
+            android:orientation="horizontal">
+            <!-- 时间 -->
+            <TextView
+                android:id="@+id/treeview_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/common_text"
+                android:text="@string/practice_report_zero"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common_text"
+                android:textSize="10sp"
+                android:text="@string/practice_report_time"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/treeview_speed_root"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/treeview_pb"
+                android:layout_width="80dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/practice_report_progressbar"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <!-- 做对的题目 -->
+                <TextView
+                    android:id="@+id/treeview_rightnum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/common_text"
+                    android:text="@string/practice_report_zero"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/common_text"
+                    android:textSize="10sp"
+                    android:text="@string/practice_report_semicolon"/>
+                <!-- 全部的题目 -->
+                <TextView
+                    android:id="@+id/treeview_totalnum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/common_text"
+                    android:textSize="10sp"
+                    android:text="@string/practice_report_zero"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

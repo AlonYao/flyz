@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
@@ -65,6 +66,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ImageView level_3 = (ImageView) view.findViewById(R.id.level_3);
         ImageView level_4 = (ImageView) view.findViewById(R.id.level_4);
         ImageView level_5 = (ImageView) view.findViewById(R.id.level_5);
+        RelativeLayout vipLayout = (RelativeLayout) view.findViewById(R.id.treeview_vip);
 
         // 知识点层级名字
         tvName.setText(value.name);
@@ -131,6 +133,17 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
 
             ivDo.setVisibility(View.VISIBLE);
 
+        } else if (KnowledgeTreeModel.TYPE_VIP_XC_REPORT.equals(value.type)) {
+            ivWatch.setVisibility(View.GONE);
+            ivDo.setVisibility(View.GONE);
+            vipLayout.setVisibility(View.VISIBLE);
+            TextView tvRight = (TextView) view.findViewById(R.id.treeview_rightnum);
+            TextView tvTotal = (TextView) view.findViewById(R.id.treeview_totalnum);
+            TextView tvSpeed = (TextView) view.findViewById(R.id.treeview_speed);
+            tvRight.setText(String.valueOf(value.right));
+            tvTotal.setText(String.valueOf(value.total));
+            tvSpeed.setText(String.valueOf(value.duration/value.total));
+
         } else {
             ivWatch.setVisibility(View.VISIBLE);
             ivDo.setVisibility(View.VISIBLE);
@@ -191,6 +204,8 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         public int total;
         public ArrayList<HierarchyM> childs;
         public int ev_level;
+        public int right;
+        public int duration;
 
         public TreeItem(int level,
                         int id,
@@ -208,6 +223,28 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             this.done = done;
             this.childs = childs;
             this.ev_level = ev_level;
+        }
+
+        public TreeItem(int level,
+                        int id,
+                        String name,
+                        int done,
+                        int total,
+                        String type,
+                        ArrayList<HierarchyM> childs,
+                        int ev_level,
+                        int right,
+                        int duration) {
+            this.level = level;
+            this.id = id;
+            this.name = name;
+            this.type = type;
+            this.total = total;
+            this.done = done;
+            this.childs = childs;
+            this.ev_level = ev_level;
+            this.right = right;
+            this.duration = duration;
         }
     }
 }

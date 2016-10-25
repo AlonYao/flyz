@@ -7,17 +7,17 @@ import java.io.Serializable;
  */
 public class AnswerM implements Serializable{
 
-    int id;
-    boolean is_right;
-    String answer;
-    int duration;
-    boolean is_collected;
+    private int id;
+    private boolean is_right;
+    private String answer;
+    private int duration;
+    private boolean is_collected;
 
     /** 小班 START **/
-    String submit_time;
-    String image_url;
-    String review_postil;
-    int score;
+    private String submit_time;
+    private String image_url;
+    private String review_postil;
+    private int score;
     /** 小班 END **/
 
     public boolean is_right() {

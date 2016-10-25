@@ -79,7 +79,7 @@ public class PracticeReportModel {
     /**
      * 设置内容
      */
-    private void setContent() {
+    public void setContent() {
         // 如果是今日Mini模考，显示击败信息
         if ("mokao".equals(mActivity.mPaperType)) {
             mActivity.mRlMiniMokao.setVisibility(View.VISIBLE);
@@ -349,7 +349,7 @@ public class PracticeReportModel {
      * @param answers   答案
      */
     private void skipToMeasureAnalysisActivity(ArrayList<QuestionM> questions,
-                                                      ArrayList<AnswerM> answers) {
+                                               ArrayList<AnswerM> answers) {
         Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
         intent.putExtra("questions", questions);
         intent.putExtra("answers", answers);
@@ -558,7 +558,7 @@ public class PracticeReportModel {
     /**
      * 拼接科目
      */
-    private void jointCategoryMap() {
+    public void jointCategoryMap() {
         if (mActivity.mUserAnswerList == null) return;
 
         mActivity.mTotalNum = mActivity.mUserAnswerList.size();
@@ -628,7 +628,7 @@ public class PracticeReportModel {
      *
      * @param answers 用户答案
      */
-    private void jointUserAnswer(ArrayList<AnswerM> answers) {
+    public void jointUserAnswer(ArrayList<AnswerM> answers) {
         if (mActivity.mUserAnswerList == null)
             mActivity.mUserAnswerList = new ArrayList<>();
 

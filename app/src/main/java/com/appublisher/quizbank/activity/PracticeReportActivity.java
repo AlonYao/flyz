@@ -18,10 +18,14 @@ import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.vip.model.VipXCModel;
+import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
+import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.QRequest;
@@ -133,6 +137,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
         mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
         mPaperType = getIntent().getStringExtra("paper_type");
         mPaperName = getIntent().getStringExtra("paper_name");
+        mPaperId = getIntent().getIntExtra("paper_id", 0);
         mUmengEntry = getIntent().getStringExtra("umeng_entry");
         mPaperTime = getIntent().getStringExtra("paper_time");
         if (mPaperTime == null) mPaperTime = Utils.DateToString(new Date(), "yyyy/MM/dd");
@@ -160,6 +165,46 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
             // 从学习记录、mini模考、历史模考、估分模考进入，需要重新获取数据
             ProgressDialogManager.showProgressDialog(this, true);
             new QRequest(this, this).getHistoryExerciseDetail(mExerciseId, mPaperType);
+        } else if ("vip".equals(mFrom)) {
+            // 小班
+            // 小班特殊处理
+            VipXCModel xcModel = new VipXCModel(this);
+            xcModel.obtainIntelligentPaper(mPaperId, new VipXCModel.IntelligentPaperListener() {
+                @Override
+                public void complete(JSONObject resp) {
+                    VipXCResp xcResp = GsonManager.getModel(resp, VipXCResp.class);
+                    if (xcResp == null || xcResp.getResponse_code() != 1) return;
+                    ArrayList<VipXCResp.QuestionBean> questionList = xcResp.getQuestion();
+                    if (questionList == null) return;
+
+                    ArrayList<QuestionM> questions = new ArrayList<>();
+                    ArrayList<AnswerM> answers = new ArrayList<>();
+                    for (VipXCResp.QuestionBean questionBean : questionList) {
+                        if (questionBean == null) continue;
+                        // 添加question
+                        String question = GsonManager.modelToString(questionBean);
+                        QuestionM questionM = GsonManager.getModel(question, QuestionM.class);
+                        questions.add(questionM);
+                        // 添加answer
+                        VipXCResp.QuestionBean.UserAnswerBean userAnswerBean =
+                                questionBean.getUser_answer();
+                        if (userAnswerBean == null) {
+                            answers.add(new AnswerM());
+                        } else {
+                            AnswerM answerM = new AnswerM();
+                            answerM.setId(userAnswerBean.getQuestion_id());
+                            answerM.setIs_right(userAnswerBean.isIs_right());
+                            answerM.setAnswer(userAnswerBean.getAnswer());
+                            answerM.setIs_collected(userAnswerBean.isIs_collected());
+                            answers.add(answerM);
+                        }
+                    }
+                    mQuestions = questions;
+                    mModel.jointUserAnswer(answers);
+                    mModel.jointCategoryMap();
+                    mModel.setContent();
+                }
+            });
         } else {
             mModel.getData();
         }
