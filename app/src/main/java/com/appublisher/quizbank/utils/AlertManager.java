@@ -94,7 +94,7 @@ public class AlertManager {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // 如果在第一页退出，更新第一页的时长
                                     if (activity.mCurPosition == 0)
-                                        MeasureModel.saveQuestionTime(activity);
+                                        activity.mModel.saveQuestionTime();
 
                                     // 保存至本地
                                     PaperDAO.save(activity.mPaperId, activity.mCurPosition);
@@ -131,7 +131,7 @@ public class AlertManager {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // 如果在第一页退出，更新第一页的时长
                                     if (activity.mCurPosition == 0)
-                                        MeasureModel.saveQuestionTime(activity);
+                                        activity.mModel.saveQuestionTime();
 
                                     // 保存至本地
                                     PaperDAO.save(activity.mPaperId, activity.mCurPosition);

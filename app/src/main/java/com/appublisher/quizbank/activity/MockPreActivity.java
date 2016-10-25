@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -18,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
@@ -31,7 +31,7 @@ import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.MockDAO;
-import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.mock.MockListResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
@@ -42,6 +42,7 @@ import com.appublisher.quizbank.network.QRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -363,6 +364,11 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
 
         //模
         mock_time = mockPre.getMock_time();
+
+        // 缓存模考时间
+        MeasureModel measureModel = new MeasureModel(this);
+        measureModel.updateMockTime(mock_time);
+
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         int date = MockDAO.getIsDateById(mock_id);
         String mock_status = mockPre.getMock_status();

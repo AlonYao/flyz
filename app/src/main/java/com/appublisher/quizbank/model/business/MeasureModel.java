@@ -3,6 +3,7 @@ package com.appublisher.quizbank.model.business;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.graphics.Matrix;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
@@ -30,6 +32,7 @@ import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
@@ -37,11 +40,14 @@ import com.appublisher.quizbank.common.measure.UserAnswerEntity;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
 import com.appublisher.quizbank.dao.PaperDAO;
+import com.appublisher.quizbank.model.netdata.CommonResp;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
+import com.appublisher.quizbank.model.netdata.mock.MockListResp;
+import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
@@ -66,15 +72,25 @@ import java.util.TimerTask;
 /**
  * 做题模块
  */
-public class MeasureModel {
+public class MeasureModel implements RequestCallback{
 
     private static boolean mOptionClick;
     private MeasureActivity mActivity;
+    private Context mContext;
 
     public static final String CACHE_USER_ANSWER = "cache_user_answer";
+    public static final String CACHE_PAPER_ID = "cache_paper_id";
+    public static final String CACHE_PAPER_TYPE = "cache_paper_type";
+    public static final String CACHE_REDO = "cache_redo";
+    public static final String CACHE_MOCK_TIME = "cache_mock_time";
+    public static final String YAOGUO_MEASURE = "yaoguo_measure";
 
     public MeasureModel(MeasureActivity activity) {
         mActivity = activity;
+    }
+
+    public MeasureModel(Context context) {
+        mContext = context;
     }
 
     /**
@@ -409,7 +425,7 @@ public class MeasureModel {
      * @param activity MeasureActivity
      * @param response 回调数据
      */
-    public static void dealExerciseDetailResp(MeasureActivity activity,
+    public void dealExerciseDetailResp(MeasureActivity activity,
                                               JSONObject response) {
         if (response == null) return;
 
@@ -479,7 +495,7 @@ public class MeasureModel {
     /**
      * 设置ViewPager
      */
-    private static void setViewPager(final MeasureActivity activity) {
+    private void setViewPager(final MeasureActivity activity) {
         MeasureAdapter measureAdapter = new MeasureAdapter(activity);
         activity.mViewPager.setAdapter(measureAdapter);
 
@@ -493,7 +509,7 @@ public class MeasureModel {
 
             @Override
             public void onPageSelected(int position) {
-                saveQuestionTime(activity);
+                saveQuestionTime();
                 activity.mCurPosition = position;
             }
 
@@ -513,18 +529,19 @@ public class MeasureModel {
     /**
      * 保存做题时间
      */
-    public static void saveQuestionTime(MeasureActivity activity) {
-        int duration = (int) ((System.currentTimeMillis() - activity.mCurTimestamp) / 1000);
-        activity.mCurTimestamp = System.currentTimeMillis();
+    public void saveQuestionTime() {
+        int duration = (int) ((System.currentTimeMillis() - mActivity.mCurTimestamp) / 1000);
+        mActivity.mCurTimestamp = System.currentTimeMillis();
         HashMap<String, Object> userAnswerMap =
-                activity.mUserAnswerList.get(activity.mCurPosition);
+                mActivity.mUserAnswerList.get(mActivity.mCurPosition);
 
         if (userAnswerMap.containsKey("duration")) {
             duration = duration + (int) userAnswerMap.get("duration");
         }
 
         userAnswerMap.put("duration", duration);
-        activity.mUserAnswerList.set(activity.mCurPosition, userAnswerMap);
+        mActivity.mUserAnswerList.set(mActivity.mCurPosition, userAnswerMap);
+        updatePaperCache(mActivity.mUserAnswerList, mActivity.mCurPosition, mActivity.mRedo);
     }
 
     /**
@@ -532,27 +549,18 @@ public class MeasureModel {
      * @param userAnswerList 用户答案
      * @param curIndex 当前索引
      */
+    @SuppressLint("CommitPrefEdits")
     private void updatePaperCache(ArrayList<HashMap<String, Object>> userAnswerList,
-                                  int curIndex) {
+                                  int curIndex,
+                                  boolean redo) {
         if (userAnswerList == null || curIndex >= userAnswerList.size()) return;
 
         HashMap<String, Object> userAnswerMap = userAnswerList.get(curIndex);
         if (userAnswerMap == null) return;
 
-//        UserAnswerEntity entity = new UserAnswerEntity();
-//        entity.setId((int) userAnswerMap.get("id"));
-//        entity.setAnswer((String) userAnswerMap.get("answer"));
-//        entity.setCategory((int) userAnswerMap.get("category_id"));
-//        entity.setCategory_name((String) userAnswerMap.get("category_name"));
-//        entity.setNote_id((int) userAnswerMap.get("note_id"));
-//        entity.setDuration((int) userAnswerMap.get("duration"));
-//        entity.setRight_answer((String) userAnswerMap.get("right_answer"));
-//        boolean is_right = false;
-
         int id = (int) userAnswerMap.get("id");
         String answer = (String) userAnswerMap.get("answer");
         int category = (int) userAnswerMap.get("category_id");
-        String category_name = (String) userAnswerMap.get("category_name");
         int note_id = (int) userAnswerMap.get("note_id");
         int duration = (int) userAnswerMap.get("duration");
         String right_answer = (String) userAnswerMap.get("right_answer");
@@ -564,18 +572,55 @@ public class MeasureModel {
             is_right = true;
         }
 
+        SharedPreferences cache = getUserAnswerCache(mActivity);
+        String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+        try {
+            // 构造JSONObject
+            JSONObject userAnswerJO = new JSONObject();
+            userAnswerJO.put("id", id);
+            userAnswerJO.put("answer", answer);
+            userAnswerJO.put("is_right", is_right);
+            userAnswerJO.put("category", category);
+            userAnswerJO.put("note_id", note_id);
+            userAnswerJO.put("duration", duration);
+            // 初始化JSONArray
+            JSONArray userAnswerArray = new JSONArray(userAnswer);
+            if (userAnswerArray.length() == 0) {
+                userAnswerArray = new JSONArray();
+                for (HashMap<String, Object> ignored : userAnswerList) {
+                    JSONObject jsonObject = new JSONObject();
+                    userAnswerArray.put(jsonObject);
+                }
+            }
+            // 更新
+            userAnswerArray.put(curIndex, userAnswerJO);
 
+            String redoSubmit;
+            if (redo) {
+                redoSubmit = "true";
+            } else {
+                redoSubmit = "false";
+            }
 
+            SharedPreferences.Editor editor = cache.edit();
+            editor.putString(CACHE_USER_ANSWER, userAnswerArray.toString());
+            editor.putInt(CACHE_PAPER_ID, mActivity.mPaperId);
+            editor.putString(CACHE_PAPER_TYPE, mActivity.mPaperType);
+            editor.putString(CACHE_REDO, redoSubmit);
+            editor.commit();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    private JSONArray getUserAnswerCache(Context context) {
-        JSONArray array = new JSONArray();
-
-        SharedPreferences cache =
-                context.getSharedPreferences("yaoguo_measure", Context.MODE_PRIVATE);
-//        String userAnswer = cache.getString()
-
-        return array;
+    /**
+     * 获取做题答案缓存
+     * @param context
+     * @return
+     */
+    public SharedPreferences getUserAnswerCache(Context context) {
+        return context.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
     }
 
     private JSONObject getAnswerObject(UserAnswerEntity entity) {
@@ -945,5 +990,192 @@ public class MeasureModel {
                 mOptionClick = false;
             }
         }, 100);
+    }
+
+    public void checkCache(Context context) {
+        SharedPreferences cache = getUserAnswerCache(context);
+        int paperId = cache.getInt(CACHE_PAPER_ID, 0);
+        if (paperId == 0) return;
+
+        String paperType = cache.getString(CACHE_PAPER_TYPE, "");
+        String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+        String redo = cache.getString(CACHE_REDO, "true");
+        if ("mock".equals(paperType)) {
+            new QRequest(mContext, this).getMockExerciseList();
+        } else {
+            // 提交做题数据
+            new QRequest(mContext, this).cacheSubmitPaper(
+                    ParamBuilder.submitPaper(
+                            String.valueOf(paperId),
+                            paperType,
+                            redo,
+                            String.valueOf(countDuration(userAnswer)),
+                            userAnswer,
+                            "undone")
+            );
+        }
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    public void updateMockTime(String mock_time) {
+        SharedPreferences cache = getUserAnswerCache(mContext);
+        SharedPreferences.Editor editor = cache.edit();
+        editor.putString(CACHE_MOCK_TIME, mock_time);
+        editor.commit();
+    }
+
+    private void showMockCacheSubmitAlert() {
+        if (mContext == null || ((Activity) mContext).isFinishing()) return;
+        String msg = "你的模考正在进行中";
+        String n = "放弃";
+        String p = "继续";
+        new AlertDialog.Builder(mContext)
+                .setMessage(msg)
+                .setNegativeButton(n, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearUserAnswerCache();
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(p,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences cache = getUserAnswerCache(mContext);
+                            int paperId = cache.getInt(CACHE_PAPER_ID, 0);
+                            String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+                            String mockTime = cache.getString(CACHE_MOCK_TIME, "");
+                            // 跳转
+                            Intent intent = new Intent(mContext, MeasureActivity.class);
+                            intent.putExtra("from", "mockpre");
+                            intent.putExtra("paper_id", paperId);
+                            intent.putExtra("paper_type", "mock");
+                            intent.putExtra("mock_time", mockTime);
+                            intent.putExtra("paper_name", "模考总动员");
+                            intent.putExtra("cache_userAnswer", userAnswer);
+                            intent.putExtra("redo", false);
+                            mContext.startActivity(intent);
+                            dialog.dismiss();
+                        }
+                    }).show();
+    }
+
+    private void showMockCacheSubmitTimeOutAlert() {
+        if (mContext == null || ((Activity) mContext).isFinishing()) return;
+        String msg = "你的模考时间已到";
+        String n = "放弃";
+        String p = "提交";
+        new AlertDialog.Builder(mContext)
+                .setMessage(msg)
+                .setNegativeButton(n, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearUserAnswerCache();
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(p,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 提交做题数据
+                            SharedPreferences cache = getUserAnswerCache(mContext);
+                            int paperId = cache.getInt(CACHE_PAPER_ID, 0);
+                            String paperType = cache.getString(CACHE_PAPER_TYPE, "");
+                            String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+                            String redo = cache.getString(CACHE_REDO, "false");
+                            new QRequest(mContext).submitPaper(
+                                    ParamBuilder.submitPaper(
+                                            String.valueOf(paperId),
+                                            paperType,
+                                            redo,
+                                            String.valueOf(countDuration(userAnswer)),
+                                            userAnswer,
+                                            "done")
+                            );
+                            dialog.dismiss();
+                        }
+                    }).show();
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private void clearUserAnswerCache() {
+        SharedPreferences cache = getUserAnswerCache(mContext);
+        SharedPreferences.Editor editor = cache.edit();
+        editor.putInt(CACHE_PAPER_ID, 0);
+        editor.putString(CACHE_PAPER_TYPE, "");
+        editor.putString(CACHE_USER_ANSWER, "");
+        editor.putString(CACHE_REDO, "");
+        editor.putString(CACHE_MOCK_TIME, "");
+        editor.commit();
+    }
+
+    private int countDuration(String userAnswer) {
+        int count = 0;
+        try {
+            JSONArray array = new JSONArray(userAnswer);
+            int length = array.length();
+            for (int i = 0; i < length; i++) {
+                JSONObject jo = array.getJSONObject(i);
+                int duration = jo.getInt("duration");
+                count = count + duration;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
+    private void showCacheSubmitAlert() {
+        if (mContext == null || ((Activity) mContext).isFinishing()) return;
+        String msg = "你有一次未完成的练习";
+        String p = "去看记录";
+        new AlertDialog.Builder(mContext)
+                .setMessage(msg)
+                .setPositiveButton(p,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("cache_submit_paper".equals(apiName)) {
+            // 缓存提交
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) return;
+            showCacheSubmitAlert();
+        } else if ("mock_exercise_list".equals(apiName)) {
+            MockListResp mockListResp =
+                    GsonManager.getModel(response.toString(), MockListResp.class);
+            if (mockListResp == null || mockListResp.getResponse_code() != 1) return;
+            ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
+            if (mockPaperMs != null && mockPaperMs.size() != 0) {
+                MockPaperM mockPaperM = mockPaperMs.get(0);
+                int mockId = mockPaperM.getId();
+                if (mockId == 0) return;
+                String status = mockPaperM.getStatus();
+                if ("finish".equals(status)) {
+                    showMockCacheSubmitTimeOutAlert();
+                } else {
+                    showMockCacheSubmitAlert();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+
     }
 }

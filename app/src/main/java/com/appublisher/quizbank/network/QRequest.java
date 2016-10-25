@@ -458,6 +458,13 @@ public class QRequest extends Request implements QApiConstants {
     }
 
     /**
+     * 提交试卷
+     */
+    public void cacheSubmitPaper(Map<String, String> params) {
+        postRequest(ParamBuilder.finalUrl(submitPaper), params, "cache_submit_paper", "object");
+    }
+
+    /**
      * 收藏&取消收藏题目
      *
      * @param params 参数

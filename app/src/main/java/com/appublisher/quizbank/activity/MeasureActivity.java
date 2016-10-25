@@ -71,6 +71,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
     public String mFrom;
     public Gson mGson;
     public Timer mTimer;
+    public MeasureModel mModel;
 
     public static Toolbar mToolbar;
     public static Handler mHandler;
@@ -189,6 +190,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
         mUmengPause = "0";
         mUmengAnswerSheet = "0";
         mQRequest = new QRequest(this, this);
+        mModel = new MeasureModel(this);
 
         // 获取ToolBar高度
         int toolBarHeight = MeasureModel.getViewHeight(mToolbar);
@@ -305,7 +307,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
 
         } else if (item.getTitle().equals("暂停")) {
             if (mTimer != null) mTimer.cancel();
-            saveQuestionTime();
+            mModel.saveQuestionTime();
             AlertManager.pauseAlert(this);
 
             // Umeng
@@ -395,24 +397,6 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
     }
 
     /**
-     * 保存做题时间
-     */
-    private void saveQuestionTime() {
-        int duration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
-        mCurTimestamp = System.currentTimeMillis();
-
-        if (mUserAnswerList == null) return;
-        HashMap<String, Object> userAnswerMap = mUserAnswerList.get(mCurPosition);
-
-        if (userAnswerMap.containsKey("duration")) {
-            duration = duration + (int) userAnswerMap.get("duration");
-        }
-
-        userAnswerMap.put("duration", duration);
-        mUserAnswerList.set(mCurPosition, userAnswerMap);
-    }
-
-    /**
      * 处理快速智能练习回调
      *
      * @param autoTrainingResp 快速智能练习回调
@@ -492,7 +476,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
 
             @Override
             public void onPageSelected(int position) {
-                saveQuestionTime();
+                mModel.saveQuestionTime();
 
                 // Umeng 判断单个题是否完成
                 if (mUserAnswerList != null && position < mUserAnswerList.size()) {
@@ -659,7 +643,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
             case "paper_exercise":
             case "history_exercise_detail":
                 // mini模考、整卷、模考、估分、历史练习
-                MeasureModel.dealExerciseDetailResp(this, response);
+                mModel.dealExerciseDetailResp(this, response);
                 break;
 
             case "server_current_time":
