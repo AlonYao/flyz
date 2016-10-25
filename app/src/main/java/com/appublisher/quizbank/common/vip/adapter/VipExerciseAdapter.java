@@ -65,6 +65,9 @@ public class VipExerciseAdapter extends BaseAdapter {
         viewHolder.statusText.setText(exercisesBean.getStatus_text());
         viewHolder.classText.setText(exercisesBean.getClass_name());
         viewHolder.courseText.setText(exercisesBean.getCourse_name());
+
+        viewHolder.statusText.setTextColor(context.getResources().getColor(R.color.login_red));
+
         //未完成状态显示倒计时时间
         if (exercisesBean.getStatus() == 0) {
             long time = Utils.getSecondsByDateMinusNow(exercisesBean.getEnd_time()) / (60 * 60);
@@ -81,6 +84,8 @@ public class VipExerciseAdapter extends BaseAdapter {
                     viewHolder.statusText.setText("1分钟后到期");
                 }
             }
+        } else if (exercisesBean.getStatus() == 1) {
+            viewHolder.statusText.setTextColor(context.getResources().getColor(R.color.themecolor));
         }
 
         ViewHelper.setAlpha(convertView, 1.0f);
