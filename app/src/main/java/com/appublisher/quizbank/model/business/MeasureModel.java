@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
@@ -35,6 +34,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.UserAnswerEntity;
@@ -79,13 +79,13 @@ public class MeasureModel implements RequestCallback{
     private MeasureActivity mActivity;
     private Context mContext;
 
-    public static final String CACHE_USER_ANSWER = "cache_user_answer";
-    public static final String CACHE_PAPER_ID = "cache_paper_id";
-    public static final String CACHE_PAPER_TYPE = "cache_paper_type";
-    public static final String CACHE_REDO = "cache_redo";
-    public static final String CACHE_MOCK_TIME = "cache_mock_time";
-    public static final String CACHE_PAPER_NAME = "cache_paper_name";
-    public static final String YAOGUO_MEASURE = "yaoguo_measure";
+    private static final String CACHE_USER_ANSWER = "cache_user_answer";
+    private static final String CACHE_PAPER_ID = "cache_paper_id";
+    private static final String CACHE_PAPER_TYPE = "cache_paper_type";
+    private static final String CACHE_REDO = "cache_redo";
+    private static final String CACHE_MOCK_TIME = "cache_mock_time";
+    private static final String CACHE_PAPER_NAME = "cache_paper_name";
+    private static final String YAOGUO_MEASURE = "yaoguo_measure";
 
     public MeasureModel(MeasureActivity activity) {
         mActivity = activity;
@@ -601,25 +601,40 @@ public class MeasureModel implements RequestCallback{
         SharedPreferences cache = getUserAnswerCache(mActivity);
         String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
         try {
-            // 构造JSONObject
-            JSONObject userAnswerJO = new JSONObject();
-            userAnswerJO.put("id", id);
-            userAnswerJO.put("answer", answer);
-            userAnswerJO.put("is_right", is_right);
-            userAnswerJO.put("category", category);
-            userAnswerJO.put("note_id", note_id);
-            userAnswerJO.put("duration", duration);
             // 初始化JSONArray
-            JSONArray userAnswerArray = new JSONArray(userAnswer);
-            if (userAnswerArray.length() == 0) {
+            JSONArray userAnswerArray;
+            if (userAnswer.length() == 0) {
                 userAnswerArray = new JSONArray();
-                for (HashMap<String, Object> ignored : userAnswerList) {
+                for (HashMap<String, Object> itemMap : userAnswerList) {
+                    if (itemMap == null) continue;
+                    int itemId = (int) itemMap.get("id");
+                    String itemAnswer = (String) itemMap.get("answer");
+                    int itemCategory = (int) itemMap.get("category_id");
+                    int itemNoteId = (int) itemMap.get("note_id");
+                    int itemDuration = (int) itemMap.get("duration");
+
                     JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id", itemId);
+                    jsonObject.put("answer", itemAnswer);
+                    jsonObject.put("is_right", false);
+                    jsonObject.put("category", itemCategory);
+                    jsonObject.put("note_id", itemNoteId);
+                    jsonObject.put("duration", itemDuration);
                     userAnswerArray.put(jsonObject);
                 }
+            } else {
+                userAnswerArray = new JSONArray(userAnswer);
             }
             // 更新
-            userAnswerArray.put(curIndex, userAnswerJO);
+            // 构造JSONObject
+            JSONObject curJO = new JSONObject();
+            curJO.put("id", id);
+            curJO.put("answer", answer);
+            curJO.put("is_right", is_right);
+            curJO.put("category", category);
+            curJO.put("note_id", note_id);
+            curJO.put("duration", duration);
+            userAnswerArray.put(curIndex, curJO);
 
             String redoSubmit;
             if (redo) {
@@ -635,7 +650,7 @@ public class MeasureModel implements RequestCallback{
             editor.putString(CACHE_REDO, redoSubmit);
             editor.commit();
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -1021,9 +1036,6 @@ public class MeasureModel implements RequestCallback{
     }
 
     public void checkCache() {
-
-        Logger.e("checkCache");
-
         SharedPreferences cache = getUserAnswerCache(mContext);
         int paperId = cache.getInt(CACHE_PAPER_ID, 0);
         if (paperId == 0) return;
@@ -1181,6 +1193,10 @@ public class MeasureModel implements RequestCallback{
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // 跳转至学习记录
+                                if (mContext instanceof MainActivity) {
+                                    ((MainActivity) mContext).changeFragment(5);
+                                }
                                 dialog.dismiss();
                             }
                         }).show();

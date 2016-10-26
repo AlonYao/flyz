@@ -541,7 +541,8 @@ public class AlertManager {
                                                 questions.toString(),
                                                 "done")
                                 );
-
+                                // 清除做题缓存
+                                MeasureModel.clearUserAnswerCache(activity);
                                 dialog.dismiss();
                             }
                         })
