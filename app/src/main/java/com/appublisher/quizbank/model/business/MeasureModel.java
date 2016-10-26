@@ -47,8 +47,7 @@ import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseRes
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.model.netdata.mock.MockListResp;
-import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
+import com.appublisher.quizbank.model.netdata.mock.MockPre;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
@@ -1044,7 +1043,7 @@ public class MeasureModel implements RequestCallback{
         String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
         String redo = cache.getString(CACHE_REDO, "true");
         if ("mock".equals(paperType)) {
-            new QRequest(mContext, this).getMockExerciseList();
+            new QRequest(mContext, this).getMockPreExamInfo(String.valueOf(paperId));
         } else {
             // 提交做题数据
             new QRequest(mContext, this).cacheSubmitPaper(
@@ -1209,21 +1208,14 @@ public class MeasureModel implements RequestCallback{
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp == null || resp.getResponse_code() != 1) return;
             showCacheSubmitAlert();
-        } else if ("mock_exercise_list".equals(apiName)) {
-            MockListResp mockListResp =
-                    GsonManager.getModel(response.toString(), MockListResp.class);
-            if (mockListResp == null || mockListResp.getResponse_code() != 1) return;
-            ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
-            if (mockPaperMs != null && mockPaperMs.size() != 0) {
-                MockPaperM mockPaperM = mockPaperMs.get(0);
-                int mockId = mockPaperM.getId();
-                if (mockId == 0) return;
-                String status = mockPaperM.getStatus();
-                if ("finish".equals(status)) {
-                    showMockCacheSubmitTimeOutAlert();
-                } else {
-                    showMockCacheSubmitAlert();
-                }
+        } else if ("mockpre_exam_info".equals(apiName)) {
+            MockPre mockPre = GsonManager.getModel(response.toString(), MockPre.class);
+            if (mockPre == null || mockPre.getResponse_code() != 1) return;
+            String status = mockPre.getMock_status();
+            if ("finish".equals(status)) {
+                showMockCacheSubmitTimeOutAlert();
+            } else {
+                showMockCacheSubmitAlert();
             }
         }
     }

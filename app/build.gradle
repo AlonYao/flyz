@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 42
-        versionName "1.7.1"
+        versionCode 50
+        versionName "1.8.7"
 
         //参数
         manifestPlaceholders = [
@@ -30,6 +30,11 @@ android {
         other {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
                                     APP_CHANNEL: "other"]
+        }
+
+        xiaomi {
+            manifestPlaceholders = [APP_NAME   : "天天模考公务员",
+                                    APP_CHANNEL: "xiaomi"]
         }
     }
 

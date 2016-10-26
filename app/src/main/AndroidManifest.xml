@@ -86,6 +86,9 @@
         <meta-data
             android:name="AA_MODELS"
             android:value="com.appublisher.quizbank.model.db.GlobalSetting,                            com.appublisher.quizbank.model.db.Grade,                            com.appublisher.quizbank.model.db.Mock,                            com.appublisher.quizbank.model.db.Paper,                            com.appublisher.lib_login.model.db.User,                            com.appublisher.lib_course.offline.model.db.Offline" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="6" />
 
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
