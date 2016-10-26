@@ -56,6 +56,9 @@ public class PromoteQuizBankModel extends PromoteModel {
         ImageButton btnClose = (ImageButton) window.findViewById(R.id.promote_alert_close);
         Button btnConfirm = (Button) window.findViewById(R.id.promote_alert_confirm);
 
+        //noinspection deprecation
+        btnConfirm.setBackgroundColor(getContext().getResources().getColor(R.color.themecolor));
+
         // 图片
         getRequest().loadImage(alertBean.getAlert_image(), ivImg);
 
