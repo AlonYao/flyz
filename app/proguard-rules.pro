@@ -31,7 +31,7 @@
 -dontwarn org.apache.**
 -keep class org.apache.** {*; }
 
-# 友盟社会化组件混淆
+# 友盟混淆
 -dontshrink
 -dontoptimize
 -dontwarn com.google.android.maps.**
@@ -39,30 +39,63 @@
 -dontwarn com.umeng.**
 -dontwarn com.tencent.weibo.sdk.**
 -dontwarn com.facebook.**
+
 -keep enum com.facebook.**
 -keepattributes Exceptions,InnerClasses,Signature
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
+
 -keep public interface com.facebook.**
 -keep public interface com.tencent.**
 -keep public interface com.umeng.socialize.**
 -keep public interface com.umeng.socialize.sensor.**
 -keep public interface com.umeng.scrshot.**
+
 -keep public class com.umeng.socialize.* {*;}
 -keep public class javax.**
 -keep public class android.webkit.**
+
 -keep class com.facebook.**
+-keep class com.facebook.** { *; }
 -keep class com.umeng.scrshot.**
 -keep public class com.tencent.** {*;}
 -keep class com.umeng.socialize.sensor.**
+-keep class com.umeng.socialize.handler.**
+-keep class com.umeng.socialize.handler.*
 -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
 -keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
+
 -keep class im.yixin.sdk.api.YXMessage {*;}
 -keep class im.yixin.sdk.api.** implements im.yixin.sdk.api.YXMessage$YXMessageData{*;}
--keep public class com.appublisher.quizbank.R$*{
+
+-dontwarn twitter4j.**
+-keep class twitter4j.** { *; }
+
+-keep class com.tencent.** {*;}
+-dontwarn com.tencent.**
+-keep public class com.appublisher.lib_basic.R$*{
     public static final int *;
 }
--keep class com.sina.weibo.sdk.**{*;}
+-keep public class com.umeng.soexample.R$*{
+    public static final int *;
+}
+-keep class com.tencent.open.TDialog$*
+-keep class com.tencent.open.TDialog$* {*;}
+-keep class com.tencent.open.PKDialog
+-keep class com.tencent.open.PKDialog {*;}
+-keep class com.tencent.open.PKDialog$*
+-keep class com.tencent.open.PKDialog$* {*;}
+
+-keep class com.sina.** {*;}
+-dontwarn com.sina.**
+-keep class  com.alipay.share.sdk.** {
+   *;
+}
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+-keep class com.linkedin.** { *; }
+-keepattributes Signature
 
 # 听云
 # ProGuard configurations for NetworkBench Lens

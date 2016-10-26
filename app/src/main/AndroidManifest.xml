@@ -105,6 +105,17 @@
         </receiver>
         <!-- 个推SDK配置结束 -->
 
+        <!-- 新浪回调Activity -->
+        <activity
+            android:name=".WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+            <!--<intent-filter>-->
+            <!--<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />-->
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        </activity>
+
         <activity
             android:name=".activity.SystemNoticeActivity"
             android:configChanges="orientation|keyboardHidden"
