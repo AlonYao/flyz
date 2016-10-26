@@ -54,6 +54,7 @@ import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.business.PromoteQuizBankModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -189,6 +190,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             }
             // 检测账号是否被合并
             mQRequest.isUserMerged(LoginModel.getUserId());
+            // 做题缓存提交
+            new MeasureModel(this).checkCache();
         }
     }
 

@@ -552,6 +552,12 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
      * 保存
      */
     public void saveTest() {
+        if ("vip".equals(mPaperType)) {
+            // 小班特殊处理
+            UmengManager.onEvent(MeasureActivity.this, "0");
+            finish();
+        }
+
         boolean isSave = false;
         if (mUserAnswerList != null) {
             int size = mUserAnswerList.size();

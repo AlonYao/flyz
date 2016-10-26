@@ -93,14 +93,6 @@
             android:exported="false"
             android:screenOrientation="behind" />
 
-        <!-- 微信回调Activity -->
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <!-- 个推SDK配置开始 -->
         <receiver
             android:name=".broadcast.PushReceiver"

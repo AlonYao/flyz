@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
@@ -644,7 +645,7 @@ public class MeasureModel implements RequestCallback{
      * @param context
      * @return
      */
-    public SharedPreferences getUserAnswerCache(Context context) {
+    public static SharedPreferences getUserAnswerCache(Context context) {
         return context.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
     }
 
@@ -787,6 +788,7 @@ public class MeasureModel implements RequestCallback{
                         status)
         );
         ToastManager.showToast(activity, "交卷啦");
+        MeasureModel.clearUserAnswerCache(activity);
     }
 
     /**
@@ -945,6 +947,7 @@ public class MeasureModel implements RequestCallback{
                         questions.toString(),
                         "done")
         );
+        MeasureModel.clearUserAnswerCache(activity);
     }
 
     /**
@@ -1017,8 +1020,11 @@ public class MeasureModel implements RequestCallback{
         }, 100);
     }
 
-    public void checkCache(Context context) {
-        SharedPreferences cache = getUserAnswerCache(context);
+    public void checkCache() {
+
+        Logger.e("checkCache");
+
+        SharedPreferences cache = getUserAnswerCache(mContext);
         int paperId = cache.getInt(CACHE_PAPER_ID, 0);
         if (paperId == 0) return;
 
@@ -1038,6 +1044,7 @@ public class MeasureModel implements RequestCallback{
                             userAnswer,
                             "undone")
             );
+            clearUserAnswerCache(mContext);
         }
     }
 
@@ -1067,7 +1074,7 @@ public class MeasureModel implements RequestCallback{
                 .setNegativeButton(n, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        clearUserAnswerCache();
+                        clearUserAnswerCache(mContext);
                         dialog.dismiss();
                     }
                 })
@@ -1105,7 +1112,7 @@ public class MeasureModel implements RequestCallback{
                 .setNegativeButton(n, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        clearUserAnswerCache();
+                        clearUserAnswerCache(mContext);
                         dialog.dismiss();
                     }
                 })
@@ -1128,14 +1135,15 @@ public class MeasureModel implements RequestCallback{
                                             userAnswer,
                                             "done")
                             );
+                            clearUserAnswerCache(mContext);
                             dialog.dismiss();
                         }
                     }).show();
     }
 
     @SuppressLint("CommitPrefEdits")
-    private void clearUserAnswerCache() {
-        SharedPreferences cache = getUserAnswerCache(mContext);
+    public static void clearUserAnswerCache(Context context) {
+        SharedPreferences cache = getUserAnswerCache(context);
         SharedPreferences.Editor editor = cache.edit();
         editor.putInt(CACHE_PAPER_ID, 0);
         editor.putString(CACHE_PAPER_TYPE, "");
