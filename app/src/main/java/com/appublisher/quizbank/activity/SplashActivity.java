@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.ToastManager;
-import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.promote.PromoteModel;
@@ -136,12 +135,19 @@ public class SplashActivity extends Activity implements RequestCallback {
         if ("global_settings".equals(apiName)) {
             if (response == null) response = new JSONObject();
             GlobalSettingDAO.save(response.toString());
+
+            // 缓存至本地
+            SharedPreferences sp = getSharedPreferences("global_setting", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("global_setting", response.toString());
+            editor.commit();
+
             GlobalSettingsResp globalSettingsResp =
                     GsonManager.getModel(response.toString(), GlobalSettingsResp.class);
             if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
                 SharedPreferences sharedPreferences =
                         getSharedPreferences("updateVersion", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor = sharedPreferences.edit();
                 editor.putString("versionInfo", GsonManager.modelToString(
                         globalSettingsResp.getNew_version(), NewVersion.class));
                 editor.commit();

@@ -2,6 +2,7 @@ package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -23,11 +24,13 @@ import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
@@ -299,31 +302,26 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
                     "这道题我用时不到一分钟哦，看看你是不是比我快？"};
             int random = new Random().nextInt(content.length);
             Resources resources = getResources();
-            UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
-                    .setTitle(resources.getString(R.string.share_title))
-                    .setText(content[random])
-                    .setUmImage(new UMImage(this,Utils.getBitmapByView(mViewPager)))
-                    .setTargetUrl("http://share.zhiboke.net/question.php?question_id=" + mCurQuestionId);
-            UmengManager.shareAction(MeasureAnalysisActivity.this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
-                @Override
-                public void platform(SHARE_MEDIA platformType) {
-                    ////
-                }
-            });
-
-
-            // 友盟分享文字处理
-//            UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
-//            umShareContentEntity.setType("measure_analysis");
-//            umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
-//
-//            // 友盟分享跳转链接处理
-//            UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-//            urlEntity.setType("measure_analysis");
-//            urlEntity.setQuestion_id(mCurQuestionId);
-//            umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
-//
-//            UmengManager.openShare(umengShareEntity);
+            // 获取单题分享链接
+            SharedPreferences sp = getSharedPreferences("global_setting", MODE_PRIVATE);
+            String spString = sp.getString("global_setting", "");
+            GlobalSettingsResp globalSettingsResp =
+                    GsonManager.getModel(spString, GlobalSettingsResp.class);
+            if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+                String questionShareUrl = globalSettingsResp.getQuestion_share_url();
+                String targetUrl = questionShareUrl + "question_id=" + mCurQuestionId;
+                UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
+                        .setTitle(resources.getString(R.string.share_title))
+                        .setText(content[random])
+                        .setUmImage(new UMImage(this, Utils.getBitmapByView(mViewPager)))
+                        .setTargetUrl(targetUrl);
+                UmengManager.shareAction(MeasureAnalysisActivity.this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
+                    @Override
+                    public void platform(SHARE_MEDIA platformType) {
+                        // Empty
+                    }
+                });
+            }
         }
 
         return super.onOptionsItemSelected(item);

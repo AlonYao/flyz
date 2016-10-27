@@ -17,6 +17,7 @@ public class GlobalSettingsResp {
     MockM mock;
     String report_share_url;
     String evaluate_share_url;
+    String question_share_url;
     String app_ios_url;
     String app_android_url;
     NewVersion new_version;
@@ -68,5 +69,9 @@ public class GlobalSettingsResp {
 
     public ArrayList<OpenCourseRateTagItem> getRate_tags() {
         return rate_tags;
+    }
+
+    public String getQuestion_share_url() {
+        return question_share_url;
     }
 }

@@ -722,7 +722,8 @@ public class PracticeReportModel {
         }
         int exerciseId = mActivity.mExerciseId == 0 ? mActivity.mPaperId : mActivity.mExerciseId;
         String paperName = mActivity.mTvPaperName.getText() == null ? "" : mActivity.mTvPaperName.getText().toString();
-        baseUrl += baseUrl + "user_id=" + LoginModel.getUserId()
+
+        baseUrl = baseUrl + "user_id=" + LoginModel.getUserId()
                 + "&user_token=" + LoginModel.getUserToken()
                 + "&exercise_id=" + exerciseId
                 + "&paper_type=" + mActivity.mPaperType
