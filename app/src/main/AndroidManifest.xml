@@ -16,6 +16,21 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="androd.permission.INSTALL_PACKAGES" />
 
+    <!--  个推SDK权限 START
+  -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="getui.permission.GetuiService.com.appublisher.quizbank" />
+    <permission
+        android:name="getui.permission.GetuiService.com.appublisher.quizbank"
+        android:protectionLevel="normal" />
+    - <!--  个推SDK权限 END
+  -->
+
+
     <application
         android:name=".QuizBankApp"
         android:allowBackup="true"
@@ -101,7 +116,6 @@
             android:name=".broadcast.PushReceiver"
             android:exported="false">
             <intent-filter>
-
                 <!-- 个推 appID -->
                 <action android:name="${GT_APPID}" />
             </intent-filter>
@@ -112,7 +126,7 @@
         <activity
             android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <!--<intent-filter>-->
             <!--<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />-->
             <!--<category android:name="android.intent.category.DEFAULT" />-->
@@ -279,7 +293,7 @@
             android:name=".common.vip.activity.VipXCReportActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_xc_report"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
