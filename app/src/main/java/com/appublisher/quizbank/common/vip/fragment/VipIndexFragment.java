@@ -1,14 +1,9 @@
 package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatDelegate;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.model.business.LoginModel;
@@ -26,12 +20,9 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
-import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
 import com.appublisher.quizbank.common.vip.activity.VipNotificationActivity;
 import com.appublisher.quizbank.common.vip.model.VipIndexModel;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
-import com.appublisher.quizbank.fragment.SettingFragment;
-import com.appublisher.quizbank.network.QRequest;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
@@ -134,11 +125,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         super.onResume();
 
         final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-        nickname.setText(userInfoModel.getNickname());
+        nickname.setText(userInfoModel == null ? "" : userInfoModel.getNickname());
         LoginModel.setAvatar(getActivity(), avatarImage);
         final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
-        String name = userExamInfoModel.getName();
-        String date = userExamInfoModel.getDate();
+        String name = userExamInfoModel == null ? "" : userExamInfoModel.getName();
+        String date = userExamInfoModel == null ? "" : userExamInfoModel.getDate();
 
         long day = Utils.dateMinusNow(date);
         if (day < 0) {

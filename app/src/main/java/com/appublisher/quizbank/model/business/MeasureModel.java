@@ -34,6 +34,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.UserAnswerEntity;
@@ -46,8 +47,7 @@ import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseRes
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.model.netdata.mock.MockListResp;
-import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
+import com.appublisher.quizbank.model.netdata.mock.MockPre;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
@@ -78,13 +78,13 @@ public class MeasureModel implements RequestCallback{
     private MeasureActivity mActivity;
     private Context mContext;
 
-    public static final String CACHE_USER_ANSWER = "cache_user_answer";
-    public static final String CACHE_PAPER_ID = "cache_paper_id";
-    public static final String CACHE_PAPER_TYPE = "cache_paper_type";
-    public static final String CACHE_REDO = "cache_redo";
-    public static final String CACHE_MOCK_TIME = "cache_mock_time";
-    public static final String CACHE_PAPER_NAME = "cache_paper_name";
-    public static final String YAOGUO_MEASURE = "yaoguo_measure";
+    private static final String CACHE_USER_ANSWER = "cache_user_answer";
+    private static final String CACHE_PAPER_ID = "cache_paper_id";
+    private static final String CACHE_PAPER_TYPE = "cache_paper_type";
+    private static final String CACHE_REDO = "cache_redo";
+    private static final String CACHE_MOCK_TIME = "cache_mock_time";
+    private static final String CACHE_PAPER_NAME = "cache_paper_name";
+    private static final String YAOGUO_MEASURE = "yaoguo_measure";
 
     public MeasureModel(MeasureActivity activity) {
         mActivity = activity;
@@ -600,25 +600,40 @@ public class MeasureModel implements RequestCallback{
         SharedPreferences cache = getUserAnswerCache(mActivity);
         String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
         try {
-            // 构造JSONObject
-            JSONObject userAnswerJO = new JSONObject();
-            userAnswerJO.put("id", id);
-            userAnswerJO.put("answer", answer);
-            userAnswerJO.put("is_right", is_right);
-            userAnswerJO.put("category", category);
-            userAnswerJO.put("note_id", note_id);
-            userAnswerJO.put("duration", duration);
             // 初始化JSONArray
-            JSONArray userAnswerArray = new JSONArray(userAnswer);
-            if (userAnswerArray.length() == 0) {
+            JSONArray userAnswerArray;
+            if (userAnswer.length() == 0) {
                 userAnswerArray = new JSONArray();
-                for (HashMap<String, Object> ignored : userAnswerList) {
+                for (HashMap<String, Object> itemMap : userAnswerList) {
+                    if (itemMap == null) continue;
+                    int itemId = (int) itemMap.get("id");
+                    String itemAnswer = (String) itemMap.get("answer");
+                    int itemCategory = (int) itemMap.get("category_id");
+                    int itemNoteId = (int) itemMap.get("note_id");
+                    int itemDuration = (int) itemMap.get("duration");
+
                     JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id", itemId);
+                    jsonObject.put("answer", itemAnswer);
+                    jsonObject.put("is_right", false);
+                    jsonObject.put("category", itemCategory);
+                    jsonObject.put("note_id", itemNoteId);
+                    jsonObject.put("duration", itemDuration);
                     userAnswerArray.put(jsonObject);
                 }
+            } else {
+                userAnswerArray = new JSONArray(userAnswer);
             }
             // 更新
-            userAnswerArray.put(curIndex, userAnswerJO);
+            // 构造JSONObject
+            JSONObject curJO = new JSONObject();
+            curJO.put("id", id);
+            curJO.put("answer", answer);
+            curJO.put("is_right", is_right);
+            curJO.put("category", category);
+            curJO.put("note_id", note_id);
+            curJO.put("duration", duration);
+            userAnswerArray.put(curIndex, curJO);
 
             String redoSubmit;
             if (redo) {
@@ -634,7 +649,7 @@ public class MeasureModel implements RequestCallback{
             editor.putString(CACHE_REDO, redoSubmit);
             editor.commit();
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -644,7 +659,7 @@ public class MeasureModel implements RequestCallback{
      * @param context
      * @return
      */
-    public SharedPreferences getUserAnswerCache(Context context) {
+    public static SharedPreferences getUserAnswerCache(Context context) {
         return context.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
     }
 
@@ -787,6 +802,7 @@ public class MeasureModel implements RequestCallback{
                         status)
         );
         ToastManager.showToast(activity, "交卷啦");
+        MeasureModel.clearUserAnswerCache(activity);
     }
 
     /**
@@ -945,6 +961,7 @@ public class MeasureModel implements RequestCallback{
                         questions.toString(),
                         "done")
         );
+        MeasureModel.clearUserAnswerCache(activity);
     }
 
     /**
@@ -1017,8 +1034,8 @@ public class MeasureModel implements RequestCallback{
         }, 100);
     }
 
-    public void checkCache(Context context) {
-        SharedPreferences cache = getUserAnswerCache(context);
+    public void checkCache() {
+        SharedPreferences cache = getUserAnswerCache(mContext);
         int paperId = cache.getInt(CACHE_PAPER_ID, 0);
         if (paperId == 0) return;
 
@@ -1026,7 +1043,7 @@ public class MeasureModel implements RequestCallback{
         String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
         String redo = cache.getString(CACHE_REDO, "true");
         if ("mock".equals(paperType)) {
-            new QRequest(mContext, this).getMockExerciseList();
+            new QRequest(mContext, this).getMockPreExamInfo(String.valueOf(paperId));
         } else {
             // 提交做题数据
             new QRequest(mContext, this).cacheSubmitPaper(
@@ -1038,6 +1055,7 @@ public class MeasureModel implements RequestCallback{
                             userAnswer,
                             "undone")
             );
+            clearUserAnswerCache(mContext);
         }
     }
 
@@ -1067,7 +1085,7 @@ public class MeasureModel implements RequestCallback{
                 .setNegativeButton(n, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        clearUserAnswerCache();
+                        clearUserAnswerCache(mContext);
                         dialog.dismiss();
                     }
                 })
@@ -1105,7 +1123,7 @@ public class MeasureModel implements RequestCallback{
                 .setNegativeButton(n, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        clearUserAnswerCache();
+                        clearUserAnswerCache(mContext);
                         dialog.dismiss();
                     }
                 })
@@ -1128,14 +1146,15 @@ public class MeasureModel implements RequestCallback{
                                             userAnswer,
                                             "done")
                             );
+                            clearUserAnswerCache(mContext);
                             dialog.dismiss();
                         }
                     }).show();
     }
 
     @SuppressLint("CommitPrefEdits")
-    private void clearUserAnswerCache() {
-        SharedPreferences cache = getUserAnswerCache(mContext);
+    public static void clearUserAnswerCache(Context context) {
+        SharedPreferences cache = getUserAnswerCache(context);
         SharedPreferences.Editor editor = cache.edit();
         editor.putInt(CACHE_PAPER_ID, 0);
         editor.putString(CACHE_PAPER_TYPE, "");
@@ -1173,6 +1192,10 @@ public class MeasureModel implements RequestCallback{
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // 跳转至学习记录
+                                if (mContext instanceof MainActivity) {
+                                    ((MainActivity) mContext).changeFragment(5);
+                                }
                                 dialog.dismiss();
                             }
                         }).show();
@@ -1185,21 +1208,14 @@ public class MeasureModel implements RequestCallback{
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp == null || resp.getResponse_code() != 1) return;
             showCacheSubmitAlert();
-        } else if ("mock_exercise_list".equals(apiName)) {
-            MockListResp mockListResp =
-                    GsonManager.getModel(response.toString(), MockListResp.class);
-            if (mockListResp == null || mockListResp.getResponse_code() != 1) return;
-            ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
-            if (mockPaperMs != null && mockPaperMs.size() != 0) {
-                MockPaperM mockPaperM = mockPaperMs.get(0);
-                int mockId = mockPaperM.getId();
-                if (mockId == 0) return;
-                String status = mockPaperM.getStatus();
-                if ("finish".equals(status)) {
-                    showMockCacheSubmitTimeOutAlert();
-                } else {
-                    showMockCacheSubmitAlert();
-                }
+        } else if ("mockpre_exam_info".equals(apiName)) {
+            MockPre mockPre = GsonManager.getModel(response.toString(), MockPre.class);
+            if (mockPre == null || mockPre.getResponse_code() != 1) return;
+            String status = mockPre.getMock_status();
+            if ("finish".equals(status)) {
+                showMockCacheSubmitTimeOutAlert();
+            } else {
+                showMockCacheSubmitAlert();
             }
         }
     }

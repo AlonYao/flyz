@@ -184,6 +184,7 @@ public class VipHPTSQuestionFragment extends Fragment {
             mTvFinish.setVisibility(View.GONE);
             mLlUnFinish.setVisibility(View.VISIBLE);
             mRbLevelGood.setChecked(true);
+            mLevel = mRbLevelGood.getText().toString();
 
             mRgLevel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override

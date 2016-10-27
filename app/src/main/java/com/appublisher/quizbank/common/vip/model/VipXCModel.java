@@ -74,14 +74,10 @@ public class VipXCModel extends VipBaseModel {
 
         JSONArray answers = new JSONArray();
 
-        // 标记有没有未做的题
-        boolean hasNoAnswer = false;
-
         HashMap<String, Object> userAnswerMap;
         for (int i = 0; i < list.size(); i++) {
             try {
                 userAnswerMap = list.get(i);
-
                 int id = (int) userAnswerMap.get("id");
                 String answer = (String) userAnswerMap.get("answer");
                 int category = (int) userAnswerMap.get("category_id");
@@ -90,20 +86,15 @@ public class VipXCModel extends VipBaseModel {
                 //noinspection unchecked
                 ArrayList<Integer> noteIdsList = (ArrayList<Integer>) userAnswerMap.get("note_ids");
                 JSONArray note_ids = new JSONArray(noteIdsList);
-
                 // 判断对错
                 int is_right = 0;
                 if (answer != null && right_answer != null
                         && !"".equals(answer) && answer.equals(right_answer)) {
                     is_right = 1;
                 }
-
-                // 标记有没有未做的题
-                if (answer == null || answer.length() == 0) hasNoAnswer = true;
-
                 // 统计总时长
                 duration_total = duration_total + duration;
-
+                // 构造提交数据结构
                 JSONObject joQuestion = new JSONObject();
                 joQuestion.put("id", id);
                 joQuestion.put("answer", answer);
@@ -112,18 +103,12 @@ public class VipXCModel extends VipBaseModel {
                 joQuestion.put("note_ids", note_ids);
                 joQuestion.put("duration", duration);
                 answers.put(joQuestion);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        if (hasNoAnswer) {
-            // 提示用户存在未完成课程
-            showUnFinishAlert(mContext, exercise_id, answers.toString(), duration_total);
-        } else {
-            postPaperAnswer(mContext, exercise_id, answers.toString(), duration_total);
-        }
+        postPaperAnswer(mContext, exercise_id, answers.toString(), duration_total);
     }
 
     /**

@@ -86,20 +86,15 @@
         <meta-data
             android:name="AA_MODELS"
             android:value="com.appublisher.quizbank.model.db.GlobalSetting,                            com.appublisher.quizbank.model.db.Grade,                            com.appublisher.quizbank.model.db.Mock,                            com.appublisher.quizbank.model.db.Paper,                            com.appublisher.lib_login.model.db.User,                            com.appublisher.lib_course.offline.model.db.Offline" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="6" />
 
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind" />
-
-        <!-- 微信回调Activity -->
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- 个推SDK配置开始 -->
         <receiver
@@ -112,6 +107,17 @@
             </intent-filter>
         </receiver>
         <!-- 个推SDK配置结束 -->
+
+        <!-- 新浪回调Activity -->
+        <activity
+            android:name=".WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+            <!--<intent-filter>-->
+            <!--<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />-->
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        </activity>
 
         <activity
             android:name=".activity.SystemNoticeActivity"

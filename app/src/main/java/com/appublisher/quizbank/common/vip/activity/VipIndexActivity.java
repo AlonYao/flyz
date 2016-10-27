@@ -137,17 +137,17 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
         super.onResume();
 
         final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-        nickname.setText(userInfoModel.getNickname());
+        nickname.setText(userInfoModel == null ? "" : userInfoModel.getNickname());
         LoginModel.setAvatar(this, avatarImage);
         final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
-        String name = userExamInfoModel.getName();
-        String date = userExamInfoModel.getDate();
+        String name = userExamInfoModel == null ? "" : userExamInfoModel.getName();
+        String date = userExamInfoModel == null ? "" : userExamInfoModel.getDate();
 
         long day = Utils.dateMinusNow(date);
         if (day < 0) {
             day = 0;
         }
-        final String text = "距离" + name + "还有" + String.valueOf(day) + "天";
+        String text = "距离" + name + "还有" + String.valueOf(day) + "天";
         examText.setText(text);
         mRequest.getVipIndexEntryData();
     }

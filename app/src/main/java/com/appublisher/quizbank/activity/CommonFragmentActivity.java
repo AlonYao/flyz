@@ -7,13 +7,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.SettingFragment;
+import com.appublisher.quizbank.model.business.CommonModel;
 
 public class CommonFragmentActivity extends BaseActivity {
 
@@ -26,7 +26,7 @@ public class CommonFragmentActivity extends BaseActivity {
         setContentView(R.layout.activity_common_fragment);
         mFrom = getIntent().getStringExtra("from");
 
-        setToolBar(this);
+        CommonModel.setToolBar(this);
 
         mFragmentManager = getSupportFragmentManager();
         setValue();
