@@ -108,6 +108,12 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
                 list.clear();
             list.addAll(notificationResp.getNotifications());
             adapter.notifyDataSetChanged();
+            if (notificationResp.getNotifications().size() == 0) {
+                listView.setPullLoadEnable(false);
+                ToastManager.showToast(this, "已加载全部");
+            } else {
+                listView.setPullLoadEnable(true);
+            }
         }
     }
 
