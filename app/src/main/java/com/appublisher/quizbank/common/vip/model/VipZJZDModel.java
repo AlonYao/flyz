@@ -31,7 +31,7 @@ public class VipZJZDModel extends VipBaseModel {
     public int mExerciseId;
 
     // Umeng
-    public String mUMDone = "0";
+    private String mUMDone = "0";
     public long mUMBegin;
 
     public VipZJZDModel(Context context) {
@@ -92,6 +92,11 @@ public class VipZJZDModel extends VipBaseModel {
             if (userAnswer != null) {
                 mView.showRejectAlert(userAnswer.getReview_postil(), resp.getEnd_time());
             }
+        }
+
+        // Umeng
+        if (status == 1 || status == 5) {
+            mUMDone = "1";
         }
     }
 
