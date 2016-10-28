@@ -246,13 +246,13 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (isDone == 0) {
-            int des = (int) (umDurationEnd - umDurationBegin) / 1000;
+        if (isDone == 0 && umDurationEnd != 0) {
+            int des = (int) (System.currentTimeMillis() - umDurationBegin) / 1000;
             umMap.clear();
             umMap.put("Done", "0");
             UmengManager.onEventValue(this, eventId, umMap, des);
-        } else if (isDone == 1) {
-            int des = (int) (umDurationEnd - umDurationBegin) / 1000;
+        } else if (isDone == 1 && umDurationEnd != 0) {
+            int des = (int) (System.currentTimeMillis() - umDurationBegin) / 1000;
             umMap.clear();
             umMap.put("Done", "1");
             UmengManager.onEventValue(this, eventId, umMap, des);
