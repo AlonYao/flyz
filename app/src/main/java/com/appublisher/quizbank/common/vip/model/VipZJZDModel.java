@@ -2,14 +2,17 @@ package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipZJZDActivity;
+import com.appublisher.quizbank.common.vip.netdata.VipSubmitResp;
 import com.appublisher.quizbank.common.vip.netdata.VipZJZDResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 小班：字迹诊断模块
@@ -26,6 +29,10 @@ public class VipZJZDModel extends VipBaseModel {
     public boolean mCanSubmit;
     public ArrayList<String> mPaths;
     public int mExerciseId;
+
+    // Umeng
+    public String mUMDone = "0";
+    public long mUMBegin;
 
     public VipZJZDModel(Context context) {
         super(context);
@@ -105,13 +112,30 @@ public class VipZJZDModel extends VipBaseModel {
         });
     }
 
+    /**
+     * 提交友盟统计数据
+     */
+    public void sendToUmeng() {
+        HashMap<String, String> map = new HashMap<>();
+        int dur = (int) ((System.currentTimeMillis() - mUMBegin) / 1000);
+        map.put("Done", mUMDone);
+        UmengManager.onEventValue(mContext, "Ziji", map, dur);
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             dealExerciseDetailResp(response);
         } else if (VipRequest.SUBMIT.equals(apiName)) {
-            mView.showLoading();
-            getExerciseDetail();
+            VipSubmitResp resp = GsonManager.getModel(response, VipSubmitResp.class);
+            if (resp != null && resp.getResponse_code() == 1) {
+                mView.showLoading();
+                getExerciseDetail();
+                // Umeng
+                mUMDone = "1";
+            } else {
+                mView.showSubmitErrorToast();
+            }
         }
         super.requestCompleted(response, apiName);
     }

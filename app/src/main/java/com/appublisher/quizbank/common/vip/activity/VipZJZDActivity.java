@@ -40,6 +40,13 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        mModel.sendToUmeng();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) return;
@@ -89,6 +96,8 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     private void initData() {
         mModel = new VipZJZDModel(this);
         mModel.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
+        // Umeng
+        mModel.mUMBegin = System.currentTimeMillis();
         // 获取练习详情
         showLoading();
         mModel.getExerciseDetail();
