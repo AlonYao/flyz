@@ -16,6 +16,7 @@ public class VipDTTPActivity extends VipBaseActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private VipDTTPAdapter mAdapter;
+    private VipDTTPModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,12 @@ public class VipDTTPActivity extends VipBaseActivity {
         setToolBar(this);
         initView();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mModel.sendToUmeng();
     }
 
     @Override
@@ -37,10 +44,12 @@ public class VipDTTPActivity extends VipBaseActivity {
     }
 
     private void initData() {
-        VipDTTPModel model = new VipDTTPModel(this);
+        mModel = new VipDTTPModel(this);
         showLoading();
-        model.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
-        model.getExerciseDetail();
+        mModel.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
+        mModel.getExerciseDetail();
+        // Umeng
+        mModel.mUMBegin = System.currentTimeMillis();
     }
 
     private void initView() {

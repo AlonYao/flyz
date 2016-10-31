@@ -13,6 +13,7 @@ public class VipHPTSActivity extends VipBaseActivity {
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private VipHPTSModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +24,19 @@ public class VipHPTSActivity extends VipBaseActivity {
         initData();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mModel.sendToUmeng();
+    }
+
     private void initData() {
-        VipHPTSModel model = new VipHPTSModel(this);
+        mModel = new VipHPTSModel(this);
         showLoading();
-        model.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
-        model.getExerciseDetail();
+        mModel.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
+        mModel.getExerciseDetail();
+        // Umeng
+        mModel.mUMBegin = System.currentTimeMillis();
     }
 
     private void initView() {
