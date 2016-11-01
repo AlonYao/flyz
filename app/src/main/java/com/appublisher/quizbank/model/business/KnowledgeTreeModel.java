@@ -195,7 +195,7 @@ public class KnowledgeTreeModel {
                             hierarchy.getNotes(),
                             hierarchy.getLevel(),
                             hierarchy.getRight(),
-                            hierarchy.getDuration()));
+                            (int) hierarchy.getDuration()));
         } else {
             return new TreeNode(
                     new TreeItemHolder.TreeItem(

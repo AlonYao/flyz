@@ -37,7 +37,7 @@ ext {
     GT_ACTION_APPID = 'com.igexin.sdk.action.ochSakabi27Qk0igiEO7m5'
     GT_AUTHORITIES = 'downloads.com.appublisher.quizbank'
     QQ_SCHEME = 'tencent1104655578'
-    GD_KEY = ''
+    GD_KEY = 'b2a10842076b75ad042ce68dbe3a397b'
 }
 
 task pullLibBasic {
