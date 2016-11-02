@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_bg"
     tools:context=".common.vip.activity.VipIndexActivity">
 
     <ScrollView
@@ -74,8 +75,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/exam_txt"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
                     android:layout_marginBottom="-10dp"
+                    android:layout_marginRight="20dp"
                     android:padding="10dp"
                     android:src="@drawable/vip_index_setting" />
 
@@ -155,9 +156,9 @@
                         android:layout_toRightOf="@+id/homework_txt"
                         android:background="@drawable/opencourse_num_bg"
                         android:gravity="center"
+                        android:text=""
                         android:textColor="@color/white"
-                        android:visibility="invisible"
-                        android:text="" />
+                        android:visibility="invisible" />
 
                     <TextView
                         android:id="@+id/homework_time"
@@ -192,9 +193,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/vip_index_message"
                         android:layout_marginBottom="10dp"
-                        />
+                        android:src="@drawable/vip_index_message" />
 
                     <TextView
                         android:id="@+id/message_txt"
@@ -213,9 +213,9 @@
                         android:layout_toRightOf="@+id/message_txt"
                         android:background="@drawable/opencourse_num_bg"
                         android:gravity="center"
+                        android:text=""
                         android:textColor="@color/white"
-                        android:visibility="invisible"
-                        android:text="" />
+                        android:visibility="invisible" />
 
                     <TextView
                         android:layout_width="wrap_content"
