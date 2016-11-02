@@ -204,6 +204,56 @@ android {
                                     APP_CHANNEL: "weibo-feeds-43"]
         }
 
+        "weibo-bird-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-bird-1"]
+        }
+
+        "weibo-bird-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-bird-2"]
+        }
+
+        "weibo-bird-3" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-bird-3"]
+        }
+
+        "weibo-bird-4" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-bird-4"]
+        }
+
+        "weibo-yhby-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-yhby-1"]
+        }
+
+        "weibo-yhby-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-yhby-2"]
+        }
+
+        "weibo-yhby-3" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-yhby-3"]
+        }
+
+        "weibo-gzbs-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-gzbs-1"]
+        }
+
+        "weibo-gzbs-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-gzbs-2"]
+        }
+
+        "weibo-gzbs-3" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "weibo-gzbs-3"]
+        }
+
         /**
          * 360
          */
@@ -354,6 +404,11 @@ android {
         "baidu-qudao-1" {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
                                     APP_CHANNEL: "baidu-qudao-1"]
+        }
+
+        "baidu-qudao-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-qudao-2"]
         }
 
         /**
