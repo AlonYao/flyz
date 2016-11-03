@@ -5,7 +5,7 @@ import android.view.MenuItem;
 
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
 import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * MeasureAnalysisActivity Model
+ * LegacyMeasureAnalysisActivity Model
  */
-public class MeasureAnalysisModel {
+public class LegacyMeasureAnalysisModel {
 
     private static int mCurPosition;
 
@@ -28,11 +28,11 @@ public class MeasureAnalysisModel {
     /**
      * 设置ViewPager
      *
-     * @param activity  MeasureAnalysisActivity
+     * @param activity  LegacyMeasureAnalysisActivity
      * @param questions 问题
      * @param answers   答案
      */
-    public static void setViewPager(final MeasureAnalysisActivity activity,
+    public static void setViewPager(final LegacyMeasureAnalysisActivity activity,
                                     final ArrayList<QuestionM> questions,
                                     final ArrayList<AnswerM> answers) {
         if (questions == null || questions.size() == 0) return;
@@ -136,18 +136,18 @@ public class MeasureAnalysisModel {
             }
         }
 
-        MeasureModel.jointUserAnswer(questions, answers, activity.mUserAnswerList);
+        LegacyMeasureModel.jointUserAnswer(questions, answers, activity.mUserAnswerList);
     }
 
     /**
      * 设置页面的状态
      *
      * @param position 页面的位置
-     * @param activity MeasureAnalysisActivity
+     * @param activity LegacyMeasureAnalysisActivity
      * @param answers  用户答案
      */
     private static void setCurPageStatus(int position,
-                                         MeasureAnalysisActivity activity,
+                                         LegacyMeasureAnalysisActivity activity,
                                          ArrayList<AnswerM> answers) {
         if (position >= answers.size()) return;
 
@@ -165,10 +165,10 @@ public class MeasureAnalysisModel {
     /**
      * 设置收藏
      *
-     * @param activity MeasureAnalysisActivity
+     * @param activity LegacyMeasureAnalysisActivity
      * @param item     MenuItem
      */
-    public static void setCollect(MeasureAnalysisActivity activity, MenuItem item) {
+    public static void setCollect(LegacyMeasureAnalysisActivity activity, MenuItem item) {
         activity.mCollect = "collect";
 
         if (activity.mCurAnswerModel != null) activity.mCurAnswerModel.setIs_collected(true);
@@ -179,10 +179,10 @@ public class MeasureAnalysisModel {
     /**
      * 设置未收藏
      *
-     * @param activity MeasureAnalysisActivity
+     * @param activity LegacyMeasureAnalysisActivity
      * @param item     MenuItem
      */
-    public static void setUnCollect(MeasureAnalysisActivity activity, MenuItem item) {
+    public static void setUnCollect(LegacyMeasureAnalysisActivity activity, MenuItem item) {
         activity.mCollect = "cancel";
 
         if (activity.mCurAnswerModel != null) activity.mCurAnswerModel.setIs_collected(false);

@@ -34,8 +34,8 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.MainActivity;
-import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.UserAnswerEntity;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
@@ -72,10 +72,10 @@ import java.util.TimerTask;
 /**
  * 做题模块
  */
-public class MeasureModel implements RequestCallback{
+public class LegacyMeasureModel implements RequestCallback{
 
     private static boolean mOptionClick;
-    private MeasureActivity mActivity;
+    private LegacyMeasureActivity mActivity;
     private Context mContext;
 
     private static final String CACHE_USER_ANSWER = "cache_user_answer";
@@ -86,11 +86,11 @@ public class MeasureModel implements RequestCallback{
     private static final String CACHE_PAPER_NAME = "cache_paper_name";
     private static final String YAOGUO_MEASURE = "yaoguo_measure";
 
-    public MeasureModel(MeasureActivity activity) {
+    public LegacyMeasureModel(LegacyMeasureActivity activity) {
         mActivity = activity;
     }
 
-    public MeasureModel(Context context) {
+    public LegacyMeasureModel(Context context) {
         mContext = context;
     }
 
@@ -122,7 +122,7 @@ public class MeasureModel implements RequestCallback{
                         }
 
                         mActivity.mQuestions = questions;
-                        MeasureActivity.mDuration = xcResp.getDuration();
+                        LegacyMeasureActivity.mDuration = xcResp.getDuration();
                         mActivity.setContent();
                     }
         });
@@ -378,9 +378,9 @@ public class MeasureModel implements RequestCallback{
     /**
      * 获取数据
      *
-     * @param activity MeasureActivity
+     * @param activity LegacyMeasureActivity
      */
-    public static void getData(MeasureActivity activity) {
+    public static void getData(LegacyMeasureActivity activity) {
         if (activity.mPaperType == null) return;
 
         // 其他
@@ -389,21 +389,21 @@ public class MeasureModel implements RequestCallback{
             // 提交时的字段是paperId，所有这里要统一
             activity.mPaperId = activity.mExerciseId;
             ProgressDialogManager.showProgressDialog(activity, true);
-            MeasureActivity.mQRequest.getHistoryExerciseDetail(
+            LegacyMeasureActivity.mQRequest.getHistoryExerciseDetail(
                     activity.mExerciseId, activity.mPaperType);
         } else {
             // 做新题
             switch (activity.mPaperType) {
                 case "auto":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mQRequest.getAutoTraining();
+                    LegacyMeasureActivity.mQRequest.getAutoTraining();
                     break;
 
                 case "note":
                 case "error":
                 case "collect":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mQRequest.getNoteQuestions(
+                    LegacyMeasureActivity.mQRequest.getNoteQuestions(
                             String.valueOf(activity.mHierarchyId),
                             activity.mPaperType);
                     break;
@@ -413,7 +413,7 @@ public class MeasureModel implements RequestCallback{
                 case "entire":
                 case "mokao":
                     ProgressDialogManager.showProgressDialog(activity, true);
-                    MeasureActivity.mQRequest.getPaperExercise(
+                    LegacyMeasureActivity.mQRequest.getPaperExercise(
                             activity.mPaperId, activity.mPaperType);
                     break;
             }
@@ -423,10 +423,10 @@ public class MeasureModel implements RequestCallback{
     /**
      * 处理历史练习回调(用户已经做过一次后，请求的接口)
      *
-     * @param activity MeasureActivity
+     * @param activity LegacyMeasureActivity
      * @param response 回调数据
      */
-    public void dealExerciseDetailResp(MeasureActivity activity,
+    public void dealExerciseDetailResp(LegacyMeasureActivity activity,
                                               JSONObject response) {
         if (response == null) return;
 
@@ -504,9 +504,9 @@ public class MeasureModel implements RequestCallback{
         }
 
         // 倒计时
-        MeasureActivity.mDuration =
+        LegacyMeasureActivity.mDuration =
                 historyExerciseResp.getDuration() - historyExerciseResp.getStart_from();
-        if (MeasureActivity.mockpre && MeasureActivity.mMockTime != null) {
+        if (LegacyMeasureActivity.mockpre && LegacyMeasureActivity.mMockTime != null) {
             // 如果是模考则计算剩余时间
             time();
         } else {
@@ -520,7 +520,7 @@ public class MeasureModel implements RequestCallback{
     /**
      * 设置ViewPager
      */
-    private void setViewPager(final MeasureActivity activity) {
+    private void setViewPager(final LegacyMeasureActivity activity) {
         MeasureAdapter measureAdapter = new MeasureAdapter(activity);
         activity.mViewPager.setAdapter(measureAdapter);
 
@@ -693,9 +693,9 @@ public class MeasureModel implements RequestCallback{
     /**
      * 倒计时启动
      */
-    private static void startTimer(final MeasureActivity activity) {
-        MeasureActivity.mMins = MeasureActivity.mDuration / 60;
-        MeasureActivity.mSec = MeasureActivity.mDuration % 60;
+    private static void startTimer(final LegacyMeasureActivity activity) {
+        LegacyMeasureActivity.mMins = LegacyMeasureActivity.mDuration / 60;
+        LegacyMeasureActivity.mSec = LegacyMeasureActivity.mDuration % 60;
 
         if (activity.mTimer != null) {
             activity.mTimer.cancel();
@@ -707,18 +707,18 @@ public class MeasureModel implements RequestCallback{
 
             @Override
             public void run() {
-                MeasureActivity.mSec--;
-                MeasureActivity.mDuration--;
-                if (MeasureActivity.mSec < 0) {
-                    MeasureActivity.mMins--;
-                    MeasureActivity.mSec = 59;
-                    MeasureActivity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
-                    if (MeasureActivity.mMins < 0) {
+                LegacyMeasureActivity.mSec--;
+                LegacyMeasureActivity.mDuration--;
+                if (LegacyMeasureActivity.mSec < 0) {
+                    LegacyMeasureActivity.mMins--;
+                    LegacyMeasureActivity.mSec = 59;
+                    LegacyMeasureActivity.mHandler.sendEmptyMessage(LegacyMeasureActivity.TIME_ON);
+                    if (LegacyMeasureActivity.mMins < 0) {
                         activity.mTimer.cancel();
-                        MeasureActivity.mHandler.sendEmptyMessage(MeasureActivity.TIME_OUT);
+                        LegacyMeasureActivity.mHandler.sendEmptyMessage(LegacyMeasureActivity.TIME_OUT);
                     }
                 } else {
-                    MeasureActivity.mHandler.sendEmptyMessage(MeasureActivity.TIME_ON);
+                    LegacyMeasureActivity.mHandler.sendEmptyMessage(LegacyMeasureActivity.TIME_ON);
                 }
             }
         }, 0, 1000);
@@ -728,16 +728,16 @@ public class MeasureModel implements RequestCallback{
      * 倒计时2
      */
     private static void time() {
-        Message message = MeasureActivity.mHandler.obtainMessage(MeasureActivity.TIME_ON_MOCK);
-        MeasureActivity.mHandler.sendMessage(message);
+        Message message = LegacyMeasureActivity.mHandler.obtainMessage(LegacyMeasureActivity.TIME_ON_MOCK);
+        LegacyMeasureActivity.mHandler.sendMessage(message);
     }
 
     /**
      * 提交答案(从做题页面Alert处的提交)
      *
-     * @param activity MeasureActivity
+     * @param activity LegacyMeasureActivity
      */
-    public static void submitPaper(MeasureActivity activity) {
+    public static void submitPaper(LegacyMeasureActivity activity) {
         int duration_total = 0;
         HashMap<String, Object> userAnswerMap;
         JSONArray questions = new JSONArray();
@@ -786,7 +786,7 @@ public class MeasureModel implements RequestCallback{
                 e.printStackTrace();
             }
         }
-        if (MeasureActivity.mockpre) {
+        if (LegacyMeasureActivity.mockpre) {
             status = "done";
         } else {
             status = "undone";
@@ -802,7 +802,7 @@ public class MeasureModel implements RequestCallback{
                         status)
         );
         ToastManager.showToast(activity, "交卷啦");
-        MeasureModel.clearUserAnswerCache(activity);
+        LegacyMeasureModel.clearUserAnswerCache(activity);
     }
 
     /**
@@ -852,7 +852,7 @@ public class MeasureModel implements RequestCallback{
      *
      * @param activity AnswerSheetActivity
      */
-    public static void autoSubmitPaper(MeasureActivity activity) {
+    public static void autoSubmitPaper(LegacyMeasureActivity activity) {
         // 重置数据
         activity.mRightNum = 0;
         int duration_total = 0;
@@ -961,22 +961,22 @@ public class MeasureModel implements RequestCallback{
                         questions.toString(),
                         "done")
         );
-        MeasureModel.clearUserAnswerCache(activity);
+        LegacyMeasureModel.clearUserAnswerCache(activity);
     }
 
     /**
      * 处理服务器时间回调
-     * @param activity MeasureActivity
+     * @param activity LegacyMeasureActivity
      * @param resp ServerCurrentTimeResp
      */
-    public static void dealServerCurrentTimeResp(MeasureActivity activity,
+    public static void dealServerCurrentTimeResp(LegacyMeasureActivity activity,
                                                  ServerCurrentTimeResp resp) {
         if (resp == null || resp.getResponse_code() != 1) return;
 
         String serverTime = resp.getCurrent_time();
 
         if (serverTime == null || serverTime.length() == 0) return;
-        if (MeasureActivity.mMockTime == null || MeasureActivity.mMockTime.length() == 0) return;
+        if (LegacyMeasureActivity.mMockTime == null || LegacyMeasureActivity.mMockTime.length() == 0) return;
 
         long seconds = 0;
 
@@ -984,7 +984,7 @@ public class MeasureModel implements RequestCallback{
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             ParsePosition parsePosition = new ParsePosition(0);
-            Date time = formatter.parse(MeasureActivity.mMockTime, parsePosition);
+            Date time = formatter.parse(LegacyMeasureActivity.mMockTime, parsePosition);
             seconds = time.getTime() - Long.parseLong(serverTime) * 1000;
         } catch (Exception e) {
             // Empty
@@ -1007,7 +1007,7 @@ public class MeasureModel implements RequestCallback{
             if (seconds <= 0) {
                 // 时间到
                 AlertManager.mockTimeOutAlert(activity);
-                MeasureModel.autoSubmitPaper(activity);
+                LegacyMeasureModel.autoSubmitPaper(activity);
                 if (activity.getSupportActionBar() == null) return;
                 activity.getSupportActionBar().setTitle("00:00");
             }
@@ -1101,7 +1101,7 @@ public class MeasureModel implements RequestCallback{
                             String mockTime = cache.getString(CACHE_MOCK_TIME, "");
                             String paperName = cache.getString(CACHE_PAPER_NAME, "");
                             // 跳转
-                            Intent intent = new Intent(mContext, MeasureActivity.class);
+                            Intent intent = new Intent(mContext, LegacyMeasureActivity.class);
                             intent.putExtra("from", "mockpre");
                             intent.putExtra("paper_id", paperId);
                             intent.putExtra("paper_type", "mock");

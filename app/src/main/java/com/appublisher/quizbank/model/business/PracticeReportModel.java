@@ -20,7 +20,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
@@ -350,7 +350,7 @@ public class PracticeReportModel {
      */
     private void skipToMeasureAnalysisActivity(ArrayList<QuestionM> questions,
                                                ArrayList<AnswerM> answers) {
-        Intent intent = new Intent(mActivity, MeasureAnalysisActivity.class);
+        Intent intent = new Intent(mActivity, LegacyMeasureAnalysisActivity.class);
         intent.putExtra("questions", questions);
         intent.putExtra("answers", answers);
         intent.putExtra("paper_name", mActivity.mPaperName);

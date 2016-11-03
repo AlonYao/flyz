@@ -11,8 +11,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
-import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
+import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 public class MeasureAnalysisAdapter extends PagerAdapter {
 
-    private MeasureAnalysisActivity mActivity;
+    private LegacyMeasureAnalysisActivity mActivity;
     private int mLastY;
     private ArrayList<QuestionM> mQuestions;
     private ArrayList<AnswerM> mAnswers;
@@ -38,7 +38,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
     private TextView mTvOptionD;
     private ImageView mIvNoAnswer;
 
-    public MeasureAnalysisAdapter(MeasureAnalysisActivity activity,
+    public MeasureAnalysisAdapter(LegacyMeasureAnalysisActivity activity,
                                   ArrayList<QuestionM> questions,
                                   ArrayList<AnswerM> answers) {
         mActivity = activity;
@@ -81,7 +81,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
             final ScrollView svTop = (ScrollView) view.findViewById(R.id.measure_top);
 
             // 材料
-            MeasureModel.addRichTextToContainer(mActivity, llMaterial, material, true);
+            LegacyMeasureModel.addRichTextToContainer(mActivity, llMaterial, material, true);
 
             ivPull.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -148,7 +148,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
                 + "/" + String.valueOf(mQuestions.size()) + "#%";
         questionContent = questionPosition + (questionContent == null ? "" : questionContent);
 
-        MeasureModel.addRichTextToContainer(
+        LegacyMeasureModel.addRichTextToContainer(
                 mActivity, llQuestionContent, questionContent, true, questionPosition);
 
         // 设置选项内容
@@ -166,10 +166,10 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
         String optionC = question.getOption_c();
         String optionD = question.getOption_d();
 
-        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA, true);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB, true);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC, true);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD, true);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA, true);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB, true);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC, true);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD, true);
 
         // 选项Textview控件
         mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
@@ -203,7 +203,7 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
         LinearLayout llMeasureAnalysis =
                 (LinearLayout) view.findViewById(R.id.measure_analysis_container);
 
-        MeasureModel.addRichTextToContainer(
+        LegacyMeasureModel.addRichTextToContainer(
                 mActivity, llMeasureAnalysis, "【解析】 " + question.getAnalysis(), true);
 
         // 解析 知识点&来源&统计

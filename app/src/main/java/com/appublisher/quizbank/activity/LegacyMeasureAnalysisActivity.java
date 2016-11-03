@@ -28,8 +28,8 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
-import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.LegacyMeasureAnalysisModel;
+import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.MeasureAnalysisResp;
@@ -53,7 +53,7 @@ import java.util.Random;
 /**
  * 做题解析模块
  */
-public class MeasureAnalysisActivity extends BaseActivity implements RequestCallback {
+public class LegacyMeasureAnalysisActivity extends BaseActivity implements RequestCallback {
 
     public int mScreenHeight;
     public int mCurQuestionId;
@@ -91,7 +91,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_measure_analysis);
+        setContentView(R.layout.activity_legacy_measure_analysis);
 
         // ToolBar
        setToolBar(this);
@@ -109,7 +109,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
         mUmengFeedback = "0";
 
         // 获取ToolBar高度
-        int toolBarHeight = MeasureModel.getViewHeight(toolbar);
+        int toolBarHeight = LegacyMeasureModel.getViewHeight(toolbar);
 
         // 获取屏幕高度
         DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -142,7 +142,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
             //noinspection unchecked
             ArrayList<AnswerM> answers =
                     (ArrayList<AnswerM>) getIntent().getSerializableExtra("answers");
-            MeasureAnalysisModel.setViewPager(this, questions, answers);
+            LegacyMeasureAnalysisModel.setViewPager(this, questions, answers);
         }
     }
 
@@ -164,7 +164,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                UmengManager.onEvent(MeasureAnalysisActivity.this, "Back");
+                UmengManager.onEvent(LegacyMeasureAnalysisActivity.this, "Back");
             }
 
             @Override
@@ -252,13 +252,13 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // Umeng
-            UmengManager.onEvent(MeasureAnalysisActivity.this, "Back");
+            UmengManager.onEvent(LegacyMeasureAnalysisActivity.this, "Back");
             finish();
 
         } else if ("收藏".equals(item.getTitle())) {
             if (mCurAnswerModel != null && mCurAnswerModel.is_collected()) {
                 // 如果是已收藏状态，取消收藏
-                MeasureAnalysisModel.setUnCollect(this, item);
+                LegacyMeasureAnalysisModel.setUnCollect(this, item);
 
                 ToastManager.showToast(this, "取消收藏");
 
@@ -267,7 +267,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
 
             } else {
                 // 如果是未收藏状态，收藏
-                MeasureAnalysisModel.setCollect(this, item);
+                LegacyMeasureAnalysisModel.setCollect(this, item);
 
                 ToastManager.showToast(this, "收藏成功");
 
@@ -315,7 +315,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
                         .setText(content[random])
                         .setUmImage(new UMImage(this, Utils.getBitmapByView(mViewPager)))
                         .setTargetUrl(targetUrl);
-                UmengManager.shareAction(MeasureAnalysisActivity.this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
+                UmengManager.shareAction(LegacyMeasureAnalysisActivity.this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
                     @Override
                     public void platform(SHARE_MEDIA platformType) {
                         // Empty
@@ -330,7 +330,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
     @Override
     public void onBackPressed() {
         // Umeng
-        UmengManager.onEvent(MeasureAnalysisActivity.this, "Back");
+        UmengManager.onEvent(LegacyMeasureAnalysisActivity.this, "Back");
         super.onBackPressed();
     }
 
@@ -398,7 +398,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
         tvImageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                Intent intent = new Intent(LegacyMeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "1");
                 intent.putExtra("bar_title", tvImageText.getText().toString());
@@ -411,7 +411,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
         tvAnswerWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                Intent intent = new Intent(LegacyMeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "2");
                 intent.putExtra("bar_title", tvAnswerWrong.getText().toString());
@@ -424,7 +424,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
         tvAnalysisWrong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                Intent intent = new Intent(LegacyMeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "3");
                 intent.putExtra("bar_title", tvAnalysisWrong.getText().toString());
@@ -437,7 +437,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
         tvBetterAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MeasureAnalysisActivity.this, MyAnalysisActivity.class);
+                Intent intent = new Intent(LegacyMeasureAnalysisActivity.this, MyAnalysisActivity.class);
                 intent.putExtra("question_id", String.valueOf(mCurQuestionId));
                 intent.putExtra("type", "4");
                 intent.putExtra("bar_title", tvBetterAnalysis.getText().toString());
@@ -462,7 +462,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements RequestCall
         if (measureAnalysisResp == null || measureAnalysisResp.getResponse_code() != 1) return;
         ArrayList<QuestionM> questions = measureAnalysisResp.getQuestions();
 
-        MeasureAnalysisModel.setViewPager(this, questions, measureAnalysisResp.getAnswers());
+        LegacyMeasureAnalysisModel.setViewPager(this, questions, measureAnalysisResp.getAnswers());
     }
 
     @Override

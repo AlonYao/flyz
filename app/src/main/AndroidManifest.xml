@@ -152,7 +152,7 @@
             android:label="@string/title_activity_qa"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MeasureActivity"
+            android:name=".activity.LegacyMeasureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_measure"
             android:screenOrientation="portrait" />
@@ -173,7 +173,7 @@
             android:label="@string/title_activity_practice_report"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MeasureAnalysisActivity"
+            android:name=".activity.LegacyMeasureAnalysisActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_measure_analysis"
             android:screenOrientation="portrait" />

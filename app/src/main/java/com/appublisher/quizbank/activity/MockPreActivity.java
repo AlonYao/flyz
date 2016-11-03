@@ -31,7 +31,7 @@ import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.MockDAO;
-import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.mock.MockListResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
@@ -366,9 +366,9 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         mock_time = mockPre.getMock_time();
 
         // 缓存模考时间
-        MeasureModel measureModel = new MeasureModel(this);
-        measureModel.updateMockTime(mock_time);
-        measureModel.updatePaperName(paper_name);
+        LegacyMeasureModel legacyMeasureModel = new LegacyMeasureModel(this);
+        legacyMeasureModel.updateMockTime(mock_time);
+        legacyMeasureModel.updatePaperName(paper_name);
 
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         int date = MockDAO.getIsDateById(mock_id);
@@ -443,7 +443,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
 
             case R.id.mockpre_bottom_left://进入考试
                 if (beginMock) {
-                    Intent intent = new Intent(this, MeasureActivity.class);
+                    Intent intent = new Intent(this, LegacyMeasureActivity.class);
                     intent.putExtra("from", "mockpre");
                     intent.putExtra("paper_id", mock_id);
                     intent.putExtra("paper_type", "mock");

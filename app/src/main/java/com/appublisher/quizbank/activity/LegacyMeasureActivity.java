@@ -26,7 +26,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
-import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.measure.AutoTrainingResp;
@@ -51,7 +51,7 @@ import java.util.TimerTask;
 /**
  * 做题
  */
-public class MeasureActivity extends BaseActivity implements RequestCallback {
+public class LegacyMeasureActivity extends BaseActivity implements RequestCallback {
 
     public int mScreenHeight;
     public int mCurPosition;
@@ -71,7 +71,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
     public String mFrom;
     public Gson mGson;
     public Timer mTimer;
-    public MeasureModel mModel;
+    public LegacyMeasureModel mModel;
 
     public static Toolbar mToolbar;
     public static Handler mHandler;
@@ -115,7 +115,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
         @SuppressLint("CommitPrefEdits")
         @Override
         public void handleMessage(Message msg) {
-            final MeasureActivity activity = (MeasureActivity) mActivity.get();
+            final LegacyMeasureActivity activity = (LegacyMeasureActivity) mActivity.get();
             if (activity != null) {
                 switch (msg.what) {
                     case TIME_ON:
@@ -140,8 +140,8 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
 
                     case TIME_ON_MOCK:
                         mock_duration = (int) Utils.getSecondsByDateMinusNow(mMockTime) + mDuration;
-                        MeasureActivity.mMins = mock_duration / 60;
-                        MeasureActivity.mSec = mock_duration % 60;
+                        LegacyMeasureActivity.mMins = mock_duration / 60;
+                        LegacyMeasureActivity.mSec = mock_duration % 60;
                         mins = String.valueOf(mMins);
                         sec = String.valueOf(mSec);
                         if (mins.length() == 1) mins = "0" + mins;
@@ -170,7 +170,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_measure);
+        setContentView(R.layout.activity_legacy_measure);
 
         // ToolBar
         setToolBar(this);
@@ -190,10 +190,10 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
         mUmengPause = "0";
         mUmengAnswerSheet = "0";
         mQRequest = new QRequest(this, this);
-        mModel = new MeasureModel(this);
+        mModel = new LegacyMeasureModel(this);
 
         // 获取ToolBar高度
-        int toolBarHeight = MeasureModel.getViewHeight(mToolbar);
+        int toolBarHeight = LegacyMeasureModel.getViewHeight(mToolbar);
 
         // 获取屏幕高度
         DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -217,10 +217,10 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
         }
 
         if ("vip".equals(mPaperType)) {
-            MeasureModel measureModel = new MeasureModel(this);
-            measureModel.getVipIntelligentPaper();
+            LegacyMeasureModel legacyMeasureModel = new LegacyMeasureModel(this);
+            legacyMeasureModel.getVipIntelligentPaper();
         } else {
-            MeasureModel.getData(this);
+            LegacyMeasureModel.getData(this);
         }
     }
 
@@ -244,7 +244,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
             public void onHomePressed() {
                 // 友盟统计
                 mUmengIsPressHome = true;
-                UmengManager.onEvent(MeasureActivity.this, "0");
+                UmengManager.onEvent(LegacyMeasureActivity.this, "0");
             }
 
             @Override
@@ -485,10 +485,10 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
                     if (map != null && map.containsKey("answer")
                             && map.get("answer") != null && !map.get("answer").equals("")) {
                         um_map.put("Answer", "1");
-                        UmengManager.onEvent(MeasureActivity.this, "Problem", um_map);
+                        UmengManager.onEvent(LegacyMeasureActivity.this, "Problem", um_map);
                     } else {
                         um_map.put("Answer", "0");
-                        UmengManager.onEvent(MeasureActivity.this, "Problem", um_map);
+                        UmengManager.onEvent(LegacyMeasureActivity.this, "Problem", um_map);
                     }
                 }
 
@@ -554,7 +554,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
     public void saveTest() {
         if ("vip".equals(mPaperType)) {
             // 小班特殊处理
-            UmengManager.onEvent(MeasureActivity.this, "0");
+            UmengManager.onEvent(LegacyMeasureActivity.this, "0");
             finish();
         }
 
@@ -574,7 +574,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
         if (isSave) {
             AlertManager.saveTestAlert(this);
         } else {
-            UmengManager.onEvent(MeasureActivity.this, "0");
+            UmengManager.onEvent(LegacyMeasureActivity.this, "0");
             finish();
         }
     }
@@ -656,7 +656,7 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 if (!isFinishing())
-                    MeasureModel.dealServerCurrentTimeResp(this, resp);
+                    LegacyMeasureModel.dealServerCurrentTimeResp(this, resp);
                 break;
         }
 

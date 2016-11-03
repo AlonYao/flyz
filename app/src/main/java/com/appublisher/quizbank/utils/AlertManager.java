@@ -19,16 +19,16 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
-import com.appublisher.quizbank.activity.MeasureActivity;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.HomePageModel;
-import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
-import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.LegacyMeasureAnalysisModel;
+import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.umeng.analytics.MobclickAgent;
@@ -48,9 +48,9 @@ public class AlertManager {
     /**
      * 暂停Alert
      *
-     * @param activity MeasureActivity
+     * @param activity LegacyMeasureActivity
      */
-    public static void pauseAlert(final MeasureActivity activity) {
+    public static void pauseAlert(final LegacyMeasureActivity activity) {
         final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setCancelable(false);
         alertDialog.show();
@@ -74,10 +74,10 @@ public class AlertManager {
     /**
      * 保存测验Alert
      *
-     * @param activity MeasureActivity
+     * @param activity LegacyMeasureActivity
      */
-    public static void saveTestAlert(final MeasureActivity activity) {
-        if (MeasureActivity.mockpre) {
+    public static void saveTestAlert(final LegacyMeasureActivity activity) {
+        if (LegacyMeasureActivity.mockpre) {
             new AlertDialog.Builder(activity)
                     .setTitle(R.string.alert_savetest_title)
                     .setMessage(R.string.alert_mock_back)
@@ -100,9 +100,9 @@ public class AlertManager {
                                     PaperDAO.save(activity.mPaperId, activity.mCurPosition);
                                     // 提交数据
                                     if("mockpre".equals(activity.mFrom)){
-                                        MeasureModel.autoSubmitPaper(activity);
+                                        LegacyMeasureModel.autoSubmitPaper(activity);
                                     }else{
-                                        MeasureModel.submitPaper(activity);
+                                        LegacyMeasureModel.submitPaper(activity);
                                     }
                                     // 保存练习
                                     ToastManager.showToast(activity, "保存成功");
@@ -137,7 +137,7 @@ public class AlertManager {
                                     PaperDAO.save(activity.mPaperId, activity.mCurPosition);
 
                                     // 提交数据
-                                    MeasureModel.submitPaper(activity);
+                                    LegacyMeasureModel.submitPaper(activity);
 
                                     // 保存练习
                                     ToastManager.showToast(activity, "保存成功");
@@ -155,9 +155,9 @@ public class AlertManager {
     /**
      * 末题引导Alert
      *
-     * @param activity MeasureAnalysisActivity
+     * @param activity LegacyMeasureAnalysisActivity
      */
-    public static void lastPageAlert(final MeasureAnalysisActivity activity) {
+    public static void lastPageAlert(final LegacyMeasureAnalysisActivity activity) {
         if (mAlertLastPage != null && mAlertLastPage.isShowing()) return;
 
         mAlertLastPage = new AlertDialog.Builder(activity).create();
@@ -181,7 +181,7 @@ public class AlertManager {
         mAlertLastPage.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                MeasureAnalysisModel.mIsShowAlert = false;
+                LegacyMeasureAnalysisModel.mIsShowAlert = false;
             }
         });
 
@@ -472,9 +472,9 @@ public class AlertManager {
     /**
      * 显示登出Alert
      *
-     * @param activity MeasureAnalysisActivity
+     * @param activity LegacyMeasureAnalysisActivity
      */
-    public static void deleteErrorQuestionAlert(final MeasureAnalysisActivity activity) {
+    public static void deleteErrorQuestionAlert(final LegacyMeasureAnalysisActivity activity) {
         new AlertDialog.Builder(activity)
                 .setMessage(R.string.alert_delete_error_content)
                 .setTitle(R.string.alert_logout_title)
@@ -542,7 +542,7 @@ public class AlertManager {
                                                 "done")
                                 );
                                 // 清除做题缓存
-                                MeasureModel.clearUserAnswerCache(activity);
+                                LegacyMeasureModel.clearUserAnswerCache(activity);
                                 dialog.dismiss();
                             }
                         })
@@ -620,11 +620,11 @@ public class AlertManager {
     /**
      * 报告错题Alert
      *
-     * @param activity MeasureAnalysisActivity
+     * @param activity LegacyMeasureAnalysisActivity
      * @param type     类型
      * @deprecated
      */
-    public static void reportErrorAlert(final MeasureAnalysisActivity activity,
+    public static void reportErrorAlert(final LegacyMeasureAnalysisActivity activity,
                                         final String type) {
         new AlertDialog.Builder(QuizBankApp.getInstance().getApplicationContext())
                 .setMessage(R.string.alert_report_error_content)
@@ -655,9 +655,9 @@ public class AlertManager {
 
     /**
      * 模考时间到Alert
-     * @param activity MeasureActivity
+     * @param activity LegacyMeasureActivity
      */
-    public static void mockTimeOutAlert(final MeasureActivity activity) {
+    public static void mockTimeOutAlert(final LegacyMeasureActivity activity) {
         new AlertDialog.Builder(activity)
                 .setMessage("时间到了要交卷啦！")
                 .setTitle("提示")

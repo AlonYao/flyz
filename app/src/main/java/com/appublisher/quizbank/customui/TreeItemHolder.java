@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
@@ -167,7 +167,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ivWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MeasureAnalysisActivity.class);
+                Intent intent = new Intent(context, LegacyMeasureAnalysisActivity.class);
                 intent.putExtra("analysis_type", value.type);
                 intent.putExtra("hierarchy_id", value.id);
                 intent.putExtra("hierarchy_level", value.level);

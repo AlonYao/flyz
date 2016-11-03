@@ -12,8 +12,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureActivity;
-import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.activity.LegacyMeasureActivity;
+import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import java.util.HashMap;
  */
 public class MeasureAdapter extends PagerAdapter{
 
-    private MeasureActivity mActivity;
+    private LegacyMeasureActivity mActivity;
     private int mLastY;
     private SparseBooleanArray mIsItemLoad;
     private HashMap<String, Object> mUserAnswerMap;
@@ -34,7 +34,7 @@ public class MeasureAdapter extends PagerAdapter{
     private TextView mTvOptionC;
     private TextView mTvOptionD;
 
-    public MeasureAdapter(MeasureActivity activity) {
+    public MeasureAdapter(LegacyMeasureActivity activity) {
         mActivity = activity;
         mIsItemLoad = new SparseBooleanArray();
     }
@@ -95,7 +95,7 @@ public class MeasureAdapter extends PagerAdapter{
             final ScrollView svTop = (ScrollView) view.findViewById(R.id.measure_top);
 
             // 材料
-            MeasureModel.addRichTextToContainer(mActivity, llMaterial, material, true);
+            LegacyMeasureModel.addRichTextToContainer(mActivity, llMaterial, material, true);
 
             ivPull.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -162,7 +162,7 @@ public class MeasureAdapter extends PagerAdapter{
                 + "/" + String.valueOf(mActivity.mUserAnswerList.size()) + "#%";
         questionContent = questionPosition + (questionContent == null ? "" : questionContent);
 
-        MeasureModel.addRichTextToContainer(
+        LegacyMeasureModel.addRichTextToContainer(
                 mActivity, llQuestionContent, questionContent, true, questionPosition);
 
         // 选项
@@ -180,10 +180,10 @@ public class MeasureAdapter extends PagerAdapter{
         String optionC = question.getOption_c();
         String optionD = question.getOption_d();
 
-        MeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA, false);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB, false);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC, false);
-        MeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD, false);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionAContainer, optionA, false);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionBContainer, optionB, false);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionCContainer, optionC, false);
+        LegacyMeasureModel.addRichTextToContainer(mActivity, llOptionDContainer, optionD, false);
 
         mTvOptionA = (TextView) view.findViewById(R.id.measure_option_a_tv);
         mTvOptionB = (TextView) view.findViewById(R.id.measure_option_b_tv);
@@ -221,19 +221,19 @@ public class MeasureAdapter extends PagerAdapter{
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.measure_option_a:
-                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionA);
+                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionA);
                     break;
 
                 case R.id.measure_option_b:
-                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionB);
+                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionB);
                     break;
 
                 case R.id.measure_option_c:
-                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionC);
+                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionC);
                     break;
 
                 case R.id.measure_option_d:
-                    MeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionD);
+                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionD);
                     break;
 
                 default:

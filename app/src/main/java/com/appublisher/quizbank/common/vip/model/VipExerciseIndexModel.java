@@ -18,7 +18,7 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
 import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
@@ -425,7 +425,7 @@ public class VipExerciseIndexModel {
             case 8:
                 // 行测_智能组卷
                 if (status == 0 || status == 4 || status == 6) {
-                    Intent intent = new Intent(activity, MeasureActivity.class);
+                    Intent intent = new Intent(activity, LegacyMeasureActivity.class);
                     intent.putExtra("paper_id", exerciseId);
                     intent.putExtra("paper_type", "vip");
                     activity.startActivity(intent);
