@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 50
-        versionName "2.0.0"
+        versionCode 51
+        versionName "2.0.1"
 
         //参数
         manifestPlaceholders = [
@@ -470,10 +470,10 @@ android {
                                     APP_CHANNEL: "shenma-qudao-1"]
         }
 
-//        AppUpdate {
-//            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
-//                                    APP_CHANNEL: "AppUpdate"]
-//        }
+        AppUpdate {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+                                    APP_CHANNEL: "AppUpdate"]
+        }
 //
 //        app_share {
 //            manifestPlaceholders = [APP_NAME   : "天天模考腰果公务员",
