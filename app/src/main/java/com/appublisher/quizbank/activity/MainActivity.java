@@ -252,17 +252,15 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             MenuItemCompat.setShowAsAction(menu.add("测试服"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
-        if (mCurFragment instanceof HomePageFragment
-                && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
-            MenuItemCompat.setShowAsAction(menu.add("小班").setIcon(R.drawable.vip_entry),
+        if (mCurFragment instanceof StudyIndexFragment) {
+            MenuItemCompat.setShowAsAction(menu.add("面试").setIcon(R.drawable.actionbar_interview),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
         } else if (mCurFragment instanceof CourseFragment) {
             MenuItemCompat.setShowAsAction(menu.add("下载"),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        } else if (mCurFragment instanceof VipIndexFragment) {
-            MenuItemCompat.setShowAsAction(menu.add("首页").setIcon(R.drawable.examindex),
+        } else if (mCurFragment instanceof StudyRecordFragment) {
+            MenuItemCompat.setShowAsAction(menu.add("设置").setIcon(R.drawable.actionbar_setting),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
@@ -276,9 +274,11 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             startActivity(intent);
         } else if ("评分".equals(item.getTitle())) {
             OpenCourseModel.skipToMyGrade(this, mUnRateClasses, "false");
-        } else if ("首页".equals(item.getTitle())) {
+        } else if ("面试".equals(item.getTitle())) {
+            ToastManager.showToast(this, "切换面试");
+        } else if ("设置".equals(item.getTitle())) {
             final Intent intent = new Intent(this, CommonFragmentActivity.class);
-            intent.putExtra("from", "homepage");
+            intent.putExtra("from", "setting");
             startActivity(intent);
         }
 
@@ -368,7 +368,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
                 break;
 
-            case 3: 
+            case 3:
                 // 记录
                 if (mStudyRecordFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上

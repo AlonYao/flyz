@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_bg"
+    android:background="@color/white"
     tools:context=".common.vip.activity.VipIndexActivity">
 
     <ScrollView
@@ -18,28 +18,32 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_height="165dp">
 
-                <TextView
-                    android:id="@+id/nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="@color/common_text"
-                    android:textSize="18sp" />
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.2"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/login_avatar" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.4"
+                    android:background="#000000" />
 
                 <!-- 头像 -->
                 <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/user_avatar"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_below="@+id/nickname"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/login_avatar"
-                    app:riv_border_color="#262b2d"
+                    app:riv_border_color="@color/white"
                     app:riv_border_width="2dp"
                     app:riv_oval="true" />
 
@@ -47,9 +51,9 @@
                     android:id="@+id/ev_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/user_avatar"
+                    android:layout_below="@+id/user_avatar"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="75dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/vip_index_evaluation_shape"
                     android:paddingBottom="5dp"
                     android:paddingLeft="10dp"
@@ -57,53 +61,60 @@
                     android:paddingTop="5dp"
                     android:text="@string/vip_index_evaluation"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ev_txt"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/exam_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ev_txt"
+                    android:layout_below="@+id/nickname"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/common_text"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
-
-                <ImageView
-                    android:id="@+id/setting_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/exam_txt"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="-10dp"
-                    android:layout_marginRight="20dp"
-                    android:padding="10dp"
-                    android:src="@drawable/vip_index_setting" />
-
             </RelativeLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+                android:layout_height="1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/common_line" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/vip_index_course" />
 
                 <LinearLayout
                     android:id="@+id/course"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="80dp"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/vip_index_course" />
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -120,24 +131,37 @@
                         android:textColor="@color/login_red" />
 
                 </LinearLayout>
+            </RelativeLayout>
 
-                <RelativeLayout
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/common_line" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/vip_index_homework" />
+
+                <LinearLayout
                     android:id="@+id/homework"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
-
-                    <ImageView
-                        android:id="@+id/homework_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="10dp"
-                        android:src="@drawable/vip_index_homework" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="80dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/homework_txt"
@@ -169,32 +193,39 @@
                         android:text=""
                         android:textColor="@color/login_red" />
 
-                </RelativeLayout>
-            </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/common_line" />
 
-                <RelativeLayout
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/vip_index_message" />
+
+                <LinearLayout
                     android:id="@+id/message"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
-
-                    <ImageView
-                        android:id="@+id/message_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="10dp"
-                        android:src="@drawable/vip_index_message" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="80dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/message_txt"
@@ -224,40 +255,15 @@
                         android:text=""
                         android:textColor="@color/login_red" />
 
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/vip_index_homework" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="我的课程"
-                        android:textColor="@color/common_text" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2天后开课"
-                        android:textColor="@color/login_red" />
-
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/common_line" />
 
         </LinearLayout>
 

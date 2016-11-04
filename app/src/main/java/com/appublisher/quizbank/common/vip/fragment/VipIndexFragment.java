@@ -1,12 +1,18 @@
 package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.renderscript.RenderScript;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +29,7 @@ import com.appublisher.quizbank.common.vip.activity.VipExerciseIndexActivity;
 import com.appublisher.quizbank.common.vip.activity.VipNotificationActivity;
 import com.appublisher.quizbank.common.vip.model.VipIndexModel;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
+import com.appublisher.quizbank.utils.FastBlur;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
@@ -57,6 +64,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         //initViews
         initViews();
         setValues();
+
         return mView;
     }
 
@@ -118,6 +126,38 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             }
         });
 
+        final ImageView imageView = (ImageView) mView.findViewById(R.id.avatar);
+        imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                imageView.buildDrawingCache();
+
+                Bitmap bmp = imageView.getDrawingCache();
+                blur(bmp, imageView);
+                return true;
+            }
+        });
+    }
+
+    private void blur(Bitmap bkg, ImageView view) {
+        long startMs = System.currentTimeMillis();
+        float scaleFactor = 1;
+        float radius = 60;
+
+
+        Bitmap overlay = Bitmap.createScaledBitmap(bkg, (int) (view.getMeasuredWidth() / scaleFactor),
+                (int) (view.getMeasuredHeight() / scaleFactor), false);
+//        Canvas canvas = new Canvas(overlay);
+//        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop() / scaleFactor);
+//        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
+//        Paint paint = new Paint();
+//        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+//        canvas.drawBitmap(bkg, 0, 0, paint);
+
+        overlay = FastBlur.doBlur(overlay, (int) radius, true);
+        view.setImageBitmap(overlay);
+
     }
 
     @Override
@@ -138,6 +178,8 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         String text = "距离" + name + "还有" + String.valueOf(day) + "天";
         examText.setText(text);
         mRequest.getVipIndexEntryData();
+
+
     }
 
     @Override
