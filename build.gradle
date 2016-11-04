@@ -37,7 +37,7 @@ ext {
     GT_ACTION_APPID = 'com.igexin.sdk.action.ochSakabi27Qk0igiEO7m5'
     GT_AUTHORITIES = 'downloads.com.appublisher.quizbank'
     QQ_SCHEME = 'tencent1104655578'
-    GD_KEY = ''
+    GD_KEY = 'b2a10842076b75ad042ce68dbe3a397b'
 }
 
 task pullLibBasic {
@@ -45,7 +45,7 @@ task pullLibBasic {
         //noinspection GroovyAssignabilityCheck
         def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_basic'
         def libFile = file(path)
-        def branch = 'master'
+        def branch = 'release_1.2.0'
 
         if (libFile.exists()) {
             //noinspection GroovyAssignabilityCheck
@@ -73,7 +73,7 @@ task pullLibLogin {
         //noinspection GroovyAssignabilityCheck
         def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_login'
         def libFile = file(path)
-        def branch = 'master'
+        def branch = 'release_1.2.0'
 
         if (libFile.exists()) {
             //noinspection GroovyAssignabilityCheck
@@ -101,7 +101,7 @@ task pullLibCourse {
         //noinspection GroovyAssignabilityCheck
         def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_course'
         def libFile = file(path)
-        def branch = 'master'
+        def branch = 'release_1.2.0'
 
         if (libFile.exists()) {
             //noinspection GroovyAssignabilityCheck
@@ -129,7 +129,7 @@ task pullLibPay {
         //noinspection GroovyAssignabilityCheck
         def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_pay'
         def libFile = file(path)
-        def branch = 'master'
+        def branch = 'release_1.2.0'
 
         if (libFile.exists()) {
             //noinspection GroovyAssignabilityCheck

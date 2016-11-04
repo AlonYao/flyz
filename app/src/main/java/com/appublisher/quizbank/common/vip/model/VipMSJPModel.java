@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipMSJPActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
@@ -11,6 +12,7 @@ import com.appublisher.quizbank.common.vip.network.VipRequest;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 小班：名师精批
@@ -19,6 +21,12 @@ public class VipMSJPModel extends VipBaseModel {
 
     public int mExerciseId;
     private VipMSJPActivity mView;
+
+    // Umeng
+    private String mUMDone = "0";
+    public String mUMEntry;
+    public long mUMBegin;
+    public int mUMSwitch = 0;
 
     public VipMSJPModel(Context context) {
         super(context);
@@ -41,6 +49,8 @@ public class VipMSJPModel extends VipBaseModel {
             if (resp != null && resp.getResponse_code() == 1) {
                 mView.showLoading();
                 getExerciseDetail();
+                // Umeng
+                mUMDone = "1";
             } else {
                 mView.showSubmitErrorToast();
             }
@@ -68,7 +78,24 @@ public class VipMSJPModel extends VipBaseModel {
                     return;
                 }
             }
+            // Umeng
+            int status = resp.getStatus();
+            if (status == 1 || status == 5) {
+                mUMDone = "1";
+            }
         }
         mView.showContent(resp);
+    }
+
+    /**
+     * 提交友盟统计数据
+     */
+    public void sendToUmeng() {
+        HashMap<String, String> map = new HashMap<>();
+        int dur = (int) ((System.currentTimeMillis() - mUMBegin) / 1000);
+        map.put("Done", mUMDone);
+        map.put("Entry", mUMEntry);
+        map.put("Switch", String.valueOf(mUMSwitch));
+        UmengManager.onEventValue(mContext, "Jingpi", map, dur);
     }
 }

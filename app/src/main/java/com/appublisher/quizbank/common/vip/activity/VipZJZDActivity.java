@@ -1,8 +1,10 @@
 package com.appublisher.quizbank.common.vip.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +26,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 public class VipZJZDActivity extends VipBaseActivity implements View.OnClickListener{
 
     private ImageView mIvExample;
-    private TextView mTvMaterial;
+    private WebView mTvMaterial;
     private TextView mTvStatus;
     private Button mBtnSubmit;
     private FlowLayout mMyjobContainer;
@@ -37,6 +39,13 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
         setToolBar(this);
         initView();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        mModel.sendToUmeng();
     }
 
     @Override
@@ -89,6 +98,8 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     private void initData() {
         mModel = new VipZJZDModel(this);
         mModel.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
+        // Umeng
+        mModel.mUMBegin = System.currentTimeMillis();
         // 获取练习详情
         showLoading();
         mModel.getExerciseDetail();
@@ -96,7 +107,7 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
 
     private void initView() {
         mIvExample = (ImageView) findViewById(R.id.vip_zjzd_example);
-        mTvMaterial = (TextView) findViewById(R.id.vip_zjzd_material);
+        mTvMaterial = (WebView) findViewById(R.id.vip_zjzd_material);
         mTvStatus = (TextView) findViewById(R.id.vip_zjzd_status);
         mBtnSubmit = (Button) findViewById(R.id.vip_zjzd_submit);
         mMyjobContainer = (FlowLayout) findViewById(R.id.vip_zjzd_myjob_container);
@@ -106,7 +117,10 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     }
 
     public void showTvMaterial(String text) {
-        mTvMaterial.setText(text);
+        mTvMaterial.setBackgroundColor(Color.WHITE);
+        mTvMaterial.loadDataWithBaseURL(
+                null, VipBaseModel.CUSTOM_STYLE + text,
+                "text/html", "UTF-8", null);
     }
 
     public void showIvExample(String url) {

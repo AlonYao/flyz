@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipHPTSActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipHPTSResp;
@@ -9,6 +10,8 @@ import com.appublisher.quizbank.common.vip.netdata.VipSubmitResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * 小班：互评提升
@@ -18,6 +21,11 @@ public class VipHPTSModel extends VipBaseModel {
 
     private VipHPTSActivity mView;
     public int mExerciseId;
+
+    // Umeng
+    private String mUMDone = "0";
+    public long mUMBegin;
+    public int mUMSwitch = 0;
 
     public VipHPTSModel(Context context) {
         super(context);
@@ -40,6 +48,8 @@ public class VipHPTSModel extends VipBaseModel {
             if (resp != null && resp.getResponse_code() == 1) {
                 mView.showLoading();
                 getExerciseDetail();
+                // Umeng
+                mUMDone = "1";
             } else {
                 mView.showSubmitErrorToast();
             }
@@ -53,7 +63,24 @@ public class VipHPTSModel extends VipBaseModel {
      */
     private void dealExerciseDetailResp(JSONObject response) {
         VipHPTSResp resp = GsonManager.getModel(response, VipHPTSResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
         mView.showContent(resp);
+        // Umeng
+        int status = resp.getStatus();
+        if (status == 1 || status == 5) {
+            mUMDone = "1";
+        }
+    }
+
+    /**
+     * 提交友盟统计数据
+     */
+    public void sendToUmeng() {
+        HashMap<String, String> map = new HashMap<>();
+        int dur = (int) ((System.currentTimeMillis() - mUMBegin) / 1000);
+        map.put("Done", mUMDone);
+        map.put("Switch", String.valueOf(mUMSwitch));
+        UmengManager.onEventValue(mContext, "Huping", map, dur);
     }
 
 }

@@ -208,7 +208,7 @@ public class VipXCResp {
             private int id;
             private int total;
             private int right;
-            private int duration;
+            private float duration;
             private String name;
 
             public int getId() {
@@ -235,11 +235,11 @@ public class VipXCResp {
                 this.right = right;
             }
 
-            public int getDuration() {
+            public float getDuration() {
                 return duration;
             }
 
-            public void setDuration(int duration) {
+            public void setDuration(float duration) {
                 this.duration = duration;
             }
 
@@ -257,7 +257,7 @@ public class VipXCResp {
             private String name;
             private int total;
             private int right;
-            private int duration;
+            private float duration;
             private List<NotesBean> notes;
 
             public int getId() {
@@ -292,11 +292,11 @@ public class VipXCResp {
                 this.right = right;
             }
 
-            public int getDuration() {
+            public float getDuration() {
                 return duration;
             }
 
-            public void setDuration(int duration) {
+            public void setDuration(float duration) {
                 this.duration = duration;
             }
 
@@ -312,7 +312,7 @@ public class VipXCResp {
                 private int id;
                 private int total;
                 private int right;
-                private int duration;
+                private float duration;
                 private String name;
 
                 public int getId() {
@@ -339,11 +339,11 @@ public class VipXCResp {
                     this.right = right;
                 }
 
-                public int getDuration() {
+                public float getDuration() {
                     return duration;
                 }
 
-                public void setDuration(int duration) {
+                public void setDuration(float duration) {
                     this.duration = duration;
                 }
 

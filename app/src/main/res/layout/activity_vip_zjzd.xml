@@ -35,15 +35,16 @@
                 android:layout_height="1dp"
                 android:background="@color/vip_gray"/>
             <!-- 材料 -->
-            <TextView
-                android:id="@+id/vip_zjzd_material"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/vip_none"
-                android:textColor="@color/common_text"
-                android:textSize="@dimen/vip_default_text"
-                android:padding="15dp"
-                android:background="@color/white"/>
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:padding="15dp">
+                <WebView
+                    android:id="@+id/vip_zjzd_material"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
             <!-- 作业示例 -->
             <TextView
                 style="@style/Vip_Title"

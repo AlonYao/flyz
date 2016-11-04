@@ -1042,6 +1042,8 @@ public class MeasureModel implements RequestCallback{
         String paperType = cache.getString(CACHE_PAPER_TYPE, "");
         String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
         String redo = cache.getString(CACHE_REDO, "true");
+        if ("vip".equals(paperType)) return;
+
         if ("mock".equals(paperType)) {
             new QRequest(mContext, this).getMockPreExamInfo(String.valueOf(paperId));
         } else {

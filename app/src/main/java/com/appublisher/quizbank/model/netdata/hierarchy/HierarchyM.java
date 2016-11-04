@@ -14,7 +14,7 @@ public class HierarchyM {
     private ArrayList<HierarchyM> childs;
     private int level;
     private int right;
-    private int duration;
+    private float duration;
     private ArrayList<HierarchyM> notes;
 
     public ArrayList<HierarchyM> getNotes() {
@@ -89,11 +89,11 @@ public class HierarchyM {
         this.right = right;
     }
 
-    public int getDuration() {
+    public float getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(float duration) {
         this.duration = duration;
     }
 }
