@@ -11,8 +11,11 @@ import android.view.MenuItem;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.SettingFragment;
+import com.appublisher.quizbank.fragment.WholePageFragment;
+import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
 
 public class CommonFragmentActivity extends BaseActivity {
@@ -46,7 +49,18 @@ public class CommonFragmentActivity extends BaseActivity {
             courseFragment.setArguments(bundle);
             fragmentTransaction.add(R.id.container_view, courseFragment, "Course");
             setTitle("课程中心");
+        } else if ("wholepage".equals(mFrom)) {
+            fragmentTransaction.add(R.id.container_view, new WholePageFragment(), "Wholepage");
+            setTitle("真题演练");
+        } else if ("collect".equals(mFrom)) {
+            fragmentTransaction.add(R.id.container_view, new FavoriteFragment(), "Favorite");
+            setTitle("收藏夹");
+        } else if ("wrong".equals(mFrom)) {
+            fragmentTransaction.add(R.id.container_view, new WrongQuestionsFragment(), "Wrong");
+            setTitle("错题本");
         }
+
+
         fragmentTransaction.commit();
     }
 

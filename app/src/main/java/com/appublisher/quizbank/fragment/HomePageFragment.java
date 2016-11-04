@@ -30,7 +30,7 @@ import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.model.business.HomePageModel;
+import com.appublisher.quizbank.model.business.StudyIndexModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.globalsettings.MockM;
@@ -201,7 +201,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
             long dex = (curTimestamp - gradeTimestamp) / 1000;
             if (dex >= 10) {
                 // 视为评价完成，开通课程
-                HomePageModel.openupCourse(this);
+                com.appublisher.quizbank.model.business.StudyIndexModel.openupCourse(this);
                 //noinspection deprecation
                 Utils.updateMenu((ActionBarActivity) mActivity);
             } else {
@@ -223,7 +223,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         dealGradeAlert();
 
         // 考试项目倒计时
-        HomePageModel.setExamCountDown(mTvExam, mQRequest);
+        StudyIndexModel.setExamCountDown(mTvExam, mQRequest);
     }
 
     /**
@@ -281,10 +281,10 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
         Globals.last_notice_id = homePageResp.getLatest_notify();
 
         // 显示红点
-        HomePageModel.setDrawerRedPoint();
+//        StudyIndexModel.setDrawerRedPoint();
 
         // 更新用户考试项目
-        HomePageModel.updateExam(homePageResp.getExam_info(), this);
+//        StudyIndexModel.updateExam(homePageResp.getExam_info(), this);
 
         ProgressBarManager.hideProgressBar();
     }
@@ -334,12 +334,12 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 break;
 
             case "free_open_course_status":
-                HomePageModel.dealOpenCourseStatusResp(response);
-                HomePageModel.setOpenCourseBtn(mActivity, mTvZhiboke);
+                com.appublisher.quizbank.model.business.StudyIndexModel.dealOpenCourseStatusResp(response);
+                com.appublisher.quizbank.model.business.StudyIndexModel.setOpenCourseBtn(mActivity, mTvZhiboke);
                 break;
 
             case "promote_live_course":
-                HomePageModel.dealPromoteResp(response, this);
+                StudyIndexModel.dealPromoteResp(response, this);
                 break;
 
             case "global_settings":
@@ -349,14 +349,14 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case "get_rate_course":
                 ProgressDialogManager.closeProgressDialog();
-                HomePageModel.dealOpenupCourseResp(response, this);
+                com.appublisher.quizbank.model.business.StudyIndexModel.dealOpenupCourseResp(response, this);
                 break;
 
             case "exam_list":
                 // 更新考试时间
                 ExamDetailModel exam = GsonManager.getModel(
                         response.toString(), ExamDetailModel.class);
-                HomePageModel.updateExam(exam, mTvExam);
+                com.appublisher.quizbank.model.business.StudyIndexModel.updateExam(exam, mTvExam);
                 break;
         }
     }

@@ -98,21 +98,21 @@ public class HistoryPapersListAdapter extends BaseAdapter{
      */
     private void setLogo(ImageView ivLogo, String paperType) {
         if ("entire".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_entire);
+            ivLogo.setImageResource(R.drawable.record_entire);
         } else if ("mokao".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_mokao);
+            ivLogo.setImageResource(R.drawable.record_mokao);
         } else if ("note".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_special);
+            ivLogo.setImageResource(R.drawable.record_special);
         } else if ("auto".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_auto);
+            ivLogo.setImageResource(R.drawable.record_quick);
         } else if ("error".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_wrong);
         } else if ("collect".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.studyrecord_collect);
         } else if ("evaluate".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_estimate);
+            ivLogo.setImageResource(R.drawable.record_gufen);
         } else if ("mock".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_mock);
+            ivLogo.setImageResource(R.drawable.record_mokao);
         } else {
             ivLogo.setVisibility(View.GONE);
         }

@@ -2,6 +2,7 @@ package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,19 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.model.business.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +37,7 @@ import java.util.Map;
  * 学习记录
  */
 public class StudyRecordFragment extends Fragment implements RequestCallback,
-        XListView.IXListViewListener{
+        XListView.IXListViewListener {
 
     public Activity mActivity;
     public XListView mXListView;
@@ -44,7 +49,12 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     private QRequest mQRequest;
     private View mView;
 
-    /** Umeng */
+    private ImageView collectIv;
+    private ImageView wrongIv;
+
+    /**
+     * Umeng
+     */
     public String mUmengAction;
 
     @Override
@@ -69,12 +79,37 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mView = inflater.inflate(R.layout.fragment_studyrecord, container, false);
         mXListView = (XListView) mView.findViewById(R.id.studyrecord_lv);
         mIvNull = (ImageView) mView.findViewById(R.id.quizbank_null);
+        collectIv = (ImageView) mView.findViewById(R.id.collect_iv);
+        wrongIv = (ImageView) mView.findViewById(R.id.wrong_iv);
+
 
         // 初始化XListView
         mXListView.setXListViewListener(this);
         mXListView.setPullLoadEnable(true);
 
+        setValue();
+
         return mView;
+    }
+
+    public void setValue() {
+        collectIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
+                intent.putExtra("from", "collect");
+                startActivity(intent);
+            }
+        });
+
+        wrongIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
+                intent.putExtra("from", "wrong");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -96,7 +131,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public void onPause() {
         super.onPause();
         // Umeng
-        final Map<String,String> um_map = new HashMap<String,String>();
+        final Map<String, String> um_map = new HashMap<String, String>();
         um_map.put("Action", mUmengAction);
         UmengManager.onEvent(mActivity, "Record", um_map);
         MobclickAgent.onPageEnd("StudyRecordFragment");

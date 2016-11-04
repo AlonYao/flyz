@@ -30,7 +30,7 @@
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
     </style>
-7.0
+    7.0
     <!-- ActivityTransparent -->
     <style name="ActivityTransparent" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@color/scratch_paper_bg</item>
@@ -277,5 +277,38 @@
         <item name="android:textColor">@color/common_text</item>
     </style>
 
+    <!-- Tab -->
+    <style name="TabRadioButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingTop">5dp</item>
+    </style>
+
+    <!--common text start-->
+    <style name="CommonColorTextView16">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/common_text</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CommonColorTextView14">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/common_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CommonColorTextView12">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/common_text</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <!--common text end-->
 
 </resources>

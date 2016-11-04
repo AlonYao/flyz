@@ -32,7 +32,6 @@ import com.appublisher.quizbank.activity.QaActivity;
 import com.appublisher.quizbank.activity.SystemNoticeActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.images.DiskLruImageCache;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
@@ -153,10 +152,10 @@ public class SettingFragment extends Fragment implements QApiConstants {
                 mIvRedPoint.setVisibility(View.GONE);
 
                 // 侧边栏设置按钮红点消失
-                ImageView ivSettingRedPoint = HomePageModel.getSettingRedPointView();
+//                ImageView ivSettingRedPoint = StudyIndexModel.getSettingRedPointView();
 
-                if (ivSettingRedPoint == null) return;
-                ivSettingRedPoint.setVisibility(View.GONE);
+//                if (ivSettingRedPoint == null) return;
+//                ivSettingRedPoint.setVisibility(View.GONE);
 
                 // Umeng
                 mUmengInforms = "1";

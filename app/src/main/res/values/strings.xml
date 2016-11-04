@@ -13,16 +13,16 @@
     <string name="alert_mock_n">坚持</string>
     <string name="alert_title">提示</string>
 
-    <!-- 侧边栏 -->
-    <string name="drawer_open">drawer_open</string>
-    <string name="drawer_close">drawer_close</string>
-    <string name="drawer_homepage">首页</string>
-    <string name="drawer_wholepage">真题演练</string>
-    <string name="drawer_course">课程中心</string>
-    <string name="drawer_wrong">错题本</string>
-    <string name="drawer_store">收藏夹</string>
-    <string name="drawer_record">学习记录</string>
-    <string name="drawer_setting">设置</string>
+    <!-- 首页 -->
+    <string name="study_index">学习</string>
+    <string name="wholepage_index">真题演练</string>
+    <string name="course_center">课程中心</string>
+    <string name="course">课程</string>
+    <string name="opencourse">公开课</string>
+    <string name="wrong_index">错题本</string>
+    <string name="vip_index">VIP</string>
+    <string name="record_index">记录</string>
+    <string name="setting_index">设置</string>
 
     <!-- 首页 -->
     <string name="homepage_gufen">预测分</string>

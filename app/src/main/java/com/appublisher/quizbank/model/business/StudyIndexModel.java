@@ -32,6 +32,7 @@ import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.HomePageFragment;
+import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.netdata.course.GradeCourseResp;
 import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
@@ -50,12 +51,13 @@ import java.util.HashMap;
 /**
  * HomePageFragment Model
  */
-public class HomePageModel {
+public class StudyIndexModel {
 
     private static Activity mActivity;
 
     /**
      * 设置考试项目倒计时
+     *
      * @param textView textView
      */
     public static void setExamCountDown(TextView textView, QRequest QRequest) {
@@ -77,41 +79,16 @@ public class HomePageModel {
             QRequest.getExamList();
         }
 
-        String text = "距离" + name + "还有" + String.valueOf(day) + "天";
+        String text = "距离" + name + "\n还有" + String.valueOf(day) + "天";
         textView.setText(text);
     }
 
-    /**
-     * 设置侧边栏红点
-     */
-    public static void setDrawerRedPoint() {
-        if (MainActivity.mIvDrawerRedPoint == null || Globals.last_notice_id == 0) return;
-
-        GlobalSetting globalSetting = GlobalSettingDAO.findById();
-        if (globalSetting != null && globalSetting.latest_notify == Globals.last_notice_id) {
-            MainActivity.mIvDrawerRedPoint.setVisibility(View.GONE);
-        } else {
-            MainActivity.mIvDrawerRedPoint.setVisibility(View.VISIBLE);
-        }
-
-        if (MainActivity.mDrawerAdapter != null) MainActivity.mDrawerAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 获取侧边栏设置Button View
-     * @return view
-     */
-    public static ImageView getSettingRedPointView() {
-        if (MainActivity.mDrawerList == null) return null;
-
-        View setting = CommonModel.getViewByPosition(5, MainActivity.mDrawerList);
-        return (ImageView) setting.findViewById(R.id.drawer_item_redpoint);
-    }
 
     /**
      * 设置快讯模块
+     *
      * @param activity 上下文
-     * @param view 控件
+     * @param view     控件
      */
     public static void setPromoteLiveCourse(final Activity activity,
                                             View view,
@@ -211,8 +188,8 @@ public class HomePageModel {
 
                             } else if (targetContent.contains("courselist")) {
                                 // 跳转到课程中心模块
-                                if (mActivity instanceof MainActivity)
-                                    ((MainActivity) mActivity).changeFragment(2);
+//                                if (mActivity instanceof MainActivity)
+//                                    ((MainActivity) mActivity).changeFragment(2);
 
                             } else if (targetContent.contains("zhiboke@")) {
                                 // 跳转至课程详情页面
@@ -252,7 +229,8 @@ public class HomePageModel {
 
     /**
      * 处理快讯模块数据回调
-     * @param response 快讯数据
+     *
+     * @param response         快讯数据
      * @param homePageFragment 首页
      */
     public static void dealPromoteResp(JSONObject response, HomePageFragment homePageFragment) {
@@ -277,6 +255,7 @@ public class HomePageModel {
 
     /**
      * 开通课程
+     *
      * @param homePageFragment 首页
      */
     public static void openupCourse(HomePageFragment homePageFragment) {
@@ -289,14 +268,15 @@ public class HomePageModel {
 
     /**
      * 处理开通评价课程回调
-     * @param response 回调数据
+     *
+     * @param response         回调数据
      * @param homePageFragment 首页
      */
     public static void dealOpenupCourseResp(JSONObject response,
                                             HomePageFragment homePageFragment) {
 
         GradeCourseResp gradeCourseResp =
-               GsonManager.getModel(response.toString(), GradeCourseResp.class);
+                GsonManager.getModel(response.toString(), GradeCourseResp.class);
 
         if (gradeCourseResp == null || gradeCourseResp.getResponse_code() != 1) return;
 
@@ -307,8 +287,9 @@ public class HomePageModel {
 
     /**
      * 更新考试时间
+     *
      * @param examDetailModel 考试列表数据模型
-     * @param textView 考试项目控件
+     * @param textView        考试项目控件
      */
     public static void updateExam(ExamDetailModel examDetailModel, TextView textView) {
         if (examDetailModel == null || examDetailModel.getResponse_code() != 1) return;
@@ -339,7 +320,7 @@ public class HomePageModel {
                 // 更新页面显示
                 long day = Utils.dateMinusNow(date);
                 if (day < 0) day = 0;
-                String text = "距离" + name + "还有" + String.valueOf(day) + "天";
+                String text = "距离" + name + "\n" + "还有" + String.valueOf(day) + "天";
                 textView.setText(text);
             }
         }
@@ -347,17 +328,19 @@ public class HomePageModel {
 
     /**
      * 更新考试项目
-     * @param model 考试项目数据
+     *
+     * @param model    考试项目数据
      * @param fragment HomePageFragment
      */
-    public static void updateExam(ExamItemModel model, HomePageFragment fragment) {
+    public static void updateExam(ExamItemModel model, StudyIndexFragment fragment) {
         if (model == null) return;
         LoginModel.updateExamInfo(GsonManager.modelToString(model, ExamItemModel.class));
-        setExamCountDown(fragment.mTvExam, fragment.mQRequest);
+        setExamCountDown(fragment.examNameTv, fragment.mQRequest);
     }
 
     /**
      * 处理公开课状态回调
+     *
      * @param response 回调数据
      */
     public static void dealOpenCourseStatusResp(JSONObject response) {
@@ -370,6 +353,7 @@ public class HomePageModel {
 
     /**
      * 设置公开课按钮
+     *
      * @param activity Activity
      * @param textView 公开课按钮控件
      */

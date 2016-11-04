@@ -26,9 +26,9 @@ import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.business.HomePageModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.StudyIndexModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.umeng.analytics.MobclickAgent;
@@ -233,7 +233,7 @@ public class AlertManager {
         });
 
         // 看个直播
-        HomePageModel.setOpenCourseBtn(activity, tvZhibo);
+        StudyIndexModel.setOpenCourseBtn(activity, tvZhibo);
     }
 
     /**

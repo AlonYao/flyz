@@ -2,30 +2,21 @@ package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
-import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -43,17 +34,11 @@ import com.appublisher.lib_login.model.netdata.IsUserMergedResp;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.adapter.DrawerAdapter;
-import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.fragment.FavoriteFragment;
 import com.appublisher.quizbank.fragment.HomePageFragment;
-import com.appublisher.quizbank.fragment.SettingFragment;
+import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
-import com.appublisher.quizbank.fragment.WholePageFragment;
-import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.business.PromoteQuizBankModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
@@ -66,9 +51,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class MainActivity extends BaseActivity implements RequestCallback {
 
@@ -76,33 +58,27 @@ public class MainActivity extends BaseActivity implements RequestCallback {
      * Fragment
      **/
     private FragmentManager mFragmentManager;
-    private HomePageFragment mHomePageFragment;
-    private WholePageFragment mWholePageFragment;
     private CourseFragment mCourseFragment;
-    private WrongQuestionsFragment mWrongQuestionsFragment;
-    private FavoriteFragment mFavoriteFragment;
     private StudyRecordFragment mStudyRecordFragment;
-    private SettingFragment mSettingFragment;
     private VipIndexFragment mVipIndexFragment;
+    private StudyIndexFragment mStudyIndexFragment;
     private static Fragment mCurFragment;
     private static int mCurFragmentPosition;
-    private DrawerLayout mDrawerLayout;
     private boolean mDoubleBackToExit;
     private QRequest mQRequest;
     private String mFrom;
-    public TextView mTvOpenCourseNumNotice;
-    public static ListView mDrawerList;
-    public static ImageView mIvDrawerRedPoint;
-    public static DrawerAdapter mDrawerAdapter;
-    private static final String HOMEPAGE = "Home";
-    private static final String WHOLEPAGE = "Whole";
+    private static final String OPENCOURSE = "Opencourse";
     private static final String COURSE = "Course";
-    private static final String WRONGQUESTIONS = "Wrong";
-    private static final String FAVORITE = "Favorite";
-    private static final String STUDYRECORD = "Study";
-    private static final String SETTING = "Setting";
+    private static final String RECORD = "Record";
     private static final String VIP = "Vip";
+    private static final String STUDY = "Study";
     public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
+
+    private RadioButton studyRadioButton;
+    private RadioButton courseRadioButton;
+    private RadioButton opencourseRadioButton;
+    private RadioButton recordRadioButton;
+    private RadioButton vipRadioButton;
 
     /**
      * 国考推广
@@ -115,13 +91,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // View初始化
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mDrawerList = (ListView) findViewById(R.id.drawer_list);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        mIvDrawerRedPoint = (ImageView) findViewById(R.id.drawer_redpoint);
-        mTvOpenCourseNumNotice = (TextView) findViewById(R.id.opencourse_num_notice);
+        setToolBar(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
@@ -129,42 +100,19 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         mPromoteData = getIntent().getStringExtra(INTENT_PROMOTE);
         mPromoteQuizBankModel = new PromoteQuizBankModel(this);
 
-        /** 侧边栏设置 */
-
-        // 侧边栏按钮列表
-        mDrawerAdapter = new DrawerAdapter(this);
-        mDrawerList.setAdapter(mDrawerAdapter);
-        mDrawerList.setOnItemClickListener(drawerListOnClick);
-
-        // 侧边栏样式
-        CommonModel.setToolBar(this);
-
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-        };
-
-        drawerToggle.syncState();
-        mDrawerLayout.setDrawerListener(drawerToggle);
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
-        // 页面切换，默认首页
-        changeFragment(mCurFragmentPosition);
+        studyRadioButton = (RadioButton) findViewById(R.id.study);
+        courseRadioButton = (RadioButton) findViewById(R.id.course);
+        opencourseRadioButton = (RadioButton) findViewById(R.id.opencourse);
+        recordRadioButton = (RadioButton) findViewById(R.id.record);
+        vipRadioButton = (RadioButton) findViewById(R.id.vip);
 
         // 记录用户评价行为
         if (GradeDAO.isShowGradeAlert(Globals.appVersion)) {
             // 提前获取评价课程数据
             mQRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
         }
+
+        setValue();
 
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);
@@ -193,6 +141,71 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             // 做题缓存提交
             new MeasureModel(this).checkCache();
         }
+    }
+
+    public void setValue() {
+        studyRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    changeFragment(0);
+                    studyRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+                } else {
+                    studyRadioButton.setTextColor(getResources().getColor(R.color.common_text));
+                }
+            }
+        });
+
+        courseRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    changeFragment(1);
+                    courseRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+                } else {
+                    courseRadioButton.setTextColor(getResources().getColor(R.color.common_text));
+                }
+            }
+        });
+
+        opencourseRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    changeFragment(2);
+                    opencourseRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+                } else {
+                    opencourseRadioButton.setTextColor(getResources().getColor(R.color.common_text));
+                }
+            }
+        });
+
+        recordRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    changeFragment(3);
+                    recordRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+                } else {
+                    recordRadioButton.setTextColor(getResources().getColor(R.color.common_text));
+                }
+            }
+        });
+
+        vipRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    changeFragment(4);
+                    vipRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+                } else {
+                    vipRadioButton.setTextColor(getResources().getColor(R.color.common_text));
+                }
+            }
+        });
+
+        // 页面切换，默认首页
+        studyRadioButton.setChecked(true);
     }
 
 
@@ -226,8 +239,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         // 关闭定位
         LocationManager.stop();
 
-        ProgressDialogManager.closeProgressDialog();
-
         // 关闭评价窗口
         AlertManager.dismissGradeAlert();
     }
@@ -240,9 +251,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         if (QApiConstants.baseUrl.contains("dev")) {
             MenuItemCompat.setShowAsAction(menu.add("测试服"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
-
-        // 恢复课程评论小红点的显示状态
-        mTvOpenCourseNumNotice.setVisibility(View.GONE);
 
         if (mCurFragment instanceof HomePageFragment
                 && GradeDAO.isOpenGradeSys(Globals.appVersion)) {
@@ -263,16 +271,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if ("小班".equals(item.getTitle())) {
-            final Intent intent = new Intent(this, VipIndexActivity.class);
-            startActivity(intent);
-
-            //um
-            Map<String, String> umMap = new HashMap<>();
-            umMap.put("Action", "Entry");
-            UmengManager.onEvent(this, "VipHome", umMap);
-
-        } else if ("下载".equals(item.getTitle())) {
+        if ("下载".equals(item.getTitle())) {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);
         } else if ("评分".equals(item.getTitle())) {
@@ -289,10 +288,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     @SuppressLint("RtlHardcoded")
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            mDrawerLayout.closeDrawers();
-            return;
-        }
 
         // 两次Back退出
         if (mDoubleBackToExit) {
@@ -313,40 +308,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     }
 
     /**
-     * 侧边栏按钮点击事件
-     */
-    private AdapterView.OnItemClickListener drawerListOnClick =
-            new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // 点击版本号，直接返回
-                    if (position == DrawerAdapter.mItemNames.length) return;
-
-                    changeFragment(position);
-
-                    // 侧边栏顶部红点消失
-                    if (position == 5) {
-                        mIvDrawerRedPoint.setVisibility(View.GONE);
-                    }
-
-                    // Umeng统计
-                    if (position == 2) {
-                        final Map<String, String> um_map = new HashMap<String, String>();
-                        um_map.put("Entry", "Drawer");
-                        UmengManager.onEvent(MainActivity.this, "CourseCenter", um_map);
-                        ;
-                    }
-                }
-            };
-
-    /**
      * 切换Fragment
      *
      * @param position fragment在侧边栏上的位置
      */
     public void changeFragment(int position) {
         mCurFragmentPosition = position;
-
         // 开启一个Fragment事务
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
@@ -354,141 +321,91 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         switch (position) {
             case 0:
-                if (Globals.sharedPreferences.getBoolean("vip" + LoginModel.getUserId(), false)) {
-                    if (mVipIndexFragment == null) {
-                        mVipIndexFragment = new VipIndexFragment();
-                        transaction.add(R.id.drawer_frame, mVipIndexFragment, VIP);
-                    } else {
-                        transaction.show(mVipIndexFragment);
-                    }
-
-                    getSupportActionBar().setTitle(" ");
-
-                    mCurFragment = mVipIndexFragment;
+                if (mStudyIndexFragment == null) {
+                    mStudyIndexFragment = new StudyIndexFragment();
+                    transaction.add(R.id.container_view, mStudyIndexFragment, STUDY);
                 } else {
-                    // 首页
-                    if (mHomePageFragment == null) {
-                        // 如果Fragment为空，则创建一个并添加到界面上
-                        mHomePageFragment = new HomePageFragment();
-                        transaction.add(R.id.drawer_frame, mHomePageFragment, HOMEPAGE);
-                    } else {
-                        // 如果Fragment不为空，则直接将它显示出来
-                        transaction.show(mHomePageFragment);
-                    }
-
-                    getSupportActionBar().setTitle(" ");
-
-                    mCurFragment = mHomePageFragment;
+                    transaction.show(mStudyIndexFragment);
                 }
+
+                getSupportActionBar().setTitle(R.string.study_index);
+
+                mCurFragment = mStudyIndexFragment;
+
                 break;
 
             case 1:
-                // 整卷练习
-                if (mWholePageFragment == null) {
-                    // 如果Fragment为空，则创建一个并添加到界面上
-                    mWholePageFragment = new WholePageFragment();
-                    transaction.add(R.id.drawer_frame, mWholePageFragment, WHOLEPAGE);
-                } else {
-                    // 如果Fragment不为空，则直接将它显示出来
-                    transaction.show(mWholePageFragment);
-                }
-
-                getSupportActionBar().setTitle(R.string.drawer_wholepage);
-
-                mCurFragment = mWholePageFragment;
-
-                break;
-
-            case 2:
                 // 课程中心
                 if (mCourseFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mCourseFragment = new CourseFragment();
-                    transaction.add(R.id.drawer_frame, mCourseFragment, COURSE);
+                    transaction.add(R.id.container_view, mCourseFragment, COURSE);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mCourseFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.drawer_course);
+                getSupportActionBar().setTitle(R.string.course_center);
 
                 mCurFragment = mCourseFragment;
 
                 break;
 
-            case 3:
-                // 错题本
-                if (mWrongQuestionsFragment == null) {
+            case 2:
+                // 公开课
+                if (mCourseFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
-                    mWrongQuestionsFragment = new WrongQuestionsFragment();
-                    transaction.add(R.id.drawer_frame, mWrongQuestionsFragment, WRONGQUESTIONS);
+                    mCourseFragment = new CourseFragment();
+                    transaction.add(R.id.container_view, mCourseFragment, COURSE);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
-                    transaction.show(mWrongQuestionsFragment);
+                    transaction.show(mCourseFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.drawer_wrong);
+                getSupportActionBar().setTitle(R.string.course_center);
 
-                mCurFragment = mWrongQuestionsFragment;
+                mCurFragment = mCourseFragment;
 
                 break;
 
-            case 4:
-                // 收藏夹
-                if (mFavoriteFragment == null) {
-                    // 如果Fragment为空，则创建一个并添加到界面上
-                    mFavoriteFragment = new FavoriteFragment();
-                    transaction.add(R.id.drawer_frame, mFavoriteFragment, FAVORITE);
-                } else {
-                    // 如果Fragment不为空，则直接将它显示出来
-                    transaction.show(mFavoriteFragment);
-                }
-
-                getSupportActionBar().setTitle(R.string.drawer_store);
-
-                mCurFragment = mFavoriteFragment;
-
-                break;
-
-            case 5:
-                // 学习记录
+            case 3: 
+                // 记录
                 if (mStudyRecordFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mStudyRecordFragment = new StudyRecordFragment();
-                    transaction.add(R.id.drawer_frame, mStudyRecordFragment, STUDYRECORD);
+                    transaction.add(R.id.container_view, mStudyRecordFragment, RECORD);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mStudyRecordFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.drawer_record);
+                getSupportActionBar().setTitle(R.string.record_index);
 
                 mCurFragment = mStudyRecordFragment;
 
                 break;
 
-            case 6:
-                // 设置
-                if (mSettingFragment == null) {
+            case 4:
+                //vip
+                if (mVipIndexFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
-                    mSettingFragment = new SettingFragment();
-                    transaction.add(R.id.drawer_frame, mSettingFragment, SETTING);
+                    mVipIndexFragment = new VipIndexFragment();
+                    transaction.add(R.id.container_view, mVipIndexFragment, VIP);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
-                    transaction.show(mSettingFragment);
+                    transaction.show(mVipIndexFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.drawer_setting);
+                getSupportActionBar().setTitle(R.string.vip_index);
 
-                mCurFragment = mSettingFragment;
+                mCurFragment = mVipIndexFragment;
 
                 break;
-
             default:
                 break;
         }
 
-        mDrawerLayout.closeDrawer(mDrawerList);
+//        mDrawerLayout.closeDrawer(mDrawerList);
         transaction.commit();
 
         // 更新Menu
@@ -502,38 +419,16 @@ public class MainActivity extends BaseActivity implements RequestCallback {
      */
     private void hideFragments(FragmentTransaction transaction) {
         // 首页
-        mHomePageFragment = (HomePageFragment) mFragmentManager.findFragmentByTag(HOMEPAGE);
-        if (mHomePageFragment != null) transaction.hide(mHomePageFragment);
-
-        // 真题演练
-        mWholePageFragment = (WholePageFragment) mFragmentManager.findFragmentByTag(WHOLEPAGE);
-        if (mWholePageFragment != null) transaction.hide(mWholePageFragment);
+        mStudyIndexFragment = (StudyIndexFragment) mFragmentManager.findFragmentByTag(STUDY);
+        if (mStudyIndexFragment != null) transaction.hide(mStudyIndexFragment);
 
         // 课程中心
         mCourseFragment = (CourseFragment) mFragmentManager.findFragmentByTag(COURSE);
         if (mCourseFragment != null) transaction.hide(mCourseFragment);
 
-        // 错题本
-        mWrongQuestionsFragment =
-                (WrongQuestionsFragment) mFragmentManager.findFragmentByTag(WRONGQUESTIONS);
-        if (mWrongQuestionsFragment != null) transaction.hide(mWrongQuestionsFragment);
-
-        // 收藏夹
-        mFavoriteFragment = (FavoriteFragment) mFragmentManager.findFragmentByTag(FAVORITE);
-        if (mFavoriteFragment != null) transaction.hide(mFavoriteFragment);
-
-        // 学习记录
-        mStudyRecordFragment =
-                (StudyRecordFragment) mFragmentManager.findFragmentByTag(STUDYRECORD);
-        if (mStudyRecordFragment != null) {
-            transaction.hide(mStudyRecordFragment);
-            transaction.remove(mStudyRecordFragment);
-            mStudyRecordFragment = null;
-        }
-
-        // 设置
-        mSettingFragment = (SettingFragment) mFragmentManager.findFragmentByTag(SETTING);
-        if (mSettingFragment != null) transaction.hide(mSettingFragment);
+        // 记录
+        mStudyRecordFragment = (StudyRecordFragment) mFragmentManager.findFragmentByTag(RECORD);
+        if (mStudyRecordFragment != null) transaction.hide(mStudyRecordFragment);
 
         //Vip
         mVipIndexFragment = (VipIndexFragment) mFragmentManager.findFragmentByTag(VIP);
@@ -543,7 +438,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null || apiName == null) {
-            ProgressDialogManager.closeProgressDialog();
             return;
         }
 
@@ -551,7 +445,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             case "get_rate_course":
                 Globals.rateCourseResp = GsonManager.getModel(response, RateCourseResp.class);
                 if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this, "Click");
-                ProgressDialogManager.closeProgressDialog();
                 break;
 
             case "is_user_merged":
@@ -561,18 +454,15 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 break;
 
             default:
-                ProgressDialogManager.closeProgressDialog();
                 break;
         }
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
     }
 }

@@ -1,61 +1,61 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
-    <ImageView
-        android:id="@+id/drawer_redpoint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="32dp"
-        android:visibility="gone"
-        android:src="@drawable/setting_notice"
-        tools:ignore="ContentDescription,RtlHardcoded" />
-
-    <TextView
-        android:id="@+id/opencourse_num_notice"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="2dp"
-        android:layout_alignParentRight="true"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:background="@drawable/opencourse_num_bg"
-        tools:ignore="RtlHardcoded" />
-
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer"
+    <RelativeLayout
+        android:id="@+id/container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        android:layout_above="@+id/tab_radiogroup"
+        android:layout_below="@+id/toolbar"></RelativeLayout>
 
-        <!-- Main layout -->
-        <FrameLayout
-            android:id="@+id/drawer_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-        <!-- The navigation drawer -->
-        <ListView
-            android:id="@+id/drawer_list"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:clipToPadding="false"
-            android:scrollbars="none"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
-            android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="30dp"
-            android:background="#FFFFFF"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@+id/tab_radiogroup"
+        android:background="@color/common_line"></View>
 
-    </android.support.v4.widget.DrawerLayout>
+    <RadioGroup
+        android:id="@+id/tab_radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/study"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_study_selector"
+            android:text="@string/study_index" />
+
+        <RadioButton
+            android:id="@+id/course"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_course_selector"
+            android:text="@string/course" />
+
+        <RadioButton
+            android:id="@+id/opencourse"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_opencourse_selector"
+            android:text="@string/opencourse" />
+
+        <RadioButton
+            android:id="@+id/record"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_record_selector"
+            android:text="@string/record_index" />
+
+        <RadioButton
+            android:id="@+id/vip"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_vip"
+            android:text="@string/vip_index" />
+    </RadioGroup>
 
 </RelativeLayout>

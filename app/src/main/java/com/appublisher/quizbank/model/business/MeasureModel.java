@@ -1182,32 +1182,32 @@ public class MeasureModel implements RequestCallback{
         return count;
     }
 
-    private void showCacheSubmitAlert() {
-        if (mContext == null || ((Activity) mContext).isFinishing()) return;
-        String msg = "你有一次未完成的练习";
-        String p = "去看记录";
-        new AlertDialog.Builder(mContext)
-                .setMessage(msg)
-                .setPositiveButton(p,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 跳转至学习记录
-                                if (mContext instanceof MainActivity) {
-                                    ((MainActivity) mContext).changeFragment(5);
-                                }
-                                dialog.dismiss();
-                            }
-                        }).show();
-    }
+//    private void showCacheSubmitAlert() {
+//        if (mContext == null || ((Activity) mContext).isFinishing()) return;
+//        String msg = "你有一次未完成的练习";
+//        String p = "去看记录";
+//        new AlertDialog.Builder(mContext)
+//                .setMessage(msg)
+//                .setPositiveButton(p,
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                // 跳转至学习记录
+//                                if (mContext instanceof MainActivity) {
+//                                    ((MainActivity) mContext).changeFragment(5);
+//                                }
+//                                dialog.dismiss();
+//                            }
+//                        }).show();
+//    }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("cache_submit_paper".equals(apiName)) {
             // 缓存提交
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
-            if (resp == null || resp.getResponse_code() != 1) return;
-            showCacheSubmitAlert();
+//            if (resp == null || resp.getResponse_code() != 1) return;
+//            showCacheSubmitAlert();
         } else if ("mockpre_exam_info".equals(apiName)) {
             MockPre mockPre = GsonManager.getModel(response.toString(), MockPre.class);
             if (mockPre == null || mockPre.getResponse_code() != 1) return;
