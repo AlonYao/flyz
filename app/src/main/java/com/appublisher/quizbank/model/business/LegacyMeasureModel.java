@@ -36,7 +36,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.MainActivity;
-import com.appublisher.quizbank.adapter.MeasureAdapter;
+import com.appublisher.quizbank.adapter.LegacyMeasureAdapter;
 import com.appublisher.quizbank.common.measure.UserAnswerEntity;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
@@ -521,8 +521,8 @@ public class LegacyMeasureModel implements RequestCallback{
      * 设置ViewPager
      */
     private void setViewPager(final LegacyMeasureActivity activity) {
-        MeasureAdapter measureAdapter = new MeasureAdapter(activity);
-        activity.mViewPager.setAdapter(measureAdapter);
+        LegacyMeasureAdapter legacyMeasureAdapter = new LegacyMeasureAdapter(activity);
+        activity.mViewPager.setAdapter(legacyMeasureAdapter);
 
         //noinspection deprecation
         activity.mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1018,7 +1018,7 @@ public class LegacyMeasureModel implements RequestCallback{
      * 选项点击动作
      * @param textView 选项
      */
-    public static void optionOnClickAction(MeasureAdapter adapter, final TextView textView) {
+    public static void optionOnClickAction(LegacyMeasureAdapter adapter, final TextView textView) {
         if (mOptionClick) return;
 
         mOptionClick = true;

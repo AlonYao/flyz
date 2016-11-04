@@ -16,21 +16,20 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="androd.permission.INSTALL_PACKAGES" />
 
-    <!--  个推SDK权限 START
-  -->
+    <!--   个推SDK权限 START -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="getui.permission.GetuiService.com.appublisher.quizbank" />
+
     <permission
         android:name="getui.permission.GetuiService.com.appublisher.quizbank"
         android:protectionLevel="normal" />
-    - <!--  个推SDK权限 END
-  -->
+    -
 
-
+    <!--   个推SDK权限 END -->
     <application
         android:name=".QuizBankApp"
         android:allowBackup="true"
@@ -116,21 +115,24 @@
             android:name=".broadcast.PushReceiver"
             android:exported="false">
             <intent-filter>
+
                 <!-- 个推 appID -->
                 <action android:name="${GT_APPID}" />
             </intent-filter>
         </receiver>
         <!-- 个推SDK配置结束 -->
 
+
         <!-- 新浪回调Activity -->
         <activity
             android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait">
-            <!--<intent-filter>-->
-            <!--<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />-->
-            <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" /> -->
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <!-- 微信回调Activity -->
@@ -140,7 +142,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".activity.SystemNoticeActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -302,6 +303,10 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_xc_report"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.measure.MeasureActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

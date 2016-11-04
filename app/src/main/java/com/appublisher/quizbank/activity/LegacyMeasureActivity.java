@@ -25,7 +25,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.adapter.MeasureAdapter;
+import com.appublisher.quizbank.adapter.LegacyMeasureAdapter;
 import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
@@ -464,8 +464,8 @@ public class LegacyMeasureActivity extends BaseActivity implements RequestCallba
      * 设置ViewPager
      */
     private void setViewPager() {
-        MeasureAdapter measureAdapter = new MeasureAdapter(this);
-        mViewPager.setAdapter(measureAdapter);
+        LegacyMeasureAdapter legacyMeasureAdapter = new LegacyMeasureAdapter(this);
+        mViewPager.setAdapter(legacyMeasureAdapter);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

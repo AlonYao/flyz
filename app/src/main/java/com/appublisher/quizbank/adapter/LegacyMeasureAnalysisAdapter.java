@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * 题目解析容器
  */
-public class MeasureAnalysisAdapter extends PagerAdapter {
+public class LegacyMeasureAnalysisAdapter extends PagerAdapter {
 
     private LegacyMeasureAnalysisActivity mActivity;
     private int mLastY;
@@ -38,9 +38,9 @@ public class MeasureAnalysisAdapter extends PagerAdapter {
     private TextView mTvOptionD;
     private ImageView mIvNoAnswer;
 
-    public MeasureAnalysisAdapter(LegacyMeasureAnalysisActivity activity,
-                                  ArrayList<QuestionM> questions,
-                                  ArrayList<AnswerM> answers) {
+    public LegacyMeasureAnalysisAdapter(LegacyMeasureAnalysisActivity activity,
+                                        ArrayList<QuestionM> questions,
+                                        ArrayList<AnswerM> answers) {
         mActivity = activity;
         mQuestions = questions;
         mAnswers = answers;

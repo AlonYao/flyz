@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
-import com.appublisher.quizbank.adapter.MeasureAnalysisAdapter;
+import com.appublisher.quizbank.adapter.LegacyMeasureAnalysisAdapter;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.utils.AlertManager;
@@ -37,7 +37,7 @@ public class LegacyMeasureAnalysisModel {
                                     final ArrayList<AnswerM> answers) {
         if (questions == null || questions.size() == 0) return;
 
-        MeasureAnalysisAdapter adapter = new MeasureAnalysisAdapter(
+        LegacyMeasureAnalysisAdapter adapter = new LegacyMeasureAnalysisAdapter(
                 activity,
                 questions,
                 answers);

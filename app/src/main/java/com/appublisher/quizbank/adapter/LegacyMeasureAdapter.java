@@ -21,7 +21,7 @@ import java.util.HashMap;
 /**
  * 做题模块
  */
-public class MeasureAdapter extends PagerAdapter{
+public class LegacyMeasureAdapter extends PagerAdapter{
 
     private LegacyMeasureActivity mActivity;
     private int mLastY;
@@ -34,7 +34,7 @@ public class MeasureAdapter extends PagerAdapter{
     private TextView mTvOptionC;
     private TextView mTvOptionD;
 
-    public MeasureAdapter(LegacyMeasureActivity activity) {
+    public LegacyMeasureAdapter(LegacyMeasureActivity activity) {
         mActivity = activity;
         mIsItemLoad = new SparseBooleanArray();
     }
@@ -221,19 +221,19 @@ public class MeasureAdapter extends PagerAdapter{
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.measure_option_a:
-                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionA);
+                    LegacyMeasureModel.optionOnClickAction(LegacyMeasureAdapter.this, mTvOptionA);
                     break;
 
                 case R.id.measure_option_b:
-                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionB);
+                    LegacyMeasureModel.optionOnClickAction(LegacyMeasureAdapter.this, mTvOptionB);
                     break;
 
                 case R.id.measure_option_c:
-                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionC);
+                    LegacyMeasureModel.optionOnClickAction(LegacyMeasureAdapter.this, mTvOptionC);
                     break;
 
                 case R.id.measure_option_d:
-                    LegacyMeasureModel.optionOnClickAction(MeasureAdapter.this, mTvOptionD);
+                    LegacyMeasureModel.optionOnClickAction(LegacyMeasureAdapter.this, mTvOptionD);
                     break;
 
                 default:
