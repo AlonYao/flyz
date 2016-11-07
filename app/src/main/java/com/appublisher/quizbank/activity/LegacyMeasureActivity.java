@@ -176,7 +176,7 @@ public class LegacyMeasureActivity extends BaseActivity implements RequestCallba
         setToolBar(this);
 
         // View 初始化
-        mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.legacy_measure_viewpager);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // 初始化成员变量

@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_measure"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.appublisher.quizbank.common.measure.MeasureActivity">
 
     <include layout="@layout/toolbar"/>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/measure_tablayout"
+    <!-- 整卷Tab -->
+    <ViewStub
+        android:id="@+id/measure_tablayout_viewstub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:background="@android:color/white"
-        app:tabSelectedTextColor="@color/themecolor"
-        app:tabIndicatorColor="@color/themecolor"/>
+        android:layout="@layout/measure_tablayout"/>
 
-    <View
+    <!-- ViewPager -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/measure_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@id/measure_tablayout"
-        android:background="@color/measure_divider"/>
+        android:layout_height="match_parent"/>
 
-</RelativeLayout>
+</LinearLayout>

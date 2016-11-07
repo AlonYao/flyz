@@ -24,7 +24,7 @@ public class MeasureAdapter extends FragmentStatePagerAdapter{
     @Override
     public Fragment getItem(int position) {
         String question = GsonManager.modelToString(mQuestions.get(position));
-        return MeasureItemFragment.newInstance(question);
+        return MeasureItemFragment.newInstance(question, position, getCount());
     }
 
     @Override

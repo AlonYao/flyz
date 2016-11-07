@@ -150,7 +150,7 @@ public class LegacyMeasureAdapter extends PagerAdapter{
         } else {
             // 题目不带材料
             view = LayoutInflater.from(mActivity).inflate(
-                    R.layout.measure_item_withoutmaterial, container, false);
+                    R.layout.legacy_measure_item_withoutmaterial, container, false);
         }
 
         // 题干

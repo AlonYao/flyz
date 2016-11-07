@@ -7,4 +7,8 @@ import com.appublisher.lib_basic.volley.ApiConstants;
  */
 
 public interface MeasureApi extends ApiConstants{
+
+    // 快速智能练习
+    String getAutoTraining = baseUrl + "quizbank/auto_training";
+
 }

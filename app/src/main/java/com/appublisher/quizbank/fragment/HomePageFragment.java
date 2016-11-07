@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
@@ -28,6 +29,7 @@ import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
+import com.appublisher.quizbank.common.measure.MeasureActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.model.business.HomePageModel;
@@ -45,6 +47,7 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -454,10 +457,13 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
 
             case R.id.homepage_quicktest:
                 // 快速智能练习
-                intent = new Intent(mActivity, PracticeDescriptionActivity.class);
-                intent.putExtra("paper_type", "auto");
-                intent.putExtra("paper_name", "快速智能练习");
-                intent.putExtra("umeng_entry", "Home");
+//                intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+//                intent.putExtra("paper_type", "auto");
+//                intent.putExtra("paper_name", "快速智能练习");
+//                intent.putExtra("umeng_entry", "Home");
+//                startActivity(intent);
+                intent = new Intent(mActivity, MeasureActivity.class);
+                intent.putExtra(MeasureActivity.PAPER_TYPE, "auto");
                 startActivity(intent);
                 break;
 
