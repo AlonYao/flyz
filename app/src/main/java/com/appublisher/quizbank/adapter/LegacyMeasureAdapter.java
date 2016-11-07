@@ -167,13 +167,13 @@ public class LegacyMeasureAdapter extends PagerAdapter{
 
         // 选项
         LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
-                R.id.measure_option_a_container);
+                R.id.legacy_measure_option_a_container);
         LinearLayout llOptionBContainer = (LinearLayout) view.findViewById(
-                R.id.measure_option_b_container);
+                R.id.legacy_measure_option_b_container);
         LinearLayout llOptionCContainer = (LinearLayout) view.findViewById(
-                R.id.measure_option_c_container);
+                R.id.legacy_measure_option_c_container);
         LinearLayout llOptionDContainer = (LinearLayout) view.findViewById(
-                R.id.measure_option_d_container);
+                R.id.legacy_measure_option_d_container);
 
         String optionA = question.getOption_a();
         String optionB = question.getOption_b();
