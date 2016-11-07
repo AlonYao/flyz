@@ -15,7 +15,7 @@ public class MeasureActivity extends BaseActivity {
 
     public static final String PAPER_TYPE = "paper_type";
 
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
     private MeasureModel mModel;
 
     @Override
