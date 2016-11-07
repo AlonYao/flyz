@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
     private TextView mTvOptionB;
     private TextView mTvOptionC;
     private TextView mTvOptionD;
+    private View mRoot;
+    private ScrollView mSvBottom;
     private int mPosition;
     private int mSize;
     private boolean mOptionClick;
@@ -60,22 +64,39 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.measure_item_withoutmaterial, container, false);
-        mStemContainer = (LinearLayout) root.findViewById(R.id.measure_stem_container);
-        mOptionAContainer = (LinearLayout) root.findViewById(
-                R.id.measure_option_a_container);
-        mOptionBContainer = (LinearLayout) root.findViewById(
-                R.id.measure_option_b_container);
-        mOptionCContainer = (LinearLayout) root.findViewById(
-                R.id.measure_option_c_container);
-        mOptionDContainer = (LinearLayout) root.findViewById(
-                R.id.measure_option_d_container);
-        mTvOptionA = (TextView) root.findViewById(R.id.measure_option_a_tv);
-        mTvOptionB = (TextView) root.findViewById(R.id.measure_option_b_tv);
-        mTvOptionC = (TextView) root.findViewById(R.id.measure_option_c_tv);
-        mTvOptionD = (TextView) root.findViewById(R.id.measure_option_d_tv);
+        mRoot = inflater.inflate(R.layout.measure_item, container, false);
+        initView();
+        setOnClick();
         showContent();
-        return root;
+        return mRoot;
+    }
+
+    private void initView() {
+        mStemContainer = (LinearLayout) mRoot.findViewById(R.id.measure_stem_container);
+        mOptionAContainer = (LinearLayout) mRoot.findViewById(
+                R.id.measure_option_a_container);
+        mOptionBContainer = (LinearLayout) mRoot.findViewById(
+                R.id.measure_option_b_container);
+        mOptionCContainer = (LinearLayout) mRoot.findViewById(
+                R.id.measure_option_c_container);
+        mOptionDContainer = (LinearLayout) mRoot.findViewById(
+                R.id.measure_option_d_container);
+        mSvBottom = (ScrollView) mRoot.findViewById(R.id.measure_bottom);
+        mTvOptionA = (TextView) mRoot.findViewById(R.id.measure_option_a_tv);
+        mTvOptionB = (TextView) mRoot.findViewById(R.id.measure_option_b_tv);
+        mTvOptionC = (TextView) mRoot.findViewById(R.id.measure_option_c_tv);
+        mTvOptionD = (TextView) mRoot.findViewById(R.id.measure_option_d_tv);
+    }
+
+    private void setOnClick() {
+        mOptionAContainer.setOnClickListener(this);
+        mOptionBContainer.setOnClickListener(this);
+        mOptionCContainer.setOnClickListener(this);
+        mOptionDContainer.setOnClickListener(this);
+        mTvOptionA.setOnClickListener(this);
+        mTvOptionB.setOnClickListener(this);
+        mTvOptionC.setOnClickListener(this);
+        mTvOptionD.setOnClickListener(this);
     }
 
     private void showContent() {
@@ -93,16 +114,20 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
                 getContext(), mOptionCContainer, mQuestion.getOption_c(), false);
         MeasureModel.addRichTextToContainer(
                 getContext(), mOptionDContainer, mQuestion.getOption_d(), false);
+        // 材料
+        showMaterial(mQuestion.getMaterial());
+    }
 
-        mOptionAContainer.setOnClickListener(this);
-        mOptionBContainer.setOnClickListener(this);
-        mOptionCContainer.setOnClickListener(this);
-        mOptionDContainer.setOnClickListener(this);
-
-        mTvOptionA.setOnClickListener(this);
-        mTvOptionB.setOnClickListener(this);
-        mTvOptionC.setOnClickListener(this);
-        mTvOptionD.setOnClickListener(this);
+    private void showMaterial(String material) {
+        if (material == null || material.length() == 0) return;
+        ViewStub vsMaterial = (ViewStub) mRoot.findViewById(R.id.measure_material_viewstub);
+        vsMaterial.inflate();
+        ViewStub vsDivider = (ViewStub) mRoot.findViewById(R.id.measure_divider_viewstub);
+        vsDivider.inflate();
+        // 显示材料
+        ScrollView mSvTop = (ScrollView) mRoot.findViewById(R.id.measure_top);
+        LinearLayout mMaterialContainer = (LinearLayout) mRoot.findViewById(R.id.measure_material);
+        MeasureModel.addRichTextToContainer(getContext(), mMaterialContainer, material, true);
     }
 
     @Override

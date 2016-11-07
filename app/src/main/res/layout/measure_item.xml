@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 材料 -->
+    <ViewStub
+        android:id="@+id/measure_material_viewstub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/measure_item_material"/>
+
+    <!-- 题目 -->
+    <ScrollView
+        android:id="@+id/measure_bottom"
+        android:layout_below="@id/measure_material_viewstub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="15dp"
+            android:orientation="vertical">
+
+            <!-- 题干 -->
+            <LinearLayout
+                android:id="@+id/measure_stem_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="26dp"
+                android:orientation="vertical"/>
+
+            <!-- 选项 A -->
+            <LinearLayout
+                android:id="@+id/measure_option_a"
+                style="@style/MeasureOptionLL">
+                <TextView
+                    android:id="@+id/measure_option_a_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_a"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_a_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+
+            <!-- 选项 B -->
+            <LinearLayout
+                android:id="@+id/measure_option_b"
+                style="@style/MeasureOptionLL">
+                <TextView
+                    android:id="@+id/measure_option_b_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_b"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_b_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+
+            <!-- 选项 C -->
+            <LinearLayout
+                android:id="@+id/measure_option_c"
+                style="@style/MeasureOptionLL">
+                <TextView
+                    android:id="@+id/measure_option_c_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_c"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_c_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+
+            <!-- 选项 D -->
+            <LinearLayout
+                android:id="@+id/measure_option_d"
+                style="@style/MeasureOptionLL">
+                <TextView
+                    android:id="@+id/measure_option_d_tv"
+                    style="@style/MeasureOptionTv"
+                    android:text="@string/measure_option_d"/>
+                <LinearLayout
+                    android:id="@+id/measure_option_d_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ViewStub
+        android:id="@+id/measure_divider_viewstub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/measure_bottom"
+        android:layout="@layout/measure_item_divider"/>
+
+</RelativeLayout>
