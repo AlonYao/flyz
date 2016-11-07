@@ -2,11 +2,7 @@ package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.renderscript.RenderScript;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -49,7 +44,6 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
     public TextView classTime;
     public TextView homeworkTimeText;
     public TextView homeworkTipsText;
-    private ImageView settingImage;
     private View notificationView;
     private View exerciseView;
     private View courseView;
@@ -80,7 +74,6 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         notificationView = mView.findViewById(R.id.message);
         exerciseView = mView.findViewById(R.id.homework);
         courseView = mView.findViewById(R.id.course);
-        settingImage = (ImageView) mView.findViewById(R.id.setting_image);
     }
 
     public void setValues() {
@@ -93,14 +86,6 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             }
         });
 
-        settingImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
-                intent.putExtra("from", "setting");
-                startActivity(intent);
-            }
-        });
 
         notificationView.setOnClickListener(new View.OnClickListener() {
             @Override
