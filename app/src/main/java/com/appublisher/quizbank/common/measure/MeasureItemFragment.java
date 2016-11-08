@@ -5,9 +5,11 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
     private ScrollView mSvBottom;
     private int mPosition;
     private int mSize;
+    private int mLastY;
     private boolean mOptionClick;
 
     public static MeasureItemFragment newInstance(String question, int position, int size) {
@@ -125,9 +128,42 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
         ViewStub vsDivider = (ViewStub) mRoot.findViewById(R.id.measure_divider_viewstub);
         vsDivider.inflate();
         // 显示材料
-        ScrollView mSvTop = (ScrollView) mRoot.findViewById(R.id.measure_top);
+        final ScrollView svTop = (ScrollView) mRoot.findViewById(R.id.measure_top);
+        ImageView ivPull = (ImageView) mRoot.findViewById(R.id.measure_iv);
         LinearLayout mMaterialContainer = (LinearLayout) mRoot.findViewById(R.id.measure_material);
         MeasureModel.addRichTextToContainer(getContext(), mMaterialContainer, material, true);
+
+        ivPull.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        mLastY = (int) event.getRawY();
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        int dy = (int) event.getRawY() - mLastY;
+
+                        // 边界溢出处理
+                        int finalY = svTop.getHeight() + dy;
+                        if (finalY <= v.getHeight()) break;
+
+                        // 改变上部分ScrollView的高度
+                        ViewGroup.LayoutParams layoutParams = svTop.getLayoutParams();
+                        layoutParams.height = finalY;
+                        svTop.setLayoutParams(layoutParams);
+                        mLastY = (int) event.getRawY();
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        break;
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
