@@ -14,4 +14,7 @@ public interface MeasureApi extends ApiConstants{
     // 专项练习获取题目
     String getNoteQuestions = baseUrl + "quizbank/get_note_questions";
 
+    // 生成试卷练习(仅限天天模考、整卷和估分)
+    String getPaperExercise = baseUrl + "quizbank/get_paper_exercise";
+
 }

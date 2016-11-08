@@ -26,10 +26,11 @@ import com.appublisher.lib_basic.LocationManager;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
 import com.appublisher.quizbank.adapter.YearGvAdapter;
+import com.appublisher.quizbank.common.measure.MeasureActivity;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.model.business.WholePageModel;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
@@ -40,8 +41,10 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.google.gson.Gson;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -234,10 +237,15 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                     int paperId = entirePaper.getId();
                     String paperName = entirePaper.getName();
 
-                    Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
-                    intent.putExtra("paper_type", "entire");
-                    intent.putExtra("paper_id", paperId);
-                    intent.putExtra("paper_name", paperName);
+//                    Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+//                    intent.putExtra("paper_type", "entire");
+//                    intent.putExtra("paper_id", paperId);
+//                    intent.putExtra("paper_name", paperName);
+
+                    Intent intent = new Intent(mActivity, MeasureActivity.class);
+                    intent.putExtra(MeasureConstants.PAPER_TYPE, "entire");
+                    intent.putExtra(MeasureConstants.PAPER_ID, paperId);
+//                    intent.putExtra("paper_name", paperName);
 
                     // Umeng
                     if (mUmengIsSelfPick) {

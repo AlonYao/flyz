@@ -19,6 +19,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
+import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -32,17 +33,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 做题模块：管理类
  */
 
-public class MeasureModel implements RequestCallback{
+public class MeasureModel implements RequestCallback, MeasureConstants{
 
     private Context mContext;
     private MeasureRequest mRequest;
     private SparseIntArray mFinalHeightMap;
     public String mPaperType;
+    public int mPaperId;
     public int mHierarchyId;
 
     MeasureModel(Context context) {
@@ -61,10 +64,12 @@ public class MeasureModel implements RequestCallback{
     }
 
     public void getData() {
-        if ("auto".equals(mPaperType)) {
+        if (AUTO.equals(mPaperType)) {
             mRequest.getAutoTraining();
-        } else if ("note".equals(mPaperType)) {
+        } else if (NOTE.equals(mPaperType)) {
             mRequest.getNoteQuestions(mHierarchyId, "note");
+        } else if (ENTIRE.equals(mPaperType)) {
+            mRequest.getPaperExercise(mPaperId, mPaperType);
         }
     }
 
@@ -92,6 +97,43 @@ public class MeasureModel implements RequestCallback{
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
         ((MeasureActivity) mContext).showViewPager(resp.getQuestions());
+    }
+
+    /**
+     * 处理每日模考&整卷
+     * @param response JSONObject
+     */
+    private void dealPaperExerciseResp(JSONObject response) {
+        MeasureEntireResp resp = GsonManager.getModel(response, MeasureEntireResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
+        List<MeasureEntireResp.CategoryBean> categorys = resp.getCategory();
+        if (categorys == null) return;
+
+        // 构造数据结构
+        List<MeasureTabBean> tabs = new ArrayList<>();
+        List<MeasureQuestion> questions = new ArrayList<>();
+
+        // 遍历
+        for (MeasureEntireResp.CategoryBean category : categorys) {
+            if (category == null) continue;
+            List<MeasureQuestion> categoryQuestions = category.getQuestions();
+            if (categoryQuestions == null) continue;
+            // 添加Tab数据
+            MeasureTabBean tabBean = new MeasureTabBean();
+            tabBean.setName(category.getName());
+            tabBean.setPosition(questions.size());
+            tabs.add(tabBean);
+            // 添加题目数据，构造说明页
+            MeasureQuestion question = new MeasureQuestion();
+            question.setIs_desc(true);
+            question.setCategory_name(category.getName());
+            questions.add(question);
+            questions.addAll(categoryQuestions);
+        }
+
+        if (!(mContext instanceof MeasureActivity)) return;
+        ((MeasureActivity) mContext).showTabLayout(tabs);
+        ((MeasureActivity) mContext).showViewPager(questions);
     }
 
     /**
@@ -205,10 +247,12 @@ public class MeasureModel implements RequestCallback{
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if (MeasureRequest.AUTO_TRAINING.equals(apiName)) {
+        if (AUTO_TRAINING.equals(apiName)) {
             dealAutoTrainingResp(response);
-        } else if (MeasureRequest.NOTE_QUESTIONS.equals(apiName)) {
+        } else if (NOTE_QUESTIONS.equals(apiName)) {
             dealNoteQuestionsResp(response);
+        } else if (PAPER_EXERCISE.equals(apiName)) {
+            dealPaperExerciseResp(response);
         }
         hideLoading();
     }

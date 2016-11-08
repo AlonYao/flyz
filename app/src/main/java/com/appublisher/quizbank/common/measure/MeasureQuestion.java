@@ -29,6 +29,15 @@ public class MeasureQuestion {
     private int material_id;
     private List<Integer> note_ids;
     private int question_id;
+    private boolean is_desc;
+
+    public boolean is_desc() {
+        return is_desc;
+    }
+
+    public void setIs_desc(boolean is_desc) {
+        this.is_desc = is_desc;
+    }
 
     public int getQuestion_id() {
         return question_id;
