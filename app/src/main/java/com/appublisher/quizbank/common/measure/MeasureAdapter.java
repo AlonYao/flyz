@@ -32,4 +32,8 @@ public class MeasureAdapter extends FragmentStatePagerAdapter{
         return mQuestions == null ? 0 : mQuestions.size();
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 }

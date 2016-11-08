@@ -157,12 +157,11 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
                         // 改变上部分ScrollView的高度
                         changeSvHeight(svTop, finalY);
                         mLastY = (int) event.getRawY();
-
-                        // 保存最终位置
-                        saveFinalHeight(finalY);
                         break;
 
                     case MotionEvent.ACTION_UP:
+                        // 保存最终位置
+                        saveFinalHeight(svTop.getHeight());
                         break;
                 }
 
@@ -191,6 +190,7 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
         if (getActivity() instanceof MeasureActivity) {
             ((MeasureActivity) getActivity())
                     .mModel.saveFinalHeight(mQuestion.getMaterial_id(), height);
+            ((MeasureActivity) getActivity()).mAdapter.notifyDataSetChanged();
         }
     }
 

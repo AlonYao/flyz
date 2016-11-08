@@ -18,6 +18,7 @@ public class MeasureActivity extends BaseActivity {
 
     public ViewPager mViewPager;
     public MeasureModel mModel;
+    public MeasureAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class MeasureActivity extends BaseActivity {
     }
 
     public void showViewPager(List<MeasureQuestion> questions) {
-        MeasureAdapter adapter = new MeasureAdapter(getSupportFragmentManager(), questions);
-        mViewPager.setAdapter(adapter);
+        mAdapter = new MeasureAdapter(getSupportFragmentManager(), questions);
+        mViewPager.setAdapter(mAdapter);
     }
 }
