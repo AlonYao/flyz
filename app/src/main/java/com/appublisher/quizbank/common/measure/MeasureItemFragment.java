@@ -39,7 +39,6 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
     private TextView mTvOptionC;
     private TextView mTvOptionD;
     private View mRoot;
-    private ScrollView mSvBottom;
     private int mPosition;
     private int mSize;
     private int mLastY;
@@ -84,7 +83,6 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
                 R.id.measure_option_c_container);
         mOptionDContainer = (LinearLayout) mRoot.findViewById(
                 R.id.measure_option_d_container);
-        mSvBottom = (ScrollView) mRoot.findViewById(R.id.measure_bottom);
         mTvOptionA = (TextView) mRoot.findViewById(R.id.measure_option_a_tv);
         mTvOptionB = (TextView) mRoot.findViewById(R.id.measure_option_b_tv);
         mTvOptionC = (TextView) mRoot.findViewById(R.id.measure_option_c_tv);
@@ -133,6 +131,12 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
         LinearLayout mMaterialContainer = (LinearLayout) mRoot.findViewById(R.id.measure_material);
         MeasureModel.addRichTextToContainer(getContext(), mMaterialContainer, material, true);
 
+        // 更新上部分ScrollView的高度
+        int finalHeight = getFinalHeight();
+        if (finalHeight != 0) {
+            changeSvHeight(svTop, finalHeight);
+        }
+
         ivPull.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -151,10 +155,11 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
                         if (finalY <= v.getHeight()) break;
 
                         // 改变上部分ScrollView的高度
-                        ViewGroup.LayoutParams layoutParams = svTop.getLayoutParams();
-                        layoutParams.height = finalY;
-                        svTop.setLayoutParams(layoutParams);
+                        changeSvHeight(svTop, finalY);
                         mLastY = (int) event.getRawY();
+
+                        // 保存最终位置
+                        saveFinalHeight(finalY);
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -164,6 +169,29 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
                 return false;
             }
         });
+    }
+
+    private void changeSvHeight(ScrollView sv, int height) {
+        ViewGroup.LayoutParams layoutParams = sv.getLayoutParams();
+        layoutParams.height = height;
+        sv.setLayoutParams(layoutParams);
+    }
+
+    private int getFinalHeight() {
+        if (mQuestion == null) return 0;
+        if (getActivity() instanceof MeasureActivity) {
+            return ((MeasureActivity) getActivity())
+                    .mModel.getFinalHeightById(mQuestion.getMaterial_id());
+        }
+        return 0;
+    }
+
+    private void saveFinalHeight(int height) {
+        if (mQuestion == null) return;
+        if (getActivity() instanceof MeasureActivity) {
+            ((MeasureActivity) getActivity())
+                    .mModel.saveFinalHeight(mQuestion.getMaterial_id(), height);
+        }
     }
 
     @Override

@@ -17,7 +17,7 @@ public class MeasureActivity extends BaseActivity {
     public static final String HIERARCHY_ID = "hierarchy_id";
 
     public ViewPager mViewPager;
-    private MeasureModel mModel;
+    public MeasureModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

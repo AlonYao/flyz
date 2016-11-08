@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.measure;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -40,12 +41,23 @@ public class MeasureModel implements RequestCallback{
 
     private Context mContext;
     private MeasureRequest mRequest;
+    private SparseIntArray mFinalHeightMap;
     public String mPaperType;
     public int mHierarchyId;
 
     MeasureModel(Context context) {
         mContext = context;
         mRequest = new MeasureRequest(context, this);
+    }
+
+    public int getFinalHeightById(int id) {
+        if (mFinalHeightMap == null) return 0;
+        return mFinalHeightMap.get(id);
+    }
+
+    public void saveFinalHeight(int id, int finalHeight) {
+        if (mFinalHeightMap == null) mFinalHeightMap = new SparseIntArray();
+        mFinalHeightMap.put(id, finalHeight);
     }
 
     public void getData() {
