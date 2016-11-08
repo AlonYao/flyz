@@ -150,7 +150,7 @@ public class LegacyMeasureAdapter extends PagerAdapter{
         } else {
             // 题目不带材料
             view = LayoutInflater.from(mActivity).inflate(
-                    R.layout.legacy_measure_item_withoutmaterial, container, false);
+                    R.layout.measure_item_withoutmaterial, container, false);
         }
 
         // 题干
@@ -167,13 +167,13 @@ public class LegacyMeasureAdapter extends PagerAdapter{
 
         // 选项
         LinearLayout llOptionAContainer = (LinearLayout) view.findViewById(
-                R.id.legacy_measure_option_a_container);
+                R.id.measure_option_a_container);
         LinearLayout llOptionBContainer = (LinearLayout) view.findViewById(
-                R.id.legacy_measure_option_b_container);
+                R.id.measure_option_b_container);
         LinearLayout llOptionCContainer = (LinearLayout) view.findViewById(
-                R.id.legacy_measure_option_c_container);
+                R.id.measure_option_c_container);
         LinearLayout llOptionDContainer = (LinearLayout) view.findViewById(
-                R.id.legacy_measure_option_d_container);
+                R.id.measure_option_d_container);
 
         String optionA = question.getOption_a();
         String optionB = question.getOption_b();

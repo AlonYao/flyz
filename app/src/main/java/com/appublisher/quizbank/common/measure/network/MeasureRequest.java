@@ -13,6 +13,7 @@ import com.appublisher.lib_login.volley.LoginParamBuilder;
 public class MeasureRequest extends Request implements MeasureApi{
 
     public static final String AUTO_TRAINING = "auto_training";
+    public static final String NOTE_QUESTIONS = "note_questions";
 
     public MeasureRequest(Context context) {
         super(context);
@@ -31,6 +32,20 @@ public class MeasureRequest extends Request implements MeasureApi{
      */
     public void getAutoTraining() {
         asyncRequest(getFinalUrl(getAutoTraining), "auto_training", "object");
+    }
+
+    /**
+     * 专项练习获取题目
+     *
+     * @param note_id 知识点id
+     * @param type    类型: all：所有题目 error：只从错题里抽 collect：只从收藏的题目里抽
+     */
+    public void getNoteQuestions(int note_id,
+                                 String type) {
+        asyncRequest(
+                getFinalUrl(getNoteQuestions) + "&note_id=" + note_id + "&type=" + type,
+                "note_questions",
+                "object");
     }
 
 }

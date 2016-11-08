@@ -18,6 +18,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
+import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -40,6 +41,7 @@ public class MeasureModel implements RequestCallback{
     private Context mContext;
     private MeasureRequest mRequest;
     public String mPaperType;
+    public int mHierarchyId;
 
     MeasureModel(Context context) {
         mContext = context;
@@ -49,6 +51,8 @@ public class MeasureModel implements RequestCallback{
     public void getData() {
         if ("auto".equals(mPaperType)) {
             mRequest.getAutoTraining();
+        } else if ("note".equals(mPaperType)) {
+            mRequest.getNoteQuestions(mHierarchyId, "note");
         }
     }
 
@@ -56,8 +60,23 @@ public class MeasureModel implements RequestCallback{
         if (mContext instanceof BaseActivity) ((BaseActivity) mContext).hideLoading();
     }
 
+    /**
+     * 处理快速智能练习
+     * @param response JSONObject
+     */
     private void dealAutoTrainingResp(JSONObject response) {
         MeasureAutoResp resp = GsonManager.getModel(response, MeasureAutoResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
+        if (!(mContext instanceof MeasureActivity)) return;
+        ((MeasureActivity) mContext).showViewPager(resp.getQuestions());
+    }
+
+    /**
+     * 处理知识点专项训练
+     * @param response JSONObject
+     */
+    private void dealNoteQuestionsResp(JSONObject response) {
+        MeasureNotesResp resp = GsonManager.getModel(response, MeasureNotesResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
         ((MeasureActivity) mContext).showViewPager(resp.getQuestions());
@@ -176,6 +195,8 @@ public class MeasureModel implements RequestCallback{
     public void requestCompleted(JSONObject response, String apiName) {
         if (MeasureRequest.AUTO_TRAINING.equals(apiName)) {
             dealAutoTrainingResp(response);
+        } else if (MeasureRequest.NOTE_QUESTIONS.equals(apiName)) {
+            dealNoteQuestionsResp(response);
         }
         hideLoading();
     }

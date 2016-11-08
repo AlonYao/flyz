@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
-import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.common.measure.MeasureActivity;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.unnamed.b.atv.model.TreeNode;
@@ -153,10 +153,18 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ivDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, PracticeDescriptionActivity.class);
-                intent.putExtra("paper_type", value.type);
+//                Intent intent = new Intent(context, PracticeDescriptionActivity.class);
+//                intent.putExtra("paper_type", value.type);
+//                intent.putExtra("paper_name", value.name);
+//                intent.putExtra("hierarchy_id", value.id);
+//                intent.putExtra("hierarchy_level", value.level);
+//                intent.putExtra("umeng_entry", "List");
+//                context.startActivity(intent);
+
+                Intent intent = new Intent(context, MeasureActivity.class);
+                intent.putExtra(MeasureActivity.PAPER_TYPE, value.type);
                 intent.putExtra("paper_name", value.name);
-                intent.putExtra("hierarchy_id", value.id);
+                intent.putExtra(MeasureActivity.HIERARCHY_ID, value.id);
                 intent.putExtra("hierarchy_level", value.level);
                 intent.putExtra("umeng_entry", "List");
                 context.startActivity(intent);

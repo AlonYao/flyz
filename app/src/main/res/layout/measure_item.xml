@@ -7,13 +7,13 @@
     <ViewStub
         android:id="@+id/measure_material_viewstub"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout="@layout/measure_item_material"/>
 
     <!-- 题目 -->
     <ScrollView
         android:id="@+id/measure_bottom"
-        android:layout_below="@id/measure_material_viewstub"
+        android:layout_below="@id/measure_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white">

@@ -14,6 +14,7 @@ import java.util.List;
 public class MeasureActivity extends BaseActivity {
 
     public static final String PAPER_TYPE = "paper_type";
+    public static final String HIERARCHY_ID = "hierarchy_id";
 
     public ViewPager mViewPager;
     private MeasureModel mModel;
@@ -30,6 +31,7 @@ public class MeasureActivity extends BaseActivity {
     private void initData() {
         mModel = new MeasureModel(this);
         mModel.mPaperType = getIntent().getStringExtra(PAPER_TYPE);
+        mModel.mHierarchyId = getIntent().getIntExtra(HIERARCHY_ID, 0);
         showLoading();
         mModel.getData();
     }
