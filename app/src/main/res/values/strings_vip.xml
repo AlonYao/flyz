@@ -11,6 +11,7 @@
     <string name="title_activity_vip_dttp">单题突破</string>
     <string name="title_activity_vip_hpts">互评提升</string>
     <string name="title_activity_vip_xc_report">作业报告</string>
+    <string name="title_activity_mock_list">模考</string>
 
     <string name="vip_filter_status">作业状态</string>
     <string name="vip_filter_category">科目</string>

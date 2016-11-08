@@ -233,7 +233,7 @@ public class AlertManager {
         });
 
         // 看个直播
-        StudyIndexModel.setOpenCourseBtn(activity, tvZhibo);
+//        StudyIndexModel.setOpenCourseBtn(activity, tvZhibo);
     }
 
     /**

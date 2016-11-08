@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
@@ -33,20 +33,16 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
-import com.appublisher.quizbank.model.netdata.mock.MockListResp;
-import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
-import com.appublisher.quizbank.model.netdata.mock.MockPre;
+import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,15 +57,11 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     private String paper_name;
     private String mock_time;
     private String courseDetailLink;
-    private boolean is_purchased;
     private TextView bottom_right;
     public static TextView bottom_left;
     private Handler mHandler;
-    private int course_id;
-    public static boolean beginMock;//是否可以进入考试
-    public static boolean isDate;//是否是预约时间
-    public static boolean isExercise;//进入练习报告页
-    private int exercise_id;
+    private int exercise_id = -1;
+    private MockPreResp mMockPreResp;
     //预约后倒计时＋考试时间倒计时
     public Timer mTimer;
     public static long mDuration;
@@ -117,8 +109,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     case BEGINMOCK_Y:
                         //考试时间到
                         bottom_left.setText("点击进入");
-                        beginMock = true;
-                        isDate = false;//不再预约
                         break;
 
                     default:
@@ -132,33 +122,35 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mock_pre);
-        //Toolbar
+
         setToolBar(this);
-        //获取传参
+
         paper_name = getIntent().getStringExtra("paper_name");
-        //布局
+        mock_id = getIntent().getIntExtra("mock_id", -1);
+
+        initViews();
+
+        mHandler = new MsgHandler(this);
+        mQRequest = new QRequest(this, this);
+    }
+
+    public void initViews() {
+
         examdeailContainer = (LinearLayout) findViewById(R.id.examdetailcontainer);
         rankingContainer = (LinearLayout) findViewById(R.id.rankingcontainer);
         bottom_right = (TextView) findViewById(R.id.mockpre_bottom_right);
         bottom_left = (TextView) findViewById(R.id.mockpre_bottom_left);
-        //设置监听
+
         bottom_right.setOnClickListener(this);
         bottom_left.setOnClickListener(this);
-        //初始化时不可以进入考试,不可预约
-        beginMock = false;
-        isDate = false;
-        isExercise = false;
-        //成员变量初始化
-        mHandler = new MsgHandler(this);
-        mQRequest = new QRequest(this, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //获取数据(模考列表)
-        ProgressDialogManager.showProgressDialog(this, true);
-        mQRequest.getMockExerciseList();
+        showLoading();
+        mQRequest.getServerCurrentTime();
     }
 
     @Override
@@ -169,7 +161,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         map.put("Order", mUMOrder);
         map.put("EntryMock", mUMEntryMock);
         map.put("Course", mUMCourse);
-        UmengManager.onEvent(this, "MockPre", map);
+        UmengManager.onEvent(this, "MockPreResp", map);
     }
 
     @Override
@@ -200,33 +192,10 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null || apiName == null) return;
-
+        hideLoading();
         switch (apiName) {
             case "mockpre_exam_info":
                 dealMockPreInfo(response);
-                ProgressDialogManager.closeProgressDialog();
-                break;
-
-            case "mock_signup": //报名结果
-                if (response.toString().equals("")) {
-                    ToastManager.showToast(this, "报名失败");
-                    return;
-                }
-
-                try {
-                    int response_code = response.getInt("response_code");
-                    if (response_code == 1) {
-                        ToastManager.showToast(this, "课程已开通，详情见侧边栏课程中心");
-                        bottom_right.setText("查看详情");
-                        courseDetailLink = courseDetailLink.replace("unpurchased", "purchased");
-                        is_purchased = true;
-                    } else {
-                        ToastManager.showToast(this, "报名失败");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
                 break;
 
             case "book_mock":
@@ -234,42 +203,25 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 break;
 
             case "server_current_time":
-                mQRequest.getMockPreExamInfo(mock_id + "");
+                if (mock_id != -1)
+                    mQRequest.getMockPreExamInfo(mock_id + "");
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 if (resp != null && resp.getResponse_code() == 1) {
                     mServerCurrentTime = resp.getCurrent_time();
                 }
                 break;
-
-            case "mock_exercise_list":
-                MockListResp mockListResp =
-                        GsonManager.getModel(response.toString(), MockListResp.class);
-                if (mockListResp == null || mockListResp.getResponse_code() != 1) return;
-
-                ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
-                if (mockPaperMs != null && mockPaperMs.size() != 0) {
-                    MockPaperM mockPaperM = mockPaperMs.get(0);
-                    mock_id = mockPaperM.getId();
-                    if (mock_id <= 0) {
-                        ToastManager.showToast(this, "没有相应的模考");
-                    } else {
-                        mQRequest.getServerCurrentTime();
-                    }
-                }
-
-                break;
         }
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
     //动态添加模考说明
@@ -350,11 +302,13 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
 
     /**
      * 处理模考信息
+     *
      * @param response 回调数据
      */
     public void dealMockPreInfo(JSONObject response) {
-        MockPre mockPre = GsonManager.getModel(response.toString(), MockPre.class);
-        if (mockPre.getResponse_code() != 1) {
+        MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
+        mMockPreResp = mockPreResp;
+        if (mockPreResp.getResponse_code() != 1) {
             return;
         }
 
@@ -363,7 +317,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         rankingContainer.removeAllViews();
 
         //模
-        mock_time = mockPre.getMock_time();
+        mock_time = mockPreResp.getMock_time();
 
         // 缓存模考时间
         MeasureModel measureModel = new MeasureModel(this);
@@ -372,17 +326,15 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
 
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         int date = MockDAO.getIsDateById(mock_id);
-        String mock_status = mockPre.getMock_status();
-        if (mockPre.getExercise_id() > 0) {
+        String mock_status = mockPreResp.getMock_status();
+        if (mockPreResp.getExercise_id() > 0) {
             bottom_left.setText("练习报告");
-            isExercise = true;
-            exercise_id = mockPre.getExercise_id();
+            exercise_id = mockPreResp.getExercise_id();
         } else {
             switch (mock_status) {
                 case "unstart": //未开始
                     if (date == 0) {//未预约过
                         bottom_left.setText("预约考试");
-                        isDate = true;
                         startTimeBackground();
                     } else {//倒计时
                         startTimer();
@@ -391,7 +343,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
 
                 case "on_going": //开考30分钟内
                     bottom_left.setText("点击进入");
-                    beginMock = true;
                     break;
 
                 case "end": // 模考彻底结束
@@ -402,24 +353,21 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
             }
         }
         //是否已报名
-        is_purchased = mockPre.getIs_purchased();
-        if (is_purchased) {
+        if (mockPreResp.getIs_purchased()) {
             bottom_right.setText("查看详情");
         }
-        //课程id
-        course_id = mockPre.getCourse_id();
         //排名
-        List<String> award_info = mockPre.getAward_info();
+        List<String> award_info = mockPreResp.getAward_info();
         for (int i = 0; i < award_info.size(); i++) {
             addRankChildViews((i + 1) + "", award_info.get(i));
         }
 
         //模考信息
-        List<MockPre.DateInfoEntity> dataInfoEntity = mockPre.getDate_info();
+        List<MockPreResp.DateInfoEntity> dataInfoEntity = mockPreResp.getDate_info();
         //查看详情链接
         int size = dataInfoEntity == null ? 0 : dataInfoEntity.size();
         for (int i = 0; i < size; i++) {
-            MockPre.DateInfoEntity entity = dataInfoEntity.get(i);
+            MockPreResp.DateInfoEntity entity = dataInfoEntity.get(i);
             if (entity == null) continue;
 
             String link = entity.getLink();
@@ -442,21 +390,14 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 break;
 
             case R.id.mockpre_bottom_left://进入考试
-                if (beginMock) {
-                    Intent intent = new Intent(this, MeasureActivity.class);
-                    intent.putExtra("from", "mockpre");
-                    intent.putExtra("paper_id", mock_id);
-                    intent.putExtra("paper_type", "mock");
-                    intent.putExtra("mock_time", mock_time);
-                    intent.putExtra("paper_name", paper_name);
-                    intent.putExtra("redo", false);
+                if ("点击进入".equals(bottom_left.getText().toString().trim())) {
+                    final Intent intent = new Intent(this, MockListActivity.class);
+                    intent.putExtra("mock_list", GsonManager.modelToString(mMockPreResp));
                     startActivity(intent);
                     finish();
-
                     // Umeng
                     mUMEntryMock = "1";
-                }
-                if (isDate) {
+                } else if ("预约考试".equals(bottom_left.getText().toString().trim())) {
                     // 判断用户是否有手机号
                     String mobileNum = LoginModel.getUserMobile();
                     if (mobileNum == null || mobileNum.length() == 0) {
@@ -467,8 +408,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     } else {
                         mQRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
                     }
-                }
-                if (isExercise) {//进入练习报告页
+                } else if (exercise_id != -1) {//进入练习报告页
                     Intent intent = new Intent(this, PracticeReportActivity.class);
                     intent.putExtra("exercise_id", exercise_id);
                     intent.putExtra("paper_type", "mock");
@@ -501,6 +441,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 + "&app_type=quizbank"
                 + "&app_version=" + Globals.appVersion;
 
+        Logger.i("url===" + url);
         Intent intent = new Intent(this, WebViewActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("bar_title", "");
@@ -514,7 +455,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     public void startTimer() {
         if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) return;
 
-        mHours = mDuration / (60*60);
+        mHours = mDuration / (60 * 60);
         mMins = (mDuration / 60) % 60;
         mSec = mDuration % 60;
 
@@ -558,7 +499,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     public void startTimeBackground() {
         if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) return;
 
-        mHours = mDuration / (60*60);
+        mHours = mDuration / (60 * 60);
         mMins = mDuration / 60;
         mSec = mDuration % 60;
 
@@ -612,14 +553,13 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         ToastManager.showToast(this, "考试前会收到短信提示哦");
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         startTimer();
-        isDate = false;
-
         // Umeng
         mUMOrder = "1";
     }
 
     /**
      * 计算指定日期与服务器日期的秒数差
+     *
      * @param date 指定日期
      * @return 秒数差
      */

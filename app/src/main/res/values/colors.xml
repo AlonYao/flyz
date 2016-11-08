@@ -50,6 +50,7 @@
     <color name="course_filter_selected">#3AAC7F</color>
 
     <color name="mock_card_round">#ECEDEF</color>
+    <color name="mock_list_text">#333333</color>
     <color name="apptheme">#3AAD7F</color>
     <color name="themecolor">#3AAD7F</color>
 

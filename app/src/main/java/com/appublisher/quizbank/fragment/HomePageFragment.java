@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
@@ -23,7 +24,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
-import com.appublisher.quizbank.activity.MockActivity;
+import com.appublisher.quizbank.activity.GuFenListActivity;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
@@ -45,6 +46,7 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -334,12 +336,12 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 break;
 
             case "free_open_course_status":
-                com.appublisher.quizbank.model.business.StudyIndexModel.dealOpenCourseStatusResp(response);
-                com.appublisher.quizbank.model.business.StudyIndexModel.setOpenCourseBtn(mActivity, mTvZhiboke);
+//                com.appublisher.quizbank.model.business.StudyIndexModel.dealOpenCourseStatusResp(response);
+//                com.appublisher.quizbank.model.business.StudyIndexModel.setOpenCourseBtn(mActivity, mTvZhiboke);
                 break;
 
             case "promote_live_course":
-                StudyIndexModel.dealPromoteResp(response, this);
+//                StudyIndexModel.dealPromoteResp(response, this);
                 break;
 
             case "global_settings":
@@ -467,7 +469,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 if ("mock".equals(type)) {
                     cls = MockPreActivity.class;
                 } else {
-                    cls = MockActivity.class;
+                    cls = GuFenListActivity.class;
                 }
                 intent = new Intent(mActivity, cls);
                 intent.putExtra("title", mTvMockTitle.getText().toString());

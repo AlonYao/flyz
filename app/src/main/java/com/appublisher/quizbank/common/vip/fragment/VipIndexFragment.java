@@ -2,7 +2,15 @@ package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,9 +19,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_login.activity.UserInfoActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.UserExamInfoModel;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
@@ -38,6 +48,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
     private View mView;
     private TextView nickname;
     private RoundedImageView avatarImage;
+    private ImageView avatarBgImage;
     private TextView evaluationText;
     private TextView examText;
     public TextView messageTips;
@@ -66,6 +77,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         nickname = (TextView) mView.findViewById(R.id.nickname);
         evaluationText = (TextView) mView.findViewById(R.id.ev_txt);
         avatarImage = (RoundedImageView) mView.findViewById(R.id.user_avatar);
+        avatarBgImage = (ImageView) mView.findViewById(R.id.avatar);
         examText = (TextView) mView.findViewById(R.id.exam_txt);
         classTime = (TextView) mView.findViewById(R.id.course_time);
         homeworkTimeText = (TextView) mView.findViewById(R.id.homework_time);
@@ -111,38 +123,42 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             }
         });
 
-        final ImageView imageView = (ImageView) mView.findViewById(R.id.avatar);
-        imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        avatarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        avatarBgImage.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                imageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                imageView.buildDrawingCache();
-
-                Bitmap bmp = imageView.getDrawingCache();
-                blur(bmp, imageView);
+                avatarBgImage.getViewTreeObserver().removeOnPreDrawListener(this);
+                avatarBgImage.buildDrawingCache();
+                Bitmap bmp = avatarBgImage.getDrawingCache();
+                blur(bmp, avatarBgImage);
                 return true;
             }
         });
     }
 
     private void blur(Bitmap bkg, ImageView view) {
-        long startMs = System.currentTimeMillis();
         float scaleFactor = 1;
-        float radius = 60;
-
-
-        Bitmap overlay = Bitmap.createScaledBitmap(bkg, (int) (view.getMeasuredWidth() / scaleFactor),
-                (int) (view.getMeasuredHeight() / scaleFactor), false);
-//        Canvas canvas = new Canvas(overlay);
-//        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop() / scaleFactor);
-//        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
-//        Paint paint = new Paint();
-//        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-//        canvas.drawBitmap(bkg, 0, 0, paint);
-
+        float radius = 20;
+        Bitmap overlay = Bitmap.createBitmap(
+                (int) (view.getMeasuredWidth() / scaleFactor),
+                (int) (view.getMeasuredHeight() / scaleFactor),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(overlay);
+        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop()
+                / scaleFactor);
+        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
+        Paint paint = new Paint();
+        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+        canvas.drawBitmap(bkg, 0, 0, paint);
         overlay = FastBlur.doBlur(overlay, (int) radius, true);
         view.setImageBitmap(overlay);
-
     }
 
     @Override
@@ -152,6 +168,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
         nickname.setText(userInfoModel == null ? "" : userInfoModel.getNickname());
         LoginModel.setAvatar(getActivity(), avatarImage);
+        LoginModel.setAvatar(getActivity(), avatarBgImage);
         final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
         String name = userExamInfoModel == null ? "" : userExamInfoModel.getName();
         String date = userExamInfoModel == null ? "" : userExamInfoModel.getDate();
@@ -164,7 +181,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         examText.setText(text);
         mRequest.getVipIndexEntryData();
 
-
+        avatarImage.setBackgroundResource(R.drawable.avatar_bg_shadow);
     }
 
     @Override

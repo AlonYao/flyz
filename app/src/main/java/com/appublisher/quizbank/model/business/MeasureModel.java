@@ -34,7 +34,6 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.UserAnswerEntity;
@@ -47,7 +46,7 @@ import com.appublisher.quizbank.model.netdata.historyexercise.HistoryExerciseRes
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.CategoryM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
-import com.appublisher.quizbank.model.netdata.mock.MockPre;
+import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
@@ -1211,9 +1210,9 @@ public class MeasureModel implements RequestCallback{
 //            if (resp == null || resp.getResponse_code() != 1) return;
 //            showCacheSubmitAlert();
         } else if ("mockpre_exam_info".equals(apiName)) {
-            MockPre mockPre = GsonManager.getModel(response.toString(), MockPre.class);
-            if (mockPre == null || mockPre.getResponse_code() != 1) return;
-            String status = mockPre.getMock_status();
+            MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
+            if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
+            String status = mockPreResp.getMock_status();
             if ("finish".equals(status)) {
                 showMockCacheSubmitTimeOutAlert();
             } else {

@@ -185,7 +185,7 @@
     <string name="title_activity_open_course_none">查看往期</string>
     <string name="title_activity_web_view"> </string>
     <string name="title_activity_app_guide">AppGuideActivity</string>
-    <string name="title_activity_mock">模考估分</string>
+    <string name="title_activity_gufen_list">估分</string>
     <string name="title_activity_mock_pre">模考总动员</string>
 
 

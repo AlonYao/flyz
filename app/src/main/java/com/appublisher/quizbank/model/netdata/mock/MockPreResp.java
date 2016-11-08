@@ -1,24 +1,13 @@
 package com.appublisher.quizbank.model.netdata.mock;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import java.util.List;
 
 /**
  * Created by bihaitian on 15/9/18.
  */
-public class MockPre {
-
-
-    /**
-     * response_code : 1
-     * mock_time : 2015-09-24 11:00:00
-     * mock_status : unstart
-     * date_info : [{"text":"第一行","link":""},{"text":"第二行","link":""},{"text":"第三行","link":""},{"text":"第四行，a这是课程","link":"http://m.zhiboke.net/index.html#/live/unpurchased?course_id=264"}]
-     * award_info : ["第一名奖励大保健","第二名奖励大包间","第三名奖励大宝剑"]
-     * course_id : 264
-     * is_purchased : false
-     * exercise_id : 857
-     */
-
+public class MockPreResp {
 
     private int response_code;
     private String mock_time;
@@ -29,6 +18,23 @@ public class MockPre {
     private List<String> award_info;
 
     private int exercise_id;
+    private String list_intro;
+    private boolean is_booked;
+    private String download_link;
+    private List<MockListBean> mock_list;
+
+    protected MockPreResp(Parcel in) {
+        response_code = in.readInt();
+        mock_time = in.readString();
+        mock_status = in.readString();
+        course_id = in.readInt();
+        is_purchased = in.readByte() != 0;
+        award_info = in.createStringArrayList();
+        exercise_id = in.readInt();
+        list_intro = in.readString();
+        is_booked = in.readByte() != 0;
+        download_link = in.readString();
+    }
 
     public void setResponse_code(int response_code) {
         this.response_code = response_code;
@@ -94,11 +100,39 @@ public class MockPre {
         return exercise_id;
     }
 
+    public String getList_intro() {
+        return list_intro;
+    }
+
+    public void setList_intro(String list_intro) {
+        this.list_intro = list_intro;
+    }
+
+    public boolean isIs_booked() {
+        return is_booked;
+    }
+
+    public void setIs_booked(boolean is_booked) {
+        this.is_booked = is_booked;
+    }
+
+    public String getDownload_link() {
+        return download_link;
+    }
+
+    public void setDownload_link(String download_link) {
+        this.download_link = download_link;
+    }
+
+    public List<MockListBean> getMock_list() {
+        return mock_list;
+    }
+
+    public void setMock_list(List<MockListBean> mock_list) {
+        this.mock_list = mock_list;
+    }
+
     public static class DateInfoEntity {
-        /**
-         * text : 第一行
-         * link :
-         */
 
         private String text;
         private String link;
@@ -117,6 +151,36 @@ public class MockPre {
 
         public String getLink() {
             return link;
+        }
+    }
+
+    public static class MockListBean {
+        private int paper_id;
+        private String paper_name;
+        private int question_num;
+
+        public int getPaper_id() {
+            return paper_id;
+        }
+
+        public void setPaper_id(int paper_id) {
+            this.paper_id = paper_id;
+        }
+
+        public String getPaper_name() {
+            return paper_name;
+        }
+
+        public void setPaper_name(String paper_name) {
+            this.paper_name = paper_name;
+        }
+
+        public int getQuestion_num() {
+            return question_num;
+        }
+
+        public void setQuestion_num(int question_num) {
+            this.question_num = question_num;
         }
     }
 }

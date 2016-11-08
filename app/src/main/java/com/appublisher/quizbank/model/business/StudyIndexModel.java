@@ -38,9 +38,12 @@ import com.appublisher.quizbank.model.netdata.course.GradeCourseResp;
 import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
+import com.appublisher.quizbank.model.netdata.mock.GufenM;
+import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
+import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
@@ -52,8 +55,6 @@ import java.util.HashMap;
  * HomePageFragment Model
  */
 public class StudyIndexModel {
-
-    private static Activity mActivity;
 
     /**
      * 设置考试项目倒计时
@@ -83,175 +84,6 @@ public class StudyIndexModel {
         textView.setText(text);
     }
 
-
-    /**
-     * 设置快讯模块
-     *
-     * @param activity 上下文
-     * @param view     控件
-     */
-    public static void setPromoteLiveCourse(final Activity activity,
-                                            View view,
-                                            final PromoteLiveCourseResp resp) {
-        if (resp == null || resp.getResponse_code() != 1) return;
-
-        LinearLayout llPromote = (LinearLayout) view.findViewById(R.id.course_promote);
-        TextView tvPromote = (TextView) view.findViewById(R.id.course_promote_text);
-        final ImageView ivPromote = (ImageView) view.findViewById(R.id.course_promote_img);
-
-        String displayType = resp.getDisplay_type();
-        String displayContent = resp.getDisplay_content() == null ? "" : resp.getDisplay_content();
-
-        // 设置内容
-        if (displayType == null) {
-            llPromote.setVisibility(View.GONE);
-        } else if ("image".equals(displayType)) {
-            llPromote.setVisibility(View.VISIBLE);
-            ivPromote.setVisibility(View.VISIBLE);
-
-            ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-                    Bitmap data = imageContainer.getBitmap();
-
-                    if (data == null) return;
-
-                    // 对小于指定尺寸的图片进行放大(2倍)
-                    int width = data.getWidth();
-                    int height = data.getHeight();
-                    int newWidth = Utils.dip2px(activity, 300);
-                    if (width < newWidth) {
-                        float m = (float) newWidth / width;
-                        Matrix matrix = new Matrix();
-                        matrix.postScale(m, m);
-                        data = Bitmap.createBitmap(data, 0, 0, width, height, matrix, true);
-                    }
-
-                    ivPromote.setImageBitmap(data);
-                }
-
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-
-                }
-            };
-
-            new QRequest(activity).loadImage(displayContent, imageListener);
-
-        } else if ("text".equals(displayType)) {
-            llPromote.setVisibility(View.VISIBLE);
-            tvPromote.setVisibility(View.VISIBLE);
-
-            String targetContent = resp.getTarget_content();
-            if (targetContent == null || targetContent.length() == 0) {
-                // 没有跳转信息
-                tvPromote.setText(displayContent);
-
-            } else {
-                // 有跳转信息
-                SpannableStringBuilder text = new SpannableStringBuilder();
-                displayContent = displayContent + "\n点击看详情";
-                text.append(displayContent);
-                int start = displayContent.lastIndexOf("点");
-                int end = displayContent.length();
-                text.setSpan(new URLSpan(displayContent), start, end, 0);
-                text.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, 0);
-                tvPromote.setText(text);
-            }
-        }
-
-        // 设置跳转
-        mActivity = activity;
-        llPromote.setVisibility(View.VISIBLE);
-        llPromote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.course_promote:
-                        if (resp.getResponse_code() != 1) return;
-
-                        String targetType = resp.getTarget_type();
-                        String targetContent = resp.getTarget_content();
-
-                        if (targetContent == null || targetContent.length() == 0) return;
-
-                        if ("url".equals(targetType)) {
-                            Intent intent = new Intent(mActivity, WebViewActivity.class);
-                            intent.putExtra("url", targetContent);
-                            mActivity.startActivity(intent);
-
-                        } else if ("app".equals(targetType)) {
-                            if (targetContent.contains("market@")) {
-                                // 跳转到市场
-                                CommonModel.skipToGrade(
-                                        mActivity, targetContent.replace("market@", ""));
-
-                            } else if (targetContent.contains("courselist")) {
-                                // 跳转到课程中心模块
-//                                if (mActivity instanceof MainActivity)
-//                                    ((MainActivity) mActivity).changeFragment(2);
-
-                            } else if (targetContent.contains("zhiboke@")) {
-                                // 跳转至课程详情页面
-                                Intent intent = new Intent(mActivity, WebViewActivity.class);
-                                intent.putExtra("url", targetContent.replace("zhiboke@", "")
-                                        + "&user_id=" + LoginModel.getUserId()
-                                        + "&user_token=" + LoginModel.getUserToken());
-                                intent.putExtra("bar_title", "快讯");
-                                intent.putExtra("from", "course");
-                                mActivity.startActivity(intent);
-
-                                // Umeng统计
-                                try {
-                                    String courseId =
-                                            targetContent.substring(
-                                                    targetContent.indexOf("course_id=") + 10,
-                                                    targetContent.indexOf("&user_id="));
-                                    HashMap<String, String> map = new HashMap<>();
-                                    map.put("CourseID", courseId);
-                                    map.put("Entry", "KX");
-                                    map.put("Status", "");
-                                    MobclickAgent.onEvent(mActivity, "EnterCourse", map);
-                                } catch (Exception e) {
-                                    // Empty
-                                }
-                            }
-
-                        } else if ("apk".equals(targetType)) {
-                            AppDownload.downloadApk(mActivity, targetContent);
-                        }
-
-                        break;
-                }
-            }
-        });
-    }
-
-    /**
-     * 处理快讯模块数据回调
-     *
-     * @param response         快讯数据
-     * @param homePageFragment 首页
-     */
-    public static void dealPromoteResp(JSONObject response, HomePageFragment homePageFragment) {
-        if (response == null) return;
-        PromoteLiveCourseResp resp =
-                GsonManager.getModel(response.toString(), PromoteLiveCourseResp.class);
-
-        setPromoteLiveCourse(homePageFragment.mActivity, homePageFragment.mView, resp);
-    }
-
-//    /*
-//    获取mock_id
-//     */
-//    public static void dealMockListResp(JSONObject jsonObject, HomePageFragment homePageFragment) {
-//        MockListResp mockListResp = GsonManager.getObejctFromJSON(jsonObject.toString(), MockListResp.class);
-//        ArrayList<MockPaperM> mockPaperMs = mockListResp.getPaper_list();
-//        if(mockPaperMs != null && mockPaperMs.size() != 0){
-//            MockPaperM mockPaperM = mockPaperMs.get(0);
-//            homePageFragment.mock_id = mockPaperM.getId();
-//        }
-//    }
 
     /**
      * 开通课程
@@ -339,47 +171,31 @@ public class StudyIndexModel {
     }
 
     /**
-     * 处理公开课状态回调
+     * 模考估分回调
      *
-     * @param response 回调数据
+     * @param response
+     * @param fragment
      */
-    public static void dealOpenCourseStatusResp(JSONObject response) {
-        OpenCourseStatusResp openCourseStatusResp =
-                GsonManager.getModel(response, OpenCourseStatusResp.class);
-        if (openCourseStatusResp == null || openCourseStatusResp.getResponse_code() != 1) return;
+    public static void dealMockGufenResp(JSONObject response, StudyIndexFragment fragment) {
+        final MockGufenResp mockGufenResp = GsonManager.getModel(response, MockGufenResp.class);
 
-        Globals.openCourseStatus = openCourseStatusResp;
-    }
+        if (mockGufenResp.getResponse_code() == 1) {
 
-    /**
-     * 设置公开课按钮
-     *
-     * @param activity Activity
-     * @param textView 公开课按钮控件
-     */
-    public static void setOpenCourseBtn(final Activity activity, TextView textView) {
-        // 更新按钮文字
-        String head = "免费公开课";
-        if (Globals.openCourseStatus != null && Globals.openCourseStatus.getType() != 0) {
-            String courseName = Globals.openCourseStatus.getCourse_name() == null
-                    ? ""
-                    : Globals.openCourseStatus.getCourse_name();
+            fragment.mockGufenResp = mockGufenResp;
 
-            if (Globals.openCourseStatus.getType() == 1) {
-                head = "正在手机直播：\n" + courseName;
-            } else if (Globals.openCourseStatus.getType() == 2) {
-                head = "即将手机直播：\n" + courseName;
+            if (mockGufenResp.getMock() != null) {
+                MockGufenResp.MockBean mockBean = mockGufenResp.getMock();
+                fragment.mockNameTv.setText(mockBean.getName());
+                fragment.mockView.setVisibility(View.VISIBLE);
+                fragment.mock_id = mockBean.getId();
+            }
+
+            if (mockGufenResp.getGufen() != null) {
+                GufenM gufenBean = mockGufenResp.getGufen();
+                fragment.assessNameTv.setText(gufenBean.getName());
+                fragment.assessView.setVisibility(View.VISIBLE);
             }
         }
-        textView.setText(head);
-
-        // 跳转
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, OpenCourseActivity.class);
-                activity.startActivity(intent);
-            }
-        });
     }
+
 }

@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="165dp">
@@ -23,28 +24,25 @@
                 <ImageView
                     android:id="@+id/avatar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0.2"
+                    android:layout_height="165dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/login_avatar" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:alpha="0.4"
-                    android:background="#000000" />
+                    android:alpha="0.3"
+                    android:background="#ff000000" />
 
                 <!-- 头像 -->
                 <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/user_avatar"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/login_avatar"
-                    app:riv_border_color="@color/white"
-                    app:riv_border_width="2dp"
                     app:riv_oval="true" />
 
                 <TextView
@@ -65,35 +63,32 @@
 
                 <TextView
                     android:id="@+id/nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CommonShadowText"
                     android:layout_below="@+id/ev_txt"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/white"
                     android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/exam_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CommonShadowText"
                     android:layout_below="@+id/nickname"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/white"
+                    android:layout_marginTop="5dp"
                     android:textSize="14sp" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
                 android:background="@color/common_line" />
 
 
             <RelativeLayout
+                android:id="@+id/course"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginLeft="30dp"
@@ -107,28 +102,26 @@
                     android:src="@drawable/vip_index_course" />
 
                 <LinearLayout
-                    android:id="@+id/course"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="80dp"
-                    android:gravity="center_horizontal"
                     android:orientation="vertical">
 
                     <TextView
+                        style="@style/CommonColorTextView16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/vip_index_course"
-                        android:textColor="@color/common_text" />
+                        android:text="@string/vip_index_course" />
 
                     <TextView
                         android:id="@+id/course_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/login_red" />
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/common_grey_text"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -136,11 +129,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="@color/common_line" />
 
             <RelativeLayout
+                android:id="@+id/homework"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginLeft="30dp"
@@ -154,57 +148,51 @@
                     android:src="@drawable/vip_index_homework" />
 
                 <LinearLayout
-                    android:id="@+id/homework"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="80dp"
-                    android:gravity="center_horizontal"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/homework_txt"
+                        style="@style/CommonColorTextView16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/homework_image"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/vip_index_homework"
-                        android:textColor="@color/common_text" />
-
-                    <TextView
-                        android:id="@+id/homework_tips"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_above="@+id/homework_txt"
-                        android:layout_toRightOf="@+id/homework_txt"
-                        android:background="@drawable/opencourse_num_bg"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:visibility="invisible" />
+                        android:text="@string/vip_index_homework" />
 
                     <TextView
                         android:id="@+id/homework_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/homework_txt"
-                        android:layout_centerHorizontal="true"
-                        android:text=""
-                        android:textColor="@color/login_red" />
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/common_grey_text"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/homework_tips"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/opencourse_num_bg"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="@color/common_line" />
 
 
             <RelativeLayout
+                android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginLeft="30dp"
@@ -218,51 +206,44 @@
                     android:src="@drawable/vip_index_message" />
 
                 <LinearLayout
-                    android:id="@+id/message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="80dp"
-                    android:gravity="center_horizontal"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/message_txt"
+                        style="@style/CommonColorTextView16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/message_image"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/vip_index_message"
-                        android:textColor="@color/common_text" />
-
-                    <TextView
-                        android:id="@+id/message_tips"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_above="@+id/message_txt"
-                        android:layout_toRightOf="@+id/message_txt"
-                        android:background="@drawable/opencourse_num_bg"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:visibility="invisible" />
+                        android:text="@string/vip_index_message" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:text=""
-                        android:textColor="@color/login_red" />
+                        android:textColor="@color/common_grey_text"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/message_tips"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/opencourse_num_bg"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="@color/common_line" />
 
         </LinearLayout>

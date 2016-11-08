@@ -1,34 +1,34 @@
 package com.appublisher.quizbank.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
+import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 历史模考列表容器
+ * Created by jinbao on 2016/11/8.
  */
-public class MockListAdapter extends BaseAdapter{
 
-    private Activity mActivity;
-    private ArrayList<MockPaperM> mMockPapers;
+public class MockListAdapter extends BaseAdapter {
 
-    public MockListAdapter(Activity activity, ArrayList<MockPaperM> mockPapers) {
-        mActivity = activity;
-        mMockPapers = mockPapers;
+    private Context context;
+    private List<MockPreResp.MockListBean> list;
+
+    public MockListAdapter(Context context, List<MockPreResp.MockListBean> list) {
+        this.context = context;
+        this.list = list;
     }
 
     @Override
     public int getCount() {
-        return mMockPapers == null ? 0 : mMockPapers.size();
+        return list == null ? 0 : list.size();
     }
 
     @Override
@@ -44,43 +44,23 @@ public class MockListAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-
         if (convertView == null) {
-            convertView = LayoutInflater.from(mActivity).inflate(
-                    R.layout.mock_item, parent, false);
-
             viewHolder = new ViewHolder();
-            viewHolder.tvName = (TextView) convertView.findViewById(R.id.mock_item_name);
-            viewHolder.ivStatus =
-                    (ImageView) convertView.findViewById(R.id.mock_item_status);
-
+            convertView = LayoutInflater.from(context).inflate(R.layout.mock_list_item, null);
+            viewHolder.textView = (TextView) convertView.findViewById(R.id.mock_name);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        setContent(viewHolder, position);
-
+        MockPreResp.MockListBean mockListBean = list.get(position);
+        if (mockListBean == null) return convertView;
+        String text = "总体量" + mockListBean.getQuestion_num() + "题 (" + mockListBean.getPaper_name() + ")";
+        viewHolder.textView.setText(text);
         return convertView;
     }
 
-    /**
-     * 设置内容
-     * @param viewHolder ViewHolder
-     * @param position position
-     */
-    private void setContent(ViewHolder viewHolder, int position) {
-        if (mMockPapers == null || position >= mMockPapers.size()) return;
-
-        MockPaperM mockPaper = mMockPapers.get(position);
-
-        if (mockPaper == null) return;
-
-        viewHolder.tvName.setText(mockPaper.getName());
-    }
-
-    private class ViewHolder {
-        TextView tvName;
-        ImageView ivStatus;
+    class ViewHolder {
+        TextView textView;
     }
 }

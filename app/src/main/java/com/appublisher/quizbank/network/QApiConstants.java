@@ -4,7 +4,7 @@ import android.graphics.Bitmap.CompressFormat;
 
 import com.appublisher.lib_basic.volley.ApiConstants;
 
-public interface QApiConstants extends ApiConstants{
+public interface QApiConstants extends ApiConstants {
 
     /**
      * 登录注册模块
@@ -130,8 +130,11 @@ public interface QApiConstants extends ApiConstants{
     // 设置页面QA
     String getQa = baseUrl + "quizbank/get_qa";
 
-    // 获取模考&估分试卷列表
+    // 获取模考&估分试卷列表（version 2.1：弃用）
     String getMockExerciseList = baseUrl + "quizbank/mock_exercise_list";
+
+    //获取模考估分
+    String getMockGufen = baseUrl + "quizbank/mock_gufen";
 
     // 获取模考信息
     String getMockPreExamInfo = baseUrl + "quizbank/get_mock_tutorial";

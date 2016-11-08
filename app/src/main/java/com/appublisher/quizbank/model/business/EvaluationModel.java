@@ -153,12 +153,12 @@ public class EvaluationModel {
         activity.mLlHistory.setVisibility(View.VISIBLE);
 
         //1.5版本提示
-        boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
-        boolean detailCategory = Globals.sharedPreferences.getBoolean("detailCategory", true);
-        if (!isFirstStart && detailCategory) {
-            if (!activity.isFinishing())
-                PopupWindowManager.showUpdateEvaluation(activity.parentView, activity);
-        }
+//        boolean isFirstStart = Globals.sharedPreferences.getBoolean("firstNotice", true);
+//        boolean detailCategory = Globals.sharedPreferences.getBoolean("detailCategory", true);
+//        if (!isFirstStart && detailCategory) {
+//            if (!activity.isFinishing())
+//                PopupWindowManager.showUpdateEvaluation(activity.parentView, activity);
+//        }
     }
 
     /**
@@ -214,29 +214,6 @@ public class EvaluationModel {
 
             }
         });
-
-//        UmengShareEntity umengShareEntity = new UmengShareEntity();
-//        umengShareEntity.setActivity(activity);
-//        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
-//        umengShareEntity.setFrom("evaluation");
-//
-//        // 友盟分享文字处理
-//        UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
-//        umShareContentEntity.setType("evaluation");
-//        umShareContentEntity.setLearningDays(activity.mLearningDays);
-//        umShareContentEntity.setExamName(LoginModel.getUserExamName());
-//        umShareContentEntity.setScore(activity.mScore);
-//        umShareContentEntity.setRank(activity.mRank);
-//        umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
-//
-//        // 友盟分享跳转链接处理
-//        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-//        urlEntity.setType("evaluation");
-//        urlEntity.setUser_id(LoginModel.getUserId());
-//        urlEntity.setUser_token(LoginModel.getUserToken());
-//        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
-//
-//        UmengManager.openShare(umengShareEntity);
     }
 
 }

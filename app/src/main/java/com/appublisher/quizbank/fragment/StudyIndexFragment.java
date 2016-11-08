@@ -10,31 +10,33 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_login.activity.UserInfoActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
-import com.appublisher.lib_login.model.db.User;
-import com.appublisher.lib_login.model.db.UserDAO;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
+import com.appublisher.quizbank.activity.GuFenListActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
+import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.StudyIndexModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
-import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
 import com.appublisher.quizbank.model.netdata.homepage.PaperM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperNoteM;
 import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
+import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -49,8 +51,8 @@ import org.json.JSONObject;
 public class StudyIndexFragment extends Fragment implements RequestCallback, View.OnClickListener {
 
     private View userInfoView;
-    private View mockView;
-    private View assessView;
+    public View mockView;
+    public View assessView;
     private View miniView;
     private View historyMiniView;
     private View noteView;
@@ -62,8 +64,8 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     private TextView assessScoreTv;
     private TextView rankTv;
     public TextView examNameTv;
-    private TextView mockNameTv;
-    private TextView assessNameTv;
+    public TextView mockNameTv;
+    public TextView assessNameTv;
     private TextView miniCuntTv;
     private TextView noteNameTv;
 
@@ -71,6 +73,9 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
 
     private PaperTodayM mTodayExam;
     private PaperNoteM mNote;
+    public MockGufenResp mockGufenResp;
+
+    public int mock_id = -1;
 
     @Nullable
     @Override
@@ -106,6 +111,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     }
 
     public void setValue() {
+        avatarIv.setOnClickListener(this);
         userInfoView.setOnClickListener(this);
         miniView.setOnClickListener(this);
         historyMiniView.setOnClickListener(this);
@@ -113,12 +119,14 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         noteView.setOnClickListener(this);
         quickTestView.setOnClickListener(this);
         wholepageView.setOnClickListener(this);
+        mockView.setOnClickListener(this);
+        assessView.setOnClickListener(this);
     }
 
     public void getData() {
         mQRequest.getGlobalSettings();
         mQRequest.getEntryData();
-
+        mQRequest.getMockGufen();
     }
 
     @Override
@@ -203,6 +211,9 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                         response.toString(), ExamDetailModel.class);
                 StudyIndexModel.updateExam(exam, examNameTv);
                 break;
+            case "mock_gufen":
+                StudyIndexModel.dealMockGufenResp(response, this);
+                break;
             default:
                 break;
 
@@ -223,6 +234,10 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     public void onClick(View v) {
         final Intent intent;
         switch (v.getId()) {
+            case R.id.avatar:
+                intent = new Intent(getActivity(), UserInfoActivity.class);
+                startActivity(intent);
+                break;
             case R.id.user_info_view:
                 // 能力评估
                 intent = new Intent(getActivity(), EvaluationActivity.class);
@@ -298,6 +313,16 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             case R.id.wholepage_view:
                 intent = new Intent(getActivity(), CommonFragmentActivity.class);
                 intent.putExtra("from", "wholepage");
+                startActivity(intent);
+                break;
+            case R.id.mock_view:
+                intent = new Intent(getActivity(), MockPreActivity.class);
+                intent.putExtra("mock_id", mock_id);
+                startActivity(intent);
+                break;
+            case R.id.assess_view:
+                intent = new Intent(getActivity(), GuFenListActivity.class);
+                intent.putExtra("mock_gufen", GsonManager.modelToString(mockGufenResp));
                 startActivity(intent);
                 break;
         }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.UmengManager;
@@ -24,8 +25,10 @@ import com.db.chart.view.LineChartView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,7 +83,7 @@ public class EvaluationActivity extends BaseActivity implements RequestCallback 
         parentView = findViewById(R.id.baseView);
         mContainer = (LinearLayout) findViewById(R.id.category_container);
         // 获取数据
-        ProgressDialogManager.showProgressDialog(this, true);
+        showLoading();
         new QRequest(this, this).getEvaluation();
 
         // Umeng
@@ -124,17 +127,17 @@ public class EvaluationActivity extends BaseActivity implements RequestCallback 
     public void requestCompleted(JSONObject response, String apiName) {
         if ("evaluation".equals(apiName)) EvaluationModel.dealEvaluationResp(this, response);
 
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-        ProgressDialogManager.closeProgressDialog();
+        hideLoading();
     }
 
 }
