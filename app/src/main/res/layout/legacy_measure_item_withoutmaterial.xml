@@ -38,7 +38,7 @@
                     android:text="@string/measure_option_a"/>
 
                 <LinearLayout
-                    android:id="@+id/legacy_measure_option_a_container"
+                    android:id="@+id/measure_option_a_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -57,7 +57,7 @@
                     android:text="@string/measure_option_b"/>
 
                 <LinearLayout
-                    android:id="@+id/legacy_measure_option_b_container"
+                    android:id="@+id/measure_option_b_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -76,7 +76,7 @@
                     android:text="@string/measure_option_c"/>
 
                 <LinearLayout
-                    android:id="@+id/legacy_measure_option_c_container"
+                    android:id="@+id/measure_option_c_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -95,7 +95,7 @@
                     android:text="@string/measure_option_d"/>
 
                 <LinearLayout
-                    android:id="@+id/legacy_measure_option_d_container"
+                    android:id="@+id/measure_option_d_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

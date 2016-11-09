@@ -15,7 +15,7 @@
 
         <!-- 题干 -->
         <LinearLayout
-            android:id="@+id/measure_stem_container"
+            android:id="@+id/measure_question_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="26dp"
