@@ -114,7 +114,9 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         List<MeasureQuestion> questions = new ArrayList<>();
 
         // 遍历
-        for (MeasureEntireResp.CategoryBean category : categorys) {
+        int size = categorys.size();
+        for (int i = 0; i < size; i++) {
+            MeasureEntireResp.CategoryBean category = categorys.get(i);
             if (category == null) continue;
             List<MeasureQuestion> categoryQuestions = category.getQuestions();
             if (categoryQuestions == null) continue;
@@ -127,6 +129,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             MeasureQuestion question = new MeasureQuestion();
             question.setIs_desc(true);
             question.setCategory_name(category.getName());
+            question.setDesc_position(i);
+            // 添加至题目list
             questions.add(question);
             questions.addAll(categoryQuestions);
         }

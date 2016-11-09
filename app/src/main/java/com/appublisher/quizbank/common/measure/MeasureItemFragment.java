@@ -65,7 +65,9 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.measure_item, container, false);
         initView();
         setOnClick();

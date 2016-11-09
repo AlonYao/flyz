@@ -30,6 +30,15 @@ public class MeasureQuestion {
     private List<Integer> note_ids;
     private int question_id;
     private boolean is_desc;
+    private int desc_position;
+
+    public int getDesc_position() {
+        return desc_position;
+    }
+
+    public void setDesc_position(int desc_position) {
+        this.desc_position = desc_position;
+    }
 
     public boolean is_desc() {
         return is_desc;

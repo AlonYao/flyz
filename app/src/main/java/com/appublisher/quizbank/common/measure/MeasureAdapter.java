@@ -23,8 +23,16 @@ public class MeasureAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        String question = GsonManager.modelToString(mQuestions.get(position));
-        return MeasureItemFragment.newInstance(question, position, getCount());
+        MeasureQuestion measureQuestion = mQuestions.get(position);
+        if (measureQuestion != null && measureQuestion.is_desc()) {
+            // Tab说明页
+            return MeasureTabDescFragment.newInstance(
+                    measureQuestion.getCategory_name(), measureQuestion.getDesc_position());
+        } else {
+            // 题目页面
+            String question = GsonManager.modelToString(mQuestions.get(position));
+            return MeasureItemFragment.newInstance(question, position, getCount());
+        }
     }
 
     @Override
