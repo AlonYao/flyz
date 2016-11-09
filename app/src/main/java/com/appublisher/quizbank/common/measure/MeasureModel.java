@@ -44,6 +44,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     private Context mContext;
     private MeasureRequest mRequest;
     private SparseIntArray mFinalHeightMap;
+    private List<MeasureTabBean> mTabs;
     public String mPaperType;
     public int mPaperId;
     public int mHierarchyId;
@@ -110,7 +111,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         if (categorys == null) return;
 
         // 构造数据结构
-        List<MeasureTabBean> tabs = new ArrayList<>();
+        mTabs = new ArrayList<>();
         List<MeasureQuestion> questions = new ArrayList<>();
 
         // 遍历
@@ -124,7 +125,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             MeasureTabBean tabBean = new MeasureTabBean();
             tabBean.setName(category.getName());
             tabBean.setPosition(questions.size());
-            tabs.add(tabBean);
+            mTabs.add(tabBean);
             // 添加题目数据，构造说明页
             MeasureQuestion question = new MeasureQuestion();
             question.setIs_desc(true);
@@ -136,7 +137,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         }
 
         if (!(mContext instanceof MeasureActivity)) return;
-        ((MeasureActivity) mContext).showTabLayout(tabs);
+        ((MeasureActivity) mContext).showTabLayout(mTabs);
         ((MeasureActivity) mContext).showViewPager(questions);
     }
 
@@ -247,6 +248,25 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         }
 
         container.addView(flowLayout);
+    }
+
+    public int getTabPositionScrollTo(int curPosition) {
+        if (mTabs == null) return 0;
+        int size = mTabs.size();
+        int tab = 0;
+        for (int i = 0; i < size; i++) {
+            MeasureTabBean tabBean = mTabs.get(i);
+            if (tabBean == null) continue;
+            if (curPosition >= tabBean.getPosition()) tab = i;
+        }
+        return tab;
+    }
+
+    public int getPositionByTab(int tabPosition) {
+        if (mTabs == null || tabPosition >= mTabs.size()) return 0;
+        MeasureTabBean tabBean = mTabs.get(tabPosition);
+        if (tabBean == null) return 0;
+        return tabBean.getPosition();
     }
 
     @Override
