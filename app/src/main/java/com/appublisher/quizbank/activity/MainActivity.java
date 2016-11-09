@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
@@ -27,10 +28,12 @@ import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.lib_course.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
+import com.appublisher.lib_login.activity.BindingMobileActivity;
 import com.appublisher.lib_login.activity.ExamChangeActivity;
 import com.appublisher.lib_login.activity.LoginActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.IsUserMergedResp;
+import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
@@ -137,7 +140,19 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
             }
             // 检测账号是否被合并
-            new LoginModel(this).commonCheck();
+            new LoginModel(this).commonCheck(new LoginModel.ObtainUserInfoListener() {
+                @Override
+                public void isSuccess(boolean isSuccess) {
+                    if (isSuccess) {
+                        final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
+                        if (userInfoModel == null) return;
+                        if (userInfoModel.getMobile_num() == null || "".equals(userInfoModel.getMobile_num())) {
+                            final Intent intent = new Intent(MainActivity.this, BindingMobileActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
+            });
             // 做题缓存提交
             new MeasureModel(this).checkCache();
         }
@@ -256,9 +271,9 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             MenuItemCompat.setShowAsAction(menu.add("面试").setIcon(R.drawable.actionbar_interview),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         } else if (mCurFragment instanceof CourseFragment) {
-            MenuItemCompat.setShowAsAction(menu.add("下载"),
+            MenuItemCompat.setShowAsAction(menu.add("下载").setIcon(R.drawable.actionbar_download),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            MenuItemCompat.setShowAsAction(menu.add("评分").setIcon(R.drawable.actionbar_rate), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         } else if (mCurFragment instanceof StudyRecordFragment) {
             MenuItemCompat.setShowAsAction(menu.add("设置").setIcon(R.drawable.actionbar_setting),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);

@@ -54,7 +54,8 @@
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="15dp"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        />
 
     <include layout="@layout/progressbar" />
 
@@ -62,6 +63,8 @@
         layout="@layout/quizbank_null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        />
 
 </RelativeLayout>
