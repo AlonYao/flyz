@@ -5,13 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
@@ -45,6 +46,7 @@ import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -203,7 +205,7 @@ public class HomePageFragment extends Fragment implements RequestCallback, View.
                 // 视为评价完成，开通课程
                 HomePageModel.openupCourse(this);
                 //noinspection deprecation
-                Utils.updateMenu((ActionBarActivity) mActivity);
+                Utils.updateMenu((AppCompatActivity) mActivity);
             } else {
                 // 视为未完成评价
                 GradeDAO.saveGradeTimestamp(Globals.appVersion, 0);
