@@ -81,6 +81,11 @@ android {
                                     APP_CHANNEL: "oppo"]
         }
 
+        smartisan {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "smartisan"]
+        }
+
         other {
             manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
                                     APP_CHANNEL: "other"]
