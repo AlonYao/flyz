@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
@@ -10,11 +9,8 @@ import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.network.QRequest;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

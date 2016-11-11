@@ -2,7 +2,6 @@ package com.appublisher.quizbank.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,13 +14,10 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryMokaoAdapter;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoResp;
 import com.appublisher.quizbank.network.QRequest;
 import com.google.gson.Gson;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

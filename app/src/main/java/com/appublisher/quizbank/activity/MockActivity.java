@@ -2,12 +2,12 @@ package com.appublisher.quizbank.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
@@ -19,8 +19,6 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.mock.MockListResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPaperM;
 import com.appublisher.quizbank.network.QRequest;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
