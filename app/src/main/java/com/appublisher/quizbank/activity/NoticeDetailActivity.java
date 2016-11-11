@@ -2,7 +2,6 @@ package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JsResult;
@@ -14,9 +13,6 @@ import android.widget.TextView;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.CommonModel;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * 通知详情

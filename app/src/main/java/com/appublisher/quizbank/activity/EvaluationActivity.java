@@ -3,29 +3,28 @@ package com.appublisher.quizbank.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.EvaluationModel;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.UMengManager;
 import com.db.chart.view.LineChartView;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 

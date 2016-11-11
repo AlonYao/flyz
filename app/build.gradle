@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 52
-        versionName "2.0.2"
+        versionCode 53
+        versionName "2.0.3"
 
         //参数
         manifestPlaceholders = [
