@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
-import com.appublisher.quizbank.common.measure.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.unnamed.b.atv.model.TreeNode;

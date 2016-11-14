@@ -18,6 +18,7 @@ import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
@@ -49,7 +50,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     public int mPaperId;
     public int mHierarchyId;
 
-    MeasureModel(Context context) {
+    public MeasureModel(Context context) {
         mContext = context;
         mRequest = new MeasureRequest(context, this);
     }

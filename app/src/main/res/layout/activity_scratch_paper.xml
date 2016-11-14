@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/transparent"
-    tools:context="com.appublisher.quizbank.activity.ScratchPaperActivity">
+    tools:context="com.appublisher.quizbank.common.measure.activity.ScratchPaperActivity">
 
     <include layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"/>
 
-    <com.appublisher.quizbank.customui.PaintView
+    <com.appublisher.quizbank.common.measure.scratch.PaintView
         android:id="@+id/scratch_paper_paintview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

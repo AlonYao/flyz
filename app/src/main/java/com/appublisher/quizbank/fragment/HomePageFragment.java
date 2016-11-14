@@ -28,7 +28,7 @@ import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
-import com.appublisher.quizbank.common.measure.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.model.business.HomePageModel;

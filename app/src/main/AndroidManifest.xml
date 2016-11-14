@@ -163,7 +163,7 @@
             android:label="@string/title_activity_answer_sheet"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ScratchPaperActivity"
+            android:name=".common.measure.activity.ScratchPaperActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_scratch_paper"
             android:screenOrientation="portrait"
@@ -304,7 +304,7 @@
             android:label="@string/title_activity_vip_xc_report"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".common.measure.MeasureActivity"
+            android:name=".common.measure.activity.MeasureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
     </application>

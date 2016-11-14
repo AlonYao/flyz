@@ -1,21 +1,34 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureAdapter;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.MeasureModel;
+import com.appublisher.quizbank.common.measure.MeasureQuestion;
+import com.appublisher.quizbank.common.measure.MeasureTabBean;
 
 import java.util.List;
 
 /**
  * 做题模块：主页面
  */
-public class MeasureActivity extends BaseActivity implements MeasureConstants{
+public class MeasureActivity extends BaseActivity implements MeasureConstants {
+
+    private static final String MENU_SCRATCH = "草稿纸";
+    private static final String MENU_ANSWERSHEET = "答题卡";
+    private static final String MENU_PAUSE = "暂停";
 
     public ViewPager mViewPager;
     public MeasureModel mModel;
@@ -31,6 +44,58 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants{
         setToolBar(this);
         initView();
         initData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+
+        MenuItemCompat.setShowAsAction(menu.add(MENU_SCRATCH).setIcon(
+                R.drawable.measure_icon_scratch_paper), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        MenuItemCompat.setShowAsAction(menu.add(MENU_ANSWERSHEET).setIcon(
+                R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+//        if (!mockpre) {
+//            MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(
+//                    R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+//        }
+
+        MenuItemCompat.setShowAsAction(menu.add(MENU_PAUSE).setIcon(
+                R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+//            mPressBack = true;
+//            checkSave();
+
+        } else if (item.getTitle().equals(MENU_PAUSE)) {
+//            if (mTimer != null) mTimer.cancel();
+//            mModel.saveQuestionTime();
+//            AlertManager.pauseAlert(this);
+
+            // Umeng
+//            mUmengPause = "1";
+
+        } else if (item.getTitle().equals(MENU_ANSWERSHEET)) {
+//            skipToAnswerSheet();
+
+            // Umeng
+//            mUmengAnswerSheet = "1";
+
+        } else if (item.getTitle().equals(MENU_SCRATCH)) {
+            Intent intent = new Intent(this, ScratchPaperActivity.class);
+            startActivity(intent);
+
+            // Umeng
+//            mUmengDraft = "1";
+        }
+
+        return false;
     }
 
     private void initData() {

@@ -189,7 +189,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
             }
             // 检测账号是否被合并
-            new LoginModel(this).commonCheck();
+            new LoginModel(this).commonCheck(null);
             // 做题缓存提交
             new LegacyMeasureModel(this).checkCache();
         }

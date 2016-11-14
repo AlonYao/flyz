@@ -29,7 +29,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
 import com.appublisher.quizbank.adapter.YearGvAdapter;
-import com.appublisher.quizbank.common.measure.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.model.business.WholePageModel;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;

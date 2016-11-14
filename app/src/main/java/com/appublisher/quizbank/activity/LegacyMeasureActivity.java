@@ -26,6 +26,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.LegacyMeasureAdapter;
+import com.appublisher.quizbank.common.measure.activity.ScratchPaperActivity;
 import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;

@@ -1,18 +1,15 @@
-package com.appublisher.quizbank.activity;
+package com.appublisher.quizbank.common.measure.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.customui.PaintView;
-import com.appublisher.quizbank.model.business.CommonModel;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
+import com.appublisher.quizbank.common.measure.scratch.PaintView;
 
 /**
  * 草稿纸
@@ -32,9 +29,21 @@ public class ScratchPaperActivity extends BaseActivity {
         // View 初始化
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mPaintView = (PaintView) findViewById(R.id.scratch_paper_paintview);
+        initPaintView(mPaintView);
 
         // 修改Toolbar icon
+        initToolbar(toolbar);
+    }
+
+    private void initToolbar(Toolbar toolbar) {
+        if (toolbar == null) return;
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);
+    }
+
+    private void initPaintView(PaintView paintView) {
+        if (paintView == null) return;
+        paintView.setColor(Color.parseColor("#262B2D"));
+        paintView.setStrokeWidth(4);
     }
 
     @Override
@@ -59,7 +68,7 @@ public class ScratchPaperActivity extends BaseActivity {
             finish();
 
         } else if (item.getTitle().equals("清空")) {
-            mPaintView.removeAllPaint();
+            mPaintView.clear();
 
         } else if (item.getTitle().equals("撤销")) {
             mPaintView.undo();
