@@ -7,4 +7,7 @@
     <string name="measure_desc_panduan">本部分包括图形推理、定义判断、类比推理与逻辑判断四种类型的试题。请根据题目要求，在四个选项中选出一个最恰当的答案</string>
     <string name="measure_desc_ziliao">所给出的图、表、文字或综合性资料均有若干个问题要你回答，你应根据资料提供的信息进行分析、比较、计算和判断处理</string>
 
+    <string name="measure_scratch_hint">两个手指点住拖动草稿纸</string>
+    <string name="measure_scratch_hint_btn">知道了</string>
+
 </resources>

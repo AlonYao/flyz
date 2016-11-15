@@ -1,11 +1,17 @@
 package com.appublisher.quizbank.common.measure.activity;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.TextView;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
@@ -33,17 +39,50 @@ public class ScratchPaperActivity extends BaseActivity {
 
         // 修改Toolbar icon
         initToolbar(toolbar);
+
+        showHintAlert();
     }
 
+    @SuppressWarnings("deprecation")
     private void initToolbar(Toolbar toolbar) {
         if (toolbar == null) return;
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.themecolor));
     }
 
     private void initPaintView(PaintView paintView) {
         if (paintView == null) return;
         paintView.setColor(Color.parseColor("#262B2D"));
         paintView.setStrokeWidth(4);
+    }
+
+    private void showHintAlert() {
+        final SharedPreferences sharedPreferences =
+                getSharedPreferences("yaoguo_measure", MODE_PRIVATE);
+        boolean isShowScratchHint = sharedPreferences.getBoolean("is_show_scratch_hint", true);
+        if (!isShowScratchHint) return;
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        Window window = alertDialog.getWindow();
+        if (window == null) return;
+        window.setContentView(R.layout.measure_scratch_hint);
+        window.setBackgroundDrawableResource(R.color.transparency);
+
+        TextView textView = (TextView) window.findViewById(R.id.measure_scratch_hint_btn);
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("CommitPrefEdits")
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("is_show_scratch_hint", false);
+                editor.commit();
+                alertDialog.dismiss();
+            }
+        });
     }
 
     @Override

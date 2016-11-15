@@ -355,6 +355,7 @@ public class PaintView extends View {
     }
 
     private void resizeBgBitmap() {
+        if (mBgBitmap == null) return;
         if (mBgBitmap.getWidth() > mWidth || mBgBitmap.getHeight() > mHeight) {
             mBgBitmap = zoomImg(mBgBitmap, mWidth, mHeight);
         }
