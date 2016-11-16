@@ -4,10 +4,21 @@
     android:id="@+id/activity_guo_kao"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.appublisher.quizbank.common.interview.activity.GuoKaoActivity">
+    tools:context="com.appublisher.quizbank.common.interview.activity.InterviewGuoKaoActivity">
 
+    <include layout="@layout/toolbar" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:clipToPadding="false"
+        android:divider="@color/common_line"
+        android:dividerHeight="1px"
+        android:paddingBottom="15dp"
+        android:paddingLeft="30dp"
+        android:scrollbars="none">
+
+    </ListView>
 </RelativeLayout>

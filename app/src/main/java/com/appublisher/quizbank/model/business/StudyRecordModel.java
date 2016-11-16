@@ -11,6 +11,7 @@ import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.model.netdata.history.HistoryPapersResp;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class StudyRecordModel {
 
     /**
      * 处理学习记录回调
+     *
      * @param fragment StudyRecordFragment
      * @param response 回调数据
      */
@@ -56,48 +58,49 @@ public class StudyRecordModel {
 
         fragment.mXListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (fragment.mHistoryPapers == null
-                        || position - 1 >= fragment.mHistoryPapers.size())
-                    return;
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (fragment.mHistoryPapers == null
+                                || position - 2 >= fragment.mHistoryPapers.size())
+                            return;
 
-                HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position - 1);
+                        HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position - 2);
 
-                if (historyPaper == null) return;
+                        if (historyPaper == null) return;
 
-                String status = historyPaper.getStatus();
+                        String status = historyPaper.getStatus();
 
-                if ("done".equals(status)) {
-                    // 跳转至练习报告页面
-                    Intent intent = new Intent(fragment.mActivity, PracticeReportActivity.class);
-                    intent.putExtra("from", "study_record");
-                    intent.putExtra("exercise_id", historyPaper.getPaper_id());
-                    intent.putExtra("paper_type", historyPaper.getPaper_type());
-                    intent.putExtra("paper_name", historyPaper.getName());
-                    intent.putExtra("paper_time", historyPaper.getAction_time());
-                    fragment.mActivity.startActivity(intent);
+                        if ("done".equals(status)) {
+                            // 跳转至练习报告页面
+                            Intent intent = new Intent(fragment.mActivity, PracticeReportActivity.class);
+                            intent.putExtra("from", "study_record");
+                            intent.putExtra("exercise_id", historyPaper.getPaper_id());
+                            intent.putExtra("paper_type", historyPaper.getPaper_type());
+                            intent.putExtra("paper_name", historyPaper.getName());
+                            intent.putExtra("paper_time", historyPaper.getAction_time());
+                            fragment.mActivity.startActivity(intent);
 
-                } else if ("undone".equals(status)) {
-                    // 跳转至做题页面
-                    Intent intent = new Intent(fragment.mActivity, MeasureActivity.class);
-                    intent.putExtra("from", "study_record");
-                    intent.putExtra("exercise_id", historyPaper.getPaper_id());
-                    intent.putExtra("paper_type", historyPaper.getPaper_type());
-                    intent.putExtra("paper_name", historyPaper.getName());
-                    intent.putExtra("redo", true);
-                    intent.putExtra("umeng_entry", "Continue");
-                    fragment.mActivity.startActivity(intent);
-                }
+                        } else if ("undone".equals(status)) {
+                            // 跳转至做题页面
+                            Intent intent = new Intent(fragment.mActivity, MeasureActivity.class);
+                            intent.putExtra("from", "study_record");
+                            intent.putExtra("exercise_id", historyPaper.getPaper_id());
+                            intent.putExtra("paper_type", historyPaper.getPaper_type());
+                            intent.putExtra("paper_name", historyPaper.getName());
+                            intent.putExtra("redo", true);
+                            intent.putExtra("umeng_entry", "Continue");
+                            fragment.mActivity.startActivity(intent);
+                        }
 
-                // Umeng
-                fragment.mUmengAction = "1";
-            }
-        });
+                        // Umeng
+                        fragment.mUmengAction = "1";
+                    }
+                });
     }
 
     /**
      * 显示空白图片
+     *
      * @param fragment StudyRecordFragment
      */
     public static void showNullImg(StudyRecordFragment fragment) {

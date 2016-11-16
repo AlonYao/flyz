@@ -124,11 +124,10 @@ public class VipIndexActivity extends BaseActivity implements RequestCallback {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(VipIndexActivity.this, CommonFragmentActivity.class);
-                intent.putExtra("from", "course");
+                intent.putExtra("from", "course_purchased");
                 startActivity(intent);
             }
         });
-
 
     }
 

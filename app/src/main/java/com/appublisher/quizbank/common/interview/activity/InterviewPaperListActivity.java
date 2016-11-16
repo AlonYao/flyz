@@ -161,10 +161,14 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
         hideLoading();
+        xListView.stopRefresh();
+        xListView.stopLoadMore();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         hideLoading();
+        xListView.stopRefresh();
+        xListView.stopLoadMore();
     }
 }

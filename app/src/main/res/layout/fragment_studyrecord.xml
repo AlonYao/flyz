@@ -4,58 +4,14 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <RelativeLayout
-        android:id="@+id/top_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/common_bg">
-
-        <ImageView
-            android:id="@+id/collect_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/record_collection" />
-
-        <ImageView
-            android:id="@+id/wrong_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/record_wrong" />
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/record_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/top_view"
-        android:paddingLeft="30dp"
-        android:paddingTop="15dp"
-        android:text="学习记录"
-        android:textColor="@color/apptheme"
-        android:textSize="16sp" />
-
     <com.appublisher.lib_basic.customui.XListView
         android:id="@+id/studyrecord_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/record_text"
         android:clipToPadding="false"
         android:divider="@color/common_line"
-        android:dividerHeight="1px"
-        android:paddingBottom="15dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="15dp"
-        android:scrollbars="none"
-        />
+        android:dividerHeight="0px"
+        android:scrollbars="none" />
 
     <include layout="@layout/progressbar" />
 
@@ -64,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        />
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

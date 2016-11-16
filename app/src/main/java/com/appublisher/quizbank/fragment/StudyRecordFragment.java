@@ -79,11 +79,14 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mView = inflater.inflate(R.layout.fragment_studyrecord, container, false);
         mXListView = (XListView) mView.findViewById(R.id.studyrecord_lv);
         mIvNull = (ImageView) mView.findViewById(R.id.quizbank_null);
-        collectIv = (ImageView) mView.findViewById(R.id.collect_iv);
-        wrongIv = (ImageView) mView.findViewById(R.id.wrong_iv);
+
+        View headView = inflater.inflate(R.layout.fragment_studyrecord_headview, null);
+        collectIv = (ImageView) headView.findViewById(R.id.collect_iv);
+        wrongIv = (ImageView) headView.findViewById(R.id.wrong_iv);
 
 
         // 初始化XListView
+        mXListView.addHeaderView(headView);
         mXListView.setXListViewListener(this);
         mXListView.setPullLoadEnable(true);
 

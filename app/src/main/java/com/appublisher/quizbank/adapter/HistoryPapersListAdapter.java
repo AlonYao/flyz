@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * 学习历史List容器
  */
-public class HistoryPapersListAdapter extends BaseAdapter{
+public class HistoryPapersListAdapter extends BaseAdapter {
 
     private Activity mActivity;
     private ArrayList<HistoryPaperM> mHistoryPapers;
@@ -93,7 +93,8 @@ public class HistoryPapersListAdapter extends BaseAdapter{
 
     /**
      * 设置Logo
-     * @param ivLogo 控件
+     *
+     * @param ivLogo    控件
      * @param paperType 试卷类型
      */
     private void setLogo(ImageView ivLogo, String paperType) {
@@ -106,9 +107,9 @@ public class HistoryPapersListAdapter extends BaseAdapter{
         } else if ("auto".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.record_quick);
         } else if ("error".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_wrong);
+            ivLogo.setImageResource(R.drawable.record_wrong);
         } else if ("collect".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.studyrecord_collect);
+            ivLogo.setImageResource(R.drawable.record_collect);
         } else if ("evaluate".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.record_gufen);
         } else if ("mock".equals(paperType)) {

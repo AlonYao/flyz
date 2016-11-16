@@ -13,6 +13,10 @@
     <string name="title_activity_vip_xc_report">作业报告</string>
     <string name="title_activity_mock_list">模考</string>
 
+    <!--面试 -->
+    <string name="title_activity_interview_guokao">国考精选</string>
+    <string name="title_activity_interview_category">分类突破</string>
+
     <string name="vip_filter_status">作业状态</string>
     <string name="vip_filter_category">科目</string>
     <string name="vip_filter_type">作业类型</string>

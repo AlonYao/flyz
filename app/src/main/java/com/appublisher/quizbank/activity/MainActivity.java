@@ -2,7 +2,6 @@ package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
@@ -39,7 +40,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.fragment.HomePageFragment;
+import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.business.MeasureModel;
@@ -65,17 +66,19 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private StudyRecordFragment mStudyRecordFragment;
     private VipIndexFragment mVipIndexFragment;
     private StudyIndexFragment mStudyIndexFragment;
+    private InterviewIndexFragment mInterviewIndexFragment;
     private static Fragment mCurFragment;
-    private static int mCurFragmentPosition;
     private boolean mDoubleBackToExit;
     private QRequest mQRequest;
-    private String mFrom;
     private static final String OPENCOURSE = "Opencourse";
     private static final String COURSE = "Course";
     private static final String RECORD = "Record";
     private static final String VIP = "Vip";
     private static final String STUDY = "Study";
+    private static final String INTERVIEW = "Interview";
     public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
+
+    private TextView rateCourseCountTv;
 
     private RadioButton studyRadioButton;
     private RadioButton courseRadioButton;
@@ -103,6 +106,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         mPromoteData = getIntent().getStringExtra(INTENT_PROMOTE);
         mPromoteQuizBankModel = new PromoteQuizBankModel(this);
 
+        rateCourseCountTv = (TextView) findViewById(R.id.opencourse_num_notice);
+
         studyRadioButton = (RadioButton) findViewById(R.id.study);
         courseRadioButton = (RadioButton) findViewById(R.id.course);
         opencourseRadioButton = (RadioButton) findViewById(R.id.opencourse);
@@ -124,6 +129,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     @Override
     protected void onResume() {
         super.onResume();
+        //隐藏评分个数
+        rateCourseCountTv.setVisibility(View.GONE);
         // 检查登录&考试项目状态
         if (checkLoginStatus()) {
             // 国考推广Alert
@@ -277,6 +284,9 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         } else if (mCurFragment instanceof StudyRecordFragment) {
             MenuItemCompat.setShowAsAction(menu.add("设置").setIcon(R.drawable.actionbar_setting),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        } else if (mCurFragment instanceof InterviewIndexFragment) {
+            MenuItemCompat.setShowAsAction(menu.add("笔试").setIcon(R.drawable.tab_study_n),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -288,13 +298,15 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);
         } else if ("评分".equals(item.getTitle())) {
-            OpenCourseModel.skipToMyGrade(this, mUnRateClasses, "false");
+            OpenCourseModel.skipToMyGrade(this, CourseFragment.mUnRateClasses, "false");
         } else if ("面试".equals(item.getTitle())) {
-            ToastManager.showToast(this, "切换面试");
+            changeFragment(5);
         } else if ("设置".equals(item.getTitle())) {
             final Intent intent = new Intent(this, CommonFragmentActivity.class);
             intent.putExtra("from", "setting");
             startActivity(intent);
+        } else if ("笔试".equals(item.getTitle())) {
+            changeFragment(0);
         }
 
         return super.onOptionsItemSelected(item);
@@ -328,7 +340,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
      * @param position fragment在侧边栏上的位置
      */
     public void changeFragment(int position) {
-        mCurFragmentPosition = position;
         // 开启一个Fragment事务
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
@@ -359,7 +370,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mCourseFragment);
                 }
-
+                Logger.i("fragment===11" + mCourseFragment.getId());
                 getSupportActionBar().setTitle(R.string.course_center);
 
                 mCurFragment = mCourseFragment;
@@ -416,6 +427,23 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 mCurFragment = mVipIndexFragment;
 
                 break;
+            case 5:
+                //interview
+                if (mInterviewIndexFragment == null) {
+                    // 如果Fragment为空，则创建一个并添加到界面上
+                    mInterviewIndexFragment = new InterviewIndexFragment();
+                    transaction.add(R.id.container_view, mInterviewIndexFragment, INTERVIEW);
+                } else {
+                    // 如果Fragment不为空，则直接将它显示出来
+                    transaction.show(mInterviewIndexFragment);
+                }
+
+                getSupportActionBar().setTitle(R.string.vip_index);
+
+                mCurFragment = mInterviewIndexFragment;
+
+
+                break;
             default:
                 break;
         }
@@ -448,6 +476,10 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         //Vip
         mVipIndexFragment = (VipIndexFragment) mFragmentManager.findFragmentByTag(VIP);
         if (mVipIndexFragment != null) transaction.hide(mVipIndexFragment);
+
+        //interview
+        mInterviewIndexFragment = (InterviewIndexFragment) mFragmentManager.findFragmentByTag(INTERVIEW);
+        if (mInterviewIndexFragment != null) transaction.hide(mInterviewIndexFragment);
     }
 
     @Override
@@ -458,8 +490,9 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         switch (apiName) {
             case "get_rate_course":
+                //处理邀请评价送课逻辑，待修改
                 Globals.rateCourseResp = GsonManager.getModel(response, RateCourseResp.class);
-                if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this, "Click");
+//                if ("menu".equals(mFrom)) AlertManager.showGradeAlert(this, "Click");
                 break;
 
             case "is_user_merged":

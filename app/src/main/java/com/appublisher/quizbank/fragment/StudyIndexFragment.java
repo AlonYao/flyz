@@ -105,8 +105,6 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
 
         setValue();
 
-        getData();
-
         return view;
     }
 
@@ -136,6 +134,8 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         if (userInfoModel != null) {
             LoginModel.setAvatar(getActivity(), avatarIv);
         }
+
+        getData();
     }
 
     /**

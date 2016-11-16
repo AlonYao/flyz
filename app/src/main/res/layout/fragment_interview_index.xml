@@ -31,7 +31,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/guokao_iv"
-                android:text="@string/wholepage_index" />
+                android:text="@string/interview_index_guokao" />
         </RelativeLayout>
 
         <View
@@ -42,7 +42,7 @@
             android:background="@color/common_line" />
 
         <RelativeLayout
-            android:id="@+id/_view"
+            android:id="@+id/star_analysis_view"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginLeft="30dp"

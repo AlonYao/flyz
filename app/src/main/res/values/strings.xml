@@ -215,4 +215,10 @@
     <string name="vip_index_course">我的课程</string>
     <string name="vip_index_homework">我的作业</string>
     <string name="vip_index_message">我的消息</string>
+
+    <!--面试 -->
+    <string name="interview_index_guokao">国考精选</string>
+    <string name="interview_index_star_analysis">名师解析</string>
+    <string name="interview_index_category">分类突破</string>
+    <string name="interview_index_history">历年真题</string>
 </resources>

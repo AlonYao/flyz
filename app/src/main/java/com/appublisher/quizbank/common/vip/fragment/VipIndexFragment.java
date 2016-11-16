@@ -118,7 +118,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
-                intent.putExtra("from", "course");
+                intent.putExtra("from", "course_purchased");
                 getActivity().startActivity(intent);
             }
         });

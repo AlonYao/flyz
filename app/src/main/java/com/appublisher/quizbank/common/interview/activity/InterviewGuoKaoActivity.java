@@ -54,7 +54,7 @@ public class InterviewGuoKaoActivity extends BaseActivity implements RequestCall
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (list == null || list.size() <= 0) return;
-                final Intent intent = new Intent(InterviewGuoKaoActivity.this, PaperListActivity.class);
+                final Intent intent = new Intent(InterviewGuoKaoActivity.this, InterviewPaperListActivity.class);
                 intent.putExtra("from", "guokao");
                 intent.putExtra("year", list.get(position));
                 startActivity(intent);

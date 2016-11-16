@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="66dp"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp">
 
     <ImageView
         android:id="@+id/studyrecord_logo"
@@ -51,7 +53,11 @@
                 android:textSize="16sp"
                 tools:ignore="RelativeOverlap" />
         </RelativeLayout>
-
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_line" />
 </RelativeLayout>

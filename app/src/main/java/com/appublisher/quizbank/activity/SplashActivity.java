@@ -153,7 +153,7 @@ public class SplashActivity extends Activity implements RequestCallback {
                 editor.commit();
             }
 
-            if (AppUpdate.showUpGrade(SplashActivity.this)) return;
+//            if (AppUpdate.showUpGrade(SplashActivity.this)) return;
 
             // 获取国考公告解读宣传
             mPromoteModel.getPromoteData(new PromoteModel.PromoteDataListener() {
