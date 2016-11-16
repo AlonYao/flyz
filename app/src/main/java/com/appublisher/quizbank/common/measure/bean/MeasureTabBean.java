@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.bean;
 
 /**
  * 做题模块：Tab

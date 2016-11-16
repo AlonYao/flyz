@@ -2,5 +2,7 @@
 <resources>
 
     <color name="measure_divider">#AEB1B3</color>
+    <color name="measure_exclude">#AEB1B3</color>
+    <color name="measure_text">#262B2D</color>
 
 </resources>

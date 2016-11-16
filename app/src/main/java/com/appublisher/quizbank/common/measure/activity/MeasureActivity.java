@@ -17,7 +17,7 @@ import com.appublisher.quizbank.common.measure.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.MeasureQuestion;
-import com.appublisher.quizbank.common.measure.MeasureTabBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 
 import java.util.List;
 

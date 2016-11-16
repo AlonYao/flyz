@@ -19,6 +19,8 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
@@ -49,6 +51,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     public String mPaperType;
     public int mPaperId;
     public int mHierarchyId;
+    public List<MeasureExcludeBean> mExcludes;
 
     public MeasureModel(Context context) {
         mContext = context;
@@ -148,7 +151,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     }
 
     /**
-     * 设置题号
+     * 设置题号(同时初始化用户记录)
      * @param list List<MeasureQuestion>
      * @return List<MeasureQuestion>
      */
@@ -157,6 +160,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         int size = list.size();
         int amount = size - descSize;
         int order = 0;
+        mExcludes = new ArrayList<>();
+
         for (int i = 0; i < size; i++) {
             MeasureQuestion measureQuestion = list.get(i);
             if (measureQuestion == null || measureQuestion.is_desc()) continue;
@@ -164,9 +169,24 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             measureQuestion.setQuestion_order(order);
             measureQuestion.setQuestion_amount(amount);
             list.set(i, measureQuestion);
+            // 选项排除
+            mExcludes.add(new MeasureExcludeBean());
         }
         return list;
     }
+
+//    private void initUserRecord(List<MeasureQuestion> list) {
+//        mExcludes = new ArrayList<>();
+//        if (list == null) return;
+//
+//        // 初始化选项排除
+//        int size = list.size();
+//        for (int i = 0; i < size; i++) {
+//            MeasureQuestion question = list.get(i);
+//            if (question == null || question.is_desc()) continue;
+//            mExcludes.add(new MeasureExcludeBean());
+//        }
+//    }
 
     /**
      * 动态添加富文本

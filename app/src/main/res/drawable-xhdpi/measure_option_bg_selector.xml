@@ -3,12 +3,6 @@
     <!-- selected -->
     <item android:state_selected="true" android:drawable="@drawable/answer_sheet_selected"/>
 
-    <!-- focused -->
-    <item android:state_focused="true" android:drawable="@drawable/answer_sheet_selected"/>
-
-    <!-- pressed -->
-    <item android:state_pressed="true" android:drawable="@drawable/answer_sheet_selected"/>
-
     <!-- not selected -->
     <item android:drawable="@drawable/answer_sheet_unselect"/>
 </selector>

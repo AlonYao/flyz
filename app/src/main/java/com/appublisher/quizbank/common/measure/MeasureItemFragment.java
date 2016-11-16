@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,21 +16,36 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
+
+import org.apmem.tools.layouts.FlowLayout;
+
+import java.util.List;
 
 /**
  * 做题模块
  */
 
-public class MeasureItemFragment extends Fragment implements View.OnClickListener{
+public class MeasureItemFragment extends Fragment implements
+        View.OnClickListener, View.OnLongClickListener{
 
     private static final String ARGS_QUESTION = "question";
     private static final String ARGS_POSITION = "position";
+    private static final String OPTION_A = "a";
+    private static final String OPTION_B = "b";
+    private static final String OPTION_C = "c";
+    private static final String OPTION_D = "d";
 
     private MeasureQuestion mQuestion;
     private LinearLayout mStemContainer;
+    private LinearLayout mOptionA;
+    private LinearLayout mOptionB;
+    private LinearLayout mOptionC;
+    private LinearLayout mOptionD;
     private LinearLayout mOptionAContainer;
     private LinearLayout mOptionBContainer;
     private LinearLayout mOptionCContainer;
@@ -86,17 +102,22 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
         mTvOptionB = (TextView) mRoot.findViewById(R.id.measure_option_b_tv);
         mTvOptionC = (TextView) mRoot.findViewById(R.id.measure_option_c_tv);
         mTvOptionD = (TextView) mRoot.findViewById(R.id.measure_option_d_tv);
+        mOptionA = (LinearLayout) mRoot.findViewById(R.id.measure_option_a);
+        mOptionB = (LinearLayout) mRoot.findViewById(R.id.measure_option_b);
+        mOptionC = (LinearLayout) mRoot.findViewById(R.id.measure_option_c);
+        mOptionD = (LinearLayout) mRoot.findViewById(R.id.measure_option_d);
     }
 
     private void setOnClick() {
-        mOptionAContainer.setOnClickListener(this);
-        mOptionBContainer.setOnClickListener(this);
-        mOptionCContainer.setOnClickListener(this);
-        mOptionDContainer.setOnClickListener(this);
-        mTvOptionA.setOnClickListener(this);
-        mTvOptionB.setOnClickListener(this);
-        mTvOptionC.setOnClickListener(this);
-        mTvOptionD.setOnClickListener(this);
+        mOptionA.setOnClickListener(this);
+        mOptionB.setOnClickListener(this);
+        mOptionC.setOnClickListener(this);
+        mOptionD.setOnClickListener(this);
+
+        mOptionA.setOnLongClickListener(this);
+        mOptionB.setOnLongClickListener(this);
+        mOptionC.setOnLongClickListener(this);
+        mOptionD.setOnLongClickListener(this);
     }
 
     private void showContent() {
@@ -198,29 +219,164 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.measure_option_a_tv:
-            case R.id.measure_option_b_tv:
-            case R.id.measure_option_c_tv:
-            case R.id.measure_option_d_tv:
-                optionOnClickAction((TextView) v);
-                break;
-
-            case R.id.measure_option_a_container:
+            case R.id.measure_option_a:
+                Logger.e("measure_option_a");
                 optionOnClickAction(mTvOptionA);
                 break;
 
-            case R.id.measure_option_b_container:
+            case R.id.measure_option_b:
+                Logger.e("measure_option_b");
                 optionOnClickAction(mTvOptionB);
                 break;
 
-            case R.id.measure_option_c_container:
+            case R.id.measure_option_c:
+                Logger.e("measure_option_c");
                 optionOnClickAction(mTvOptionC);
                 break;
 
-            case R.id.measure_option_d_container:
+            case R.id.measure_option_d:
+                Logger.e("measure_option_d");
                 optionOnClickAction(mTvOptionD);
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.measure_option_a:
+                if (isOptionExclude(OPTION_A)) {
+                    changeExcludeStatus(OPTION_A, false);
+                } else {
+                    changeExcludeStatus(OPTION_A, true);
+                }
+                break;
+
+            case R.id.measure_option_b:
+                if (isOptionExclude(OPTION_B)) {
+                    changeExcludeStatus(OPTION_B, false);
+                } else {
+                    changeExcludeStatus(OPTION_B, true);
+                }
+                break;
+
+            case R.id.measure_option_c:
+                if (isOptionExclude(OPTION_C)) {
+                    changeExcludeStatus(OPTION_C, false);
+                } else {
+                    changeExcludeStatus(OPTION_C, true);
+                }
+                break;
+
+            case R.id.measure_option_d:
+                if (isOptionExclude(OPTION_D)) {
+                    changeExcludeStatus(OPTION_D, false);
+                } else {
+                    changeExcludeStatus(OPTION_D, true);
+                }
+                break;
+        }
+        return true;
+    }
+
+    private void changeExcludeStatus(String option, boolean isExclude) {
+        TextView tvParent = null;
+        LinearLayout llParent = null;
+        if (OPTION_A.equals(option)) {
+            tvParent = mTvOptionA;
+            llParent = mOptionAContainer;
+        } else if (OPTION_B.equals(option)) {
+            tvParent = mTvOptionB;
+            llParent = mOptionBContainer;
+        } else if (OPTION_C.equals(option)) {
+            tvParent = mTvOptionC;
+            llParent = mOptionCContainer;
+        } else if (OPTION_D.equals(option)) {
+            tvParent = mTvOptionD;
+            llParent = mOptionDContainer;
+        }
+
+        if (tvParent != null) {
+            if (isExclude) {
+                tvParent.setTextColor(ContextCompat.getColor(
+                        getContext(), R.color.measure_exclude));
+                tvParent.setBackgroundResource(R.drawable.measure_exclude_bg);
+            } else {
+                tvParent.setBackgroundResource(R.drawable.measure_option_bg_selector);
+                tvParent.setTextColor(ContextCompat.getColor(
+                        getContext(), R.color.measure_option_text_selector));
+            }
+        }
+
+        if (llParent != null) {
+            int sizeFlowLayout = llParent.getChildCount();
+            for (int i = 0; i < sizeFlowLayout; i++) {
+                View flowLayout = llParent.getChildAt(i);
+                if (flowLayout == null || (!(flowLayout instanceof FlowLayout))) continue;
+
+                int sizeTextView = ((FlowLayout) flowLayout).getChildCount();
+                for (int j = 0; j < sizeTextView; j++) {
+                    View textView = ((FlowLayout) flowLayout).getChildAt(j);
+                    if (textView == null || (!(textView instanceof TextView))) continue;
+                    if (isExclude) {
+                        ((TextView) textView).setTextColor(
+                                ContextCompat.getColor(getContext(), R.color.measure_exclude));
+                    } else {
+                        ((TextView) textView).setTextColor(
+                                ContextCompat.getColor(getContext(), R.color.measure_text));
+                    }
+                }
+            }
+        }
+
+        saveExclude(option, isExclude);
+    }
+
+    private boolean isOptionExclude(String option) {
+        // 异常处理部分
+        if (!(getActivity() instanceof MeasureActivity)) return false;
+        List<MeasureExcludeBean> list = ((MeasureActivity) getActivity()).mModel.mExcludes;
+        if (list == null || mQuestion == null) return false;
+        int order = mQuestion.getQuestion_order();
+        if (order >= list.size()) return false;
+        MeasureExcludeBean bean = list.get(order);
+        if (bean == null) return false;
+
+        if (OPTION_A.equals(option)) {
+            return bean.isExclude_a();
+        } else if (OPTION_B.equals(option)) {
+            return bean.isExclude_b();
+        } else if (OPTION_C.equals(option)) {
+            return bean.isExclude_c();
+        } else if (OPTION_D.equals(option)) {
+            return bean.isExclude_d();
+        }
+
+        return false;
+    }
+
+    private void saveExclude(String option, boolean isExclude) {
+        // 异常处理部分
+        if (!(getActivity() instanceof MeasureActivity)) return;
+        List<MeasureExcludeBean> list = ((MeasureActivity) getActivity()).mModel.mExcludes;
+        if (list == null || mQuestion == null) return;
+        int order = mQuestion.getQuestion_order();
+        if (order >= list.size()) return;
+        MeasureExcludeBean bean = list.get(order);
+        if (bean == null) return;
+
+        if (OPTION_A.equals(option)) {
+            bean.setExclude_a(isExclude);
+        } else if (OPTION_B.equals(option)) {
+            bean.setExclude_b(isExclude);
+        } else if (OPTION_C.equals(option)) {
+            bean.setExclude_c(isExclude);
+        } else if (OPTION_D.equals(option)) {
+            bean.setExclude_d(isExclude);
+        }
+
+        list.set(order, bean);
+        ((MeasureActivity) getActivity()).mModel.mExcludes = list;
     }
 
     /**
@@ -265,4 +421,5 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
             }
         }
     }
+
 }
