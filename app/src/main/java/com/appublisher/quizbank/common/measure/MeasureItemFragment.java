@@ -303,8 +303,9 @@ public class MeasureItemFragment extends Fragment implements
                 tvParent.setBackgroundResource(R.drawable.measure_exclude_bg);
             } else {
                 tvParent.setBackgroundResource(R.drawable.measure_option_bg_selector);
-                tvParent.setTextColor(ContextCompat.getColor(
-                        getContext(), R.color.measure_option_text_selector));
+                tvParent.setTextColor(ContextCompat.getColorStateList(
+                        getContext(), R.drawable.measure_option_text_selector));
+                tvParent.setSelected(false);
             }
         }
 
