@@ -31,7 +31,7 @@ public class MeasureAdapter extends FragmentStatePagerAdapter{
         } else {
             // 题目页面
             String question = GsonManager.modelToString(mQuestions.get(position));
-            return MeasureItemFragment.newInstance(question, position, getCount());
+            return MeasureItemFragment.newInstance(question, position);
         }
     }
 

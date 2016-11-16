@@ -27,7 +27,6 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
 
     private static final String ARGS_QUESTION = "question";
     private static final String ARGS_POSITION = "position";
-    private static final String ARGS_SIZE = "size";
 
     private MeasureQuestion mQuestion;
     private LinearLayout mStemContainer;
@@ -41,15 +40,13 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
     private TextView mTvOptionD;
     private View mRoot;
     private int mPosition;
-    private int mSize;
     private int mLastY;
     private boolean mOptionClick;
 
-    public static MeasureItemFragment newInstance(String question, int position, int size) {
+    public static MeasureItemFragment newInstance(String question, int position) {
         Bundle args = new Bundle();
         args.putString(ARGS_QUESTION, question);
         args.putInt(ARGS_POSITION, position);
-        args.putInt(ARGS_SIZE, size);
         MeasureItemFragment fragment = new MeasureItemFragment();
         fragment.setArguments(args);
         return fragment;
@@ -61,7 +58,6 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
         mQuestion = GsonManager.getModel(
                 getArguments().getString(ARGS_QUESTION), MeasureQuestion.class);
         mPosition = getArguments().getInt(ARGS_POSITION);
-        mSize = getArguments().getInt(ARGS_SIZE);
     }
 
     @Nullable
@@ -106,7 +102,9 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
     private void showContent() {
         if (mQuestion == null) return;
         // 处理题号
-        String stem = String.valueOf(mPosition + 1) + "/" + String.valueOf(mSize) + "  ";
+        String stem =
+                String.valueOf(mQuestion.getQuestion_order())
+                + "/" + String.valueOf(mQuestion.getQuestion_amount()) + "  ";
         stem = stem + mQuestion.getQuestion();
         MeasureModel.addRichTextToContainer(getContext(), mStemContainer, stem, true);
         // 选项
@@ -259,7 +257,7 @@ public class MeasureItemFragment extends Fragment implements View.OnClickListene
      * 页面跳转
      */
     private void pageSkip() {
-        if (mPosition + 1 == mSize) {
+        if (mQuestion.getQuestion_order() == mQuestion.getQuestion_amount()) {
             Toast.makeText(getContext(), "答题卡", Toast.LENGTH_SHORT).show();
         } else {
             if (getActivity() instanceof MeasureActivity) {

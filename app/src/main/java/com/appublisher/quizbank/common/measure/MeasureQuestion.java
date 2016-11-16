@@ -31,6 +31,24 @@ public class MeasureQuestion {
     private int question_id;
     private boolean is_desc;
     private int desc_position;
+    private int question_order;
+    private int question_amount;
+
+    public int getQuestion_order() {
+        return question_order;
+    }
+
+    public void setQuestion_order(int question_order) {
+        this.question_order = question_order;
+    }
+
+    public int getQuestion_amount() {
+        return question_amount;
+    }
+
+    public void setQuestion_amount(int question_amount) {
+        this.question_amount = question_amount;
+    }
 
     public int getDesc_position() {
         return desc_position;

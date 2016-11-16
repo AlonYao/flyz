@@ -87,7 +87,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         MeasureAutoResp resp = GsonManager.getModel(response, MeasureAutoResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
-        ((MeasureActivity) mContext).showViewPager(resp.getQuestions());
+        List<MeasureQuestion> questions = setQuestionOrder(resp.getQuestions(), 0);
+        ((MeasureActivity) mContext).showViewPager(questions);
     }
 
     /**
@@ -98,7 +99,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         MeasureNotesResp resp = GsonManager.getModel(response, MeasureNotesResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
-        ((MeasureActivity) mContext).showViewPager(resp.getQuestions());
+        List<MeasureQuestion> questions = setQuestionOrder(resp.getQuestions(), 0);
+        ((MeasureActivity) mContext).showViewPager(questions);
     }
 
     /**
@@ -137,9 +139,33 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             questions.addAll(categoryQuestions);
         }
 
+        // 设置题号
+        questions = setQuestionOrder(questions, size);
+
         if (!(mContext instanceof MeasureActivity)) return;
         ((MeasureActivity) mContext).showTabLayout(mTabs);
         ((MeasureActivity) mContext).showViewPager(questions);
+    }
+
+    /**
+     * 设置题号
+     * @param list List<MeasureQuestion>
+     * @return List<MeasureQuestion>
+     */
+    private List<MeasureQuestion> setQuestionOrder(List<MeasureQuestion> list, int descSize) {
+        if (list == null) return new ArrayList<>();
+        int size = list.size();
+        int amount = size - descSize;
+        int order = 0;
+        for (int i = 0; i < size; i++) {
+            MeasureQuestion measureQuestion = list.get(i);
+            if (measureQuestion == null || measureQuestion.is_desc()) continue;
+            order++;
+            measureQuestion.setQuestion_order(order);
+            measureQuestion.setQuestion_amount(amount);
+            list.set(i, measureQuestion);
+        }
+        return list;
     }
 
     /**
