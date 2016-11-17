@@ -20,6 +20,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -39,7 +40,7 @@ public class MeasureItemFragment extends Fragment implements
     private static final String OPTION_C = "c";
     private static final String OPTION_D = "d";
 
-    private MeasureQuestion mQuestion;
+    private MeasureQuestionBean mQuestion;
     private LinearLayout mStemContainer;
     private LinearLayout mOptionA;
     private LinearLayout mOptionB;
@@ -71,7 +72,7 @@ public class MeasureItemFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mQuestion = GsonManager.getModel(
-                getArguments().getString(ARGS_QUESTION), MeasureQuestion.class);
+                getArguments().getString(ARGS_QUESTION), MeasureQuestionBean.class);
         mPosition = getArguments().getInt(ARGS_POSITION);
     }
 

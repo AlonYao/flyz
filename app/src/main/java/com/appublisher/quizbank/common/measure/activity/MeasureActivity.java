@@ -16,7 +16,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.MeasureModel;
-import com.appublisher.quizbank.common.measure.MeasureQuestion;
+import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 
 import java.util.List;
@@ -111,7 +111,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
     }
 
-    public void showViewPager(List<MeasureQuestion> questions) {
+    public void showViewPager(List<MeasureQuestionBean> questions) {
         mAdapter = new MeasureAdapter(getSupportFragmentManager(), questions);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

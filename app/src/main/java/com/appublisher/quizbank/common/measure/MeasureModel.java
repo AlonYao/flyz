@@ -20,6 +20,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
@@ -90,7 +91,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         MeasureAutoResp resp = GsonManager.getModel(response, MeasureAutoResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
-        List<MeasureQuestion> questions = setQuestionOrder(resp.getQuestions(), 0);
+        List<MeasureQuestionBean> questions = setQuestionOrder(resp.getQuestions(), 0);
         ((MeasureActivity) mContext).showViewPager(questions);
     }
 
@@ -102,7 +103,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         MeasureNotesResp resp = GsonManager.getModel(response, MeasureNotesResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
-        List<MeasureQuestion> questions = setQuestionOrder(resp.getQuestions(), 0);
+        List<MeasureQuestionBean> questions = setQuestionOrder(resp.getQuestions(), 0);
         ((MeasureActivity) mContext).showViewPager(questions);
     }
 
@@ -118,14 +119,14 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
 
         // 构造数据结构
         mTabs = new ArrayList<>();
-        List<MeasureQuestion> questions = new ArrayList<>();
+        List<MeasureQuestionBean> questions = new ArrayList<>();
 
         // 遍历
         int size = categorys.size();
         for (int i = 0; i < size; i++) {
             MeasureEntireResp.CategoryBean category = categorys.get(i);
             if (category == null) continue;
-            List<MeasureQuestion> categoryQuestions = category.getQuestions();
+            List<MeasureQuestionBean> categoryQuestions = category.getQuestions();
             if (categoryQuestions == null) continue;
             // 添加Tab数据
             MeasureTabBean tabBean = new MeasureTabBean();
@@ -133,7 +134,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             tabBean.setPosition(questions.size());
             mTabs.add(tabBean);
             // 添加题目数据，构造说明页
-            MeasureQuestion question = new MeasureQuestion();
+            MeasureQuestionBean question = new MeasureQuestionBean();
             question.setIs_desc(true);
             question.setCategory_name(category.getName());
             question.setDesc_position(i);
@@ -152,10 +153,10 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
 
     /**
      * 设置题号(同时初始化用户记录)
-     * @param list List<MeasureQuestion>
-     * @return List<MeasureQuestion>
+     * @param list List<MeasureQuestionBean>
+     * @return List<MeasureQuestionBean>
      */
-    private List<MeasureQuestion> setQuestionOrder(List<MeasureQuestion> list, int descSize) {
+    private List<MeasureQuestionBean> setQuestionOrder(List<MeasureQuestionBean> list, int descSize) {
         if (list == null) return new ArrayList<>();
         int size = list.size();
         int amount = size - descSize;
@@ -163,26 +164,26 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         mExcludes = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
-            MeasureQuestion measureQuestion = list.get(i);
-            if (measureQuestion == null || measureQuestion.is_desc()) continue;
+            MeasureQuestionBean measureQuestionBean = list.get(i);
+            if (measureQuestionBean == null || measureQuestionBean.is_desc()) continue;
             order++;
-            measureQuestion.setQuestion_order(order);
-            measureQuestion.setQuestion_amount(amount);
-            list.set(i, measureQuestion);
+            measureQuestionBean.setQuestion_order(order);
+            measureQuestionBean.setQuestion_amount(amount);
+            list.set(i, measureQuestionBean);
             // 选项排除
             mExcludes.add(new MeasureExcludeBean());
         }
         return list;
     }
 
-//    private void initUserRecord(List<MeasureQuestion> list) {
+//    private void initUserRecord(List<MeasureQuestionBean> list) {
 //        mExcludes = new ArrayList<>();
 //        if (list == null) return;
 //
 //        // 初始化选项排除
 //        int size = list.size();
 //        for (int i = 0; i < size; i++) {
-//            MeasureQuestion question = list.get(i);
+//            MeasureQuestionBean question = list.get(i);
 //            if (question == null || question.is_desc()) continue;
 //            mExcludes.add(new MeasureExcludeBean());
 //        }

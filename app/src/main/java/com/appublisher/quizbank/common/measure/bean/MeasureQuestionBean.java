@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.bean;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * 做题模块：题目模型
  */
 
-public class MeasureQuestion {
+public class MeasureQuestionBean {
 
     private int id;
     private String material;

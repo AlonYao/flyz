@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 
 import java.util.List;
 
@@ -14,20 +15,20 @@ import java.util.List;
 
 public class MeasureAdapter extends FragmentStatePagerAdapter{
 
-    private List<MeasureQuestion> mQuestions;
+    private List<MeasureQuestionBean> mQuestions;
 
-    public MeasureAdapter(FragmentManager fm, List<MeasureQuestion> questions) {
+    public MeasureAdapter(FragmentManager fm, List<MeasureQuestionBean> questions) {
         super(fm);
         mQuestions = questions;
     }
 
     @Override
     public Fragment getItem(int position) {
-        MeasureQuestion measureQuestion = mQuestions.get(position);
-        if (measureQuestion != null && measureQuestion.is_desc()) {
+        MeasureQuestionBean measureQuestionBean = mQuestions.get(position);
+        if (measureQuestionBean != null && measureQuestionBean.is_desc()) {
             // Tab说明页
             return MeasureTabDescFragment.newInstance(
-                    measureQuestion.getCategory_name(), measureQuestion.getDesc_position());
+                    measureQuestionBean.getCategory_name(), measureQuestionBean.getDesc_position());
         } else {
             // 题目页面
             String question = GsonManager.modelToString(mQuestions.get(position));

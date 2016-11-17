@@ -1,6 +1,6 @@
 package com.appublisher.quizbank.common.measure.netdata;
 
-import com.appublisher.quizbank.common.measure.MeasureQuestion;
+import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class MeasureAutoResp {
     private int response_code;
     private int paper_id;
     private int duration;
-    private List<MeasureQuestion> questions;
+    private List<MeasureQuestionBean> questions;
 
     public int getResponse_code() {
         return response_code;
@@ -39,11 +39,11 @@ public class MeasureAutoResp {
         this.duration = duration;
     }
 
-    public List<MeasureQuestion> getQuestions() {
+    public List<MeasureQuestionBean> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<MeasureQuestion> questions) {
+    public void setQuestions(List<MeasureQuestionBean> questions) {
         this.questions = questions;
     }
 }

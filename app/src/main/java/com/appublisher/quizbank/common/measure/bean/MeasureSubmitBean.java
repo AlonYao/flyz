@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.bean;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * 做题模块：提交
  */
 
-public class MeasureSubmit {
+public class MeasureSubmitBean {
 
     private int id;
     private String answer;

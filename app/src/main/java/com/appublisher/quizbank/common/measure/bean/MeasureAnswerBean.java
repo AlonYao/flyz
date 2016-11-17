@@ -1,10 +1,10 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.bean;
 
 /**
  * 做题模块：答案模型
  */
 
-public class MeasureAnswer {
+public class MeasureAnswerBean {
 
     private int id;
     private boolean is_right;

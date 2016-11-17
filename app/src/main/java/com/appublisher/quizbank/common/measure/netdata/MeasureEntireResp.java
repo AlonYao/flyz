@@ -1,6 +1,6 @@
 package com.appublisher.quizbank.common.measure.netdata;
 
-import com.appublisher.quizbank.common.measure.MeasureQuestion;
+import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class MeasureEntireResp {
     public static class CategoryBean {
         private int id;
         private String name;
-        private List<MeasureQuestion> questions;
+        private List<MeasureQuestionBean> questions;
         private List<?> answers;
 
         public int getId() {
@@ -78,11 +78,11 @@ public class MeasureEntireResp {
             this.name = name;
         }
 
-        public List<MeasureQuestion> getQuestions() {
+        public List<MeasureQuestionBean> getQuestions() {
             return questions;
         }
 
-        public void setQuestions(List<MeasureQuestion> questions) {
+        public void setQuestions(List<MeasureQuestionBean> questions) {
             this.questions = questions;
         }
 
