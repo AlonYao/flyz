@@ -10,7 +10,7 @@ public class MeasureSubmitBean {
 
     private int id;
     private String answer;
-    private int is_right;
+    private int is_right; // 0 错 1 对
     private int category;
     private List<Integer> note_ids;
     private int duration;

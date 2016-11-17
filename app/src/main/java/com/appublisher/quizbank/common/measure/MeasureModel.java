@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.measure;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -176,18 +177,14 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         return list;
     }
 
-//    private void initUserRecord(List<MeasureQuestionBean> list) {
-//        mExcludes = new ArrayList<>();
-//        if (list == null) return;
-//
-//        // 初始化选项排除
-//        int size = list.size();
-//        for (int i = 0; i < size; i++) {
-//            MeasureQuestionBean question = list.get(i);
-//            if (question == null || question.is_desc()) continue;
-//            mExcludes.add(new MeasureExcludeBean());
-//        }
-//    }
+    /**
+     * 获取做题答案缓存
+     * @return SharedPreferences
+     */
+    public SharedPreferences getUserAnswerCache() {
+        if (mContext == null) return null;
+        return mContext.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
+    }
 
     /**
      * 动态添加富文本
