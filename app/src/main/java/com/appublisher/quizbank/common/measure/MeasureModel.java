@@ -153,7 +153,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     }
 
     /**
-     * 设置题号(同时初始化用户记录)
+     * 设置题号&索引(同时初始化用户记录)
      * @param list List<MeasureQuestionBean>
      * @return List<MeasureQuestionBean>
      */
@@ -165,12 +165,18 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         mExcludes = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
+            // 设置索引
             MeasureQuestionBean measureQuestionBean = list.get(i);
-            if (measureQuestionBean == null || measureQuestionBean.is_desc()) continue;
+            if (measureQuestionBean == null) continue;
+            measureQuestionBean.setQuestion_index(i);
+
+            // 设置题号
+            if (measureQuestionBean.is_desc()) continue;
             order++;
             measureQuestionBean.setQuestion_order(order);
             measureQuestionBean.setQuestion_amount(amount);
             list.set(i, measureQuestionBean);
+
             // 选项排除
             mExcludes.add(new MeasureExcludeBean());
         }

@@ -31,7 +31,7 @@ public class MeasureSheetFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_answer_sheet, container);
+        View view = inflater.inflate(R.layout.measure_sheet_fragment, container);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.themecolor));
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);

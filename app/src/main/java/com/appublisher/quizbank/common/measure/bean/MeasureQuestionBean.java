@@ -33,6 +33,15 @@ public class MeasureQuestionBean {
     private int desc_position;
     private int question_order;
     private int question_amount;
+    private int question_index;
+
+    public int getQuestion_index() {
+        return question_index;
+    }
+
+    public void setQuestion_index(int question_index) {
+        this.question_index = question_index;
+    }
 
     public int getQuestion_order() {
         return question_order;
