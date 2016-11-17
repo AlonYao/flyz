@@ -314,10 +314,16 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_interview_guokao"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.interview.activity.InterviewCategoryActivity"
+        <activity
+            android:name=".common.interview.activity.InterviewCategoryActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_interview_category"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.interview.activity.InterviewPaperDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_interview_paper_detail"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

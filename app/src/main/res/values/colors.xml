@@ -10,6 +10,7 @@
     <color name="transparency">#00000000</color>
     <color name="black_translucence">#80000000</color>
     <color name="blue">#4E90F5</color>
+    <color name="grey">#AAAAAA</color>
 
     <!-- 首页 -->
     <color name="homepage_todayexam">#506183</color>

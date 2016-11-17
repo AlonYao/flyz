@@ -56,4 +56,14 @@ public class InterviewRequest extends Request implements InterviewApi {
         asyncRequest(getFinalUrl(interviewTeacherPaperList)
                 + "&page=" + page, "interview_paper_list", "object");
     }
+
+    /**
+     * 试卷详情页
+     *
+     * @param paper_id
+     */
+    public void getPaperDetail(int paper_id) {
+        asyncRequest(getFinalUrl(interviewPaperDetail)
+                + "&paper_id=" + paper_id, "paper_detail", "object");
+    }
 }

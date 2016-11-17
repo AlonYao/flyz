@@ -6,7 +6,7 @@ import java.util.List;
  * Created by jinbao on 2016/11/16.
  */
 
-public class PaperListResp {
+public class InterviewPaperListResp {
 
     private int response_code;
     private List<PapersBean> papers;

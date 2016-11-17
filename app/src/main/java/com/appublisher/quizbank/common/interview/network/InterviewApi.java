@@ -15,5 +15,8 @@ public interface InterviewApi extends ApiConstants {
     public String interviewPaperList = baseUrl + "quizbank/get_interview_papers";
 
     //名师解析
-    public String interviewTeacherPaperList = baseUrl +"quizbank/teacher_interview_papers";
+    public String interviewTeacherPaperList = baseUrl + "quizbank/teacher_interview_papers";
+
+    //面试详情页
+    public String interviewPaperDetail = baseUrl + "quizbank/interview_paper_detail";
 }

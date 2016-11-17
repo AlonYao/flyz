@@ -146,7 +146,7 @@ public class VipExerciseIndexModel {
     public void initStatusPop(final VipExerciseIndexActivity activity) {
         if (mVipExerciseFilterResp == null) return;
 
-        View statusView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
+        View statusView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView gridView = (GridView) statusView.findViewById(R.id.gridview);
         VipExerciseFilterStatusAdapter adapter = new VipExerciseFilterStatusAdapter(activity, mVipExerciseFilterResp.getStatus_filter());
         gridView.setAdapter(adapter);
@@ -220,7 +220,7 @@ public class VipExerciseIndexModel {
 
     public void initCategoryPop(final VipExerciseIndexActivity activity) {
         if (mVipExerciseFilterResp == null) return;
-        View categoryView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
+        View categoryView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView categoryGridView = (GridView) categoryView.findViewById(R.id.gridview);
         VipExerciseFilterCategoryAdapter categoryAdapter = new VipExerciseFilterCategoryAdapter(activity, mVipExerciseFilterResp.getCategory_filter());
         categoryGridView.setAdapter(categoryAdapter);
@@ -292,7 +292,7 @@ public class VipExerciseIndexModel {
     public void initTypePop(final VipExerciseIndexActivity activity) {
         if (mVipExerciseFilterResp == null) return;
 
-        View typeView = LayoutInflater.from(activity).inflate(R.layout.vip_pop_filter, null);
+        View typeView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView typeGridView = (GridView) typeView.findViewById(R.id.gridview);
         final List<VipExerciseFilterResp.CategoryFilterBean.ExerciseTypeBean> typeBeanList = new ArrayList<>();
         for (int i = 0; i < mVipExerciseFilterResp.getCategory_filter().size(); i++) {

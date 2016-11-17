@@ -1,9 +1,10 @@
 package com.appublisher.quizbank.common.interview.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
@@ -13,10 +14,10 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.PaperListAdapter;
+import com.appublisher.quizbank.common.interview.model.InterviewPaperListModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewFilterResp;
-import com.appublisher.quizbank.common.interview.netdata.PaperListResp;
+import com.appublisher.quizbank.common.interview.netdata.InterviewPaperListResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,11 +31,16 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
     private InterviewRequest mRequest;
     private int page = 1;
     private XListView xListView;
-    private List<PaperListResp.PapersBean> list;
+    private List<InterviewPaperListResp.PapersBean> list;
     private PaperListAdapter adapter;
-    private int area_id = 0;
     private int note_id = 0;
-    private int year = 0;
+    public int area_id = 0;
+    public int year = 0;
+    public View yearFilterView;
+    public View areaFilterView;
+    public TextView yearFilterTv;
+    public TextView areaFilterTv;
+    private InterviewPaperListModel interviewPaperListModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +67,7 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         adapter = new PaperListAdapter(this, list);
 
         mRequest = new InterviewRequest(this, this);
-        if ("teacher".equals(mFrom)) {
-            mRequest.getTeacherPaperList(page);
-        } else {
-            mRequest.getPaperList(area_id, year, note_id, page);
-        }
-
-        showLoading();
+        interviewPaperListModel = new InterviewPaperListModel();
 
         setValue();
     }
@@ -77,20 +77,25 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
             View filterView = findViewById(R.id.filter);
             filterView.setVisibility(View.VISIBLE);
             mRequest.getInterviewFilter();
-            View yearFilterView = findViewById(R.id.interview_year_rl);
-            View areaFilterView = findViewById(R.id.interview_area_rl);
+            yearFilterView = findViewById(R.id.interview_year_rl);
+            areaFilterView = findViewById(R.id.interview_area_rl);
+            yearFilterTv = (TextView) findViewById(R.id.interview_year_tv);
+            areaFilterTv = (TextView) findViewById(R.id.interview_area_tv);
+
             yearFilterView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    interviewPaperListModel.showYearPop(InterviewPaperListActivity.this);
                 }
             });
+
             areaFilterView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    interviewPaperListModel.showAreaPop(InterviewPaperListActivity.this);
                 }
             });
+
         }
 
         xListView.setPullLoadEnable(true);
@@ -120,9 +125,27 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         xListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                final Intent intent = new Intent(InterviewPaperListActivity.this, InterviewPaperDetailActivity.class);
+                intent.putExtra("paper_id", list.get(position - 1).getId());
+                startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+    }
+
+    public void getData() {
+        if ("teacher".equals(mFrom)) {
+            mRequest.getTeacherPaperList(page);
+        } else {
+            mRequest.getPaperList(area_id, year, note_id, page);
+        }
+
+        showLoading();
     }
 
     @Override
@@ -132,17 +155,17 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         if ("interview_paper_list".equals(apiName)) {
             xListView.stopRefresh();
             xListView.stopLoadMore();
-            PaperListResp paperListResp = GsonManager.getModel(response, PaperListResp.class);
-            if (paperListResp.getResponse_code() == 1) {
+            InterviewPaperListResp interviewPaperListResp = GsonManager.getModel(response, InterviewPaperListResp.class);
+            if (interviewPaperListResp.getResponse_code() == 1) {
                 if (page == 1) {
                     list.clear();
                     xListView.setPullLoadEnable(true);
                 }
-                list.addAll(paperListResp.getPapers());
+                list.addAll(interviewPaperListResp.getPapers());
                 adapter.notifyDataSetChanged();
-                if (paperListResp.getPapers().size() == 0) {
+                if (interviewPaperListResp.getPapers().size() < 15) {
                     xListView.setPullLoadEnable(false);
-                    if (page == 1) {
+                    if (page == 1 && interviewPaperListResp.getPapers().size() == 0) {
                         ToastManager.showToast(this, "没有相关试卷");
                     } else {
                         ToastManager.showToast(this, "已加载全部试卷");
@@ -152,7 +175,7 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         } else if ("interview_filter".equals(apiName)) {
             InterviewFilterResp interviewFilterResp = GsonManager.getModel(response, InterviewFilterResp.class);
             if (interviewFilterResp.getResponse_code() == 1) {
-
+                interviewPaperListModel.dealFilterResp(response);
             }
         }
 

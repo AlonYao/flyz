@@ -8,19 +8,20 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.interview.netdata.InterviewPaperListResp;
+import com.appublisher.quizbank.common.interview.netdata.InterviewFilterResp;
 
 import java.util.List;
 
 /**
- * Created by jinbao on 2016/11/16.
+ * Created by jinbao on 2016/11/17.
  */
 
-public class PaperListAdapter extends BaseAdapter {
-    private Context context;
-    private List<InterviewPaperListResp.PapersBean> list;
+public class FilterAreaAdapter extends BaseAdapter {
 
-    public PaperListAdapter(Context context, List<InterviewPaperListResp.PapersBean> list) {
+    private Context context;
+    private List<InterviewFilterResp.AreaBean> list;
+
+    public FilterAreaAdapter(Context context, List<InterviewFilterResp.AreaBean> list) {
         this.context = context;
         this.list = list;
     }
@@ -45,13 +46,13 @@ public class PaperListAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.interview_paper_list_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.pop_filter_item, null);
             viewHolder.textView = (TextView) convertView.findViewById(R.id.text);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.textView.setText(list.get(position).getName());
+        viewHolder.textView.setText(list.get(position).getArea());
         return convertView;
     }
 
