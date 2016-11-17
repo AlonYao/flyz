@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.common.measure.activity;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -18,6 +20,7 @@ import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
+import com.appublisher.quizbank.common.measure.fragment.MeasureSheetFragment;
 
 import java.util.List;
 
@@ -82,7 +85,13 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
 //            mUmengPause = "1";
 
         } else if (item.getTitle().equals(MENU_ANSWERSHEET)) {
-//            skipToAnswerSheet();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            Fragment fragment = getFragmentManager().findFragmentByTag("MeasureSheetFragment");
+            if (fragment != null) {
+                transaction.remove(fragment);
+            }
+            MeasureSheetFragment sheetFragment = new MeasureSheetFragment();
+            sheetFragment.show(transaction, "MeasureSheetFragment");
 
             // Umeng
 //            mUmengAnswerSheet = "1";

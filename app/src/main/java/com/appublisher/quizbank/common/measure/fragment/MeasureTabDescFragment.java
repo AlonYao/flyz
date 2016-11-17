@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

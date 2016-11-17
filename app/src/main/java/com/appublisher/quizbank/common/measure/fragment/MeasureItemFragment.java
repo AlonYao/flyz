@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;

@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.fragment.MeasureItemFragment;
+import com.appublisher.quizbank.common.measure.fragment.MeasureTabDescFragment;
 
 import java.util.List;
 
