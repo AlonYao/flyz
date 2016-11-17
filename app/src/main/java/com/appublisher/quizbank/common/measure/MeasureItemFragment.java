@@ -16,7 +16,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
@@ -220,23 +219,35 @@ public class MeasureItemFragment extends Fragment implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.measure_option_a:
-                Logger.e("measure_option_a");
-                optionOnClickAction(mTvOptionA);
+                if (isOptionExclude(OPTION_A)) {
+                    changeExcludeStatus(OPTION_A, false);
+                } else {
+                    optionOnClickAction(mTvOptionA);
+                }
                 break;
 
             case R.id.measure_option_b:
-                Logger.e("measure_option_b");
-                optionOnClickAction(mTvOptionB);
+                if (isOptionExclude(OPTION_B)) {
+                    changeExcludeStatus(OPTION_B, false);
+                } else {
+                    optionOnClickAction(mTvOptionB);
+                }
                 break;
 
             case R.id.measure_option_c:
-                Logger.e("measure_option_c");
-                optionOnClickAction(mTvOptionC);
+                if (isOptionExclude(OPTION_C)) {
+                    changeExcludeStatus(OPTION_C, false);
+                } else {
+                    optionOnClickAction(mTvOptionC);
+                }
                 break;
 
             case R.id.measure_option_d:
-                Logger.e("measure_option_d");
-                optionOnClickAction(mTvOptionD);
+                if (isOptionExclude(OPTION_D)) {
+                    changeExcludeStatus(OPTION_D, false);
+                } else {
+                    optionOnClickAction(mTvOptionD);
+                }
                 break;
         }
     }
