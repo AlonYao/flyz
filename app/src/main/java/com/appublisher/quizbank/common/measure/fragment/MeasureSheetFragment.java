@@ -100,13 +100,6 @@ public class MeasureSheetFragment extends DialogFragment {
         } else {
             showCommon();
         }
-//        if (mQuestions == null) return;
-//        int size = mQuestions.size();
-//        for (int i = 0; i < size; i++) {
-//            MeasureQuestionBean questionBean = mQuestions.get(i);
-//            if (questionBean == null) continue;
-//
-//        }
     }
 
     private void showEntire() {

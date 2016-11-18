@@ -22,6 +22,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
@@ -185,12 +186,37 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     }
 
     /**
-     * 获取做题答案缓存
+     * 获取做题模块缓存
      * @return SharedPreferences
      */
-    public SharedPreferences getUserAnswerCache() {
-        if (mContext == null) return null;
-        return mContext.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
+    public static SharedPreferences getMeasureCache(Context context) {
+        if (context == null) return null;
+        return context.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * 获取用户答案缓存
+     * @param context Context
+     * @return List<MeasureSubmitBean>
+     */
+    public static List<MeasureSubmitBean> getCacheUserAnswer(Context context) {
+        if (context == null) return new ArrayList<>();
+        SharedPreferences cache = getMeasureCache(context);
+        if (cache == null) return new ArrayList<>();
+
+        List<MeasureSubmitBean> list = new ArrayList<>();
+        String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+        try {
+            JSONArray array = new JSONArray(userAnswer);
+            int length = array.length();
+            for (int i = 0; i < length; i++) {
+                list.add(GsonManager.getModel(array.getJSONObject(i), MeasureSubmitBean.class));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
     /**

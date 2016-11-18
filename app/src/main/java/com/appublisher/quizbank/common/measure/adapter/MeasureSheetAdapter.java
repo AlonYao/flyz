@@ -1,5 +1,8 @@
 package com.appublisher.quizbank.common.measure.adapter;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
 
 import java.util.List;
 
@@ -20,11 +25,13 @@ public class MeasureSheetAdapter extends BaseAdapter{
 
     private MeasureActivity mActivity;
     private List<MeasureQuestionBean> mQuestions;
+    private List<MeasureSubmitBean> mSubmits;
 
     public MeasureSheetAdapter(MeasureActivity activity,
                                List<MeasureQuestionBean> questions) {
         mActivity = activity;
         mQuestions = questions;
+        mSubmits = MeasureModel.getCacheUserAnswer(activity);
     }
 
     @Override
@@ -116,7 +123,39 @@ public class MeasureSheetAdapter extends BaseAdapter{
 
     private void setContent(ViewHolder viewHolder, int position) {
         if (mQuestions == null || position >= mQuestions.size()) return;
+        final MeasureQuestionBean questionBean = mQuestions.get(position);
+        if (questionBean == null) return;
 
+        // 题号
+        viewHolder.tvNum.setText(String.valueOf(questionBean.getQuestion_order()));
+
+        // 做题记录标记
+        if (hasRecord(questionBean.getQuestion_order() - 1)) {
+            viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_selected);
+            viewHolder.tvNum.setTextColor(Color.WHITE);
+        } else {
+            viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_unselect);
+            viewHolder.tvNum.setTextColor(ContextCompat.getColor(mActivity, R.color.measure_text));
+        }
+
+        // 点击跳转
+        viewHolder.ivBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(mActivity, cls);
+//                intent.putExtra("position", mOffset + position);
+//                mActivity.setResult(ActivitySkipConstants.ANSWER_SHEET_SKIP, intent);
+//                mActivity.finish();
+                mActivity.mViewPager.setCurrentItem(questionBean.getQuestion_index());
+            }
+        });
+    }
+
+    private boolean hasRecord(int order) {
+        if (mSubmits == null || order >= mSubmits.size()) return false;
+        MeasureSubmitBean submitBean = mSubmits.get(order);
+        if (submitBean == null) return false;
+        return submitBean.getAnswer().length() > 0;
     }
 
     private class ViewHolder {

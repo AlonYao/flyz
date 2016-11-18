@@ -24,7 +24,7 @@ public class MeasureSubmitBean {
     }
 
     public String getAnswer() {
-        return answer;
+        return answer == null ? "" : answer;
     }
 
     public void setAnswer(String answer) {
