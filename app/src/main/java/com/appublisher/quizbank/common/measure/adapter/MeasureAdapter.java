@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,5 +46,9 @@ public class MeasureAdapter extends FragmentStatePagerAdapter{
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
+    }
+
+    public List<MeasureQuestionBean> getQuestions() {
+        return mQuestions;
     }
 }

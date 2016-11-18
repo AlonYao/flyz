@@ -15,7 +15,7 @@ import android.view.ViewStub;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.measure.MeasureAdapter;
+import com.appublisher.quizbank.common.measure.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
@@ -73,35 +73,23 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-//            mPressBack = true;
-//            checkSave();
-
+            // 返回键
         } else if (item.getTitle().equals(MENU_PAUSE)) {
-//            if (mTimer != null) mTimer.cancel();
-//            mModel.saveQuestionTime();
-//            AlertManager.pauseAlert(this);
-
-            // Umeng
-//            mUmengPause = "1";
-
+            // 暂停
         } else if (item.getTitle().equals(MENU_ANSWERSHEET)) {
+            // 答题卡
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             Fragment fragment = getFragmentManager().findFragmentByTag("MeasureSheetFragment");
             if (fragment != null) {
                 transaction.remove(fragment);
             }
+
             MeasureSheetFragment sheetFragment = new MeasureSheetFragment();
             sheetFragment.show(transaction, "MeasureSheetFragment");
-
-            // Umeng
-//            mUmengAnswerSheet = "1";
 
         } else if (item.getTitle().equals(MENU_SCRATCH)) {
             Intent intent = new Intent(this, ScratchPaperActivity.class);
             startActivity(intent);
-
-            // Umeng
-//            mUmengDraft = "1";
         }
 
         return false;

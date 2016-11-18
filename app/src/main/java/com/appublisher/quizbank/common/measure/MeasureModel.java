@@ -35,6 +35,7 @@ import com.appublisher.quizbank.model.richtext.ParseManager;
 
 import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -318,6 +319,29 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         MeasureTabBean tabBean = mTabs.get(tabPosition);
         if (tabBean == null) return 0;
         return tabBean.getPosition();
+    }
+
+    /**
+     * 获取用于答题卡使用的Questions
+     * @param list List<MeasureQuestionBean>
+     * @return String
+     */
+    public String getQuestionsForSheet(List<MeasureQuestionBean> list) {
+        if (list == null) return "";
+        int size = list.size();
+
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < size; i++) {
+            String bean = GsonManager.modelToString(list.get(i));
+            try {
+                JSONObject jsonObject = new JSONObject(bean);
+                jsonArray.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return jsonArray.toString();
     }
 
     @Override
