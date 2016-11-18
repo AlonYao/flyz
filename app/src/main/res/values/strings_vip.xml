@@ -17,6 +17,7 @@
     <string name="title_activity_interview_guokao">国考精选</string>
     <string name="title_activity_interview_category">分类突破</string>
     <string name="title_activity_interview_paper_detail">题目列表</string>
+    <string name="title_activity_interview_material_detail">材料</string>
 
     <string name="vip_filter_status">作业状态</string>
     <string name="vip_filter_category">科目</string>

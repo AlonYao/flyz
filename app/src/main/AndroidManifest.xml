@@ -323,6 +323,11 @@
             android:name=".common.interview.activity.InterviewPaperDetailActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_interview_paper_detail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.interview.activity.InterviewMaterialDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_interview_material_detail"
             android:screenOrientation="portrait"></activity>
     </application>
 

@@ -43,10 +43,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mRequest = new InterviewRequest(this, this);
 
         mRequest.getPaperDetail(paper_id);
+        showLoading();
     }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        hideLoading();
         if (response == null || apiName == null) return;
 
         if ("paper_detail".equals(apiName)) {
@@ -62,11 +64,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        hideLoading();
     }
 }

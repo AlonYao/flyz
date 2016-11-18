@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_interview_material_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar" />
+        <!-- 材料 -->
+        <LinearLayout
+            android:id="@+id/interview_material"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="15dp">
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

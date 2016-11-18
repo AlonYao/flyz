@@ -163,6 +163,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             // 做题缓存提交
             new MeasureModel(this).checkCache();
         }
+
     }
 
     public void setValue() {
@@ -350,7 +351,13 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 if (mStudyIndexFragment == null) {
                     mStudyIndexFragment = new StudyIndexFragment();
                     transaction.add(R.id.container_view, mStudyIndexFragment, STUDY);
+                    if (mCurFragment instanceof InterviewIndexFragment) {
+                        transaction.setCustomAnimations(R.anim.translate_right_out, R.anim.translate_left_out);
+                    }
                 } else {
+                    if (mCurFragment instanceof InterviewIndexFragment) {
+                        transaction.setCustomAnimations(R.anim.translate_right_out, R.anim.translate_left_out);
+                    }
                     transaction.show(mStudyIndexFragment);
                 }
 
@@ -432,13 +439,15 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 if (mInterviewIndexFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                     mInterviewIndexFragment = new InterviewIndexFragment();
+                    transaction.setCustomAnimations(R.anim.translate_right_in, R.anim.translate_left_in);
                     transaction.add(R.id.container_view, mInterviewIndexFragment, INTERVIEW);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
+                    transaction.setCustomAnimations(R.anim.translate_right_in, R.anim.translate_left_in);
                     transaction.show(mInterviewIndexFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.vip_index);
+                getSupportActionBar().setTitle(R.string.interview_index);
 
                 mCurFragment = mInterviewIndexFragment;
 

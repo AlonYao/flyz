@@ -48,7 +48,7 @@ public class InterviewPaperListModel {
         if (yearPop.isShowing()) {
             yearPop.dismiss();
         } else {
-            yearPop.showAsDropDown(activity.yearFilterView, 0, 0);
+            yearPop.showAsDropDown(activity.yearFilterView, 0, 1);
         }
 
     }
@@ -109,7 +109,7 @@ public class InterviewPaperListModel {
         if (areaPop.isShowing()) {
             areaPop.dismiss();
         } else {
-            areaPop.showAsDropDown(activity.yearFilterView, 0, 0);
+            areaPop.showAsDropDown(activity.yearFilterView, 0, 1);
         }
 
     }
