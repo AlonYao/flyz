@@ -138,8 +138,42 @@ public class MeasureItemFragment extends Fragment implements
                 getContext(), mOptionCContainer, mQuestion.getOption_c(), false);
         MeasureModel.addRichTextToContainer(
                 getContext(), mOptionDContainer, mQuestion.getOption_d(), false);
+        // 选项选中状态
+        setOptionStatus();
         // 材料
         showMaterial(mQuestion.getMaterial());
+    }
+
+    /**
+     * 选项选中状态
+     */
+    private void setOptionStatus() {
+        // 选项排除
+        if (isOptionExclude(OPTION_A)) {
+            showExcludeStatus(OPTION_A, true);
+        }
+        if (isOptionExclude(OPTION_B)) {
+            showExcludeStatus(OPTION_B, true);
+        }
+        if (isOptionExclude(OPTION_C)) {
+            showExcludeStatus(OPTION_C, true);
+        }
+        if (isOptionExclude(OPTION_D)) {
+            showExcludeStatus(OPTION_D, true);
+        }
+
+        // 选项选中
+        resetOption();
+        String answer = getUserAnswer();
+        if (OPTION_A.equals(answer)) {
+            mTvOptionA.setSelected(true);
+        } else if (OPTION_B.equals(answer)) {
+            mTvOptionB.setSelected(true);
+        } else if (OPTION_C.equals(answer)) {
+            mTvOptionC.setSelected(true);
+        } else if (OPTION_D.equals(answer)) {
+            mTvOptionD.setSelected(true);
+        }
     }
 
     private void showMaterial(String material) {
@@ -222,7 +256,7 @@ public class MeasureItemFragment extends Fragment implements
         switch (v.getId()) {
             case R.id.measure_option_a:
                 if (isOptionExclude(OPTION_A)) {
-                    changeExcludeStatus(OPTION_A, false);
+                    showExcludeStatus(OPTION_A, false);
                 } else {
                     optionOnClickAction(OPTION_A);
                 }
@@ -230,7 +264,7 @@ public class MeasureItemFragment extends Fragment implements
 
             case R.id.measure_option_b:
                 if (isOptionExclude(OPTION_B)) {
-                    changeExcludeStatus(OPTION_B, false);
+                    showExcludeStatus(OPTION_B, false);
                 } else {
                     optionOnClickAction(OPTION_B);
                 }
@@ -238,7 +272,7 @@ public class MeasureItemFragment extends Fragment implements
 
             case R.id.measure_option_c:
                 if (isOptionExclude(OPTION_C)) {
-                    changeExcludeStatus(OPTION_C, false);
+                    showExcludeStatus(OPTION_C, false);
                 } else {
                     optionOnClickAction(OPTION_C);
                 }
@@ -246,7 +280,7 @@ public class MeasureItemFragment extends Fragment implements
 
             case R.id.measure_option_d:
                 if (isOptionExclude(OPTION_D)) {
-                    changeExcludeStatus(OPTION_D, false);
+                    showExcludeStatus(OPTION_D, false);
                 } else {
                     optionOnClickAction(OPTION_D);
                 }
@@ -259,40 +293,40 @@ public class MeasureItemFragment extends Fragment implements
         switch (v.getId()) {
             case R.id.measure_option_a:
                 if (isOptionExclude(OPTION_A)) {
-                    changeExcludeStatus(OPTION_A, false);
+                    showExcludeStatus(OPTION_A, false);
                 } else {
-                    changeExcludeStatus(OPTION_A, true);
+                    showExcludeStatus(OPTION_A, true);
                 }
                 break;
 
             case R.id.measure_option_b:
                 if (isOptionExclude(OPTION_B)) {
-                    changeExcludeStatus(OPTION_B, false);
+                    showExcludeStatus(OPTION_B, false);
                 } else {
-                    changeExcludeStatus(OPTION_B, true);
+                    showExcludeStatus(OPTION_B, true);
                 }
                 break;
 
             case R.id.measure_option_c:
                 if (isOptionExclude(OPTION_C)) {
-                    changeExcludeStatus(OPTION_C, false);
+                    showExcludeStatus(OPTION_C, false);
                 } else {
-                    changeExcludeStatus(OPTION_C, true);
+                    showExcludeStatus(OPTION_C, true);
                 }
                 break;
 
             case R.id.measure_option_d:
                 if (isOptionExclude(OPTION_D)) {
-                    changeExcludeStatus(OPTION_D, false);
+                    showExcludeStatus(OPTION_D, false);
                 } else {
-                    changeExcludeStatus(OPTION_D, true);
+                    showExcludeStatus(OPTION_D, true);
                 }
                 break;
         }
         return true;
     }
 
-    private void changeExcludeStatus(String option, boolean isExclude) {
+    private void showExcludeStatus(String option, boolean isExclude) {
         TextView tvParent = null;
         LinearLayout llParent = null;
         if (OPTION_A.equals(option)) {
@@ -401,6 +435,11 @@ public class MeasureItemFragment extends Fragment implements
         mTvOptionB.setSelected(false);
         mTvOptionC.setSelected(false);
         mTvOptionD.setSelected(false);
+    }
+
+    private String getUserAnswer() {
+        if (mQuestion == null) return "";
+        return MeasureModel.getUserAnswerByPosition(getContext(), mQuestion.getQuestion_order() - 1);
     }
 
     /**

@@ -275,6 +275,14 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
 
     }
 
+    public static String getUserAnswerByPosition(Context context, int position) {
+        List<MeasureSubmitBean> list = getUserAnswerCache(context);
+        if (list == null || position < 0 || position >= list.size()) return "";
+        MeasureSubmitBean bean = list.get(position);
+        if (bean == null) return "";
+        return bean.getAnswer();
+    }
+
     @SuppressLint("CommitPrefEdits")
     private void saveSubmitPaperInfo() {
         SharedPreferences spf = getMeasureCache(mContext);
