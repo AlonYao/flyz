@@ -27,7 +27,7 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.coursecenter.CourseModel;
-import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.lib_pay.PayListener;
 import com.appublisher.lib_pay.PayWebViewHandler;
 import com.appublisher.quizbank.R;
@@ -139,10 +139,7 @@ public class WebViewActivity extends BaseActivity implements RequestCallback {
                 ProgressDialogManager.showProgressDialog(this, true);
                 mQRequest.getOpenCourseUrl(mOpencourseId);
             } else if ("opencourse_pre".equals(mFrom)) {
-                showWebView(mUrl
-                        + "&user_id=" + LoginModel.getUserId()
-                        + "&user_token=" + LoginModel.getUserToken()
-                        + "&timestamp=" + System.currentTimeMillis());
+                showWebView(LoginParamBuilder.finalUrl(mUrl));
             } else if ("course".equals(mFrom) && PayConstants.mIsPaySuccess) {
                 String url = "http://"
                         + CourseModel.getDomain()
@@ -342,12 +339,6 @@ public class WebViewActivity extends BaseActivity implements RequestCallback {
             @Override
             public void onPageFinished(WebView view, String url) {
                 mProgressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
             }
         });
 

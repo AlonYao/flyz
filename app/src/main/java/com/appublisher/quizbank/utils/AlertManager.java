@@ -15,6 +15,7 @@ import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
 import com.appublisher.lib_login.activity.UserInfoActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
@@ -370,9 +371,7 @@ public class AlertManager {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, WebViewActivity.class);
-                intent.putExtra("url", jump_url
-                        + "&user_id=" + LoginModel.getUserId()
-                        + "&user_token=" + LoginModel.getUserToken());
+                intent.putExtra("url", LoginParamBuilder.finalUrl(jump_url));
                 activity.startActivity(intent);
                 alertDialog.dismiss();
             }

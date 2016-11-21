@@ -25,6 +25,7 @@ import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.db.User;
 import com.appublisher.lib_login.model.db.UserDAO;
 import com.appublisher.lib_login.model.netdata.UserExamInfoModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
@@ -200,7 +201,7 @@ public class HomePageModel {
 
                         if ("url".equals(targetType)) {
                             Intent intent = new Intent(mActivity, WebViewActivity.class);
-                            intent.putExtra("url", targetContent);
+                            intent.putExtra("url", LoginParamBuilder.finalUrl(targetContent));
                             mActivity.startActivity(intent);
 
                         } else if ("app".equals(targetType)) {
@@ -217,9 +218,8 @@ public class HomePageModel {
                             } else if (targetContent.contains("zhiboke@")) {
                                 // 跳转至课程详情页面
                                 Intent intent = new Intent(mActivity, WebViewActivity.class);
-                                intent.putExtra("url", targetContent.replace("zhiboke@", "")
-                                        + "&user_id=" + LoginModel.getUserId()
-                                        + "&user_token=" + LoginModel.getUserToken());
+                                intent.putExtra("url", LoginParamBuilder.finalUrl(
+                                        targetContent.replace("zhiboke@", "")));
                                 intent.putExtra("bar_title", "快讯");
                                 intent.putExtra("from", "course");
                                 mActivity.startActivity(intent);
