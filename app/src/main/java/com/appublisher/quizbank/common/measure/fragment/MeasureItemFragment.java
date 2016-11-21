@@ -36,10 +36,10 @@ public class MeasureItemFragment extends Fragment implements
 
     private static final String ARGS_QUESTION = "question";
     private static final String ARGS_POSITION = "position";
-    private static final String OPTION_A = "a";
-    private static final String OPTION_B = "b";
-    private static final String OPTION_C = "c";
-    private static final String OPTION_D = "d";
+    private static final String OPTION_A = "A";
+    private static final String OPTION_B = "B";
+    private static final String OPTION_C = "C";
+    private static final String OPTION_D = "D";
 
     private MeasureQuestionBean mQuestion;
     private LinearLayout mStemContainer;
@@ -224,7 +224,7 @@ public class MeasureItemFragment extends Fragment implements
                 if (isOptionExclude(OPTION_A)) {
                     changeExcludeStatus(OPTION_A, false);
                 } else {
-                    optionOnClickAction(mTvOptionA);
+                    optionOnClickAction(OPTION_A);
                 }
                 break;
 
@@ -232,7 +232,7 @@ public class MeasureItemFragment extends Fragment implements
                 if (isOptionExclude(OPTION_B)) {
                     changeExcludeStatus(OPTION_B, false);
                 } else {
-                    optionOnClickAction(mTvOptionB);
+                    optionOnClickAction(OPTION_B);
                 }
                 break;
 
@@ -240,7 +240,7 @@ public class MeasureItemFragment extends Fragment implements
                 if (isOptionExclude(OPTION_C)) {
                     changeExcludeStatus(OPTION_C, false);
                 } else {
-                    optionOnClickAction(mTvOptionC);
+                    optionOnClickAction(OPTION_C);
                 }
                 break;
 
@@ -248,7 +248,7 @@ public class MeasureItemFragment extends Fragment implements
                 if (isOptionExclude(OPTION_D)) {
                     changeExcludeStatus(OPTION_D, false);
                 } else {
-                    optionOnClickAction(mTvOptionD);
+                    optionOnClickAction(OPTION_D);
                 }
                 break;
         }
@@ -405,13 +405,25 @@ public class MeasureItemFragment extends Fragment implements
 
     /**
      * 选项点击动作
-     * @param textView 选项
+     * @param option 选项
      */
-    public void optionOnClickAction(final TextView textView) {
+    public void optionOnClickAction(String option) {
         if (mOptionClick) return;
 
         mOptionClick = true;
         resetOption();
+
+        TextView textView = null;
+        if (OPTION_A.equals(option)) {
+            textView = mTvOptionA;
+        } else if (OPTION_B.equals(option)) {
+            textView = mTvOptionB;
+        } else if (OPTION_C.equals(option)) {
+            textView = mTvOptionC;
+        } else if (OPTION_D.equals(option)) {
+            textView = mTvOptionD;
+        }
+        if (textView == null) return;
         textView.setSelected(true);
 
         new Handler().postDelayed(new Runnable() {
@@ -421,6 +433,14 @@ public class MeasureItemFragment extends Fragment implements
                 mOptionClick = false;
             }
         }, 100);
+
+        // 保存用户做题记录
+        saveUserAnswer(option);
+    }
+
+    private void saveUserAnswer(String option) {
+        if (mQuestion == null) return;
+        MeasureModel.saveSubmitAnswer(getContext(), mQuestion.getQuestion_order() - 1, option);
     }
 
     /**

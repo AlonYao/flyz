@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.common.measure;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,6 +57,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     public int mPaperId;
     public int mHierarchyId;
     public List<MeasureExcludeBean> mExcludes;
+    private List<MeasureSubmitBean> mSubmits;
 
     public MeasureModel(Context context) {
         mContext = context;
@@ -165,6 +167,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         int amount = size - descSize;
         int order = 0;
         mExcludes = new ArrayList<>();
+        mSubmits = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             // 设置索引
@@ -181,7 +184,17 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
 
             // 选项排除
             mExcludes.add(new MeasureExcludeBean());
+
+            // 用户做题记录
+            MeasureSubmitBean submitBean = new MeasureSubmitBean();
+            submitBean.setId(measureQuestionBean.getId());
+            submitBean.setCategory(measureQuestionBean.getCategory_id());
+            submitBean.setNote_ids(measureQuestionBean.getNote_ids());
+            mSubmits.add(submitBean);
         }
+
+        saveUserAnswerCache(mContext, mSubmits);
+
         return list;
     }
 
@@ -199,7 +212,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
      * @param context Context
      * @return List<MeasureSubmitBean>
      */
-    public static List<MeasureSubmitBean> getCacheUserAnswer(Context context) {
+    public static List<MeasureSubmitBean> getUserAnswerCache(Context context) {
         if (context == null) return new ArrayList<>();
         SharedPreferences cache = getMeasureCache(context);
         if (cache == null) return new ArrayList<>();
@@ -218,6 +231,39 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         }
 
         return list;
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    public static void saveUserAnswerCache(Context context, List<MeasureSubmitBean> list) {
+        if (list == null) return;
+        JSONArray array = new JSONArray();
+        for (MeasureSubmitBean submitBean : list) {
+            try {
+                JSONObject object = new JSONObject(GsonManager.modelToString(submitBean));
+                array.put(object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        SharedPreferences spf = getMeasureCache(context);
+        SharedPreferences.Editor editor = spf.edit();
+        editor.putString(CACHE_USER_ANSWER, array.toString());
+        editor.commit();
+    }
+
+    public static void saveSubmitAnswer(Context context, int position, String option) {
+        List<MeasureSubmitBean> list = getUserAnswerCache(context);
+        if (list == null || position >= list.size() || position < 0) return;
+        MeasureSubmitBean submitBean = list.get(position);
+        if (submitBean == null) return;
+        submitBean.setAnswer(option);
+        list.set(position, submitBean);
+        saveUserAnswerCache(context, list);
+    }
+
+    public static void saveSubmitDuration() {
+
     }
 
     /**

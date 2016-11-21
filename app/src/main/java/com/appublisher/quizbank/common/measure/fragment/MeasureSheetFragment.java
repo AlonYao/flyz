@@ -76,7 +76,7 @@ public class MeasureSheetFragment extends DialogFragment {
     }
 
     private void initData() {
-        mSubmits = MeasureModel.getCacheUserAnswer(getActivity());
+        mSubmits = MeasureModel.getUserAnswerCache(getActivity());
         if (getActivity() instanceof MeasureActivity) {
             mQuestions = ((MeasureActivity) getActivity()).mAdapter.getQuestions();
         }

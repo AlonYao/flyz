@@ -38,7 +38,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
     public MeasureAdapter mAdapter;
     public TabLayout mTabLayout;
 
-    private boolean isFromClick;
+    private boolean mIsFromClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,9 +161,9 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (isFromClick) {
+                if (mIsFromClick) {
                     pageSkipFromTabClick(tab.getPosition());
-                    isFromClick = false;
+                    mIsFromClick = false;
                 }
             }
 
@@ -174,9 +174,9 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (isFromClick) {
+                if (mIsFromClick) {
                     pageSkipFromTabClick(tab.getPosition());
-                    isFromClick = false;
+                    mIsFromClick = false;
                 }
             }
         });
@@ -197,7 +197,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
             tabView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    isFromClick = true;
+                    mIsFromClick = true;
                 }
             });
         }
