@@ -206,6 +206,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
 
         List<MeasureSubmitBean> list = new ArrayList<>();
         String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+        if (userAnswer.length() == 0) return new ArrayList<>();
         try {
             JSONArray array = new JSONArray(userAnswer);
             int length = array.length();

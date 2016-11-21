@@ -83,9 +83,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
             if (fragment != null) {
                 transaction.remove(fragment);
             }
-
-            MeasureSheetFragment sheetFragment = MeasureSheetFragment.newInstance(
-                    mModel.getQuestionsForSheet(mAdapter.getQuestions()));
+            MeasureSheetFragment sheetFragment = new MeasureSheetFragment();
             sheetFragment.show(transaction, "MeasureSheetFragment");
 
         } else if (item.getTitle().equals(MENU_SCRATCH)) {

@@ -10,9 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
 import com.appublisher.quizbank.common.measure.fragment.MeasureSheetFragment;
@@ -30,11 +28,12 @@ public class MeasureSheetAdapter extends BaseAdapter{
     private List<MeasureSubmitBean> mSubmits;
 
     public MeasureSheetAdapter(MeasureSheetFragment fragment,
-                               List<MeasureQuestionBean> questions) {
+                               List<MeasureQuestionBean> questions,
+                               List<MeasureSubmitBean> submits) {
         mFragment = fragment;
         mContext = fragment.getActivity();
         mQuestions = questions;
-        mSubmits = MeasureModel.getCacheUserAnswer(mContext);
+        mSubmits = submits;
     }
 
     @Override
@@ -93,8 +92,6 @@ public class MeasureSheetAdapter extends BaseAdapter{
         viewHolder.ivBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.e("11111111111111");
-//                mActivity.mViewPager.setCurrentItem(questionBean.getQuestion_index());
                 mFragment.skip(questionBean.getQuestion_index());
             }
         });

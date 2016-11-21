@@ -11,17 +11,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
-import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSheetAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,18 +30,9 @@ import java.util.List;
 
 public class MeasureSheetFragment extends DialogFragment {
 
-    private static final String ARGS_QUESTIONS = "questions";
-
     private List<MeasureQuestionBean> mQuestions;
+    private List<MeasureSubmitBean> mSubmits;
     private LinearLayout mContainer;
-
-    public static MeasureSheetFragment newInstance(String questions) {
-        Bundle args = new Bundle();
-        args.putString(ARGS_QUESTIONS, questions);
-        MeasureSheetFragment fragment = new MeasureSheetFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +51,7 @@ public class MeasureSheetFragment extends DialogFragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.themecolor));
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);
+        toolbar.setTitle(R.string.measure_sheet_title);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,17 +76,9 @@ public class MeasureSheetFragment extends DialogFragment {
     }
 
     private void initData() {
-        mQuestions = new ArrayList<>();
-        String questions = getArguments().getString(ARGS_QUESTIONS);
-        try {
-            JSONArray array = new JSONArray(questions);
-            int length = array.length();
-            for (int i = 0; i < length; i++) {
-                JSONObject object = array.getJSONObject(i);
-                mQuestions.add(GsonManager.getModel(object, MeasureQuestionBean.class));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        mSubmits = MeasureModel.getCacheUserAnswer(getActivity());
+        if (getActivity() instanceof MeasureActivity) {
+            mQuestions = ((MeasureActivity) getActivity()).mAdapter.getQuestions();
         }
     }
 
@@ -109,20 +91,49 @@ public class MeasureSheetFragment extends DialogFragment {
     }
 
     private void showEntire() {
+        if (mQuestions == null) return;
+        List<MeasureQuestionBean> questionsForAdapter = new ArrayList<>();
+        int size = mQuestions.size();
 
+        // 遍历
+        for (int i = 0; i < size; i++) {
+            MeasureQuestionBean questionBean = mQuestions.get(i);
+            if (questionBean == null) continue;
+            if (questionBean.is_desc()) {
+                if (questionsForAdapter.size() != 0) {
+                    // 添加GridView
+                    String name = questionsForAdapter.get(0).getCategory_name();
+                    addGridViewItem(name, questionsForAdapter);
+                    questionsForAdapter = new ArrayList<>();
+                }
+            } else {
+                questionsForAdapter.add(questionBean);
+                if (i == size - 1) {
+                    String name = questionsForAdapter.get(0).getCategory_name();
+                    addGridViewItem(name, questionsForAdapter);
+                }
+            }
+        }
     }
 
     private void showCommon() {
-        if (mQuestions == null || !(getActivity() instanceof MeasureActivity)) return;
+        addGridViewItem("", mQuestions);
+    }
+
+    private void addGridViewItem(String category, List<MeasureQuestionBean> questions) {
+        if (questions == null) return;
 
         // init view
         View child = LayoutInflater.from(getActivity()).inflate(
                 R.layout.measure_sheet_item, mContainer, false);
+        TextView tvCategory = (TextView) child.findViewById(R.id.measure_sheet_item_tv);
         ExpandableHeightGridView gridView =
                 (ExpandableHeightGridView)
                         child.findViewById(R.id.measure_sheet_item_gv);
 
-        MeasureSheetAdapter adapter = new MeasureSheetAdapter(this, mQuestions);
+        tvCategory.setText(category == null ? "" : category);
+
+        MeasureSheetAdapter adapter = new MeasureSheetAdapter(this, questions, mSubmits);
         gridView.setAdapter(adapter);
 
         mContainer.addView(child);

@@ -11,5 +11,6 @@
     <string name="measure_scratch_hint_btn">知道了</string>
 
     <string name="measure_sheet_submit">交卷</string>
+    <string name="measure_sheet_title">答题卡</string>
 
 </resources>
