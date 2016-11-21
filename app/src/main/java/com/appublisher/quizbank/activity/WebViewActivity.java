@@ -343,12 +343,6 @@ public class WebViewActivity extends BaseActivity implements RequestCallback {
             public void onPageFinished(WebView view, String url) {
                 mProgressBar.setVisibility(View.GONE);
             }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
         });
 
     }
