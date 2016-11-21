@@ -20,6 +20,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.update.AppUpdate;
@@ -27,7 +28,6 @@ import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.tendcloud.tenddata.TCAgent;
@@ -255,7 +255,7 @@ public class SplashActivity extends Activity implements RequestCallback {
                             toMainActivity();
 
                             Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
-                            intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(imageBean.getTarget()));
+                            intent.putExtra("url", LoginParamBuilder.finalUrl(imageBean.getTarget()));
                             if (imageBean.getTarget() != null && imageBean.getTarget().contains("course_id"))
                                 intent.putExtra("from", "course");
                             startActivity(intent);

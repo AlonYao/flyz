@@ -27,8 +27,8 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.activity.BindingMobileActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.ActivitySkipConstants;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.business.MeasureModel;
@@ -495,11 +495,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
      * 跳转课程详情页
      */
     public void skipCourseDetailPage() {
-        String url = courseDetailLink
-                + "&user_id=" + LoginModel.getUserId()
-                + "&user_token=" + LoginModel.getUserToken()
-                + "&app_type=quizbank"
-                + "&app_version=" + Globals.appVersion;
+        String url = LoginParamBuilder.finalUrl(courseDetailLink);
 
         Intent intent = new Intent(this, WebViewActivity.class);
         intent.putExtra("url", url);
