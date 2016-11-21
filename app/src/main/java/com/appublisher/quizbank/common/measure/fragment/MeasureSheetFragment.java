@@ -10,9 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
+import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.adapter.MeasureSheetAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 
 import org.json.JSONArray;
@@ -31,6 +35,7 @@ public class MeasureSheetFragment extends DialogFragment {
     private static final String ARGS_QUESTIONS = "questions";
 
     private List<MeasureQuestionBean> mQuestions;
+    private LinearLayout mContainer;
 
     public static MeasureSheetFragment newInstance(String questions) {
         Bundle args = new Bundle();
@@ -63,6 +68,7 @@ public class MeasureSheetFragment extends DialogFragment {
                 dismiss();
             }
         });
+        mContainer = (LinearLayout) view.findViewById(R.id.measure_sheet_container);
         showContent();
         return view;
     }
@@ -107,7 +113,19 @@ public class MeasureSheetFragment extends DialogFragment {
     }
 
     private void showCommon() {
+        if (mQuestions == null || !(getActivity() instanceof MeasureActivity)) return;
 
+        // init view
+        View child = LayoutInflater.from(getActivity()).inflate(
+                R.layout.measure_sheet_item, mContainer, false);
+        ExpandableHeightGridView gridView =
+                (ExpandableHeightGridView)
+                        child.findViewById(R.id.measure_sheet_item_gv);
+
+        MeasureSheetAdapter adapter = new MeasureSheetAdapter(this, mQuestions);
+        gridView.setAdapter(adapter);
+
+        mContainer.addView(child);
     }
 
     private boolean isEntirePaper() {
@@ -115,5 +133,11 @@ public class MeasureSheetFragment extends DialogFragment {
         if (mQuestions == null || mQuestions.size() == 0) return false;
         MeasureQuestionBean questionBean = mQuestions.get(0);
         return questionBean != null && questionBean.is_desc();
+    }
+
+    public void skip(int index) {
+        if (!(getActivity() instanceof MeasureActivity)) return;
+        ((MeasureActivity) getActivity()).mViewPager.setCurrentItem(index);
+        dismiss();
     }
 }

@@ -1,6 +1,6 @@
 package com.appublisher.quizbank.common.measure.adapter;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -10,11 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureModel;
-import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
+import com.appublisher.quizbank.common.measure.fragment.MeasureSheetFragment;
 
 import java.util.List;
 
@@ -23,15 +24,17 @@ import java.util.List;
  */
 public class MeasureSheetAdapter extends BaseAdapter{
 
-    private MeasureActivity mActivity;
+    private Context mContext;
+    private MeasureSheetFragment mFragment;
     private List<MeasureQuestionBean> mQuestions;
     private List<MeasureSubmitBean> mSubmits;
 
-    public MeasureSheetAdapter(MeasureActivity activity,
+    public MeasureSheetAdapter(MeasureSheetFragment fragment,
                                List<MeasureQuestionBean> questions) {
-        mActivity = activity;
+        mFragment = fragment;
+        mContext = fragment.getActivity();
         mQuestions = questions;
-        mSubmits = MeasureModel.getCacheUserAnswer(activity);
+        mSubmits = MeasureModel.getCacheUserAnswer(mContext);
     }
 
     @Override
@@ -54,7 +57,8 @@ public class MeasureSheetAdapter extends BaseAdapter{
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(mActivity).inflate(R.layout.answer_sheet_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(
+                    R.layout.answer_sheet_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.ivBg = (ImageView) convertView.findViewById(R.id.answer_sheet_item_bg);
             viewHolder.tvNum = (TextView) convertView.findViewById(R.id.answer_sheet_item_tv);
@@ -64,59 +68,6 @@ public class MeasureSheetAdapter extends BaseAdapter{
         }
 
         setContent(viewHolder, position);
-
-//        viewHolder.tvNum.setText(String.valueOf(mOffset + position + 1));
-//
-//        HashMap<String, Object> userAnswerMap = mUserAnswerList.get(position);
-//        if ("analysis".equals(mActivity.mFrom)) {
-//            // 解析
-//            boolean isRight = false;
-//
-//            if (userAnswerMap.containsKey("answer")
-//                    && userAnswerMap.containsKey("right_answer")
-//                    && userAnswerMap.get("answer") != null
-//                    && userAnswerMap.get("right_answer").equals(userAnswerMap.get("answer"))) {
-//                isRight = true;
-//            }
-//
-//            if (isRight) {
-//                viewHolder.ivBg.setImageResource(R.drawable.measure_analysis_right);
-//            } else {
-//                viewHolder.ivBg.setImageResource(R.drawable.measure_analysis_wrong);
-//            }
-//
-//            viewHolder.tvNum.setTextColor(Color.WHITE);
-//        } else {
-//            // 非解析
-//            if (userAnswerMap.containsKey("answer")
-//                    && userAnswerMap.get("answer") != null
-//                    && !userAnswerMap.get("answer").equals("")) {
-//                viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_selected);
-//                viewHolder.tvNum.setTextColor(Color.WHITE);
-//            } else {
-//                viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_unselect);
-//                viewHolder.tvNum.setTextColor(
-//                        mActivity.getResources().getColor(R.color.common_text));
-//            }
-//        }
-//
-//        viewHolder.ivBg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Class<?> cls;
-//
-//                if ("analysis".equals(mActivity.mFrom)) {
-//                    cls = LegacyMeasureAnalysisActivity.class;
-//                } else {
-//                    cls = LegacyMeasureActivity.class;
-//                }
-//
-//                Intent intent = new Intent(mActivity, cls);
-//                intent.putExtra("position", mOffset + position);
-//                mActivity.setResult(ActivitySkipConstants.ANSWER_SHEET_SKIP, intent);
-//                mActivity.finish();
-//            }
-//        });
 
         return convertView;
     }
@@ -135,18 +86,16 @@ public class MeasureSheetAdapter extends BaseAdapter{
             viewHolder.tvNum.setTextColor(Color.WHITE);
         } else {
             viewHolder.ivBg.setImageResource(R.drawable.answer_sheet_unselect);
-            viewHolder.tvNum.setTextColor(ContextCompat.getColor(mActivity, R.color.measure_text));
+            viewHolder.tvNum.setTextColor(ContextCompat.getColor(mContext, R.color.measure_text));
         }
 
         // 点击跳转
         viewHolder.ivBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(mActivity, cls);
-//                intent.putExtra("position", mOffset + position);
-//                mActivity.setResult(ActivitySkipConstants.ANSWER_SHEET_SKIP, intent);
-//                mActivity.finish();
-                mActivity.mViewPager.setCurrentItem(questionBean.getQuestion_index());
+                Logger.e("11111111111111");
+//                mActivity.mViewPager.setCurrentItem(questionBean.getQuestion_index());
+                mFragment.skip(questionBean.getQuestion_index());
             }
         });
     }
@@ -154,8 +103,7 @@ public class MeasureSheetAdapter extends BaseAdapter{
     private boolean hasRecord(int order) {
         if (mSubmits == null || order >= mSubmits.size()) return false;
         MeasureSubmitBean submitBean = mSubmits.get(order);
-        if (submitBean == null) return false;
-        return submitBean.getAnswer().length() > 0;
+        return submitBean != null && submitBean.getAnswer().length() > 0;
     }
 
     private class ViewHolder {
