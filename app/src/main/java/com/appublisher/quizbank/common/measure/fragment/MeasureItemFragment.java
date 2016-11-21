@@ -452,12 +452,11 @@ public class MeasureItemFragment extends Fragment implements
      * 页面跳转
      */
     private void pageSkip() {
+        if (!(getActivity() instanceof MeasureActivity)) return;
         if (mQuestion.getQuestion_order() == mQuestion.getQuestion_amount()) {
-            Toast.makeText(getContext(), "答题卡", Toast.LENGTH_SHORT).show();
+            ((MeasureActivity) getActivity()).skipToSheet();
         } else {
-            if (getActivity() instanceof MeasureActivity) {
-                ((MeasureActivity) getActivity()).mViewPager.setCurrentItem(mPosition + 1);
-            }
+            ((MeasureActivity) getActivity()).mViewPager.setCurrentItem(mPosition + 1);
         }
     }
 

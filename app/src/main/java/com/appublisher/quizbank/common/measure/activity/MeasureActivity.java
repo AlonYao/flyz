@@ -78,13 +78,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
             // 暂停
         } else if (item.getTitle().equals(MENU_ANSWERSHEET)) {
             // 答题卡
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            Fragment fragment = getFragmentManager().findFragmentByTag("MeasureSheetFragment");
-            if (fragment != null) {
-                transaction.remove(fragment);
-            }
-            MeasureSheetFragment sheetFragment = new MeasureSheetFragment();
-            sheetFragment.show(transaction, "MeasureSheetFragment");
+            skipToSheet();
 
         } else if (item.getTitle().equals(MENU_SCRATCH)) {
             Intent intent = new Intent(this, ScratchPaperActivity.class);
@@ -206,5 +200,18 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
 
     private void pageSkipFromTabClick(int tabPosition) {
         mViewPager.setCurrentItem(mModel.getPositionByTab(tabPosition));
+    }
+
+    /**
+     * 跳转至答题卡
+     */
+    public void skipToSheet() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment fragment = getFragmentManager().findFragmentByTag("MeasureSheetFragment");
+        if (fragment != null) {
+            transaction.remove(fragment);
+        }
+        MeasureSheetFragment sheetFragment = new MeasureSheetFragment();
+        sheetFragment.show(transaction, "MeasureSheetFragment");
     }
 }
