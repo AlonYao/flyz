@@ -99,6 +99,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         mModel.mPaperType = getIntent().getStringExtra(PAPER_TYPE);
         mModel.mHierarchyId = getIntent().getIntExtra(HIERARCHY_ID, 0);
         mModel.mPaperId = getIntent().getIntExtra(PAPER_ID, 0);
+        mModel.mRedo = getIntent().getBooleanExtra(REDO, false);
         showLoading();
         mModel.getData();
     }

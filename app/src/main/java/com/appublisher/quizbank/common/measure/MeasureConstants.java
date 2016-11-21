@@ -9,6 +9,7 @@ public interface MeasureConstants {
     String PAPER_TYPE = "paper_type";
     String PAPER_ID = "paper_id";
     String HIERARCHY_ID = "hierarchy_id";
+    String REDO = "redo";
 
     /**
      * 试卷类型
@@ -28,6 +29,7 @@ public interface MeasureConstants {
     String AUTO_TRAINING = "auto_training";
     String NOTE_QUESTIONS = "note_questions";
     String PAPER_EXERCISE = "paper_exercise";
+    String SUBMIT_PAPER = "submit_paper";
 
     /**
      * 缓存

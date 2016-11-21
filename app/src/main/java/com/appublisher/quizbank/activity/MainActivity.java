@@ -191,7 +191,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             // 检测账号是否被合并
             new LoginModel(this).commonCheck(null);
             // 做题缓存提交
-            new LegacyMeasureModel(this).checkCache();
+//            new LegacyMeasureModel(this).checkCache();
         }
     }
 

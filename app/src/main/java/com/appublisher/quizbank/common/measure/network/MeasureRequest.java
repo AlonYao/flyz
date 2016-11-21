@@ -7,6 +7,8 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 
+import java.util.Map;
+
 /**
  * 做题模块
  */
@@ -58,6 +60,13 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
                         + "&paper_id=" + paper_id
                         + "&paper_type=" + paper_type,
                 PAPER_EXERCISE, "object");
+    }
+
+    /**
+     * 提交试卷
+     */
+    public void submitPaper(Map<String, String> params) {
+        postRequest(getFinalUrl(submitPaper), params, SUBMIT_PAPER, "object");
     }
 
 }

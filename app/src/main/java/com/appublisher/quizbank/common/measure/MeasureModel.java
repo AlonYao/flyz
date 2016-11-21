@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -28,6 +29,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
+import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -49,14 +51,16 @@ import java.util.List;
 
 public class MeasureModel implements RequestCallback, MeasureConstants{
 
+    public String mPaperType;
+    public int mPaperId;
+    public int mHierarchyId;
+    public boolean mRedo;
+    public List<MeasureExcludeBean> mExcludes;
+
     private Context mContext;
     private MeasureRequest mRequest;
     private SparseIntArray mFinalHeightMap;
     private List<MeasureTabBean> mTabs;
-    public String mPaperType;
-    public int mPaperId;
-    public int mHierarchyId;
-    public List<MeasureExcludeBean> mExcludes;
     private List<MeasureSubmitBean> mSubmits;
 
     public MeasureModel(Context context) {
@@ -96,6 +100,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         MeasureAutoResp resp = GsonManager.getModel(response, MeasureAutoResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
+
+        mPaperId = resp.getPaper_id();
         List<MeasureQuestionBean> questions = setQuestionOrder(resp.getQuestions(), 0);
         ((MeasureActivity) mContext).showViewPager(questions);
     }
@@ -193,6 +199,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             mSubmits.add(submitBean);
         }
 
+        // 缓存
+        saveSubmitPaperInfo();
         saveUserAnswerCache(mContext, mSubmits);
 
         return list;
@@ -252,18 +260,29 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         editor.commit();
     }
 
-    public static void saveSubmitAnswer(Context context, int position, String option) {
+    public static void saveSubmitAnswer(Context context, int position, String option, int isRight) {
         List<MeasureSubmitBean> list = getUserAnswerCache(context);
         if (list == null || position >= list.size() || position < 0) return;
         MeasureSubmitBean submitBean = list.get(position);
         if (submitBean == null) return;
         submitBean.setAnswer(option);
+        submitBean.setIs_right(isRight);
         list.set(position, submitBean);
         saveUserAnswerCache(context, list);
     }
 
     public static void saveSubmitDuration() {
 
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private void saveSubmitPaperInfo() {
+        SharedPreferences spf = getMeasureCache(mContext);
+        SharedPreferences.Editor editor = spf.edit();
+        editor.putInt(CACHE_PAPER_ID, mPaperId);
+        editor.putString(CACHE_PAPER_TYPE, String.valueOf(mPaperType));
+        editor.putBoolean(CACHE_REDO, mRedo);
+        editor.commit();
     }
 
     /**
@@ -394,6 +413,30 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         return tabBean.getPosition();
     }
 
+    public void submit() {
+        SharedPreferences spf = getMeasureCache(mContext);
+        if (spf == null) return;
+        int paperId = spf.getInt(CACHE_PAPER_ID, 0);
+        String paperTpye = spf.getString(CACHE_PAPER_TYPE, "");
+        boolean redo = spf.getBoolean(CACHE_REDO, false);
+        String answer = spf.getString(CACHE_USER_ANSWER, "");
+        if (paperId == 0 || paperTpye.length() == 0 || answer.length() == 0) return;
+
+        // 统计总时长
+        List<MeasureSubmitBean> submits = getUserAnswerCache(mContext);
+        if (submits == null) return;
+        int durtion = 0;
+        for (MeasureSubmitBean submitBean : submits) {
+            if (submitBean == null) continue;
+            durtion = durtion + submitBean.getDuration();
+        }
+
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
+
+//        mRequest.submitPaper(MeasureParamBuilder.submitPaper(
+//                paperId, paperTpye, redo, durtion, answer, "done"));
+    }
+
     /**
      * 获取用于答题卡使用的Questions
      * @param list List<MeasureQuestionBean>
@@ -425,7 +468,10 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             dealNoteQuestionsResp(response);
         } else if (PAPER_EXERCISE.equals(apiName)) {
             dealPaperExerciseResp(response);
+        } else if (SUBMIT_PAPER.equals(apiName)) {
+            Logger.e("跳转至练习报告页面");
         }
+
         hideLoading();
     }
 

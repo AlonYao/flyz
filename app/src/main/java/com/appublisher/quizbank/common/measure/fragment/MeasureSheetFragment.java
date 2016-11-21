@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,11 +29,12 @@ import java.util.List;
  * 做题模块：答题纸
  */
 
-public class MeasureSheetFragment extends DialogFragment {
+public class MeasureSheetFragment extends DialogFragment implements View.OnClickListener{
 
     private List<MeasureQuestionBean> mQuestions;
     private List<MeasureSubmitBean> mSubmits;
     private LinearLayout mContainer;
+    private Button mBtnSubmit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class MeasureSheetFragment extends DialogFragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.measure_sheet_fragment, container);
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.themecolor));
         toolbar.setNavigationIcon(R.drawable.scratch_paper_exit);
@@ -58,7 +61,11 @@ public class MeasureSheetFragment extends DialogFragment {
                 dismiss();
             }
         });
+
         mContainer = (LinearLayout) view.findViewById(R.id.measure_sheet_container);
+        mBtnSubmit = (Button) view.findViewById(R.id.measure_sheet_submit);
+        mBtnSubmit.setOnClickListener(this);
+
         showContent();
         return view;
     }
@@ -150,5 +157,14 @@ public class MeasureSheetFragment extends DialogFragment {
         if (!(getActivity() instanceof MeasureActivity)) return;
         ((MeasureActivity) getActivity()).mViewPager.setCurrentItem(index);
         dismiss();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.measure_sheet_submit) {
+            // 提交
+            if (!(getActivity() instanceof MeasureActivity)) return;
+            ((MeasureActivity) getActivity()).mModel.submit();
+        }
     }
 }

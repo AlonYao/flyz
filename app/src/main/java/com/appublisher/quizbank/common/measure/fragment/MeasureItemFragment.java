@@ -439,8 +439,13 @@ public class MeasureItemFragment extends Fragment implements
     }
 
     private void saveUserAnswer(String option) {
-        if (mQuestion == null) return;
-        MeasureModel.saveSubmitAnswer(getContext(), mQuestion.getQuestion_order() - 1, option);
+        if (mQuestion == null || option == null) return;
+        int isRight = 0;
+        if (option.equals(mQuestion.getAnswer())) {
+            isRight = 1;
+        }
+        MeasureModel.saveSubmitAnswer(
+                getContext(), mQuestion.getQuestion_order() - 1, option, isRight);
     }
 
     /**

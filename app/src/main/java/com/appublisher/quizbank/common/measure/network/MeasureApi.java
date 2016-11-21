@@ -17,4 +17,7 @@ public interface MeasureApi extends ApiConstants{
     // 生成试卷练习(仅限天天模考、整卷和估分)
     String getPaperExercise = baseUrl + "quizbank/get_paper_exercise";
 
+    // 提交试卷
+    String submitPaper = baseUrl + "quizbank/submit_paper";
+
 }
