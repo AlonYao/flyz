@@ -94,6 +94,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         mModel.mHierarchyId = getIntent().getIntExtra(HIERARCHY_ID, 0);
         mModel.mPaperId = getIntent().getIntExtra(PAPER_ID, 0);
         mModel.mRedo = getIntent().getBooleanExtra(REDO, false);
+        mModel.mCurTimestamp = System.currentTimeMillis();
         showLoading();
         mModel.getData();
     }
@@ -110,17 +111,18 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
             public void onPageScrolled(int position,
                                        float positionOffset,
                                        int positionOffsetPixels) {
-
+                // Empty
             }
 
             @Override
             public void onPageSelected(int position) {
+
                 scrollTabLayout(position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                // Empty
             }
         });
     }

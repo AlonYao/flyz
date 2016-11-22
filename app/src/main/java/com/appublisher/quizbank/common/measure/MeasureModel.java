@@ -29,7 +29,6 @@ import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
-import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -51,10 +50,12 @@ import java.util.List;
 
 public class MeasureModel implements RequestCallback, MeasureConstants{
 
-    public String mPaperType;
     public int mPaperId;
     public int mHierarchyId;
+    public int mCurPagePosition;
     public boolean mRedo;
+    public long mCurTimestamp;
+    public String mPaperType;
     public List<MeasureExcludeBean> mExcludes;
 
     private Context mContext;
@@ -210,7 +211,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
      * 获取做题模块缓存
      * @return SharedPreferences
      */
-    public static SharedPreferences getMeasureCache(Context context) {
+    private static SharedPreferences getMeasureCache(Context context) {
         if (context == null) return null;
         return context.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
     }
@@ -242,7 +243,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     }
 
     @SuppressLint("CommitPrefEdits")
-    public static void saveUserAnswerCache(Context context, List<MeasureSubmitBean> list) {
+    private static void saveUserAnswerCache(Context context, List<MeasureSubmitBean> list) {
         if (list == null) return;
         JSONArray array = new JSONArray();
         for (MeasureSubmitBean submitBean : list) {
@@ -271,8 +272,36 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         saveUserAnswerCache(context, list);
     }
 
-    public static void saveSubmitDuration() {
+    /**
+     * 缓存用户做题时长
+     * @param position 此处的position指的是题目的索引
+     */
+    public void saveSubmitDuration(int position) {
+        if (!(mContext instanceof MeasureActivity)) return;
 
+        List<MeasureQuestionBean> questions = ((MeasureActivity) mContext).mAdapter.getQuestions();
+        if (questions == null || position < 0 || position >= questions.size()) return;
+
+        // 去掉说明页
+        MeasureQuestionBean questionBean = questions.get(position);
+        if (questionBean == null || questionBean.is_desc()) return;
+
+        int order = questionBean.getQuestion_order();
+        order--;
+        if (order < 0) return;
+        List<MeasureSubmitBean> list = getUserAnswerCache(mContext);
+        if (list == null || order >= list.size()) return;
+
+        MeasureSubmitBean submitBean = list.get(order);
+        if (submitBean == null) return;
+
+        int duration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
+        if (duration == 0) return;
+        int preDuration = submitBean.getDuration();
+        duration = duration + preDuration;
+        submitBean.setDuration(duration);
+        list.set(order, submitBean);
+        saveUserAnswerCache(mContext, list);
     }
 
     public static String getUserAnswerByPosition(Context context, int position) {
