@@ -136,6 +136,9 @@ public interface QApiConstants extends ApiConstants {
     //获取模考估分
     String getMockGufen = baseUrl + "quizbank/mock_gufen";
 
+    //获取轮播图
+    String getCarousel = baseUrl + "quizbank/get_carousel";
+
     // 获取模考信息
     String getMockPreExamInfo = baseUrl + "quizbank/get_mock_tutorial";
 

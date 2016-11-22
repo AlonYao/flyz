@@ -23,6 +23,7 @@ import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
@@ -81,10 +82,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private TextView rateCourseCountTv;
 
     private RadioButton studyRadioButton;
-    private RadioButton courseRadioButton;
+    public RadioButton courseRadioButton;
     private RadioButton opencourseRadioButton;
     private RadioButton recordRadioButton;
     private RadioButton vipRadioButton;
+
+    private String indexString = "study";//study or interview
 
     /**
      * 国考推广
@@ -171,7 +174,11 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    changeFragment(0);
+                    if (indexString.equals("study")) {
+                        changeFragment(0);
+                    } else {
+                        changeFragment(5);
+                    }
                     studyRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
                 } else {
                     studyRadioButton.setTextColor(getResources().getColor(R.color.common_text));
@@ -364,6 +371,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 getSupportActionBar().setTitle(R.string.study_index);
 
                 mCurFragment = mStudyIndexFragment;
+                indexString = "study";
 
                 break;
 
@@ -377,7 +385,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     // 如果Fragment不为空，则直接将它显示出来
                     transaction.show(mCourseFragment);
                 }
-                Logger.i("fragment===11" + mCourseFragment.getId());
+
                 getSupportActionBar().setTitle(R.string.course_center);
 
                 mCurFragment = mCourseFragment;
@@ -450,6 +458,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 getSupportActionBar().setTitle(R.string.interview_index);
 
                 mCurFragment = mInterviewIndexFragment;
+                indexString = "interview";
 
 
                 break;

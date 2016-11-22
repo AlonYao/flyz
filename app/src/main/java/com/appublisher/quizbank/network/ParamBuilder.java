@@ -414,9 +414,9 @@ public class ParamBuilder implements QApiConstants {
                     .append("&uuid=")
                     .append(OpenUDIDManager.getID() == null ? "" : OpenUDIDManager.getID())
                     .append("&user_id=")
-                    .append(Globals.sharedPreferences.getString("user_id", ""))
+                    .append(LoginModel.getUserId())
                     .append("&user_token=")
-                    .append(Globals.sharedPreferences.getString("user_token", ""))
+                    .append(LoginModel.getUserToken())
                     .append("&timestamp=")
                     .append(System.currentTimeMillis());
         } else {
@@ -428,7 +428,7 @@ public class ParamBuilder implements QApiConstants {
                     .append("&uuid=")
                     .append(OpenUDIDManager.getID() == null ? "" : OpenUDIDManager.getID())
                     .append("&user_id=")
-                    .append(Globals.sharedPreferences.getString("user_id", ""))
+                    .append(LoginModel.getUserId())
                     .append("&user_token=")
                     .append(Globals.sharedPreferences.getString("user_token", ""))
                     .append("&timestamp=")

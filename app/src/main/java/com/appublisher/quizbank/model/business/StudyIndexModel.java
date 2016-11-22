@@ -1,41 +1,27 @@
 package com.appublisher.quizbank.model.business;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.URLSpan;
+import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.appublisher.lib_basic.AppDownload;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
-import com.appublisher.lib_course.opencourse.netdata.OpenCourseStatusResp;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.db.User;
 import com.appublisher.lib_login.model.db.UserDAO;
 import com.appublisher.lib_login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.Globals;
-import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MainActivity;
-import com.appublisher.quizbank.activity.WebViewActivity;
-import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
-import com.appublisher.quizbank.model.db.GlobalSetting;
+import com.appublisher.quizbank.model.netdata.CarouselResp;
 import com.appublisher.quizbank.model.netdata.course.GradeCourseResp;
-import com.appublisher.quizbank.model.netdata.course.PromoteLiveCourseResp;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.mock.GufenM;
@@ -43,13 +29,10 @@ import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
-import com.google.gson.Gson;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * HomePageFragment Model
@@ -194,6 +177,38 @@ public class StudyIndexModel {
                 GufenM gufenBean = mockGufenResp.getGufen();
                 fragment.assessNameTv.setText(gufenBean.getName());
                 fragment.assessView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    /**
+     * 轮播图处理
+     *
+     * @param jsonObject
+     * @param fragment
+     */
+    public static void dealCarouselResp(JSONObject jsonObject, Fragment fragment) {
+        CarouselResp carouselResp = GsonManager.getModel(jsonObject, CarouselResp.class);
+        if (carouselResp.getResponse_code() == 1) {
+            int width = Utils.getWindowWidth(fragment.getActivity());
+            int height = width / 69 * 20;
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
+
+            if (fragment instanceof StudyIndexFragment) {
+                ((StudyIndexFragment) fragment).carouselView.setLayoutParams(params);
+                if (carouselResp.getWritten() != null && carouselResp.getWritten().size() != 0) {
+                    ((StudyIndexFragment) fragment).carouselWrittenList.addAll(carouselResp.getWritten());
+                    ((StudyIndexFragment) fragment).carouselAdapter.notifyDataSetChanged();
+                    ((StudyIndexFragment) fragment).carouselView.setVisibility(View.VISIBLE);
+                }
+            } else if (fragment instanceof InterviewIndexFragment) {
+                ((InterviewIndexFragment) fragment).carouselView.setLayoutParams(params);
+                if (carouselResp.getInterview() != null && carouselResp.getInterview().size() != 0) {
+                    ((InterviewIndexFragment) fragment).carouselInterviewList.addAll(carouselResp.getWritten());
+                    ((InterviewIndexFragment) fragment).carouselAdapter.notifyDataSetChanged();
+                    ((InterviewIndexFragment) fragment).carouselView.setVisibility(View.VISIBLE);
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,10 @@ import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
+import com.appublisher.quizbank.adapter.CarouselAdapter;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.StudyIndexModel;
+import com.appublisher.quizbank.model.netdata.CarouselM;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.homepage.AssessmentM;
 import com.appublisher.quizbank.model.netdata.homepage.HomePageResp;
@@ -43,6 +46,9 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jinbao on 2016/10/31.
@@ -59,6 +65,11 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     private View notesView;
     private View quickTestView;
     private View wholepageView;
+
+    public View carouselView;
+    public ViewPager viewPager;
+    public CarouselAdapter carouselAdapter;
+    public List<CarouselM> carouselWrittenList;
 
     private RoundedImageView avatarIv;
     private TextView assessScoreTv;
@@ -92,6 +103,8 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         quickTestView = view.findViewById(R.id.quick_test_view);
         wholepageView = view.findViewById(R.id.wholepage_view);
 
+        carouselView = view.findViewById(R.id.carousel_view_rl);
+        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         avatarIv = (RoundedImageView) view.findViewById(R.id.avatar);
         assessScoreTv = (TextView) view.findViewById(R.id.score);
         rankTv = (TextView) view.findViewById(R.id.rank);
@@ -102,6 +115,9 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         noteNameTv = (TextView) view.findViewById(R.id.note_name);
 
         mQRequest = new QRequest(getActivity(), this);
+
+        carouselWrittenList = new ArrayList<>();
+        carouselAdapter = new CarouselAdapter(getActivity(), carouselWrittenList);
 
         setValue();
 
@@ -119,12 +135,15 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         wholepageView.setOnClickListener(this);
         mockView.setOnClickListener(this);
         assessView.setOnClickListener(this);
+
+        viewPager.setAdapter(carouselAdapter);
     }
 
     public void getData() {
         mQRequest.getGlobalSettings();
         mQRequest.getEntryData();
         mQRequest.getMockGufen();
+        mQRequest.getCarousel();
     }
 
     @Override
@@ -213,6 +232,9 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 break;
             case "mock_gufen":
                 StudyIndexModel.dealMockGufenResp(response, this);
+                break;
+            case "get_carousel":
+                StudyIndexModel.dealCarouselResp(response, this);
                 break;
             default:
                 break;

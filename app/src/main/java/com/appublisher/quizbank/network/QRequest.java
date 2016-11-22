@@ -62,8 +62,18 @@ public class QRequest extends Request implements QApiConstants {
         asyncRequest(ParamBuilder.finalUrl(getEntryData), "entry_data", "object");
     }
 
+    /**
+     * 获取模考和估分
+     */
     public void getMockGufen() {
         asyncRequest(ParamBuilder.finalUrl(getMockGufen), "mock_gufen", "object");
+    }
+
+    /**
+     * 获取轮播图
+     */
+    public void getCarousel() {
+        asyncRequest(ParamBuilder.finalUrl(getCarousel), "get_carousel", "object");
     }
 
     /**
