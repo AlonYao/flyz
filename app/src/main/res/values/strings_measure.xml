@@ -13,4 +13,30 @@
     <string name="measure_sheet_submit">交卷</string>
     <string name="measure_sheet_title">答题卡</string>
 
+    <string name="measure_report_btn_all">全部解析</string>
+    <string name="measure_report_btn_error">错题解析</string>
+    <string name="measure_report_rightall">做对/全部题目</string>
+    <string name="measure_report_semicolon">/</string>
+    <string name="measure_report_zero">0</string>
+    <string name="measure_report_time">秒/题</string>
+    <string name="measure_report_category">科目</string>
+    <string name="measure_report_note_name">知识点</string>
+    <string name="measure_report_name">练习类型</string>
+    <string name="measure_report_note">知识点掌握的越好盆栽长得越好哦</string>
+    <string name="measure_report_borderline">往年分数线</string>
+    <string name="measure_report_notedesp">你的知识点掌握度没发生变化呦，\n要继续加油呀</string>
+    <string name="measure_report_all">全部解析</string>
+    <string name="measure_report_error">错题解析</string>
+    <string name="measure_report_minimokaorank">本次战绩</string>
+    <string name="measure_report_evaluate">你的成绩</string>
+    <string name="measure_report_totalpoints">总分</string>
+    <string name="measure_report_xingce">行测</string>
+    <string name="measure_report_shenlun">申论</string>
+    <string name="measure_report_entire_rank">在全站排名前</string>
+    <string name="measure_report_entire_score">全站平均分数</string>
+    <string name="measure_report_borderline_desc">
+        根据实际情况，各省分数线包括行测分、申论分、总分（可能只有其中一项或两项），
+        此处“总分”是指行测与申论分数之和。
+    </string>
+
 </resources>

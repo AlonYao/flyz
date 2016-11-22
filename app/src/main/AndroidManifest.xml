@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="androd.permission.INSTALL_PACKAGES" />
 
-    <!--   个推SDK权限 START -->
+    <!-- 个推SDK权限 START -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -29,7 +29,7 @@
         android:protectionLevel="normal" />
     -
 
-    <!--   个推SDK权限 END -->
+    <!-- 个推SDK权限 END -->
     <application
         android:name=".QuizBankApp"
         android:allowBackup="true"
@@ -306,7 +306,8 @@
         <activity
             android:name=".common.measure.activity.MeasureActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".common.measure.activity.MeasureReportActivity"></activity>
     </application>
 
 </manifest>

@@ -20,4 +20,7 @@ public interface MeasureApi extends ApiConstants{
     // 提交试卷
     String submitPaper = baseUrl + "quizbank/submit_paper";
 
+    // 获取历史练习内容
+    String getHistoryExerciseDetail = baseUrl + "quizbank/history_exercise_detail";
+
 }

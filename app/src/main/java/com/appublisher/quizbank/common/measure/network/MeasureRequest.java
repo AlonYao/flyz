@@ -69,4 +69,16 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
         postRequest(getFinalUrl(submitPaper), params, SUBMIT_PAPER, "object");
     }
 
+    /**
+     * 获取历史练习内容
+     *
+     * @param exercise_id   单次练习的id
+     * @param exercise_type 练习类型(mokao：天天模考 entire：整卷 auto：智能练习 等等)
+     */
+    public void getHistoryExerciseDetail(int exercise_id, String exercise_type) {
+        asyncRequest(getFinalUrl(getHistoryExerciseDetail)
+                        + "&exercise_id=" + exercise_id + "&exercise_type=" + exercise_type,
+                "history_exercise_detail", "object");
+    }
+
 }

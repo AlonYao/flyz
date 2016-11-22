@@ -56,9 +56,9 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     public long mCurTimestamp;
     public String mPaperType;
     public List<MeasureExcludeBean> mExcludes;
+    public MeasureRequest mRequest;
+    public Context mContext;
 
-    private Context mContext;
-    private MeasureRequest mRequest;
     private SparseIntArray mFinalHeightMap;
     private List<MeasureTabBean> mTabs;
     private List<MeasureSubmitBean> mSubmits;
