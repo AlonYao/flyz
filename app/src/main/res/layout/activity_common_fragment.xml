@@ -9,9 +9,24 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <TextView
+        android:id="@+id/opencourse_num_notice"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/opencourse_num_bg"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:ignore="RtlHardcoded" />
+
     <RelativeLayout
         android:id="@+id/container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"></RelativeLayout>
+        android:layout_below="@+id/toolbar"/>
+
 </RelativeLayout>
