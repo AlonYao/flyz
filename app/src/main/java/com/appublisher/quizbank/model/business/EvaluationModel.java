@@ -23,6 +23,7 @@ import com.db.chart.view.LineChartView;
 import com.db.chart.view.XController;
 import com.db.chart.view.YController;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONObject;
 
@@ -203,10 +204,13 @@ public class EvaluationModel {
                 + "&user_token=" + LoginModel.getUserToken();
 
         Resources resources = activity.getResources();
+        //noinspection ConstantConditions
         UmengManager.UMShareEntity shareEntity = new UmengManager.UMShareEntity()
                 .setTitle(resources.getString(R.string.share_title))
                 .setText(content)
-                .setTargetUrl(baseUrl);
+                .setTargetUrl(baseUrl)
+                .setSinaWithoutTargetUrl(true)
+                .setUmImage(new UMImage(activity, Utils.getBitmapByView(activity.mSvMain)));
 
         UmengManager.shareAction(activity, shareEntity, UmengManager.APP_TYPE_QUIZBANK, new UmengManager.PlatformInter() {
             @Override
@@ -214,29 +218,6 @@ public class EvaluationModel {
 
             }
         });
-
-//        UmengShareEntity umengShareEntity = new UmengShareEntity();
-//        umengShareEntity.setActivity(activity);
-//        umengShareEntity.setBitmap(Utils.getBitmapByView(activity.mSvMain));
-//        umengShareEntity.setFrom("evaluation");
-//
-//        // 友盟分享文字处理
-//        UMShareContentEntity umShareContentEntity = new UMShareContentEntity();
-//        umShareContentEntity.setType("evaluation");
-//        umShareContentEntity.setLearningDays(activity.mLearningDays);
-//        umShareContentEntity.setExamName(LoginModel.getUserExamName());
-//        umShareContentEntity.setScore(activity.mScore);
-//        umShareContentEntity.setRank(activity.mRank);
-//        umengShareEntity.setContent(UmengManager.getShareContent(umShareContentEntity));
-//
-//        // 友盟分享跳转链接处理
-//        UMShareUrlEntity urlEntity = new UMShareUrlEntity();
-//        urlEntity.setType("evaluation");
-//        urlEntity.setUser_id(LoginModel.getUserId());
-//        urlEntity.setUser_token(LoginModel.getUserToken());
-//        umengShareEntity.setUrl(UmengManager.getUrl(urlEntity));
-//
-//        UmengManager.openShare(umengShareEntity);
     }
 
 }
