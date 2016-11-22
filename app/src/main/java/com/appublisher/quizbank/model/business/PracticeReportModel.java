@@ -757,6 +757,7 @@ public class PracticeReportModel {
                 .setTitle(resources.getString(R.string.share_title))
                 .setText(content)
                 .setTargetUrl(baseUrl)
+                .setSinaWithoutTargetUrl(true)
                 .setUmImage(new UMImage(mActivity, Utils.getBitmapByView(mActivity.mSvMain)));
         UmengManager.shareAction(mActivity, umShareEntity, UmengManager.APP_TYPE_QUIZBANK, new UmengManager.PlatformInter() {
             @Override
