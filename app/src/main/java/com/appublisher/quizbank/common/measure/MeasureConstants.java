@@ -42,4 +42,14 @@ public interface MeasureConstants {
     String CACHE_PAPER_NAME = "cache_paper_name";
     String YAOGUO_MEASURE = "yaoguo_measure";
 
+    /**
+     * 提交数据
+     */
+    String SUBMIT_ID = "id";
+    String SUBMIT_ANSWER = "answer";
+    String SUBMIT_CATEGORY = "category";
+    String SUBMIT_NOTE_IDS = "note_ids";
+    String SUBMIT_IS_RIGHT = "is_right";
+    String SUBMIT_DURATION = "duration";
+
 }

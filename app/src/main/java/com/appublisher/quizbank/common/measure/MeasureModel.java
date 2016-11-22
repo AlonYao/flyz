@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -233,7 +232,21 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
             JSONArray array = new JSONArray(userAnswer);
             int length = array.length();
             for (int i = 0; i < length; i++) {
-                list.add(GsonManager.getModel(array.getJSONObject(i), MeasureSubmitBean.class));
+                MeasureSubmitBean submitBean = new MeasureSubmitBean();
+
+                JSONObject object = array.getJSONObject(i);
+                submitBean.setId(object.getInt(SUBMIT_ID));
+                submitBean.setAnswer(object.getString(SUBMIT_ANSWER));
+                submitBean.setCategory(object.getInt(SUBMIT_CATEGORY));
+
+                // 构建note_ids
+                List<Integer> noteIdList = new ArrayList<>();
+                JSONArray noteIdArray = object.getJSONArray(SUBMIT_NOTE_IDS);
+                int arrayLength = noteIdArray.length();
+                for (int j = 0; j < arrayLength; j++) {
+                    noteIdList.add(noteIdArray.getInt(j));
+                }
+                submitBean.setNote_ids(noteIdList);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -247,12 +260,29 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         if (list == null) return;
         JSONArray array = new JSONArray();
         for (MeasureSubmitBean submitBean : list) {
+
+            if (submitBean == null) continue;
+            JSONObject object = new JSONObject();
             try {
-                JSONObject object = new JSONObject(GsonManager.modelToString(submitBean));
-                array.put(object);
+                object.put(SUBMIT_ID, submitBean.getId());
+                object.put(SUBMIT_CATEGORY, submitBean.getCategory());
+                object.put(SUBMIT_ANSWER, submitBean.getAnswer());
+                object.put(SUBMIT_IS_RIGHT, submitBean.getIs_right());
+
+                // 构建noteIds
+                List<Integer> noteIds = submitBean.getNote_ids();
+                if (noteIds == null) continue;
+                JSONArray noteIdArray = new JSONArray();
+                for (Integer noteId : noteIds) {
+                    noteIdArray.put(noteId);
+                }
+                object.put(SUBMIT_NOTE_IDS, noteIdArray);
+
+                object.put(SUBMIT_DURATION, submitBean.getDuration());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            array.put(object);
         }
 
         SharedPreferences spf = getMeasureCache(context);
@@ -280,10 +310,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         if (!(mContext instanceof MeasureActivity)) return;
 
         List<MeasureQuestionBean> questions = ((MeasureActivity) mContext).mAdapter.getQuestions();
-        if (questions == null || position < 0 || position >= questions.size()) return;
+        if (questions == null || mCurPagePosition < 0 || mCurPagePosition >= questions.size())
+            return;
 
         // 去掉说明页
-        MeasureQuestionBean questionBean = questions.get(position);
+        MeasureQuestionBean questionBean = questions.get(mCurPagePosition);
         if (questionBean == null || questionBean.is_desc()) return;
 
         int order = questionBean.getQuestion_order();
@@ -302,6 +333,9 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         submitBean.setDuration(duration);
         list.set(order, submitBean);
         saveUserAnswerCache(mContext, list);
+
+        mCurPagePosition = position;
+        mCurTimestamp = System.currentTimeMillis();
     }
 
     public static String getUserAnswerByPosition(Context context, int position) {
@@ -506,7 +540,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
         } else if (PAPER_EXERCISE.equals(apiName)) {
             dealPaperExerciseResp(response);
         } else if (SUBMIT_PAPER.equals(apiName)) {
-            Logger.e("跳转至练习报告页面");
+            // Empty
         }
 
         hideLoading();
