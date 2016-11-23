@@ -34,6 +34,15 @@ public class MeasureQuestionBean {
     private int question_order;
     private int question_amount;
     private int question_index;
+    private boolean is_allright;
+
+    public boolean is_allright() {
+        return is_allright;
+    }
+
+    public void setIs_allright(boolean is_allright) {
+        this.is_allright = is_allright;
+    }
 
     public int getQuestion_index() {
         return question_index;

@@ -1,8 +1,10 @@
 package com.appublisher.quizbank.common.measure.netdata;
 
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureScoresBean;
 
 import java.util.List;
 
@@ -20,9 +22,9 @@ public class MeasureHistoryResp {
     private double score;
     private double defeat;
     private double avg_score;
-    private List<CategoryBean> category;
+    private List<MeasureCategoryBean> category;
     private List<MeasureNotesBean> notes;
-    private List<ScoresBean> scores;
+    private List<MeasureScoresBean> scores;
     private List<MeasureQuestionBean> questions;
     private List<MeasureAnswerBean> answers;
 
@@ -106,11 +108,11 @@ public class MeasureHistoryResp {
         this.avg_score = avg_score;
     }
 
-    public List<CategoryBean> getCategory() {
+    public List<MeasureCategoryBean> getCategory() {
         return category;
     }
 
-    public void setCategory(List<CategoryBean> category) {
+    public void setCategory(List<MeasureCategoryBean> category) {
         this.category = category;
     }
 
@@ -122,100 +124,12 @@ public class MeasureHistoryResp {
         this.notes = notes;
     }
 
-    public List<ScoresBean> getScores() {
+    public List<MeasureScoresBean> getScores() {
         return scores;
     }
 
-    public void setScores(List<ScoresBean> scores) {
+    public void setScores(List<MeasureScoresBean> scores) {
         this.scores = scores;
     }
 
-    public static class CategoryBean {
-
-        private int id;
-        private String name;
-        private int right_count;
-        private int done_count;
-        private String done_ids;
-        private List<MeasureQuestionBean> questions;
-        private List<MeasureAnswerBean> answers;
-
-        public List<MeasureQuestionBean> getQuestions() {
-            return questions;
-        }
-
-        public void setQuestions(List<MeasureQuestionBean> questions) {
-            this.questions = questions;
-        }
-
-        public List<MeasureAnswerBean> getAnswers() {
-            return answers;
-        }
-
-        public void setAnswers(List<MeasureAnswerBean> answers) {
-            this.answers = answers;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getRight_count() {
-            return right_count;
-        }
-
-        public void setRight_count(int right_count) {
-            this.right_count = right_count;
-        }
-
-        public int getDone_count() {
-            return done_count;
-        }
-
-        public void setDone_count(int done_count) {
-            this.done_count = done_count;
-        }
-
-        public String getDone_ids() {
-            return done_ids;
-        }
-
-        public void setDone_ids(String done_ids) {
-            this.done_ids = done_ids;
-        }
-    }
-
-    public static class ScoresBean {
-
-        private String name;
-        private int score;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getScore() {
-            return score;
-        }
-
-        public void setScore(int score) {
-            this.score = score;
-        }
-    }
 }

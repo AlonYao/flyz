@@ -5,7 +5,7 @@ import android.content.Context;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
-import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureHistoryResp;
 
@@ -48,7 +48,7 @@ public class MeasureReportModel extends MeasureModel {
         showRightAll(resp.getAnswers());
 
         // 科目
-        List<MeasureCategoryBean> categorys = getCategorys(resp.getQuestions(), resp.getAnswers());
+        List<MeasureReportCategoryBean> categorys = getCategorys(resp.getQuestions(), resp.getAnswers());
         ((MeasureReportActivity) mContext).showCategory(categorys);
 
         // 知识点
@@ -66,9 +66,9 @@ public class MeasureReportModel extends MeasureModel {
         ((MeasureReportActivity) mContext).showRightAll(rightNum, totalNum);
     }
 
-    private List<MeasureCategoryBean> getCategorys(List<MeasureQuestionBean> questions,
-                                                   List<MeasureAnswerBean> answers) {
-        List<MeasureCategoryBean> categorys = new ArrayList<>();
+    private List<MeasureReportCategoryBean> getCategorys(List<MeasureQuestionBean> questions,
+                                                         List<MeasureAnswerBean> answers) {
+        List<MeasureReportCategoryBean> categorys = new ArrayList<>();
 
         if (questions == null || answers == null) return categorys;
 
@@ -77,7 +77,7 @@ public class MeasureReportModel extends MeasureModel {
             if (questionBean == null) continue;
             if (questionBean.getCategory_id() == curCategoryId) continue;
             curCategoryId = questionBean.getCategory_id();
-            MeasureCategoryBean categoryBean = new MeasureCategoryBean();
+            MeasureReportCategoryBean categoryBean = new MeasureReportCategoryBean();
             categoryBean.setCategory_id(curCategoryId);
             categoryBean.setCategory_name(questionBean.getCategory_name());
             categorys.add(categoryBean);
@@ -88,7 +88,7 @@ public class MeasureReportModel extends MeasureModel {
             int answerCategory = answerBean.getCategory();
             int size = categorys.size();
             for (int i = 0; i < size; i++) {
-                MeasureCategoryBean categoryBean = categorys.get(i);
+                MeasureReportCategoryBean categoryBean = categorys.get(i);
                 if (categoryBean == null) continue;
                 if (answerCategory != categoryBean.getCategory_id()) continue;
 

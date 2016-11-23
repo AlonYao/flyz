@@ -6,27 +6,18 @@ import java.util.List;
  * 做题模块
  */
 
-public class MeasureCategoryBean {
+public class MeasureAnalysisBean {
 
-    private int id;
-    private String name;
     private List<MeasureQuestionBean> questions;
     private List<MeasureAnswerBean> answers;
+    private List<MeasureCategoryBean> categorys;
 
-    public int getId() {
-        return id;
+    public List<MeasureCategoryBean> getCategorys() {
+        return categorys;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setCategorys(List<MeasureCategoryBean> categorys) {
+        this.categorys = categorys;
     }
 
     public List<MeasureQuestionBean> getQuestions() {
@@ -44,5 +35,4 @@ public class MeasureCategoryBean {
     public void setAnswers(List<MeasureAnswerBean> answers) {
         this.answers = answers;
     }
-
 }

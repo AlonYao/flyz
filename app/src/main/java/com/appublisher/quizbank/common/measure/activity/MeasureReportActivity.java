@@ -13,7 +13,7 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
-import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 
 import java.util.List;
@@ -73,7 +73,7 @@ public class MeasureReportActivity extends BaseActivity implements MeasureConsta
         }
     }
 
-    public void showCategory(List<MeasureCategoryBean> list) {
+    public void showCategory(List<MeasureReportCategoryBean> list) {
         if (list == null || list.size() == 0) return;
 
         ViewStub vs = (ViewStub) findViewById(R.id.measure_report_category_vs);
@@ -83,7 +83,7 @@ public class MeasureReportActivity extends BaseActivity implements MeasureConsta
                 (LinearLayout) findViewById(R.id.measure_report_category_container);
         if (container == null) return;
 
-        for (MeasureCategoryBean categoryBean : list) {
+        for (MeasureReportCategoryBean categoryBean : list) {
             if (categoryBean == null) continue;
 
             View child = LayoutInflater.from(this).inflate(
