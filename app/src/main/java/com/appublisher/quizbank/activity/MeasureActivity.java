@@ -539,7 +539,12 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
      * 是否记录本次练习
      */
     private void checkSave() {
-        if (mUserAnswerList == null || mUserAnswerList.size() == 0) finish();
+        if (mUserAnswerList == null || mUserAnswerList.size() == 0) {
+            // 清空做题缓存
+            MeasureModel.clearUserAnswerCache(this);
+            finish();
+        }
+
         if (mockpre) {
             ProgressDialogManager.showProgressDialog(this);
             mQRequest.getServerCurrentTime();
@@ -574,6 +579,8 @@ public class MeasureActivity extends BaseActivity implements RequestCallback {
         if (isSave) {
             AlertManager.saveTestAlert(this);
         } else {
+            // 清空做题缓存
+            MeasureModel.clearUserAnswerCache(this);
             UmengManager.onEvent(MeasureActivity.this, "0");
             finish();
         }
