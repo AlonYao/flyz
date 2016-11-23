@@ -971,6 +971,7 @@ public class MeasureModel implements RequestCallback{
      */
     public static void dealServerCurrentTimeResp(MeasureActivity activity,
                                                  ServerCurrentTimeResp resp) {
+        if (activity == null || !"mock".equals(activity.mPaperType)) return;
         if (resp == null || resp.getResponse_code() != 1) return;
 
         String serverTime = resp.getCurrent_time();
