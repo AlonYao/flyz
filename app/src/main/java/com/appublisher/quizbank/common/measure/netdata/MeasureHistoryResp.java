@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.netdata;
 
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class MeasureHistoryResp {
     private double defeat;
     private double avg_score;
     private List<CategoryBean> category;
-    private List<NotesBean> notes;
+    private List<MeasureNotesBean> notes;
     private List<ScoresBean> scores;
     private List<MeasureQuestionBean> questions;
     private List<MeasureAnswerBean> answers;
@@ -113,11 +114,11 @@ public class MeasureHistoryResp {
         this.category = category;
     }
 
-    public List<NotesBean> getNotes() {
+    public List<MeasureNotesBean> getNotes() {
         return notes;
     }
 
-    public void setNotes(List<NotesBean> notes) {
+    public void setNotes(List<MeasureNotesBean> notes) {
         this.notes = notes;
     }
 
@@ -193,46 +194,6 @@ public class MeasureHistoryResp {
 
         public void setDone_ids(String done_ids) {
             this.done_ids = done_ids;
-        }
-    }
-
-    public static class NotesBean {
-
-        private int id;
-        private String name;
-        private int from;
-        private int to;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getFrom() {
-            return from;
-        }
-
-        public void setFrom(int from) {
-            this.from = from;
-        }
-
-        public int getTo() {
-            return to;
-        }
-
-        public void setTo(int to) {
-            this.to = to;
         }
     }
 

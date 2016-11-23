@@ -8,6 +8,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.model.netdata.history.HistoryPapersResp;
@@ -70,13 +71,21 @@ public class StudyRecordModel {
 
                 if ("done".equals(status)) {
                     // 跳转至练习报告页面
-                    Intent intent = new Intent(fragment.mActivity, PracticeReportActivity.class);
-                    intent.putExtra("from", "study_record");
-                    intent.putExtra("exercise_id", historyPaper.getPaper_id());
-                    intent.putExtra("paper_type", historyPaper.getPaper_type());
-                    intent.putExtra("paper_name", historyPaper.getName());
-                    intent.putExtra("paper_time", historyPaper.getAction_time());
-                    fragment.mActivity.startActivity(intent);
+                    if ("auto".equals(historyPaper.getPaper_type())) {
+                        Intent intent = new Intent(fragment.mActivity, MeasureReportActivity.class);
+                        intent.putExtra("paper_type", "auto");
+                        intent.putExtra("paper_id", historyPaper.getPaper_id());
+                        fragment.mActivity.startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(fragment.mActivity, PracticeReportActivity.class);
+                        intent.putExtra("from", "study_record");
+                        intent.putExtra("exercise_id", historyPaper.getPaper_id());
+                        intent.putExtra("paper_type", historyPaper.getPaper_type());
+                        intent.putExtra("paper_name", historyPaper.getName());
+                        intent.putExtra("paper_time", historyPaper.getAction_time());
+                        fragment.mActivity.startActivity(intent);
+                    }
+
 
                 } else if ("undone".equals(status)) {
                     // 跳转至做题页面
