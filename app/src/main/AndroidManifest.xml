@@ -307,7 +307,9 @@
             android:name=".common.measure.activity.MeasureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.measure.activity.MeasureReportActivity"></activity>
+        <activity android:name=".common.measure.activity.MeasureReportActivity" />
+        <activity android:name=".common.measure.activity.MeasureAnalysisActivity" />
+        <activity android:name=".common.measure.activity.MeasureBaseActivity"></activity>
     </application>
 
 </manifest>

@@ -94,6 +94,13 @@
                     android:orientation="vertical"/>
             </LinearLayout>
 
+            <!-- 解析页面额外需要显示的部分 -->
+            <ViewStub
+                android:id="@+id/measure_analysis_viewstub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/measure_analysis_viewstub"/>
+
         </LinearLayout>
     </ScrollView>
 

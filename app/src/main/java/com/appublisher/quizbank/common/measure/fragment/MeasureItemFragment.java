@@ -3,24 +3,19 @@ package com.appublisher.quizbank.common.measure.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.measure.MeasureModel;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -30,18 +25,13 @@ import java.util.List;
  * 做题模块
  */
 
-public class MeasureItemFragment extends Fragment implements
+public class MeasureItemFragment extends MeasureBaseFragment implements
         View.OnClickListener, View.OnLongClickListener{
 
     private static final String ARGS_QUESTION = "question";
     private static final String ARGS_POSITION = "position";
-    private static final String OPTION_A = "A";
-    private static final String OPTION_B = "B";
-    private static final String OPTION_C = "C";
-    private static final String OPTION_D = "D";
 
-    private MeasureQuestionBean mQuestion;
-    private LinearLayout mStemContainer;
+    private LinearLayout mStemContainer; // 题干
     private LinearLayout mOptionA;
     private LinearLayout mOptionB;
     private LinearLayout mOptionC;
@@ -54,9 +44,7 @@ public class MeasureItemFragment extends Fragment implements
     private TextView mTvOptionB;
     private TextView mTvOptionC;
     private TextView mTvOptionD;
-    private View mRoot;
     private int mPosition;
-    private int mLastY;
     private boolean mOptionClick;
 
     public static MeasureItemFragment newInstance(String question, int position) {
@@ -175,80 +163,80 @@ public class MeasureItemFragment extends Fragment implements
         }
     }
 
-    private void showMaterial(String material) {
-        if (material == null || material.length() == 0) return;
-        ViewStub vsMaterial = (ViewStub) mRoot.findViewById(R.id.measure_material_viewstub);
-        vsMaterial.inflate();
-        ViewStub vsDivider = (ViewStub) mRoot.findViewById(R.id.measure_divider_viewstub);
-        vsDivider.inflate();
-        // 显示材料
-        final ScrollView svTop = (ScrollView) mRoot.findViewById(R.id.measure_top);
-        ImageView ivPull = (ImageView) mRoot.findViewById(R.id.measure_iv);
-        LinearLayout mMaterialContainer = (LinearLayout) mRoot.findViewById(R.id.measure_material);
-        MeasureModel.addRichTextToContainer(getContext(), mMaterialContainer, material, true);
-
-        // 更新上部分ScrollView的高度
-        int finalHeight = getFinalHeight();
-        if (finalHeight != 0) {
-            changeSvHeight(svTop, finalHeight);
-        }
-
-        ivPull.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        mLastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        int dy = (int) event.getRawY() - mLastY;
-
-                        // 边界溢出处理
-                        int finalY = svTop.getHeight() + dy;
-                        if (finalY <= v.getHeight()) break;
-
-                        // 改变上部分ScrollView的高度
-                        changeSvHeight(svTop, finalY);
-                        mLastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        // 保存最终位置
-                        saveFinalHeight(svTop.getHeight());
-                        break;
-                }
-
-                return false;
-            }
-        });
-    }
-
-    private void changeSvHeight(ScrollView sv, int height) {
-        ViewGroup.LayoutParams layoutParams = sv.getLayoutParams();
-        layoutParams.height = height;
-        sv.setLayoutParams(layoutParams);
-    }
-
-    private int getFinalHeight() {
-        if (mQuestion == null) return 0;
-        if (getActivity() instanceof MeasureActivity) {
-            return ((MeasureActivity) getActivity())
-                    .mModel.getFinalHeightById(mQuestion.getMaterial_id());
-        }
-        return 0;
-    }
-
-    private void saveFinalHeight(int height) {
-        if (mQuestion == null) return;
-        if (getActivity() instanceof MeasureActivity) {
-            ((MeasureActivity) getActivity())
-                    .mModel.saveFinalHeight(mQuestion.getMaterial_id(), height);
-            ((MeasureActivity) getActivity()).mAdapter.notifyDataSetChanged();
-        }
-    }
+//    private void showMaterial(String material) {
+//        if (material == null || material.length() == 0) return;
+//        ViewStub vsMaterial = (ViewStub) mRoot.findViewById(R.id.measure_material_viewstub);
+//        vsMaterial.inflate();
+//        ViewStub vsDivider = (ViewStub) mRoot.findViewById(R.id.measure_divider_viewstub);
+//        vsDivider.inflate();
+//        // 显示材料
+//        final ScrollView svTop = (ScrollView) mRoot.findViewById(R.id.measure_top);
+//        ImageView ivPull = (ImageView) mRoot.findViewById(R.id.measure_iv);
+//        LinearLayout mMaterialContainer = (LinearLayout) mRoot.findViewById(R.id.measure_material);
+//        MeasureModel.addRichTextToContainer(getContext(), mMaterialContainer, material, true);
+//
+//        // 更新上部分ScrollView的高度
+//        int finalHeight = getFinalHeight();
+//        if (finalHeight != 0) {
+//            changeSvHeight(svTop, finalHeight);
+//        }
+//
+//        ivPull.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                int action = event.getAction();
+//
+//                switch (action) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        mLastY = (int) event.getRawY();
+//                        break;
+//
+//                    case MotionEvent.ACTION_MOVE:
+//                        int dy = (int) event.getRawY() - mLastY;
+//
+//                        // 边界溢出处理
+//                        int finalY = svTop.getHeight() + dy;
+//                        if (finalY <= v.getHeight()) break;
+//
+//                        // 改变上部分ScrollView的高度
+//                        changeSvHeight(svTop, finalY);
+//                        mLastY = (int) event.getRawY();
+//                        break;
+//
+//                    case MotionEvent.ACTION_UP:
+//                        // 保存最终位置
+//                        saveFinalHeight(svTop.getHeight());
+//                        break;
+//                }
+//
+//                return false;
+//            }
+//        });
+//    }
+//
+//    private void changeSvHeight(ScrollView sv, int height) {
+//        ViewGroup.LayoutParams layoutParams = sv.getLayoutParams();
+//        layoutParams.height = height;
+//        sv.setLayoutParams(layoutParams);
+//    }
+//
+//    private int getFinalHeight() {
+//        if (mQuestion == null) return 0;
+//        if (getActivity() instanceof MeasureActivity) {
+//            return ((MeasureActivity) getActivity())
+//                    .mModel.getFinalHeightById(mQuestion.getMaterial_id());
+//        }
+//        return 0;
+//    }
+//
+//    private void saveFinalHeight(int height) {
+//        if (mQuestion == null) return;
+//        if (getActivity() instanceof MeasureActivity) {
+//            ((MeasureActivity) getActivity())
+//                    .mModel.saveFinalHeight(mQuestion.getMaterial_id(), height);
+//            ((MeasureActivity) getActivity()).mAdapter.notifyDataSetChanged();
+//        }
+//    }
 
     @Override
     public void onClick(View v) {

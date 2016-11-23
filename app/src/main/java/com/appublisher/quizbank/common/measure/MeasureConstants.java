@@ -53,4 +53,12 @@ public interface MeasureConstants {
     String SUBMIT_IS_RIGHT = "is_right";
     String SUBMIT_DURATION = "duration";
 
+    /**
+     * 选项
+     */
+    String OPTION_A = "A";
+    String OPTION_B = "B";
+    String OPTION_C = "C";
+    String OPTION_D = "D";
+
 }

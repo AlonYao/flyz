@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.measure.MeasureModel;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSheetAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;

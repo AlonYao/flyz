@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.MeasureReportModel;
+import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 

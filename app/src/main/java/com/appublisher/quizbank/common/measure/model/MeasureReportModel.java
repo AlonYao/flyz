@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.model;
 
 import android.content.Context;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * 做题模块：练习报告
  */
 
-public class MeasureReportModel extends MeasureModel{
+public class MeasureReportModel extends MeasureModel {
 
     public MeasureReportModel(Context context) {
         super(context);

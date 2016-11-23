@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.measure;
+package com.appublisher.quizbank.common.measure.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,6 +20,7 @@ import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
@@ -47,7 +48,7 @@ import java.util.List;
  * 做题模块：管理类
  */
 
-public class MeasureModel implements RequestCallback, MeasureConstants{
+public class MeasureModel implements RequestCallback, MeasureConstants {
 
     public int mPaperId;
     public int mHierarchyId;
@@ -58,10 +59,9 @@ public class MeasureModel implements RequestCallback, MeasureConstants{
     public List<MeasureExcludeBean> mExcludes;
     public MeasureRequest mRequest;
     public Context mContext;
-
-    private SparseIntArray mFinalHeightMap;
-    private List<MeasureTabBean> mTabs;
-    private List<MeasureSubmitBean> mSubmits;
+    public SparseIntArray mFinalHeightMap;
+    public List<MeasureTabBean> mTabs;
+    public List<MeasureSubmitBean> mSubmits;
 
     public MeasureModel(Context context) {
         mContext = context;
