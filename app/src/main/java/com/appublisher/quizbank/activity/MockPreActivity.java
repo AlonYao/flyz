@@ -25,6 +25,7 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_login.activity.BindingMobileActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -442,7 +443,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 + "&app_version=" + Globals.appVersion;
 
         Logger.i("url===" + url);
-        Intent intent = new Intent(this, WebViewActivity.class);
+        Intent intent = new Intent(this, CourseWebViewActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("bar_title", "");
         intent.putExtra("from", "course");

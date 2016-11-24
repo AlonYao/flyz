@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_bg">
+    android:background="@color/common_bg"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:paddingTop="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,46 +27,50 @@
                 <RelativeLayout
                     android:id="@+id/setting_account"
                     style="@style/SettingRL">
+
                     <TextView
                         style="@style/SettingTV"
-                        android:text="@string/setting_account"/>
+                        android:text="@string/setting_account" />
+
                     <ImageView
                         style="@style/SettingArrow"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
-                <View
-                    style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 我的学号 -->
                 <RelativeLayout
                     android:id="@+id/setting_sno_rl"
                     style="@style/SettingRL">
+
                     <TextView
                         style="@style/SettingTV"
-                        android:text="@string/setting_studentid"/>
+                        android:text="@string/setting_studentid" />
+
                     <TextView
                         android:id="@+id/setting_sno"
                         style="@style/SettingTV"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="18dp"/>
+                        android:layout_marginRight="18dp" />
                 </RelativeLayout>
 
-                <View
-                    style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 我的考试 -->
                 <RelativeLayout
                     android:id="@+id/setting_myexam"
                     style="@style/SettingRL">
+
                     <TextView
                         style="@style/SettingTV"
-                        android:text="@string/setting_myexam"/>
+                        android:text="@string/setting_myexam" />
+
                     <TextView
                         android:id="@+id/setting_exam"
                         style="@style/SettingTV"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="18dp"/>
+                        android:layout_marginRight="18dp" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -74,16 +78,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
                 android:layout_marginTop="15dp"
+                android:background="@android:color/white"
                 android:orientation="vertical">
 
                 <!-- 学习提醒 -->
-                <RelativeLayout
-                    style="@style/SettingRL">
+                <RelativeLayout style="@style/SettingRL">
+
                     <TextView
                         style="@style/SettingTV"
-                        android:text="@string/setting_push"/>
+                        android:text="@string/setting_push" />
+
                     <CheckBox
                         android:id="@+id/setting_push_cb"
                         style="@style/SettingCheckBox"
@@ -91,20 +96,22 @@
                         tools:ignore="RtlSymmetry" />
                 </RelativeLayout>
 
-                <View
-                    style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 系统通知 -->
                 <RelativeLayout
                     android:id="@+id/setting_notice"
                     style="@style/SettingRL">
+
                     <TextView
                         android:id="@+id/setting_notice_tv"
                         style="@style/SettingTV"
-                        android:text="@string/setting_notice"/>
+                        android:text="@string/setting_notice" />
+
                     <ImageView
                         style="@style/SettingArrow"
                         tools:ignore="ContentDescription" />
+
                     <ImageView
                         android:id="@+id/setting_redpoint"
                         android:layout_width="wrap_content"
@@ -118,47 +125,70 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
                 android:layout_marginTop="15dp"
+                android:background="@android:color/white"
                 android:orientation="vertical">
 
                 <!-- 意见反馈 -->
                 <RelativeLayout
                     android:id="@+id/setting_feedback"
                     style="@style/SettingRL">
+
                     <TextView
                         style="@style/SettingTV"
-                        android:text="@string/setting_feedback"/>
+                        android:text="@string/setting_feedback" />
+
                     <ImageView
                         style="@style/SettingArrow"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
-                <View style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 常见问题 -->
                 <RelativeLayout
                     android:id="@+id/setting_qa"
                     style="@style/SettingRL">
+
                     <TextView
                         style="@style/SettingTV"
-                        android:text="@string/setting_qa"/>
+                        android:text="@string/setting_qa" />
+
                     <ImageView
                         style="@style/SettingArrow"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
-                <View style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 手动清理缓存 -->
                 <RelativeLayout
                     android:id="@+id/setting_delete_cache"
                     style="@style/SettingRL">
+
                     <TextView
                         style="@style/SettingTV"
-                        android:text="@string/setting_delete_cache"/>
+                        android:text="@string/setting_delete_cache" />
+
                     <TextView
                         android:id="@+id/setting_delete_cache_size"
+                        style="@style/SettingTV"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="18dp"
+                        tools:ignore="RtlHardcoded" />
+                </RelativeLayout>
+
+                <View style="@style/SettingLine" />
+
+                <!-- 版本号 -->
+                <RelativeLayout style="@style/SettingRL">
+
+                    <TextView
+                        style="@style/SettingTV"
+                        android:text="@string/setting_version_code" />
+
+                    <TextView
+                        android:id="@+id/setting_version_code"
                         style="@style/SettingTV"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="18dp"

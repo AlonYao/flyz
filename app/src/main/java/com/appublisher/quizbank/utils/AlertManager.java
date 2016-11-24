@@ -12,6 +12,7 @@ import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
 import com.appublisher.lib_login.activity.UserInfoActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
@@ -22,13 +23,11 @@ import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.MeasureActivity;
 import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
-import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.business.MeasureModel;
-import com.appublisher.quizbank.model.business.StudyIndexModel;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.umeng.analytics.MobclickAgent;
@@ -369,7 +368,7 @@ public class AlertManager {
         tvLearn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, WebViewActivity.class);
+                Intent intent = new Intent(activity, CourseWebViewActivity.class);
                 intent.putExtra("url", jump_url
                         + "&user_id=" + LoginModel.getUserId()
                         + "&user_token=" + LoginModel.getUserToken());

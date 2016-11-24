@@ -167,6 +167,10 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             new MeasureModel(this).checkCache();
         }
 
+        if (!Utils.isConnectingToInternet(QuizBankApp.getInstance().getApplicationContext())) {
+            ToastManager.showToast(this, "当前无可用网络");
+            courseRadioButton.setChecked(true);
+        }
     }
 
     public void setValue() {

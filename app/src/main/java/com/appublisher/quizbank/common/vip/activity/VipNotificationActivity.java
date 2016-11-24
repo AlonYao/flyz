@@ -12,8 +12,8 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.common.vip.adapter.VipNotificationAdapter;
 import com.appublisher.quizbank.common.vip.netdata.VipNotificationResp;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
@@ -83,7 +83,7 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
                 if (type == 3) {
                     String url = notificationsBean.getRedirect_url();
                     if (url == null || "".equals(url)) return;
-                    final Intent intent = new Intent(VipNotificationActivity.this, WebViewActivity.class);
+                    final Intent intent = new Intent(VipNotificationActivity.this, CourseWebViewActivity.class);
                     intent.putExtra("url", url);
                     startActivity(intent);
                 } else {

@@ -42,6 +42,7 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
     public TextView areaFilterTv;
     private InterviewPaperListModel interviewPaperListModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,7 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         }
 
         xListView = (XListView) findViewById(R.id.listView);
+
         list = new ArrayList<>();
         adapter = new PaperListAdapter(this, list);
 
@@ -157,12 +159,15 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
             xListView.stopLoadMore();
             InterviewPaperListResp interviewPaperListResp = GsonManager.getModel(response, InterviewPaperListResp.class);
             if (interviewPaperListResp.getResponse_code() == 1) {
+
                 if (page == 1) {
                     list.clear();
                     xListView.setPullLoadEnable(true);
                 }
+
                 list.addAll(interviewPaperListResp.getPapers());
                 adapter.notifyDataSetChanged();
+
                 if (interviewPaperListResp.getPapers().size() < 15) {
                     xListView.setPullLoadEnable(false);
                     if (page == 1 && interviewPaperListResp.getPapers().size() == 0) {

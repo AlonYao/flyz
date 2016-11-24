@@ -16,12 +16,15 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
+import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.update.NewVersion;
@@ -106,6 +109,7 @@ public class SplashActivity extends Activity implements RequestCallback {
         // 版本更新后，更新内容是否提示
         editor.putBoolean("firstNotice", isFirstStart);
         editor.commit();
+
     }
 
     @Override
@@ -255,7 +259,7 @@ public class SplashActivity extends Activity implements RequestCallback {
                             // 外部链接
                             toMainActivity();
 
-                            Intent intent = new Intent(SplashActivity.this, WebViewActivity.class);
+                            Intent intent = new Intent(SplashActivity.this, CourseWebViewActivity.class);
                             intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(imageBean.getTarget()));
                             if (imageBean.getTarget() != null && imageBean.getTarget().contains("course_id"))
                                 intent.putExtra("from", "course");

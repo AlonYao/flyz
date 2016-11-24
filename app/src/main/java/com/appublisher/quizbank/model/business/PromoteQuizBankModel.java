@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MockPreActivity;
-import com.appublisher.quizbank.activity.WebViewActivity;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.network.ParamBuilder;
 
@@ -82,7 +82,7 @@ public class PromoteQuizBankModel extends PromoteModel {
                 if ("url".equals(target_type)) {
                     // 外部链接
 
-                    Intent intent = new Intent(getContext(), WebViewActivity.class);
+                    Intent intent = new Intent(getContext(), CourseWebViewActivity.class);
                     intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(alertBean.getTarget()));
                     if (alertBean.getTarget() != null && alertBean.getTarget().contains("course_id"))
                         intent.putExtra("from", "course");

@@ -79,17 +79,31 @@ public class PaperDetailAdaper extends PagerAdapter {
             }
 
             analysisView.setVisibility(View.GONE);
+            if ("notice".equals(questionsBean.getStatus())) {
+                analysisSwitchTv.setText("展开提示");
+            }
+
             analysisSwitchView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (analysisView.getVisibility() == View.VISIBLE) {
                         analysisView.setVisibility(View.GONE);
-                        analysisSwitchTv.setText("展开解析");
                         analysisIm.setImageResource(R.drawable.interview_arrow_down);
+                        if ("notice".equals(questionsBean.getStatus())) {
+                            analysisSwitchTv.setText("收起提示");
+                            analysisTv.setVisibility(View.GONE);
+                        } else {
+                            analysisSwitchTv.setText("收起解析");
+                            analysisTv.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         analysisView.setVisibility(View.VISIBLE);
-                        analysisSwitchTv.setText("收起解析");
                         analysisIm.setImageResource(R.drawable.interview_arrow_up);
+                        if ("notice".equals(questionsBean.getStatus())) {
+                            analysisSwitchTv.setText("展开提示");
+                        } else {
+                            analysisSwitchTv.setText("展开解析");
+                        }
                     }
                 }
             });

@@ -214,10 +214,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activity.WebViewActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_web_view" />
-        <activity
             android:name=".activity.AppGuideActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_app_guide"

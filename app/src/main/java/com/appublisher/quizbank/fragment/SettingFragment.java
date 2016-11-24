@@ -50,11 +50,14 @@ public class SettingFragment extends Fragment implements QApiConstants {
     private TextView mTvSno;
     private TextView mTvExam;
     private TextView mTvCacheSize;
+    private TextView mTvVersion;
     private ImageView mIvRedPoint;
     private RelativeLayout mRlSno;
     private DiskLruImageCache mDiskLruImageCache;
 
-    /** Umeng */
+    /**
+     * Umeng
+     */
     private String mUmengAccount;
     private String mUmengMyTest;
     private String mUmengRemind;
@@ -85,6 +88,7 @@ public class SettingFragment extends Fragment implements QApiConstants {
         mIvRedPoint = (ImageView) view.findViewById(R.id.setting_redpoint);
         mTvSno = (TextView) view.findViewById(R.id.setting_sno);
         mTvExam = (TextView) view.findViewById(R.id.setting_exam);
+        mTvVersion = (TextView) view.findViewById(R.id.setting_version_code);
         mRlSno = (RelativeLayout) view.findViewById(R.id.setting_sno_rl);
 
         // 成员变量初始化
@@ -243,7 +247,7 @@ public class SettingFragment extends Fragment implements QApiConstants {
         GlobalSetting globalSetting = GlobalSettingDAO.findById();
         if (globalSetting != null && globalSetting.latest_notify == Globals.last_notice_id) {
             mIvRedPoint.setVisibility(View.GONE);
-        } else if (Globals.last_notice_id == 0){
+        } else if (Globals.last_notice_id == 0) {
             mIvRedPoint.setVisibility(View.GONE);
         } else {
             mIvRedPoint.setVisibility(View.VISIBLE);
@@ -252,6 +256,9 @@ public class SettingFragment extends Fragment implements QApiConstants {
         // 获取缓存大小
         mTvCacheSize.setText(
                 String.valueOf(mDiskLruImageCache.getCacheSize() / (1024 * 1024)) + "MB");
+
+        //版本号
+        mTvVersion.setText(Globals.appVersion);
 
         // Umeng
         MobclickAgent.onPageStart("SettingFragment");

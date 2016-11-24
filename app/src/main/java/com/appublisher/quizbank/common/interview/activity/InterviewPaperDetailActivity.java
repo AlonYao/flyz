@@ -2,8 +2,10 @@ package com.appublisher.quizbank.common.interview.activity;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.View;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -26,6 +28,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private PaperDetailAdaper adaper;
     private List<InterviewPaperDetailResp.QuestionsBean> list;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         paper_id = getIntent().getIntExtra("paper_id", 0);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
 
         list = new ArrayList<>();
         adaper = new PaperDetailAdaper(this, list);
@@ -57,6 +61,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 list.clear();
                 list.addAll(interviewPaperDetailResp.getQuestions());
                 adaper.notifyDataSetChanged();
+
+                if (list.size() == 0) {
+                    ToastManager.showToast(this, "没有面试题目");
+                }
+            } else if (interviewPaperDetailResp.getResponse_code() == 1001) {
+                ToastManager.showToast(this, "没有面试题目");
             }
         }
 

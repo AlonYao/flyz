@@ -36,7 +36,7 @@
     <string name="homepage_special_value">暂无</string>
     <string name="homepage_today_exam">今日mini模考</string>
     <string name="homepage_today_exam_value">已有0人参加</string>
-    <string name="drawer_version">版本号</string>
+
 
     <!-- 快讯 -->
     <string name="course_promote">快讯</string>
@@ -50,6 +50,7 @@
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_qa">常见问题</string>
     <string name="setting_delete_cache">手动清理缓存</string>
+    <string name="setting_version_code">版本号</string>
 
     <!-- 做题 -->
     <string name="measure_option_a">A</string>
