@@ -243,8 +243,8 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 //                    intent.putExtra("paper_name", paperName);
 
                     Intent intent = new Intent(mActivity, MeasureActivity.class);
-                    intent.putExtra(MeasureConstants.PAPER_TYPE, "entire");
-                    intent.putExtra(MeasureConstants.PAPER_ID, paperId);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, "entire");
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, paperId);
 //                    intent.putExtra("paper_name", paperName);
 
                     // Umeng

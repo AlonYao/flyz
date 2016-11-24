@@ -57,6 +57,8 @@ public interface MeasureConstants {
     String SUBMIT_NOTE_IDS = "note_ids";
     String SUBMIT_IS_RIGHT = "is_right";
     String SUBMIT_DURATION = "duration";
+    String SUBMIT_DONE = "done";
+    String SUBMIT_UNDONE = "undone";
 
     /**
      * 选项

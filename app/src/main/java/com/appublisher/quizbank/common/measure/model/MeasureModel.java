@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.model;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
+import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -263,6 +265,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                     noteIdList.add(noteIdArray.getInt(j));
                 }
                 submitBean.setNote_ids(noteIdList);
+
+                list.add(submitBean);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -500,7 +504,10 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         return tabBean.getPosition();
     }
 
-    public void submit() {
+    public void submit(boolean isDone) {
+        String doneStatus = SUBMIT_DONE;
+        if (!isDone) doneStatus = SUBMIT_UNDONE;
+
         SharedPreferences spf = getMeasureCache(mContext);
         if (spf == null) return;
         int paperId = spf.getInt(CACHE_PAPER_ID, 0);
@@ -519,9 +526,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         }
 
         if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
-
-//        mRequest.submitPaper(MeasureParamBuilder.submitPaper(
-//                paperId, paperTpye, redo, durtion, answer, "done"));
+        mRequest.submitPaper(MeasureParamBuilder.submitPaper(
+                paperId, paperTpye, redo, durtion, answer, doneStatus));
     }
 
     /**
@@ -545,6 +551,15 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         }
 
         return jsonArray.toString();
+    }
+
+    public void checkRecord() {
+        if (hasRecord()) {
+            if (mContext instanceof MeasureActivity)
+                ((MeasureActivity) mContext).showSaveTestAlert();
+        } else {
+            if (mContext instanceof Activity) ((Activity) mContext).finish();
+        }
     }
 
     @Override

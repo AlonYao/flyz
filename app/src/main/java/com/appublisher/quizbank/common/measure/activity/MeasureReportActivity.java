@@ -38,8 +38,8 @@ public class MeasureReportActivity extends BaseActivity implements
 
     private void initData() {
         mModel = new MeasureReportModel(this);
-        mModel.mPaperId = getIntent().getIntExtra(PAPER_ID, 0);
-        mModel.mPaperType = getIntent().getStringExtra(PAPER_TYPE);
+        mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
+        mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
         mModel.getData();
     }
 

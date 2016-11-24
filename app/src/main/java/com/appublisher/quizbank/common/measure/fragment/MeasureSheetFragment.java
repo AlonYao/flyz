@@ -164,7 +164,7 @@ public class MeasureSheetFragment extends DialogFragment implements View.OnClick
         if (view.getId() == R.id.measure_sheet_submit) {
             // 提交
             if (!(getActivity() instanceof MeasureActivity)) return;
-            ((MeasureActivity) getActivity()).mModel.submit();
+            ((MeasureActivity) getActivity()).mModel.submit(true);
         }
     }
 }

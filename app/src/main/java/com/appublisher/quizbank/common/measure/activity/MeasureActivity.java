@@ -1,7 +1,9 @@
 package com.appublisher.quizbank.common.measure.activity;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -13,14 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.measure.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.fragment.MeasureSheetFragment;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 
 import java.util.List;
 
@@ -74,6 +77,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // 返回键
+            mModel.checkRecord();
         } else if (item.getTitle().equals(MENU_PAUSE)) {
             // 暂停
         } else if (item.getTitle().equals(MENU_ANSWERSHEET)) {
@@ -86,6 +90,11 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        mModel.checkRecord();
     }
 
     private void initData() {
@@ -215,5 +224,63 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         }
         MeasureSheetFragment sheetFragment = new MeasureSheetFragment();
         sheetFragment.show(transaction, "MeasureSheetFragment");
+    }
+
+    /**
+     * 保存测验Alert
+     */
+    public void showSaveTestAlert() {
+
+        int titleId = R.string.alert_savetest_title;
+        int msgId;
+        int pId;
+        int nId;
+
+        if (MOCK.equals(mModel.mPaperType)) {
+            msgId = R.string.alert_mock_back;
+            pId = R.string.alert_mock_p;
+            nId = R.string.alert_mock_n;
+        } else {
+            msgId = R.string.alert_savetest_msg;
+            pId = R.string.alert_p;
+            nId = R.string.alert_n;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(titleId)
+                .setMessage(msgId)
+                .setNegativeButton(nId,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setPositiveButton(pId,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 更新当前页面的时长
+
+                                // 保存至本地
+//                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
+
+                                // 提交数据
+                                if(MOCK.equals(mModel.mPaperType)){
+                                    mModel.submit(true);
+                                }else{
+                                    mModel.submit(false);
+                                }
+
+                                // 保存练习
+                                ToastManager.showToast(MeasureActivity.this, "保存成功");
+                                dialog.dismiss();
+
+                                // Umeng
+//                                UmengManager.onEvent(activity, "0");
+
+                                finish();
+                            }
+                        }).show();
     }
 }
