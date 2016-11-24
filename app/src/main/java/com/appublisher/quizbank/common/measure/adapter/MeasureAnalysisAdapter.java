@@ -57,4 +57,12 @@ public class MeasureAnalysisAdapter extends FragmentStatePagerAdapter{
     public int getItemPosition(Object object) {
         return POSITION_NONE;
     }
+
+    public List<MeasureQuestionBean> getQuestions() {
+        return mQuestions;
+    }
+
+    public List<MeasureAnswerBean> getAnswers() {
+        return mAnswers;
+    }
 }

@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.common.measure.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -16,7 +18,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
-import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
@@ -26,10 +27,10 @@ import com.appublisher.quizbank.common.measure.adapter.MeasureAnalysisAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.fragment.MeasureAnalysisSheetFragment;
 import com.appublisher.quizbank.common.measure.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
 
 import java.util.List;
 import java.util.Random;
@@ -37,13 +38,13 @@ import java.util.Random;
 public class MeasureAnalysisActivity extends BaseActivity implements
         MeasureConstants, View.OnClickListener{
 
-    private ViewPager mViewPager;
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
 
     public int mCurQuestionId;
     public MeasureAnalysisModel mModel;
     public MeasureAnalysisAdapter mAdapter;
+    public ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +148,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements
             // Umeng
 //            mUmengDelete = "1";
         } else if (item.getTitle().equals("答题卡")) {
-//            skipToAnswerSheet();
+            skipToSheet();
         } else if ("分享".equals(item.getTitle())) {
             /** 构造友盟分享实体 **/
             String[] content = {"检验学霸的唯一标准就是做对题目，我出一道考考你？接招吗？",
@@ -167,7 +168,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements
                 UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
                         .setTitle(resources.getString(R.string.share_title))
                         .setText(content[random])
-                        .setUmImage(new UMImage(this, Utils.getBitmapByView(mViewPager)))
+                        .setUmImage(UmengManager.getUMImage(this, mViewPager))
                         .setTargetUrl(targetUrl);
                 UmengManager.shareAction(this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
                     @Override
@@ -294,5 +295,18 @@ public class MeasureAnalysisActivity extends BaseActivity implements
             startActivity(intent);
             mPopupWindow.dismiss();
         }
+    }
+
+    /**
+     * 跳转至答题卡
+     */
+    private void skipToSheet() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment fragment = getFragmentManager().findFragmentByTag("SheetFragment");
+        if (fragment != null) {
+            transaction.remove(fragment);
+        }
+        MeasureAnalysisSheetFragment sheetFragment = new MeasureAnalysisSheetFragment();
+        sheetFragment.show(transaction, "SheetFragment");
     }
 }
