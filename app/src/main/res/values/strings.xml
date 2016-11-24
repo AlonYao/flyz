@@ -59,7 +59,6 @@
     <string name="measure_option_d">D</string>
 
     <!-- 解析 -->
-    <string name="measure_analysis">【解析】</string>
     <string name="measure_analysis_fb_imagetext">图/文有错</string>
     <string name="measure_analysis_fb_answerwrong">答案有错</string>
     <string name="measure_analysis_fb_analysiswrong">解析有错</string>
