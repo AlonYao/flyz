@@ -6,11 +6,8 @@ import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
-import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
-import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
-import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +35,7 @@ public class MeasureAnalysisModel extends MeasureModel{
     }
 
     private void showErrorOnly() {
-        if (mAnalysisBean == null) return;
+        if (mAnalysisBean == null || !(mContext instanceof MeasureAnalysisActivity)) return;
 
         // 构造数据结构
         mTabs = new ArrayList<>();
@@ -47,6 +44,32 @@ public class MeasureAnalysisModel extends MeasureModel{
 
         if (mAnalysisBean.getCategorys() == null || mAnalysisBean.getCategorys().size() == 0) {
             // 非整卷
+            List<Integer> wrongIndex = getWrongIndex(mAnalysisBean.getAnswers());
+            if (wrongIndex == null || wrongIndex.size() == 0) return;
+
+            // 生成题号
+            List<MeasureQuestionBean> originList = mAnalysisBean.getQuestions();
+            if (originList == null) return;
+            int order = 0;
+            int size = originList.size();
+            for (int i = 0; i < size; i++) {
+                MeasureQuestionBean questionBean = originList.get(i);
+                if (questionBean == null) continue;
+                order++;
+                questionBean.setQuestion_order(order);
+                questionBean.setQuestion_amount(size);
+                originList.set(i, questionBean);
+            }
+
+            // 构造Questions
+            for (Integer index : wrongIndex) {
+                if (index < 0 || index >= originList.size()) continue;
+                questions.add(originList.get(index));
+            }
+
+            // 构造Answers
+            answers = getWrongOnlyAnswers(mAnalysisBean.getAnswers());
+
         } else {
             // 整卷
             int order = 0;
@@ -73,6 +96,7 @@ public class MeasureAnalysisModel extends MeasureModel{
                 if (wrongIndex == null || wrongIndex.size() == 0) {
                     // 全对
                     question.setIs_allright(true);
+                    question.setDesc_position(i);
                     questions.add(question);
                     // 递增题号
                     order = order + categoryQuestions.size();
@@ -108,6 +132,8 @@ public class MeasureAnalysisModel extends MeasureModel{
                 answers.addAll(tempAnswers);
             }
         }
+
+        ((MeasureAnalysisActivity) mContext).showViewPager(questions, answers);
     }
 
     private void showAll() {

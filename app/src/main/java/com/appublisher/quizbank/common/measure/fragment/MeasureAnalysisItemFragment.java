@@ -192,11 +192,11 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
         if (OPTION_A.equals(userAnswer)) {
             setOptionBg(mTvOptionA, false);
         } else if (OPTION_B.equals(userAnswer)) {
-            setOptionBg(mTvOptionA, false);
+            setOptionBg(mTvOptionB, false);
         } else if (OPTION_C.equals(userAnswer)) {
-            setOptionBg(mTvOptionA, false);
+            setOptionBg(mTvOptionC, false);
         } else if (OPTION_D.equals(userAnswer)) {
-            setOptionBg(mTvOptionA, false);
+            setOptionBg(mTvOptionD, false);
         }
     }
 

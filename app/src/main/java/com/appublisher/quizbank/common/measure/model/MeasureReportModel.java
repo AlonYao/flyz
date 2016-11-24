@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
+import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureHistoryResp;
@@ -20,12 +22,43 @@ import java.util.List;
 
 public class MeasureReportModel extends MeasureModel {
 
+    public MeasureAnalysisBean mAnalysisBean;
+
     public MeasureReportModel(Context context) {
         super(context);
     }
 
     public void getData() {
         mRequest.getHistoryExerciseDetail(mPaperId, mPaperType);
+    }
+
+    public boolean isAllRight() {
+        if (mAnalysisBean == null) return true;
+
+        List<MeasureCategoryBean> categorys = mAnalysisBean.getCategorys();
+        if (categorys == null || categorys.size() == 0) {
+            // 非整卷
+            List<MeasureAnswerBean> answers = mAnalysisBean.getAnswers();
+            if (answers == null) return true;
+            for (MeasureAnswerBean answer : answers) {
+                if (answer == null) continue;
+                if (!answer.is_right()) return false;
+            }
+
+        } else {
+            // 整卷
+            for (MeasureCategoryBean category : categorys) {
+                if (category == null) continue;
+                List<MeasureAnswerBean> answers = category.getAnswers();
+                if (answers == null) return true;
+                for (MeasureAnswerBean answer : answers) {
+                    if (answer == null) continue;
+                    if (!answer.is_right()) return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -39,6 +72,12 @@ public class MeasureReportModel extends MeasureModel {
         MeasureHistoryResp resp = GsonManager.getModel(response, MeasureHistoryResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureReportActivity)) return;
+
+        // init param
+        mAnalysisBean = new MeasureAnalysisBean();
+        mAnalysisBean.setCategorys(resp.getCategory());
+        mAnalysisBean.setQuestions(resp.getQuestions());
+        mAnalysisBean.setAnswers(resp.getAnswers());
 
         // 试卷信息
         ((MeasureReportActivity) mContext).showPaperInfo(

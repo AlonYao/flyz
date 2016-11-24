@@ -1,15 +1,18 @@
 package com.appublisher.quizbank.common.measure.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
@@ -18,7 +21,10 @@ import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 
 import java.util.List;
 
-public class MeasureReportActivity extends BaseActivity implements MeasureConstants {
+public class MeasureReportActivity extends BaseActivity implements
+        MeasureConstants, View.OnClickListener {
+
+    private MeasureReportModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +35,23 @@ public class MeasureReportActivity extends BaseActivity implements MeasureConsta
     }
 
     private void initData() {
-        MeasureReportModel model = new MeasureReportModel(this);
-        model.mPaperId = getIntent().getIntExtra(PAPER_ID, 0);
-        model.mPaperType = getIntent().getStringExtra(PAPER_TYPE);
-        model.getData();
+        mModel = new MeasureReportModel(this);
+        mModel.mPaperId = getIntent().getIntExtra(PAPER_ID, 0);
+        mModel.mPaperType = getIntent().getStringExtra(PAPER_TYPE);
+        mModel.getData();
     }
 
     private void initView() {
+        Button btnAll = (Button) findViewById(R.id.measure_report_all);
+        Button btnError = (Button) findViewById(R.id.measure_report_error);
 
+        if (btnAll != null) {
+            btnAll.setOnClickListener(this);
+        }
+
+        if (btnError != null) {
+            btnError.setOnClickListener(this);
+        }
     }
 
     public void showPaperInfo(String type, String name) {
@@ -193,6 +208,20 @@ public class MeasureReportActivity extends BaseActivity implements MeasureConsta
             view.setImageResource(R.drawable.practice_report_level5);
         } else {
             view.setImageResource(R.drawable.practice_report_level0);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.measure_report_all) {
+            // 全部
+        } else if (v.getId() == R.id.measure_report_error) {
+            // 错题
+            if (mModel.isAllRight()) return;
+            Intent intent = new Intent(this, MeasureAnalysisActivity.class);
+            intent.putExtra(INTENT_ANALYSIS_BEAN, GsonManager.modelToString(mModel.mAnalysisBean));
+            intent.putExtra(INTENT_ANALYSIS_IS_ERROR_ONLY, true);
+            startActivity(intent);
         }
     }
 }
