@@ -217,6 +217,10 @@ public class MeasureReportActivity extends BaseActivity implements
     public void onClick(View v) {
         if (v.getId() == R.id.measure_report_all) {
             // 全部
+            Intent intent = new Intent(this, MeasureAnalysisActivity.class);
+            intent.putExtra(INTENT_ANALYSIS_BEAN, GsonManager.modelToString(mModel.mAnalysisBean));
+            startActivity(intent);
+
         } else if (v.getId() == R.id.measure_report_error) {
             // 错题
             if (mModel.isAllRight()) return;

@@ -137,7 +137,77 @@ public class MeasureAnalysisModel extends MeasureModel{
     }
 
     private void showAll() {
+        if (mAnalysisBean == null || !(mContext instanceof MeasureAnalysisActivity)) return;
 
+        // 构造数据结构
+        mTabs = new ArrayList<>();
+        List<MeasureQuestionBean> questions = new ArrayList<>();
+        List<MeasureAnswerBean> answers = new ArrayList<>();
+
+        if (mAnalysisBean.getCategorys() == null || mAnalysisBean.getCategorys().size() == 0) {
+            // 非整卷
+
+            // 生成题号
+            questions = mAnalysisBean.getQuestions();
+            if (questions == null) return;
+            int order = 0;
+            int size = questions.size();
+            for (int i = 0; i < size; i++) {
+                MeasureQuestionBean questionBean = questions.get(i);
+                if (questionBean == null) continue;
+                order++;
+                questionBean.setQuestion_order(order);
+                questionBean.setQuestion_amount(size);
+                questions.set(i, questionBean);
+            }
+
+            // 构造Answers
+            answers = mAnalysisBean.getAnswers();
+
+        } else {
+            // 整卷
+            int order = 0;
+            int size = mAnalysisBean.getCategorys().size();
+            for (int i = 0; i < size; i++) {
+                MeasureCategoryBean category = mAnalysisBean.getCategorys().get(i);
+                if (category == null) continue;
+
+                List<MeasureQuestionBean> categoryQuestions = category.getQuestions();
+                if (categoryQuestions == null) continue;
+                List<MeasureAnswerBean> categoryAnswers = category.getAnswers();
+                if (categoryAnswers == null) continue;
+
+                // 添加Tab数据
+                MeasureTabBean tabBean = new MeasureTabBean();
+                tabBean.setName(category.getName());
+                tabBean.setPosition(questions.size());
+                mTabs.add(tabBean);
+
+                // 添加说明页
+                MeasureQuestionBean question = new MeasureQuestionBean();
+                question.setIs_desc(true);
+                question.setCategory_name(category.getName());
+                question.setDesc_position(i);
+                questions.add(question);
+
+                MeasureAnswerBean answerBean = new MeasureAnswerBean();
+                answers.add(answerBean);
+                answers.addAll(categoryAnswers);
+
+                // 添加题号
+                int questionSize = categoryQuestions.size();
+                for (int j = 0; j < questionSize; j++) {
+                    MeasureQuestionBean questionBean = categoryQuestions.get(j);
+                    if (questionBean == null) continue;
+                    order++;
+                    questionBean.setQuestion_order(order);
+                    categoryQuestions.set(j, questionBean);
+                }
+                questions.addAll(categoryQuestions);
+            }
+        }
+
+        ((MeasureAnalysisActivity) mContext).showViewPager(questions, answers);
     }
 
     private boolean isAllRight(List<MeasureAnswerBean> answers) {
