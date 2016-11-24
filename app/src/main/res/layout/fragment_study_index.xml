@@ -120,20 +120,27 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/mock_view"
             android:layout_width="338dp"
             android:layout_height="53dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/study_index_mock"
+            android:background="@drawable/avatar_bg_shadow"
             android:orientation="vertical"
-            android:paddingLeft="80dp"
             android:visibility="gone">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/study_index_mock" />
+
             <TextView
+                android:id="@+id/mock_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:paddingLeft="80dp"
                 android:text="模考"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
@@ -142,27 +149,36 @@
                 android:id="@+id/mock_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/mock_tv"
                 android:layout_marginTop="2dp"
+                android:paddingLeft="80dp"
                 android:text="模考名称名称名称"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/assess_view"
             android:layout_width="338dp"
             android:layout_height="53dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/study_index_assessment"
+            android:background="@drawable/avatar_bg_shadow"
             android:orientation="vertical"
-            android:paddingLeft="80dp"
             android:visibility="gone">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/study_index_assessment" />
+
             <TextView
+                android:id="@+id/assess_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:paddingLeft="80dp"
                 android:text="估分"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
@@ -171,12 +187,14 @@
                 android:id="@+id/assess_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/assess_tv"
                 android:layout_marginTop="2dp"
+                android:paddingLeft="80dp"
                 android:text="估分名称估分名称"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

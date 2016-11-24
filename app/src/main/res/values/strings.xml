@@ -189,6 +189,13 @@
     <string name="title_activity_app_guide">AppGuideActivity</string>
     <string name="title_activity_gufen_list">估分</string>
     <string name="title_activity_mock_pre">模考总动员</string>
+    <string name="title_activity_mock_list">模考</string>
+
+    <!--面试 -->
+    <string name="title_activity_interview_guokao">国考精选</string>
+    <string name="title_activity_interview_category">分类突破</string>
+    <string name="title_activity_interview_paper_detail">题目列表</string>
+    <string name="title_activity_interview_material_detail">材料</string>
 
 
     <!-- 支付模块 -->

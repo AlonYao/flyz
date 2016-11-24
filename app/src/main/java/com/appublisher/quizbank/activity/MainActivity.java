@@ -2,6 +2,8 @@ package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,13 +19,11 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
@@ -297,7 +297,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             MenuItemCompat.setShowAsAction(menu.add("设置").setIcon(R.drawable.actionbar_setting),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         } else if (mCurFragment instanceof InterviewIndexFragment) {
-            MenuItemCompat.setShowAsAction(menu.add("笔试").setIcon(R.drawable.tab_study_n),
+            MenuItemCompat.setShowAsAction(menu.add("笔试").setIcon(R.drawable.actionbar_study),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
@@ -463,8 +463,23 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
                 mCurFragment = mInterviewIndexFragment;
                 indexString = "interview";
+                studyRadioButton.setText("面试");
+//                Drawable drawable = getResources().getDrawable(R.drawable.tab_interview_selector);
 
+                Drawable drawable = getResources().getDrawable(R.drawable.tab_interview_selector);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                studyRadioButton.setCompoundDrawables(null, drawable, null, null);
+                studyRadioButton.setText("面试");
 
+//                int sysVersion = Integer.parseInt(Build.VERSION.SDK);
+//                if (sysVersion < 17) {
+//                    drawable.setBounds(0, 0, 30, 30);
+//                    studyRadioButton
+//                            .setCompoundDrawables(null, drawable, null, null);
+//                } else {
+//                    studyRadioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
+//                            drawable, null, null);
+//                }
                 break;
             default:
                 break;
