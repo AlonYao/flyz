@@ -478,7 +478,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 break;
         }
 
-//        mDrawerLayout.closeDrawer(mDrawerList);
         transaction.commit();
 
         // 更新Menu
