@@ -28,11 +28,11 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_login.activity.BindingMobileActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.ActivitySkipConstants;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.MockDAO;
-import com.appublisher.quizbank.model.business.MeasureModel;
+import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -321,9 +321,9 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         mock_time = mockPreResp.getMock_time();
 
         // 缓存模考时间
-        MeasureModel measureModel = new MeasureModel(this);
-        measureModel.updateMockTime(mock_time);
-        measureModel.updatePaperName(paper_name);
+        LegacyMeasureModel legacyMeasureModel = new LegacyMeasureModel(this);
+        legacyMeasureModel.updateMockTime(mock_time);
+        legacyMeasureModel.updatePaperName(paper_name);
 
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         int date = MockDAO.getIsDateById(mock_id);
@@ -394,6 +394,12 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 if ("点击进入".equals(bottom_left.getText().toString().trim())) {
                     final Intent intent = new Intent(this, MockListActivity.class);
                     intent.putExtra("mock_list", GsonManager.modelToString(mMockPreResp));
+                    intent.putExtra("from", "mockpre");
+                    intent.putExtra("paper_id", mock_id);
+                    intent.putExtra("paper_type", "mock");
+                    intent.putExtra("mock_time", mock_time);
+                    intent.putExtra("paper_name", paper_name);
+                    intent.putExtra("redo", false);
                     startActivity(intent);
                     finish();
                     // Umeng
@@ -436,11 +442,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
      * 跳转课程详情页
      */
     public void skipCourseDetailPage() {
-        String url = courseDetailLink
-                + "&user_id=" + LoginModel.getUserId()
-                + "&user_token=" + LoginModel.getUserToken()
-                + "&app_type=quizbank"
-                + "&app_version=" + Globals.appVersion;
+        String url = LoginParamBuilder.finalUrl(courseDetailLink);
 
         Logger.i("url===" + url);
         Intent intent = new Intent(this, CourseWebViewActivity.class);

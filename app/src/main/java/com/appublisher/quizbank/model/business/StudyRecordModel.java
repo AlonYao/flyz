@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.quizbank.activity.MeasureActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
@@ -56,8 +56,7 @@ public class StudyRecordModel {
             mHistoryPapersListAdapter.notifyDataSetChanged();
         }
 
-        fragment.mXListView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
+        fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (fragment.mHistoryPapers == null
@@ -82,7 +81,7 @@ public class StudyRecordModel {
 
                         } else if ("undone".equals(status)) {
                             // 跳转至做题页面
-                            Intent intent = new Intent(fragment.mActivity, MeasureActivity.class);
+                            Intent intent = new Intent(fragment.mActivity, LegacyMeasureActivity.class);
                             intent.putExtra("from", "study_record");
                             intent.putExtra("exercise_id", historyPaper.getPaper_id());
                             intent.putExtra("paper_type", historyPaper.getPaper_type());

@@ -23,7 +23,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/common_bg">
 
             <!-- 练习类型及内容信息 -->
             <TextView
@@ -234,7 +235,7 @@
                     android:layout_marginBottom="15dp"
                     android:layout_gravity="center_horizontal"
                     android:visibility="gone"
-                    android:src="@drawable/practice_report_logo"
+                    android:src="@drawable/measure_report_notes_nochange"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 

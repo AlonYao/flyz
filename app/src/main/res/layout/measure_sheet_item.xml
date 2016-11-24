@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/measure_sheet_item_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:textColor="@color/common_text"/>
+
+    <com.appublisher.lib_basic.customui.ExpandableHeightGridView
+        android:id="@+id/measure_sheet_item_gv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        android:layout_marginBottom="10dp"
+        android:numColumns="5"
+        android:clipToPadding="false"
+        android:gravity="center"
+        android:verticalSpacing="15dp">
+    </com.appublisher.lib_basic.customui.ExpandableHeightGridView>
+
+</LinearLayout>

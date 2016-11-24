@@ -2,33 +2,23 @@ package com.appublisher.quizbank.model.business;
 
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.db.User;
 import com.appublisher.lib_login.model.db.UserDAO;
 import com.appublisher.lib_login.model.netdata.UserExamInfoModel;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
-import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.model.netdata.CarouselResp;
-import com.appublisher.quizbank.model.netdata.course.GradeCourseResp;
 import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.mock.GufenM;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
-import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
-import com.appublisher.quizbank.utils.AlertManager;
 
 import org.json.JSONObject;
 
@@ -65,39 +55,6 @@ public class StudyIndexModel {
 
         String text = "距离" + name + "\n还有" + String.valueOf(day) + "天";
         textView.setText(text);
-    }
-
-
-    /**
-     * 开通课程
-     *
-     * @param homePageFragment 首页
-     */
-    public static void openupCourse(HomePageFragment homePageFragment) {
-        if (Globals.rateCourseResp == null || Globals.rateCourseResp.getResponse_code() != 1)
-            return;
-        ProgressDialogManager.showProgressDialog(homePageFragment.mActivity, false);
-        homePageFragment.mQRequest.getRateCourse(ParamBuilder.getRateCourse(
-                "enroll", String.valueOf(Globals.rateCourseResp.getCourse_id())));
-    }
-
-    /**
-     * 处理开通评价课程回调
-     *
-     * @param response         回调数据
-     * @param homePageFragment 首页
-     */
-    public static void dealOpenupCourseResp(JSONObject response,
-                                            HomePageFragment homePageFragment) {
-
-        GradeCourseResp gradeCourseResp =
-                GsonManager.getModel(response.toString(), GradeCourseResp.class);
-
-        if (gradeCourseResp == null || gradeCourseResp.getResponse_code() != 1) return;
-
-        AlertManager.showGradeSuccessAlert(
-                homePageFragment.mActivity, gradeCourseResp.getJump_url());
-        GradeDAO.setGrade(Globals.appVersion);
     }
 
     /**

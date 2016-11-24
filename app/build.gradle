@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 51
-        versionName "2.0.1"
+        versionCode 54
+        versionName "2.0.4"
 
         //参数
         manifestPlaceholders = [
@@ -21,7 +21,7 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
-            res.srcDirs = ['src/main/res', 'src/main/res-offline', 'src/main/res-opencourse']
+            res.srcDirs = ['src/main/res']
         }
     }
 
@@ -79,6 +79,11 @@ android {
         oppo {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
                                     APP_CHANNEL: "oppo"]
+        }
+
+        smartisan {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "smartisan"]
         }
 
         other {

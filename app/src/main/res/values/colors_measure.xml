@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="measure_divider">#AEB1B3</color>
+    <color name="measure_exclude">#AEB1B3</color>
+    <color name="measure_text">#262B2D</color>
+    <color name="measure_report_error_btn_bg">#FF6666</color>
+
+</resources>

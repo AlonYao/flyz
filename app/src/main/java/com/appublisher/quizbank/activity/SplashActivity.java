@@ -14,24 +14,20 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
-import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.Globals;
-import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.tendcloud.tenddata.TCAgent;
@@ -258,9 +254,8 @@ public class SplashActivity extends Activity implements RequestCallback {
                         if ("url".equals(targetType)) {
                             // 外部链接
                             toMainActivity();
-
                             Intent intent = new Intent(SplashActivity.this, CourseWebViewActivity.class);
-                            intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(imageBean.getTarget()));
+                            intent.putExtra("url", LoginParamBuilder.finalUrl(imageBean.getTarget()));
                             if (imageBean.getTarget() != null && imageBean.getTarget().contains("course_id"))
                                 intent.putExtra("from", "course");
                             startActivity(intent);

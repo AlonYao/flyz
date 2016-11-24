@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
-import com.appublisher.quizbank.activity.MeasureActivity;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,9 +107,9 @@ public class EntireAnswerSheetAdapter extends BaseAdapter{
                 Class<?> cls;
 
                 if ("analysis".equals(mActivity.mFrom)) {
-                    cls = MeasureAnalysisActivity.class;
+                    cls = LegacyMeasureAnalysisActivity.class;
                 } else {
-                    cls = MeasureActivity.class;
+                    cls = LegacyMeasureActivity.class;
                 }
 
                 Intent intent = new Intent(mActivity, cls);

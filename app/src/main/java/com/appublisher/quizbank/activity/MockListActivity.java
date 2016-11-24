@@ -13,7 +13,6 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MockListAdapter;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
-import com.nostra13.universalimageloader.utils.L;
 
 public class MockListActivity extends BaseActivity {
 
@@ -47,7 +46,7 @@ public class MockListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                final Intent intent = new Intent(MockListActivity.this, MeasureActivity.class);
+                final Intent intent = new Intent(MockListActivity.this, LegacyMeasureActivity.class);
                 intent.putExtra("from", "mockpre");
                 intent.putExtra("paper_id", mockPreResp.getMock_list().get(position).getPaper_id());
                 intent.putExtra("paper_type", "mock");

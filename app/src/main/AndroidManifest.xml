@@ -48,55 +48,16 @@
             </intent-filter>
         </activity>
 
-        <!-- 百度定位 -->
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
-
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="B3547418bc3eb81c55baa59a8fb16975" />
-
-        <!-- 友盟反馈 -->
+        <!-- 友盟 -->
         <activity android:name="com.umeng.fb.ConversationActivity" />
-
-        <!-- 友盟分享 -->
-        <!-- ###################注册SDK使用的Activity###################### -->
-        <!-- 分享编辑页 -->
-        <activity
-            android:name="com.umeng.socialize.view.ShareActivity"
-            android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:noHistory="true"
-            android:theme="@style/Theme.UMDialog"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
-
-        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID -->
-                <data android:scheme="tencent1104655578" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${APP_CHANNEL}" />
         <meta-data
             android:name="TD_CHANNEL_ID"
             android:value="${APP_CHANNEL}" />
+
+        <!-- 数据库 -->
         <meta-data
             android:name="AA_MODELS"
             android:value="com.appublisher.quizbank.model.db.GlobalSetting,                            com.appublisher.quizbank.model.db.Grade,                            com.appublisher.quizbank.model.db.Mock,                            com.appublisher.quizbank.model.db.Paper,                            com.appublisher.lib_login.model.db.User,                            com.appublisher.lib_course.offline.model.db.Offline" />
@@ -104,18 +65,11 @@
             android:name="AA_DB_VERSION"
             android:value="6" />
 
-        <activity
-            android:name="com.alipay.sdk.auth.AuthActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
-            android:exported="false"
-            android:screenOrientation="behind" />
-
         <!-- 个推SDK配置开始 -->
         <receiver
             android:name=".broadcast.PushReceiver"
             android:exported="false">
             <intent-filter>
-
                 <!-- 个推 appID -->
                 <action android:name="${GT_APPID}" />
             </intent-filter>
@@ -128,7 +82,6 @@
             android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait">
-
             <!-- <intent-filter> -->
             <!-- <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" /> -->
             <!-- <category android:name="android.intent.category.DEFAULT" /> -->
@@ -153,7 +106,7 @@
             android:label="@string/title_activity_qa"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MeasureActivity"
+            android:name=".activity.LegacyMeasureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_measure"
             android:screenOrientation="portrait" />
@@ -163,7 +116,7 @@
             android:label="@string/title_activity_answer_sheet"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ScratchPaperActivity"
+            android:name=".common.measure.activity.ScratchPaperActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_scratch_paper"
             android:screenOrientation="portrait"
@@ -174,7 +127,7 @@
             android:label="@string/title_activity_practice_report"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MeasureAnalysisActivity"
+            android:name=".activity.LegacyMeasureAnalysisActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_measure_analysis"
             android:screenOrientation="portrait" />
@@ -304,7 +257,8 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_mock_list"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.interview.activity.InterviewPaperListActivity" />
+        <activity
+            android:name=".common.interview.activity.InterviewPaperListActivity" />
         <activity
             android:name=".common.interview.activity.InterviewGuoKaoActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -324,7 +278,23 @@
             android:name=".common.interview.activity.InterviewMaterialDetailActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_interview_material_detail"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".common.measure.activity.MeasureActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.measure.activity.MeasureReportActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".common.measure.activity.MeasureAnalysisActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".common.measure.activity.MeasureBaseActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

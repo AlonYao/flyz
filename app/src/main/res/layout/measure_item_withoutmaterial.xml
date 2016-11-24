@@ -1,108 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@android:color/white">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:layout_height="wrap_content"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:paddingTop="15dp"
+        android:orientation="vertical">
 
+        <!-- 题干 -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/measure_question_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
-            android:paddingTop="15dp"
-            android:orientation="vertical">
+            android:layout_marginBottom="26dp"
+            android:orientation="vertical"/>
 
-            <!-- 题干 -->
+        <!-- 选项 A -->
+        <LinearLayout
+            android:id="@+id/measure_option_a"
+            style="@style/MeasureOptionLL">
+            <TextView
+                android:id="@+id/measure_option_a_tv"
+                style="@style/MeasureOptionTv"
+                android:text="@string/measure_option_a"/>
             <LinearLayout
-                android:id="@+id/measure_question_content"
+                android:id="@+id/measure_option_a_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="26dp"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-            <!-- 选项 A -->
-            <LinearLayout
-                android:id="@+id/measure_option_a"
-                style="@style/MeasureOptionLL">
-
-                <TextView
-                    android:id="@+id/measure_option_a_tv"
-                    style="@style/MeasureOptionTv"
-                    android:text="@string/measure_option_a"/>
-
-                <LinearLayout
-                    android:id="@+id/measure_option_a_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- 选项 B -->
-            <LinearLayout
-                android:id="@+id/measure_option_b"
-                style="@style/MeasureOptionLL">
-
-                <TextView
-                    android:id="@+id/measure_option_b_tv"
-                    style="@style/MeasureOptionTv"
-                    android:text="@string/measure_option_b"/>
-
-                <LinearLayout
-                    android:id="@+id/measure_option_b_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- 选项 C -->
-            <LinearLayout
-                android:id="@+id/measure_option_c"
-                style="@style/MeasureOptionLL">
-
-                <TextView
-                    android:id="@+id/measure_option_c_tv"
-                    style="@style/MeasureOptionTv"
-                    android:text="@string/measure_option_c"/>
-
-                <LinearLayout
-                    android:id="@+id/measure_option_c_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- 选项 D -->
-            <LinearLayout
-                android:id="@+id/measure_option_d"
-                style="@style/MeasureOptionLL">
-
-                <TextView
-                    android:id="@+id/measure_option_d_tv"
-                    style="@style/MeasureOptionTv"
-                    android:text="@string/measure_option_d"/>
-
-                <LinearLayout
-                    android:id="@+id/measure_option_d_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </LinearLayout>
-
+                android:orientation="vertical"/>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+
+        <!-- 选项 B -->
+        <LinearLayout
+            android:id="@+id/measure_option_b"
+            style="@style/MeasureOptionLL">
+            <TextView
+                android:id="@+id/measure_option_b_tv"
+                style="@style/MeasureOptionTv"
+                android:text="@string/measure_option_b"/>
+            <LinearLayout
+                android:id="@+id/measure_option_b_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+        <!-- 选项 C -->
+        <LinearLayout
+            android:id="@+id/measure_option_c"
+            style="@style/MeasureOptionLL">
+            <TextView
+                android:id="@+id/measure_option_c_tv"
+                style="@style/MeasureOptionTv"
+                android:text="@string/measure_option_c"/>
+            <LinearLayout
+                android:id="@+id/measure_option_c_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+        <!-- 选项 D -->
+        <LinearLayout
+            android:id="@+id/measure_option_d"
+            style="@style/MeasureOptionLL">
+            <TextView
+                android:id="@+id/measure_option_d_tv"
+                style="@style/MeasureOptionTv"
+                android:text="@string/measure_option_d"/>
+            <LinearLayout
+                android:id="@+id/measure_option_d_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

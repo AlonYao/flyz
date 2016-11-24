@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--正确答案-->
+    <TextView
+        android:id="@+id/measure_analysis_rightanswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/common_text"
+        android:textSize="17sp" />
+
+    <!-- 统计 -->
+    <TextView
+        android:id="@+id/measure_analysis_accuracy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/common_text"
+        android:textSize="17sp" />
+
+    <!-- 解析：支持图文混排 -->
+    <LinearLayout
+        android:id="@+id/measure_analysis_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <!-- 知识点 -->
+    <TextView
+        android:id="@+id/measure_analysis_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/common_text"
+        android:textSize="17sp" />
+
+    <!-- 来源 -->
+    <TextView
+        android:id="@+id/measure_analysis_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/common_text"
+        android:textSize="17sp" />
+
+</LinearLayout>

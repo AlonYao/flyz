@@ -136,9 +136,9 @@ public class AnswerSheetActivity extends BaseActivity implements RequestCallback
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Class<?> cls;
                 if ("analysis".equals(mFrom)) {
-                    cls = MeasureAnalysisActivity.class;
+                    cls = LegacyMeasureAnalysisActivity.class;
                 } else {
-                    cls = MeasureActivity.class;
+                    cls = LegacyMeasureActivity.class;
                 }
 
                 Intent intent = new Intent(AnswerSheetActivity.this, cls);
@@ -179,7 +179,7 @@ public class AnswerSheetActivity extends BaseActivity implements RequestCallback
         measureEntity.setScores(submitPaperResp.getScores());
         measureEntity.setExercise_id(submitPaperResp.getExercise_id());
         measureEntity.setAvg_score(submitPaperResp.getAvg_score());
-        Intent intent = new Intent(AnswerSheetActivity.this, MeasureActivity.class);
+        Intent intent = new Intent(AnswerSheetActivity.this, LegacyMeasureActivity.class);
         intent.putExtra("notes", notes);
         intent.putExtra("paper_name", mPaperName);
         intent.putExtra("right_num", mRightNum);

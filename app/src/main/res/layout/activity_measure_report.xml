@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_measure_report"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.appublisher.quizbank.common.measure.activity.MeasureReportActivity">
+
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"/>
+
+    <ScrollView
+        android:id="@+id/practice_report_sv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginBottom="44dp"
+        android:scrollbars="none"
+        android:background="@color/common_bg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ViewStub
+                android:id="@+id/measure_report_paperinfo_vs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/measure_report_viewstub_paperinfo"/>
+
+            <ViewStub
+                android:id="@+id/measure_report_rightall_vs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/measure_report_viewstub_rightall"/>
+
+            <ViewStub
+                android:id="@+id/measure_report_category_vs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/measure_report_viewstub_category"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="20dp"/>
+
+            <ViewStub
+                android:id="@+id/measure_report_notes_vs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/measure_report_viewstub_notes"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"/>
+
+            <include layout="@layout/app_logo"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/measure_report_all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:background="@color/themecolor"
+            android:text="@string/measure_report_btn_all"/>
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/measure_report_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/measure_report_error_btn_bg"
+            android:textColor="@android:color/white"
+            android:text="@string/measure_report_btn_error"/>
+    </LinearLayout>
+
+</RelativeLayout>

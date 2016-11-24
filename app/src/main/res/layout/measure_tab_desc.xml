@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="40dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/measure_tab_desc_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="第一部分"
+            android:textColor="@color/themecolor"/>
+
+        <TextView
+            android:id="@+id/measure_tab_desc_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/common_text"
+            android:text="常识判断"/>
+
+        <TextView
+            android:id="@+id/measure_tab_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_text"
+            android:text="常识判断常识判断常识判断常识判断常识判断常识判断常识判断常识判断常识判断"/>
+
+    </LinearLayout>
+
+</ScrollView>

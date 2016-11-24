@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
 import com.appublisher.quizbank.common.vip.model.VipXCReportModel;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
@@ -93,7 +93,7 @@ public class VipXCReportActivity extends VipBaseActivity implements View.OnClick
         if (v.getId() == R.id.vip_xc_report_all) {
             ArrayList<QuestionM> questions = mModel.getAllQuestions();
             ArrayList<AnswerM> answers = mModel.getAllAnswers();
-            Intent intent = new Intent(this, MeasureAnalysisActivity.class);
+            Intent intent = new Intent(this, LegacyMeasureAnalysisActivity.class);
             intent.putExtra("questions", questions);
             intent.putExtra("answers", answers);
             intent.putExtra("paper_name", "");
@@ -117,7 +117,7 @@ public class VipXCReportActivity extends VipBaseActivity implements View.OnClick
         } else if (v.getId() == R.id.vip_xc_report_error) {
             ArrayList<QuestionM> questions = mModel.getErrorQuestions();
             ArrayList<AnswerM> answers = mModel.getErrorAnswers();
-            Intent intent = new Intent(this, MeasureAnalysisActivity.class);
+            Intent intent = new Intent(this, LegacyMeasureAnalysisActivity.class);
             intent.putExtra("questions", questions);
             intent.putExtra("answers", answers);
             intent.putExtra("paper_name", "");

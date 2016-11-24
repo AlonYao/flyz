@@ -20,12 +20,14 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
+import com.appublisher.lib_course.opencourse.fragment.OpenCourseFragment;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.lib_course.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.lib_course.promote.PromoteModel;
@@ -39,12 +41,11 @@ import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
-import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.business.PromoteQuizBankModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -68,6 +69,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private VipIndexFragment mVipIndexFragment;
     private StudyIndexFragment mStudyIndexFragment;
     private InterviewIndexFragment mInterviewIndexFragment;
+    private OpenCourseFragment mOpenCourseFragment;
     private static Fragment mCurFragment;
     private boolean mDoubleBackToExit;
     private QRequest mQRequest;
@@ -164,7 +166,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 }
             });
             // 做题缓存提交
-            new MeasureModel(this).checkCache();
+//            new LegacyMeasureModel(this).checkCache();
         }
 
         if (!Utils.isConnectingToInternet(QuizBankApp.getInstance().getApplicationContext())) {
@@ -299,6 +301,10 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         } else if (mCurFragment instanceof InterviewIndexFragment) {
             MenuItemCompat.setShowAsAction(menu.add("笔试").setIcon(R.drawable.actionbar_study),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        } else if (mCurFragment instanceof OpenCourseFragment) {
+            MenuItemCompat.setShowAsAction(
+                    menu.add("公开课评分").setIcon(R.drawable.actionbar_rate),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -319,6 +325,10 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             startActivity(intent);
         } else if ("笔试".equals(item.getTitle())) {
             changeFragment(0);
+        } else if ("公开课评分".equals(item.getTitle())) {
+            OpenCourseModel.skipToMyGrade(this, "true");
+            // Umeng
+            UmengManager.onEvent(this, "Score");
         }
 
         return super.onOptionsItemSelected(item);
@@ -372,7 +382,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     transaction.show(mStudyIndexFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.study_index);
+                setTitle(R.string.study_index);
 
                 mCurFragment = mStudyIndexFragment;
                 indexString = "study";
@@ -390,7 +400,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     transaction.show(mCourseFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.course_center);
+                setTitle(R.string.course_center);
 
                 mCurFragment = mCourseFragment;
 
@@ -398,18 +408,18 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
             case 2:
                 // 公开课
-                if (mCourseFragment == null) {
+                if (mOpenCourseFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
-                    mCourseFragment = new CourseFragment();
-                    transaction.add(R.id.container_view, mCourseFragment, COURSE);
+                    mOpenCourseFragment = new OpenCourseFragment();
+                    transaction.add(R.id.container_view, mOpenCourseFragment, OPENCOURSE);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
-                    transaction.show(mCourseFragment);
+                    transaction.show(mOpenCourseFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.course_center);
+                setTitle(R.string.opencourse);
 
-                mCurFragment = mCourseFragment;
+                mCurFragment = mOpenCourseFragment;
 
                 break;
 
@@ -424,7 +434,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     transaction.show(mStudyRecordFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.record_index);
+                setTitle(R.string.record_index);
 
                 mCurFragment = mStudyRecordFragment;
 
@@ -441,7 +451,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     transaction.show(mVipIndexFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.vip_index);
+                setTitle(R.string.vip_index);
 
                 mCurFragment = mVipIndexFragment;
 
@@ -459,7 +469,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     transaction.show(mInterviewIndexFragment);
                 }
 
-                getSupportActionBar().setTitle(R.string.interview_index);
+                setTitle(R.string.interview_index);
 
                 mCurFragment = mInterviewIndexFragment;
                 indexString = "interview";
@@ -485,7 +495,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 break;
         }
 
-//        mDrawerLayout.closeDrawer(mDrawerList);
         transaction.commit();
 
         // 更新Menu
@@ -517,6 +526,10 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         //interview
         mInterviewIndexFragment = (InterviewIndexFragment) mFragmentManager.findFragmentByTag(INTERVIEW);
         if (mInterviewIndexFragment != null) transaction.hide(mInterviewIndexFragment);
+
+        // 公开课
+        mOpenCourseFragment = (OpenCourseFragment) mFragmentManager.findFragmentByTag(OPENCOURSE);
+        if (mOpenCourseFragment != null) transaction.hide(mOpenCourseFragment);
     }
 
     @Override
