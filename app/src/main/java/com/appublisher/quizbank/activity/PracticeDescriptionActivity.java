@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -15,9 +14,6 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.business.CommonModel;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * 练习说明
@@ -114,7 +110,7 @@ public class PracticeDescriptionActivity extends BaseActivity {
      * 跳转到MeasureActivity
      */
     private void skipToMeasureActivity() {
-        Intent intent = new Intent(this, MeasureActivity.class);
+        Intent intent = new Intent(this, LegacyMeasureActivity.class);
         intent.putExtra("paper_type", mPaperType);
         intent.putExtra("paper_name", mPaperName);
         intent.putExtra("paper_id", mPaperId);

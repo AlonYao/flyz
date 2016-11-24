@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -9,14 +8,12 @@ import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.fragment.FavoriteFragment;
-import com.appublisher.quizbank.fragment.HomePageFragment;
 import com.appublisher.quizbank.fragment.SettingFragment;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.fragment.WrongQuestionsFragment;
@@ -41,9 +38,7 @@ public class CommonFragmentActivity extends BaseActivity {
 
     public void setValue() {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        if ("homepage".equals(mFrom)) {
-            fragmentTransaction.add(R.id.container_view, new HomePageFragment(), "Index");
-        } else if ("setting".equals(mFrom)) {
+        if ("setting".equals(mFrom)) {
             fragmentTransaction.add(R.id.container_view, new SettingFragment(), "Setting");
             setTitle("设置页");
         } else if (mFrom != null && mFrom.contains("course")) {
@@ -55,8 +50,6 @@ public class CommonFragmentActivity extends BaseActivity {
             }
             fragmentTransaction.add(R.id.container_view, courseFragment, "Activity_Course");
             setTitle("课程中心");
-
-            Logger.i("fragment===" + courseFragment.getId());
         } else if ("wholepage".equals(mFrom)) {
             fragmentTransaction.add(R.id.container_view, new WholePageFragment(), "Wholepage");
             setTitle("真题演练");
@@ -68,7 +61,6 @@ public class CommonFragmentActivity extends BaseActivity {
             setTitle("错题本");
         }
 
-
         fragmentTransaction.commit();
     }
 
@@ -78,11 +70,13 @@ public class CommonFragmentActivity extends BaseActivity {
         if ("homepage".equals(mFrom)) {
             MenuItemCompat.setShowAsAction(menu.add("小班").setIcon(R.drawable.vip_entry),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            setDisplayHomeAsUpEnabled(this, false);
         } else if (mFrom != null && mFrom.contains("course")) {
             MenuItemCompat.setShowAsAction(menu.add("下载").setIcon(R.drawable.actionbar_download),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("评分").setIcon(R.drawable.actionbar_rate), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            MenuItemCompat.setShowAsAction(menu.add("下载"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);

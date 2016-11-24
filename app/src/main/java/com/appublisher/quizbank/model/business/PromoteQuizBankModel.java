@@ -14,10 +14,10 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.dao.MockDAO;
-import com.appublisher.quizbank.network.ParamBuilder;
 
 /**
  * 国考公告解读宣传
@@ -81,9 +81,8 @@ public class PromoteQuizBankModel extends PromoteModel {
                 String target_type = alertBean.getTarget_type();
                 if ("url".equals(target_type)) {
                     // 外部链接
-
                     Intent intent = new Intent(getContext(), CourseWebViewActivity.class);
-                    intent.putExtra("url", ParamBuilder.getPromoteCourseUrl(alertBean.getTarget()));
+                    intent.putExtra("url", LoginParamBuilder.finalUrl(alertBean.getTarget()));
                     if (alertBean.getTarget() != null && alertBean.getTarget().contains("course_id"))
                         intent.putExtra("from", "course");
                     getContext().startActivity(intent);

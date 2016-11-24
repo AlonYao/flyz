@@ -17,13 +17,11 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
@@ -39,12 +37,11 @@ import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
-import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
-import com.appublisher.quizbank.model.business.MeasureModel;
 import com.appublisher.quizbank.model.business.PromoteQuizBankModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -164,7 +161,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 }
             });
             // 做题缓存提交
-            new MeasureModel(this).checkCache();
+//            new LegacyMeasureModel(this).checkCache();
         }
 
         if (!Utils.isConnectingToInternet(QuizBankApp.getInstance().getApplicationContext())) {

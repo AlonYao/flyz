@@ -1,18 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_measure"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.appublisher.quizbank.activity.MeasureActivity">
+    android:orientation="vertical"
+    tools:context="com.appublisher.quizbank.common.measure.activity.MeasureActivity">
 
-    <include layout="@layout/toolbar"
+    <include layout="@layout/toolbar"/>
+
+    <!-- 整卷Tab -->
+    <ViewStub
+        android:id="@+id/measure_tablayout_viewstub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"/>
+        android:layout="@layout/measure_tablayout"/>
 
+    <!-- ViewPager -->
     <android.support.v4.view.ViewPager
         android:id="@+id/measure_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"/>
+        android:layout_height="match_parent"/>
 
-</RelativeLayout>
+</LinearLayout>

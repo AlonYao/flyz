@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="10dp">
+
+    <!-- 做对/全部试题比值 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/measure_divider"
+        android:text="@string/measure_report_rightall"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+        <!-- 做对的题目 -->
+        <TextView
+            android:id="@+id/measure_report_rightnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textColor="@color/measure_text"
+            android:text="@string/measure_report_zero"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/measure_text"
+            android:text="@string/measure_report_semicolon"/>
+        <!-- 全部的题目 -->
+        <TextView
+            android:id="@+id/measure_report_totalnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/measure_text"
+            android:text="@string/measure_report_zero"/>
+    </LinearLayout>
+
+</LinearLayout>

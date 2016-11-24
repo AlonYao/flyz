@@ -9,7 +9,6 @@ import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.fragment.WholePageFragment;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
-import com.baidu.location.BDLocation;
 
 /**
  * WholePageFragment Model
