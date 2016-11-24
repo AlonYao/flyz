@@ -82,7 +82,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         if (AUTO.equals(mPaperType)) {
             mRequest.getAutoTraining();
         } else if (NOTE.equals(mPaperType)) {
-            mRequest.getNoteQuestions(mHierarchyId, "note");
+            mRequest.getNoteQuestions(mHierarchyId, NOTE);
         } else if (ENTIRE.equals(mPaperType)) {
             mRequest.getPaperExercise(mPaperId, mPaperType);
         }
@@ -213,6 +213,22 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     private static SharedPreferences getMeasureCache(Context context) {
         if (context == null) return null;
         return context.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * 是否有选中记录
+     * @return boolean
+     */
+    public boolean hasRecord() {
+        List<MeasureSubmitBean> submits = getUserAnswerCache(mContext);
+        if (submits == null) return false;
+
+        for (MeasureSubmitBean submit : submits) {
+            if (submit == null) continue;
+            if (submit.getAnswer().length() > 0) return true;
+        }
+
+        return false;
     }
 
     /**

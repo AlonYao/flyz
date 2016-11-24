@@ -9,10 +9,10 @@ public interface MeasureConstants {
     /**
      * intent 参数
      */
-    String PAPER_TYPE = "paper_type";
-    String PAPER_ID = "paper_id";
-    String HIERARCHY_ID = "hierarchy_id";
-    String REDO = "redo";
+    String INTENT_PAPER_TYPE = "paper_type";
+    String INTENT_PAPER_ID = "paper_id";
+    String INTENT_HIERARCHY_ID = "hierarchy_id";
+    String INTENT_REDO = "redo";
     String INTENT_ANALYSIS_BEAN = "analysis_bean";
     String INTENT_ANALYSIS_IS_ERROR_ONLY = "is_error_only";
 

@@ -59,10 +59,10 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         MenuItemCompat.setShowAsAction(menu.add(MENU_ANSWERSHEET).setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
-//        if (!mockpre) {
-//            MenuItemCompat.setShowAsAction(menu.add("暂停").setIcon(
-//                    R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-//        }
+        if (!MOCK.equals(mModel.mPaperType)) {
+            MenuItemCompat.setShowAsAction(menu.add(MENU_PAUSE).setIcon(
+                    R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
 
         MenuItemCompat.setShowAsAction(menu.add(MENU_PAUSE).setIcon(
                 R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
@@ -90,10 +90,10 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
 
     private void initData() {
         mModel = new MeasureModel(this);
-        mModel.mPaperType = getIntent().getStringExtra(PAPER_TYPE);
-        mModel.mHierarchyId = getIntent().getIntExtra(HIERARCHY_ID, 0);
-        mModel.mPaperId = getIntent().getIntExtra(PAPER_ID, 0);
-        mModel.mRedo = getIntent().getBooleanExtra(REDO, false);
+        mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
+        mModel.mHierarchyId = getIntent().getIntExtra(INTENT_HIERARCHY_ID, 0);
+        mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
+        mModel.mRedo = getIntent().getBooleanExtra(INTENT_REDO, false);
         mModel.mCurTimestamp = System.currentTimeMillis();
         showLoading();
         mModel.getData();
