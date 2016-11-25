@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.fragment;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -13,9 +14,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSheetAdapter;
@@ -29,7 +33,8 @@ import java.util.List;
  * 做题模块：答题纸
  */
 
-public class MeasureSheetFragment extends DialogFragment implements View.OnClickListener{
+public class MeasureSheetFragment extends DialogFragment implements
+        View.OnClickListener, MeasureConstants{
 
     private List<MeasureQuestionBean> mQuestions;
     private List<MeasureSubmitBean> mSubmits;
@@ -164,7 +169,22 @@ public class MeasureSheetFragment extends DialogFragment implements View.OnClick
         if (view.getId() == R.id.measure_sheet_submit) {
             // 提交
             if (!(getActivity() instanceof MeasureActivity)) return;
-            ((MeasureActivity) getActivity()).mModel.submit(true);
+
+            final MeasureModel model = ((MeasureActivity) getActivity()).mModel;
+            model.submit(true, new MeasureModel.SubmitListener() {
+                @Override
+                public void onComplete(boolean success) {
+                    if (success) {
+                        Intent intent = new Intent(getActivity(), MeasureReportActivity.class);
+                        intent.putExtra(INTENT_PAPER_ID, model.mPaperId);
+                        intent.putExtra(INTENT_PAPER_TYPE, model.mPaperType);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else {
+                        Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }
