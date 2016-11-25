@@ -387,6 +387,11 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 mCurFragment = mStudyIndexFragment;
                 indexString = "study";
 
+                Drawable drawable = getResources().getDrawable(R.drawable.tab_study_selector);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                studyRadioButton.setCompoundDrawables(null, drawable, null, null);
+                studyRadioButton.setText("学习");
+
                 break;
 
             case 1:
@@ -473,23 +478,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
                 mCurFragment = mInterviewIndexFragment;
                 indexString = "interview";
-                studyRadioButton.setText("面试");
-//                Drawable drawable = getResources().getDrawable(R.drawable.tab_interview_selector);
 
-                Drawable drawable = getResources().getDrawable(R.drawable.tab_interview_selector);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                studyRadioButton.setCompoundDrawables(null, drawable, null, null);
+                Drawable interDrawable = getResources().getDrawable(R.drawable.tab_interview_selector);
+                interDrawable.setBounds(0, 0, interDrawable.getMinimumWidth(), interDrawable.getMinimumHeight());
+                studyRadioButton.setCompoundDrawables(null, interDrawable, null, null);
                 studyRadioButton.setText("面试");
 
-//                int sysVersion = Integer.parseInt(Build.VERSION.SDK);
-//                if (sysVersion < 17) {
-//                    drawable.setBounds(0, 0, 30, 30);
-//                    studyRadioButton
-//                            .setCompoundDrawables(null, drawable, null, null);
-//                } else {
-//                    studyRadioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
-//                            drawable, null, null);
-//                }
                 break;
             default:
                 break;
