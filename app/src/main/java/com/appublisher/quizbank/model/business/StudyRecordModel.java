@@ -59,7 +59,10 @@ public class StudyRecordModel {
 
         fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemClick(AdapterView<?> parent,
+                                            View view,
+                                            int position,
+                                            long id) {
                         if (fragment.mHistoryPapers == null
                                 || position - 2 >= fragment.mHistoryPapers.size())
                             return;
@@ -72,8 +75,10 @@ public class StudyRecordModel {
 
                         if ("done".equals(status)) {
                             // 跳转至练习报告页面
-                            if ("auto".equals(historyPaper.getPaper_type())) {
-                                Intent intent = new Intent(fragment.mActivity, MeasureReportActivity.class);
+                            if ("auto".equals(historyPaper.getPaper_type())
+                                    || "entire".equals(historyPaper.getPaper_type())) {
+                                Intent intent = new Intent(
+                                        fragment.mActivity, MeasureReportActivity.class);
                                 intent.putExtra("from", "study_record");
                                 intent.putExtra("paper_id", historyPaper.getPaper_id());
                                 intent.putExtra("paper_type", historyPaper.getPaper_type());
@@ -81,7 +86,8 @@ public class StudyRecordModel {
                                 intent.putExtra("paper_time", historyPaper.getAction_time());
                                 fragment.mActivity.startActivity(intent);
                             } else {
-                                Intent intent = new Intent(fragment.mActivity, PracticeReportActivity.class);
+                                Intent intent = new Intent(
+                                        fragment.mActivity, PracticeReportActivity.class);
                                 intent.putExtra("from", "study_record");
                                 intent.putExtra("exercise_id", historyPaper.getPaper_id());
                                 intent.putExtra("paper_type", historyPaper.getPaper_type());
@@ -92,7 +98,8 @@ public class StudyRecordModel {
 
                         } else if ("undone".equals(status)) {
                             // 跳转至做题页面
-                            Intent intent = new Intent(fragment.mActivity, LegacyMeasureActivity.class);
+                            Intent intent = new Intent(
+                                    fragment.mActivity, LegacyMeasureActivity.class);
                             intent.putExtra("from", "study_record");
                             intent.putExtra("exercise_id", historyPaper.getPaper_id());
                             intent.putExtra("paper_type", historyPaper.getPaper_type());

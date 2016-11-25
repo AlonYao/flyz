@@ -79,19 +79,45 @@ public class MeasureReportModel extends MeasureModel {
         mAnalysisBean.setQuestions(resp.getQuestions());
         mAnalysisBean.setAnswers(resp.getAnswers());
 
-        // 试卷信息
-        ((MeasureReportActivity) mContext).showPaperInfo(
-                getPaperType(mPaperType), resp.getExercise_name());
+        if (AUTO.equals(mPaperType)) {
+            // 试卷信息
+            ((MeasureReportActivity) mContext).showPaperInfo(
+                    getPaperType(mPaperType), resp.getExercise_name());
 
-        // 做对/全部
-        showRightAll(resp.getAnswers());
+            // 做对/全部
+            showRightAll(resp.getAnswers());
 
-        // 科目
-        List<MeasureReportCategoryBean> categorys = getCategorys(resp.getQuestions(), resp.getAnswers());
-        ((MeasureReportActivity) mContext).showCategory(categorys);
+            // 科目
+            List<MeasureReportCategoryBean> categorys = getCategorys(resp.getQuestions(), resp.getAnswers());
+            ((MeasureReportActivity) mContext).showCategory(categorys);
 
-        // 知识点
-        ((MeasureReportActivity) mContext).showNotes(resp.getNotes());
+            // 知识点
+            ((MeasureReportActivity) mContext).showNotes(resp.getNotes());
+        } else if (ENTIRE.equals(mPaperType)){
+            // 试卷信息
+            ((MeasureReportActivity) mContext).showPaperInfo(
+                    getPaperType(mPaperType), resp.getExercise_name());
+
+            // 你的分数
+            ((MeasureReportActivity) mContext).showYourScore(String.valueOf(resp.getScore()));
+
+            // 科目
+            List<MeasureQuestionBean> questions = new ArrayList<>();
+            List<MeasureAnswerBean> answers = new ArrayList<>();
+            List<MeasureCategoryBean> categorys = resp.getCategory();
+            if (categorys != null) {
+                for (MeasureCategoryBean category : categorys) {
+                    if (category == null) continue;
+                    questions.addAll(category.getQuestions());
+                    answers.addAll(category.getAnswers());
+                }
+                List<MeasureReportCategoryBean> categoryList = getCategorys(questions, answers);
+                ((MeasureReportActivity) mContext).showCategory(categoryList);
+            }
+
+            // 分数线
+            ((MeasureReportActivity) mContext).showBorderline(resp.getScores());
+        }
     }
 
     private void showRightAll(List<MeasureAnswerBean> answers) {

@@ -11,13 +11,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
-import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureScoresBean;
+import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
 
 import java.util.List;
 
@@ -187,6 +189,85 @@ public class MeasureReportActivity extends BaseActivity implements
                 container.addView(child);
             }
         }
+    }
+
+    public void showYourScore(String text) {
+        ViewStub vs = (ViewStub) findViewById(R.id.measure_report_yourscore_vs);
+        if (vs == null) return;
+        vs.inflate();
+
+        TextView tvScore = (TextView) findViewById(R.id.measure_report_yourscore_tv);
+        if (tvScore != null) {
+            tvScore.setText(text);
+        }
+    }
+
+    public void showStatistics(String rank, String score) {
+        ViewStub vs = (ViewStub) findViewById(R.id.measure_report_statistics_vs);
+        if (vs == null) return;
+        vs.inflate();
+
+        TextView tvRank = (TextView) findViewById(R.id.measure_report_statistics_rank);
+        TextView tvScore = (TextView) findViewById(R.id.measure_report_statistics_score);
+
+        if (tvRank != null) {
+            tvRank.setText(rank);
+        }
+
+        if (tvScore != null) {
+            tvScore.setText(score);
+        }
+    }
+
+    public void showBorderline(List<MeasureScoresBean> scores) {
+        if (scores == null) return;
+
+        ViewStub vs = (ViewStub) findViewById(R.id.measure_report_borderline_vs);
+        if (vs == null) return;
+        vs.inflate();
+
+        LinearLayout container =
+                (LinearLayout) findViewById(R.id.measure_report_borderline_container);
+        if (container == null) return;
+
+        int size = scores.size();
+        for (int i = 0; i < size; i++) {
+            MeasureScoresBean score = scores.get(i);
+            if (score == null) continue;
+
+            View child = LayoutInflater.from(this)
+                    .inflate(R.layout.practice_report_borderline_item, container, false);
+
+            TextView tvName =
+                    (TextView) child.findViewById(R.id.item_borderline_name);
+            TextView tvNum =
+                    (TextView) child.findViewById(R.id.item_borderline_num);
+            View line = child.findViewById(R.id.item_borderline_line);
+
+            tvName.setText(score.getName());
+            tvNum.setText(String.valueOf(score.getScore()));
+
+            if (i == size - 1) {
+                line.setVisibility(View.GONE);
+            } else {
+                line.setVisibility(View.VISIBLE);
+            }
+
+            container.addView(child);
+        }
+
+        // 说明文字
+        TextView textView = new TextView(this);
+        textView.setText(R.string.practice_report_borderline_desc);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(
+                Utils.dip2px(this, 36),
+                Utils.dip2px(this, 5),
+                Utils.dip2px(this, 36),
+                0);
+        textView.setLayoutParams(layoutParams);
+        container.addView(textView);
     }
 
     /**
