@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -30,6 +29,8 @@ import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.adapter.CarouselAdapter;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.StudyIndexModel;
 import com.appublisher.quizbank.model.netdata.CarouselM;
@@ -326,10 +327,13 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 break;
             case R.id.quick_test_view:
                 // 快速智能练习
-                intent = new Intent(getActivity(), PracticeDescriptionActivity.class);
-                intent.putExtra("paper_type", "auto");
-                intent.putExtra("paper_name", "快速智能练习");
-                intent.putExtra("umeng_entry", "Home");
+//                intent = new Intent(getActivity(), PracticeDescriptionActivity.class);
+//                intent.putExtra("paper_type", "auto");
+//                intent.putExtra("paper_name", "快速智能练习");
+//                intent.putExtra("umeng_entry", "Home");
+//                startActivity(intent);
+                intent = new Intent(getActivity(), MeasureActivity.class);
+                intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.AUTO);
                 startActivity(intent);
                 break;
             case R.id.wholepage_view:

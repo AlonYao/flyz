@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
@@ -162,9 +163,9 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
 //                context.startActivity(intent);
 
                 Intent intent = new Intent(context, MeasureActivity.class);
-                intent.putExtra(MeasureActivity.PAPER_TYPE, value.type);
+                intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, value.type);
                 intent.putExtra("paper_name", value.name);
-                intent.putExtra(MeasureActivity.HIERARCHY_ID, value.id);
+                intent.putExtra(MeasureConstants.INTENT_HIERARCHY_ID, value.id);
                 intent.putExtra("hierarchy_level", value.level);
                 intent.putExtra("umeng_entry", "List");
                 context.startActivity(intent);

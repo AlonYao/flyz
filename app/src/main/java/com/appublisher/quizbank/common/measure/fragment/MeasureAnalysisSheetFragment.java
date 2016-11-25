@@ -10,45 +10,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.measure.model.MeasureModel;
-import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
-import com.appublisher.quizbank.common.measure.adapter.MeasureSheetAdapter;
+import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.common.measure.adapter.MeasureAnalysisSheetAdapter;
+import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
-import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 做题模块：答题纸
+ * 做题页面
  */
 
-public class MeasureSheetFragment extends DialogFragment implements View.OnClickListener{
+public class MeasureAnalysisSheetFragment extends DialogFragment {
 
     private List<MeasureQuestionBean> mQuestions;
-    private List<MeasureSubmitBean> mSubmits;
+    private List<MeasureAnswerBean> mAnswers;
     private LinearLayout mContainer;
-    private Button mBtnSubmit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 全屏处理
         setStyle(DialogFragment.STYLE_NORMAL, R.style.Measure_Dialog_FullScreen);
         initData();
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.measure_sheet_fragment, container);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -63,10 +57,9 @@ public class MeasureSheetFragment extends DialogFragment implements View.OnClick
         });
 
         mContainer = (LinearLayout) view.findViewById(R.id.measure_sheet_container);
-        mBtnSubmit = (Button) view.findViewById(R.id.measure_sheet_submit);
-        mBtnSubmit.setOnClickListener(this);
 
         showContent();
+
         return view;
     }
 
@@ -83,10 +76,9 @@ public class MeasureSheetFragment extends DialogFragment implements View.OnClick
     }
 
     private void initData() {
-        mSubmits = MeasureModel.getUserAnswerCache(getActivity());
-        if (getActivity() instanceof MeasureActivity) {
-            mQuestions = ((MeasureActivity) getActivity()).mAdapter.getQuestions();
-        }
+        if (!(getActivity() instanceof MeasureAnalysisActivity)) return;
+        mQuestions = ((MeasureAnalysisActivity) getActivity()).mAdapter.getQuestions();
+        mAnswers = ((MeasureAnalysisActivity) getActivity()).mAdapter.getAnswers();
     }
 
     private void showContent() {
@@ -97,12 +89,21 @@ public class MeasureSheetFragment extends DialogFragment implements View.OnClick
         }
     }
 
+    private boolean isEntirePaper() {
+        // 判断依据：是否有说明页
+        if (mQuestions == null || mQuestions.size() == 0) return false;
+        MeasureQuestionBean questionBean = mQuestions.get(0);
+        return questionBean != null && questionBean.is_desc();
+    }
+
     private void showEntire() {
         if (mQuestions == null) return;
+
         List<MeasureQuestionBean> questionsForAdapter = new ArrayList<>();
-        int size = mQuestions.size();
+        List<MeasureAnswerBean> answersForAdapter = new ArrayList<>();
 
         // 遍历
+        int size = mQuestions.size();
         for (int i = 0; i < size; i++) {
             MeasureQuestionBean questionBean = mQuestions.get(i);
             if (questionBean == null) continue;
@@ -110,24 +111,36 @@ public class MeasureSheetFragment extends DialogFragment implements View.OnClick
                 if (questionsForAdapter.size() != 0) {
                     // 添加GridView
                     String name = questionsForAdapter.get(0).getCategory_name();
-                    addGridViewItem(name, questionsForAdapter);
+                    addGridViewItem(name, questionsForAdapter, answersForAdapter);
+
+                    // 重置
                     questionsForAdapter = new ArrayList<>();
+                    answersForAdapter = new ArrayList<>();
                 }
             } else {
+                // 添加题目
                 questionsForAdapter.add(questionBean);
+
+                // 添加用户答案
+                if (mAnswers != null && i < mAnswers.size()) {
+                    answersForAdapter.add(mAnswers.get(i));
+                }
+
                 if (i == size - 1) {
                     String name = questionsForAdapter.get(0).getCategory_name();
-                    addGridViewItem(name, questionsForAdapter);
+                    addGridViewItem(name, questionsForAdapter, answersForAdapter);
                 }
             }
         }
     }
 
     private void showCommon() {
-        addGridViewItem("", mQuestions);
+        addGridViewItem("", mQuestions, mAnswers);
     }
 
-    private void addGridViewItem(String category, List<MeasureQuestionBean> questions) {
+    private void addGridViewItem(String category,
+                                 List<MeasureQuestionBean> questions,
+                                 List<MeasureAnswerBean> answers) {
         if (questions == null) return;
 
         // init view
@@ -140,31 +153,16 @@ public class MeasureSheetFragment extends DialogFragment implements View.OnClick
 
         tvCategory.setText(category == null ? "" : category);
 
-        MeasureSheetAdapter adapter = new MeasureSheetAdapter(this, questions, mSubmits);
+        MeasureAnalysisSheetAdapter adapter = new MeasureAnalysisSheetAdapter(
+                this, questions, answers);
         gridView.setAdapter(adapter);
 
         mContainer.addView(child);
     }
 
-    private boolean isEntirePaper() {
-        // 判断依据：是否有说明页
-        if (mQuestions == null || mQuestions.size() == 0) return false;
-        MeasureQuestionBean questionBean = mQuestions.get(0);
-        return questionBean != null && questionBean.is_desc();
-    }
-
     public void skip(int index) {
-        if (!(getActivity() instanceof MeasureActivity)) return;
-        ((MeasureActivity) getActivity()).mViewPager.setCurrentItem(index);
+        if (!(getActivity() instanceof MeasureAnalysisActivity)) return;
+        ((MeasureAnalysisActivity) getActivity()).mViewPager.setCurrentItem(index);
         dismiss();
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.measure_sheet_submit) {
-            // 提交
-            if (!(getActivity() instanceof MeasureActivity)) return;
-            ((MeasureActivity) getActivity()).mModel.submit(true);
-        }
     }
 }

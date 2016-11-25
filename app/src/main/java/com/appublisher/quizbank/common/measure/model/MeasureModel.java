@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.model;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
+import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -82,7 +84,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         if (AUTO.equals(mPaperType)) {
             mRequest.getAutoTraining();
         } else if (NOTE.equals(mPaperType)) {
-            mRequest.getNoteQuestions(mHierarchyId, "note");
+            mRequest.getNoteQuestions(mHierarchyId, NOTE);
         } else if (ENTIRE.equals(mPaperType)) {
             mRequest.getPaperExercise(mPaperId, mPaperType);
         }
@@ -216,6 +218,22 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     }
 
     /**
+     * 是否有选中记录
+     * @return boolean
+     */
+    public boolean hasRecord() {
+        List<MeasureSubmitBean> submits = getUserAnswerCache(mContext);
+        if (submits == null) return false;
+
+        for (MeasureSubmitBean submit : submits) {
+            if (submit == null) continue;
+            if (submit.getAnswer().length() > 0) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 获取用户答案缓存
      * @param context Context
      * @return List<MeasureSubmitBean>
@@ -247,6 +265,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                     noteIdList.add(noteIdArray.getInt(j));
                 }
                 submitBean.setNote_ids(noteIdList);
+
+                list.add(submitBean);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -484,7 +504,10 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         return tabBean.getPosition();
     }
 
-    public void submit() {
+    public void submit(boolean isDone) {
+        String doneStatus = SUBMIT_DONE;
+        if (!isDone) doneStatus = SUBMIT_UNDONE;
+
         SharedPreferences spf = getMeasureCache(mContext);
         if (spf == null) return;
         int paperId = spf.getInt(CACHE_PAPER_ID, 0);
@@ -503,9 +526,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         }
 
         if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
-
-//        mRequest.submitPaper(MeasureParamBuilder.submitPaper(
-//                paperId, paperTpye, redo, durtion, answer, "done"));
+        mRequest.submitPaper(MeasureParamBuilder.submitPaper(
+                paperId, paperTpye, redo, durtion, answer, doneStatus));
     }
 
     /**
@@ -529,6 +551,15 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         }
 
         return jsonArray.toString();
+    }
+
+    public void checkRecord() {
+        if (hasRecord()) {
+            if (mContext instanceof MeasureActivity)
+                ((MeasureActivity) mContext).showSaveTestAlert();
+        } else {
+            if (mContext instanceof Activity) ((Activity) mContext).finish();
+        }
     }
 
     @Override

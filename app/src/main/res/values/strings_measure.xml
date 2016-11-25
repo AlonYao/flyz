@@ -39,4 +39,7 @@
         此处“总分”是指行测与申论分数之和。
     </string>
 
+    <string name="measure_report">练习报告</string>
+    <string name="measure_analysis">解析</string>
+
 </resources>

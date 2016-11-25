@@ -30,14 +30,16 @@ public class MeasureReportActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measure_report);
+        setToolBar(this);
+        setTitle(R.string.measure_report);
         initView();
         initData();
     }
 
     private void initData() {
         mModel = new MeasureReportModel(this);
-        mModel.mPaperId = getIntent().getIntExtra(PAPER_ID, 0);
-        mModel.mPaperType = getIntent().getStringExtra(PAPER_TYPE);
+        mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
+        mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
         mModel.getData();
     }
 
@@ -215,6 +217,10 @@ public class MeasureReportActivity extends BaseActivity implements
     public void onClick(View v) {
         if (v.getId() == R.id.measure_report_all) {
             // 全部
+            Intent intent = new Intent(this, MeasureAnalysisActivity.class);
+            intent.putExtra(INTENT_ANALYSIS_BEAN, GsonManager.modelToString(mModel.mAnalysisBean));
+            startActivity(intent);
+
         } else if (v.getId() == R.id.measure_report_error) {
             // 错题
             if (mModel.isAllRight()) return;

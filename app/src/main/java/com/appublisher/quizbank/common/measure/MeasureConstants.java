@@ -9,10 +9,10 @@ public interface MeasureConstants {
     /**
      * intent 参数
      */
-    String PAPER_TYPE = "paper_type";
-    String PAPER_ID = "paper_id";
-    String HIERARCHY_ID = "hierarchy_id";
-    String REDO = "redo";
+    String INTENT_PAPER_TYPE = "paper_type";
+    String INTENT_PAPER_ID = "paper_id";
+    String INTENT_HIERARCHY_ID = "hierarchy_id";
+    String INTENT_REDO = "redo";
     String INTENT_ANALYSIS_BEAN = "analysis_bean";
     String INTENT_ANALYSIS_IS_ERROR_ONLY = "is_error_only";
 
@@ -57,6 +57,8 @@ public interface MeasureConstants {
     String SUBMIT_NOTE_IDS = "note_ids";
     String SUBMIT_IS_RIGHT = "is_right";
     String SUBMIT_DURATION = "duration";
+    String SUBMIT_DONE = "done";
+    String SUBMIT_UNDONE = "undone";
 
     /**
      * 选项
