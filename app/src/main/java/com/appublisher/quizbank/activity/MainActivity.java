@@ -59,7 +59,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity implements RequestCallback {
-
     /**
      * Fragment
      **/
@@ -242,6 +241,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // 页面切换，默认首页
         studyRadioButton.setChecked(true);
+
     }
 
 

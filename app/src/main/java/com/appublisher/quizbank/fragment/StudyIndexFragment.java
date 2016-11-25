@@ -1,13 +1,18 @@
 package com.appublisher.quizbank.fragment;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -24,6 +29,7 @@ import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.GuFenListActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
+import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
@@ -48,8 +54,11 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by jinbao on 2016/10/31.
@@ -80,6 +89,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     public TextView assessNameTv;
     private TextView miniCuntTv;
     private TextView noteNameTv;
+    private LinearLayout mLlDots;
 
     public QRequest mQRequest;
 
@@ -88,6 +98,35 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     public MockGufenResp mockGufenResp;
 
     public int mock_id = -1;
+    private static final int CAROUSEL_SLIDE = 1;
+
+    //设置当前 第几个图片 被选中
+    private int autoCurrIndex = 0;
+    private Timer timer = new Timer();
+    private MsgHandler mHandler;
+
+    public static class MsgHandler extends Handler {
+        private WeakReference<Fragment> mFragemt;
+
+        public MsgHandler(Fragment fragment) {
+            mFragemt = new WeakReference<>(fragment);
+        }
+
+        @SuppressLint("CommitPrefEdits")
+        @Override
+        public void handleMessage(Message msg) {
+            final StudyIndexFragment studyIndexFragment = (StudyIndexFragment) mFragemt.get();
+            if (studyIndexFragment != null) {
+                switch (msg.what) {
+                    case CAROUSEL_SLIDE:
+                        if (studyIndexFragment.carouselWrittenList.size() != 0) {
+                            studyIndexFragment.viewPager.setCurrentItem(msg.arg1);
+                        }
+                        break;
+                }
+            }
+        }
+    }
 
     @Nullable
     @Override
@@ -114,8 +153,10 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         assessNameTv = (TextView) view.findViewById(R.id.assess_name);
         miniCuntTv = (TextView) view.findViewById(R.id.mini_count);
         noteNameTv = (TextView) view.findViewById(R.id.note_name);
+        mLlDots = (LinearLayout) view.findViewById(R.id.carousel_dot_ll);
 
         mQRequest = new QRequest(getActivity(), this);
+        mHandler = new MsgHandler(this);
 
         carouselWrittenList = new ArrayList<>();
         carouselAdapter = new CarouselAdapter(getActivity(), carouselWrittenList);
@@ -138,6 +179,30 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         assessView.setOnClickListener(this);
 
         viewPager.setAdapter(carouselAdapter);
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                autoCurrIndex = position;
+
+                for (int i = 0; i < mLlDots.getChildCount(); i++) {
+                    if (i == position) {
+                        mLlDots.getChildAt(i).setSelected(true);
+                    } else {
+                        mLlDots.getChildAt(i).setSelected(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     public void getData() {
@@ -156,6 +221,15 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         }
 
         getData();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getData();
+            mHandler.removeMessages(CAROUSEL_SLIDE);
+        }
     }
 
     /**
@@ -352,5 +426,35 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 startActivity(intent);
                 break;
         }
+    }
+
+    public void initDots(int length) {
+        mLlDots.removeAllViews();
+        for (int j = 0; j < length; j++) {
+            mLlDots.addView(initDot());
+        }
+        mLlDots.getChildAt(0).setSelected(true);
+
+        startCarousel();
+    }
+
+    private View initDot() {
+        return LayoutInflater.from(getActivity()).inflate(R.layout.carousel_dot, null);
+    }
+
+    private void startCarousel() {
+        // 设置自动轮播图片，5s后执行，周期是5s
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = CAROUSEL_SLIDE;
+                if (autoCurrIndex == carouselWrittenList.size() - 1) {
+                    autoCurrIndex = -1;
+                }
+                message.arg1 = autoCurrIndex + 1;
+                mHandler.sendMessage(message);
+            }
+        }, 5000, 5000);
     }
 }

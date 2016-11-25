@@ -155,16 +155,20 @@ public class StudyIndexModel {
             if (fragment instanceof StudyIndexFragment) {
                 ((StudyIndexFragment) fragment).carouselView.setLayoutParams(params);
                 if (carouselResp.getWritten() != null && carouselResp.getWritten().size() != 0) {
+                    ((StudyIndexFragment) fragment).carouselWrittenList.clear();
                     ((StudyIndexFragment) fragment).carouselWrittenList.addAll(carouselResp.getWritten());
                     ((StudyIndexFragment) fragment).carouselAdapter.notifyDataSetChanged();
                     ((StudyIndexFragment) fragment).carouselView.setVisibility(View.VISIBLE);
+                    ((StudyIndexFragment) fragment).initDots(carouselResp.getWritten().size());
                 }
             } else if (fragment instanceof InterviewIndexFragment) {
                 ((InterviewIndexFragment) fragment).carouselView.setLayoutParams(params);
                 if (carouselResp.getInterview() != null && carouselResp.getInterview().size() != 0) {
+                    ((InterviewIndexFragment) fragment).carouselInterviewList.clear();
                     ((InterviewIndexFragment) fragment).carouselInterviewList.addAll(carouselResp.getWritten());
                     ((InterviewIndexFragment) fragment).carouselAdapter.notifyDataSetChanged();
                     ((InterviewIndexFragment) fragment).carouselView.setVisibility(View.VISIBLE);
+                    ((InterviewIndexFragment) fragment).initDots(carouselResp.getInterview().size());
                 }
             }
         }

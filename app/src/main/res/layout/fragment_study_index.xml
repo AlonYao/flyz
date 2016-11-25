@@ -14,7 +14,7 @@
             android:id="@+id/carousel_view_rl"
             android:layout_width="match_parent"
             android:layout_height="108dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="30dp"
                 android:layout_marginRight="30dp"
                 android:orientation="horizontal"></LinearLayout>
         </RelativeLayout>
