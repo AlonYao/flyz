@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:src="@drawable/carousel_dot_selector"
     android:background="@android:color/transparent"
-    android:paddingLeft="10dp"
+    android:paddingLeft="5dp"
     android:paddingRight="10dp"
     tools:ignore="ContentDescription" />
