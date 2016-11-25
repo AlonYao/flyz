@@ -30,6 +30,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
+import com.appublisher.quizbank.common.measure.netdata.MeasureSubmitResp;
 import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -54,20 +55,25 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     public int mPaperId;
     public int mHierarchyId;
-    public int mCurPagePosition;
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
     public List<MeasureExcludeBean> mExcludes;
     public MeasureRequest mRequest;
     public Context mContext;
-    public SparseIntArray mFinalHeightMap;
     public List<MeasureTabBean> mTabs;
-    public List<MeasureSubmitBean> mSubmits;
+
+    private SparseIntArray mFinalHeightMap;
+    private int mCurPagePosition;
+    private SubmitListener mSubmitListener;
 
     public MeasureModel(Context context) {
         mContext = context;
         mRequest = new MeasureRequest(context, this);
+    }
+
+    public interface SubmitListener {
+        void onComplete(boolean success);
     }
 
     public int getFinalHeightById(int id) {
@@ -175,7 +181,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         int amount = size - descSize;
         int order = 0;
         mExcludes = new ArrayList<>();
-        mSubmits = new ArrayList<>();
+        List<MeasureSubmitBean> submits = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             // 设置索引
@@ -198,12 +204,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             submitBean.setId(measureQuestionBean.getId());
             submitBean.setCategory(measureQuestionBean.getCategory_id());
             submitBean.setNote_ids(measureQuestionBean.getNote_ids());
-            mSubmits.add(submitBean);
+            submits.add(submitBean);
         }
 
         // 缓存
         saveSubmitPaperInfo();
-        saveUserAnswerCache(mContext, mSubmits);
+        saveUserAnswerCache(mContext, submits);
 
         return list;
     }
@@ -221,7 +227,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * 是否有选中记录
      * @return boolean
      */
-    public boolean hasRecord() {
+    private boolean hasRecord() {
         List<MeasureSubmitBean> submits = getUserAnswerCache(mContext);
         if (submits == null) return false;
 
@@ -504,6 +510,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         return tabBean.getPosition();
     }
 
+    public void submit(boolean isDone, SubmitListener listener) {
+        mSubmitListener = listener;
+        submit(isDone);
+    }
+
     public void submit(boolean isDone) {
         String doneStatus = SUBMIT_DONE;
         if (!isDone) doneStatus = SUBMIT_UNDONE;
@@ -530,35 +541,22 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 paperId, paperTpye, redo, durtion, answer, doneStatus));
     }
 
-    /**
-     * 获取用于答题卡使用的Questions
-     * @param list List<MeasureQuestionBean>
-     * @return String
-     */
-    public String getQuestionsForSheet(List<MeasureQuestionBean> list) {
-        if (list == null) return "";
-        int size = list.size();
-
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < size; i++) {
-            String bean = GsonManager.modelToString(list.get(i));
-            try {
-                JSONObject jsonObject = new JSONObject(bean);
-                jsonArray.put(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return jsonArray.toString();
-    }
-
     public void checkRecord() {
         if (hasRecord()) {
             if (mContext instanceof MeasureActivity)
                 ((MeasureActivity) mContext).showSaveTestAlert();
         } else {
             if (mContext instanceof Activity) ((Activity) mContext).finish();
+        }
+    }
+
+    private void dealSubmitResp(JSONObject response) {
+        if (mSubmitListener == null) return;
+        MeasureSubmitResp resp = GsonManager.getModel(response, MeasureSubmitResp.class);
+        if (resp != null && resp.getResponse_code() == 1) {
+            mSubmitListener.onComplete(true);
+        } else {
+            mSubmitListener.onComplete(false);
         }
     }
 
@@ -571,7 +569,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         } else if (PAPER_EXERCISE.equals(apiName)) {
             dealPaperExerciseResp(response);
         } else if (SUBMIT_PAPER.equals(apiName)) {
-            // Empty
+            dealSubmitResp(response);
         }
 
         hideLoading();

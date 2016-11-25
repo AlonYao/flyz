@@ -1,11 +1,14 @@
 package com.appublisher.quizbank.common.measure.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -14,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.Window;
+import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
@@ -25,7 +30,10 @@ import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.fragment.MeasureSheetFragment;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 做题模块：主页面
@@ -35,19 +43,52 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
     private static final String MENU_SCRATCH = "草稿纸";
     private static final String MENU_ANSWERSHEET = "答题卡";
     private static final String MENU_PAUSE = "暂停";
+    private static final int TIME_ON = 0;
 
     public ViewPager mViewPager;
     public MeasureModel mModel;
     public MeasureAdapter mAdapter;
     public TabLayout mTabLayout;
+    public int mMins;
+    public int mSec;
 
     private boolean mIsFromClick;
+    private Handler mHandler;
+    private Timer mTimer;
+
+    public static class MsgHandler extends Handler {
+        private WeakReference<MeasureActivity> mActivity;
+
+        public MsgHandler(MeasureActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @SuppressLint("CommitPrefEdits")
+        @Override
+        public void handleMessage(Message msg) {
+            final MeasureActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case TIME_ON:
+                        // 显示时间
+                        String mins = String.valueOf(activity.mMins);
+                        String sec = String.valueOf(activity.mSec);
+                        if (mins.length() == 1) mins = "0" + mins;
+                        if (sec.length() == 1) sec = "0" + sec;
+                        String time = mins + ":" + sec;
+                        activity.setTitle(time);
+                        break;
+                }
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measure);
         setToolBar(this);
+        setTitle("");
         initView();
         initData();
     }
@@ -67,9 +108,6 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
                     R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
-        MenuItemCompat.setShowAsAction(menu.add(MENU_PAUSE).setIcon(
-                R.drawable.measure_icon_pause), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -80,6 +118,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
             mModel.checkRecord();
         } else if (item.getTitle().equals(MENU_PAUSE)) {
             // 暂停
+            showPauseAlert();
         } else if (item.getTitle().equals(MENU_ANSWERSHEET)) {
             // 答题卡
             skipToSheet();
@@ -104,8 +143,13 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mRedo = getIntent().getBooleanExtra(INTENT_REDO, false);
         mModel.mCurTimestamp = System.currentTimeMillis();
+
         showLoading();
         mModel.getData();
+
+        mHandler = new MsgHandler(this);
+        mMins = 0;
+        mSec = 0;
     }
 
     private void initView() {
@@ -134,6 +178,8 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
                 // Empty
             }
         });
+
+        startTimer();
     }
 
     private void scrollTabLayout(int position) {
@@ -282,5 +328,60 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
                                 finish();
                             }
                         }).show();
+    }
+
+    /**
+     * 倒计时启动
+     */
+    private void startTimer() {
+        stopTimer();
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                mSec++;
+                if (mSec > 59) {
+                    mMins++;
+                    mSec = 0;
+                }
+                mHandler.sendEmptyMessage(TIME_ON);
+            }
+        }, 0, 1000);
+    }
+
+    /**
+     * 倒计时停止
+     */
+    private void stopTimer() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+    }
+
+    /**
+     * 暂停Alert
+     */
+    private void showPauseAlert() {
+        stopTimer();
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        Window window = alertDialog.getWindow();
+        if (window == null) return;
+        window.setContentView(R.layout.alert_item_pause);
+        window.setBackgroundDrawableResource(R.color.transparency);
+
+        TextView textView = (TextView) window.findViewById(R.id.alert_pause_tv);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTimer();
+                alertDialog.dismiss();
+            }
+        });
     }
 }
