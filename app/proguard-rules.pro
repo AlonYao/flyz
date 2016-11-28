@@ -98,39 +98,45 @@
 -keepattributes Signature
 
 # 听云
-# ProGuard configurations for NetworkBench Lens
 -keep class com.networkbench.** { *; }
 -dontwarn com.networkbench.**
 -keepattributes Exceptions, Signature, InnerClasses
-# End NetworkBench Lens
 
-##---------------Begin: proguard configuration for Gson  ----------
-# Gson uses generic type information stored in a class file when working with fields. Proguard
-# removes such information by default, so configure it to keep all of it.
+## Gson
 -keepattributes Signature
-
-# For using GSON @Expose annotation
 -keepattributes *Annotation*
-
-# Gson specific classes
 -keep class sun.misc.Unsafe { *; }
 #-keep class com.google.gson.stream.** { *; }
-
-# Application classes that will be serialized/deserialized over Gson
 -keep class com.google.gson.examples.android.model.** { *; }
 -keep class com.appublisher.quizbank.** { *; }
 -keep class com.appublisher.lib_basic.** { *; }
 -keep class com.appublisher.lib_login.** { *; }
 -keep class com.appublisher.lib_course.** { *; }
 -keep class com.appublisher.lib_pay.** { *; }
-##---------------End: proguard configuration for Gson  ----------
 
 # TalkingData
--keep public class com.tendcloud.tenddata.** { public protected *;}
 -dontwarn com.tendcloud.tenddata.**
+-keep public class com.tendcloud.tenddata.** { public protected *;}
+-keepclassmembers class com.tendcloud.tenddata.**{
+public void *(***);
+}
+-keep class com.talkingdata.sdk.TalkingDataSDK {public *;}
+-keep class com.apptalkingdata.** {*;}
 
 # picasso
 -dontwarn com.squareup.okhttp.**
+
+# ActiveAndroid
+-keep class com.activeandroid.** {*;}
+
+# 高德
+-keep class com.amap.api.location.**{*;}
+-keep class com.amap.api.fence.**{*;}
+-keep class com.autonavi.aps.amapapi.model.**{*;}
+
+# 个推
+-dontwarn com.igexin.**
+-keep class com.igexin.**{*;}
 
 # 支付宝
 -ignorewarnings
