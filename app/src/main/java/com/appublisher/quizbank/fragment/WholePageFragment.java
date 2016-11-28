@@ -23,14 +23,15 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
 import com.appublisher.quizbank.adapter.YearGvAdapter;
-import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.model.business.WholePageModel;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
@@ -49,6 +50,7 @@ import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * 真题演练
@@ -71,8 +73,6 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     private ImageView mIvYearArrow;
     private TextView mTvYear;
 
-    private boolean mUmengIsSelfPick; // 是否是自定义列表
-
     public ArrayList<EntirePaperM> mEntirePapers;
     public ImageView mIvNull;
     public static TextView mTvProvince;
@@ -85,6 +85,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     public static Handler mHandler;
     public static int mCurAreaId;
     public static final int GET_LOCATION = 10;
+
+    // Umeng
+    private String mUMFilter;
 
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mWeakActivity;
@@ -136,7 +139,6 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mOffset = 0;
         mCount = 5;
         mHandler = new MsgHandler(mActivity);
-        mUmengIsSelfPick = false;
     }
 
     @Override
@@ -247,14 +249,13 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                     intent.putExtra(MeasureConstants.INTENT_PAPER_ID, paperId);
 //                    intent.putExtra("paper_name", paperName);
 
-                    // Umeng
-                    if (mUmengIsSelfPick) {
-                        intent.putExtra("umeng_entry", "SelfPick");
-                    } else {
-                        intent.putExtra("umeng_entry", "Recom");
-                    }
-
                     startActivity(intent);
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "Click");
+                    map.put("Filter", mUMFilter);
+                    UmengManager.onEvent(getContext(), "Entirelist", map);
                 }
             };
 
@@ -340,7 +341,19 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 mPwProvince.dismiss();
 
                 // Umeng
-                mUmengIsSelfPick = true;
+                if (mCurAreaId == 0 && mCurYear != 0) {
+                    // 只选择了年份
+                    mUMFilter = "Year";
+                } else if (mCurAreaId != 0 && mCurYear == 0) {
+                    // 只选择了地区
+                    mUMFilter = "Exam";
+                } else if (mCurAreaId != 0) {
+                    // 都选了
+                    mUMFilter = "All";
+                } else {
+                    // 都没选
+                    mUMFilter = "None";
+                }
             }
         });
 
@@ -437,7 +450,20 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 mQRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
                 mPwYear.dismiss();
 
-                mUmengIsSelfPick = true;
+                // Umeng
+                if (mCurAreaId == 0 && mCurYear != 0) {
+                    // 只选择了年份
+                    mUMFilter = "Year";
+                } else if (mCurAreaId != 0 && mCurYear == 0) {
+                    // 只选择了地区
+                    mUMFilter = "Exam";
+                } else if (mCurAreaId != 0) {
+                    // 都选了
+                    mUMFilter = "All";
+                } else {
+                    // 都没选
+                    mUMFilter = "None";
+                }
             }
         });
 
