@@ -59,7 +59,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     private String mock_time;
     private String courseDetailLink;
     private TextView bottom_right;
-    public static TextView bottom_left;
+    public TextView bottom_left;
     private Handler mHandler;
     private int exercise_id = -1;
     private MockPreResp mMockPreResp;
@@ -104,12 +104,12 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                         if (sec.length() == 1) sec = "0" + sec;
                         String time = hour + ":" + mins + ":" + sec;
                         String text = time + " 开考";
-                        bottom_left.setText(text);
+                        activity.bottom_left.setText(text);
                         break;
 
                     case BEGINMOCK_Y:
                         //考试时间到
-                        bottom_left.setText("点击进入");
+                        activity.bottom_left.setText("点击进入");
                         break;
 
                     default:
