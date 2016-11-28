@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,13 @@ import android.widget.ImageView;
 
 import com.appublisher.lib_basic.AppDownload;
 import com.appublisher.lib_basic.ImageManager;
-import com.appublisher.lib_basic.Logger;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.CarouselM;
-import com.appublisher.quizbank.network.QRequest;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -90,26 +87,16 @@ public class CarouselAdapter extends PagerAdapter {
                         intent.putExtra("bar_title", "快讯");
                         intent.putExtra("from", "course");
                         context.startActivity(intent);
-
-                        // Umeng统计
-                        try {
-                            String courseId =
-                                    targetContent.substring(
-                                            targetContent.indexOf("course_id=") + 10,
-                                            targetContent.indexOf("&user_id="));
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("CourseID", courseId);
-                            map.put("Entry", "KX");
-                            map.put("Status", "");
-                            MobclickAgent.onEvent(context, "EnterCourse", map);
-                        } catch (Exception e) {
-                            // Empty
-                        }
                     }
 
                 } else if ("apk".equals(targetType)) {
                     AppDownload.downloadApk(context, targetContent);
                 }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("CarouselFigure", "1");
+                UmengManager.onEvent(context, "Home", map);
             }
         });
 

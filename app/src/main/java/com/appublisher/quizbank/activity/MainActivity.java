@@ -3,7 +3,6 @@ package com.appublisher.quizbank.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -57,6 +56,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends BaseActivity implements RequestCallback {
     /**
@@ -319,6 +319,11 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             OpenCourseModel.skipToMyGrade(this, CourseFragment.mUnRateClasses, "false");
         } else if ("面试".equals(item.getTitle())) {
             changeFragment(5);
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "InterviewPage");
+            UmengManager.onEvent(this, "Home", map);
+
         } else if ("设置".equals(item.getTitle())) {
             final Intent intent = new Intent(this, CommonFragmentActivity.class);
             intent.putExtra("from", "setting");

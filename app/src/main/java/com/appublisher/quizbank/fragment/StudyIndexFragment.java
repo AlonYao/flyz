@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -29,7 +29,6 @@ import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.GuFenListActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
-import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
@@ -56,6 +55,7 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -334,6 +334,10 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             case R.id.avatar:
                 intent = new Intent(getActivity(), UserInfoActivity.class);
                 startActivity(intent);
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Mine");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.user_info_view:
                 // 能力评估
@@ -375,11 +379,20 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                     startActivity(intent);
                 }
 
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Mini");
+                UmengManager.onEvent(getContext(), "Home", map);
+
                 break;
             case R.id.history_mini_view:
                 // 历史模考
                 intent = new Intent(getActivity(), HistoryMokaoActivity.class);
                 startActivity(intent);
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Minilist");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.note_view:
                 // 推荐专项
@@ -393,11 +406,19 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 intent.putExtra("redo", false);
                 intent.putExtra("umeng_entry", "Home");
                 startActivity(intent);
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Note");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.notes_view:
                 // 全部专项
                 intent = new Intent(getActivity(), SpecialProjectActivity.class);
                 startActivity(intent);
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Notlist");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.quick_test_view:
                 // 快速智能练习
@@ -409,21 +430,37 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 intent = new Intent(getActivity(), MeasureActivity.class);
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.AUTO);
                 startActivity(intent);
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Auto");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.wholepage_view:
                 intent = new Intent(getActivity(), CommonFragmentActivity.class);
                 intent.putExtra("from", "wholepage");
                 startActivity(intent);
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Entirelist");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.mock_view:
                 intent = new Intent(getActivity(), MockPreActivity.class);
                 intent.putExtra("mock_id", mock_id);
                 startActivity(intent);
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Mock");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.assess_view:
                 intent = new Intent(getActivity(), GuFenListActivity.class);
                 intent.putExtra("mock_gufen", GsonManager.modelToString(mockGufenResp));
                 startActivity(intent);
+                // Umeng
+                map = new HashMap<>();
+                map.put("Action", "Evaluate");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
         }
     }
