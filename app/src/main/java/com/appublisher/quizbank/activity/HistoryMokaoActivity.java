@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
@@ -23,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HistoryMokaoActivity extends BaseActivity implements RequestCallback {
 
@@ -146,6 +148,11 @@ public class HistoryMokaoActivity extends BaseActivity implements RequestCallbac
                     intent.putExtra("paper_time", historyMokao.getDate());
                     startActivity(intent);
                 }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", String.valueOf(position + 1));
+                UmengManager.onEvent(HistoryMokaoActivity.this, "Minilist", map);
             }
         });
     }
