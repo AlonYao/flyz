@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
@@ -19,12 +20,14 @@ import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.unnamed.b.atv.model.TreeNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 树形结构容器
  */
 public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.TreeItem> {
     private ImageView mIvToggle;
+    private String mType;
 
     public TreeItemHolder(Context context) {
         super(context);
@@ -69,6 +72,8 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ImageView level_5 = (ImageView) view.findViewById(R.id.level_5);
         RelativeLayout vipLayout = (RelativeLayout) view.findViewById(R.id.treeview_vip);
 
+        mType = value.type;
+
         // 知识点层级名字
         tvName.setText(value.name);
 
@@ -83,44 +88,29 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
 
             switch (value.ev_level) {
                 case 1:
-                    level_1.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_5));
+                    level_1.setImageResource(R.drawable.level_5);
                     break;
                 case 2:
-                    level_1.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_5));
-                    level_2.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_6));
+                    level_1.setImageResource(R.drawable.level_5);
+                    level_2.setImageResource(R.drawable.level_6);
                     break;
                 case 3:
-                    level_1.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_5));
-                    level_2.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_6));
-                    level_3.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_7));
+                    level_1.setImageResource(R.drawable.level_5);
+                    level_2.setImageResource(R.drawable.level_6);
+                    level_3.setImageResource(R.drawable.level_7);
                     break;
                 case 4:
-                    level_1.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_5));
-                    level_2.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_6));
-                    level_3.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_7));
-                    level_4.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_8));
+                    level_1.setImageResource(R.drawable.level_5);
+                    level_2.setImageResource(R.drawable.level_6);
+                    level_3.setImageResource(R.drawable.level_7);
+                    level_4.setImageResource(R.drawable.level_8);
                     break;
                 case 5:
-                    level_1.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_5));
-                    level_2.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_6));
-                    level_3.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_7));
-                    level_4.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_8));
-                    level_5.setImageDrawable(
-                            context.getResources().getDrawable(R.drawable.level_9));
+                    level_1.setImageResource(R.drawable.level_5);
+                    level_2.setImageResource(R.drawable.level_6);
+                    level_3.setImageResource(R.drawable.level_7);
+                    level_4.setImageResource(R.drawable.level_8);
+                    level_5.setImageResource(R.drawable.level_9);
                     break;
                 default:
                     break;
@@ -129,8 +119,10 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             // 专项训练特殊处理
             doneText.setVisibility(View.VISIBLE);
             totalText.setVisibility(View.VISIBLE);
-            doneText.setText(value.done + "/");
-            totalText.setText(value.total + "");
+
+            String done = value.done + "/";
+            doneText.setText(done);
+            totalText.setText(String.valueOf(value.total));
 
             ivDo.setVisibility(View.VISIBLE);
 
@@ -190,6 +182,31 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 intent.putExtra("from", "collect_or_error");
 
                 context.startActivity(intent);
+
+                // Umeng
+                if (KnowledgeTreeModel.TYPE_NOTE.equals(mType)) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "Quiz");
+                    UmengManager.onEvent(context, "Notelist", map);
+                }
+            }
+        });
+
+        // Umeng
+        node.setClickListener(new TreeNode.TreeNodeClickListener() {
+            @Override
+            public void onClick(TreeNode node, Object value) {
+                if (!KnowledgeTreeModel.TYPE_NOTE.equals(mType)) return;
+
+                String action = "Expand";
+                if (node.isExpanded()) {
+                    action = "Fold";
+                }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", action);
+                UmengManager.onEvent(context, "Notelist", map);
             }
         });
 
