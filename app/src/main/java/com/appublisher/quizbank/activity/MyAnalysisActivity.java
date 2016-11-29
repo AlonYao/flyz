@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
@@ -18,11 +19,15 @@ import com.appublisher.quizbank.network.QRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class MyAnalysisActivity extends BaseActivity implements RequestCallback {
 
     private EditText mEditText;
     private String mQuestionId;
     private String mType;
+
+    private String mUMAction = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,16 @@ public class MyAnalysisActivity extends BaseActivity implements RequestCallback 
         // 获取数据
         mQuestionId = getIntent().getStringExtra("question_id");
         mType = getIntent().getStringExtra("type");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", mUMAction);
+        map.put("Type", mType);
+        UmengManager.onEvent(this, "Feedback", map);
     }
 
     @Override
@@ -66,6 +81,9 @@ public class MyAnalysisActivity extends BaseActivity implements RequestCallback 
                 ToastManager.showToast(this, "提交成功");
 
                 finish();
+
+                // Umeng
+                mUMAction = "2";
             }
         }
 

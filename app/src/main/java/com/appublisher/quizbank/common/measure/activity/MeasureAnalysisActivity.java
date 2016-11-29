@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ import com.appublisher.quizbank.common.measure.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -40,6 +43,8 @@ public class MeasureAnalysisActivity extends BaseActivity implements
 
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
+    private int mCurPosition;
+    private AlertDialog mLastPageAlert;
 
     public int mCurQuestionId;
     public MeasureAnalysisModel mModel;
@@ -149,6 +154,12 @@ public class MeasureAnalysisActivity extends BaseActivity implements
 //            mUmengDelete = "1";
         } else if (item.getTitle().equals("答题卡")) {
             skipToSheet();
+
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("AnswerSheet", "1");
+            UmengManager.onEvent(this, "Review", map);
+
         } else if ("分享".equals(item.getTitle())) {
             /** 构造友盟分享实体 **/
             String[] content = {"检验学霸的唯一标准就是做对题目，我出一道考考你？接招吗？",
@@ -203,12 +214,16 @@ public class MeasureAnalysisActivity extends BaseActivity implements
             public void onPageScrolled(int position,
                                        float positionOffset,
                                        int positionOffsetPixels) {
-                // Empty
+                // 最后一页再往后滑，弹出末题引导
+                if (mModel.isShowLastPageAlert(mCurPosition, positionOffsetPixels)) {
+
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
 //                scrollTabLayout(position);
+                mCurPosition = position;
             }
 
             @Override
@@ -308,5 +323,88 @@ public class MeasureAnalysisActivity extends BaseActivity implements
         }
         MeasureAnalysisSheetFragment sheetFragment = new MeasureAnalysisSheetFragment();
         sheetFragment.show(transaction, "SheetFragment");
+    }
+
+    public void showLastPageAlert() {
+        if (mLastPageAlert != null && mLastPageAlert.isShowing()) return;
+
+        mLastPageAlert = new AlertDialog.Builder(this).create();
+        mLastPageAlert.setCancelable(true);
+        mLastPageAlert.show();
+
+        Window window = mLastPageAlert.getWindow();
+        if (window == null) return;
+        window.setContentView(R.layout.alert_item_lastpage);
+
+        TextView tvAnother = (TextView) window.findViewById(R.id.alert_lastpage_another);
+        TextView tvBack = (TextView) window.findViewById(R.id.alert_lastpage_back);
+        TextView tvZhibo = (TextView) window.findViewById(R.id.alert_lastpage_zhibo);
+
+        // 再来一发
+//        if ("mokao".equals(activity.mAnalysisType) || "entire".equals(activity.mAnalysisType) || "mock".equals(activity.mAnalysisType)) {
+//            tvAnother.setVisibility(View.GONE);
+//        } else {
+//            tvAnother.setVisibility(View.VISIBLE);
+//        }
+
+//        mAlertLastPage.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                LegacyMeasureAnalysisModel.mIsShowAlert = false;
+//            }
+//        });
+
+        // 再来一发点击事件
+        tvAnother.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                //noinspection IfCanBeSwitch
+//                if ("auto".equals(activity.mAnalysisType)) {
+//                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
+//                    intent.putExtra("paper_type", activity.mAnalysisType);
+//                    intent.putExtra("paper_name", activity.getString(R.string.paper_type_auto));
+//                    intent.putExtra("umeng_entry", activity.mUmengEntry);
+//                    activity.startActivity(intent);
+//
+//                    finishActivity(activity);
+//
+//                } else if ("note".equals(activity.mAnalysisType)
+//                        || "collect".equals(activity.mAnalysisType)
+//                        || "error".equals(activity.mAnalysisType)) {
+//                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
+//                    intent.putExtra("paper_type", activity.mAnalysisType);
+//                    intent.putExtra("paper_name", activity.mPaperName);
+//                    intent.putExtra("hierarchy_id", activity.mHierarchyId);
+//                    intent.putExtra("hierarchy_level", activity.mHierarchyLevel);
+//                    intent.putExtra("umeng_entry", activity.mUmengEntry);
+//                    activity.startActivity(intent);
+//
+//                    finishActivity(activity);
+//
+//                } else {
+//                    mAlertLastPage.dismiss();
+//                }
+//
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Guide", "Again");
+                UmengManager.onEvent(MeasureAnalysisActivity.this, "Review", map);
+            }
+        });
+
+        // 返回
+        tvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Guide", "Back");
+                UmengManager.onEvent(MeasureAnalysisActivity.this, "Review", map);
+            }
+        });
+
+        // 看个直播
+//        StudyIndexModel.setOpenCourseBtn(activity, tvZhibo);
     }
 }

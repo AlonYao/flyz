@@ -20,6 +20,7 @@ public class MeasureAnalysisModel extends MeasureModel{
 
     public MeasureAnalysisBean mAnalysisBean;
     public boolean mIsErrorOnly;
+    public int mSize;
 
     public MeasureAnalysisModel(Context context) {
         super(context);
@@ -32,6 +33,11 @@ public class MeasureAnalysisModel extends MeasureModel{
         } else {
             showAll();
         }
+    }
+
+    public boolean isShowLastPageAlert(int curPosition, int positionOffsetPixels) {
+        return mSize != 0 && (curPosition == mSize - 1 && positionOffsetPixels == 0)
+                && (AUTO.equals(mPaperType) || NOTE.equals(mPaperType));
     }
 
     private void showErrorOnly() {
