@@ -95,7 +95,7 @@ public class CarouselAdapter extends PagerAdapter {
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
-                map.put("CarouselFigure", "1");
+                map.put("CarouselFigure", targetContent);
                 UmengManager.onEvent(context, "Home", map);
             }
         });
