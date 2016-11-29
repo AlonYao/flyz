@@ -315,10 +315,23 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         if ("下载".equals(item.getTitle())) {
             Intent intent = new Intent(this, OfflineActivity.class);
             startActivity(intent);
+
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Download");
+            UmengManager.onEvent(this, "CourseCenter", map);
+
         } else if ("评分".equals(item.getTitle())) {
             OpenCourseModel.skipToMyGrade(this, CourseFragment.mUnRateClasses, "false");
+
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Score");
+            UmengManager.onEvent(this, "CourseCenter", map);
+
         } else if ("面试".equals(item.getTitle())) {
             changeFragment(5);
+
             // Umeng
             HashMap<String, String> map = new HashMap<>();
             map.put("Action", "InterviewPage");
@@ -328,10 +341,13 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             final Intent intent = new Intent(this, CommonFragmentActivity.class);
             intent.putExtra("from", "setting");
             startActivity(intent);
+
         } else if ("笔试".equals(item.getTitle())) {
             changeFragment(0);
+
         } else if ("公开课评分".equals(item.getTitle())) {
             OpenCourseModel.skipToMyGrade(this, "true");
+
             // Umeng
             UmengManager.onEvent(this, "Score");
         }
