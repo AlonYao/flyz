@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -23,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InterviewPaperListActivity extends BaseActivity implements RequestCallback {
@@ -130,6 +132,22 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
                 final Intent intent = new Intent(InterviewPaperListActivity.this, InterviewPaperDetailActivity.class);
                 intent.putExtra("paper_id", list.get(position - 1).getId());
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                if ("guokao".equals(mFrom)) {
+                    map.put("PaperID", String.valueOf(list.get(position - 1).getId()));
+                    UmengManager.onEvent(InterviewPaperListActivity.this, "Jingxuan", map);
+                } else if ("teacher".equals(mFrom)) {
+                    map.put("Action", String.valueOf(list.get(position - 1).getId()));
+                    UmengManager.onEvent(InterviewPaperListActivity.this, "Jiexi", map);
+                } else if ("note".equals(mFrom)) {
+                    map.put("Action", String.valueOf(list.get(position - 1).getId()));
+                    UmengManager.onEvent(InterviewPaperListActivity.this, "Tupo", map);
+                } else if ("history".equals(mFrom)) {
+                    map.put("Action", String.valueOf(list.get(position - 1).getId()));
+                    UmengManager.onEvent(InterviewPaperListActivity.this, "Zhenti", map);
+                }
             }
         });
     }

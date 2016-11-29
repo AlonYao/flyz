@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -60,7 +62,7 @@ public class PaperDetailAdaper extends PagerAdapter {
         final TextView sourceTv = (TextView) view.findViewById(R.id.source_tv);
         final TextView keywordsTv = (TextView) view.findViewById(R.id.keywords_tv);
 
-        if (list != null || position < (list.size() - 1)) {
+        if (list != null && position < (list.size() - 1)) {
             final InterviewPaperDetailResp.QuestionsBean questionsBean = list.get(position);
 
             //材料
@@ -72,6 +74,11 @@ public class PaperDetailAdaper extends PagerAdapter {
                         final Intent intent = new Intent(context, InterviewMaterialDetailActivity.class);
                         intent.putExtra("material", questionsBean.getMaterial());
                         context.startActivity(intent);
+
+                        // Umeng
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Action", "Material");
+                        UmengManager.onEvent(context, "InterviewProblem", map);
                     }
                 });
             } else {
@@ -105,6 +112,11 @@ public class PaperDetailAdaper extends PagerAdapter {
                             analysisSwitchTv.setText("展开解析");
                         }
                     }
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "Answer");
+                    UmengManager.onEvent(context, "InterviewProblem", map);
                 }
             });
 

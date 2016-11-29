@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InterviewGuoKaoActivity extends BaseActivity implements RequestCallback {
@@ -58,6 +60,11 @@ public class InterviewGuoKaoActivity extends BaseActivity implements RequestCall
                 intent.putExtra("from", "guokao");
                 intent.putExtra("year", list.get(position));
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Year", String.valueOf(list.get(position)));
+                UmengManager.onEvent(InterviewGuoKaoActivity.this, "Jingxuan", map);
             }
         });
     }

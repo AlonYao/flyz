@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.CarouselAdapter;
-import com.appublisher.quizbank.common.interview.activity.InterviewGuoKaoActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewCategoryActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewGuoKaoActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperListActivity;
-import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.model.business.StudyIndexModel;
 import com.appublisher.quizbank.model.netdata.CarouselM;
 import com.appublisher.quizbank.network.QRequest;
@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -114,6 +115,11 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), InterviewGuoKaoActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Jingxuan");
+                UmengManager.onEvent(getContext(), "InterviewPage", map);
             }
         });
 
@@ -123,6 +129,11 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
                 final Intent intent = new Intent(getActivity(), InterviewPaperListActivity.class);
                 intent.putExtra("from", "teacher");
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Jiexi");
+                UmengManager.onEvent(getContext(), "InterviewPage", map);
             }
         });
 
@@ -131,6 +142,11 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), InterviewCategoryActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Tupo");
+                UmengManager.onEvent(getContext(), "InterviewPage", map);
             }
         });
 
@@ -140,6 +156,11 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
                 final Intent intent = new Intent(getActivity(), InterviewPaperListActivity.class);
                 intent.putExtra("from", "history");
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Zhenti");
+                UmengManager.onEvent(getContext(), "InterviewPage", map);
             }
         });
 
