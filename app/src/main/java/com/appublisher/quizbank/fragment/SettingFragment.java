@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ProgressDialogManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.activity.ExamChangeActivity;
 import com.appublisher.lib_login.activity.UserInfoActivity;
@@ -55,16 +56,6 @@ public class SettingFragment extends Fragment implements QApiConstants {
     private RelativeLayout mRlSno;
     private DiskLruImageCache mDiskLruImageCache;
 
-    /**
-     * Umeng
-     */
-    private String mUmengAccount;
-    private String mUmengMyTest;
-    private String mUmengRemind;
-    private String mUmengInforms;
-    private String mUmengFeedback;
-    private String mUmengFAQ;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -92,12 +83,6 @@ public class SettingFragment extends Fragment implements QApiConstants {
         mRlSno = (RelativeLayout) view.findViewById(R.id.setting_sno_rl);
 
         // 成员变量初始化
-        mUmengAccount = "0";
-        mUmengMyTest = "0";
-        mUmengRemind = "0";
-        mUmengInforms = "0";
-        mUmengFeedback = "0";
-        mUmengFAQ = "0";
         mDiskLruImageCache = new DiskLruImageCache(
                 mActivity,
                 DISK_IMAGECACHE_FOLDER,
@@ -113,7 +98,9 @@ public class SettingFragment extends Fragment implements QApiConstants {
                 startActivity(intent);
 
                 // Umeng
-                mUmengAccount = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Account");
+                UmengManager.onEvent(getContext(), "Setting", map);
             }
         });
 
@@ -125,7 +112,9 @@ public class SettingFragment extends Fragment implements QApiConstants {
                 startActivity(intent);
 
                 // Umeng
-                mUmengMyTest = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "MyTest");
+                UmengManager.onEvent(getContext(), "Setting", map);
             }
         });
 
@@ -142,7 +131,9 @@ public class SettingFragment extends Fragment implements QApiConstants {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Umeng
-                mUmengRemind = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Remind");
+                UmengManager.onEvent(getContext(), "Setting", map);
             }
         });
 
@@ -162,7 +153,9 @@ public class SettingFragment extends Fragment implements QApiConstants {
 //                ivSettingRedPoint.setVisibility(View.GONE);
 
                 // Umeng
-                mUmengInforms = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Informs");
+                UmengManager.onEvent(getContext(), "Setting", map);
             }
         });
 
@@ -173,7 +166,9 @@ public class SettingFragment extends Fragment implements QApiConstants {
                 CommonModel.skipToUmengFeedback(mActivity);
 
                 // Umeng
-                mUmengFeedback = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Feedback");
+                UmengManager.onEvent(getContext(), "Setting", map);
             }
         });
 
@@ -185,7 +180,9 @@ public class SettingFragment extends Fragment implements QApiConstants {
                 startActivity(intent);
 
                 // Umeng
-                mUmengFAQ = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "FAQ");
+                UmengManager.onEvent(getContext(), "Setting", map);
             }
         });
 
@@ -275,20 +272,6 @@ public class SettingFragment extends Fragment implements QApiConstants {
 
         // TalkingData
         TCAgent.onPageEnd(mActivity, "SettingFragment");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Umeng
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Account", mUmengAccount);
-        map.put("MyTest", mUmengMyTest);
-        map.put("Remind", mUmengRemind);
-        map.put("Informs", mUmengInforms);
-        map.put("Feedback", mUmengFeedback);
-        map.put("FAQ", mUmengFAQ);
-        MobclickAgent.onEvent(mActivity, "Setting", map);
     }
 
 }
