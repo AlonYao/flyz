@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
@@ -16,6 +17,7 @@ import com.appublisher.quizbank.model.netdata.history.HistoryPapersResp;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * StudyRecordFragment Model
@@ -96,6 +98,11 @@ public class StudyRecordModel {
                                 fragment.mActivity.startActivity(intent);
                             }
 
+                            // Umeng
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("Action", "List");
+                            UmengManager.onEvent(fragment.getContext(), "Record", map);
+
                         } else if ("undone".equals(status)) {
                             // 跳转至做题页面
                             Intent intent = new Intent(
@@ -107,10 +114,12 @@ public class StudyRecordModel {
                             intent.putExtra("redo", true);
                             intent.putExtra("umeng_entry", "Continue");
                             fragment.mActivity.startActivity(intent);
-                        }
 
-                        // Umeng
-                        fragment.mUmengAction = "1";
+                            // Umeng
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("Redo", historyPaper.getPaper_type());
+                            UmengManager.onEvent(fragment.getContext(), "Record", map);
+                        }
                     }
                 });
     }

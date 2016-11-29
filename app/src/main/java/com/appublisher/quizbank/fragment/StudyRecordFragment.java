@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 学习记录
@@ -51,11 +50,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     private ImageView collectIv;
     private ImageView wrongIv;
-
-    /**
-     * Umeng
-     */
-    public String mUmengAction;
 
     @Override
     public void onAttach(Activity activity) {
@@ -102,6 +96,11 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                 final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
                 intent.putExtra("from", "collect");
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Collect");
+                UmengManager.onEvent(getContext(), "Record", map);
             }
         });
 
@@ -111,6 +110,11 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                 final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
                 intent.putExtra("from", "wrong");
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Error");
+                UmengManager.onEvent(getContext(), "Record", map);
             }
         });
     }
@@ -123,7 +127,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         onRefresh();
 
         // Umeng
-        mUmengAction = "0";
         MobclickAgent.onPageStart("StudyRecordFragment");
 
         // TalkingData
@@ -133,12 +136,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     @Override
     public void onPause() {
         super.onPause();
-        // Umeng
-        final Map<String, String> um_map = new HashMap<String, String>();
-        um_map.put("Action", mUmengAction);
-        UmengManager.onEvent(mActivity, "Record", um_map);
-        MobclickAgent.onPageEnd("StudyRecordFragment");
-
         // TalkingData
         TCAgent.onPageEnd(mActivity, "StudyRecordFragment");
     }

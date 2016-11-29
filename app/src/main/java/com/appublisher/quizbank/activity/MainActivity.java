@@ -342,6 +342,11 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             intent.putExtra("from", "setting");
             startActivity(intent);
 
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Setting");
+            UmengManager.onEvent(this, "Record", map);
+
         } else if ("笔试".equals(item.getTitle())) {
             changeFragment(0);
 
