@@ -55,6 +55,10 @@ public class VipExerciseIndexModel {
     public VipExerciseFilterResp mVipExerciseFilterResp;
     public Map<String, String> umMap = new HashMap<>();
 
+    private boolean mUMIsStateChange = false;
+    private boolean mUMIsSubjectChange = false;
+    private boolean mUMIsTypeChange = false;
+
     public void dealExerciseFilter(JSONObject response, final VipExerciseIndexActivity activity) {
         final VipExerciseFilterResp vipExerciseFilterResp = GsonManager.getModel(response, VipExerciseFilterResp.class);
         if (vipExerciseFilterResp.getResponse_code() == 1) {
@@ -135,12 +139,6 @@ public class VipExerciseIndexModel {
 
         statusPop.showAsDropDown(activity.statusView, 0, 2);
         activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
-
-        //um
-        umMap.clear();
-        umMap.put("Action", "State");
-        UmengManager.onEvent(activity, "VipFilter", umMap);
-
     }
 
     public void initStatusPop(final VipExerciseIndexActivity activity) {
@@ -162,6 +160,11 @@ public class VipExerciseIndexModel {
                     itemCancel(statusSelectedText, activity);
                 }
                 statusSelectedText = textView;
+
+                // Umeng
+                if (position != 0) {
+                    mUMIsStateChange = true;
+                }
             }
         });
         statusPop = new PopupWindow(statusView,
@@ -211,11 +214,6 @@ public class VipExerciseIndexModel {
 
         categoryPop.showAsDropDown(activity.categoryView, 0, 2);
         activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
-
-        //um
-        umMap.clear();
-        umMap.put("Action", "Subject");
-        UmengManager.onEvent(activity, "VipFilter", umMap);
     }
 
     public void initCategoryPop(final VipExerciseIndexActivity activity) {
@@ -251,6 +249,11 @@ public class VipExerciseIndexModel {
                     itemCancel(categorySelectedText, activity);
                 }
                 categorySelectedText = textView;
+
+                // Umeng
+                if (position != 0) {
+                    mUMIsSubjectChange = true;
+                }
             }
         });
         TextView categoryCancle = (TextView) categoryView.findViewById(R.id.vip_filter_cancel);
@@ -281,11 +284,6 @@ public class VipExerciseIndexModel {
 
         typePop.showAsDropDown(activity.typeView, 0, 2);
         activity.typeArrow.setImageResource(R.drawable.wholepage_arrowup);
-
-        //um
-        umMap.clear();
-        umMap.put("Action", "Type");
-        UmengManager.onEvent(activity, "VipFilter", umMap);
     }
 
 
@@ -337,6 +335,11 @@ public class VipExerciseIndexModel {
                     itemCancel(typeSelectedText, activity);
                 }
                 typeSelectedText = textView;
+
+                // Umeng
+                if (position != 0) {
+                    mUMIsTypeChange = true;
+                }
             }
         });
         TextView typeCancle = (TextView) typeView.findViewById(R.id.vip_filter_cancel);
@@ -354,8 +357,24 @@ public class VipExerciseIndexModel {
                 if (typePop.isShowing()) {
                     activity.refreshData();
                     typePop.dismiss();
-                }
 
+                    // Umeng
+                    if (mUMIsStateChange) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Filter", "State");
+                        UmengManager.onEvent(activity, "HomeWork", map);
+                    }
+                    if (mUMIsSubjectChange) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Filter", "Subject");
+                        UmengManager.onEvent(activity, "HomeWork", map);
+                    }
+                    if (mUMIsTypeChange) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Filter", "Type");
+                        UmengManager.onEvent(activity, "HomeWork", map);
+                    }
+                }
             }
         });
 
@@ -381,6 +400,12 @@ public class VipExerciseIndexModel {
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Type", "Mingshi");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 break;
             case 2:
                 // 单题突破
@@ -389,6 +414,12 @@ public class VipExerciseIndexModel {
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
+
+                // Umeng
+                map = new HashMap<>();
+                map.put("Type", "Danti");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 break;
             case 3:
                 // 字迹诊断
@@ -397,6 +428,12 @@ public class VipExerciseIndexModel {
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
+
+                // Umeng
+                map = new HashMap<>();
+                map.put("Type", "Ziji");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 break;
             case 5:
                 // 表达改写
@@ -405,6 +442,12 @@ public class VipExerciseIndexModel {
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
+
+                // Umeng
+                map = new HashMap<>();
+                map.put("Type", "Biaoda");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 break;
             case 6:
                 // 语义提炼
@@ -413,6 +456,12 @@ public class VipExerciseIndexModel {
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
+
+                // Umeng
+                map = new HashMap<>();
+                map.put("Type", "Yuyi");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 break;
             case 7:
                 // 阅读打卡
@@ -421,6 +470,12 @@ public class VipExerciseIndexModel {
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
+
+                // Umeng
+                map = new HashMap<>();
+                map.put("Type", "Yuedu");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 break;
             case 8:
                 // 行测_智能组卷
@@ -434,6 +489,12 @@ public class VipExerciseIndexModel {
                     intent.putExtra("exerciseId", exerciseId);
                     activity.startActivity(intent);
                 }
+
+                // Umeng
+                map = new HashMap<>();
+                map.put("Type", "Zhineng");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 return;
             case 9:
                 // 互评提升
@@ -442,6 +503,12 @@ public class VipExerciseIndexModel {
                 } else {
                     cls = VipExerciseDescriptionActivity.class;
                 }
+
+                // Umeng
+                map = new HashMap<>();
+                map.put("Type", "Huping");
+                UmengManager.onEvent(activity, "HomeWork", map);
+
                 break;
             default:
                 ToastManager.showToast(activity, "请在电脑查看哦");

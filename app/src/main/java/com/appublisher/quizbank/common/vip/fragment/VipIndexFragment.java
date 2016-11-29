@@ -4,13 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.activity.UserInfoActivity;
@@ -39,6 +34,8 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * Created by jinbao on 2016/9/8.
@@ -95,6 +92,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), EvaluationActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Mine");
+                UmengManager.onEvent(getContext(), "VIP", map);
             }
         });
 
@@ -104,6 +106,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), VipNotificationActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Message");
+                UmengManager.onEvent(getContext(), "VIP", map);
             }
         });
 
@@ -112,6 +119,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), VipExerciseIndexActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "HomeWork");
+                UmengManager.onEvent(getContext(), "VIP", map);
             }
         });
         courseView.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +132,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
                 final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
                 intent.putExtra("from", "course_purchased");
                 getActivity().startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "MyCourse");
+                UmengManager.onEvent(getContext(), "VIP", map);
             }
         });
 
@@ -128,6 +145,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
             public void onClick(View v) {
                 final Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Account");
+                UmengManager.onEvent(getContext(), "VIP", map);
             }
         });
 

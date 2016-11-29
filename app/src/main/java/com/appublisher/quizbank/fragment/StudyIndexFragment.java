@@ -334,15 +334,15 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             case R.id.avatar:
                 intent = new Intent(getActivity(), UserInfoActivity.class);
                 startActivity(intent);
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "Mine");
-                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.user_info_view:
                 // 能力评估
                 intent = new Intent(getActivity(), EvaluationActivity.class);
                 startActivity(intent);
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Mine");
+                UmengManager.onEvent(getContext(), "Home", map);
                 break;
             case R.id.mini_view:
                 // 今日模考

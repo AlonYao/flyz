@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class VipNotificationActivity extends BaseActivity implements RequestCallback {
 
@@ -35,17 +34,13 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
     private XListView listView;
     private int page = 1;
 
-    //um
-    private Map<String, String> umMap = new HashMap<>();
-    private boolean umIsClick = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vip_notification);
         setToolBar(this);
         mRequest = new VipRequest(this, this);
-        list = new ArrayList<VipNotificationResp.NotificationsBean>();
+        list = new ArrayList<>();
         adapter = new VipNotificationAdapter(this, list);
         mRequest.getVipNotifications(page);
         showLoading();
@@ -73,11 +68,6 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //um
-                umMap.clear();
-                umMap.put("Click", "1");
-                UmengManager.onEvent(VipNotificationActivity.this, "MessageList", umMap);
-
                 VipNotificationResp.NotificationsBean notificationsBean = list.get(position - 1);
                 int type = notificationsBean.getType();
                 if (type == 3) {
@@ -92,6 +82,25 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
                     adapter.notifyDataSetChanged();
                     skipExerciseDetail(notificationsBean.getExercise_id(), notificationsBean.getExercise_type());
                 }
+
+                // Umeng
+                String umType;
+                if (type == 1) {
+                    // 批改
+                    umType = "Pigai";
+                } else if (type == 2) {
+                    // 评论
+                    umType = "Dianping";
+                } else if (type == 4) {
+                    // 驳回
+                    umType = "Bohui";
+                } else {
+                    // 其他
+                    umType = "Other";
+                }
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Type", umType);
+                UmengManager.onEvent(VipNotificationActivity.this, "MessageList", map);
             }
         });
     }
@@ -170,15 +179,5 @@ public class VipNotificationActivity extends BaseActivity implements RequestCall
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //um
-        if (!umIsClick) {
-            umMap.clear();
-            umMap.put("Click", "0");
-            UmengManager.onEvent(VipNotificationActivity.this, "MessageList", umMap);
-        }
-    }
 }
 
