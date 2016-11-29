@@ -77,11 +77,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     // 系统时间
     private String mServerCurrentTime;
 
-    // Umeng
-    private String mUMOrder = "0";
-    private String mUMEntryMock = "0";
-    private String mUMCourse = "0";
-
     private static class MsgHandler extends Handler {
         private WeakReference<Activity> mActivity;
 
@@ -152,17 +147,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         //获取数据(模考列表)
         showLoading();
         mQRequest.getServerCurrentTime();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Umeng
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Order", mUMOrder);
-        map.put("EntryMock", mUMEntryMock);
-        map.put("Course", mUMCourse);
-        UmengManager.onEvent(this, "MockPreResp", map);
     }
 
     @Override
@@ -309,7 +293,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     public void dealMockPreInfo(JSONObject response) {
         MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
         mMockPreResp = mockPreResp;
-        if (mockPreResp.getResponse_code() != 1) {
+        if (mockPreResp == null || mockPreResp.getResponse_code() != 1) {
             return;
         }
 
@@ -387,7 +371,9 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
             case R.id.mockpre_bottom_right://课程报名
                 skipCourseDetailPage();
                 // Umeng
-                mUMCourse = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "OrderCourse");
+                UmengManager.onEvent(this, "Mock", map);
                 break;
 
             case R.id.mockpre_bottom_left://进入考试
@@ -402,8 +388,12 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     intent.putExtra("redo", false);
                     startActivity(intent);
                     finish();
+
                     // Umeng
-                    mUMEntryMock = "1";
+                    map = new HashMap<>();
+                    map.put("Action", "Exam");
+                    UmengManager.onEvent(this, "Mock", map);
+
                 } else if ("预约考试".equals(bottom_left.getText().toString().trim())) {
                     // 判断用户是否有手机号
                     String mobileNum = LoginModel.getUserMobile();
@@ -415,6 +405,12 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     } else {
                         mQRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
                     }
+
+                    // Umeng
+                    map = new HashMap<>();
+                    map.put("Action", "OrderExam");
+                    UmengManager.onEvent(this, "Mock", map);
+
                 } else if (exercise_id != -1) {//进入练习报告页
                     Intent intent = new Intent(this, PracticeReportActivity.class);
                     intent.putExtra("exercise_id", exercise_id);
@@ -425,7 +421,9 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     finish();
 
                     // Umeng
-                    mUMEntryMock = "1";
+                    map = new HashMap<>();
+                    map.put("Action", "Report");
+                    UmengManager.onEvent(this, "Mock", map);
                 }
 
                 if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) {
@@ -556,8 +554,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         ToastManager.showToast(this, "考试前会收到短信提示哦");
         mDuration = getSecondsByDateMinusServerTime(mock_time);
         startTimer();
-        // Umeng
-        mUMOrder = "1";
     }
 
     /**
