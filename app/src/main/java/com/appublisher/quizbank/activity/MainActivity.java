@@ -349,7 +349,9 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             OpenCourseModel.skipToMyGrade(this, "true");
 
             // Umeng
-            UmengManager.onEvent(this, "Score");
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Score", "1");
+            UmengManager.onEvent(this, "OpenCourse", map);
         }
 
         return super.onOptionsItemSelected(item);
