@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -45,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -362,6 +364,15 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
         mCurPagePosition = position;
         mCurTimestamp = System.currentTimeMillis();
+
+        // Umeng
+        String isDone = "0";
+        if (submitBean.getAnswer().length() > 0) {
+            isDone = "1";
+        }
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", isDone);
+        UmengManager.onEvent(mContext, "Question", map);
     }
 
     public static String getUserAnswerByPosition(Context context, int position) {

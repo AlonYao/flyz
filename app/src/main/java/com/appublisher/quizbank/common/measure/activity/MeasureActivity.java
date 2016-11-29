@@ -21,6 +21,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
@@ -31,6 +32,7 @@ import com.appublisher.quizbank.common.measure.fragment.MeasureSheetFragment;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -59,7 +61,7 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
     public static class MsgHandler extends Handler {
         private WeakReference<MeasureActivity> mActivity;
 
-        public MsgHandler(MeasureActivity activity) {
+        MsgHandler(MeasureActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
@@ -119,13 +121,27 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         } else if (item.getTitle().equals(MENU_PAUSE)) {
             // 暂停
             showPauseAlert();
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Pause");
+            UmengManager.onEvent(this, "Quiz", map);
+
         } else if (item.getTitle().equals(MENU_ANSWERSHEET)) {
             // 答题卡
             skipToSheet();
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "AnswerSheet");
+            UmengManager.onEvent(this, "Quiz", map);
 
         } else if (item.getTitle().equals(MENU_SCRATCH)) {
+            // 草稿纸
             Intent intent = new Intent(this, ScratchPaperActivity.class);
             startActivity(intent);
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Draft");
+            UmengManager.onEvent(this, "Quiz", map);
         }
 
         return false;
@@ -321,9 +337,6 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
                                 // 保存练习
                                 ToastManager.showToast(MeasureActivity.this, "保存成功");
                                 dialog.dismiss();
-
-                                // Umeng
-//                                UmengManager.onEvent(activity, "0");
 
                                 finish();
                             }
