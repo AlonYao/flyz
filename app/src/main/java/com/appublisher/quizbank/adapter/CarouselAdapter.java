@@ -13,7 +13,7 @@ import com.appublisher.lib_basic.AppDownload;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_course.CourseWebViewActivity;
-import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -58,6 +58,7 @@ public class CarouselAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if ((list.size() - 1) < position) return;
                 CarouselM carouselM = list.get(position);
+                if (carouselM == null) return;
 
                 String targetType = carouselM.getTarget_type();
                 String targetContent = carouselM.getTarget_content();
@@ -65,7 +66,7 @@ public class CarouselAdapter extends PagerAdapter {
 
                 if ("url".equals(targetType)) {
                     final Intent intent = new Intent(context, CourseWebViewActivity.class);
-                    intent.putExtra("url", targetContent);
+                    intent.putExtra("url", LoginParamBuilder.finalUrl(targetContent));
                     context.startActivity(intent);
                 } else if ("app".equals(targetType)) {
                     if (targetContent.contains("market@")) {
@@ -75,15 +76,14 @@ public class CarouselAdapter extends PagerAdapter {
 
                     } else if (targetContent.contains("courselist")) {
                         // 跳转到课程中心模块
-                        if ((Activity) context instanceof MainActivity)
+                        if (context instanceof MainActivity)
                             ((MainActivity) context).courseRadioButton.setChecked(true);
 
                     } else if (targetContent.contains("zhiboke@")) {
                         // 跳转至课程详情页面
                         Intent intent = new Intent(context, CourseWebViewActivity.class);
-                        intent.putExtra("url", targetContent.replace("zhiboke@", "")
-                                + "&user_id=" + LoginModel.getUserId()
-                                + "&user_token=" + LoginModel.getUserToken());
+                        intent.putExtra("url", LoginParamBuilder.finalUrl(
+                                targetContent.replace("zhiboke@", "")));
                         intent.putExtra("bar_title", "快讯");
                         intent.putExtra("from", "course");
                         context.startActivity(intent);

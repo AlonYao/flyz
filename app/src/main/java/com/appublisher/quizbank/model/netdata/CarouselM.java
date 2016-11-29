@@ -19,7 +19,7 @@ public class CarouselM {
     }
 
     public String getTarget_type() {
-        return target_type;
+        return target_type == null ? "" : target_type;
     }
 
     public void setTarget_type(String target_type) {
@@ -27,7 +27,7 @@ public class CarouselM {
     }
 
     public String getTarget_content() {
-        return target_content;
+        return target_content == null ? "" : target_content;
     }
 
     public void setTarget_content(String target_content) {
