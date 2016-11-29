@@ -2,28 +2,20 @@ package com.appublisher.quizbank.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.GuFenListAdapter;
-import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.netdata.mock.GufenM;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
-import com.appublisher.quizbank.network.QRequest;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,7 +39,6 @@ public class GuFenListActivity extends BaseActivity implements AdapterView.OnIte
         // 获取数据
         String data = getIntent().getStringExtra("mock_gufen");
         mockGufenResp = GsonManager.getModel(data, MockGufenResp.class);
-        Logger.i("mock_gufen" + mockGufenResp.toString());
 
         // View 初始化
         mLvMock = (ListView) findViewById(R.id.mock_lv);
@@ -72,6 +63,11 @@ public class GuFenListActivity extends BaseActivity implements AdapterView.OnIte
         intent.putExtra("paper_id", paperListBean.getId());
         intent.putExtra("umeng_entry", "Home");
         startActivity(intent);
+
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", String.valueOf(paperListBean.getId()));
+        UmengManager.onEvent(this, "Evaluate", map);
     }
 
 
