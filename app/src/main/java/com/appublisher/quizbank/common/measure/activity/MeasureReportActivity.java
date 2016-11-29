@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -21,6 +22,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureScoresBean;
 import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MeasureReportActivity extends BaseActivity implements
@@ -36,6 +38,15 @@ public class MeasureReportActivity extends BaseActivity implements
         setTitle(R.string.measure_report);
         initView();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", "Back");
+        UmengManager.onEvent(this, "Report", map);
     }
 
     private void initData() {
@@ -302,6 +313,11 @@ public class MeasureReportActivity extends BaseActivity implements
             intent.putExtra(INTENT_ANALYSIS_BEAN, GsonManager.modelToString(mModel.mAnalysisBean));
             startActivity(intent);
 
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "All");
+            UmengManager.onEvent(this, "Report", map);
+
         } else if (v.getId() == R.id.measure_report_error) {
             // 错题
             if (mModel.isAllRight()) return;
@@ -309,6 +325,11 @@ public class MeasureReportActivity extends BaseActivity implements
             intent.putExtra(INTENT_ANALYSIS_BEAN, GsonManager.modelToString(mModel.mAnalysisBean));
             intent.putExtra(INTENT_ANALYSIS_IS_ERROR_ONLY, true);
             startActivity(intent);
+
+            // Umeng
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Error");
+            UmengManager.onEvent(this, "Report", map);
         }
     }
 }
