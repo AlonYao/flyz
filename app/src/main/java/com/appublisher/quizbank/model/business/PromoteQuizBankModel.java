@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_course.CourseWebViewActivity;
 import com.appublisher.lib_course.promote.PromoteModel;
@@ -18,6 +19,8 @@ import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.dao.MockDAO;
+
+import java.util.HashMap;
 
 /**
  * 国考公告解读宣传
@@ -68,6 +71,11 @@ public class PromoteQuizBankModel extends PromoteModel {
             public void onClick(View v) {
                 saveDateAdd1();
                 alertDialog.dismiss();
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Close");
+                UmengManager.onEvent(getContext(), "Ad", map);
             }
         });
 
@@ -93,6 +101,11 @@ public class PromoteQuizBankModel extends PromoteModel {
                     getContext().startActivity(intent);
                 }
                 alertDialog.dismiss();
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Promote");
+                UmengManager.onEvent(getContext(), "Ad", map);
             }
         });
 

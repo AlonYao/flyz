@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.CourseWebViewActivity;
@@ -24,6 +25,7 @@ import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.MockDAO;
@@ -37,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,7 +61,7 @@ public class SplashActivity extends Activity implements RequestCallback {
         private WeakReference<Activity> mActivity;
         private WeakReference<TextView> mTextView;
 
-        public MsgHandler(Activity activity, TextView textView) {
+        MsgHandler(Activity activity, TextView textView) {
             mActivity = new WeakReference<>(activity);
             mTextView = new WeakReference<>(textView);
         }
@@ -154,7 +157,7 @@ public class SplashActivity extends Activity implements RequestCallback {
                 editor.commit();
             }
 
-//            if (AppUpdate.showUpGrade(SplashActivity.this)) return;
+            if (AppUpdate.showUpGrade(SplashActivity.this)) return;
 
             // 获取国考公告解读宣传
             mPromoteModel.getPromoteData(new PromoteModel.PromoteDataListener() {
@@ -182,13 +185,6 @@ public class SplashActivity extends Activity implements RequestCallback {
                 }
             });
         }
-
-//        // 版本更新
-//        boolean enable = Globals.sharedPreferences.getBoolean("appUpdate", false);
-//        if (enable && AppUpdate.showUpGrade(this)) {
-//        }else{
-//            skipToMainActivity();
-//        }
     }
 
     @Override
@@ -269,6 +265,11 @@ public class SplashActivity extends Activity implements RequestCallback {
                         }
                         timer.cancel();
                         finish();
+
+                        // Umeng
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Action", "Screen");
+                        UmengManager.onEvent(SplashActivity.this, "Ad", map);
                     }
                 });
             }

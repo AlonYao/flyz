@@ -150,6 +150,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             } else {
                 mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
             }
+
             // 检测账号是否被合并
             new LoginModel(this).commonCheck(new LoginModel.ObtainUserInfoListener() {
                 @Override
@@ -185,6 +186,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                         changeFragment(5);
                     }
                     studyRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Type", "Home");
+                    UmengManager.onEvent(MainActivity.this, "Tab", map);
+
                 } else {
                     studyRadioButton.setTextColor(getResources().getColor(R.color.common_text));
                 }
@@ -197,6 +204,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 if (isChecked) {
                     changeFragment(1);
                     courseRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Type", "CourseCenter");
+                    UmengManager.onEvent(MainActivity.this, "Tab", map);
+
                 } else {
                     courseRadioButton.setTextColor(getResources().getColor(R.color.common_text));
                 }
@@ -209,6 +222,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 if (isChecked) {
                     changeFragment(2);
                     opencourseRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Type", "OpenCourse");
+                    UmengManager.onEvent(MainActivity.this, "Tab", map);
+
                 } else {
                     opencourseRadioButton.setTextColor(getResources().getColor(R.color.common_text));
                 }
@@ -221,6 +240,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 if (isChecked) {
                     changeFragment(3);
                     recordRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Type", "Record");
+                    UmengManager.onEvent(MainActivity.this, "Tab", map);
+
                 } else {
                     recordRadioButton.setTextColor(getResources().getColor(R.color.common_text));
                 }
@@ -233,6 +258,12 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 if (isChecked) {
                     changeFragment(4);
                     vipRadioButton.setTextColor(getResources().getColor(R.color.apptheme));
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Type", "VIP");
+                    UmengManager.onEvent(MainActivity.this, "Tab", map);
+
                 } else {
                     vipRadioButton.setTextColor(getResources().getColor(R.color.common_text));
                 }
