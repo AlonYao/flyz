@@ -22,12 +22,6 @@ public class VipMSJPModel extends VipBaseModel {
     public int mExerciseId;
     private VipMSJPActivity mView;
 
-    // Umeng
-    private String mUMDone = "0";
-    public String mUMEntry;
-    public long mUMBegin;
-    public int mUMSwitch = 0;
-
     public VipMSJPModel(Context context) {
         super(context);
         mView = (VipMSJPActivity) context;
@@ -49,8 +43,12 @@ public class VipMSJPModel extends VipBaseModel {
             if (resp != null && resp.getResponse_code() == 1) {
                 mView.showLoading();
                 getExerciseDetail();
+
                 // Umeng
-                mUMDone = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Done", "1");
+                UmengManager.onEvent(mContext, "Mingshi", map);
+
             } else {
                 mView.showSubmitErrorToast();
             }
@@ -78,24 +76,20 @@ public class VipMSJPModel extends VipBaseModel {
                     return;
                 }
             }
+
             // Umeng
+            String umStatus;
             int status = resp.getStatus();
-            if (status == 1 || status == 5) {
-                mUMDone = "1";
+            if (status == 1 || status == 3 || status == 5) {
+                umStatus = "1";
+            } else {
+                umStatus = "0";
             }
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", umStatus);
+            UmengManager.onEvent(mContext, "Mingshi", map);
         }
         mView.showContent(resp);
     }
 
-    /**
-     * 提交友盟统计数据
-     */
-    public void sendToUmeng() {
-        HashMap<String, String> map = new HashMap<>();
-        int dur = (int) ((System.currentTimeMillis() - mUMBegin) / 1000);
-        map.put("Done", mUMDone);
-        map.put("Entry", mUMEntry);
-        map.put("Switch", String.valueOf(mUMSwitch));
-        UmengManager.onEventValue(mContext, "Jingpi", map, dur);
-    }
 }

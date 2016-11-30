@@ -30,10 +30,6 @@ public class VipZJZDModel extends VipBaseModel {
     public ArrayList<String> mPaths;
     public int mExerciseId;
 
-    // Umeng
-    private String mUMDone = "0";
-    public long mUMBegin;
-
     public VipZJZDModel(Context context) {
         super(context);
         mView = (VipZJZDActivity) context;
@@ -95,9 +91,15 @@ public class VipZJZDModel extends VipBaseModel {
         }
 
         // Umeng
-        if (status == 1 || status == 5) {
-            mUMDone = "1";
+        String umStatus;
+        if (status == 1 || status == 3 || status == 5) {
+            umStatus = "1";
+        } else {
+            umStatus = "0";
         }
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", umStatus);
+        UmengManager.onEvent(mContext, "Zhineng", map);
     }
 
     /**
@@ -117,16 +119,6 @@ public class VipZJZDModel extends VipBaseModel {
         });
     }
 
-    /**
-     * 提交友盟统计数据
-     */
-    public void sendToUmeng() {
-        HashMap<String, String> map = new HashMap<>();
-        int dur = (int) ((System.currentTimeMillis() - mUMBegin) / 1000);
-        map.put("Done", mUMDone);
-        UmengManager.onEventValue(mContext, "Ziji", map, dur);
-    }
-
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
@@ -136,8 +128,12 @@ public class VipZJZDModel extends VipBaseModel {
             if (resp != null && resp.getResponse_code() == 1) {
                 mView.showLoading();
                 getExerciseDetail();
+
                 // Umeng
-                mUMDone = "1";
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Done", "1");
+                UmengManager.onEvent(mContext, "Zhineng", map);
+
             } else {
                 mView.showSubmitErrorToast();
             }
@@ -163,11 +159,4 @@ public class VipZJZDModel extends VipBaseModel {
         return mCanSubmit && (mPaths != null && mPaths.size() > 0);
     }
 
-    public ArrayList<String> getPaths() {
-        return mPaths;
-    }
-
-    public void setPaths(ArrayList<String> mPaths) {
-        this.mPaths = mPaths;
-    }
 }

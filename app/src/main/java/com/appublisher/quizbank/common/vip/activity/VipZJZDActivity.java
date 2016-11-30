@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ImageManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.model.VipBaseModel;
 import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
@@ -17,6 +18,7 @@ import com.appublisher.quizbank.common.vip.model.VipZJZDModel;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
@@ -31,6 +33,7 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     private Button mBtnSubmit;
     private FlowLayout mMyjobContainer;
     private VipZJZDModel mModel;
+    private long mUMTimeStamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,9 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         // Umeng
-        mModel.sendToUmeng();
+        int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+        HashMap<String, String> map = new HashMap<>();
+        UmengManager.onEventValue(this, "Ziji", map, dur);
     }
 
     @Override
@@ -98,11 +103,11 @@ public class VipZJZDActivity extends VipBaseActivity implements View.OnClickList
     private void initData() {
         mModel = new VipZJZDModel(this);
         mModel.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
-        // Umeng
-        mModel.mUMBegin = System.currentTimeMillis();
         // 获取练习详情
         showLoading();
         mModel.getExerciseDetail();
+        // Umeng
+        mUMTimeStamp = System.currentTimeMillis();
     }
 
     private void initView() {

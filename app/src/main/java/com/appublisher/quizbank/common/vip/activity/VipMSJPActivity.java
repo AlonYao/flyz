@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipMSJPAdapter;
 import com.appublisher.quizbank.common.vip.fragment.VipMSJPQuestionFragment;
 import com.appublisher.quizbank.common.vip.model.VipMSJPModel;
 import com.appublisher.quizbank.common.vip.netdata.VipMSJPResp;
+
+import java.util.HashMap;
 
 /**
  * 小班：名师精批
@@ -22,6 +25,7 @@ public class VipMSJPActivity extends VipBaseActivity {
     private ViewPager mViewPager;
     private VipMSJPAdapter mAdapter;
     private VipMSJPModel mModel;
+    private long mUMTimeStamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,10 @@ public class VipMSJPActivity extends VipBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mModel.sendToUmeng();
+        // Umeng
+        int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+        HashMap<String, String> map = new HashMap<>();
+        UmengManager.onEventValue(this, "Mingshi", map, dur);
     }
 
     @Override
@@ -59,7 +66,7 @@ public class VipMSJPActivity extends VipBaseActivity {
         showLoading();
         mModel.getExerciseDetail();
         // Umeng
-        mModel.mUMBegin = System.currentTimeMillis();
+        mUMTimeStamp = System.currentTimeMillis();
     }
 
     public void showContent(VipMSJPResp resp) {

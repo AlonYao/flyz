@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.adapter.VipDTTPAdapter;
 import com.appublisher.quizbank.common.vip.fragment.VipDTTPQuestionFragment;
 import com.appublisher.quizbank.common.vip.model.VipDTTPModel;
 import com.appublisher.quizbank.common.vip.netdata.VipDTTPResp;
+
+import java.util.HashMap;
 
 public class VipDTTPActivity extends VipBaseActivity {
 
@@ -17,6 +20,7 @@ public class VipDTTPActivity extends VipBaseActivity {
     private ViewPager mViewPager;
     private VipDTTPAdapter mAdapter;
     private VipDTTPModel mModel;
+    private long mUMTimeStamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,10 @@ public class VipDTTPActivity extends VipBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mModel.sendToUmeng();
+        // Umeng
+        int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+        HashMap<String, String> map = new HashMap<>();
+        UmengManager.onEventValue(this, "Danti", map, dur);
     }
 
     @Override
@@ -49,7 +56,7 @@ public class VipDTTPActivity extends VipBaseActivity {
         mModel.mExerciseId = getIntent().getIntExtra("exerciseId", 0);
         mModel.getExerciseDetail();
         // Umeng
-        mModel.mUMBegin = System.currentTimeMillis();
+        mUMTimeStamp = System.currentTimeMillis();
     }
 
     private void initView() {

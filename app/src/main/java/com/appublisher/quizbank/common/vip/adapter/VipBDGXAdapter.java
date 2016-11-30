@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
@@ -24,7 +25,8 @@ import com.appublisher.quizbank.common.vip.model.VipSubmitEntity;
 import com.appublisher.quizbank.common.vip.netdata.VipBDGXResp;
 import com.appublisher.quizbank.common.vip.network.VipParamBuilder;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
-import com.appublisher.quizbank.utils.Utils;
+
+import java.util.HashMap;
 
 /**
  * Created by jinbao on 2016/9/19.
@@ -110,8 +112,6 @@ public class VipBDGXAdapter extends PagerAdapter {
                     int done = 0;
                     if (position == getCount() - 1) {
                         done = 1;
-                        ((VipBDGXActivity) context).isDone = 1;
-
                     }
 
                     String inputText = inputAnswer.getText().toString();
@@ -125,6 +125,19 @@ public class VipBDGXAdapter extends PagerAdapter {
                         vipBDGXResp.getQuestion().set(position, questionBean);
 
                         if (context instanceof BaseActivity) ((BaseActivity) context).showLoading();
+                    }
+
+                    // Umeng
+                    if (context instanceof VipBDGXActivity) {
+                        // Umeng
+                        String umEventId = ((VipBDGXActivity) context).mUMEventId;
+                        String umDone = "2";
+                        if (done == 1) {
+                            umDone = "1";
+                        }
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Done", umDone);
+                        UmengManager.onEvent(context, umEventId, map);
                     }
 
                 } else if ("返回列表".equals(text)) {

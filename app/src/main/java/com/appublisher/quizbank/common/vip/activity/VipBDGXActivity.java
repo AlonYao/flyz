@@ -14,14 +14,12 @@ import com.appublisher.quizbank.common.vip.adapter.VipBDGXAdapter;
 import com.appublisher.quizbank.common.vip.netdata.VipBDGXResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 import com.appublisher.quizbank.customui.CustomViewPager;
-import com.appublisher.quizbank.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 表达改写&语义提炼
@@ -34,13 +32,8 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
     private VipRequest mRequest;
     private VipBDGXResp vipBDGXResp;
     private VipBDGXAdapter adapter;
-
-    //um
-    public Map<String, String> umMap = new HashMap<>();
-    public long umDurationBegin = 0;
-    public long umDurationEnd = 0;
-    public int isDone = 0;
-    public String eventId = "Biaodagaixie";
+    public String mUMEventId;
+    private long mUMTimeStamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +47,12 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
 
         if (exerciseType == 5) {
             setTitle("表达改写");
-            eventId = "Biaodagaixie";
+            // Umeng
+            mUMEventId = "Biaoda";
         } else if (exerciseType == 6) {
             setTitle("语义提炼");
-            eventId = "Yuyi";
+            // Umeng
+            mUMEventId = "Yuyi";
         }
 
         initViews();
@@ -67,7 +62,17 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
             showLoading();
         }
 
-        umDurationBegin = System.currentTimeMillis();
+        // Umeng
+        mUMTimeStamp = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+        HashMap<String, String> map = new HashMap<>();
+        UmengManager.onEventValue(this, mUMEventId, map, dur);
     }
 
     public void initViews() {
@@ -121,9 +126,6 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
                 if (responseCode == 1) {
                     ToastManager.showToast(this, "提交成功");
                     adapter.notifyDataSetChanged();
-
-                    //um
-                    umDurationEnd = System.currentTimeMillis();
                 } else {
                     ToastManager.showToast(this, "提交失败，请重试");
                 }
@@ -144,19 +146,4 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
         hideLoading();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isDone == 0 && umDurationEnd != 0) {
-            int des = (int) (System.currentTimeMillis() - umDurationBegin) / 1000;
-            umMap.clear();
-            umMap.put("Done", "0");
-            UmengManager.onEventValue(this, eventId, umMap, des);
-        } else if (isDone == 1 && umDurationEnd != 0) {
-            int des = (int) (System.currentTimeMillis() - umDurationBegin) / 1000;
-            umMap.clear();
-            umMap.put("Done", "1");
-            UmengManager.onEventValue(this, eventId, umMap, des);
-        }
-    }
 }

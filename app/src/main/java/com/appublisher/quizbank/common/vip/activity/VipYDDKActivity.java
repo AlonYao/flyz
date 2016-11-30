@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.common.vip.activity;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
@@ -32,7 +31,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 阅读打卡
@@ -51,14 +49,7 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
     private ScrollView answerView;
     private int mScreenHeight;
     private int mLastY;
-
-    //um
-    public Map<String, String> umMap = new HashMap<>();
-    public long umDurationBegin = 0;
-    public long umDurationEnd = 0;
-    public int isDone = 0;
-    public String eventId = "Yuedudaka";
-
+    private long mUMTimeStamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +69,15 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
 
         initView();
         initData();
+    }
 
-        //um
-        umDurationBegin = System.currentTimeMillis();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+        HashMap<String, String> map = new HashMap<>();
+        UmengManager.onEventValue(this, "Yuedu", map, dur);
     }
 
     public void initView() {
@@ -122,6 +119,9 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
             mRequest.getExerciseDetail(exerciseId);
             showLoading();
         }
+
+        // Umeng
+        mUMTimeStamp = System.currentTimeMillis();
     }
 
     @Override
@@ -131,7 +131,7 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
 
         if ("exercise_detail".equals(apiName)) {
             VipYDDKResp vipYDDKResp = GsonManager.getModel(response, VipYDDKResp.class);
-            if (vipYDDKResp.getResponse_code() == 1) {
+            if (vipYDDKResp != null && vipYDDKResp.getResponse_code() == 1) {
                 if (vipYDDKResp.getQuestion() != null && vipYDDKResp.getQuestion().size() > 0) {
                     questionContent.setText(Html.fromHtml(vipYDDKResp.getQuestion().get(0).getQuestion()));
                     questionId = vipYDDKResp.getQuestion().get(0).getQuestion_id();
@@ -147,6 +147,18 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
                         answerView.setVisibility(View.GONE);
                         userAnswerArrow.setVisibility(View.GONE);
                     }
+
+                    // Umeng
+                    int status = vipYDDKResp.getStatus();
+                    String umStatus;
+                    if (status == 1 || status == 3 || status == 5) {
+                        umStatus = "1";
+                    } else {
+                        umStatus = "0";
+                    }
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", umStatus);
+                    UmengManager.onEvent(this, "Yuedu", map);
                 }
             }
         } else if ("submit".equals(apiName)) {
@@ -157,9 +169,11 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
                     ToastManager.showToast(this, "提交成功");
                     initData();
 
-                    //um
-                    umDurationEnd = System.currentTimeMillis();
-                    isDone = 1;
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Done", "1");
+                    UmengManager.onEvent(this, "Yuedu", map);
+
                 } else {
                     ToastManager.showToast(this, "提交失败，请重新提交");
                 }
@@ -242,20 +256,4 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (isDone == 0 && umDurationEnd != 0) {
-            int des = (int) (System.currentTimeMillis() - umDurationBegin) / 1000;
-            umMap.clear();
-            umMap.put("Done", "0");
-            UmengManager.onEventValue(this, eventId, umMap, des);
-        } else if (isDone == 1 && umDurationEnd != 0) {
-            int des = (int) (System.currentTimeMillis() - umDurationBegin) / 1000;
-            umMap.clear();
-            umMap.put("Done", "1");
-            UmengManager.onEventValue(this, eventId, umMap, des);
-        }
-    }
 }
