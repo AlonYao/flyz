@@ -34,6 +34,7 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
     private VipBDGXAdapter adapter;
     public String mUMEventId;
     private long mUMTimeStamp;
+    private boolean mUMIsPostType = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +114,25 @@ public class VipBDGXActivity extends BaseActivity implements RequestCallback {
 
         if (VipRequest.EXERCISE_DETAIL.equals(apiName)) {
             VipBDGXResp vipBDGXResp = GsonManager.getModel(response, VipBDGXResp.class);
-            if (vipBDGXResp.getResponse_code() == 1) {
+            if (vipBDGXResp != null && vipBDGXResp.getResponse_code() == 1) {
                 this.vipBDGXResp = vipBDGXResp;
                 adapter.setVipBDGXResp(vipBDGXResp);
                 adapter.notifyDataSetChanged();
+
+                // Umeng
+                if (!mUMIsPostType) {
+                    String umStatus;
+                    int status = vipBDGXResp.getStatus();
+                    if (status == 1 || status == 3 || status == 5) {
+                        umStatus = "1";
+                    } else {
+                        umStatus = "0";
+                    }
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Type", umStatus);
+                    UmengManager.onEvent(this, mUMEventId, map);
+                    mUMIsPostType = true;
+                }
             }
         } else if ("submit".equals(apiName)) {
             //提交成功

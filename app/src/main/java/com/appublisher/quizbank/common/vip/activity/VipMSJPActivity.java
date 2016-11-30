@@ -25,7 +25,10 @@ public class VipMSJPActivity extends VipBaseActivity {
     private ViewPager mViewPager;
     private VipMSJPAdapter mAdapter;
     private VipMSJPModel mModel;
+
+    // Umeng
     private long mUMTimeStamp;
+    private int mUMSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class VipMSJPActivity extends VipBaseActivity {
         // Umeng
         int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
         HashMap<String, String> map = new HashMap<>();
+        map.put("Switch", String.valueOf(mUMSwitch));
         UmengManager.onEventValue(this, "Mingshi", map, dur);
     }
 
@@ -58,6 +62,25 @@ public class VipMSJPActivity extends VipBaseActivity {
     private void initView() {
         mTabLayout = (TabLayout) findViewById(R.id.vip_msjp_tablayout);
         mViewPager = (ViewPager) findViewById(R.id.vip_msjp_viewpager);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position,
+                                       float positionOffset,
+                                       int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mUMSwitch++;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void initData() {

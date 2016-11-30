@@ -129,14 +129,13 @@ public class VipBDGXAdapter extends PagerAdapter {
 
                     // Umeng
                     if (context instanceof VipBDGXActivity) {
-                        // Umeng
                         String umEventId = ((VipBDGXActivity) context).mUMEventId;
                         String umDone = "2";
                         if (done == 1) {
                             umDone = "1";
                         }
                         HashMap<String, String> map = new HashMap<>();
-                        map.put("Done", umDone);
+                        map.put("Action", umDone);
                         UmengManager.onEvent(context, umEventId, map);
                     }
 

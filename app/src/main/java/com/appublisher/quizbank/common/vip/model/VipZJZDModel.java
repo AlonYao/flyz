@@ -25,6 +25,7 @@ public class VipZJZDModel extends VipBaseModel {
     private VipZJZDActivity mView;
     private String mExampleUrl;
     private int mQuestionId;
+    private boolean mUMIsPostType = false;
 
     public boolean mCanSubmit;
     public ArrayList<String> mPaths;
@@ -91,15 +92,18 @@ public class VipZJZDModel extends VipBaseModel {
         }
 
         // Umeng
-        String umStatus;
-        if (status == 1 || status == 3 || status == 5) {
-            umStatus = "1";
-        } else {
-            umStatus = "0";
+        if (!mUMIsPostType) {
+            String umStatus;
+            if (status == 1 || status == 3 || status == 5) {
+                umStatus = "1";
+            } else {
+                umStatus = "0";
+            }
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Type", umStatus);
+            UmengManager.onEvent(mContext, "Ziji", map);
+            mUMIsPostType = true;
         }
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Action", umStatus);
-        UmengManager.onEvent(mContext, "Zhineng", map);
     }
 
     /**
@@ -131,8 +135,8 @@ public class VipZJZDModel extends VipBaseModel {
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
-                map.put("Done", "1");
-                UmengManager.onEvent(mContext, "Zhineng", map);
+                map.put("Action", "1");
+                UmengManager.onEvent(mContext, "Ziji", map);
 
             } else {
                 mView.showSubmitErrorToast();

@@ -20,7 +20,10 @@ public class VipDTTPActivity extends VipBaseActivity {
     private ViewPager mViewPager;
     private VipDTTPAdapter mAdapter;
     private VipDTTPModel mModel;
+
+    // Umeng
     private long mUMTimeStamp;
+    private int mUMSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class VipDTTPActivity extends VipBaseActivity {
         // Umeng
         int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
         HashMap<String, String> map = new HashMap<>();
+        map.put("Switch", String.valueOf(mUMSwitch));
         UmengManager.onEventValue(this, "Danti", map, dur);
     }
 
@@ -62,6 +66,25 @@ public class VipDTTPActivity extends VipBaseActivity {
     private void initView() {
         mTabLayout = (TabLayout) findViewById(R.id.vip_dttp_tablayout);
         mViewPager = (ViewPager) findViewById(R.id.vip_dttp_viewpager);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position,
+                                       float positionOffset,
+                                       int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mUMSwitch++;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     public void showContent(VipDTTPResp resp) {

@@ -21,6 +21,7 @@ public class VipMSJPModel extends VipBaseModel {
 
     public int mExerciseId;
     private VipMSJPActivity mView;
+    private boolean mUMIsPostType = false;
 
     public VipMSJPModel(Context context) {
         super(context);
@@ -46,7 +47,7 @@ public class VipMSJPModel extends VipBaseModel {
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
-                map.put("Done", "1");
+                map.put("Action", "1");
                 UmengManager.onEvent(mContext, "Mingshi", map);
 
             } else {
@@ -78,16 +79,19 @@ public class VipMSJPModel extends VipBaseModel {
             }
 
             // Umeng
-            String umStatus;
-            int status = resp.getStatus();
-            if (status == 1 || status == 3 || status == 5) {
-                umStatus = "1";
-            } else {
-                umStatus = "0";
+            if (!mUMIsPostType) {
+                String umStatus;
+                int status = resp.getStatus();
+                if (status == 1 || status == 3 || status == 5) {
+                    umStatus = "1";
+                } else {
+                    umStatus = "0";
+                }
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Type", umStatus);
+                UmengManager.onEvent(mContext, "Mingshi", map);
+                mUMIsPostType = true;
             }
-            HashMap<String, String> map = new HashMap<>();
-            map.put("Action", umStatus);
-            UmengManager.onEvent(mContext, "Mingshi", map);
         }
         mView.showContent(resp);
     }

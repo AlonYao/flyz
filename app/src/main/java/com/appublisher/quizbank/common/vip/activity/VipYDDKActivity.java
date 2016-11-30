@@ -50,6 +50,7 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
     private int mScreenHeight;
     private int mLastY;
     private long mUMTimeStamp;
+    private boolean mUMIsPostType = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,16 +150,19 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
                     }
 
                     // Umeng
-                    int status = vipYDDKResp.getStatus();
-                    String umStatus;
-                    if (status == 1 || status == 3 || status == 5) {
-                        umStatus = "1";
-                    } else {
-                        umStatus = "0";
+                    if (!mUMIsPostType) {
+                        int status = vipYDDKResp.getStatus();
+                        String umStatus;
+                        if (status == 1 || status == 3 || status == 5) {
+                            umStatus = "1";
+                        } else {
+                            umStatus = "0";
+                        }
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Type", umStatus);
+                        UmengManager.onEvent(this, "Yuedu", map);
+                        mUMIsPostType = true;
                     }
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", umStatus);
-                    UmengManager.onEvent(this, "Yuedu", map);
                 }
             }
         } else if ("submit".equals(apiName)) {
@@ -171,7 +175,7 @@ public class VipYDDKActivity extends BaseActivity implements RequestCallback {
 
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("Done", "1");
+                    map.put("Action", "1");
                     UmengManager.onEvent(this, "Yuedu", map);
 
                 } else {
