@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
@@ -22,6 +23,8 @@ import com.umeng.analytics.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 /**
  * 收藏夹
  */
@@ -32,6 +35,7 @@ public class FavoriteFragment extends Fragment implements RequestCallback {
     public ImageView mIvNull;
 
     private View mView;
+    private long mUMTimeStamp;
 
     @Override
     public void onAttach(Activity activity) {
@@ -58,6 +62,7 @@ public class FavoriteFragment extends Fragment implements RequestCallback {
 
         // Umeng
         MobclickAgent.onPageStart("FavoriteFragment");
+        mUMTimeStamp = System.currentTimeMillis();
 
         // TalkingData
         TCAgent.onPageStart(mActivity, "FavoriteFragment");
@@ -68,6 +73,9 @@ public class FavoriteFragment extends Fragment implements RequestCallback {
         super.onPause();
         // Umeng
         MobclickAgent.onPageEnd("FavoriteFragment");
+        int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+        HashMap<String, String> map = new HashMap<>();
+        UmengManager.onEventValue(getContext(), "Collect", map, dur);
 
         // TalkingData
         TCAgent.onPageEnd(mActivity, "FavoriteFragment");

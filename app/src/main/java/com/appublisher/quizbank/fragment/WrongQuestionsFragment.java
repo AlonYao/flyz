@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
@@ -17,8 +19,11 @@ import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * 错题本
@@ -29,6 +34,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback 
     private LinearLayout mContainer;
     private ImageView mIvNull;
     private View mView;
+    private long mUMTimeStamp;
 
     @Override
     public void onAttach(Activity activity) {
@@ -55,6 +61,7 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback 
         if (!isHidden()) getData();
 
         // Umeng
+        mUMTimeStamp = System.currentTimeMillis();
         MobclickAgent.onPageStart("WrongQuestionsFragment");
 
         // TalkingData
@@ -65,6 +72,9 @@ public class WrongQuestionsFragment extends Fragment implements RequestCallback 
     public void onPause() {
         super.onPause();
         // Umeng
+        int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+        HashMap<String, String> map = new HashMap<>();
+        UmengManager.onEventValue(getContext(), "Error", map, dur);
         MobclickAgent.onPageEnd("WrongQuestionsFragment");
 
         // TalkingData

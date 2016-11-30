@@ -161,6 +161,17 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 intent.putExtra("hierarchy_level", value.level);
                 intent.putExtra("umeng_entry", "List");
                 context.startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Quiz");
+                if (KnowledgeTreeModel.TYPE_COLLECT.equals(mType)) {
+                    UmengManager.onEvent(context, "Collect", map);
+                } else if (KnowledgeTreeModel.TYPE_ERROR.equals(mType)) {
+                    UmengManager.onEvent(context, "Error", map);
+                } else if (KnowledgeTreeModel.TYPE_NOTE.equals(mType)) {
+                    UmengManager.onEvent(context, "Notelist", map);
+                }
             }
         });
 
@@ -184,10 +195,14 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 context.startActivity(intent);
 
                 // Umeng
-                if (KnowledgeTreeModel.TYPE_NOTE.equals(mType)) {
+                if (KnowledgeTreeModel.TYPE_COLLECT.equals(mType)) {
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "Quiz");
-                    UmengManager.onEvent(context, "Notelist", map);
+                    map.put("Action", "Review");
+                    UmengManager.onEvent(context, "Collect", map);
+                } else if (KnowledgeTreeModel.TYPE_ERROR.equals(mType)) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "Review");
+                    UmengManager.onEvent(context, "Error", map);
                 }
             }
         });
@@ -206,7 +221,13 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", action);
-                UmengManager.onEvent(context, "Notelist", map);
+                if (KnowledgeTreeModel.TYPE_COLLECT.equals(mType)) {
+                    UmengManager.onEvent(context, "Collect", map);
+                } else if (KnowledgeTreeModel.TYPE_ERROR.equals(mType)) {
+                    UmengManager.onEvent(context, "Error", map);
+                } else if (KnowledgeTreeModel.TYPE_NOTE.equals(mType)) {
+                    UmengManager.onEvent(context, "Notelist", map);
+                }
             }
         });
 
