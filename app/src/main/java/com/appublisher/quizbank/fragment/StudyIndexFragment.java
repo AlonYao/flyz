@@ -363,19 +363,27 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                     startActivity(intent);
 
                 } else {
-                    intent = new Intent(getActivity(), PracticeDescriptionActivity.class);
-                    intent.putExtra("paper_type", "mokao");
-                    intent.putExtra("paper_name", mTodayExam.getName());
-                    intent.putExtra("umeng_entry", "Home");
+//                    intent = new Intent(getActivity(), PracticeDescriptionActivity.class);
+//                    intent.putExtra("paper_type", "mokao");
+//                    intent.putExtra("paper_name", mTodayExam.getName());
+//                    intent.putExtra("umeng_entry", "Home");
+//
+//                    if ("fresh".equals(status)) {
+//                        intent.putExtra("paper_id", mTodayExam.getId());
+//                        intent.putExtra("redo", false);
+//                    } else {
+//                        intent.putExtra("exercise_id", mTodayExam.getId());
+//                        intent.putExtra("redo", true);
+//                    }
+//
+//                    startActivity(intent);
 
-                    if ("fresh".equals(status)) {
-                        intent.putExtra("paper_id", mTodayExam.getId());
-                        intent.putExtra("redo", false);
-                    } else {
-                        intent.putExtra("exercise_id", mTodayExam.getId());
-                        intent.putExtra("redo", true);
+                    intent = new Intent(getActivity(), MeasureActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOKAO);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, mTodayExam.getId());
+                    if ("undone".equals(status)) {
+                        intent.putExtra(MeasureConstants.INTENT_REDO, true);
                     }
-
                     startActivity(intent);
                 }
 

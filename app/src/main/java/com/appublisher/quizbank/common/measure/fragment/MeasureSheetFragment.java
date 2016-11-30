@@ -19,12 +19,12 @@ import android.widget.Toast;
 import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
-import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSheetAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +90,7 @@ public class MeasureSheetFragment extends DialogFragment implements
     private void initData() {
         mSubmits = MeasureModel.getUserAnswerCache(getActivity());
         if (getActivity() instanceof MeasureActivity) {
-            mQuestions = ((MeasureActivity) getActivity()).mAdapter.getQuestions();
+            mQuestions = ((MeasureActivity) getActivity()).mModel.getAdapterQuestions();
         }
     }
 

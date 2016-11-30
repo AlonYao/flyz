@@ -24,12 +24,16 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.adapter.MeasureAdapter;
+import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureExcludeBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureAutoResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
+import com.appublisher.quizbank.common.measure.netdata.MeasureHistoryResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSubmitResp;
 import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
@@ -89,12 +93,18 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     }
 
     public void getData() {
-        if (AUTO.equals(mPaperType)) {
-            mRequest.getAutoTraining();
-        } else if (NOTE.equals(mPaperType)) {
-            mRequest.getNoteQuestions(mHierarchyId, NOTE);
-        } else if (ENTIRE.equals(mPaperType)) {
-            mRequest.getPaperExercise(mPaperId, mPaperType);
+        if (mRedo) {
+            // 继续做
+            mRequest.getHistoryExerciseDetail(mPaperId, mPaperType);
+        } else {
+            // 新题
+            if (AUTO.equals(mPaperType)) {
+                mRequest.getAutoTraining();
+            } else if (NOTE.equals(mPaperType)) {
+                mRequest.getNoteQuestions(mHierarchyId, NOTE);
+            } else if (ENTIRE.equals(mPaperType) || MOKAO.equals(mPaperType)) {
+                mRequest.getPaperExercise(mPaperId, mPaperType);
+            }
         }
     }
 
@@ -133,43 +143,166 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * @param response JSONObject
      */
     private void dealPaperExerciseResp(JSONObject response) {
+        if (!(mContext instanceof MeasureActivity)) return;
+
         MeasureEntireResp resp = GsonManager.getModel(response, MeasureEntireResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
-        List<MeasureEntireResp.CategoryBean> categorys = resp.getCategory();
-        if (categorys == null) return;
 
-        // 构造数据结构
-        mTabs = new ArrayList<>();
         List<MeasureQuestionBean> questions = new ArrayList<>();
+        List<MeasureEntireResp.CategoryBean> categorys = resp.getCategory();
 
-        // 遍历
-        int size = categorys.size();
-        for (int i = 0; i < size; i++) {
-            MeasureEntireResp.CategoryBean category = categorys.get(i);
-            if (category == null) continue;
-            List<MeasureQuestionBean> categoryQuestions = category.getQuestions();
-            if (categoryQuestions == null) continue;
-            // 添加Tab数据
-            MeasureTabBean tabBean = new MeasureTabBean();
-            tabBean.setName(category.getName());
-            tabBean.setPosition(questions.size());
-            mTabs.add(tabBean);
-            // 添加题目数据，构造说明页
-            MeasureQuestionBean question = new MeasureQuestionBean();
-            question.setIs_desc(true);
-            question.setCategory_name(category.getName());
-            question.setDesc_position(i);
-            // 添加至题目list
-            questions.add(question);
-            questions.addAll(categoryQuestions);
+        if (categorys == null || categorys.size() == 0) {
+            // 非整卷
+            // 设置题号
+            questions = setQuestionOrder(resp.getQuestions(), 0);
+        } else {
+            // 整卷
+            mTabs = new ArrayList<>();
+            int size = categorys.size();
+            // 遍历
+            for (int i = 0; i < size; i++) {
+                MeasureEntireResp.CategoryBean category = categorys.get(i);
+                if (category == null) continue;
+                List<MeasureQuestionBean> categoryQuestions = category.getQuestions();
+                if (categoryQuestions == null) continue;
+
+                // 添加Tab数据
+                MeasureTabBean tabBean = new MeasureTabBean();
+                tabBean.setName(category.getName());
+                tabBean.setPosition(questions.size());
+                mTabs.add(tabBean);
+
+                // 添加题目数据，构造说明页
+                MeasureQuestionBean question = new MeasureQuestionBean();
+                question.setIs_desc(true);
+                question.setCategory_name(category.getName());
+                question.setDesc_position(i);
+
+                // 添加至题目list
+                questions.add(question);
+                questions.addAll(categoryQuestions);
+            }
+
+            // 设置题号
+            questions = setQuestionOrder(questions, size);
+
+            // 显示Tab
+            ((MeasureActivity) mContext).showTabLayout(mTabs);
         }
 
-        // 设置题号
-        questions = setQuestionOrder(questions, size);
-
-        if (!(mContext instanceof MeasureActivity)) return;
-        ((MeasureActivity) mContext).showTabLayout(mTabs);
         ((MeasureActivity) mContext).showViewPager(questions);
+    }
+
+    /**
+     * 处理Redo为true时请求的接口
+     * @param response JSONObject
+     */
+    private void dealHistoryExerciseDetail(JSONObject response) {
+        if (!(mContext instanceof MeasureActivity)) return;
+
+        MeasureHistoryResp resp = GsonManager.getModel(response, MeasureHistoryResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
+
+        List<MeasureQuestionBean> questions = new ArrayList<>();
+        List<MeasureSubmitBean> submits = new ArrayList<>();
+        mExcludes = new ArrayList<>();
+        List<MeasureCategoryBean> categorys = resp.getCategory();
+
+        if (categorys == null || categorys.size() == 0) {
+            // 非整卷
+
+            // 遍历原始问题
+            List<MeasureQuestionBean> originQuestions = resp.getQuestions();
+            if (originQuestions == null) return;
+
+            int order = 0;
+            int size = originQuestions.size();
+            for (int i = 0; i < size; i++) {
+                // 索引&题号
+                MeasureQuestionBean questionBean = originQuestions.get(i);
+                if (questionBean == null) continue;
+                questionBean.setQuestion_index(i);
+                order++;
+                questionBean.setQuestion_order(order);
+                questionBean.setQuestion_amount(size);
+                questions.add(questionBean);
+
+                // 选项排除
+                mExcludes.add(new MeasureExcludeBean());
+
+                // 添加用户答案中的noteids
+                MeasureSubmitBean submitBean = new MeasureSubmitBean();
+                submitBean.setNote_ids(questionBean.getNote_ids());
+                submits.add(submitBean);
+            }
+
+            // 遍历原始用户答案
+            List<MeasureAnswerBean> originAnswers = resp.getAnswers();
+            if (originAnswers == null) return;
+
+            size = originAnswers.size();
+            for (int i = 0; i < size; i++) {
+                MeasureAnswerBean answerBean = originAnswers.get(i);
+                if (answerBean == null) continue;
+                if (i >= submits.size()) continue;
+
+                MeasureSubmitBean submitBean = submits.get(i);
+                if (submitBean == null) continue;
+                submitBean.setId(answerBean.getId());
+                submitBean.setAnswer(answerBean.getAnswer());
+                submitBean.setCategory(answerBean.getCategory());
+                submitBean.setDuration(answerBean.getDuration());
+                if (answerBean.is_right()) {
+                    submitBean.setIs_right(1);
+                } else {
+                    submitBean.setIs_right(0);
+                }
+                submits.set(i, submitBean);
+            }
+
+        } else {
+            // 整卷
+            int index = 0;
+            int order = 0;
+            int size = categorys.size();
+            for (int i = 0; i < size; i++) {
+                MeasureCategoryBean category = categorys.get(i);
+                if (category == null) continue;
+                List<MeasureQuestionBean> categoryQuestions = category.getQuestions();
+                if (categoryQuestions == null) continue;
+                List<MeasureAnswerBean> categoryAnswers = category.getAnswers();
+                if (categoryAnswers == null) continue;
+
+                // 添加Tab数据
+                MeasureTabBean tabBean = new MeasureTabBean();
+                tabBean.setName(category.getName());
+                tabBean.setPosition(questions.size());
+                mTabs.add(tabBean);
+
+                // 构造说明页
+                MeasureQuestionBean question = new MeasureQuestionBean();
+                question.setIs_desc(true);
+                question.setCategory_name(category.getName());
+                question.setDesc_position(i);
+                question.setQuestion_index(index);
+                questions.add(question);
+                index++;
+
+                // 遍历categoryQuestions
+                int qSize = categoryQuestions.size();
+                for (int j = 0; j < qSize; j++) {
+                    MeasureQuestionBean questionBean = categoryQuestions.get(i);
+                    if (questionBean == null) continue;
+
+                    // 索引
+//                    questionBean.setQuestion_index();
+                }
+
+                // 添加题目
+                questions.add(question);
+//                questions.addAll(categoryQuestions);
+            }
+        }
     }
 
     /**
@@ -177,7 +310,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * @param list List<MeasureQuestionBean>
      * @return List<MeasureQuestionBean>
      */
-    private List<MeasureQuestionBean> setQuestionOrder(List<MeasureQuestionBean> list, int descSize) {
+    private List<MeasureQuestionBean> setQuestionOrder(List<MeasureQuestionBean> list,
+                                                       int descSize) {
         if (list == null) return new ArrayList<>();
         int size = list.size();
         int amount = size - descSize;
@@ -571,6 +705,15 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         }
     }
 
+    public List<MeasureQuestionBean> getAdapterQuestions() {
+        List<MeasureQuestionBean> list = new ArrayList<>();
+        if (mContext instanceof MeasureActivity) {
+            MeasureAdapter adapter = ((MeasureActivity) mContext).mAdapter;
+            if (adapter != null) list = adapter.getQuestions();
+        }
+        return list;
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (AUTO_TRAINING.equals(apiName)) {
@@ -581,6 +724,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             dealPaperExerciseResp(response);
         } else if (SUBMIT_PAPER.equals(apiName)) {
             dealSubmitResp(response);
+        } else if (HISTORY_EXERCISE_DETAIL.equals(apiName)) {
+            dealHistoryExerciseDetail(response);
         }
 
         hideLoading();

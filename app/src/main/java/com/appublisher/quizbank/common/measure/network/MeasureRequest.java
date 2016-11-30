@@ -78,7 +78,7 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
     public void getHistoryExerciseDetail(int exercise_id, String exercise_type) {
         asyncRequest(getFinalUrl(getHistoryExerciseDetail)
                         + "&exercise_id=" + exercise_id + "&exercise_type=" + exercise_type,
-                "history_exercise_detail", "object");
+                HISTORY_EXERCISE_DETAIL, "object");
     }
 
 }

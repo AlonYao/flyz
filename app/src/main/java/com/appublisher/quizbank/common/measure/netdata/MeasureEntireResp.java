@@ -15,6 +15,15 @@ public class MeasureEntireResp {
     private String paper_name;
     private int duration;
     private List<CategoryBean> category;
+    private List<MeasureQuestionBean> questions;
+
+    public List<MeasureQuestionBean> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<MeasureQuestionBean> questions) {
+        this.questions = questions;
+    }
 
     public int getResponse_code() {
         return response_code;
