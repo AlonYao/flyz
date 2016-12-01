@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
@@ -262,8 +263,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
         } else {
             // 整卷
-            int index = 0;
-            int order = 0;
             int size = categorys.size();
             for (int i = 0; i < size; i++) {
                 MeasureCategoryBean category = categorys.get(i);
@@ -284,25 +283,86 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 question.setIs_desc(true);
                 question.setCategory_name(category.getName());
                 question.setDesc_position(i);
-                question.setQuestion_index(index);
                 questions.add(question);
-                index++;
-
-                // 遍历categoryQuestions
-                int qSize = categoryQuestions.size();
-                for (int j = 0; j < qSize; j++) {
-                    MeasureQuestionBean questionBean = categoryQuestions.get(i);
-                    if (questionBean == null) continue;
-
-                    // 索引
-//                    questionBean.setQuestion_index();
-                }
 
                 // 添加题目
                 questions.add(question);
-//                questions.addAll(categoryQuestions);
+                questions.addAll(categoryQuestions);
+
+                // 添加用户答案
+                List<MeasureSubmitBean> childSubmits = new ArrayList<>();
+                int qSize = categoryQuestions.size();
+                for (int j = 0; j < qSize; j++) {
+                    MeasureQuestionBean questionBean = categoryQuestions.get(j);
+                    if (questionBean == null) continue;
+                    MeasureSubmitBean submitBean = new MeasureSubmitBean();
+                    submitBean.setNote_ids(questionBean.getNote_ids());
+                    childSubmits.add(submitBean);
+                }
+
+                qSize = categoryAnswers.size();
+                for (int j = 0; j < qSize; j++) {
+                    MeasureAnswerBean answerBean = categoryAnswers.get(j);
+                    if (answerBean == null) continue;
+                    if (j >= childSubmits.size()) continue;
+
+                    MeasureSubmitBean submitBean = childSubmits.get(j);
+                    if (submitBean == null) continue;
+                    submitBean.setId(answerBean.getId());
+                    submitBean.setAnswer(answerBean.getAnswer());
+                    submitBean.setCategory(answerBean.getCategory());
+                    submitBean.setDuration(answerBean.getDuration());
+
+                    if (answerBean.is_right()) {
+                        submitBean.setIs_right(1);
+                    } else {
+                        submitBean.setIs_right(0);
+                    }
+
+                    // 更新
+                    childSubmits.set(j, submitBean);
+                }
+
+                submits.addAll(childSubmits);
             }
+
+            // 添加题号索引选项排除
+            int index = 0;
+            int order = 0;
+            int amount = questions.size() - size;
+            mExcludes = new ArrayList<>();
+
+            for (MeasureQuestionBean question : questions) {
+                if (question == null) continue;
+
+                // 题量&索引
+                question.setQuestion_index(index);
+                question.setQuestion_amount(amount);
+
+                // 题号
+                if (!question.is_desc()) {
+                    order++;
+                    question.setQuestion_order(order);
+                }
+
+                // 更新
+                questions.set(index, question);
+                index++;
+
+                // 选项排除
+                mExcludes.add(new MeasureExcludeBean());
+            }
+
+            // 显示Tab
+            ((MeasureActivity) mContext).showTabLayout(mTabs);
         }
+
+        // 缓存
+        saveSubmitPaperInfo();
+        saveUserAnswerCache(mContext, submits);
+
+        // 展示
+        ((MeasureActivity) mContext).showViewPager(questions);
     }
 
     /**
@@ -678,8 +738,13 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         int durtion = 0;
         for (MeasureSubmitBean submitBean : submits) {
             if (submitBean == null) continue;
+
+            Logger.e(String.valueOf(submitBean.getDuration()));
+
             durtion = durtion + submitBean.getDuration();
         }
+
+        Logger.e("总计：" + String.valueOf(durtion));
 
         if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
         mRequest.submitPaper(MeasureParamBuilder.submitPaper(

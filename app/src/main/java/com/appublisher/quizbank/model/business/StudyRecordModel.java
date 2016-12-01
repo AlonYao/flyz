@@ -6,9 +6,10 @@ import android.widget.AdapterView;
 
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
@@ -106,13 +107,14 @@ public class StudyRecordModel {
                         } else if ("undone".equals(status)) {
                             // 跳转至做题页面
                             Intent intent = new Intent(
-                                    fragment.mActivity, LegacyMeasureActivity.class);
-                            intent.putExtra("from", "study_record");
-                            intent.putExtra("exercise_id", historyPaper.getPaper_id());
-                            intent.putExtra("paper_type", historyPaper.getPaper_type());
-                            intent.putExtra("paper_name", historyPaper.getName());
-                            intent.putExtra("redo", true);
-                            intent.putExtra("umeng_entry", "Continue");
+                                    fragment.mActivity, MeasureActivity.class);
+                            intent.putExtra(
+                                    MeasureConstants.INTENT_PAPER_ID,
+                                    historyPaper.getPaper_id());
+                            intent.putExtra(
+                                    MeasureConstants.INTENT_PAPER_TYPE,
+                                    historyPaper.getPaper_type());
+                            intent.putExtra(MeasureConstants.INTENT_REDO, true);
                             fragment.mActivity.startActivity(intent);
 
                             // Umeng
