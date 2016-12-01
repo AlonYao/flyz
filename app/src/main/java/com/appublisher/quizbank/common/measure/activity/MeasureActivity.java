@@ -243,6 +243,7 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 更新当前页面的时长
+                                mModel.saveSubmitDuration(mModel.mCurPagePosition);
 
                                 // 保存至本地
 //                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);

@@ -31,6 +31,14 @@
                 android:layout_height="wrap_content"
                 android:layout="@layout/measure_report_viewstub_paperinfo"/>
 
+            <!-- 本次战绩 -->
+            <ViewStub
+                android:id="@+id/measure_report_standings_vs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout="@layout/measure_report_viewstub_standings"/>
+
             <!-- 做对/全部 -->
             <ViewStub
                 android:id="@+id/measure_report_rightall_vs"

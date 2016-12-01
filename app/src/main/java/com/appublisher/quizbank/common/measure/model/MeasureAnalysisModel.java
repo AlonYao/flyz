@@ -74,7 +74,12 @@ public class MeasureAnalysisModel extends MeasureModel{
             }
 
             // 添加索引
-            questions = setQuestionIndex(questions);
+            int index = 0;
+            for (MeasureQuestionBean question : questions) {
+                if (question == null) continue;
+                question.setQuestion_index(index);
+                index++;
+            }
 
             // 构造Answers
             answers = getWrongOnlyAnswers(mAnalysisBean.getAnswers());
@@ -82,6 +87,7 @@ public class MeasureAnalysisModel extends MeasureModel{
         } else {
             // 整卷
             int order = 0;
+            int amount = 0;
             int size = mAnalysisBean.getCategorys().size();
             for (int i = 0; i < size; i++) {
                 MeasureCategoryBean category = mAnalysisBean.getCategorys().get(i);
@@ -91,6 +97,9 @@ public class MeasureAnalysisModel extends MeasureModel{
                 if (categoryQuestions == null) continue;
                 List<MeasureAnswerBean> categoryAnswers = category.getAnswers();
                 if (categoryAnswers == null) continue;
+
+                // 统计原有题目总数
+                amount = amount + category.getQuestions().size();
 
                 // 添加Tab数据
                 MeasureTabBean tabBean = new MeasureTabBean();
@@ -142,7 +151,7 @@ public class MeasureAnalysisModel extends MeasureModel{
             }
 
             // 添加索引
-            questions = setQuestionIndex(questions, size);
+            questions = setQuestionIndex(questions, amount);
 
             // 显示Tab
             ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
@@ -223,7 +232,8 @@ public class MeasureAnalysisModel extends MeasureModel{
             }
 
             // 添加索引
-            questions = setQuestionIndex(questions, size);
+            int amount = questions.size() - size;
+            questions = setQuestionIndex(questions, amount);
 
             // 显示Tab
             ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
@@ -235,23 +245,13 @@ public class MeasureAnalysisModel extends MeasureModel{
     /**
      * 设置索引&题量
      * @param list MeasureQuestionBean list
-     * @return MeasureQuestionBean list
-     */
-    private List<MeasureQuestionBean> setQuestionIndex(List<MeasureQuestionBean> list) {
-        return setQuestionIndex(list, 0);
-    }
-
-    /**
-     * 设置索引&题量
-     * @param list MeasureQuestionBean list
-     * @param descSize 说明页数量
+     * @param amount 题量
      * @return MeasureQuestionBean list
      */
     private List<MeasureQuestionBean> setQuestionIndex(List<MeasureQuestionBean> list,
-                                                       int descSize) {
+                                                       int amount) {
         if (list == null) return new ArrayList<>();
         int size = list.size();
-        int amount = size - descSize;
         for (int i = 0; i < size; i++) {
             MeasureQuestionBean questionBean = list.get(i);
             if (questionBean == null) continue;

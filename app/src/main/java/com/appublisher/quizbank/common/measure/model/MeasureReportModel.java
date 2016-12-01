@@ -1,14 +1,21 @@
 package com.appublisher.quizbank.common.measure.model;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
-import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureHistoryResp;
 
 import org.json.JSONObject;
@@ -117,6 +124,39 @@ public class MeasureReportModel extends MeasureModel {
 
             // 分数线
             ((MeasureReportActivity) mContext).showBorderline(resp.getScores());
+        } else if (MOKAO.equals(mPaperType)) {
+            // 试卷信息
+            ((MeasureReportActivity) mContext).showPaperInfo(
+                    getPaperType(mPaperType), resp.getExercise_name());
+
+            // 战绩
+            String defeat = "击败"
+                    + Utils.rateToPercent(resp.getDefeat())
+                    + "%的考生";
+            Spannable word = new SpannableString(defeat);
+            word.setSpan(
+                    new AbsoluteSizeSpan(Utils.sp2px(mContext, 22)),
+                    2,
+                    defeat.indexOf("的考生"),
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            //noinspection deprecation
+            word.setSpan(
+                    new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.themecolor)),
+                    2,
+                    defeat.indexOf("的考生"),
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            ((MeasureReportActivity) mContext).showStandings(word);
+
+            // 做对/全部
+            showRightAll(resp.getAnswers());
+
+            // 科目
+            List<MeasureReportCategoryBean> categorys = getCategorys(
+                    resp.getQuestions(), resp.getAnswers());
+            ((MeasureReportActivity) mContext).showCategory(categorys);
+
+            // 知识点
+            ((MeasureReportActivity) mContext).showNotes(resp.getNotes());
         }
     }
 

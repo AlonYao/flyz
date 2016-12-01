@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.measure.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -227,6 +228,18 @@ public class MeasureReportActivity extends BaseActivity implements
 
         if (tvScore != null) {
             tvScore.setText(score);
+        }
+    }
+
+    public void showStandings(Spannable text) {
+        ViewStub vs = (ViewStub) findViewById(R.id.measure_report_standings_vs);
+        if (vs == null) return;
+        vs.inflate();
+
+        TextView tvStandings = (TextView) findViewById(R.id.measure_report_standings);
+
+        if (tvStandings != null) {
+            tvStandings.setText(text);
         }
     }
 

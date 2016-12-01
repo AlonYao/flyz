@@ -31,11 +31,11 @@ import com.appublisher.quizbank.activity.GuFenListActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
-import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.adapter.CarouselAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.StudyIndexModel;
 import com.appublisher.quizbank.model.netdata.CarouselM;
@@ -355,29 +355,12 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
 
                 if ("done".equals(status)) {
                     // 跳转至练习报告页面
-                    intent = new Intent(getActivity(), PracticeReportActivity.class);
-                    intent.putExtra("exercise_id", mTodayExam.getId());
-                    intent.putExtra("paper_type", "mokao");
-                    intent.putExtra("paper_name", mTodayExam.getName());
-                    intent.putExtra("from", "mokao_homepage");
+                    intent = new Intent(getActivity(), MeasureReportActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, mTodayExam.getId());
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, "mokao");
                     startActivity(intent);
-
                 } else {
-//                    intent = new Intent(getActivity(), PracticeDescriptionActivity.class);
-//                    intent.putExtra("paper_type", "mokao");
-//                    intent.putExtra("paper_name", mTodayExam.getName());
-//                    intent.putExtra("umeng_entry", "Home");
-//
-//                    if ("fresh".equals(status)) {
-//                        intent.putExtra("paper_id", mTodayExam.getId());
-//                        intent.putExtra("redo", false);
-//                    } else {
-//                        intent.putExtra("exercise_id", mTodayExam.getId());
-//                        intent.putExtra("redo", true);
-//                    }
-//
-//                    startActivity(intent);
-
+                    // 跳转至做题页面
                     intent = new Intent(getActivity(), MeasureActivity.class);
                     intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOKAO);
                     intent.putExtra(MeasureConstants.INTENT_PAPER_ID, mTodayExam.getId());
