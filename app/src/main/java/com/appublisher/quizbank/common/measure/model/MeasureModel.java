@@ -262,6 +262,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
         } else {
             // 整卷
+            mTabs = new ArrayList<>();
             int size = categorys.size();
             for (int i = 0; i < size; i++) {
                 MeasureCategoryBean category = categorys.get(i);
@@ -282,7 +283,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 question.setIs_desc(true);
                 question.setCategory_name(category.getName());
                 question.setDesc_position(i);
-                questions.add(question);
 
                 // 添加题目
                 questions.add(question);
