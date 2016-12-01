@@ -284,7 +284,8 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         if (fragment != null) {
             transaction.remove(fragment);
         }
-        MeasureSheetFragment sheetFragment = new MeasureSheetFragment();
+        MeasureSheetFragment sheetFragment =
+                MeasureSheetFragment.newInstance(mModel.mCurPagePosition);
         sheetFragment.show(transaction, "MeasureSheetFragment");
     }
 

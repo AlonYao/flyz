@@ -36,10 +36,21 @@ import java.util.List;
 public class MeasureSheetFragment extends DialogFragment implements
         View.OnClickListener, MeasureConstants{
 
+    private static final String ARGS_POSITION = "position";
+
     private List<MeasureQuestionBean> mQuestions;
     private List<MeasureSubmitBean> mSubmits;
     private LinearLayout mContainer;
     private Button mBtnSubmit;
+    private int mPosition; // Viewpager中的position
+
+    public static MeasureSheetFragment newInstance(int position) {
+        Bundle args = new Bundle();
+        args.putInt(ARGS_POSITION, position);
+        MeasureSheetFragment fragment = new MeasureSheetFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +99,7 @@ public class MeasureSheetFragment extends DialogFragment implements
     }
 
     private void initData() {
+        mPosition = getArguments().getInt(ARGS_POSITION);
         mSubmits = MeasureModel.getUserAnswerCache(getActivity());
         if (getActivity() instanceof MeasureActivity) {
             mQuestions = ((MeasureActivity) getActivity()).mModel.getAdapterQuestions();
@@ -169,8 +181,12 @@ public class MeasureSheetFragment extends DialogFragment implements
         if (view.getId() == R.id.measure_sheet_submit) {
             // 提交
             if (!(getActivity() instanceof MeasureActivity)) return;
-
             final MeasureModel model = ((MeasureActivity) getActivity()).mModel;
+
+            // 更新当前题目的做题时间
+            model.saveSubmitDuration(mPosition);
+
+            // 提交
             model.submit(true, new MeasureModel.SubmitListener() {
                 @Override
                 public void onComplete(boolean success) {

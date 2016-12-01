@@ -61,6 +61,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     public int mPaperId;
     public int mHierarchyId;
+    public int mCurPagePosition;
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
@@ -70,7 +71,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public List<MeasureTabBean> mTabs;
 
     private SparseIntArray mFinalHeightMap;
-    private int mCurPagePosition;
     private SubmitListener mSubmitListener;
 
     public MeasureModel(Context context) {
@@ -529,6 +529,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     /**
      * 缓存用户做题时长
      * @param position 此处的position指的是题目的索引
+     * 备注：submit list中的索引和题号的关系是（order - 1），submit list中不包含说明页
      */
     public void saveSubmitDuration(int position) {
         if (!(mContext instanceof MeasureActivity)) return;
@@ -553,7 +554,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         int duration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
         if (duration == 0) return;
         int preDuration = submitBean.getDuration();
-
         duration = duration + preDuration;
         submitBean.setDuration(duration);
         list.set(order, submitBean);
