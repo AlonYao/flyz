@@ -360,6 +360,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         saveSubmitPaperInfo();
         saveUserAnswerCache(mContext, submits);
 
+        // 设置计时器时间
+        int startFrom = resp.getStart_from();
+        ((MeasureActivity) mContext).mSec = startFrom % 60;
+        ((MeasureActivity) mContext).mMins = startFrom / 60;
+
         // 展示
         ((MeasureActivity) mContext).showViewPager(questions);
     }
