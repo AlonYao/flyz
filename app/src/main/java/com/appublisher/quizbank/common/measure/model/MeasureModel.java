@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
@@ -455,9 +454,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 MeasureSubmitBean submitBean = new MeasureSubmitBean();
 
                 JSONObject object = array.getJSONObject(i);
+
                 submitBean.setId(object.getInt(SUBMIT_ID));
                 submitBean.setAnswer(object.getString(SUBMIT_ANSWER));
                 submitBean.setCategory(object.getInt(SUBMIT_CATEGORY));
+                submitBean.setDuration(object.getInt(SUBMIT_DURATION));
+                submitBean.setIs_right(object.getInt(SUBMIT_IS_RIGHT));
 
                 // 构建note_ids
                 List<Integer> noteIdList = new ArrayList<>();
@@ -551,6 +553,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         int duration = (int) ((System.currentTimeMillis() - mCurTimestamp) / 1000);
         if (duration == 0) return;
         int preDuration = submitBean.getDuration();
+
         duration = duration + preDuration;
         submitBean.setDuration(duration);
         list.set(order, submitBean);
@@ -738,13 +741,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         int durtion = 0;
         for (MeasureSubmitBean submitBean : submits) {
             if (submitBean == null) continue;
-
-            Logger.e(String.valueOf(submitBean.getDuration()));
-
             durtion = durtion + submitBean.getDuration();
         }
-
-        Logger.e("总计：" + String.valueOf(durtion));
 
         if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
         mRequest.submitPaper(MeasureParamBuilder.submitPaper(
