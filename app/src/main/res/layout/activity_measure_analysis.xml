@@ -11,7 +11,7 @@
 
     <!-- 整卷Tab -->
     <ViewStub
-        android:id="@+id/measure_analysis_tablayout_viewstub"
+        android:id="@+id/measure_tablayout_viewstub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout="@layout/measure_tablayout"/>

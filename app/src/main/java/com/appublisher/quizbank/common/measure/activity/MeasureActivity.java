@@ -9,25 +9,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.view.Window;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
-import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
-import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
 import com.appublisher.quizbank.common.measure.fragment.MeasureSheetFragment;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 
@@ -40,7 +35,7 @@ import java.util.TimerTask;
 /**
  * 做题模块：主页面
  */
-public class MeasureActivity extends BaseActivity implements MeasureConstants {
+public class MeasureActivity extends MeasureBaseActivity implements MeasureConstants {
 
     private static final String MENU_SCRATCH = "草稿纸";
     private static final String MENU_ANSWERSHEET = "答题卡";
@@ -50,11 +45,9 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
     public ViewPager mViewPager;
     public MeasureModel mModel;
     public MeasureAdapter mAdapter;
-    public TabLayout mTabLayout;
     public int mMins;
     public int mSec;
 
-    private boolean mIsFromClick;
     private Handler mHandler;
     private Timer mTimer;
 
@@ -166,10 +159,13 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         mHandler = new MsgHandler(this);
         mMins = 0;
         mSec = 0;
+
+        setModel(mModel);
     }
 
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.measure_viewpager);
+        setViewPager(mViewPager);
     }
 
     public void showViewPager(List<MeasureQuestionBean> questions) {
@@ -196,83 +192,6 @@ public class MeasureActivity extends BaseActivity implements MeasureConstants {
         });
 
         startTimer();
-    }
-
-    private void scrollTabLayout(int position) {
-        if (mTabLayout == null) return;
-        int scrollToPositon = mModel.getTabPositionScrollTo(position);
-        int curTabPotision = mTabLayout.getSelectedTabPosition();
-        if (scrollToPositon != curTabPotision) {
-            TabLayout.Tab tab = mTabLayout.getTabAt(scrollToPositon);
-            if (tab == null) return;
-            tab.select();
-        }
-    }
-
-    public void showTabLayout(List<MeasureTabBean> tabs) {
-        if (tabs == null) return;
-        ViewStub vs = (ViewStub) findViewById(R.id.measure_tablayout_viewstub);
-        if (vs == null) return;
-        vs.inflate();
-
-        mTabLayout = (TabLayout) findViewById(R.id.measure_tablayout);
-        if (mTabLayout == null) return;
-        for (MeasureTabBean tab : tabs) {
-            if (tab == null) continue;
-            String name = tab.getName();
-            if (name.length() > 2) {
-                name = name.substring(0, 2);
-            }
-            mTabLayout.addTab(mTabLayout.newTab().setText(name));
-        }
-
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (mIsFromClick) {
-                    pageSkipFromTabClick(tab.getPosition());
-                    mIsFromClick = false;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                if (mIsFromClick) {
-                    pageSkipFromTabClick(tab.getPosition());
-                    mIsFromClick = false;
-                }
-            }
-        });
-
-        // 设置click事件
-        setTabLayoutOnItemClick();
-    }
-
-    private void setTabLayoutOnItemClick() {
-        if (mTabLayout == null) return;
-
-        ViewGroup root = (ViewGroup) mTabLayout.getChildAt(0);
-        if (root == null) return;
-
-        int size = mTabLayout.getTabCount();
-        for (int i = 0; i < size; i++) {
-            View tabView = root.getChildAt(i);
-            tabView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIsFromClick = true;
-                }
-            });
-        }
-    }
-
-    private void pageSkipFromTabClick(int tabPosition) {
-        mViewPager.setCurrentItem(mModel.getPositionByTab(tabPosition));
     }
 
     /**

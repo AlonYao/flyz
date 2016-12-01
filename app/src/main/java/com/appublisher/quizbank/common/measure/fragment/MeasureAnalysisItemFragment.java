@@ -99,6 +99,11 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
         showAnalysis();
     }
 
+    private void showNoAnswerFlag() {
+        ViewStub vs = (ViewStub) mRoot.findViewById(R.id.measure_noanswer_viewstub);
+        vs.inflate();
+    }
+
     private void showAnalysis() {
         if (mQuestion == null || mAnswer == null) return;
 
@@ -115,7 +120,11 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
         // 正确答案
         String rightAnswer = mQuestion.getAnswer();
         String sRight = "【正确答案】 " + (rightAnswer == null ? "" : rightAnswer) + "；";
-        sRight = sRight + "你的选择是" + mAnswer.getAnswer();
+        if (mAnswer.getAnswer() != null && mAnswer.getAnswer().length() > 0) {
+            sRight = sRight + "你的选择是" + mAnswer.getAnswer();
+        } else {
+            showNoAnswerFlag();
+        }
         tvRightAnswer.setText(sRight);
 
         // 统计

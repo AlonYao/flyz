@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -33,6 +34,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
                 android:orientation="vertical"/>
+
+            <!-- 未答标记 -->
+            <ViewStub
+                android:id="@+id/measure_noanswer_viewstub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout="@layout/measure_noanswer_viewstub"
+                tools:ignore="RtlHardcoded" />
 
             <!-- 选项 A -->
             <LinearLayout

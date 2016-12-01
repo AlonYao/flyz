@@ -20,7 +20,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
-import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MyAnalysisActivity;
@@ -38,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class MeasureAnalysisActivity extends BaseActivity implements
+public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         MeasureConstants, View.OnClickListener{
 
     private PopupWindow mPopupWindow;
@@ -195,6 +194,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements
 
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.measure_analysis_viewpager);
+        setViewPager(mViewPager);
     }
 
     private void initData() {
@@ -203,6 +203,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements
                 getIntent().getStringExtra(INTENT_ANALYSIS_BEAN), MeasureAnalysisBean.class);
         mModel.mIsErrorOnly = getIntent().getBooleanExtra(INTENT_ANALYSIS_IS_ERROR_ONLY, false);
         mModel.showContent();
+        setModel(mModel);
     }
 
     public void showViewPager(List<MeasureQuestionBean> questions,
@@ -222,7 +223,7 @@ public class MeasureAnalysisActivity extends BaseActivity implements
 
             @Override
             public void onPageSelected(int position) {
-//                scrollTabLayout(position);
+                scrollTabLayout(position);
                 mCurPosition = position;
             }
 

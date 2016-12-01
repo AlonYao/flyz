@@ -142,7 +142,10 @@ public class MeasureAnalysisModel extends MeasureModel{
             }
 
             // 添加索引
-            questions = setQuestionIndex(questions);
+            questions = setQuestionIndex(questions, size);
+
+            // 显示Tab
+            ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
         }
 
         ((MeasureAnalysisActivity) mContext).showViewPager(questions, answers);
@@ -220,19 +223,40 @@ public class MeasureAnalysisModel extends MeasureModel{
             }
 
             // 添加索引
-            questions = setQuestionIndex(questions);
+            questions = setQuestionIndex(questions, size);
+
+            // 显示Tab
+            ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
         }
 
         ((MeasureAnalysisActivity) mContext).showViewPager(questions, answers);
     }
 
+    /**
+     * 设置索引&题量
+     * @param list MeasureQuestionBean list
+     * @return MeasureQuestionBean list
+     */
     private List<MeasureQuestionBean> setQuestionIndex(List<MeasureQuestionBean> list) {
+        return setQuestionIndex(list, 0);
+    }
+
+    /**
+     * 设置索引&题量
+     * @param list MeasureQuestionBean list
+     * @param descSize 说明页数量
+     * @return MeasureQuestionBean list
+     */
+    private List<MeasureQuestionBean> setQuestionIndex(List<MeasureQuestionBean> list,
+                                                       int descSize) {
         if (list == null) return new ArrayList<>();
         int size = list.size();
+        int amount = size - descSize;
         for (int i = 0; i < size; i++) {
             MeasureQuestionBean questionBean = list.get(i);
             if (questionBean == null) continue;
             questionBean.setQuestion_index(i);
+            questionBean.setQuestion_amount(amount);
             list.set(i, questionBean);
         }
         return list;
