@@ -79,7 +79,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     }
 
     public interface SubmitListener {
-        void onComplete(boolean success);
+        void onComplete(boolean success, int exercise_id);
     }
 
     public int getFinalHeightById(int id) {
@@ -767,9 +767,9 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         if (mSubmitListener == null) return;
         MeasureSubmitResp resp = GsonManager.getModel(response, MeasureSubmitResp.class);
         if (resp != null && resp.getResponse_code() == 1) {
-            mSubmitListener.onComplete(true);
+            mSubmitListener.onComplete(true, resp.getExercise_id());
         } else {
-            mSubmitListener.onComplete(false);
+            mSubmitListener.onComplete(false, 0);
         }
     }
 
