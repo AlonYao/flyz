@@ -15,6 +15,7 @@ public interface MeasureConstants {
     String INTENT_REDO = "redo";
     String INTENT_ANALYSIS_BEAN = "analysis_bean";
     String INTENT_ANALYSIS_IS_ERROR_ONLY = "is_error_only";
+    String INTENT_IS_FROM_FOLDER = "is_from_folder";
 
     /**
      * 试卷类型
@@ -37,6 +38,7 @@ public interface MeasureConstants {
     String SUBMIT_PAPER = "submit_paper";
     String HISTORY_EXERCISE_DETAIL = "history_exercise_detail";
     String COLLECT_QUESTION = "collect_question";
+    String COLLECT_ERROR_QUESTIONS = "collect_error_questions";
 
     /**
      * 缓存

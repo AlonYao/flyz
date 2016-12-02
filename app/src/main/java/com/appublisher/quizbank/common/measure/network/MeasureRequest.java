@@ -90,4 +90,19 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
         postRequest(getFinalUrl(collectQuestion), params, COLLECT_QUESTION, "object");
     }
 
+    /**
+     * 获取错题&收藏
+     *
+     * @param note_id 知识点id
+     * @param type    类型: collect:收藏 error:错题
+     */
+    public void getCollectErrorQuestions(int note_id,
+                                      String type) {
+        asyncRequest(
+                getFinalUrl(collectErrorQuestions)
+                        + "&note_id=" + note_id + "&type=" + type,
+                COLLECT_ERROR_QUESTIONS,
+                "object");
+    }
+
 }

@@ -100,8 +100,9 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             // 新题
             if (AUTO.equals(mPaperType)) {
                 mRequest.getAutoTraining();
-            } else if (NOTE.equals(mPaperType)) {
-                mRequest.getNoteQuestions(mHierarchyId, NOTE);
+            } else if (NOTE.equals(mPaperType) || COLLECT.equals(mPaperType)
+                    || ERROR.equals(mPaperType)) {
+                mRequest.getNoteQuestions(mHierarchyId, mPaperType);
             } else if (ENTIRE.equals(mPaperType) || MOKAO.equals(mPaperType)) {
                 mRequest.getPaperExercise(mPaperId, mPaperType);
             }

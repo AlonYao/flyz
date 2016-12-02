@@ -26,4 +26,7 @@ public interface MeasureApi extends ApiConstants{
     // 收藏、取消收藏题目
     String collectQuestion = baseUrl + "quizbank/collect_question";
 
+    // 获取错题收藏
+    String collectErrorQuestions = baseUrl + "quizbank/collect_error_questions";
+
 }

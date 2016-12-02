@@ -2,13 +2,18 @@ package com.appublisher.quizbank.common.measure.model;
 
 import android.content.Context;
 
+import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
+import com.appublisher.quizbank.common.measure.netdata.MeasureHistoryResp;
 import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,7 @@ public class MeasureAnalysisModel extends MeasureModel{
 
     public MeasureAnalysisBean mAnalysisBean;
     public boolean mIsErrorOnly;
+    public boolean mIsFromFolder;
     public int mSize;
 
     private List<MeasureAnswerBean> mAnswers;
@@ -29,7 +35,16 @@ public class MeasureAnalysisModel extends MeasureModel{
         super(context);
     }
 
-    public void showContent() {
+    public void getData() {
+        if (mIsFromFolder && (COLLECT.equals(mPaperType) || ERROR.equals(mPaperType))) {
+            if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
+            mRequest.getCollectErrorQuestions(mHierarchyId, mPaperType);
+        } else {
+            showContent();
+        }
+    }
+
+    private void showContent() {
         if (!(mContext instanceof MeasureAnalysisActivity)) return;
         if (mIsErrorOnly) {
             showErrorOnly();
@@ -310,6 +325,23 @@ public class MeasureAnalysisModel extends MeasureModel{
         if (mContext instanceof MeasureAnalysisActivity) {
             ((MeasureAnalysisActivity) mContext).invalidateOptionsMenu();
         }
+    }
+
+    private void dealCollectErrorQuestions(JSONObject response) {
+        MeasureHistoryResp resp = GsonManager.getModel(response, MeasureHistoryResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
+        mAnalysisBean = new MeasureAnalysisBean();
+        mAnalysisBean.setQuestions(resp.getQuestions());
+        mAnalysisBean.setAnswers(resp.getAnswers());
+        showContent();
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if (COLLECT_ERROR_QUESTIONS.equals(apiName)) {
+            dealCollectErrorQuestions(response);
+        }
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).hideLoading();
     }
 
 }

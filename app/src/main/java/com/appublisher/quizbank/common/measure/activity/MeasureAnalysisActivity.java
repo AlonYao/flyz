@@ -213,7 +213,10 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         mModel.mAnalysisBean = GsonManager.getModel(
                 getIntent().getStringExtra(INTENT_ANALYSIS_BEAN), MeasureAnalysisBean.class);
         mModel.mIsErrorOnly = getIntent().getBooleanExtra(INTENT_ANALYSIS_IS_ERROR_ONLY, false);
-        mModel.showContent();
+        mModel.mIsFromFolder = getIntent().getBooleanExtra(INTENT_IS_FROM_FOLDER, false);
+        mModel.mHierarchyId = getIntent().getIntExtra(INTENT_HIERARCHY_ID, 0);
+        mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
+        mModel.getData();
         setModel(mModel);
     }
 
