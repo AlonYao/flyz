@@ -409,11 +409,6 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 break;
             case R.id.quick_test_view:
                 // 快速智能练习
-//                intent = new Intent(getActivity(), PracticeDescriptionActivity.class);
-//                intent.putExtra("paper_type", "auto");
-//                intent.putExtra("paper_name", "快速智能练习");
-//                intent.putExtra("umeng_entry", "Home");
-//                startActivity(intent);
                 intent = new Intent(getActivity(), MeasureActivity.class);
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.AUTO);
                 startActivity(intent);

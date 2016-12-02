@@ -23,6 +23,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.LocationManager;
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -137,7 +138,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mCurAreaId = 0;
         mCurYear = 0;
         mOffset = 0;
-        mCount = 5;
+        mCount = 10;
         mHandler = new MsgHandler(mActivity);
     }
 
@@ -493,7 +494,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mAreas = areaYearResp.getArea();
         mYears = areaYearResp.getYear();
 
-        mQRequest.getEntirePapers(0, 0, 0, 5, "true");
+        mQRequest.getEntirePapers(0, 0, 0, 10, "true");
     }
 
     /**
@@ -501,7 +502,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
      *
      * @param response 整卷回调
      */
-    private void dealEntirePapersResp(JSONObject response) {
+    private void dealEntirePapersResp(WholePageFragment fragment, JSONObject response) {
         if (response == null) {
             setLoadFinish();
             return;
@@ -519,6 +520,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
 
         if (newEntirePapers == null || newEntirePapers.size() == 0) {
             setLoadFinish();
+            ToastManager.showToast(fragment.getContext(), "暂无更多内容");
             return;
         }
 
@@ -568,7 +570,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     public void requestCompleted(JSONObject response, String apiName) {
         if ("area_year".equals(apiName)) dealAreaYearResp(response);
 
-        if ("entire_papers".equals(apiName)) dealEntirePapersResp(response);
+        if ("entire_papers".equals(apiName)) dealEntirePapersResp(this, response);
     }
 
     @Override

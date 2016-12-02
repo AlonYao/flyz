@@ -47,12 +47,9 @@ public class WholePageListAdapter extends BaseAdapter{
         if (convertView == null) {
             convertView = LayoutInflater.from(mActivity).inflate(
                     R.layout.wholepage_list_item, parent, false);
-
             viewHolder = new ViewHolder();
             viewHolder.tvItem =
                     (TextView) convertView.findViewById(R.id.wholepage_list_item_tv);
-            viewHolder.line = convertView.findViewById(R.id.wholepage_list_item_line);
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -60,7 +57,6 @@ public class WholePageListAdapter extends BaseAdapter{
 
         if (mEntirePapers != null && mEntirePapers.size() > position) {
             EntirePaperM entirePaper = mEntirePapers.get(position);
-
             if (entirePaper != null) {
                 viewHolder.tvItem.setText(entirePaper.getName());
             }
@@ -71,6 +67,5 @@ public class WholePageListAdapter extends BaseAdapter{
 
     private class ViewHolder {
         TextView tvItem;
-        View line;
     }
 }
