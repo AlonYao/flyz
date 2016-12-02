@@ -25,14 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/tab_radiogroup"
-        android:layout_below="@+id/toolbar"></RelativeLayout>
+        android:layout_below="@+id/toolbar"/>
 
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_above="@+id/tab_radiogroup"
-        android:background="@color/common_line"></View>
+        android:background="@color/common_line"/>
 
     <RadioGroup
         android:id="@+id/tab_radiogroup"
@@ -45,7 +45,7 @@
             android:id="@+id/study"
             style="@style/TabRadioButton"
             android:drawableTop="@drawable/tab_study_selector"
-            android:text="@string/study_index" />
+            android:text="@string/study_index"/>
 
         <RadioButton
             android:id="@+id/course"

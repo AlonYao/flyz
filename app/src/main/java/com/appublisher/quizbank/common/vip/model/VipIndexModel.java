@@ -2,24 +2,16 @@ package com.appublisher.quizbank.common.vip.model;
 
 import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.common.vip.activity.VipIndexActivity;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
-import com.appublisher.quizbank.common.vip.netdata.VipExerciseResp;
 import com.appublisher.quizbank.common.vip.netdata.VipIndexEntryDataResp;
-import com.appublisher.quizbank.common.vip.netdata.VipNotificationResp;
-import com.appublisher.quizbank.model.netdata.course.CourseListResp;
-import com.appublisher.quizbank.model.netdata.course.CourseM;
 
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by jinbao on 2016/8/30.
@@ -162,6 +154,7 @@ public class VipIndexModel {
                     }
 
                 }
+                fragment.classTime.setVisibility(View.VISIBLE);
             }
 
             if (exerciseDate != null && !"".equals(exerciseDate)) {
@@ -179,6 +172,7 @@ public class VipIndexModel {
                         fragment.homeworkTimeText.setText("1分钟后过期");
                     }
                 }
+                fragment.homeworkTimeText.setVisibility(View.VISIBLE);
             }
 
         }

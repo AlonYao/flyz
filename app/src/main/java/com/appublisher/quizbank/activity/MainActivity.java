@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setToolBar(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        setDisplayHomeAsUpEnabled(this, false);
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();

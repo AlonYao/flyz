@@ -248,7 +248,8 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         AssessmentM assessment = homePageResp.getAssessment();
         if (assessment != null) {
             assessScoreTv.setText(String.valueOf(assessment.getScore()));
-            rankTv.setText(Utils.rateToPercent(assessment.getRank()) + "%");
+            String text = Utils.rateToPercent(assessment.getRank()) + "%";
+            rankTv.setText(text);
         }
 
         PaperM pager = homePageResp.getPaper();
@@ -257,10 +258,11 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             mTodayExam = pager.getToday();
             if (mTodayExam != null) {
                 if (mTodayExam.getDefeat() == 0) {
-                    String text = "已有" + String.valueOf(mTodayExam.getPersons_num()) + "人参加";
+                    String text = "今日已有"
+                            + String.valueOf(mTodayExam.getPersons_num()) + "人参加";
                     miniCuntTv.setText(text);
                 } else {
-                    String text = "已有"
+                    String text = "今日已有"
                             + String.valueOf(mTodayExam.getPersons_num())
                             + "人参加，击败"
                             + Utils.rateToPercent(mTodayExam.getDefeat())
