@@ -6,7 +6,6 @@ import android.widget.AdapterView;
 
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.quizbank.activity.PracticeReportActivity;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
@@ -78,26 +77,13 @@ public class StudyRecordModel {
 
                         if ("done".equals(status)) {
                             // 跳转至练习报告页面
-                            if ("auto".equals(historyPaper.getPaper_type())
-                                    || "entire".equals(historyPaper.getPaper_type())) {
-                                Intent intent = new Intent(
-                                        fragment.mActivity, MeasureReportActivity.class);
-                                intent.putExtra("from", "study_record");
-                                intent.putExtra("paper_id", historyPaper.getPaper_id());
-                                intent.putExtra("paper_type", historyPaper.getPaper_type());
-                                intent.putExtra("paper_name", historyPaper.getName());
-                                intent.putExtra("paper_time", historyPaper.getAction_time());
-                                fragment.mActivity.startActivity(intent);
-                            } else {
-                                Intent intent = new Intent(
-                                        fragment.mActivity, PracticeReportActivity.class);
-                                intent.putExtra("from", "study_record");
-                                intent.putExtra("exercise_id", historyPaper.getPaper_id());
-                                intent.putExtra("paper_type", historyPaper.getPaper_type());
-                                intent.putExtra("paper_name", historyPaper.getName());
-                                intent.putExtra("paper_time", historyPaper.getAction_time());
-                                fragment.mActivity.startActivity(intent);
-                            }
+                            Intent intent = new Intent(
+                                    fragment.mActivity, MeasureReportActivity.class);
+                            intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
+                                    historyPaper.getPaper_id());
+                            intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
+                                    historyPaper.getPaper_type());
+                            fragment.mActivity.startActivity(intent);
 
                             // Umeng
                             HashMap<String, String> map = new HashMap<>();

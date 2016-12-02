@@ -23,4 +23,7 @@ public interface MeasureApi extends ApiConstants{
     // 获取历史练习内容
     String getHistoryExerciseDetail = baseUrl + "quizbank/history_exercise_detail";
 
+    // 收藏、取消收藏题目
+    String collectQuestion = baseUrl + "quizbank/collect_question";
+
 }

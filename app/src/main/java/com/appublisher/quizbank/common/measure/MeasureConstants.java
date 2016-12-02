@@ -36,6 +36,7 @@ public interface MeasureConstants {
     String PAPER_EXERCISE = "paper_exercise";
     String SUBMIT_PAPER = "submit_paper";
     String HISTORY_EXERCISE_DETAIL = "history_exercise_detail";
+    String COLLECT_QUESTION = "collect_question";
 
     /**
      * 缓存

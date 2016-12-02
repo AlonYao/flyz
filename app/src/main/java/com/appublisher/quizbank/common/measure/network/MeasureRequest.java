@@ -81,4 +81,13 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
                 HISTORY_EXERCISE_DETAIL, "object");
     }
 
+    /**
+     * 收藏&取消收藏题目
+     *
+     * @param params 参数
+     */
+    public void collectQuestion(Map<String, String> params) {
+        postRequest(getFinalUrl(collectQuestion), params, COLLECT_QUESTION, "object");
+    }
+
 }

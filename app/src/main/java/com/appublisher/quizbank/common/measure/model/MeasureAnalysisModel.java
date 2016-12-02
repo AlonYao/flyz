@@ -8,6 +8,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureTabBean;
+import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ public class MeasureAnalysisModel extends MeasureModel{
     public MeasureAnalysisBean mAnalysisBean;
     public boolean mIsErrorOnly;
     public int mSize;
+
+    private List<MeasureAnswerBean> mAnswers;
 
     public MeasureAnalysisModel(Context context) {
         super(context);
@@ -46,7 +49,7 @@ public class MeasureAnalysisModel extends MeasureModel{
         // 构造数据结构
         mTabs = new ArrayList<>();
         List<MeasureQuestionBean> questions = new ArrayList<>();
-        List<MeasureAnswerBean> answers = new ArrayList<>();
+        mAnswers = new ArrayList<>();
 
         if (mAnalysisBean.getCategorys() == null || mAnalysisBean.getCategorys().size() == 0) {
             // 非整卷
@@ -82,7 +85,7 @@ public class MeasureAnalysisModel extends MeasureModel{
             }
 
             // 构造Answers
-            answers = getWrongOnlyAnswers(mAnalysisBean.getAnswers());
+            mAnswers = getWrongOnlyAnswers(mAnalysisBean.getAnswers());
 
         } else {
             // 整卷
@@ -145,9 +148,9 @@ public class MeasureAnalysisModel extends MeasureModel{
                 }
 
                 // 筛选只包含错题的用户答案
-                answers.add(new MeasureAnswerBean()); // 保证与questions一一对应
+                mAnswers.add(new MeasureAnswerBean()); // 保证与questions一一对应
                 List<MeasureAnswerBean> tempAnswers = getWrongOnlyAnswers(categoryAnswers);
-                answers.addAll(tempAnswers);
+                mAnswers.addAll(tempAnswers);
             }
 
             // 添加索引
@@ -157,7 +160,7 @@ public class MeasureAnalysisModel extends MeasureModel{
             ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
         }
 
-        ((MeasureAnalysisActivity) mContext).showViewPager(questions, answers);
+        ((MeasureAnalysisActivity) mContext).showViewPager(questions, mAnswers);
     }
 
     private void showAll() {
@@ -166,7 +169,7 @@ public class MeasureAnalysisModel extends MeasureModel{
         // 构造数据结构
         mTabs = new ArrayList<>();
         List<MeasureQuestionBean> questions = new ArrayList<>();
-        List<MeasureAnswerBean> answers = new ArrayList<>();
+        mAnswers = new ArrayList<>();
 
         if (mAnalysisBean.getCategorys() == null || mAnalysisBean.getCategorys().size() == 0) {
             // 非整卷
@@ -187,7 +190,7 @@ public class MeasureAnalysisModel extends MeasureModel{
             }
 
             // 构造Answers
-            answers = mAnalysisBean.getAnswers();
+            mAnswers = mAnalysisBean.getAnswers();
 
         } else {
             // 整卷
@@ -216,8 +219,8 @@ public class MeasureAnalysisModel extends MeasureModel{
                 questions.add(question);
 
                 MeasureAnswerBean answerBean = new MeasureAnswerBean();
-                answers.add(answerBean);
-                answers.addAll(categoryAnswers);
+                mAnswers.add(answerBean);
+                mAnswers.addAll(categoryAnswers);
 
                 // 添加题号
                 int questionSize = categoryQuestions.size();
@@ -239,7 +242,7 @@ public class MeasureAnalysisModel extends MeasureModel{
             ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
         }
 
-        ((MeasureAnalysisActivity) mContext).showViewPager(questions, answers);
+        ((MeasureAnalysisActivity) mContext).showViewPager(questions, mAnswers);
     }
 
     /**
@@ -284,6 +287,29 @@ public class MeasureAnalysisModel extends MeasureModel{
             if (!answer.is_right()) list.add(answer);
         }
         return list;
+    }
+
+    public boolean isCollected(int position) {
+        if (mAnswers == null || position >= mAnswers.size()) return false;
+        MeasureAnswerBean answerBean = mAnswers.get(position);
+        return answerBean != null && answerBean.is_collected();
+    }
+
+    public void setCollected(int position, boolean isCollected) {
+        if (mAnswers == null || position >= mAnswers.size()) return;
+        MeasureAnswerBean answerBean = mAnswers.get(position);
+        if (answerBean == null) return;
+        answerBean.setIs_collected(isCollected);
+        mAnswers.set(position, answerBean);
+
+        // 提交数据
+        mRequest.collectQuestion(
+                MeasureParamBuilder.collectQuestion(answerBean.getId(), isCollected));
+
+        // 刷新
+        if (mContext instanceof MeasureAnalysisActivity) {
+            ((MeasureAnalysisActivity) mContext).invalidateOptionsMenu();
+        }
     }
 
 }

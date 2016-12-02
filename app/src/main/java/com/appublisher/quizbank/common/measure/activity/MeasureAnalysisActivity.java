@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
@@ -64,8 +65,14 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
 
-        MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
-                R.drawable.measure_analysis_uncollect), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        if (mModel.isCollected(mCurPosition)) {
+            MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
+                    R.drawable.measure_analysis_collected), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        } else {
+            MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
+                    R.drawable.measure_analysis_uncollect), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
+
         MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
                 R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
@@ -95,7 +102,9 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
-        MenuItemCompat.setShowAsAction(menu.add("分享").setIcon(R.drawable.share), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(
+                menu.add("分享").setIcon(R.drawable.share),
+                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -115,27 +124,26 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
             finish();
 
         } else if ("收藏".equals(item.getTitle())) {
-//            if (mCurAnswerModel != null && mCurAnswerModel.is_collected()) {
-//                // 如果是已收藏状态，取消收藏
-//                LegacyMeasureAnalysisModel.setUnCollect(this, item);
-//
-//                ToastManager.showToast(this, "取消收藏");
-//
-//                // Umeng
-//                mUmengFavorite = "-1";
-//
-//            } else {
-//                // 如果是未收藏状态，收藏
-//                LegacyMeasureAnalysisModel.setCollect(this, item);
-//
-//                ToastManager.showToast(this, "收藏成功");
-//
-//                // Umeng
-//                mUmengFavorite = "1";
-//            }
-//
-//            mQRequest.collectQuestion(ParamBuilder.collectQuestion(
-//                    String.valueOf(mCurQuestionId), mCollect));
+            if (mModel.isCollected(mCurPosition)) {
+                // 如果是已收藏状态，取消收藏
+                mModel.setCollected(mCurPosition, false);
+                ToastManager.showToast(this, "取消收藏");
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Cancel");
+                UmengManager.onEvent(this, "ReviewDetail", map);
+
+            } else {
+                // 如果是未收藏状态，收藏
+                mModel.setCollected(mCurPosition, true);
+                ToastManager.showToast(this, "收藏成功");
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Collect");
+                UmengManager.onEvent(this, "ReviewDetail", map);
+            }
 
         } else if ("反馈".equals(item.getTitle())) {
             View feedbackMenu = findViewById(item.getItemId());
@@ -150,7 +158,10 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
 //            AlertManager.deleteErrorQuestionAlert(this);
 
             // Umeng
-//            mUmengDelete = "1";
+            HashMap<String, String> map = new HashMap<>();
+            map.put("Action", "Delete");
+            UmengManager.onEvent(this, "ReviewDetail", map);
+
         } else if (item.getTitle().equals("答题卡")) {
             skipToSheet();
 

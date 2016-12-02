@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.network;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -39,6 +40,25 @@ public class MeasureParamBuilder {
         params.put("duration", String.valueOf(duration));
         params.put("questions", questions);
         params.put("status", status);
+
+        return params;
+    }
+
+    /**
+     * 收藏&取消收藏题目
+     *
+     * @param question_id 题目id
+     * @param isCollect boolean
+     * @return 参数Map
+     */
+    public static Map<String, String> collectQuestion(int question_id, boolean isCollect) {
+        Map<String, String> params = new Hashtable<>();
+        params.put("question_id", String.valueOf(question_id));
+        if (isCollect) {
+            params.put("type", "collect");
+        } else {
+            params.put("type", "cancel");
+        }
 
         return params;
     }

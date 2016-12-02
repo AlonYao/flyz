@@ -165,6 +165,11 @@ public class MeasureReportModel extends MeasureModel {
             // 做对/全部
             showRightAll(resp.getAnswers());
 
+            // 科目
+            List<MeasureReportCategoryBean> categorys = getCategorys(
+                    resp.getQuestions(), resp.getAnswers());
+            ((MeasureReportActivity) mContext).showCategory(categorys);
+
             // 知识点
             ((MeasureReportActivity) mContext).showNotes(resp.getNotes());
         }
