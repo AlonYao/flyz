@@ -156,10 +156,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
 
                 Intent intent = new Intent(context, MeasureActivity.class);
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, value.type);
-                intent.putExtra("paper_name", value.name);
                 intent.putExtra(MeasureConstants.INTENT_HIERARCHY_ID, value.id);
-                intent.putExtra("hierarchy_level", value.level);
-                intent.putExtra("umeng_entry", "List");
                 context.startActivity(intent);
 
                 // Umeng

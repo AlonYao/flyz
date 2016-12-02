@@ -157,6 +157,16 @@ public class MeasureReportModel extends MeasureModel {
 
             // 知识点
             ((MeasureReportActivity) mContext).showNotes(resp.getNotes());
+        } else if (NOTE.equals(mPaperType)) {
+            // 试卷信息
+            ((MeasureReportActivity) mContext).showPaperInfo(
+                    getPaperType(mPaperType), resp.getExercise_name());
+
+            // 做对/全部
+            showRightAll(resp.getAnswers());
+
+            // 知识点
+            ((MeasureReportActivity) mContext).showNotes(resp.getNotes());
         }
     }
 

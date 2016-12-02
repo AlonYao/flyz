@@ -134,6 +134,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         MeasureNotesResp resp = GsonManager.getModel(response, MeasureNotesResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
         if (!(mContext instanceof MeasureActivity)) return;
+
+        mPaperId = resp.getPaper_id();
         List<MeasureQuestionBean> questions = setQuestionOrder(resp.getQuestions(), 0);
         ((MeasureActivity) mContext).showViewPager(questions);
     }

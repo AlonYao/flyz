@@ -30,7 +30,6 @@ import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.GuFenListActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
 import com.appublisher.quizbank.activity.MockPreActivity;
-import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.adapter.CarouselAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
@@ -388,14 +387,9 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             case R.id.note_view:
                 // 推荐专项
                 if (mNote == null || mNote.getId() == 0) break;
-                intent = new Intent(getActivity(), PracticeDescriptionActivity.class);
-                intent.putExtra("hierarchy_id", mNote.getId());
-                intent.putExtra("hierarchy_level", 3);
-                intent.putExtra("paper_type", "note");
-                intent.putExtra("note_type", "all");
-                intent.putExtra("paper_name", mNote.getName());
-                intent.putExtra("redo", false);
-                intent.putExtra("umeng_entry", "Home");
+                intent = new Intent(getActivity(), MeasureActivity.class);
+                intent.putExtra(MeasureConstants.INTENT_HIERARCHY_ID, mNote.getId());
+                intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.NOTE);
                 startActivity(intent);
                 // Umeng
                 map = new HashMap<>();
