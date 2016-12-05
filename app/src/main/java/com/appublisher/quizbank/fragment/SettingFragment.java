@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,11 +32,10 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.QaActivity;
 import com.appublisher.quizbank.activity.SystemNoticeActivity;
-import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
-import com.appublisher.quizbank.model.db.GlobalSetting;
 import com.appublisher.quizbank.model.images.DiskLruImageCache;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.network.QApiConstants;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
@@ -139,6 +139,7 @@ public class SettingFragment extends Fragment implements QApiConstants {
 
         // 系统通知
         rlNotice.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("CommitPrefEdits")
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, SystemNoticeActivity.class);
@@ -146,11 +147,16 @@ public class SettingFragment extends Fragment implements QApiConstants {
 
                 mIvRedPoint.setVisibility(View.GONE);
 
-                // 侧边栏设置按钮红点消失
-//                ImageView ivSettingRedPoint = StudyIndexModel.getSettingRedPointView();
-
-//                if (ivSettingRedPoint == null) return;
-//                ivSettingRedPoint.setVisibility(View.GONE);
+                // 更新缓存
+                SharedPreferences spf = getContext().getSharedPreferences(
+                        "global_setting", Context.MODE_PRIVATE);
+                String cache = spf.getString("global_setting", "");
+                GlobalSettingsResp resp = GsonManager.getModel(cache, GlobalSettingsResp.class);
+                if (resp != null && resp.getResponse_code() == 1) {
+                    SharedPreferences.Editor editor = spf.edit();
+                    editor.putInt("last_notice_id", resp.getLatest_notify());
+                    editor.commit();
+                }
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
@@ -200,6 +206,7 @@ public class SettingFragment extends Fragment implements QApiConstants {
         return view;
     }
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     public void onResume() {
         super.onResume();
@@ -241,13 +248,17 @@ public class SettingFragment extends Fragment implements QApiConstants {
         }
 
         // 显示系统通知红点
-        GlobalSetting globalSetting = GlobalSettingDAO.findById();
-        if (globalSetting != null && globalSetting.latest_notify == Globals.last_notice_id) {
-            mIvRedPoint.setVisibility(View.GONE);
-        } else if (Globals.last_notice_id == 0) {
-            mIvRedPoint.setVisibility(View.GONE);
-        } else {
+        SharedPreferences spf = getContext().getSharedPreferences(
+                "global_setting", Context.MODE_PRIVATE);
+        int lastNoticeId = spf.getInt("last_notice_id", 0);
+        String cache = spf.getString("global_setting", "");
+        GlobalSettingsResp resp = GsonManager.getModel(cache, GlobalSettingsResp.class);
+
+        if (resp != null && resp.getResponse_code() == 1
+                && resp.getLatest_notify() != lastNoticeId) {
             mIvRedPoint.setVisibility(View.VISIBLE);
+        } else {
+            mIvRedPoint.setVisibility(View.GONE);
         }
 
         // 获取缓存大小

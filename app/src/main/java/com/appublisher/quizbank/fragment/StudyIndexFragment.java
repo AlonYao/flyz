@@ -23,7 +23,6 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.activity.UserInfoActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
@@ -278,9 +277,6 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 noteNameTv.setText(text);
             }
         }
-
-        // 记录最近的系统通知的id
-        Globals.last_notice_id = homePageResp.getLatest_notify();
 
         // 更新用户考试项目
         StudyIndexModel.updateExam(homePageResp.getExam_info(), this);
