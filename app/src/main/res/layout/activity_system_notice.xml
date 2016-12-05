@@ -10,7 +10,11 @@
 
     <com.appublisher.lib_basic.customui.XListView
         android:id="@+id/notice_lv"
-        style="@style/CommonListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:dividerHeight="1px"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"/>
 

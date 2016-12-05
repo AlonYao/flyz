@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:background="@android:color/white">
 
     <ImageView
@@ -12,15 +12,17 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
         android:src="@drawable/setting_notice"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
     <TextView
         android:id="@+id/notice_item_tv"
         style="@style/SettingTV"
-        android:singleLine="true"
         android:ellipsize="end"
         android:layout_centerVertical="true"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginRight="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        tools:ignore="RtlHardcoded" />
 
 </RelativeLayout>

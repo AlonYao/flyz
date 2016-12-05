@@ -1,9 +1,11 @@
 package com.appublisher.quizbank.model.business;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.ActivitySkipConstants;
@@ -71,8 +73,13 @@ public class SystemNoticeModel {
                     if (notice == null) return;
 
                     // 记录当前View的红点view
-                    activity.mCurRedPoint =
+                    ImageView ivRed =
                             (ImageView) view.findViewById(R.id.notice_item_redpoint);
+                    ivRed.setVisibility(View.GONE);
+
+                    // 修改字体颜色
+                    TextView textView = (TextView) view.findViewById(R.id.notice_item_tv);
+                    textView.setTextColor(ContextCompat.getColor(activity, R.color.grey));
 
                     // 通知服务器已读
                     new QRequest(activity).readNotification(

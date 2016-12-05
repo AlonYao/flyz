@@ -251,8 +251,8 @@ public class SettingFragment extends Fragment implements QApiConstants {
         }
 
         // 获取缓存大小
-        mTvCacheSize.setText(
-                String.valueOf(mDiskLruImageCache.getCacheSize() / (1024 * 1024)) + "MB");
+        String cacheText = String.valueOf(mDiskLruImageCache.getCacheSize() / (1024 * 1024)) + "MB";
+        mTvCacheSize.setText(cacheText);
 
         //版本号
         mTvVersion.setText(Globals.appVersion);

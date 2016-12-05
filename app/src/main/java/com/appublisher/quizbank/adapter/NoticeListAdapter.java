@@ -1,5 +1,6 @@
 package com.appublisher.quizbank.adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,8 +67,12 @@ public class NoticeListAdapter extends BaseAdapter{
 
                 if ("done".equals(status)) {
                     viewHolder.ivRedPoint.setVisibility(View.GONE);
+                    viewHolder.tvNotice.setTextColor(
+                            ContextCompat.getColor(mActivity, R.color.grey));
                 } else {
                     viewHolder.ivRedPoint.setVisibility(View.VISIBLE);
+                    viewHolder.tvNotice.setTextColor(
+                            ContextCompat.getColor(mActivity, R.color.common_text));
                 }
             }
         }

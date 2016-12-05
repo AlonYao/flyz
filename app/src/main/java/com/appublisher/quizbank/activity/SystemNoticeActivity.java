@@ -1,10 +1,8 @@
 package com.appublisher.quizbank.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
@@ -12,7 +10,6 @@ import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.SystemNoticeModel;
 import com.appublisher.quizbank.model.netdata.notice.NoticeM;
@@ -34,7 +31,6 @@ public class SystemNoticeActivity extends BaseActivity implements
     public XListView mXListView;
     public ArrayList<NoticeM> mNotices;
     public int mOffset;
-    public ImageView mCurRedPoint;
     public ImageView mIvNull;
 
     private int mCount;
@@ -73,15 +69,6 @@ public class SystemNoticeActivity extends BaseActivity implements
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ActivitySkipConstants.NOTICE_READ) {
-            mCurRedPoint.setVisibility(View.GONE);
-        }
     }
 
     @Override
