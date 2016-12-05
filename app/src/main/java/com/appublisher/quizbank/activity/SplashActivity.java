@@ -26,7 +26,6 @@ import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.update.AppUpdate;
-import com.appublisher.quizbank.common.update.NewVersion;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
@@ -153,7 +152,8 @@ public class SplashActivity extends Activity implements RequestCallback {
                         getSharedPreferences("updateVersion", MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.putString("versionInfo", GsonManager.modelToString(
-                        globalSettingsResp.getNew_version(), NewVersion.class));
+                        globalSettingsResp.getNew_version(),
+                        GlobalSettingsResp.NewVersionBean.class));
                 editor.commit();
             }
 
