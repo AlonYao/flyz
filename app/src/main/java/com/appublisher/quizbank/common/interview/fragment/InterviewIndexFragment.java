@@ -236,6 +236,13 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
 
     private void startCarousel() {
         // 设置自动轮播图片，5s后执行，周期是5s
+        if (timer == null) {
+            timer = new Timer();
+        } else {
+            timer.cancel();
+            timer = new Timer();
+        }
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
