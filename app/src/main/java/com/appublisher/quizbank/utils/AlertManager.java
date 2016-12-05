@@ -304,7 +304,7 @@ public class AlertManager {
                 GradeDAO.updateTimestamp(Globals.appVersion, System.currentTimeMillis());
 
                 // 进入反馈
-                CommonModel.skipToUmengFeedback(activity);
+                CommonModel.skipToFeedback();
 
                 mAlertGrade.dismiss();
 

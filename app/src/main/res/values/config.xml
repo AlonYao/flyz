@@ -30,4 +30,7 @@
     <string name="qq_appid">1104655578</string>
     <string name="qq_appkey">wafYxgpizqD6YUwu</string>
 
+    <!-- 阿里百川 -->
+    <string name="ali_bc_appkey">23450170</string>
+
 </resources>

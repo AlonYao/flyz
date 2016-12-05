@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
@@ -19,6 +20,9 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.fb.model.UserInfo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -202,5 +206,30 @@ public class CommonModel {
         }).start();
     }
 
+    /**
+     * 跳转到反馈
+     */
+    public static void skipToFeedback() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userId", LoginModel.getUserId());
+            object.put("sno", LoginModel.getSno());
+            object.put("userMobile", LoginModel.getUserMobile());
+            object.put("userName", LoginModel.getNickName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        FeedbackAPI.setAppExtInfo(object);
+
+        FeedbackAPI.openFeedbackActivity();
+    }
+
+    /**
+     * 初始化反馈
+     * @param activity Activity
+     */
+    public static void initFeedback(Activity activity) {
+        FeedbackAPI.init(activity.getApplication(), activity.getString(R.string.ali_bc_appkey));
+    }
 
 }

@@ -45,6 +45,7 @@ import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PromoteQuizBankModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -125,6 +126,9 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         }
 
         setValue();
+
+        // 初始化反馈
+        CommonModel.initFeedback(this);
 
         // Add Activity
         QuizBankApp.getInstance().addActivity(this);

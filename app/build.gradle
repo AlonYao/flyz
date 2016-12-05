@@ -526,7 +526,10 @@ dependencies {
     compile 'com.coolerfall:android-http-download-manager:1.5.1'
     compile 'com.liulishuo.filedownloader:library:0.2.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
-    // for vip
+    // 小班
     compile(name: 'multi-image-selector', ext: 'aar')
     compile 'com.android.support:design:23.2.0'
+    // 阿里百川
+    compile(name: 'alisdk-feedback-2.3.0', ext: 'aar')
+    compile(name: 'securityguardaar3-5.1.81', ext: 'aar')
 }

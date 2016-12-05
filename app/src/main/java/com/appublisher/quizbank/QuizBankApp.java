@@ -26,8 +26,6 @@ public class QuizBankApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        MobclickAgent.setDebugMode(true);
-
         // 获取版本号
         try {
             PackageManager packageManager = getPackageManager();
@@ -36,12 +34,6 @@ public class QuizBankApp extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
-        // TalkingData
-//        TCAgent.init(this);
-
-        // 初始化UUID
-//        OpenUDIDManager.sync(this);
 
         // 初始化本地缓存
         Globals.sharedPreferences = getSharedPreferences("quizbank_store", 0);
@@ -58,17 +50,6 @@ public class QuizBankApp extends Application {
         } else {
             ActiveAndroidManager.setDatabase("guest", this);
         }
-
-        // 友盟反馈
-//        FeedbackAgent agent = new FeedbackAgent(this);
-//        agent.sync();
-
-        // Umeng 统计
-//        MobclickAgent.openActivityDurationTrack(false);
-
-        // 听云
-//        NBSAppAgent.setLicenseKey(getString(R.string.tingyun_appkey))
-//                .withLocationServiceEnabled(true).start(this);
 
         // 初始化多贝云离线下载
         FileDownloader.init(this);

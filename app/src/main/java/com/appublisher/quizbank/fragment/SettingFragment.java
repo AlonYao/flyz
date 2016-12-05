@@ -163,7 +163,7 @@ public class SettingFragment extends Fragment implements QApiConstants {
         rlFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonModel.skipToUmengFeedback(mActivity);
+                CommonModel.skipToFeedback();
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
