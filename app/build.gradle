@@ -475,8 +475,13 @@ android {
                                     APP_CHANNEL: "shenma-qudao-1"]
         }
 
+        appchina {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "appchina"]
+        }
+
         AppUpdate {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公务员",
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
                                     APP_CHANNEL: "AppUpdate"]
         }
 //
