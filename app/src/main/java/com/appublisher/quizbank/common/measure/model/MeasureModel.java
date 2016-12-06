@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.measure.model;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -78,6 +77,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     private SparseIntArray mFinalHeightMap;
     private SubmitListener mSubmitListener;
+    private ServerTimeListener mServerTimeListener;
     private int mMockDuration;
 
     public MeasureModel(Context context) {
@@ -87,6 +87,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     public interface SubmitListener {
         void onComplete(boolean success, int exercise_id);
+    }
+
+    public interface ServerTimeListener {
+        void onTimeOut();
+        void canSubmit();
     }
 
     public int getFinalHeightById(int id) {
@@ -440,7 +445,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     }
 
     /**
-     * 是否有选中记录
+     * 是否有做题记录
      * @return boolean
      */
     private boolean hasRecord() {
@@ -453,6 +458,24 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         }
 
         return false;
+    }
+
+    /**
+     * 是否全部完成
+     * @return boolean
+     */
+    public boolean isAllDone() {
+        List<MeasureSubmitBean> submits = getUserAnswerCache(mContext);
+        if (submits == null) return false;
+
+        int size = submits.size();
+        int count = 0;
+        for (MeasureSubmitBean submit : submits) {
+            if (submit == null) continue;
+            if (submit.getAnswer().length() > 0) count++;
+        }
+
+        return count == size;
     }
 
     /**
@@ -591,6 +614,13 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         HashMap<String, String> map = new HashMap<>();
         map.put("Action", isDone);
         UmengManager.onEvent(mContext, "Question", map);
+    }
+
+    /**
+     * 保存当前页面的时长
+     */
+    public void saveCurPageDuration() {
+        saveSubmitDuration(mCurPagePosition);
     }
 
     public static String getUserAnswerByPosition(Context context, int position) {
@@ -771,18 +801,34 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     }
 
     public void checkRecord() {
+        if (!(mContext instanceof MeasureActivity)) return;
         if (MOCK.equals(mPaperType)) {
             // 模考特殊处理
-            if (mContext instanceof MeasureActivity) {
-                ((MeasureActivity) mContext).showLoading();
-                getServerTimeStamp();
-            }
+            ((MeasureActivity) mContext).showLoading();
+            getServerTimeStamp(new ServerTimeListener() {
+                @Override
+                public void onTimeOut() {
+                    // 超时处理
+                    ((MeasureActivity) mContext).showMockTimeOutAlert();
+                    saveCurPageDuration();
+                    submitPaperDone();
+                }
+
+                @Override
+                public void canSubmit() {
+                    // 可提交状态
+                    if (hasRecord()) {
+                        ((MeasureActivity) mContext).showMockSaveTestAlert();
+                    } else {
+                        ((MeasureActivity) mContext).finish();
+                    }
+                }
+            });
         } else {
             if (hasRecord()) {
-                if (mContext instanceof MeasureActivity)
-                    ((MeasureActivity) mContext).showSaveTestAlert();
+                ((MeasureActivity) mContext).showSaveTestAlert();
             } else {
-                if (mContext instanceof Activity) ((Activity) mContext).finish();
+                ((MeasureActivity) mContext).finish();
             }
         }
     }
@@ -823,9 +869,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             date = sdf.parse(mMockTime);
             long mockTimeStamp = date.getTime();
-            int duration = (int) ((mockTimeStamp - curTimestamp) / 1000);
-            if (duration < 0) duration = 0;
-            mMockDuration = duration;
+            mMockDuration = (int) ((mockTimeStamp - curTimestamp) / 1000);
         } catch (Exception e) {
             // Empty
         }
@@ -837,7 +881,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * @return boolean
      */
     public boolean isMockTimeOut(int curDuration) {
-        return !(mMockDuration == 0 || curDuration == 0) && mMockDuration <= curDuration;
+        return mMockDuration <= curDuration;
     }
 
     /**
@@ -846,7 +890,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * @return boolean
      */
     public boolean isMockTimeRemain15(int curDuration) {
-        return !(mMockDuration == 0 || curDuration == 0) && mMockDuration - curDuration == 900;
+        return mMockDuration - curDuration == 900;
     }
 
     /**
@@ -854,11 +898,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * @param curDuration 当前持续时间
      * @return boolean
      */
-    private boolean isMockTime30(int curDuration) {
-        return curDuration != 0 && curDuration < 1800;
+    private boolean isMockTimeUnder30(int curDuration) {
+        return curDuration < 1800;
     }
 
-    public void getServerTimeStamp() {
+    public void getServerTimeStamp(ServerTimeListener serverTimeListener) {
+        mServerTimeListener = serverTimeListener;
         mRequest.getServerCurrentTime();
     }
 
@@ -874,24 +919,30 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         if (!(mContext instanceof MeasureActivity)) return;
         if (isMockTimeOut(mCurDuration)) {
             // 时间到
-            ((MeasureActivity) mContext).showMockTimeOutAlert();
-            submit(true, new SubmitListener() {
-                @Override
-                public void onComplete(boolean success, int exercise_id) {
-                    if (success) {
-                        Intent intent = new Intent(mContext, MeasureReportActivity.class);
-                        intent.putExtra(INTENT_PAPER_ID, exercise_id);
-                        intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
-                        mContext.startActivity(intent);
-                        ((MeasureActivity) mContext).finish();
-                    } else {
-                        ((MeasureActivity) mContext).showSubmitErrorToast();
-                    }
-                }
-            });
-        } else if (isMockTime30(mCurDuration)) {
+            if (mServerTimeListener != null) mServerTimeListener.onTimeOut();
+        } else if (isMockTimeUnder30(mCurDuration)) {
             ((MeasureActivity) mContext).showMockTime30Toast();
+        } else {
+            if (mServerTimeListener != null) mServerTimeListener.canSubmit();
         }
+    }
+
+    public void submitPaperDone() {
+        if (!(mContext instanceof MeasureActivity)) return;
+        submit(true, new SubmitListener() {
+            @Override
+            public void onComplete(boolean success, int exercise_id) {
+                if (success) {
+                    Intent intent = new Intent(mContext, MeasureReportActivity.class);
+                    intent.putExtra(INTENT_PAPER_ID, exercise_id);
+                    intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
+                    mContext.startActivity(intent);
+                    ((MeasureActivity) mContext).finish();
+                } else {
+                    ((MeasureActivity) mContext).showSubmitErrorToast();
+                }
+            }
+        });
     }
 
     @Override

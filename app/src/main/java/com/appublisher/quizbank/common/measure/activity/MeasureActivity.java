@@ -18,7 +18,6 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
@@ -84,7 +83,19 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                                         Toast.LENGTH_SHORT).show();
                             } else if (activity.mModel.isMockTimeOut(activity.mModel.mCurDuration)) {
                                 activity.showLoading();
-                                activity.mModel.getServerTimeStamp();
+                                activity.mModel.getServerTimeStamp(
+                                        new MeasureModel.ServerTimeListener() {
+                                            @Override
+                                            public void onTimeOut() {
+                                                activity.showMockTimeOutAlert();
+                                                activity.mModel.submitPaperDone();
+                                            }
+
+                                            @Override
+                                            public void canSubmit() {
+                                                // Empty
+                                            }
+                                        });
                             }
                         }
                         break;
@@ -228,53 +239,63 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
      * 保存测验Alert
      */
     public void showSaveTestAlert() {
-
-        int titleId = R.string.alert_savetest_title;
-        int msgId;
-        int pId;
-        int nId;
-
-        if (MOCK.equals(mModel.mPaperType)) {
-            msgId = R.string.alert_mock_back;
-            pId = R.string.alert_mock_p;
-            nId = R.string.alert_mock_n;
-        } else {
-            msgId = R.string.alert_savetest_msg;
-            pId = R.string.alert_p;
-            nId = R.string.alert_n;
-        }
-
         new AlertDialog.Builder(this)
-                .setTitle(titleId)
-                .setMessage(msgId)
-                .setNegativeButton(nId,
+                .setTitle(R.string.alert_savetest_title)
+                .setMessage(R.string.alert_savetest_msg)
+                .setNegativeButton(R.string.alert_n,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
-                .setPositiveButton(pId,
+                .setPositiveButton(R.string.alert_p,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 更新当前页面的时长
-                                mModel.saveSubmitDuration(mModel.mCurPagePosition);
+                                mModel.saveCurPageDuration();
 
                                 // 保存至本地
 //                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
 
                                 // 提交数据
-                                if(MOCK.equals(mModel.mPaperType)){
-                                    mModel.submit(true);
-                                }else{
-                                    mModel.submit(false);
-                                }
+                                mModel.submit(false);
 
-                                // 保存练习
-                                ToastManager.showToast(MeasureActivity.this, "保存成功");
                                 dialog.dismiss();
+                                finish();
+                            }
+                        }).show();
+    }
 
+    /**
+     * 保存测验Alert
+     */
+    public void showMockSaveTestAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.alert_savetest_title)
+                .setMessage(R.string.alert_mock_back)
+                .setNegativeButton(R.string.alert_mock_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setPositiveButton(R.string.alert_mock_p,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 更新当前页面的时长
+                                mModel.saveCurPageDuration();
+
+                                // 保存至本地
+//                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
+
+                                // 提交数据
+                                mModel.submit(true);
+
+                                dialog.dismiss();
                                 finish();
                             }
                         }).show();
@@ -358,5 +379,32 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
 
     public void showMockTime30Toast() {
         Toast.makeText(this, "开考30分钟后才可以交卷", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 答题卡未完成提示
+     */
+    public void showMeasureSheetUndoneAlert() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.alert_answersheet_content)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_answersheet_p,
+                        new DialogInterface.OnClickListener() {// 确定
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                showLoading();
+                                mModel.saveCurPageDuration();
+                                mModel.submitPaperDone();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_answersheet_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
     }
 }

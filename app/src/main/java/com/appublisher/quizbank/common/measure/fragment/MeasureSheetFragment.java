@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.measure.fragment;
 
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -14,13 +13,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
-import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSheetAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureSubmitBean;
@@ -182,30 +179,39 @@ public class MeasureSheetFragment extends DialogFragment implements
             // 提交
             if (!(getActivity() instanceof MeasureActivity)) return;
             final MeasureModel model = ((MeasureActivity) getActivity()).mModel;
-
-            // 更新当前题目的做题时间
-            model.saveSubmitDuration(mPosition);
+            if (model == null) return;
 
             // 提交
             if (MOCK.equals(model.mPaperType)) {
                 ((MeasureActivity) getActivity()).showLoading();
-                model.getServerTimeStamp();
-            } else {
-                model.submit(true, new MeasureModel.SubmitListener() {
+                model.getServerTimeStamp(new MeasureModel.ServerTimeListener() {
                     @Override
-                    public void onComplete(boolean success, int exercise_id) {
-                        if (success) {
-                            Intent intent = new Intent(getActivity(), MeasureReportActivity.class);
-                            intent.putExtra(INTENT_PAPER_ID, exercise_id);
-                            intent.putExtra(INTENT_PAPER_TYPE, model.mPaperType);
-                            startActivity(intent);
-                            getActivity().finish();
-                        } else {
-                            Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                        }
+                    public void onTimeOut() {
+                        model.saveCurPageDuration();
+                        model.submitPaperDone();
+                    }
+
+                    @Override
+                    public void canSubmit() {
+                        checkIsAllDone();
                     }
                 });
+            } else {
+                checkIsAllDone();
             }
+        }
+    }
+
+    private void checkIsAllDone() {
+        if (!(getActivity() instanceof MeasureActivity)) return;
+        final MeasureModel model = ((MeasureActivity) getActivity()).mModel;
+        if (model == null) return;
+
+        if (model.isAllDone()) {
+            model.saveCurPageDuration();
+            model.submitPaperDone();
+        } else {
+            ((MeasureActivity) getActivity()).showMeasureSheetUndoneAlert();
         }
     }
 }
