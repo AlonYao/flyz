@@ -324,6 +324,7 @@ public class MeasureReportActivity extends BaseActivity implements
             // 全部
             Intent intent = new Intent(this, MeasureAnalysisActivity.class);
             intent.putExtra(INTENT_ANALYSIS_BEAN, GsonManager.modelToString(mModel.mAnalysisBean));
+            intent.putExtra(INTENT_PAPER_TYPE, mModel.mPaperType);
             startActivity(intent);
 
             // Umeng
@@ -337,6 +338,7 @@ public class MeasureReportActivity extends BaseActivity implements
             Intent intent = new Intent(this, MeasureAnalysisActivity.class);
             intent.putExtra(INTENT_ANALYSIS_BEAN, GsonManager.modelToString(mModel.mAnalysisBean));
             intent.putExtra(INTENT_ANALYSIS_IS_ERROR_ONLY, true);
+            intent.putExtra(INTENT_PAPER_TYPE, mModel.mPaperType);
             startActivity(intent);
 
             // Umeng

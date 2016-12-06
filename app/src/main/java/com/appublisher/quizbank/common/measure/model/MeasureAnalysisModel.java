@@ -35,6 +35,10 @@ public class MeasureAnalysisModel extends MeasureModel{
         super(context);
     }
 
+    public int getSize() {
+       return mSize;
+    }
+
     public void getData() {
         if (mIsFromFolder && (COLLECT.equals(mPaperType) || ERROR.equals(mPaperType))) {
             if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
@@ -51,11 +55,6 @@ public class MeasureAnalysisModel extends MeasureModel{
         } else {
             showAll();
         }
-    }
-
-    public boolean isShowLastPageAlert(int curPosition, int positionOffsetPixels) {
-        return mSize != 0 && (curPosition == mSize - 1 && positionOffsetPixels == 0)
-                && (AUTO.equals(mPaperType) || NOTE.equals(mPaperType));
     }
 
     private void showErrorOnly() {
@@ -175,6 +174,8 @@ public class MeasureAnalysisModel extends MeasureModel{
             ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
         }
 
+        mSize = questions.size();
+
         ((MeasureAnalysisActivity) mContext).showViewPager(questions, mAnswers);
     }
 
@@ -257,6 +258,8 @@ public class MeasureAnalysisModel extends MeasureModel{
             ((MeasureAnalysisActivity) mContext).showTabLayout(mTabs);
         }
 
+        mSize = questions.size();
+
         ((MeasureAnalysisActivity) mContext).showViewPager(questions, mAnswers);
     }
 
@@ -334,6 +337,10 @@ public class MeasureAnalysisModel extends MeasureModel{
         mAnalysisBean.setQuestions(resp.getQuestions());
         mAnalysisBean.setAnswers(resp.getAnswers());
         showContent();
+    }
+
+    public boolean isShowAnother() {
+        return AUTO.equals(mPaperType) || NOTE.equals(mPaperType);
     }
 
     @Override

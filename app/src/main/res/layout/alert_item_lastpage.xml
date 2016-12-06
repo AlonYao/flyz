@@ -24,7 +24,7 @@
             android:gravity="center"
             android:text="@string/alert_lastpage_another"
             android:textColor="@android:color/white"
-            android:background="@drawable/alert_lastpage_btn_another"/>
+            android:background="@color/alert_lastpage_another"/>
 
         <TextView
             android:id="@+id/alert_lastpage_back"
@@ -42,7 +42,7 @@
             android:gravity="center"
             android:text="@string/alert_lastpage_zhibo"
             android:textColor="@android:color/white"
-            android:background="@drawable/alert_lastpage_btn_has_zhibo"/>
+            android:background="@color/alert_lastpage_has_zhibo"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MyAnalysisActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
@@ -44,6 +45,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
     private PopupWindow mPopupWindow;
     private long mPopupDismissTime;
     private int mCurPosition;
+    private int mEnterLastPageCount;
     private AlertDialog mLastPageAlert;
 
     public int mCurQuestionId;
@@ -230,8 +232,13 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                                        float positionOffset,
                                        int positionOffsetPixels) {
                 // 最后一页再往后滑，弹出末题引导
-                if (mModel.isShowLastPageAlert(mCurPosition, positionOffsetPixels)) {
-
+                if (mCurPosition == mModel.getSize() - 1 && positionOffsetPixels == 0) {
+                    if (mEnterLastPageCount >= 5) {
+                        showLastPageAlert();
+                        mEnterLastPageCount = 0;
+                    } else {
+                        mEnterLastPageCount++;
+                    }
                 }
             }
 
@@ -350,56 +357,39 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         Window window = mLastPageAlert.getWindow();
         if (window == null) return;
         window.setContentView(R.layout.alert_item_lastpage);
+        window.setBackgroundDrawableResource(R.color.transparency);
 
         TextView tvAnother = (TextView) window.findViewById(R.id.alert_lastpage_another);
         TextView tvBack = (TextView) window.findViewById(R.id.alert_lastpage_back);
         TextView tvZhibo = (TextView) window.findViewById(R.id.alert_lastpage_zhibo);
 
         // 再来一发
-//        if ("mokao".equals(activity.mAnalysisType) || "entire".equals(activity.mAnalysisType) || "mock".equals(activity.mAnalysisType)) {
-//            tvAnother.setVisibility(View.GONE);
-//        } else {
-//            tvAnother.setVisibility(View.VISIBLE);
-//        }
-
-//        mAlertLastPage.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//            @Override
-//            public void onDismiss(DialogInterface dialog) {
-//                LegacyMeasureAnalysisModel.mIsShowAlert = false;
-//            }
-//        });
+        if (mModel.isShowAnother()) {
+            tvAnother.setVisibility(View.VISIBLE);
+        } else {
+            tvAnother.setVisibility(View.GONE);
+        }
 
         // 再来一发点击事件
         tvAnother.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                //noinspection IfCanBeSwitch
-//                if ("auto".equals(activity.mAnalysisType)) {
-//                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
-//                    intent.putExtra("paper_type", activity.mAnalysisType);
-//                    intent.putExtra("paper_name", activity.getString(R.string.paper_type_auto));
-//                    intent.putExtra("umeng_entry", activity.mUmengEntry);
-//                    activity.startActivity(intent);
-//
-//                    finishActivity(activity);
-//
-//                } else if ("note".equals(activity.mAnalysisType)
-//                        || "collect".equals(activity.mAnalysisType)
-//                        || "error".equals(activity.mAnalysisType)) {
-//                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
-//                    intent.putExtra("paper_type", activity.mAnalysisType);
-//                    intent.putExtra("paper_name", activity.mPaperName);
-//                    intent.putExtra("hierarchy_id", activity.mHierarchyId);
-//                    intent.putExtra("hierarchy_level", activity.mHierarchyLevel);
-//                    intent.putExtra("umeng_entry", activity.mUmengEntry);
-//                    activity.startActivity(intent);
-//
-//                    finishActivity(activity);
-//
-//                } else {
-//                    mAlertLastPage.dismiss();
-//                }
-//
+                if (AUTO.equals(mModel.mPaperType)) {
+                    Intent intent = new Intent(
+                            MeasureAnalysisActivity.this, MeasureActivity.class);
+                    intent.putExtra(INTENT_PAPER_TYPE, AUTO);
+                    startActivity(intent);
+                    finish();
+                } else if (NOTE.equals(mModel.mPaperType)) {
+                    Intent intent = new Intent(
+                            MeasureAnalysisActivity.this, MeasureActivity.class);
+                    intent.putExtra(INTENT_PAPER_TYPE, NOTE);
+                    intent.putExtra(INTENT_HIERARCHY_ID, mModel.mHierarchyId);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    mLastPageAlert.dismiss();
+                }
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
@@ -412,6 +402,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Guide", "Back");
@@ -420,6 +411,13 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         });
 
         // 看个直播
-//        StudyIndexModel.setOpenCourseBtn(activity, tvZhibo);
+        tvZhibo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        MeasureAnalysisActivity.this, OpenCourseActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
