@@ -1,12 +1,12 @@
-package com.appublisher.quizbank.model.netdata;
+package com.appublisher.quizbank.common.measure.netdata;
 
 /**
  * 系统时间回调
  */
 public class ServerCurrentTimeResp {
 
-    int response_code;
-    String current_time;
+    private int response_code;
+    private String current_time;
 
     public int getResponse_code() {
         return response_code;

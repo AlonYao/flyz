@@ -16,6 +16,7 @@ public interface MeasureConstants {
     String INTENT_ANALYSIS_BEAN = "analysis_bean";
     String INTENT_ANALYSIS_IS_ERROR_ONLY = "is_error_only";
     String INTENT_IS_FROM_FOLDER = "is_from_folder";
+    String INTENT_MOCK_TIME = "mock_time";
 
     /**
      * 试卷类型
@@ -39,6 +40,7 @@ public interface MeasureConstants {
     String HISTORY_EXERCISE_DETAIL = "history_exercise_detail";
     String COLLECT_QUESTION = "collect_question";
     String COLLECT_ERROR_QUESTIONS = "collect_error_questions";
+    String SERVER_CURRENT_TIME = "server_current_time";
 
     /**
      * 缓存

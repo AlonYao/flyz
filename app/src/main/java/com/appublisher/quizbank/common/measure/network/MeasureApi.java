@@ -29,4 +29,7 @@ public interface MeasureApi extends ApiConstants{
     // 获取错题收藏
     String collectErrorQuestions = baseUrl + "quizbank/collect_error_questions";
 
+    // 服务器时间
+    String serverCurrentTime = baseUrl + "common/server_current_time";
+
 }

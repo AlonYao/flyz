@@ -105,4 +105,11 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
                 "object");
     }
 
+    /**
+     * 获取服务器时间
+     */
+    public void getServerCurrentTime() {
+        asyncRequest(getFinalUrl(serverCurrentTime), SERVER_CURRENT_TIME, "object");
+    }
+
 }

@@ -11,7 +11,7 @@ import com.appublisher.lib_basic.customui.ExpandableHeightGridView;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.adapter.EntireAnswerSheetAdapter;
-import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
+import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;

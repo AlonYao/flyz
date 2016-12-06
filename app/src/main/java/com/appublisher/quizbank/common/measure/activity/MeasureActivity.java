@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
@@ -72,6 +73,20 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                         if (sec.length() == 1) sec = "0" + sec;
                         String time = mins + ":" + sec;
                         activity.setTitle(time);
+
+                        // 模考特殊处理
+                        if (MOCK.equals(activity.mModel.mPaperType)) {
+                            activity.mModel.mCurDuration = activity.mSec + activity.mMins * 60;
+                            if (activity.mModel.isMockTimeRemain15(activity.mModel.mCurDuration)) {
+                                Toast.makeText(
+                                        activity,
+                                        "距离考试结束还有15分钟",
+                                        Toast.LENGTH_SHORT).show();
+                            } else if (activity.mModel.isMockTimeOut(activity.mModel.mCurDuration)) {
+                                activity.showLoading();
+                                activity.mModel.getServerTimeStamp();
+                            }
+                        }
                         break;
                 }
             }
@@ -151,6 +166,7 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
         mModel.mHierarchyId = getIntent().getIntExtra(INTENT_HIERARCHY_ID, 0);
         mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mRedo = getIntent().getBooleanExtra(INTENT_REDO, false);
+        mModel.mMockTime = getIntent().getStringExtra(INTENT_MOCK_TIME);
         mModel.mCurTimestamp = System.currentTimeMillis();
 
         showLoading();
@@ -317,5 +333,30 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                 alertDialog.dismiss();
             }
         });
+    }
+
+    /**
+     * 模考时间到Alert
+     */
+    public void showMockTimeOutAlert() {
+        new AlertDialog.Builder(this)
+                .setMessage("时间到了要交卷啦！")
+                .setTitle("提示")
+                .setCancelable(false)
+                .setPositiveButton("好的",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+    }
+
+    public void showSubmitErrorToast() {
+        Toast.makeText(this, "提交失败", Toast.LENGTH_SHORT).show();
+    }
+
+    public void showMockTime30Toast() {
+        Toast.makeText(this, "开考30分钟后才可以交卷", Toast.LENGTH_SHORT).show();
     }
 }

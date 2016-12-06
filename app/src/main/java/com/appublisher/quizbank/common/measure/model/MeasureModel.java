@@ -24,6 +24,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
@@ -36,6 +37,7 @@ import com.appublisher.quizbank.common.measure.netdata.MeasureEntireResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureHistoryResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureNotesResp;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSubmitResp;
+import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -49,7 +51,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,9 +66,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public int mPaperId;
     public int mHierarchyId;
     public int mCurPagePosition;
+    public int mCurDuration;
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
+    public String mMockTime;
     public List<MeasureExcludeBean> mExcludes;
     public MeasureRequest mRequest;
     public Context mContext;
@@ -72,6 +78,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     private SparseIntArray mFinalHeightMap;
     private SubmitListener mSubmitListener;
+    private int mMockDuration;
 
     public MeasureModel(Context context) {
         mContext = context;
@@ -103,7 +110,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             } else if (NOTE.equals(mPaperType) || COLLECT.equals(mPaperType)
                     || ERROR.equals(mPaperType)) {
                 mRequest.getNoteQuestions(mHierarchyId, mPaperType);
-            } else if (ENTIRE.equals(mPaperType) || MOKAO.equals(mPaperType)) {
+            } else if (ENTIRE.equals(mPaperType) || MOKAO.equals(mPaperType)
+                    || MOCK.equals(mPaperType)) {
                 mRequest.getPaperExercise(mPaperId, mPaperType);
             }
         }
@@ -191,6 +199,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
             // 显示Tab
             ((MeasureActivity) mContext).showTabLayout(mTabs);
+        }
+
+        // 模考特殊处理
+        if (MOCK.equals(mPaperType)) {
+            setMockDuration();
         }
 
         ((MeasureActivity) mContext).showViewPager(questions);
@@ -758,11 +771,19 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     }
 
     public void checkRecord() {
-        if (hasRecord()) {
-            if (mContext instanceof MeasureActivity)
-                ((MeasureActivity) mContext).showSaveTestAlert();
+        if (MOCK.equals(mPaperType)) {
+            // 模考特殊处理
+            if (mContext instanceof MeasureActivity) {
+                ((MeasureActivity) mContext).showLoading();
+                getServerTimeStamp();
+            }
         } else {
-            if (mContext instanceof Activity) ((Activity) mContext).finish();
+            if (hasRecord()) {
+                if (mContext instanceof MeasureActivity)
+                    ((MeasureActivity) mContext).showSaveTestAlert();
+            } else {
+                if (mContext instanceof Activity) ((Activity) mContext).finish();
+            }
         }
     }
 
@@ -785,6 +806,94 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         return list;
     }
 
+    /**
+     * 设置模考持续时间
+     */
+    private void setMockDuration() {
+        setMockDuration(System.currentTimeMillis());
+    }
+
+    /**
+     * 设置模考持续时间
+     */
+    private void setMockDuration(long curTimestamp) {
+        try {
+            Date date;
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            date = sdf.parse(mMockTime);
+            long mockTimeStamp = date.getTime();
+            int duration = (int) ((mockTimeStamp - curTimestamp) / 1000);
+            if (duration < 0) duration = 0;
+            mMockDuration = duration;
+        } catch (Exception e) {
+            // Empty
+        }
+    }
+
+    /**
+     * 模考：是否时间到
+     * @param curDuration 当前持续时间
+     * @return boolean
+     */
+    public boolean isMockTimeOut(int curDuration) {
+        return !(mMockDuration == 0 || curDuration == 0) && mMockDuration <= curDuration;
+    }
+
+    /**
+     * 模考：是否还剩15分钟
+     * @param curDuration 当前持续时间
+     * @return boolean
+     */
+    public boolean isMockTimeRemain15(int curDuration) {
+        return !(mMockDuration == 0 || curDuration == 0) && mMockDuration - curDuration == 900;
+    }
+
+    /**
+     * 模考：是否已经开考30分钟
+     * @param curDuration 当前持续时间
+     * @return boolean
+     */
+    private boolean isMockTime30(int curDuration) {
+        return curDuration != 0 && curDuration < 1800;
+    }
+
+    public void getServerTimeStamp() {
+        mRequest.getServerCurrentTime();
+    }
+
+    private void dealServerCurrentTimeResp(JSONObject response) {
+        ServerCurrentTimeResp resp = GsonManager.getModel(response, ServerCurrentTimeResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
+        String serverTimeStampString = resp.getCurrent_time();
+        long serverTimeStamp = Long.parseLong(serverTimeStampString);
+        if (serverTimeStamp <= 0) return;
+
+        setMockDuration(serverTimeStamp);
+
+        if (!(mContext instanceof MeasureActivity)) return;
+        if (isMockTimeOut(mCurDuration)) {
+            // 时间到
+            ((MeasureActivity) mContext).showMockTimeOutAlert();
+            submit(true, new SubmitListener() {
+                @Override
+                public void onComplete(boolean success, int exercise_id) {
+                    if (success) {
+                        Intent intent = new Intent(mContext, MeasureReportActivity.class);
+                        intent.putExtra(INTENT_PAPER_ID, exercise_id);
+                        intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
+                        mContext.startActivity(intent);
+                        ((MeasureActivity) mContext).finish();
+                    } else {
+                        ((MeasureActivity) mContext).showSubmitErrorToast();
+                    }
+                }
+            });
+        } else if (isMockTime30(mCurDuration)) {
+            ((MeasureActivity) mContext).showMockTime30Toast();
+        }
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (AUTO_TRAINING.equals(apiName)) {
@@ -797,6 +906,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             dealSubmitResp(response);
         } else if (HISTORY_EXERCISE_DETAIL.equals(apiName)) {
             dealHistoryExerciseDetail(response);
+        } else if (SERVER_CURRENT_TIME.equals(apiName)) {
+            dealServerCurrentTimeResp(response);
         }
 
         hideLoading();

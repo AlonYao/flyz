@@ -31,9 +31,11 @@ import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
+import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.business.LegacyMeasureModel;
-import com.appublisher.quizbank.model.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
@@ -412,13 +414,10 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     UmengManager.onEvent(this, "Mock", map);
 
                 } else if (exercise_id != -1) {//进入练习报告页
-                    Intent intent = new Intent(this, PracticeReportActivity.class);
-                    intent.putExtra("exercise_id", exercise_id);
-                    intent.putExtra("paper_type", "mock");
-                    intent.putExtra("paper_name", paper_name);
-                    intent.putExtra("from", "mock");
+                    Intent intent = new Intent(this, MeasureReportActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, exercise_id);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOCK);
                     startActivity(intent);
-                    finish();
 
                     // Umeng
                     map = new HashMap<>();

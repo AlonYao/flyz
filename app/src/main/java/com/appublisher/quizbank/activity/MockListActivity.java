@@ -12,6 +12,8 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MockListAdapter;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 
 import java.util.HashMap;
@@ -55,12 +57,10 @@ public class MockListActivity extends BaseActivity {
                 MockPreResp.MockListBean mockListBean = list.get(position);
                 if (mockListBean == null) return;
 
-                final Intent intent = new Intent(MockListActivity.this, LegacyMeasureActivity.class);
-                intent.putExtra("from", "mockpre");
-                intent.putExtra("paper_id", mockListBean.getPaper_id());
-                intent.putExtra("paper_type", "mock");
-                intent.putExtra("mock_time", mockPreResp.getMock_time());
-                intent.putExtra("redo", false);
+                final Intent intent = new Intent(MockListActivity.this, MeasureActivity.class);
+                intent.putExtra(MeasureConstants.INTENT_PAPER_ID, mockListBean.getPaper_id());
+                intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOCK);
+                intent.putExtra(MeasureConstants.INTENT_MOCK_TIME, mockPreResp.getMock_time());
                 startActivity(intent);
 
                 // Umeng

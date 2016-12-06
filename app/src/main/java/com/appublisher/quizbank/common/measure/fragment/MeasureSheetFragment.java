@@ -187,20 +187,25 @@ public class MeasureSheetFragment extends DialogFragment implements
             model.saveSubmitDuration(mPosition);
 
             // 提交
-            model.submit(true, new MeasureModel.SubmitListener() {
-                @Override
-                public void onComplete(boolean success, int exercise_id) {
-                    if (success) {
-                        Intent intent = new Intent(getActivity(), MeasureReportActivity.class);
-                        intent.putExtra(INTENT_PAPER_ID, exercise_id);
-                        intent.putExtra(INTENT_PAPER_TYPE, model.mPaperType);
-                        startActivity(intent);
-                        getActivity().finish();
-                    } else {
-                        Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
+            if (MOCK.equals(model.mPaperType)) {
+                ((MeasureActivity) getActivity()).showLoading();
+                model.getServerTimeStamp();
+            } else {
+                model.submit(true, new MeasureModel.SubmitListener() {
+                    @Override
+                    public void onComplete(boolean success, int exercise_id) {
+                        if (success) {
+                            Intent intent = new Intent(getActivity(), MeasureReportActivity.class);
+                            intent.putExtra(INTENT_PAPER_ID, exercise_id);
+                            intent.putExtra(INTENT_PAPER_TYPE, model.mPaperType);
+                            startActivity(intent);
+                            getActivity().finish();
+                        } else {
+                            Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 }
