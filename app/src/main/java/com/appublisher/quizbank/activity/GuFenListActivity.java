@@ -12,6 +12,8 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.GuFenListAdapter;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.model.netdata.mock.GufenM;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 
@@ -56,12 +58,9 @@ public class GuFenListActivity extends BaseActivity implements AdapterView.OnIte
 
         if (paperListBean == null) return;
 
-        Intent intent = new Intent(this, PracticeDescriptionActivity.class);
-        intent.putExtra("paper_type", "evaluate");
-        intent.putExtra("paper_name", paperListBean.getName());
-        intent.putExtra("redo", false);
-        intent.putExtra("paper_id", paperListBean.getId());
-        intent.putExtra("umeng_entry", "Home");
+        Intent intent = new Intent(this, MeasureActivity.class);
+        intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.EVALUATE);
+        intent.putExtra(MeasureConstants.INTENT_PAPER_ID, paperListBean.getId());
         startActivity(intent);
 
         // Umeng

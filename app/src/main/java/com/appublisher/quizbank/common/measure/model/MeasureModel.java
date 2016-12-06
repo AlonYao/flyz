@@ -111,7 +111,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                     || ERROR.equals(mPaperType)) {
                 mRequest.getNoteQuestions(mHierarchyId, mPaperType);
             } else if (ENTIRE.equals(mPaperType) || MOKAO.equals(mPaperType)
-                    || MOCK.equals(mPaperType)) {
+                    || MOCK.equals(mPaperType) || EVALUATE.equals(mPaperType)) {
                 mRequest.getPaperExercise(mPaperId, mPaperType);
             }
         }
