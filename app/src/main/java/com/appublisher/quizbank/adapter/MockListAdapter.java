@@ -55,8 +55,7 @@ public class MockListAdapter extends BaseAdapter {
 
         MockPreResp.MockListBean mockListBean = list.get(position);
         if (mockListBean == null) return convertView;
-        String text = "总体量" + mockListBean.getQuestion_num() + "题 (" + mockListBean.getPaper_name() + ")";
-        viewHolder.textView.setText(text);
+        viewHolder.textView.setText(mockListBean.getPaper_name());
         return convertView;
     }
 
