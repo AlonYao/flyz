@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ProgressBarManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -20,7 +21,6 @@ import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.model.business.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.QRequest;
-import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -43,13 +43,14 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public ArrayList<HistoryPaperM> mHistoryPapers;
     public int mOffset;
     public ImageView mIvNull;
+    public boolean mIsRefresh;
 
     private int mCount;
     private QRequest mQRequest;
     private View mView;
-
     private ImageView collectIv;
     private ImageView wrongIv;
+    private StudyRecordModel mModel;
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,10 +61,12 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mIsRefresh = false;
         mOffset = 0;
-        mCount = 5;
+        mCount = 10;
         mQRequest = new QRequest(mActivity, this);
         mHistoryPapers = new ArrayList<>();
+        mModel = new StudyRecordModel();
     }
 
     @Override
@@ -83,6 +86,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mXListView.addHeaderView(headView);
         mXListView.setXListViewListener(this);
         mXListView.setPullLoadEnable(true);
+
+        // showLoading
+        ProgressBarManager.showProgressBar(mView);
 
         setValue();
 
@@ -123,8 +129,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public void onResume() {
         super.onResume();
         // 获取数据
-        ProgressBarManager.showProgressBar(mView);
-        onRefresh();
+        if (!isHidden()) {
+            refreshData();
+        }
 
         // Umeng
         MobclickAgent.onPageStart("StudyRecordFragment");
@@ -141,9 +148,17 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            refreshData();
+        }
+    }
+
+    @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("history_papers".equals(apiName))
-            StudyRecordModel.dealHistoryPapersResp(this, response);
+            mModel.dealHistoryPapersResp(this, response);
 
         setLoadFinish();
     }
@@ -163,12 +178,18 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mOffset = 0;
         mHistoryPapers = new ArrayList<>();
         mQRequest.getHistoryPapers(mOffset, mCount);
+        mIsRefresh = true;
     }
 
     @Override
     public void onLoadMore() {
         mOffset = mOffset + mCount;
         mQRequest.getHistoryPapers(mOffset, mCount);
+        mIsRefresh = false;
+    }
+
+    public void refreshData() {
+        onRefresh();
     }
 
     /**
@@ -176,7 +197,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
      */
     private void setLoadFinish() {
         onLoadFinish();
-        StudyRecordModel.showNullImg(this);
         ProgressBarManager.hideProgressBar();
     }
 

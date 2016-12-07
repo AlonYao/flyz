@@ -24,7 +24,7 @@ import java.util.HashMap;
  */
 public class StudyRecordModel {
 
-    private static HistoryPapersListAdapter mHistoryPapersListAdapter;
+    private HistoryPapersListAdapter mHistoryPapersListAdapter;
 
     /**
      * 处理学习记录回调
@@ -32,32 +32,40 @@ public class StudyRecordModel {
      * @param fragment StudyRecordFragment
      * @param response 回调数据
      */
-    public static void dealHistoryPapersResp(final StudyRecordFragment fragment,
+    public void dealHistoryPapersResp(final StudyRecordFragment fragment,
                                              JSONObject response) {
-        if (response == null) return;
+        if (response == null) {
+            if (fragment.mIsRefresh) {
+                showNullImg(fragment);
+            }
+            return;
+        }
 
         HistoryPapersResp historyPapersResp =
                 GsonManager.getModel(response.toString(), HistoryPapersResp.class);
-
         if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) return;
 
         final ArrayList<HistoryPaperM> historyPapers = historyPapersResp.getList();
-
-        if (historyPapers == null || historyPapers.size() == 0) return;
+        if (historyPapers == null || historyPapers.size() == 0) {
+            if (fragment.mIsRefresh) {
+                showNullImg(fragment);
+            }
+            return;
+        }
 
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mHistoryPapers = historyPapers;
-
             mHistoryPapersListAdapter = new HistoryPapersListAdapter(
                     fragment.mActivity, fragment.mHistoryPapers);
-
             fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
         } else {
             fragment.mHistoryPapers.addAll(historyPapers);
-
             mHistoryPapersListAdapter.notifyDataSetChanged();
         }
+
+        fragment.mIvNull.setVisibility(View.GONE);
+        fragment.mXListView.setVisibility(View.VISIBLE);
 
         fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -118,10 +126,7 @@ public class StudyRecordModel {
      * @param fragment StudyRecordFragment
      */
     public static void showNullImg(StudyRecordFragment fragment) {
-        if (fragment.mHistoryPapers == null || fragment.mHistoryPapers.size() == 0) {
-            fragment.mIvNull.setVisibility(View.VISIBLE);
-        } else {
-            fragment.mIvNull.setVisibility(View.GONE);
-        }
+        fragment.mIvNull.setVisibility(View.VISIBLE);
+        fragment.mXListView.setVisibility(View.GONE);
     }
 }

@@ -28,7 +28,6 @@ import com.appublisher.lib_course.coursecenter.CourseFragment;
 import com.appublisher.lib_course.offline.activity.OfflineActivity;
 import com.appublisher.lib_course.opencourse.fragment.OpenCourseFragment;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
-import com.appublisher.lib_course.opencourse.netdata.OpenCourseUnrateClassItem;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
 import com.appublisher.lib_login.activity.BindingMobileActivity;
@@ -56,7 +55,6 @@ import com.appublisher.quizbank.utils.AlertManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends BaseActivity implements RequestCallback {
@@ -70,7 +68,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private StudyIndexFragment mStudyIndexFragment;
     private InterviewIndexFragment mInterviewIndexFragment;
     private OpenCourseFragment mOpenCourseFragment;
-    private static Fragment mCurFragment;
+    private Fragment mCurFragment;
     private boolean mDoubleBackToExit;
     private QRequest mQRequest;
     private static final String OPENCOURSE = "Opencourse";
@@ -79,7 +77,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private static final String VIP = "Vip";
     private static final String STUDY = "Study";
     private static final String INTERVIEW = "Interview";
-    public ArrayList<OpenCourseUnrateClassItem> mUnRateClasses;
 
     private TextView rateCourseCountTv;
 
