@@ -13,11 +13,12 @@
         android:id="@+id/toolbar"/>
 
     <ScrollView
-        android:id="@+id/practice_report_sv"
+        android:id="@+id/measure_report_sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:layout_marginBottom="44dp"
+        android:background="@color/measure_bg"
         android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"

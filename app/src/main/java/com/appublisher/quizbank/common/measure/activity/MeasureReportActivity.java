@@ -2,14 +2,18 @@ package com.appublisher.quizbank.common.measure.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.text.Spannable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
@@ -22,6 +26,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureScoresBean;
 import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
+import com.appublisher.quizbank.model.business.CommonModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +34,10 @@ import java.util.List;
 public class MeasureReportActivity extends BaseActivity implements
         MeasureConstants, View.OnClickListener {
 
+    private static final String MENU_SHARE = "分享";
+
     private MeasureReportModel mModel;
+    private ScrollView mScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +58,46 @@ public class MeasureReportActivity extends BaseActivity implements
         UmengManager.onEvent(this, "Report", map);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuItemCompat.setShowAsAction(
+                menu.add(MENU_SHARE).setIcon(R.drawable.share),
+                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            CommonModel.checkUmengShare(this, new CommonModel.ShareCheckListener() {
+                @Override
+                public void onShare() {
+                    mModel.setUmengShare();
+                }
+            });
+        } else if ("分享".equals(item.getTitle())) {
+            mModel.setUmengShare();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        CommonModel.checkUmengShare(this, new CommonModel.ShareCheckListener() {
+            @Override
+            public void onShare() {
+                mModel.setUmengShare();
+            }
+        });
+    }
+
     private void initData() {
         mModel = new MeasureReportModel(this);
         mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
+        mModel.setScrollView(mScrollView);
 
         showLoading();
         mModel.getData();
@@ -62,6 +106,7 @@ public class MeasureReportActivity extends BaseActivity implements
     private void initView() {
         Button btnAll = (Button) findViewById(R.id.measure_report_all);
         Button btnError = (Button) findViewById(R.id.measure_report_error);
+        mScrollView = (ScrollView) findViewById(R.id.measure_report_sv);
 
         if (btnAll != null) {
             btnAll.setOnClickListener(this);

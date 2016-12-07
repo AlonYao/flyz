@@ -1,15 +1,19 @@
 package com.appublisher.quizbank.common.measure.model;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.widget.ScrollView;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
@@ -18,6 +22,9 @@ import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureHistoryResp;
+import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.json.JSONObject;
 
@@ -31,6 +38,12 @@ import java.util.List;
 public class MeasureReportModel extends MeasureModel {
 
     public MeasureAnalysisBean mAnalysisBean;
+
+    private double mScore;
+    private double mDefeat;
+    private int mRigthNum;
+    private int mTotalNum;
+    private ScrollView mScrollView;
 
     public MeasureReportModel(Context context) {
         super(context);
@@ -87,6 +100,11 @@ public class MeasureReportModel extends MeasureModel {
         mAnalysisBean.setCategorys(resp.getCategory());
         mAnalysisBean.setQuestions(resp.getQuestions());
         mAnalysisBean.setAnswers(resp.getAnswers());
+
+        // Umeng分享
+        mPaperName = resp.getExercise_name();
+        mScore = resp.getScore();
+        mDefeat = resp.getDefeat();
 
         if (AUTO.equals(mPaperType)) {
             // 试卷信息
@@ -234,6 +252,10 @@ public class MeasureReportModel extends MeasureModel {
             if (answer.is_right()) rightNum++;
         }
         ((MeasureReportActivity) mContext).showRightAll(rightNum, totalNum);
+
+        // Umeng分享
+        mRigthNum = rightNum;
+        mTotalNum = totalNum;
     }
 
     private List<MeasureReportCategoryBean> getCategorys(List<MeasureQuestionBean> questions,
@@ -310,4 +332,67 @@ public class MeasureReportModel extends MeasureModel {
 
         return "";
     }
+
+    /**
+     * 设置友盟分享
+     */
+    public void setUmengShare() {
+        GlobalSettingsResp globalSettingsResp = CommonModel.getGlobalSetting(mContext);
+
+        String baseUrl = "http://m.yaoguo.cn/appShare/index.html#/appShare/pr?";
+        if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
+            baseUrl = globalSettingsResp.getReport_share_url();
+        }
+
+        baseUrl = baseUrl + "user_id=" + LoginModel.getUserId()
+                + "&user_token=" + LoginModel.getUserToken()
+                + "&exercise_id=" + mPaperId
+                + "&paper_type=" + mPaperType
+                + "&name=" + mPaperName;
+
+        // 练习报告
+        String content;
+        if ("mokao".equals(mPaperType)) {
+            content = "刚刚打败了全国"
+                    + Utils.rateToPercent(mDefeat)
+                    + "%的小伙伴，学霸非我莫属！";
+        } else if ("evaluate".equals(mPaperType)) {
+            content = mPaperName
+                    + "我估计能"
+                    + mScore
+                    + "分，快来看看~";
+        } else if ("mock".equals(mPaperType)) {
+            content = "我在"
+                    + mPaperName
+                    + "中拿了"
+                    + mScore
+                    + "分，棒棒哒！";
+        } else {
+            content = "刷了一套题，正确率竟然达到了"
+                    + Utils.getPercent1(mRigthNum, mTotalNum)
+                    + "呢~";
+        }
+        //noinspection ConstantConditions
+        UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
+                .setTitle("腰果公考")
+                .setText(content)
+                .setTargetUrl(baseUrl)
+                .setSinaWithoutTargetUrl(true)
+                .setUmImage(UmengManager.getUMImage(mContext, mScrollView));
+        UmengManager.shareAction(
+                (Activity) mContext,
+                umShareEntity,
+                UmengManager.APP_TYPE_QUIZBANK,
+                new UmengManager.PlatformInter() {
+                    @Override
+                    public void platform(SHARE_MEDIA platformType) {
+
+                    }
+        });
+    }
+
+    public void setScrollView(ScrollView scrollView) {
+        mScrollView = scrollView;
+    }
+
 }

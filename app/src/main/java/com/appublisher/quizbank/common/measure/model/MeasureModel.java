@@ -71,6 +71,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
+    public String mPaperName;
     public String mMockTime;
     public List<MeasureExcludeBean> mExcludes;
     public MeasureRequest mRequest;

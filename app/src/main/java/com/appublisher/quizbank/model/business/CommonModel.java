@@ -1,7 +1,12 @@
 package com.appublisher.quizbank.model.business;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -14,10 +19,13 @@ import android.widget.TextView;
 
 import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
+import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.fb.model.UserInfo;
 
@@ -31,6 +39,8 @@ import java.util.Map;
  * 通用模型
  */
 public class CommonModel {
+
+    public static ShareCheckListener mShareCheckListener;
 
     /**
      * 设置Toolbar
@@ -230,6 +240,90 @@ public class CommonModel {
      */
     public static void initFeedback(Activity activity) {
         FeedbackAPI.init(activity.getApplication(), activity.getString(R.string.ali_bc_appkey));
+    }
+
+    public interface ShareCheckListener {
+        void onShare();
+    }
+
+    public static SharedPreferences getQuizBankSPF(Context context) {
+        return context.getSharedPreferences("quizbank_store", Context.MODE_PRIVATE);
+    }
+
+    public static SharedPreferences getGlobalSettingSPF(Context context) {
+        return context.getSharedPreferences("global_setting", Context.MODE_PRIVATE);
+    }
+
+    public static GlobalSettingsResp getGlobalSetting(Context context) {
+        SharedPreferences spf = context.getSharedPreferences(
+                "global_setting", Context.MODE_PRIVATE);
+        if (spf == null) return null;
+        String data = spf.getString("global_setting", "");
+        return GsonManager.getModel(data, GlobalSettingsResp.class);
+    }
+
+    /**
+     * 检查当天是否进行友盟分享
+     *
+     * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
+     */
+    public static void checkUmengShare(Activity activity, ShareCheckListener listener) {
+        mShareCheckListener = listener;
+        // 获取上次记录的离开日期
+        SharedPreferences spf = getQuizBankSPF(activity);
+        if (spf == null) {
+            activity.finish();
+            return;
+        }
+
+        String lateDate = spf.getString("share_late_date", "");
+        String curDate = Utils.getCurDateString();
+
+        if (lateDate.equals(curDate)) {
+            activity.finish();
+        } else {
+            // 如果是当前的第一次
+            showEveryDayShareAlert(activity);
+        }
+    }
+
+    /**
+     * 展示每天友盟分享提醒Alert
+     *
+     * @param activity EvaluationActivity：能力评估页 PracticeReportActivity：练习报告页
+     */
+    @SuppressLint("CommitPrefEdits")
+    private static void showEveryDayShareAlert(final Activity activity) {
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.grade_everydayshare_alert_msg)
+                .setTitle(R.string.alert_title)
+                .setPositiveButton(R.string.grade_everydayshare_alert_p,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (mShareCheckListener != null) mShareCheckListener.onShare();
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.grade_everydayshare_alert_n,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                activity.finish();
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
+
+        // 更新本地缓存
+        SharedPreferences spf = activity.getSharedPreferences(
+                "quizbank_store", Context.MODE_PRIVATE);
+        if (spf != null) {
+            SharedPreferences.Editor editor = spf.edit();
+            editor.putString("share_late_date", Utils.getCurDateString());
+            editor.commit();
+        }
     }
 
 }

@@ -23,13 +23,13 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PracticeReportModel;
 import com.appublisher.quizbank.model.entity.measure.MeasureEntity;
 import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.QRequest;
-import com.appublisher.quizbank.utils.UMengManager;
 import com.umeng.socialize.UMShareAPI;
 
 import org.json.JSONArray;
@@ -258,7 +258,12 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
 
     @Override
     public void onBackPressed() {
-        UMengManager.checkUmengShare(this);
+        CommonModel.checkUmengShare(this, new CommonModel.ShareCheckListener() {
+            @Override
+            public void onShare() {
+                mModel.setUmengShare();
+            }
+        });
     }
 
     @Override
@@ -271,7 +276,12 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            UMengManager.checkUmengShare(this);
+            CommonModel.checkUmengShare(this, new CommonModel.ShareCheckListener() {
+                @Override
+                public void onShare() {
+                    mModel.setUmengShare();
+                }
+            });
         } else if ("分享".equals(item.getTitle())) {
             mModel.setUmengShare();
         }

@@ -11,14 +11,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.EvaluationModel;
 import com.appublisher.quizbank.network.QRequest;
-import com.appublisher.quizbank.utils.UMengManager;
 import com.db.chart.view.LineChartView;
 import com.umeng.socialize.UMShareAPI;
 
@@ -106,7 +105,12 @@ public class EvaluationActivity extends BaseActivity implements RequestCallback 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            UMengManager.checkUmengShare(this);
+            CommonModel.checkUmengShare(this, new CommonModel.ShareCheckListener() {
+                @Override
+                public void onShare() {
+                    EvaluationModel.setUmengShare(EvaluationActivity.this);
+                }
+            });
         } else if ("分享".equals(item.getTitle())) {
             EvaluationModel.setUmengShare(this);
         }
@@ -116,7 +120,12 @@ public class EvaluationActivity extends BaseActivity implements RequestCallback 
 
     @Override
     public void onBackPressed() {
-        UMengManager.checkUmengShare(this);
+        CommonModel.checkUmengShare(this, new CommonModel.ShareCheckListener() {
+            @Override
+            public void onShare() {
+                EvaluationModel.setUmengShare(EvaluationActivity.this);
+            }
+        });
     }
 
     @Override
