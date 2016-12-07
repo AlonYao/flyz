@@ -62,6 +62,7 @@ public class MockListActivity extends BaseActivity {
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOCK);
                 intent.putExtra(MeasureConstants.INTENT_MOCK_TIME, mockPreResp.getMock_time());
                 startActivity(intent);
+                finish();
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();

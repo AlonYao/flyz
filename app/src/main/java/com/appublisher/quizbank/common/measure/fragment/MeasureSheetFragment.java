@@ -187,7 +187,6 @@ public class MeasureSheetFragment extends DialogFragment implements
                 model.getServerTimeStamp(new MeasureModel.ServerTimeListener() {
                     @Override
                     public void onTimeOut() {
-                        model.saveCurPageDuration();
                         model.submitPaperDone();
                     }
 
@@ -208,7 +207,6 @@ public class MeasureSheetFragment extends DialogFragment implements
         if (model == null) return;
 
         if (model.isAllDone()) {
-            model.saveCurPageDuration();
             model.submitPaperDone();
         } else {
             ((MeasureActivity) getActivity()).showMeasureSheetUndoneAlert();

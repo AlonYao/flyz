@@ -33,6 +33,7 @@ import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.adapter.CarouselAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureDescriptionActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.business.StudyIndexModel;
@@ -405,7 +406,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                 break;
             case R.id.quick_test_view:
                 // 快速智能练习
-                intent = new Intent(getActivity(), MeasureActivity.class);
+                intent = new Intent(getActivity(), MeasureDescriptionActivity.class);
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.AUTO);
                 startActivity(intent);
                 // Umeng

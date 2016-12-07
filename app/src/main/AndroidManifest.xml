@@ -146,7 +146,7 @@
             android:label="@string/title_activity_evaluation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PracticeDescriptionActivity"
+            android:name=".common.measure.activity.MeasureDescriptionActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_practice_description"
             android:screenOrientation="portrait" />

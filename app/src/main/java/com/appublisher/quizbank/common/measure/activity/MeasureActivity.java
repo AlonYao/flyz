@@ -41,15 +41,17 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
     private static final String MENU_ANSWERSHEET = "答题卡";
     private static final String MENU_PAUSE = "暂停";
     private static final int TIME_ON = 0;
+    private static final int TIME_MOCK_ON = 1;
+    private static final int TIME_MOCK_OUT = 2;
 
     public ViewPager mViewPager;
     public MeasureModel mModel;
     public MeasureAdapter mAdapter;
     public int mMins;
     public int mSec;
+    public Timer mTimer;
 
     private Handler mHandler;
-    private Timer mTimer;
 
     public static class MsgHandler extends Handler {
         private WeakReference<MeasureActivity> mActivity;
@@ -66,41 +68,48 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                 switch (msg.what) {
                     case TIME_ON:
                         // 显示时间
-                        String mins = String.valueOf(activity.mMins);
-                        String sec = String.valueOf(activity.mSec);
-                        if (mins.length() == 1) mins = "0" + mins;
-                        if (sec.length() == 1) sec = "0" + sec;
-                        String time = mins + ":" + sec;
-                        activity.setTitle(time);
+                        activity.setTitle(getTimeText(activity.mMins, activity.mSec));
+                        break;
 
-                        // 模考特殊处理
-                        if (MOCK.equals(activity.mModel.mPaperType)) {
-                            activity.mModel.mCurDuration = activity.mSec + activity.mMins * 60;
-                            if (activity.mModel.isMockTimeRemain15(activity.mModel.mCurDuration)) {
-                                Toast.makeText(
-                                        activity,
-                                        "距离考试结束还有15分钟",
-                                        Toast.LENGTH_SHORT).show();
-                            } else if (activity.mModel.isMockTimeOut(activity.mModel.mCurDuration)) {
-                                activity.showLoading();
-                                activity.mModel.getServerTimeStamp(
-                                        new MeasureModel.ServerTimeListener() {
-                                            @Override
-                                            public void onTimeOut() {
-                                                activity.showMockTimeOutAlert();
-                                                activity.mModel.submitPaperDone();
-                                            }
-
-                                            @Override
-                                            public void canSubmit() {
-                                                // Empty
-                                            }
-                                        });
-                            }
+                    case TIME_MOCK_ON:
+                        // 模考
+                        activity.mModel.mMockDuration--;
+                        activity.setTitle(getTimeText(activity.mMins, activity.mSec));
+                        if (activity.mMins == 15 && activity.mSec == 0) {
+                            Toast.makeText(
+                                    activity,
+                                    "距离考试结束还有15分钟",
+                                    Toast.LENGTH_SHORT).show();
                         }
+                        break;
+
+                    case TIME_MOCK_OUT:
+                        activity.mModel.mMockDuration = 0;
+                        activity.showLoading();
+                        activity.mModel.getServerTimeStamp(
+                                new MeasureModel.ServerTimeListener() {
+                                    @Override
+                                    public void onTimeOut() {
+                                        activity.showMockTimeOutAlert();
+                                        activity.mModel.submitPaperDone();
+                                    }
+
+                                    @Override
+                                    public void canSubmit() {
+                                        // Empty
+                                    }
+                                });
                         break;
                 }
             }
+        }
+
+        private String getTimeText(int min, int sec) {
+            String minString = String.valueOf(min);
+            String secString = String.valueOf(sec);
+            if (minString.length() == 1) minString = "0" + minString;
+            if (secString.length() == 1) secString = "0" + secString;
+            return minString + ":" + secString;
         }
     }
 
@@ -304,21 +313,43 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
     /**
      * 倒计时启动
      */
-    private void startTimer() {
+    public void startTimer() {
         stopTimer();
         mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
+        if (MOCK.equals(mModel.mPaperType)) {
+            // 模考特殊处理
+            mTimer.schedule(new TimerTask() {
 
-            @Override
-            public void run() {
-                mSec++;
-                if (mSec > 59) {
-                    mMins++;
-                    mSec = 0;
+                @Override
+                public void run() {
+                    mSec--;
+                    if (mSec < 0) {
+                        mMins--;
+                        mSec = 59;
+                        mHandler.sendEmptyMessage(TIME_MOCK_ON);
+                        if (mMins < 0) {
+                            stopTimer();
+                            mHandler.sendEmptyMessage(TIME_MOCK_OUT);
+                        }
+                    } else {
+                        mHandler.sendEmptyMessage(TIME_MOCK_ON);
+                    }
                 }
-                mHandler.sendEmptyMessage(TIME_ON);
-            }
-        }, 0, 1000);
+            }, 0, 1000);
+        } else {
+            mTimer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    mSec++;
+                    if (mSec > 59) {
+                        mMins++;
+                        mSec = 0;
+                    }
+                    mHandler.sendEmptyMessage(TIME_ON);
+                }
+            }, 0, 1000);
+        }
     }
 
     /**
@@ -394,7 +425,6 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 showLoading();
-                                mModel.saveCurPageDuration();
                                 mModel.submitPaperDone();
                             }
                         })
@@ -407,4 +437,11 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                         })
                 .create().show();
     }
+
+    public void setMinAndSec(int duration) {
+        if (duration == 0) return;
+        mSec = duration % 60;
+        mMins = duration / 60;
+    }
+
 }

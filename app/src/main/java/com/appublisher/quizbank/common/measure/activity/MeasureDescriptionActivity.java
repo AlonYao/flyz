@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.activity;
+package com.appublisher.quizbank.common.measure.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -14,23 +15,20 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
 
 /**
  * 练习说明
  */
-public class PracticeDescriptionActivity extends BaseActivity {
+public class MeasureDescriptionActivity extends BaseActivity implements
+        View.OnClickListener, MeasureConstants{
 
     private String mPaperType;
-    private String mPaperName;
     private TextView mTvDesc;
     private TextView mTvName;
     private int mPaperId;
-    private int mExerciseId;
     private boolean mRedo;
     private int mHierarchyId;
-    private int mHierarchyLevel;
-    private String mNoteType;
-    private String mUmengEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +41,15 @@ public class PracticeDescriptionActivity extends BaseActivity {
         // View 初始化
         mTvDesc = (TextView) findViewById(R.id.practicedesc_content);
         mTvName = (TextView) findViewById(R.id.practicedesc_name);
-        TextView tvStart = (TextView) findViewById(R.id.practicedesc_start);
+        Button btnStart = (Button) findViewById(R.id.practicedesc_start);
         LinearLayout llHide = (LinearLayout) findViewById(R.id.practicedesc_hide_ll);
         final CheckBox cbHide = (CheckBox) findViewById(R.id.practicedesc_hide_cb);
 
         // 获取数据
-        mPaperType = getIntent().getStringExtra("paper_type");
-        mPaperName = getIntent().getStringExtra("paper_name");
-        mPaperId = getIntent().getIntExtra("paper_id", 0);
-        mRedo = getIntent().getBooleanExtra("redo", false);
-        mHierarchyId = getIntent().getIntExtra("hierarchy_id", 0);
-        mHierarchyLevel = getIntent().getIntExtra("hierarchy_level", 0);
-        mNoteType = getIntent().getStringExtra("note_type");
-        mUmengEntry = getIntent().getStringExtra("umeng_entry");
-        mExerciseId = getIntent().getIntExtra("exercise_id", 0);
+        mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
+        mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
+        mRedo = getIntent().getBooleanExtra(INTENT_REDO, false);
+        mHierarchyId = getIntent().getIntExtra(INTENT_HIERARCHY_ID, 0);
 
         if (mPaperType == null || mPaperType.length() == 0) finish();
 
@@ -70,31 +63,32 @@ public class PracticeDescriptionActivity extends BaseActivity {
         }
 
         // 不再显示
-        llHide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cbHide.performClick();
-            }
-        });
-
-        cbHide.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    updateLocal(true);
-                } else {
-                    updateLocal(false);
+        if (llHide != null) {
+            llHide.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (cbHide != null) cbHide.performClick();
                 }
-            }
-        });
+            });
+        }
+
+        if (cbHide != null) {
+            cbHide.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        updateLocal(true);
+                    } else {
+                        updateLocal(false);
+                    }
+                }
+            });
+        }
 
         // 开始答题
-        tvStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skipToMeasureActivity();
-            }
-        });
+        if (btnStart != null) {
+            btnStart.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -110,16 +104,11 @@ public class PracticeDescriptionActivity extends BaseActivity {
      * 跳转到MeasureActivity
      */
     private void skipToMeasureActivity() {
-        Intent intent = new Intent(this, LegacyMeasureActivity.class);
+        Intent intent = new Intent(this, MeasureActivity.class);
         intent.putExtra("paper_type", mPaperType);
-        intent.putExtra("paper_name", mPaperName);
         intent.putExtra("paper_id", mPaperId);
         intent.putExtra("redo", mRedo);
         intent.putExtra("hierarchy_id", mHierarchyId);
-        intent.putExtra("hierarchy_level", mHierarchyLevel);
-        intent.putExtra("note_type", mNoteType);
-        intent.putExtra("umeng_entry", mUmengEntry);
-        intent.putExtra("exercise_id", mExerciseId);
         startActivity(intent);
         finish();
     }
@@ -160,7 +149,8 @@ public class PracticeDescriptionActivity extends BaseActivity {
             mTvDesc.setText("抽取收藏夹试题\n藏起来的重点题目\n当然要多练练");
             mTvName.setText("收藏练习");
         } else if ("evaluate".equals(mPaperType)) {
-            mTvDesc.setText(mPaperName + "\n考场上选什么这里就选什么");
+            String text = "考场上选什么这里就选什么";
+            mTvDesc.setText(text);
             mTvName.setText("估分");
         } else if ("mock".equals(mPaperType)) {
             mTvDesc.setText("把模考当成正式考\n让正式考变成模考");
@@ -168,4 +158,12 @@ public class PracticeDescriptionActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.practicedesc_start:
+                skipToMeasureActivity();
+                break;
+        }
+    }
 }

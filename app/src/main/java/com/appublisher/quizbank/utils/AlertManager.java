@@ -24,7 +24,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.AnswerSheetActivity;
 import com.appublisher.quizbank.activity.LegacyMeasureActivity;
 import com.appublisher.quizbank.activity.LegacyMeasureAnalysisActivity;
-import com.appublisher.quizbank.activity.PracticeDescriptionActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureDescriptionActivity;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.dao.PaperDAO;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -192,7 +192,7 @@ public class AlertManager {
             public void onClick(View v) {
                 //noinspection IfCanBeSwitch
                 if ("auto".equals(activity.mAnalysisType)) {
-                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
+                    Intent intent = new Intent(activity, MeasureDescriptionActivity.class);
                     intent.putExtra("paper_type", activity.mAnalysisType);
                     intent.putExtra("paper_name", activity.getString(R.string.paper_type_auto));
                     intent.putExtra("umeng_entry", activity.mUmengEntry);
@@ -203,7 +203,7 @@ public class AlertManager {
                 } else if ("note".equals(activity.mAnalysisType)
                         || "collect".equals(activity.mAnalysisType)
                         || "error".equals(activity.mAnalysisType)) {
-                    Intent intent = new Intent(activity, PracticeDescriptionActivity.class);
+                    Intent intent = new Intent(activity, MeasureDescriptionActivity.class);
                     intent.putExtra("paper_type", activity.mAnalysisType);
                     intent.putExtra("paper_name", activity.mPaperName);
                     intent.putExtra("hierarchy_id", activity.mHierarchyId);

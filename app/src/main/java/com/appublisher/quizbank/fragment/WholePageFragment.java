@@ -240,7 +240,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                     int paperId = entirePaper.getId();
                     String paperName = entirePaper.getName();
 
-//                    Intent intent = new Intent(mActivity, PracticeDescriptionActivity.class);
+//                    Intent intent = new Intent(mActivity, MeasureDescriptionActivity.class);
 //                    intent.putExtra("paper_type", "entire");
 //                    intent.putExtra("paper_id", paperId);
 //                    intent.putExtra("paper_name", paperName);

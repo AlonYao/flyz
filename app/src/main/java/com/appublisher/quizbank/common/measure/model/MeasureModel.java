@@ -65,7 +65,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public int mPaperId;
     public int mHierarchyId;
     public int mCurPagePosition;
-    public int mCurDuration;
+    public int mMockDuration;
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
@@ -78,14 +78,14 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     private SparseIntArray mFinalHeightMap;
     private SubmitListener mSubmitListener;
     private ServerTimeListener mServerTimeListener;
-    private int mMockDuration;
+    private int mPaperDuration;
 
     public MeasureModel(Context context) {
         mContext = context;
         mRequest = new MeasureRequest(context, this);
     }
 
-    public interface SubmitListener {
+    interface SubmitListener {
         void onComplete(boolean success, int exercise_id);
     }
 
@@ -208,6 +208,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
         // 模考特殊处理
         if (MOCK.equals(mPaperType)) {
+            mPaperDuration = resp.getDuration();
             setMockDuration();
         }
 
@@ -810,7 +811,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 public void onTimeOut() {
                     // 超时处理
                     ((MeasureActivity) mContext).showMockTimeOutAlert();
-                    saveCurPageDuration();
                     submitPaperDone();
                 }
 
@@ -869,7 +869,13 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             date = sdf.parse(mMockTime);
             long mockTimeStamp = date.getTime();
+            mockTimeStamp = mockTimeStamp + (mPaperDuration * 1000);
             mMockDuration = (int) ((mockTimeStamp - curTimestamp) / 1000);
+
+            if (mMockDuration > 0 && mContext instanceof MeasureActivity) {
+                ((MeasureActivity) mContext).setMinAndSec(mMockDuration);
+            }
+
         } catch (Exception e) {
             // Empty
         }
@@ -877,29 +883,18 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     /**
      * 模考：是否时间到
-     * @param curDuration 当前持续时间
      * @return boolean
      */
-    public boolean isMockTimeOut(int curDuration) {
-        return mMockDuration <= curDuration;
+    public boolean isMockTimeOut() {
+        return mMockDuration <= 0;
     }
 
     /**
-     * 模考：是否还剩15分钟
-     * @param curDuration 当前持续时间
+     * 模考：开考是否小于30分钟
      * @return boolean
      */
-    public boolean isMockTimeRemain15(int curDuration) {
-        return mMockDuration - curDuration == 900;
-    }
-
-    /**
-     * 模考：是否已经开考30分钟
-     * @param curDuration 当前持续时间
-     * @return boolean
-     */
-    private boolean isMockTimeUnder30(int curDuration) {
-        return curDuration < 1800;
+    private boolean isMockTimeUnder30() {
+        return mPaperDuration - mMockDuration < 1800;
     }
 
     public void getServerTimeStamp(ServerTimeListener serverTimeListener) {
@@ -914,21 +909,27 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         long serverTimeStamp = Long.parseLong(serverTimeStampString);
         if (serverTimeStamp <= 0) return;
 
-        setMockDuration(serverTimeStamp);
+        setMockDuration(serverTimeStamp * 1000);
 
         if (!(mContext instanceof MeasureActivity)) return;
-        if (isMockTimeOut(mCurDuration)) {
+        if (isMockTimeOut()) {
             // 时间到
             if (mServerTimeListener != null) mServerTimeListener.onTimeOut();
-        } else if (isMockTimeUnder30(mCurDuration)) {
+            return;
+        } else if (isMockTimeUnder30()) {
             ((MeasureActivity) mContext).showMockTime30Toast();
         } else {
             if (mServerTimeListener != null) mServerTimeListener.canSubmit();
         }
+
+        // 恢复计时
+        if (((MeasureActivity) mContext).mTimer == null)
+            ((MeasureActivity) mContext).startTimer();
     }
 
     public void submitPaperDone() {
         if (!(mContext instanceof MeasureActivity)) return;
+        saveCurPageDuration();
         submit(true, new SubmitListener() {
             @Override
             public void onComplete(boolean success, int exercise_id) {
