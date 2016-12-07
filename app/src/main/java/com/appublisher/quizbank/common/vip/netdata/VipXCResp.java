@@ -372,8 +372,8 @@ public class VipXCResp {
         private int category_id;
         private String category_name;
         private String source;
-        private int accuracy;
-        private float summary_accuracy;
+        private double accuracy;
+        private double summary_accuracy;
         private int summary_count;
         private String summary_fallible;
         private int material_id;
@@ -485,19 +485,19 @@ public class VipXCResp {
             this.source = source;
         }
 
-        public int getAccuracy() {
+        public double getAccuracy() {
             return accuracy;
         }
 
-        public void setAccuracy(int accuracy) {
+        public void setAccuracy(double accuracy) {
             this.accuracy = accuracy;
         }
 
-        public float getSummary_accuracy() {
+        public double getSummary_accuracy() {
             return summary_accuracy;
         }
 
-        public void setSummary_accuracy(float summary_accuracy) {
+        public void setSummary_accuracy(double summary_accuracy) {
             this.summary_accuracy = summary_accuracy;
         }
 

@@ -183,6 +183,7 @@ public class MeasureSheetFragment extends DialogFragment implements
 
             // 提交
             if (MOCK.equals(model.mPaperType)) {
+                // 模考
                 ((MeasureActivity) getActivity()).showLoading();
                 model.getServerTimeStamp(new MeasureModel.ServerTimeListener() {
                     @Override
@@ -195,7 +196,11 @@ public class MeasureSheetFragment extends DialogFragment implements
                         checkIsAllDone();
                     }
                 });
+            } else if (VIP.equals(model.mPaperType)) {
+                // 小班
+                model.submitVipXCPaper();
             } else {
+                // 其他
                 checkIsAllDone();
             }
         }

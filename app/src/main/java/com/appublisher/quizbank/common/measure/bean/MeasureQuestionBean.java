@@ -22,7 +22,7 @@ public class MeasureQuestionBean {
     private int category_id;
     private String category_name;
     private String source;
-    private int accuracy;
+    private double accuracy;
     private double summary_accuracy;
     private int summary_count;
     private String summary_fallible;
@@ -204,11 +204,11 @@ public class MeasureQuestionBean {
         this.source = source;
     }
 
-    public int getAccuracy() {
+    public double getAccuracy() {
         return accuracy;
     }
 
-    public void setAccuracy(int accuracy) {
+    public void setAccuracy(double accuracy) {
         this.accuracy = accuracy;
     }
 

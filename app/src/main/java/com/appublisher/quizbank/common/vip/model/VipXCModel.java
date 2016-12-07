@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.vip.activity.VipXCReportActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipSubmitResp;
@@ -111,6 +112,43 @@ public class VipXCModel extends VipBaseModel {
         postPaperAnswer(mContext, exercise_id, answers.toString(), duration_total);
     }
 
+    public static void submitPaper(final Context context,
+                                   final int exercise_id,
+                                   String answer,
+                                   int duration_total) {
+        if (context instanceof BaseActivity) ((BaseActivity) context).showLoading();
+        VipSubmitEntity entity = new VipSubmitEntity();
+        entity.exercise_id = exercise_id;
+        entity.answer_content = answer;
+        entity.duration = duration_total;
+
+        new VipRequest(context, new RequestCallback() {
+            @Override
+            public void requestCompleted(JSONObject response, String apiName) {
+                VipSubmitResp resp = GsonManager.getModel(response, VipSubmitResp.class);
+                if (resp == null || resp.getResponse_code() != 1) {
+                    Toast.makeText(context, "提交失败……", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(context, VipXCReportActivity.class);
+                    intent.putExtra("exerciseId", exercise_id);
+                    context.startActivity(intent);
+                    ((Activity) context).finish();
+                }
+                if (context instanceof BaseActivity) ((BaseActivity) context).hideLoading();
+            }
+
+            @Override
+            public void requestCompleted(JSONArray response, String apiName) {
+                if (context instanceof BaseActivity) ((BaseActivity) context).hideLoading();
+            }
+
+            @Override
+            public void requestEndedWithError(VolleyError error, String apiName) {
+                if (context instanceof BaseActivity) ((BaseActivity) context).hideLoading();
+            }
+        }).submit(VipParamBuilder.submit(entity));
+    }
+
     /**
      * 提交真题答案
      * @param context Context
@@ -128,7 +166,6 @@ public class VipXCModel extends VipBaseModel {
         entity.answer_content = answers;
         entity.duration = duration;
 
-        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
         new VipRequest(context, this).submit(VipParamBuilder.submit(entity));
     }
 

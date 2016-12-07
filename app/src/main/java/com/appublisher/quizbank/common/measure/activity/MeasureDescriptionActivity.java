@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,7 +35,7 @@ public class MeasureDescriptionActivity extends BaseActivity implements
         setContentView(R.layout.activity_practice_description);
 
         // Toolbar
-        setToolBar(this);
+        setToolBarWithoutBackBtn(this);
 
         // View 初始化
         mTvDesc = (TextView) findViewById(R.id.practicedesc_content);
@@ -91,24 +90,15 @@ public class MeasureDescriptionActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * 跳转到MeasureActivity
      */
     private void skipToMeasureActivity() {
         Intent intent = new Intent(this, MeasureActivity.class);
-        intent.putExtra("paper_type", mPaperType);
-        intent.putExtra("paper_id", mPaperId);
-        intent.putExtra("redo", mRedo);
-        intent.putExtra("hierarchy_id", mHierarchyId);
+        intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
+        intent.putExtra(INTENT_PAPER_ID, mPaperId);
+        intent.putExtra(INTENT_REDO, mRedo);
+        intent.putExtra(INTENT_HIERARCHY_ID, mHierarchyId);
         startActivity(intent);
         finish();
     }

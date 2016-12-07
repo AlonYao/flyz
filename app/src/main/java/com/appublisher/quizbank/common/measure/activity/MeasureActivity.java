@@ -188,15 +188,15 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
         mModel.mRedo = getIntent().getBooleanExtra(INTENT_REDO, false);
         mModel.mMockTime = getIntent().getStringExtra(INTENT_MOCK_TIME);
         mModel.mCurTimestamp = System.currentTimeMillis();
-
-        showLoading();
-        mModel.getData();
+        mModel.mVipXCData = getIntent().getStringExtra(INTENT_VIP_XC_DATA);
 
         mHandler = new MsgHandler(this);
         mMins = 0;
         mSec = 0;
-
         setModel(mModel);
+
+        showLoading();
+        mModel.getData();
     }
 
     private void initView() {

@@ -57,7 +57,9 @@ public class VipXCReportModel extends VipBaseModel{
         VipXCResp.SummaryBean summaryBean = mResp.getSummary();
         if (summaryBean != null) {
             // 正确率
-            mView.showAccuracy((int) summaryBean.getAccuracy()*100);
+            float accuracy = summaryBean.getAccuracy();
+            accuracy = accuracy * 100;
+            mView.showAccuracy(String.valueOf(accuracy));
             // 平均速度
             mView.showSpeed(summaryBean.getDuration()/questionCount);
             // 次序
@@ -87,9 +89,9 @@ public class VipXCReportModel extends VipBaseModel{
     }
 
     private String timeFormat(int duration) {
-        int hour = duration / (60*60);
-        int min = (duration % (60*60)) / 60;
-        return String.valueOf(hour) + ":" + String.valueOf(min);
+        int min = duration / 60;
+        int sec = duration % 60;
+        return String.valueOf(min) + ":" + String.valueOf(sec);
     }
 
     public ArrayList<QuestionM> getAllQuestions() {

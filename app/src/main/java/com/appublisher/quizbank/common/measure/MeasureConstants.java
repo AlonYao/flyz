@@ -17,6 +17,7 @@ public interface MeasureConstants {
     String INTENT_ANALYSIS_IS_ERROR_ONLY = "is_error_only";
     String INTENT_IS_FROM_FOLDER = "is_from_folder";
     String INTENT_MOCK_TIME = "mock_time";
+    String INTENT_VIP_XC_DATA = "vip_xc_data";
 
     /**
      * 试卷类型
@@ -29,6 +30,7 @@ public interface MeasureConstants {
     String MOCK = "mock";
     String MOKAO = "mokao";
     String EVALUATE = "evaluate";
+    String VIP = "vip";
 
     /**
      * 接口请求

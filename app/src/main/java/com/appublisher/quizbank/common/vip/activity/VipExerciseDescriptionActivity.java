@@ -29,7 +29,7 @@ public class VipExerciseDescriptionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vip_exercise_description);
 
-        setToolBar(this);
+        setToolBarWithoutBackBtn(this);
 
         mFrom = getIntent().getStringExtra("from");
         exerciseId = getIntent().getIntExtra("exerciseId", -1);

@@ -13,12 +13,15 @@ import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.LegacyMeasureActivity;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
 import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
@@ -33,7 +36,9 @@ import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterStatusAdapte
 import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterTypeAdapter;
 import com.appublisher.quizbank.common.vip.netdata.VipExerciseFilterResp;
 import com.appublisher.quizbank.common.vip.netdata.VipExerciseResp;
+import com.appublisher.quizbank.common.vip.network.VipRequest;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -386,10 +391,10 @@ public class VipExerciseIndexModel {
      * @param activity VipExerciseIndexActivity
      * @param position position
      */
-    public void dealExerciseSkip(VipExerciseIndexActivity activity, int position) {
+    public void dealExerciseSkip(final VipExerciseIndexActivity activity, int position) {
 
         int exerciseTypeId = activity.list.get(position).getExercise_type();
-        int exerciseId = activity.list.get(position).getExercise_id();
+        final int exerciseId = activity.list.get(position).getExercise_id();
         int status = activity.list.get(position).getStatus();
         Class<?> cls = null;
         switch (exerciseTypeId) {
@@ -480,10 +485,32 @@ public class VipExerciseIndexModel {
             case 8:
                 // 行测_智能组卷
                 if (status == 0 || status == 4 || status == 6) {
-                    Intent intent = new Intent(activity, LegacyMeasureActivity.class);
-                    intent.putExtra("paper_id", exerciseId);
-                    intent.putExtra("paper_type", "vip");
-                    activity.startActivity(intent);
+                    activity.showLoading();
+                    new VipRequest(activity, new RequestCallback() {
+                        @Override
+                        public void requestCompleted(JSONObject response, String apiName) {
+                            if (response != null) {
+                                Intent intent = new Intent(activity, MeasureActivity.class);
+                                intent.putExtra(
+                                        MeasureConstants.INTENT_VIP_XC_DATA, response.toString());
+                                intent.putExtra(
+                                        MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.VIP);
+                                intent.putExtra(MeasureConstants.INTENT_PAPER_ID, exerciseId);
+                                activity.startActivity(intent);
+                            }
+                            activity.hideLoading();
+                        }
+
+                        @Override
+                        public void requestCompleted(JSONArray response, String apiName) {
+                            activity.hideLoading();
+                        }
+
+                        @Override
+                        public void requestEndedWithError(VolleyError error, String apiName) {
+                            activity.hideLoading();
+                        }
+                    }).getExerciseDetail(exerciseId);
                 } else {
                     Intent intent = new Intent(activity, VipXCReportActivity.class);
                     intent.putExtra("exerciseId", exerciseId);

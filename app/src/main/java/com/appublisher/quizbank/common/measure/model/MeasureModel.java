@@ -39,6 +39,8 @@ import com.appublisher.quizbank.common.measure.netdata.MeasureSubmitResp;
 import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
+import com.appublisher.quizbank.common.vip.model.VipXCModel;
+import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
@@ -74,6 +76,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public MeasureRequest mRequest;
     public Context mContext;
     public List<MeasureTabBean> mTabs;
+    public String mVipXCData;
 
     private SparseIntArray mFinalHeightMap;
     private SubmitListener mSubmitListener;
@@ -119,8 +122,59 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             } else if (ENTIRE.equals(mPaperType) || MOKAO.equals(mPaperType)
                     || MOCK.equals(mPaperType) || EVALUATE.equals(mPaperType)) {
                 mRequest.getPaperExercise(mPaperId, mPaperType);
+            } else if (VIP.equals(mPaperType)) {
+                dealVipXC();
+                hideLoading();
             }
         }
+    }
+
+    /**
+     * 处理小班行测
+     */
+    private void dealVipXC() {
+        VipXCResp resp = GsonManager.getModel(mVipXCData, VipXCResp.class);
+        if (resp == null || resp.getResponse_code() != 1) return;
+        List<VipXCResp.QuestionBean> originList = resp.getQuestion();
+        if (originList == null || originList.size() == 0) return;
+
+        List<MeasureQuestionBean> questions = new ArrayList<>();
+        for (VipXCResp.QuestionBean questionBean : originList) {
+            if (questionBean == null) continue;
+            MeasureQuestionBean question = vipXCQuestionTransform(questionBean);
+            questions.add(question);
+        }
+
+        questions = setQuestionOrder(questions, 0);
+        ((MeasureActivity) mContext).showViewPager(questions);
+    }
+
+    public static MeasureQuestionBean vipXCQuestionTransform(VipXCResp.QuestionBean origin) {
+        MeasureQuestionBean question = new MeasureQuestionBean();
+        if (origin == null) return question;
+
+        question.setId(origin.getQuestion_id());
+        question.setMaterial(origin.getMaterial());
+        question.setQuestion(origin.getQuestion());
+        question.setOption_a(origin.getOption_a());
+        question.setOption_b(origin.getOption_b());
+        question.setOption_c(origin.getOption_c());
+        question.setOption_d(origin.getOption_d());
+        question.setAnswer(origin.getAnswer());
+        question.setAnalysis(origin.getAnalysis());
+        question.setNote_id(origin.getNote_id());
+        question.setNote_ids(origin.getNote_ids());
+        question.setNote_name(origin.getNote_name());
+        question.setCategory_id(origin.getCategory_id());
+        question.setCategory_name(origin.getCategory_name());
+        question.setSource(origin.getSource());
+        question.setAccuracy(origin.getAccuracy());
+        question.setSummary_accuracy(origin.getSummary_accuracy());
+        question.setSummary_count(origin.getSummary_count());
+        question.setSummary_fallible(origin.getSummary_fallible());
+        question.setMaterial_id(origin.getMaterial_id());
+
+        return question;
     }
 
     private void hideLoading() {
@@ -792,6 +846,41 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 paperId, paperTpye, redo, durtion, answer, doneStatus));
     }
 
+    public void submitPaperDone() {
+        if (!(mContext instanceof MeasureActivity)) return;
+        submit(true, new SubmitListener() {
+            @Override
+            public void onComplete(boolean success, int exercise_id) {
+                if (success) {
+                    Intent intent = new Intent(mContext, MeasureReportActivity.class);
+                    intent.putExtra(INTENT_PAPER_ID, exercise_id);
+                    intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
+                    mContext.startActivity(intent);
+                    ((MeasureActivity) mContext).finish();
+                } else {
+                    ((MeasureActivity) mContext).showSubmitErrorToast();
+                }
+            }
+        });
+    }
+
+    public void submitVipXCPaper() {
+        SharedPreferences spf = getMeasureCache(mContext);
+        if (spf == null) return;
+        String answer = spf.getString(CACHE_USER_ANSWER, "");
+
+        // 统计总时长
+        List<MeasureSubmitBean> submits = getUserAnswerCache(mContext);
+        if (submits == null) return;
+        int durtion = 0;
+        for (MeasureSubmitBean submitBean : submits) {
+            if (submitBean == null) continue;
+            durtion = durtion + submitBean.getDuration();
+        }
+
+        VipXCModel.submitPaper(mContext, mPaperId, answer, durtion);
+    }
+
     public void checkRecord() {
         if (!(mContext instanceof MeasureActivity)) return;
         if (MOCK.equals(mPaperType)) {
@@ -815,6 +904,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                     }
                 }
             });
+        } else if (VIP.equals(mPaperType)) {
+            ((MeasureActivity) mContext).finish();
         } else {
             if (hasRecord()) {
                 ((MeasureActivity) mContext).showSaveTestAlert();
@@ -916,24 +1007,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         // 恢复计时
         if (((MeasureActivity) mContext).mTimer == null)
             ((MeasureActivity) mContext).startTimer();
-    }
-
-    public void submitPaperDone() {
-        if (!(mContext instanceof MeasureActivity)) return;
-        submit(true, new SubmitListener() {
-            @Override
-            public void onComplete(boolean success, int exercise_id) {
-                if (success) {
-                    Intent intent = new Intent(mContext, MeasureReportActivity.class);
-                    intent.putExtra(INTENT_PAPER_ID, exercise_id);
-                    intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
-                    mContext.startActivity(intent);
-                    ((MeasureActivity) mContext).finish();
-                } else {
-                    ((MeasureActivity) mContext).showSubmitErrorToast();
-                }
-            }
-        });
     }
 
     @Override

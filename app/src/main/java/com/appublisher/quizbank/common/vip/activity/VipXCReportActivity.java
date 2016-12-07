@@ -72,8 +72,8 @@ public class VipXCReportActivity extends VipBaseActivity implements View.OnClick
         mTvJYYS.setText(time);
     }
 
-    public void showAccuracy(int accuracy) {
-        mTvAccuracy.setText(String.valueOf(accuracy));
+    public void showAccuracy(String accuracy) {
+        mTvAccuracy.setText(accuracy);
     }
 
     public void showSpeed(int speed) {
