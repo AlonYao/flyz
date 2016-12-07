@@ -8,6 +8,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 
 import com.appublisher.lib_basic.Utils;
+import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
@@ -73,6 +74,7 @@ public class MeasureReportModel extends MeasureModel {
         if (HISTORY_EXERCISE_DETAIL.equals(apiName)) {
             dealHistoryExerciseDetailResp(response);
         }
+        if (mContext instanceof BaseActivity) ((BaseActivity) mContext).hideLoading();
     }
 
     private void dealHistoryExerciseDetailResp(JSONObject response) {
@@ -287,7 +289,7 @@ public class MeasureReportModel extends MeasureModel {
     /**
      * 显示试卷类型
      */
-    public String getPaperType(String type) {
+    private String getPaperType(String type) {
         if (AUTO.equals(type)) {
             return "快速智能练习";
         } else if (NOTE.equals(type)) {

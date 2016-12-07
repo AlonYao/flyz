@@ -54,6 +54,8 @@ public class MeasureReportActivity extends BaseActivity implements
         mModel = new MeasureReportModel(this);
         mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
+
+        showLoading();
         mModel.getData();
     }
 

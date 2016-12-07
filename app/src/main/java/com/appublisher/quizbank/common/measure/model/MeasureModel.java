@@ -64,8 +64,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     public int mPaperId;
     public int mHierarchyId;
-    public int mCurPagePosition;
     public int mMockDuration;
+    public int mCurPagePosition;
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
@@ -79,6 +79,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     private SubmitListener mSubmitListener;
     private ServerTimeListener mServerTimeListener;
     private int mPaperDuration;
+
 
     public MeasureModel(Context context) {
         mContext = context;
@@ -573,10 +574,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     /**
      * 缓存用户做题时长
-     * @param position 此处的position指的是题目的索引
-     * 备注：submit list中的索引和题号的关系是（order - 1），submit list中不包含说明页
      */
-    public void saveSubmitDuration(int position) {
+    public void saveSubmitDuration() {
         if (!(mContext instanceof MeasureActivity)) return;
 
         List<MeasureQuestionBean> questions = ((MeasureActivity) mContext).mAdapter.getQuestions();
@@ -604,7 +603,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         list.set(order, submitBean);
         saveUserAnswerCache(mContext, list);
 
-        mCurPagePosition = position;
         mCurTimestamp = System.currentTimeMillis();
 
         // Umeng
@@ -615,13 +613,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         HashMap<String, String> map = new HashMap<>();
         map.put("Action", isDone);
         UmengManager.onEvent(mContext, "Question", map);
-    }
-
-    /**
-     * 保存当前页面的时长
-     */
-    public void saveCurPageDuration() {
-        saveSubmitDuration(mCurPagePosition);
     }
 
     public static String getUserAnswerByPosition(Context context, int position) {
@@ -929,7 +920,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
     public void submitPaperDone() {
         if (!(mContext instanceof MeasureActivity)) return;
-        saveCurPageDuration();
         submit(true, new SubmitListener() {
             @Override
             public void onComplete(boolean success, int exercise_id) {

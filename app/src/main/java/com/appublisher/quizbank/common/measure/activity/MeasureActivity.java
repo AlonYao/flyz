@@ -217,8 +217,9 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
 
             @Override
             public void onPageSelected(int position) {
-                mModel.saveSubmitDuration(position);
+                mModel.saveSubmitDuration();
                 scrollTabLayout(position);
+                mModel.mCurPagePosition = position;
             }
 
             @Override
@@ -263,7 +264,7 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 更新当前页面的时长
-                                mModel.saveCurPageDuration();
+                                mModel.saveSubmitDuration();
 
                                 // 保存至本地
 //                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
@@ -296,7 +297,7 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 更新当前页面的时长
-                                mModel.saveCurPageDuration();
+                                mModel.saveSubmitDuration();
 
                                 // 保存至本地
 //                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
