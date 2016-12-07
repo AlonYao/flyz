@@ -32,7 +32,7 @@ import com.appublisher.quizbank.adapter.ProvinceGvAdapter;
 import com.appublisher.quizbank.adapter.WholePageListAdapter;
 import com.appublisher.quizbank.adapter.YearGvAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureDescriptionActivity;
 import com.appublisher.quizbank.model.business.WholePageModel;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaM;
 import com.appublisher.quizbank.model.netdata.wholepage.AreaYearResp;
@@ -232,24 +232,13 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (mEntirePapers == null || position - 1 >= mEntirePapers.size()) return;
-
                     EntirePaperM entirePaper = mEntirePapers.get(position - 1);
-
                     if (entirePaper == null) return;
-
                     int paperId = entirePaper.getId();
-                    String paperName = entirePaper.getName();
 
-//                    Intent intent = new Intent(mActivity, MeasureDescriptionActivity.class);
-//                    intent.putExtra("paper_type", "entire");
-//                    intent.putExtra("paper_id", paperId);
-//                    intent.putExtra("paper_name", paperName);
-
-                    Intent intent = new Intent(mActivity, MeasureActivity.class);
-                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, "entire");
+                    Intent intent = new Intent(mActivity, MeasureDescriptionActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.ENTIRE);
                     intent.putExtra(MeasureConstants.INTENT_PAPER_ID, paperId);
-//                    intent.putExtra("paper_name", paperName);
-
                     startActivity(intent);
 
                     // Umeng

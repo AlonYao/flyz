@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureDescriptionActivity;
 import com.appublisher.quizbank.model.business.KnowledgeTreeModel;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
 import com.unnamed.b.atv.model.TreeNode;
@@ -146,7 +146,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ivDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MeasureActivity.class);
+                Intent intent = new Intent(context, MeasureDescriptionActivity.class);
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, value.type);
                 intent.putExtra(MeasureConstants.INTENT_HIERARCHY_ID, value.id);
                 context.startActivity(intent);
@@ -168,19 +168,6 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
         ivWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(context, LegacyMeasureAnalysisActivity.class);
-//                intent.putExtra("analysis_type", value.type);
-//                intent.putExtra("hierarchy_id", value.id);
-//                intent.putExtra("hierarchy_level", value.level);
-//                intent.putExtra("umeng_entry", "List");
-//                if (KnowledgeTreeModel.TYPE_ERROR.equals(value.type)) {
-//                    intent.putExtra("is_from_error", true);
-//                    intent.putExtra("umeng_entry_review", "Error");
-//                } else if (KnowledgeTreeModel.TYPE_COLLECT.equals(value.type)) {
-//                    intent.putExtra("umeng_entry_review", "Collect");
-//                }
-//                intent.putExtra("from", "collect_or_error");
-
                 Intent intent = new Intent(context, MeasureAnalysisActivity.class);
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, value.type);
                 intent.putExtra(MeasureConstants.INTENT_HIERARCHY_ID, value.id);

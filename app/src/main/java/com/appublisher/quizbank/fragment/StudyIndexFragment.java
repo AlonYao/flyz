@@ -32,7 +32,6 @@ import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.adapter.CarouselAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureDescriptionActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
@@ -359,7 +358,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
                     startActivity(intent);
                 } else {
                     // 跳转至做题页面
-                    intent = new Intent(getActivity(), MeasureActivity.class);
+                    intent = new Intent(getActivity(), MeasureDescriptionActivity.class);
                     intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOKAO);
                     intent.putExtra(MeasureConstants.INTENT_PAPER_ID, mTodayExam.getId());
                     if ("undone".equals(status)) {
@@ -386,7 +385,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             case R.id.note_view:
                 // 推荐专项
                 if (mNote == null || mNote.getId() == 0) break;
-                intent = new Intent(getActivity(), MeasureActivity.class);
+                intent = new Intent(getActivity(), MeasureDescriptionActivity.class);
                 intent.putExtra(MeasureConstants.INTENT_HIERARCHY_ID, mNote.getId());
                 intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.NOTE);
                 startActivity(intent);
