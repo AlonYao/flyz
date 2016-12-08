@@ -43,7 +43,7 @@ public class MeasureAnalysisSheetFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.measure_sheet_fragment, container);
+        View view = inflater.inflate(R.layout.measure_analysis_sheet_fragment, container);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.themecolor));

@@ -113,7 +113,7 @@ public class HistoryPapersListAdapter extends BaseAdapter {
         } else if ("evaluate".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.record_gufen);
         } else if ("mock".equals(paperType)) {
-            ivLogo.setImageResource(R.drawable.record_mokao);
+            ivLogo.setImageResource(R.drawable.record_mock);
         } else {
             ivLogo.setVisibility(View.GONE);
         }
