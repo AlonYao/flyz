@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="measure_desc_changshi">根据题目要求，在四个选项中选出一个最恰当的答案</string>
+    <string name="measure_desc_changshi">根据题目要求，在四个选项中选出一个最恰当的答案，向左滑动页面，开始答题</string>
     <string name="measure_desc_yanyu">本部分包括表达与理解两方面的内容。请根据题目要求，在四个选项中选出一个最恰当的答案</string>
     <string name="measure_desc_shuliang">在这部分试题中，每道题呈现一段表述数字关系的文字，要求你迅速、准确地计算出答案</string>
     <string name="measure_desc_panduan">本部分包括图形推理、定义判断、类比推理与逻辑判断四种类型的试题。请根据题目要求，在四个选项中选出一个最恰当的答案</string>
