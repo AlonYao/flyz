@@ -4,6 +4,10 @@ import android.content.Context;
 
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.vip.activity.VipXCReportActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
@@ -15,6 +19,7 @@ import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 小班：行测报告页面
@@ -23,6 +28,7 @@ import java.util.ArrayList;
 public class VipXCReportModel extends VipBaseModel{
 
     public int mExerciseId;
+    public MeasureAnalysisBean mAnalysisBean;
     private VipXCReportActivity mView;
     private VipXCResp mResp;
 
@@ -44,6 +50,31 @@ public class VipXCReportModel extends VipBaseModel{
             dealExerciseDetailResp(response);
         }
         super.requestCompleted(response, apiName);
+    }
+
+    private void setAnalysisBean() {
+        mAnalysisBean = new MeasureAnalysisBean();
+        if (mResp == null || mResp.getResponse_code() != 1) return;
+        ArrayList<VipXCResp.QuestionBean> origin = mResp.getQuestion();
+        if (origin == null) return;
+
+        List<MeasureQuestionBean> questions = new ArrayList<>();
+        List<MeasureAnswerBean> answers = new ArrayList<>();
+        for (VipXCResp.QuestionBean questionBean : origin) {
+            if (questionBean == null || questionBean.getUser_answer() == null) continue;
+            questions.add(MeasureModel.vipXCQuestionTransform(questionBean));
+
+            VipXCResp.QuestionBean.UserAnswerBean userAnswerBean = questionBean.getUser_answer();
+            MeasureAnswerBean answerBean = new MeasureAnswerBean();
+            answerBean.setId(userAnswerBean.getQuestion_id());
+            answerBean.setIs_right(userAnswerBean.isIs_right());
+            answerBean.setAnswer(userAnswerBean.getAnswer());
+            answerBean.setIs_collected(userAnswerBean.isIs_collected());
+            answers.add(answerBean);
+        }
+
+        mAnalysisBean.setQuestions(questions);
+        mAnalysisBean.setAnswers(answers);
     }
 
     private void dealExerciseDetailResp(JSONObject response) {
@@ -87,6 +118,9 @@ public class VipXCReportModel extends VipBaseModel{
                 knowledgeTreeModel.showHierarchys(hierarchys);
             }
         }
+
+        // 生成用于解析页面的数据
+        setAnalysisBean();
     }
 
     private String timeFormat(int duration) {
@@ -171,5 +205,20 @@ public class VipXCReportModel extends VipBaseModel{
             answers.add(answerM);
         }
         return answers;
+    }
+
+    public boolean isAllRight() {
+        if (mResp == null || mResp.getResponse_code() != 1) return true;
+        ArrayList<VipXCResp.QuestionBean> questions = mResp.getQuestion();
+        if (questions == null) return true;
+
+        for (VipXCResp.QuestionBean question : questions) {
+            if (question == null) continue;
+            VipXCResp.QuestionBean.UserAnswerBean userAnswerBean = question.getUser_answer();
+            if (userAnswerBean == null) continue;
+            if (!userAnswerBean.isIs_right()) return false;
+        }
+
+        return true;
     }
 }
