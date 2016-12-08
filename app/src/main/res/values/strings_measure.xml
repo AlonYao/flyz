@@ -42,4 +42,6 @@
     <string name="measure_report">练习报告</string>
     <string name="measure_analysis">解析</string>
 
+    <string name="measure_analysis_allright">这个科目的题全部做对啦！</string>
+
 </resources>

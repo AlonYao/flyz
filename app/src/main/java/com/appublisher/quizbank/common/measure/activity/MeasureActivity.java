@@ -265,13 +265,10 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                             public void onClick(DialogInterface dialog, int which) {
                                 // 更新当前页面的时长
                                 mModel.saveSubmitDuration();
-
-                                // 保存至本地
-//                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
-
                                 // 提交数据
                                 mModel.submit(false);
-
+                                // 清除缓存
+                                MeasureModel.clearUserAnswerCache(MeasureActivity.this);
                                 dialog.dismiss();
                                 finish();
                             }
@@ -298,13 +295,10 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                             public void onClick(DialogInterface dialog, int which) {
                                 // 更新当前页面的时长
                                 mModel.saveSubmitDuration();
-
-                                // 保存至本地
-//                                PaperDAO.save(activity.mPaperId, activity.mCurPosition);
-
                                 // 提交数据
                                 mModel.submit(true);
-
+                                // 清除缓存
+                                MeasureModel.clearUserAnswerCache(MeasureActivity.this);
                                 dialog.dismiss();
                                 finish();
                             }

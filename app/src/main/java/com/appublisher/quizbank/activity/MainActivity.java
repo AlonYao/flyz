@@ -41,6 +41,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.grade.GradeUtil;
 import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
@@ -83,8 +84,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
     private RadioButton studyRadioButton;
     public RadioButton courseRadioButton;
+    public RadioButton recordRadioButton;
     private RadioButton opencourseRadioButton;
-    private RadioButton recordRadioButton;
     private RadioButton vipRadioButton;
 
     private String indexString = "study";//study or interview
@@ -168,7 +169,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 }
             });
             // 做题缓存提交
-//            new LegacyMeasureModel(this).checkCache();
+            new MeasureModel(this).checkCache();
         }
 
         if (!Utils.isConnectingToInternet(QuizBankApp.getInstance().getApplicationContext())) {

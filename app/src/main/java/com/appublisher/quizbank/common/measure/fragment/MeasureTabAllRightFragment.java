@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.appublisher.quizbank.R;
+
 /**
  * 做题页面
  */
@@ -23,6 +25,6 @@ public class MeasureTabAllRightFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.measure_analysis_allright, container, false);
     }
 }

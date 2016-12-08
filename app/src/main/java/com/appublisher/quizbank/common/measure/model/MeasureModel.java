@@ -1,9 +1,12 @@
 package com.appublisher.quizbank.common.measure.model;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -21,6 +24,7 @@ import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
@@ -42,10 +46,14 @@ import com.appublisher.quizbank.common.measure.network.MeasureRequest;
 import com.appublisher.quizbank.common.vip.model.VipXCModel;
 import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
 import com.appublisher.quizbank.model.business.CommonModel;
+import com.appublisher.quizbank.model.netdata.CommonResp;
+import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
+import com.appublisher.quizbank.network.ParamBuilder;
+import com.appublisher.quizbank.network.QRequest;
 
 import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
@@ -256,7 +264,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             }
 
             // 设置题号
-            questions = setQuestionOrder(questions, size);
+            // 模考特殊处理
+            if (MOCK.equals(mPaperType)) {
+                questions = setMockQuestionOrder(questions, size);
+            } else {
+                questions = setQuestionOrder(questions, size);
+            }
 
             // 显示Tab
             ((MeasureActivity) mContext).showTabLayout(mTabs);
@@ -493,6 +506,59 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     }
 
     /**
+     * 设置模考题号&索引(同时初始化用户记录)
+     * @param list List<MeasureQuestionBean>
+     * @return List<MeasureQuestionBean>
+     */
+    private List<MeasureQuestionBean> setMockQuestionOrder(List<MeasureQuestionBean> list,
+                                                       int descSize) {
+        if (list == null) return new ArrayList<>();
+        int size = list.size();
+        int amount = size - descSize;
+        int order = 0;
+        mExcludes = new ArrayList<>();
+
+        boolean isFresh = false;
+        List<MeasureSubmitBean> submits = getUserAnswerCache(mContext);
+        if (submits == null || submits.size() == 0) {
+            isFresh = true;
+            submits = new ArrayList<>();
+        }
+
+        for (int i = 0; i < size; i++) {
+            // 设置索引
+            MeasureQuestionBean measureQuestionBean = list.get(i);
+            if (measureQuestionBean == null) continue;
+            measureQuestionBean.setQuestion_index(i);
+
+            // 设置题号
+            if (measureQuestionBean.is_desc()) continue;
+            order++;
+            measureQuestionBean.setQuestion_order(order);
+            measureQuestionBean.setQuestion_amount(amount);
+            list.set(i, measureQuestionBean);
+
+            // 选项排除
+            mExcludes.add(new MeasureExcludeBean());
+
+            // 用户做题记录
+            if (isFresh) {
+                MeasureSubmitBean submitBean = new MeasureSubmitBean();
+                submitBean.setId(measureQuestionBean.getId());
+                submitBean.setCategory(measureQuestionBean.getCategory_id());
+                submitBean.setNote_ids(measureQuestionBean.getNote_ids());
+                submits.add(submitBean);
+            }
+        }
+
+        // 缓存
+        saveSubmitPaperInfo();
+        saveUserAnswerCache(mContext, submits);
+
+        return list;
+    }
+
+    /**
      * 获取做题模块缓存
      * @return SharedPreferences
      */
@@ -596,10 +662,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
                 // 构建noteIds
                 List<Integer> noteIds = submitBean.getNote_ids();
-                if (noteIds == null) continue;
                 JSONArray noteIdArray = new JSONArray();
-                for (Integer noteId : noteIds) {
-                    noteIdArray.put(noteId);
+                if (noteIds != null) {
+                    for (Integer noteId : noteIds) {
+                        noteIdArray.put(noteId);
+                    }
                 }
                 object.put(SUBMIT_NOTE_IDS, noteIdArray);
 
@@ -685,6 +752,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         editor.putInt(CACHE_PAPER_ID, mPaperId);
         editor.putString(CACHE_PAPER_TYPE, String.valueOf(mPaperType));
         editor.putBoolean(CACHE_REDO, mRedo);
+        editor.putString(CACHE_MOCK_TIME, mMockTime);
         editor.commit();
     }
 
@@ -748,37 +816,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 imgView.setImageResource(R.drawable.measure_loading_img);
 
                 flowLayout.addView(imgView);
-
-                // 异步加载图片
-//                DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-//                final float minHeight = (float) ((dm.heightPixels - 50) * 0.05); // 50是状态栏高度
-//
-//                ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
-//                    @Override
-//                    public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-//                        Bitmap data = imageContainer.getBitmap();
-//
-//                        if (data == null) return;
-//
-//                        // 对小于指定尺寸的图片进行放大(2倍)
-//                        int width = data.getWidth();
-//                        int height = data.getHeight();
-//                        if (height < minHeight) {
-//                            Matrix matrix = new Matrix();
-//                            matrix.postScale(2.0f, 2.0f);
-//                            data = Bitmap.createBitmap(data, 0, 0, width, height, matrix, true);
-//                        }
-//
-//                        imgView.setImageBitmap(data);
-//                    }
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//
-//                    }
-//                };
-//
-//                request.loadImage(segment.text.toString(), imageListener);
 
                 ImageManager.displayImage(segment.text.toString(), imgView);
 
@@ -858,6 +895,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                     intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
                     mContext.startActivity(intent);
                     ((MeasureActivity) mContext).finish();
+                    // 清除做题缓存
+                    clearUserAnswerCache(mContext);
                 } else {
                     ((MeasureActivity) mContext).showSubmitErrorToast();
                 }
@@ -968,7 +1007,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * 模考：是否时间到
      * @return boolean
      */
-    public boolean isMockTimeOut() {
+    private boolean isMockTimeOut() {
         return mMockDuration <= 0;
     }
 
@@ -1010,6 +1049,156 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             ((MeasureActivity) mContext).startTimer();
     }
 
+    public void checkCache() {
+        SharedPreferences cache = getMeasureCache(mContext);
+        int paperId = cache.getInt(CACHE_PAPER_ID, 0);
+        if (paperId == 0) return;
+        String paperType = cache.getString(CACHE_PAPER_TYPE, "");
+        if (paperType.length() == 0 || "vip".equals(paperType)) return;
+
+        if (hasRecord()) {
+            if ("mock".equals(paperType)) {
+                new QRequest(mContext, this).getMockPreExamInfo(String.valueOf(paperId));
+            } else {
+                // 提交做题数据
+                String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+                boolean redo = cache.getBoolean(CACHE_REDO, false);
+                new QRequest(mContext, this).cacheSubmitPaper(
+                        MeasureParamBuilder.submitPaper(
+                                paperId,
+                                paperType,
+                                redo,
+                                countDuration(userAnswer),
+                                userAnswer,
+                                "undone")
+                );
+                clearUserAnswerCache(mContext);
+            }
+        } else {
+            clearUserAnswerCache(mContext);
+        }
+    }
+
+    private int countDuration(String userAnswer) {
+        int count = 0;
+        try {
+            JSONArray array = new JSONArray(userAnswer);
+            int length = array.length();
+            for (int i = 0; i < length; i++) {
+                JSONObject jo = array.getJSONObject(i);
+                int duration = jo.getInt("duration");
+                count = count + duration;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    public static void clearUserAnswerCache(Context context) {
+        SharedPreferences cache = getMeasureCache(context);
+        SharedPreferences.Editor editor = cache.edit();
+        editor.putInt(CACHE_PAPER_ID, 0);
+        editor.putString(CACHE_PAPER_TYPE, "");
+        editor.putString(CACHE_USER_ANSWER, "");
+        editor.putBoolean(CACHE_REDO, false);
+        editor.putString(CACHE_MOCK_TIME, "");
+        editor.putString(CACHE_PAPER_NAME, "");
+        editor.commit();
+    }
+
+    private void showMockCacheSubmitAlert() {
+        if (mContext == null || ((Activity) mContext).isFinishing()) return;
+        String msg = "你的模考正在进行中";
+        String n = "放弃";
+        String p = "继续";
+        new AlertDialog.Builder(mContext)
+                .setMessage(msg)
+                .setNegativeButton(n, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearUserAnswerCache(mContext);
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(p,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences cache = getMeasureCache(mContext);
+                                int paperId = cache.getInt(CACHE_PAPER_ID, 0);
+                                String mockTime = cache.getString(CACHE_MOCK_TIME, "");
+                                // 跳转
+                                Intent intent = new Intent(mContext, MeasureActivity.class);
+                                intent.putExtra(INTENT_PAPER_ID, paperId);
+                                intent.putExtra(INTENT_PAPER_TYPE, MOCK);
+                                intent.putExtra(INTENT_MOCK_TIME, mockTime);
+                                mContext.startActivity(intent);
+                                dialog.dismiss();
+                            }
+                        }).show();
+    }
+
+    private void showMockCacheSubmitTimeOutAlert() {
+        if (mContext == null || ((Activity) mContext).isFinishing()) return;
+        String msg = "你的模考时间已到";
+        String n = "放弃";
+        String p = "提交";
+        new AlertDialog.Builder(mContext)
+                .setMessage(msg)
+                .setNegativeButton(n, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearUserAnswerCache(mContext);
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(p,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 提交做题数据
+                                SharedPreferences cache = getMeasureCache(mContext);
+                                int paperId = cache.getInt(CACHE_PAPER_ID, 0);
+                                String paperType = cache.getString(CACHE_PAPER_TYPE, "");
+                                String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
+                                String redo = cache.getString(CACHE_REDO, "false");
+                                new QRequest(mContext).submitPaper(
+                                        ParamBuilder.submitPaper(
+                                                String.valueOf(paperId),
+                                                paperType,
+                                                redo,
+                                                String.valueOf(countDuration(userAnswer)),
+                                                userAnswer,
+                                                "done")
+                                );
+                                clearUserAnswerCache(mContext);
+                                dialog.dismiss();
+                            }
+                        }).show();
+    }
+
+    private void showCacheSubmitAlert() {
+        if (mContext == null || ((Activity) mContext).isFinishing()) return;
+        String msg = "你有一次未完成的练习";
+        String p = "去看记录";
+        new AlertDialog.Builder(mContext)
+                .setMessage(msg)
+                .setPositiveButton(p,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 跳转至学习记录
+                                if (mContext instanceof MainActivity) {
+                                    ((MainActivity) mContext).recordRadioButton.setChecked(true);
+                                }
+                                dialog.dismiss();
+                            }
+                        }).show();
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (AUTO_TRAINING.equals(apiName)) {
@@ -1024,6 +1213,20 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             dealHistoryExerciseDetail(response);
         } else if (SERVER_CURRENT_TIME.equals(apiName)) {
             dealServerCurrentTimeResp(response);
+        } else if ("cache_submit_paper".equals(apiName)) {
+            // 缓存提交
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) return;
+            showCacheSubmitAlert();
+        } else if ("mockpre_exam_info".equals(apiName)) {
+            MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
+            if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
+            String status = mockPreResp.getMock_status();
+            if ("finish".equals(status)) {
+                showMockCacheSubmitTimeOutAlert();
+            } else {
+                showMockCacheSubmitAlert();
+            }
         }
 
         hideLoading();

@@ -146,7 +146,7 @@ public class StudyIndexModel {
      */
     public static void dealCarouselResp(JSONObject jsonObject, Fragment fragment) {
         CarouselResp carouselResp = GsonManager.getModel(jsonObject, CarouselResp.class);
-        if (carouselResp.getResponse_code() == 1) {
+        if (carouselResp != null && carouselResp.getResponse_code() == 1) {
             int width = Utils.getWindowWidth(fragment.getActivity());
             int height = width / 69 * 20;
 
@@ -160,6 +160,8 @@ public class StudyIndexModel {
                     ((StudyIndexFragment) fragment).carouselAdapter.notifyDataSetChanged();
                     ((StudyIndexFragment) fragment).carouselView.setVisibility(View.VISIBLE);
                     ((StudyIndexFragment) fragment).initDots(carouselResp.getWritten().size());
+                } else {
+                    ((StudyIndexFragment) fragment).carouselView.setVisibility(View.GONE);
                 }
             } else if (fragment instanceof InterviewIndexFragment) {
                 ((InterviewIndexFragment) fragment).carouselView.setLayoutParams(params);
@@ -169,6 +171,8 @@ public class StudyIndexModel {
                     ((InterviewIndexFragment) fragment).carouselAdapter.notifyDataSetChanged();
                     ((InterviewIndexFragment) fragment).carouselView.setVisibility(View.VISIBLE);
                     ((InterviewIndexFragment) fragment).initDots(carouselResp.getInterview().size());
+                } else {
+                    ((InterviewIndexFragment) fragment).carouselView.setVisibility(View.GONE);
                 }
             }
         }

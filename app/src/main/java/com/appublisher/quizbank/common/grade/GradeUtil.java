@@ -228,8 +228,7 @@ public class GradeUtil implements RequestCallback{
         Long gradeTime = mSharedPreferences.getLong("user_grade_time", -1);
         if (gradeTime != -1) return false;
         Long dif = System.currentTimeMillis() - firstUserTime;
-//        return (dif / (1000 * 60 * 60)) > 72;
-        return (dif / (1000)) > 72;
+        return (dif / (1000 * 60 * 60)) > 72;
     }
 
     /**
