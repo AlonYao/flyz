@@ -24,6 +24,8 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.EvaluationActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.umeng.fb.FeedbackAgent;
@@ -41,6 +43,8 @@ import java.util.Map;
 public class CommonModel {
 
     public static ShareCheckListener mShareCheckListener;
+    private static final String SHARE_EVALUATION_LATEDATE = "share_evaluation_latedate";
+    private static final String SHARE_REPORT_LATEDATE = "share_report_latedate";
 
     /**
      * 设置Toolbar
@@ -276,8 +280,16 @@ public class CommonModel {
             return;
         }
 
-        String lateDate = spf.getString("share_late_date", "");
+        String lateDate;
         String curDate = Utils.getCurDateString();
+
+        if (activity instanceof EvaluationActivity) {
+            lateDate = spf.getString(SHARE_EVALUATION_LATEDATE, "");
+        } else if (activity instanceof MeasureReportActivity) {
+            lateDate = spf.getString(SHARE_REPORT_LATEDATE, "");
+        } else {
+            lateDate = curDate;
+        }
 
         if (lateDate.equals(curDate)) {
             activity.finish();
@@ -317,11 +329,14 @@ public class CommonModel {
                 .create().show();
 
         // 更新本地缓存
-        SharedPreferences spf = activity.getSharedPreferences(
-                "quizbank_store", Context.MODE_PRIVATE);
+        SharedPreferences spf = getQuizBankSPF(activity);
         if (spf != null) {
             SharedPreferences.Editor editor = spf.edit();
-            editor.putString("share_late_date", Utils.getCurDateString());
+            if (activity instanceof EvaluationActivity) {
+                editor.putString(SHARE_EVALUATION_LATEDATE, Utils.getCurDateString());
+            } else if (activity instanceof MeasureReportActivity) {
+                editor.putString(SHARE_REPORT_LATEDATE, Utils.getCurDateString());
+            }
             editor.commit();
         }
     }
