@@ -19,6 +19,7 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
+import com.appublisher.quizbank.utils.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +63,7 @@ public class PaperDetailAdaper extends PagerAdapter {
         final TextView sourceTv = (TextView) view.findViewById(R.id.source_tv);
         final TextView keywordsTv = (TextView) view.findViewById(R.id.keywords_tv);
 
-        if (list != null && position < (list.size() - 1)) {
+        if (list != null && position < list.size()) {
             final InterviewPaperDetailResp.QuestionsBean questionsBean = list.get(position);
 
             //材料
@@ -88,6 +89,8 @@ public class PaperDetailAdaper extends PagerAdapter {
             analysisView.setVisibility(View.GONE);
             if ("notice".equals(questionsBean.getStatus())) {
                 analysisSwitchTv.setText("展开提示");
+            } else {
+                analysisSwitchTv.setText("展开解析");
             }
 
             analysisSwitchView.setOnClickListener(new View.OnClickListener() {
@@ -108,8 +111,10 @@ public class PaperDetailAdaper extends PagerAdapter {
                         analysisIm.setImageResource(R.drawable.interview_arrow_up);
                         if ("notice".equals(questionsBean.getStatus())) {
                             analysisSwitchTv.setText("展开提示");
+                            analysisTv.setVisibility(View.GONE);
                         } else {
                             analysisSwitchTv.setText("展开解析");
+                            analysisTv.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -124,7 +129,7 @@ public class PaperDetailAdaper extends PagerAdapter {
 
             SpannableString analysis = new SpannableString("【解析】" + questionsBean.getAnalysis());
             ForegroundColorSpan colorSpan = new ForegroundColorSpan(context.getResources().getColor(R.color.themecolor));
-            AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(46);
+            AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(context, 15));
             StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
 
             //解析
@@ -141,14 +146,14 @@ public class PaperDetailAdaper extends PagerAdapter {
             noteTv.setText(note);
 
             //来源
-            SpannableString source = new SpannableString("【来源】" + questionsBean.getNotes());
+            SpannableString source = new SpannableString("【来源】" + questionsBean.getFrom());
             source.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             source.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             source.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             sourceTv.setText(source);
 
             //关键词
-            SpannableString keywords = new SpannableString("【关键词】" + questionsBean.getNotes());
+            SpannableString keywords = new SpannableString("【关键词】" + questionsBean.getKeywords());
             keywords.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             keywords.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             keywords.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
