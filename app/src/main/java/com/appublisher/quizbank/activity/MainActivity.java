@@ -39,7 +39,7 @@ import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.grade.GradeUtil;
+import com.appublisher.quizbank.common.grade.GradeManager;
 import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
@@ -178,8 +178,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         }
 
         // 邀请评价
-        GradeUtil gradeUtil = new GradeUtil(this);
-        gradeUtil.dealGrade();
+        GradeManager gradeManager = new GradeManager(this);
+        gradeManager.dealGrade();
     }
 
     public void setValue() {

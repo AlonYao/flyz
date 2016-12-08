@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.grade;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +34,7 @@ import java.util.HashMap;
 /**
  * Created by bihaitian on 16/4/15.
  */
-public class GradeUtil implements RequestCallback{
+public class GradeManager implements RequestCallback{
 
     private SharedPreferences mSharedPreferences;
     private static AlertDialog mAlertDialog;
@@ -43,7 +42,7 @@ public class GradeUtil implements RequestCallback{
     private Context mContext;
     private RateCourseResp mRateCourseResp;
 
-    public GradeUtil (Context context) {
+    public GradeManager(Context context) {
         mSharedPreferences = context.getSharedPreferences("grade", Context.MODE_PRIVATE);
         mRequest = new QRequest(context, this);
         mContext = context;
@@ -118,6 +117,11 @@ public class GradeUtil implements RequestCallback{
                     // 不再提示
                     clearLoginAlertNotice();
                     mAlertDialog.dismiss();
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "0");
+                    UmengManager.onEvent(mContext, "Rating", map);
                 }
             });
 
@@ -195,6 +199,11 @@ public class GradeUtil implements RequestCallback{
                         }
                     });
                     mAlertDialog.dismiss();
+
+                    // Umeng统计
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "2");
+                    UmengManager.onEvent(mContext, "Rating", map);
                 }
             });
 
@@ -373,7 +382,6 @@ public class GradeUtil implements RequestCallback{
 
                     // Umeng统计
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("Type", umengEntry);
                     map.put("Action", "2");
                     UmengManager.onEvent(mContext, "Rating", map);
                 }
@@ -387,13 +395,12 @@ public class GradeUtil implements RequestCallback{
                     clearFirstTime();
 
                     // 进入反馈
-                    CommonModel.skipToUmengFeedback((Activity) mContext);
+                    CommonModel.skipToFeedback();
 
                     mAlertDialog.dismiss();
 
                     // Umeng统计
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("Type", umengEntry);
                     map.put("Action", "1");
                     UmengManager.onEvent(mContext, "Rating", map);
                 }
