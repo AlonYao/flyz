@@ -273,7 +273,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // 页面切换，默认首页
         studyRadioButton.setChecked(true);
-
     }
 
 
@@ -293,8 +292,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             Intent intent = new Intent(this, ExamChangeActivity.class);
             intent.putExtra("from", "splash");
             startActivity(intent);
-            // Umeng
-//            UmengManager.sendCountEvent(this, "Home", "Entry", "Launch");
             return false;
         }
 
