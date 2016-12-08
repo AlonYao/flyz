@@ -75,8 +75,6 @@ public class CommonFragmentActivity extends BaseActivity {
             MenuItemCompat.setShowAsAction(menu.add("下载").setIcon(R.drawable.actionbar_download),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("评分").setIcon(R.drawable.actionbar_rate), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            MenuItemCompat.setShowAsAction(menu.add("下载"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            MenuItemCompat.setShowAsAction(menu.add("评分"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);

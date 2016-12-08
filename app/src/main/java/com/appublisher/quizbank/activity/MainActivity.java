@@ -496,7 +496,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     transaction.show(mStudyRecordFragment);
                 }
 
-                setTitle(R.string.record_index);
+                setTitle("学习记录");
 
                 mCurFragment = mStudyRecordFragment;
 
@@ -513,7 +513,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                     transaction.show(mVipIndexFragment);
                 }
 
-                setTitle(R.string.vip_index);
+                setTitle("智学系统");
 
                 mCurFragment = mVipIndexFragment;
 

@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.appublisher.lib_basic.Logger;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
 import com.igexin.sdk.PushConsts;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * Created by bihaitian on 16/4/7.
@@ -43,6 +46,11 @@ public class PushReceiver extends BroadcastReceiver {
                             final Intent intent1 = new Intent(context, OpenCourseActivity.class);
                             intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent1);
+
+                            // Umeng
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("Type", "OpenCourse");
+                            UmengManager.onEvent(context, "Push", map);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

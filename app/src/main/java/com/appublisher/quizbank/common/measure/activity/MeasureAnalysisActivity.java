@@ -202,7 +202,6 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                 UmengManager.UMShareEntity umShareEntity = new UmengManager.UMShareEntity()
                         .setTitle(resources.getString(R.string.share_title))
                         .setText(content[random])
-                        .setUmImage(UmengManager.getUMImage(this, mViewPager))
                         .setTargetUrl(targetUrl)
                         .setFrom("Review");
                 UmengManager.shareAction(
@@ -437,6 +436,11 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                 Intent intent = new Intent(
                         MeasureAnalysisActivity.this, OpenCourseActivity.class);
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Guide", "Live");
+                UmengManager.onEvent(MeasureAnalysisActivity.this, "Review", map);
             }
         });
     }
