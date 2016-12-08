@@ -349,6 +349,12 @@ public class MeasureAnalysisModel extends MeasureModel{
         return questionBean.getId();
     }
 
+    public boolean isDescPage(int position) {
+        if (mQuestions == null || position < 0 || position >= mQuestions.size()) return false;
+        MeasureQuestionBean questionBean = mQuestions.get(position);
+        return questionBean != null && questionBean.is_desc();
+    }
+
     public boolean isShowAnother() {
         return AUTO.equals(mPaperType) || NOTE.equals(mPaperType);
     }

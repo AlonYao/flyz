@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_course.opencourse.activity.OpenCourseActivity;
 import com.appublisher.quizbank.R;
@@ -106,8 +107,14 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
 //            }
 //        }
 
-        // 初始化反馈菜单
-        initPopupWindowView();
+        if (mModel.isDescPage(mCurPosition)) {
+            // 说明页禁用icon
+            try {
+                menu.setGroupEnabled(0, false);
+            } catch (Exception e) {
+                // Empty
+            }
+        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -157,6 +164,9 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
             } else if (System.currentTimeMillis() - mPopupDismissTime > 500) {
                 mPopupWindow.showAsDropDown(feedbackMenu, 120, 12);
             }
+
+            Utils.updateMenu(this);
+
         } else if ("错题".equals(item.getTitle())) {
 //            AlertManager.deleteErrorQuestionAlert(this);
 
@@ -210,6 +220,8 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.measure_analysis_viewpager);
         setViewPager(mViewPager);
+        // 初始化反馈菜单
+        initPopupWindowView();
     }
 
     private void initData() {
@@ -249,6 +261,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                 scrollTabLayout(position);
                 mCurQuestionId = mModel.getCurQuestionId(position);
                 mCurPosition = position;
+                Utils.updateMenu(MeasureAnalysisActivity.this);
             }
 
             @Override
