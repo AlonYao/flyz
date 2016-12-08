@@ -32,4 +32,7 @@ public interface MeasureApi extends ApiConstants{
     // 服务器时间
     String serverCurrentTime = baseUrl + "common/server_current_time";
 
+    // 删除错题
+    String deleteErrorQuestion = baseUrl + "quizbank/delete_error_question";
+
 }

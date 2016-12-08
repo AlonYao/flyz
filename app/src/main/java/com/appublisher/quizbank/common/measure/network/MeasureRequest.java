@@ -112,4 +112,14 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
         asyncRequest(getFinalUrl(serverCurrentTime), SERVER_CURRENT_TIME, "object");
     }
 
+    /**
+     * 错题删除
+     *
+     * @param params 删除
+     */
+    public void deleteErrorQuestion(Map<String, String> params) {
+        postRequest(getFinalUrl(deleteErrorQuestion),
+                params, "delete_error_question", "object");
+    }
+
 }

@@ -21,6 +21,7 @@ import com.appublisher.lib_course.coursecenter.netdata.GradeCourseResp;
 import com.appublisher.lib_course.coursecenter.netdata.RateCourseResp;
 import com.appublisher.lib_login.activity.LoginActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -323,6 +324,7 @@ public class GradeUtil implements RequestCallback{
                 mAlertDialog.show();
 
             Window window = mAlertDialog.getWindow();
+            if (window == null) return;
             window.setContentView(R.layout.alert_item_grade);
             window.setBackgroundDrawableResource(R.color.transparency);
 
@@ -416,6 +418,7 @@ public class GradeUtil implements RequestCallback{
             if (!mAlertDialog.isShowing())
                 mAlertDialog.show();
             Window window = mAlertDialog.getWindow();
+            if (window == null) return;
             window.setContentView(R.layout.alert_item_grade_success);
             window.setBackgroundDrawableResource(R.color.transparency);
 
@@ -436,9 +439,7 @@ public class GradeUtil implements RequestCallback{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, CourseWebViewActivity.class);
-                    intent.putExtra("url", jump_url
-                            + "&user_id=" + LoginModel.getUserId()
-                            + "&user_token=" + LoginModel.getUserToken());
+                    intent.putExtra("url", LoginParamBuilder.finalUrl(jump_url));
                     mContext.startActivity(intent);
                     mAlertDialog.dismiss();
                 }

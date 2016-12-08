@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -33,6 +34,7 @@ import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.fragment.MeasureAnalysisSheetFragment;
 import com.appublisher.quizbank.common.measure.model.MeasureAnalysisModel;
+import com.appublisher.quizbank.common.measure.network.MeasureParamBuilder;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -80,32 +82,17 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                 menu.add("分享").setIcon(R.drawable.share),
                 MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
+        // 判断是否显示错题
+        if (ERROR.equals(mModel.mPaperType) && mModel.mIsFromFolder) {
+            MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
+                    R.drawable.measure_analysis_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
 
         MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
                 R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
                 R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
-        // 判断是否显示错题
-//        if (mIsFromError && mDeleteErrorQuestions != null) {
-//            int size = mDeleteErrorQuestions.size();
-//
-//            if (size == 0) {
-//                MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
-//                        R.drawable.scratch_paper_clear), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-//            } else {
-//                // 遍历
-//                for (int i = 0; i < size; i++) {
-//                    int questionId = mDeleteErrorQuestions.get(i);
-//                    if (questionId != mCurQuestionId) {
-//                        MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
-//                                R.drawable.scratch_paper_clear),
-//                                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-//                    }
-//                }
-//            }
-//        }
 
         if (mModel.isDescPage(mCurPosition)) {
             // 说明页禁用icon
@@ -168,7 +155,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
             Utils.updateMenu(this);
 
         } else if ("错题".equals(item.getTitle())) {
-//            AlertManager.deleteErrorQuestionAlert(this);
+            showDeleteErrorQuestionAlert();
 
             // Umeng
             HashMap<String, String> map = new HashMap<>();
@@ -443,5 +430,34 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                 UmengManager.onEvent(MeasureAnalysisActivity.this, "Review", map);
             }
         });
+    }
+
+    /**
+     * 显示登出Alert
+     */
+    private void showDeleteErrorQuestionAlert() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.alert_delete_error_content)
+                .setTitle(R.string.alert_logout_title)
+                .setPositiveButton(R.string.alert_logout_positive,
+                        new DialogInterface.OnClickListener() {// 确定
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 提交登出信息至服务器
+                                mModel.mRequest.deleteErrorQuestion(
+                                        MeasureParamBuilder.deleteErrorQuestion(mCurQuestionId));
+                                ToastManager.showToast(MeasureAnalysisActivity.this, "删除成功");
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton(R.string.alert_logout_negative,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .create().show();
     }
 }
