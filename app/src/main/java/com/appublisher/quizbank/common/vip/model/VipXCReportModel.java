@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.vip.model;
 
 import android.content.Context;
 
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.vip.activity.VipXCReportActivity;
 import com.appublisher.quizbank.common.vip.netdata.VipXCResp;
@@ -61,7 +62,7 @@ public class VipXCReportModel extends VipBaseModel{
             accuracy = accuracy * 100;
             mView.showAccuracy(String.valueOf(accuracy));
             // 平均速度
-            mView.showSpeed(summaryBean.getDuration()/questionCount);
+            mView.showSpeed(Utils.getSpeedByRound(summaryBean.getDuration(), questionCount));
             // 次序
             mView.showPosition(summaryBean.getPosition());
             // 实际用时

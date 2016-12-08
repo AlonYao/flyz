@@ -196,8 +196,8 @@ public class MeasureReportActivity extends BaseActivity implements
                 lp.width = pbLength * 2;
                 lp.height = 10;
                 ivCategoryPb.setLayoutParams(lp);
-                int ratio = categoryDuration / categoryTotalNum;
-                tvCategoryTime.setText(String.valueOf(ratio));
+                tvCategoryTime.setText(String.valueOf(
+                        Utils.getSpeedByRound(categoryDuration, categoryTotalNum)));
             }
 
             container.addView(child);

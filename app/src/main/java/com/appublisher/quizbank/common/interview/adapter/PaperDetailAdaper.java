@@ -16,10 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
-import com.appublisher.quizbank.utils.Utils;
 
 import java.util.HashMap;
 import java.util.List;

@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
@@ -135,7 +136,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.T
             TextView tvSpeed = (TextView) view.findViewById(R.id.treeview_speed);
             tvRight.setText(String.valueOf(value.right));
             tvTotal.setText(String.valueOf(value.total));
-            tvSpeed.setText(String.valueOf(value.duration/value.total));
+            tvSpeed.setText(String.valueOf(Utils.getSpeedByRound(value.duration, value.total)));
 
         } else {
             ivWatch.setVisibility(View.VISIBLE);
