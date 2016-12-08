@@ -75,6 +75,14 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                     R.drawable.measure_analysis_uncollect), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
+        MenuItemCompat.setShowAsAction(
+                menu.add("分享").setIcon(R.drawable.share),
+                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+
+        MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
+                R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
         MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
                 R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
@@ -100,13 +108,6 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
 
         // 初始化反馈菜单
         initPopupWindowView();
-
-        MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
-                R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
-        MenuItemCompat.setShowAsAction(
-                menu.add("分享").setIcon(R.drawable.share),
-                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -154,7 +155,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
             if (mPopupWindow != null && mPopupWindow.isShowing()) {
                 mPopupWindow.dismiss();
             } else if (System.currentTimeMillis() - mPopupDismissTime > 500) {
-                mPopupWindow.showAsDropDown(feedbackMenu, 0, 12);
+                mPopupWindow.showAsDropDown(feedbackMenu, 120, 12);
             }
         } else if ("错题".equals(item.getTitle())) {
 //            AlertManager.deleteErrorQuestionAlert(this);
@@ -193,7 +194,8 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                         .setText(content[random])
                         .setUmImage(UmengManager.getUMImage(this, mViewPager))
                         .setTargetUrl(targetUrl);
-                UmengManager.shareAction(this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
+                UmengManager.shareAction(
+                        this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
                     @Override
                     public void platform(SHARE_MEDIA platformType) {
                         // Empty
@@ -245,6 +247,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
             @Override
             public void onPageSelected(int position) {
                 scrollTabLayout(position);
+                mCurQuestionId = mModel.getCurQuestionId(position);
                 mCurPosition = position;
             }
 
@@ -253,6 +256,9 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                 // Empty
             }
         });
+
+        // 初始化Id
+        mCurQuestionId = mModel.getCurQuestionId(0);
     }
 
     /**

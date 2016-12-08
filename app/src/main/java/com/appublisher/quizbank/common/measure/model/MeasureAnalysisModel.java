@@ -29,6 +29,7 @@ public class MeasureAnalysisModel extends MeasureModel{
     public boolean mIsFromFolder;
     public int mSize;
 
+    private List<MeasureQuestionBean> mQuestions;
     private List<MeasureAnswerBean> mAnswers;
 
     public MeasureAnalysisModel(Context context) {
@@ -175,6 +176,7 @@ public class MeasureAnalysisModel extends MeasureModel{
         }
 
         mSize = questions.size();
+        mQuestions = questions;
 
         ((MeasureAnalysisActivity) mContext).showViewPager(questions, mAnswers);
     }
@@ -259,6 +261,7 @@ public class MeasureAnalysisModel extends MeasureModel{
         }
 
         mSize = questions.size();
+        mQuestions = questions;
 
         ((MeasureAnalysisActivity) mContext).showViewPager(questions, mAnswers);
     }
@@ -337,6 +340,13 @@ public class MeasureAnalysisModel extends MeasureModel{
         mAnalysisBean.setQuestions(resp.getQuestions());
         mAnalysisBean.setAnswers(resp.getAnswers());
         showContent();
+    }
+
+    public int getCurQuestionId(int position) {
+        if (mQuestions == null || position < 0 || position >= mQuestions.size()) return 0;
+        MeasureQuestionBean questionBean = mQuestions.get(position);
+        if (questionBean == null) return 0;
+        return questionBean.getId();
     }
 
     public boolean isShowAnother() {
