@@ -142,6 +142,8 @@
     <string name="grade_everydayshare_alert_msg">这么辛苦，晒个成绩吧</string>
     <string name="grade_everydayshare_alert_p">去分享</string>
     <string name="grade_everydayshare_alert_n">不要</string>
+    <string name="refused_course">不要课了</string>
+    <string name="go_login">登录获取</string>
 
     <!-- 能力评估 -->
     <string name="evaluation_score">预测分</string>

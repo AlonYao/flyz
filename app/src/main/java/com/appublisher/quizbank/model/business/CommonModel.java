@@ -25,6 +25,7 @@ import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
+import com.appublisher.quizbank.common.grade.ICommonCallback;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
@@ -338,6 +339,28 @@ public class CommonModel {
                 editor.putString(SHARE_REPORT_LATEDATE, Utils.getCurDateString());
             }
             editor.commit();
+        }
+    }
+
+    /**
+     * 跳转至评价页面
+     */
+    public static void skipToGrade(Context context,
+                                   String packageName,
+                                   ICommonCallback iCommonCallback) {
+        if (packageName == null || packageName.length() == 0) return;
+
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+        marketIntent.setData(Uri.parse("market://details?id=" + packageName));
+
+        if (marketIntent.resolveActivity(context.getPackageManager()) != null) {
+            if (iCommonCallback != null)
+                iCommonCallback.callback(true);
+            context.startActivity(marketIntent);
+        } else {
+            if (iCommonCallback != null)
+                iCommonCallback.callback(false);
+            ToastManager.showToast(context, "请安装应用市场，如应用宝、百度手机助手、360手机助手等……");
         }
     }
 
