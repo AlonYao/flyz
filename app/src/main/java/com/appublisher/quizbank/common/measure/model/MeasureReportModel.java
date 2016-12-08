@@ -128,6 +128,11 @@ public class MeasureReportModel extends MeasureModel {
             // 你的分数
             ((MeasureReportActivity) mContext).showYourScore(String.valueOf(resp.getScore()));
 
+            // 全站排名
+            ((MeasureReportActivity) mContext).showStatistics(
+                    Utils.rateToPercent(resp.getDefeat()) + "%",
+                    String.valueOf(resp.getAvg_score()));
+
             // 科目
             List<MeasureQuestionBean> questions = new ArrayList<>();
             List<MeasureAnswerBean> answers = new ArrayList<>();

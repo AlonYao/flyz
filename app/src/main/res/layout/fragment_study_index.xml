@@ -236,7 +236,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
-                        android:text="历史模考"
+                        android:text="mini历史"
                         android:textColor="@color/common_grey_text"
                         android:textSize="12sp" />
                 </LinearLayout>
