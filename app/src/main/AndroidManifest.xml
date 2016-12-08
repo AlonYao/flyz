@@ -60,7 +60,12 @@
         <!-- 数据库 -->
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.appublisher.quizbank.model.db.GlobalSetting,                            com.appublisher.quizbank.model.db.Grade,                            com.appublisher.quizbank.model.db.Mock,                            com.appublisher.quizbank.model.db.Paper,                            com.appublisher.lib_login.model.db.User,                            com.appublisher.lib_course.offline.model.db.Offline" />
+            android:value="com.appublisher.quizbank.model.db.GlobalSetting,
+                                        com.appublisher.quizbank.model.db.Grade,
+                                        com.appublisher.quizbank.model.db.Mock,
+                                        com.appublisher.quizbank.model.db.Paper,
+                                        com.appublisher.lib_login.model.db.User,
+                                        com.appublisher.lib_course.offline.model.db.Offline" />
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="6" />
@@ -236,7 +241,10 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_vip_msjp"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.vip.activity.VipBaseActivity" />
+        <activity
+            android:name=".common.vip.activity.VipBaseActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".common.vip.activity.VipDTTPActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -258,7 +266,9 @@
             android:label="@string/title_activity_mock_list"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".common.interview.activity.InterviewPaperListActivity" />
+            android:name=".common.interview.activity.InterviewPaperListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".common.interview.activity.InterviewGuoKaoActivity"
             android:configChanges="orientation|keyboardHidden"

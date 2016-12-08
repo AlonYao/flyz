@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -124,6 +125,8 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
         setTitle("");
         initView();
         initData();
+        // 设置屏幕常亮
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override

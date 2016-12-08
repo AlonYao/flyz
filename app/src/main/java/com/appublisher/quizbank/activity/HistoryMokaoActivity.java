@@ -15,6 +15,9 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryMokaoAdapter;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoM;
 import com.appublisher.quizbank.model.netdata.historymokao.HistoryMokaoResp;
 import com.appublisher.quizbank.network.QRequest;
@@ -122,30 +125,22 @@ public class HistoryMokaoActivity extends BaseActivity implements RequestCallbac
 
                 //noinspection IfCanBeSwitch
                 if ("undone".equals(status)) {
-                    Intent intent = new Intent(HistoryMokaoActivity.this, LegacyMeasureActivity.class);
-                    intent.putExtra("exercise_id", historyMokao.getExercise_id());
-                    intent.putExtra("paper_type", "mokao");
-                    intent.putExtra("paper_name", historyMokao.getName());
-                    intent.putExtra("redo", true);
-                    intent.putExtra("umeng_entry", "List");
+                    Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, historyMokao.getExercise_id());
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOKAO);
+                    intent.putExtra(MeasureConstants.INTENT_REDO, true);
                     startActivity(intent);
                 } else if ("fresh".equals(status)) {
-                    Intent intent = new Intent(HistoryMokaoActivity.this, LegacyMeasureActivity.class);
-                    intent.putExtra("paper_id", historyMokao.getId());
-                    intent.putExtra("paper_type", "mokao");
-                    intent.putExtra("paper_name", historyMokao.getName());
-                    intent.putExtra("redo", false);
-                    intent.putExtra("umeng_entry", "List");
+                    Intent intent = new Intent(HistoryMokaoActivity.this, MeasureActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, historyMokao.getId());
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOKAO);
                     startActivity(intent);
                 } else if ("done".equals(status)) {
                     // 跳转至练习报告页面
                     Intent intent = new Intent(HistoryMokaoActivity.this,
-                            PracticeReportActivity.class);
-                    intent.putExtra("exercise_id", historyMokao.getExercise_id());
-                    intent.putExtra("paper_type", "mokao");
-                    intent.putExtra("paper_name", historyMokao.getName());
-                    intent.putExtra("from", "mokao_history_list");
-                    intent.putExtra("paper_time", historyMokao.getDate());
+                            MeasureReportActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, historyMokao.getExercise_id());
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOKAO);
                     startActivity(intent);
                 }
 
