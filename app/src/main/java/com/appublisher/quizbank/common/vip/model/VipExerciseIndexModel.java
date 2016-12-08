@@ -497,6 +497,11 @@ public class VipExerciseIndexModel {
                                         MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.VIP);
                                 intent.putExtra(MeasureConstants.INTENT_PAPER_ID, exerciseId);
                                 activity.startActivity(intent);
+
+                                // Umeng
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("Type", "0");
+                                UmengManager.onEvent(activity, "Zhineng", map);
                             }
                             activity.hideLoading();
                         }
@@ -515,6 +520,11 @@ public class VipExerciseIndexModel {
                     Intent intent = new Intent(activity, VipXCReportActivity.class);
                     intent.putExtra("exerciseId", exerciseId);
                     activity.startActivity(intent);
+
+                    // Umeng
+                    map = new HashMap<>();
+                    map.put("Type", "1");
+                    UmengManager.onEvent(activity, "Zhineng", map);
                 }
 
                 // Umeng

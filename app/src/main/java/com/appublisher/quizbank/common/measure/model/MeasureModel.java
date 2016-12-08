@@ -919,6 +919,11 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         }
 
         VipXCModel.submitPaper(mContext, mPaperId, answer, durtion);
+
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", "1");
+        UmengManager.onEvent(mContext, "Zhineng", map);
     }
 
     public void checkRecord() {

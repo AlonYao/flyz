@@ -53,6 +53,9 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
 
     private Handler mHandler;
 
+    // Umeng
+    private long mUMTimeStamp;
+
     public static class MsgHandler extends Handler {
         private WeakReference<MeasureActivity> mActivity;
 
@@ -121,6 +124,17 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
         setTitle("");
         initView();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Umeng
+        if (VIP.equals(mModel.mPaperType)) {
+            int dur = (int) ((System.currentTimeMillis() - mUMTimeStamp) / 1000);
+            HashMap<String, String> map = new HashMap<>();
+            UmengManager.onEventValue(this, "Zhineng", map, dur);
+        }
     }
 
     @Override
@@ -197,6 +211,9 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
 
         showLoading();
         mModel.getData();
+
+        // Umeng
+        mUMTimeStamp = System.currentTimeMillis();
     }
 
     private void initView() {
