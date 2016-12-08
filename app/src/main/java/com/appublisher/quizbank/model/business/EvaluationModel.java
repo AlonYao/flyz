@@ -8,7 +8,6 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
-import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
@@ -16,7 +15,6 @@ import com.appublisher.quizbank.model.netdata.evaluation.EvaluationResp;
 import com.appublisher.quizbank.model.netdata.evaluation.HistoryScoreM;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.model.netdata.hierarchy.HierarchyM;
-import com.appublisher.quizbank.utils.PopupWindowManager;
 import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
 import com.db.chart.view.LineChartView;
@@ -210,7 +208,8 @@ public class EvaluationModel {
                 .setText(content)
                 .setTargetUrl(baseUrl)
                 .setSinaWithoutTargetUrl(true)
-                .setUmImage(new UMImage(activity, Utils.getBitmapByView(activity.mSvMain)));
+                .setUmImage(new UMImage(activity, Utils.getBitmapByView(activity.mSvMain)))
+                .setFrom("Mine");
 
         UmengManager.shareAction(activity, shareEntity, UmengManager.APP_TYPE_QUIZBANK, new UmengManager.PlatformInter() {
             @Override

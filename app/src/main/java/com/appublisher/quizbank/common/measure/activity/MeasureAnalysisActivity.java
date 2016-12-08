@@ -203,7 +203,8 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                         .setTitle(resources.getString(R.string.share_title))
                         .setText(content[random])
                         .setUmImage(UmengManager.getUMImage(this, mViewPager))
-                        .setTargetUrl(targetUrl);
+                        .setTargetUrl(targetUrl)
+                        .setFrom("Review");
                 UmengManager.shareAction(
                         this, umShareEntity, "quizbank", new UmengManager.PlatformInter() {
                     @Override

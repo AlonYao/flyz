@@ -383,7 +383,8 @@ public class MeasureReportModel extends MeasureModel {
                 .setText(content)
                 .setTargetUrl(baseUrl)
                 .setSinaWithoutTargetUrl(true)
-                .setUmImage(UmengManager.getUMImage(mContext, mScrollView));
+                .setUmImage(UmengManager.getUMImage(mContext, mScrollView))
+                .setFrom("Report");
         UmengManager.shareAction(
                 (Activity) mContext,
                 umShareEntity,
