@@ -68,14 +68,15 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     private int mCurYear;
     private int mOffset;
     private int mCount;
+    private boolean mIsLoadMore;
     private View mMainView;
-    private XListView mLvWholePage;
     private ImageView mIvProvinceArrow;
     private ImageView mIvYearArrow;
     private TextView mTvYear;
 
     public ArrayList<EntirePaperM> mEntirePapers;
     public ImageView mIvNull;
+    public XListView mLvWholePage;
     public static TextView mTvProvince;
     public static RelativeLayout mRlLocation;
     public static TextView mTvLocation;
@@ -140,6 +141,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mOffset = 0;
         mCount = 10;
         mHandler = new MsgHandler(mActivity);
+        mIsLoadMore = false;
     }
 
     @Override
@@ -440,6 +442,8 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 mQRequest.getEntirePapers(mCurAreaId, mCurYear, 0, 5, "false");
                 mPwYear.dismiss();
 
+                mIsLoadMore = false;
+
                 // Umeng
                 if (mCurAreaId == 0 && mCurYear != 0) {
                     // 只选择了年份
@@ -493,6 +497,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
      */
     private void dealEntirePapersResp(WholePageFragment fragment, JSONObject response) {
         if (response == null) {
+            if (!mIsLoadMore) {
+                WholePageModel.showNullImg(this);
+            }
             setLoadFinish();
             return;
         }
@@ -501,6 +508,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 mGson.fromJson(response.toString(), EntirePapersResp.class);
 
         if (entirePapersResp == null || entirePapersResp.getResponse_code() != 1) {
+            if (!mIsLoadMore) {
+                WholePageModel.showNullImg(this);
+            }
             setLoadFinish();
             return;
         }
@@ -508,6 +518,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         ArrayList<EntirePaperM> newEntirePapers = entirePapersResp.getList();
 
         if (newEntirePapers == null || newEntirePapers.size() == 0) {
+            if (!mIsLoadMore) {
+                WholePageModel.showNullImg(this);
+            }
             setLoadFinish();
             ToastManager.showToast(fragment.getContext(), "暂无更多内容");
             return;
@@ -522,6 +535,9 @@ public class WholePageFragment extends Fragment implements RequestCallback,
                 mEntirePapers.add(newEntirePapers.get(i));
             }
         }
+
+        fragment.mLvWholePage.setVisibility(View.VISIBLE);
+        fragment.mIvNull.setVisibility(View.GONE);
 
         setLoadFinish();
     }
@@ -540,7 +556,6 @@ public class WholePageFragment extends Fragment implements RequestCallback,
      */
     private void setLoadFinish() {
         onLoadFinish();
-        WholePageModel.showNullImg(this);
         ProgressBarManager.hideProgressBar();
     }
 
@@ -580,6 +595,7 @@ public class WholePageFragment extends Fragment implements RequestCallback,
         mOffset = 0;
         mEntirePapers = null;
         mQRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
+        mIsLoadMore = false;
     }
 
     /**
@@ -589,5 +605,6 @@ public class WholePageFragment extends Fragment implements RequestCallback,
     public void onLoadMore() {
         mOffset = mOffset + mCount;
         mQRequest.getEntirePapers(mCurAreaId, mCurYear, mOffset, mCount, "false");
+        mIsLoadMore = true;
     }
 }

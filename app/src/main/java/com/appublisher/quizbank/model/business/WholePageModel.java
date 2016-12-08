@@ -90,10 +90,7 @@ public class WholePageModel {
      * @param fragment WholePageFragment
      */
     public static void showNullImg(WholePageFragment fragment) {
-        if (fragment.mEntirePapers == null || fragment.mEntirePapers.size() == 0) {
-            fragment.mIvNull.setVisibility(View.VISIBLE);
-        } else {
-            fragment.mIvNull.setVisibility(View.GONE);
-        }
+        fragment.mIvNull.setVisibility(View.VISIBLE);
+        fragment.mLvWholePage.setVisibility(View.GONE);
     }
 }
