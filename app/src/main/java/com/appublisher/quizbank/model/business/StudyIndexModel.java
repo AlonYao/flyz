@@ -167,7 +167,7 @@ public class StudyIndexModel {
                 ((InterviewIndexFragment) fragment).carouselView.setLayoutParams(params);
                 if (carouselResp.getInterview() != null && carouselResp.getInterview().size() != 0) {
                     ((InterviewIndexFragment) fragment).carouselInterviewList.clear();
-                    ((InterviewIndexFragment) fragment).carouselInterviewList.addAll(carouselResp.getWritten());
+                    ((InterviewIndexFragment) fragment).carouselInterviewList.addAll(carouselResp.getInterview());
                     ((InterviewIndexFragment) fragment).carouselAdapter.notifyDataSetChanged();
                     ((InterviewIndexFragment) fragment).carouselView.setVisibility(View.VISIBLE);
                     ((InterviewIndexFragment) fragment).initDots(carouselResp.getInterview().size());
