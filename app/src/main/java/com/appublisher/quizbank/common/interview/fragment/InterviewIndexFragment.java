@@ -98,7 +98,7 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
         mLlDots = (LinearLayout) view.findViewById(R.id.carousel_dot_ll);
 
         carouselInterviewList = new ArrayList<>();
-        carouselAdapter = new CarouselAdapter(getActivity(), carouselInterviewList);
+        carouselAdapter = new CarouselAdapter(getActivity(), carouselInterviewList, true);
 
         mHandler = new MsgHandler(this);
         mQRequest = new QRequest(getActivity(), this);

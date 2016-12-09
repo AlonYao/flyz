@@ -29,12 +29,18 @@ import java.util.List;
 public class CarouselAdapter extends PagerAdapter {
     private Context context;
     private List<CarouselM> list;
+    private boolean isFromInterview;
 
     public CarouselAdapter(Context context, List<CarouselM> list) {
         this.context = context;
         this.list = list;
     }
 
+    public CarouselAdapter(Context context, List<CarouselM> list, boolean isFromInterview) {
+        this.context = context;
+        this.list = list;
+        this.isFromInterview = isFromInterview;
+    }
 
     @Override
     public int getCount() {
@@ -96,7 +102,11 @@ public class CarouselAdapter extends PagerAdapter {
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("CarouselFigure", targetContent);
-                UmengManager.onEvent(context, "Home", map);
+                if (isFromInterview) {
+                    UmengManager.onEvent(context, "InterviewPage", map);
+                } else {
+                    UmengManager.onEvent(context, "Home", map);
+                }
             }
         });
 
