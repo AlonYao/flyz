@@ -190,8 +190,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 break;
 
             case "server_current_time":
-                if (mock_id != -1)
-                    mQRequest.getMockPreExamInfo(mock_id + "");
+                mQRequest.getMockPreExamInfo(mock_id + "");
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 if (resp != null && resp.getResponse_code() == 1) {

@@ -131,6 +131,15 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Intent intent = new Intent(InterviewPaperListActivity.this, InterviewPaperDetailActivity.class);
                 intent.putExtra("paper_id", list.get(position - 1).getId());
+                // 类型处理
+                if ("guokao".equals(mFrom) || "history".equals(mFrom)) {
+                    intent.putExtra("paper_type", "entire");
+                } else if ("teacher".equals(mFrom)) {
+                    intent.putExtra("paper_type", "teacher");
+                } else if ("note".equals(mFrom)) {
+                    intent.putExtra("paper_type", "note");
+                    intent.putExtra("note_id", note_id);
+                }
                 startActivity(intent);
 
                 // Umeng

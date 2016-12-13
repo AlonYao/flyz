@@ -552,7 +552,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 break;
         }
 
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
 
         // 更新Menu
         Utils.updateMenu(this);

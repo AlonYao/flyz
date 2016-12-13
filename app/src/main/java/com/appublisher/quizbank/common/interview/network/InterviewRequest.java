@@ -6,7 +6,6 @@ import android.content.Context;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
-import com.appublisher.quizbank.common.vip.network.VipApi;
 
 /**
  * Created by jinbao on 2016/11/16.
@@ -62,8 +61,10 @@ public class InterviewRequest extends Request implements InterviewApi {
      *
      * @param paper_id
      */
-    public void getPaperDetail(int paper_id) {
+    public void getPaperDetail(int paper_id, String paper_type, int note_id) {
         asyncRequest(getFinalUrl(interviewPaperDetail)
-                + "&paper_id=" + paper_id, "paper_detail", "object");
+                + "&paper_id=" + paper_id
+                + "&paper_type=" + paper_type
+                + "&note_id=" + note_id, "paper_detail", "object");
     }
 }

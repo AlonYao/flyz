@@ -700,7 +700,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public void saveSubmitDuration() {
         if (!(mContext instanceof MeasureActivity)) return;
 
-        List<MeasureQuestionBean> questions = ((MeasureActivity) mContext).mAdapter.getQuestions();
+        List<MeasureQuestionBean> questions = getAdapterQuestions();
         if (questions == null || mCurPagePosition < 0 || mCurPagePosition >= questions.size())
             return;
 

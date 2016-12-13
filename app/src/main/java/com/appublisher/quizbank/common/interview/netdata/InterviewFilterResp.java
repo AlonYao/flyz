@@ -12,6 +12,15 @@ public class InterviewFilterResp {
     private List<AreaBean> area;
     private List<Integer> year;
     private List<NotesBean> notes;
+    private List<Integer> guokao_year;
+
+    public List<Integer> getGuokao_year() {
+        return guokao_year;
+    }
+
+    public void setGuokao_year(List<Integer> guokao_year) {
+        this.guokao_year = guokao_year;
+    }
 
     public int getResponse_code() {
         return response_code;

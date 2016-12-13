@@ -1,8 +1,7 @@
 package com.appublisher.quizbank.common.interview.activity;
 
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v4.view.ViewPager;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
@@ -37,6 +36,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         setToolBar(this);
 
         paper_id = getIntent().getIntExtra("paper_id", 0);
+        String paper_type = getIntent().getStringExtra("paper_type");
+        int note_id = getIntent().getIntExtra("note_id", 0);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
 
@@ -46,7 +47,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         mRequest = new InterviewRequest(this, this);
 
-        mRequest.getPaperDetail(paper_id);
+        mRequest.getPaperDetail(paper_id, paper_type, note_id);
         showLoading();
     }
 
