@@ -33,9 +33,11 @@ import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.business.LegacyMeasureModel;
+import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
@@ -190,12 +192,28 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 break;
 
             case "server_current_time":
-                mQRequest.getMockPreExamInfo(mock_id + "");
+                if (mock_id == -1) {
+                    mQRequest.getMockGufen();
+                } else {
+                    mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
+                    MeasureModel.saveCacheMockId(this, mock_id);
+                }
+
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 if (resp != null && resp.getResponse_code() == 1) {
                     mServerCurrentTime = resp.getCurrent_time();
                 }
+                break;
+
+            case "mock_gufen":
+                MockGufenResp mockGufenResp = GsonManager.getModel(response, MockGufenResp.class);
+                if (mockGufenResp == null || mockGufenResp.getResponse_code() != 1) return;
+                MockGufenResp.MockBean mockBean = mockGufenResp.getMock();
+                if (mockBean == null) return;
+                mock_id = mockBean.getId();
+                mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
+                MeasureModel.saveCacheMockId(this, mock_id);
                 break;
         }
     }

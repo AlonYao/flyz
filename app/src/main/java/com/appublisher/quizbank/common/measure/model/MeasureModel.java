@@ -756,6 +756,16 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         editor.commit();
     }
 
+    @SuppressLint("CommitPrefEdits")
+    public static void saveCacheMockId(Context context, int mockId) {
+        if (context == null) return;
+        SharedPreferences spf = getMeasureCache(context);
+        if (spf == null) return;
+        SharedPreferences.Editor editor = spf.edit();
+        editor.putInt(CACHE_MOCK_ID, mockId);
+        editor.commit();
+    }
+
     /**
      * 动态添加富文本
      * @param container 富文本控件容器
@@ -1063,7 +1073,8 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
         if (hasRecord()) {
             if ("mock".equals(paperType)) {
-                new QRequest(mContext, this).getMockPreExamInfo(String.valueOf(paperId));
+                int mockId = cache.getInt(CACHE_MOCK_ID, 0);
+                new QRequest(mContext, this).getMockPreExamInfo(String.valueOf(mockId));
             } else {
                 // 提交做题数据
                 String userAnswer = cache.getString(CACHE_USER_ANSWER, "");

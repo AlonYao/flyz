@@ -247,6 +247,9 @@ public class SplashActivity extends Activity implements RequestCallback {
                     @Override
                     public void onClick(View v) {
                         String targetType = imageBean.getTarget_type();
+                        String target = imageBean.getTarget();
+                        if (target == null) target = "";
+
                         if ("url".equals(targetType)) {
                             // 外部链接
                             toMainActivity();
@@ -261,6 +264,7 @@ public class SplashActivity extends Activity implements RequestCallback {
                             toMainActivity();
                             Intent intent = new Intent(SplashActivity.this, MockPreActivity.class);
                             intent.putExtra("type", "mock");
+                            intent.putExtra("mock_id", Integer.parseInt(target));
                             startActivity(intent);
                         }
                         timer.cancel();

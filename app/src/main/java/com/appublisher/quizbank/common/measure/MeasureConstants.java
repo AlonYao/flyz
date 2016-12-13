@@ -52,6 +52,7 @@ public interface MeasureConstants {
     String CACHE_PAPER_TYPE = "cache_paper_type";
     String CACHE_REDO = "cache_redo";
     String CACHE_MOCK_TIME = "cache_mock_time";
+    String CACHE_MOCK_ID = "cache_mock_id";
     String CACHE_PAPER_NAME = "cache_paper_name";
     String YAOGUO_MEASURE = "yaoguo_measure";
 
