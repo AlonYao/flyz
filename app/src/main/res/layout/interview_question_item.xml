@@ -51,13 +51,12 @@
             android:layout_height="1px"
             android:background="@color/common_line" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/question_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="30dp"
-            android:textColor="@color/common_text"
-            android:textSize="17sp" />
+            android:orientation="vertical"
+            android:padding="30dp"/>
 
         <View
             android:layout_width="match_parent"

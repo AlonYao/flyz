@@ -87,6 +87,8 @@ public class PromoteQuizBankModel extends PromoteModel {
             @Override
             public void onClick(View v) {
                 String target_type = alertBean.getTarget_type();
+                String target = alertBean.getTarget();
+                if (target == null) target = "";
                 if ("url".equals(target_type)) {
                     // 外部链接
                     Intent intent = new Intent(getContext(), CourseWebViewActivity.class);
@@ -98,6 +100,7 @@ public class PromoteQuizBankModel extends PromoteModel {
                     // 模考
                     Intent intent = new Intent(getContext(), MockPreActivity.class);
                     intent.putExtra("type", "mock");
+                    intent.putExtra("mock_id", Integer.parseInt(target));
                     getContext().startActivity(intent);
                 }
                 alertDialog.dismiss();

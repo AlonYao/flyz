@@ -27,9 +27,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginRight="30dp"
-                android:orientation="horizontal"></LinearLayout>
+                android:orientation="horizontal"/>
         </RelativeLayout>
 
         <RelativeLayout
