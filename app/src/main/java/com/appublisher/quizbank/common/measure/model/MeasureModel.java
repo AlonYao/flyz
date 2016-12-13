@@ -808,6 +808,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 textView.setLayoutParams(p);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setTextColor(context.getResources().getColor(R.color.common_text));
+                textView.setLineSpacing(0, 1.4f);
                 textView.setText(segment.text);
                 flowLayout.addView(textView);
 
