@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 55
-        versionName "2.1.0"
+        versionCode 56
+        versionName "2.1.1"
 
         //参数
         manifestPlaceholders = [
@@ -478,6 +478,50 @@ android {
         "shenma-qudao-1" {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
                                     APP_CHANNEL: "shenma-qudao-1"]
+        }
+
+        /**
+         * wyyd
+         */
+
+        "wyyd-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-1"]
+        }
+
+        "wyyd-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-2"]
+        }
+
+        "wyyd-3" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-3"]
+        }
+
+        "wyyd-4" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-4"]
+        }
+
+        "wyyd-5" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-5"]
+        }
+
+        "wyyd-6" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-6"]
+        }
+
+        "wyyd-7" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-7"]
+        }
+
+        "wyyd-8" {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "wyyd-8"]
         }
 
         AppUpdate {
