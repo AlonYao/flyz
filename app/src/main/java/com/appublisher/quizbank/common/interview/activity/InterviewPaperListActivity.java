@@ -74,6 +74,9 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         interviewPaperListModel = new InterviewPaperListModel();
 
         setValue();
+
+        getData();
+        showLoading();
     }
 
     public void setValue() {
@@ -107,23 +110,14 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         xListView.setXListViewListener(new XListView.IXListViewListener() {
             @Override
             public void onRefresh() {
-                if (page > 1)
-                    page--;
-                if ("teacher".equals(mFrom)) {
-                    mRequest.getTeacherPaperList(page);
-                    return;
-                }
-                mRequest.getPaperList(area_id, year, note_id, page);
+                page = 1;
+                getData();
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                if ("teacher".equals(mFrom)) {
-                    mRequest.getTeacherPaperList(page);
-                    return;
-                }
-                mRequest.getPaperList(area_id, year, note_id, page);
+                getData();
             }
         });
         xListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -161,20 +155,14 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getData();
-    }
-
     public void getData() {
         if ("teacher".equals(mFrom)) {
             mRequest.getTeacherPaperList(page);
+        } else if ("guokao".equals(mFrom)) {
+            mRequest.getPaperList(1, year, note_id, page);
         } else {
             mRequest.getPaperList(area_id, year, note_id, page);
         }
-
-        showLoading();
     }
 
     @Override
@@ -185,7 +173,7 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
             xListView.stopRefresh();
             xListView.stopLoadMore();
             InterviewPaperListResp interviewPaperListResp = GsonManager.getModel(response, InterviewPaperListResp.class);
-            if (interviewPaperListResp.getResponse_code() == 1) {
+            if (interviewPaperListResp != null && interviewPaperListResp.getResponse_code() == 1) {
 
                 if (page == 1) {
                     list.clear();
@@ -195,7 +183,7 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
                 list.addAll(interviewPaperListResp.getPapers());
                 adapter.notifyDataSetChanged();
 
-                if (interviewPaperListResp.getPapers().size() < 15) {
+                if (interviewPaperListResp.getPapers().size() == 0) {
                     xListView.setPullLoadEnable(false);
                     if (page == 1 && interviewPaperListResp.getPapers().size() == 0) {
                         ToastManager.showToast(this, "没有相关试卷");
@@ -206,7 +194,7 @@ public class InterviewPaperListActivity extends BaseActivity implements RequestC
             }
         } else if ("interview_filter".equals(apiName)) {
             InterviewFilterResp interviewFilterResp = GsonManager.getModel(response, InterviewFilterResp.class);
-            if (interviewFilterResp.getResponse_code() == 1) {
+            if (interviewFilterResp != null && interviewFilterResp.getResponse_code() == 1) {
                 interviewPaperListModel.dealFilterResp(response);
             }
         }

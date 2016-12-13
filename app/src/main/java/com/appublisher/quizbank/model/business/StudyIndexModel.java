@@ -119,7 +119,7 @@ public class StudyIndexModel {
     public static void dealMockGufenResp(JSONObject response, StudyIndexFragment fragment) {
         final MockGufenResp mockGufenResp = GsonManager.getModel(response, MockGufenResp.class);
 
-        if (mockGufenResp.getResponse_code() == 1) {
+        if (mockGufenResp != null && mockGufenResp.getResponse_code() == 1) {
 
             fragment.mockGufenResp = mockGufenResp;
 

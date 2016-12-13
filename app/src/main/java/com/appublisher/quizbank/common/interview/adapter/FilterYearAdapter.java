@@ -60,7 +60,13 @@ public class FilterYearAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.textView.setText(list.get(position) + "年");
+        String text;
+        if (position == 0) {
+            text = "全部";
+        } else {
+            text = list.get(position) + "年";
+        }
+        viewHolder.textView.setText(text);
         return convertView;
     }
 

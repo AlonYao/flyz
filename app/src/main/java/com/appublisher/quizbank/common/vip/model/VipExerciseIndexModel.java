@@ -66,7 +66,7 @@ public class VipExerciseIndexModel {
 
     public void dealExerciseFilter(JSONObject response, final VipExerciseIndexActivity activity) {
         final VipExerciseFilterResp vipExerciseFilterResp = GsonManager.getModel(response, VipExerciseFilterResp.class);
-        if (vipExerciseFilterResp.getResponse_code() == 1) {
+        if (vipExerciseFilterResp != null && vipExerciseFilterResp.getResponse_code() == 1) {
             mVipExerciseFilterResp = vipExerciseFilterResp;
         }
 
@@ -111,7 +111,7 @@ public class VipExerciseIndexModel {
     public void dealExercises(JSONObject response, VipExerciseIndexActivity activity) {
         VipExerciseResp vipExerciseResp = GsonManager.getModel(response, VipExerciseResp.class);
         activity.list.clear();
-        if (vipExerciseResp.getResponse_code() == 1) {
+        if (vipExerciseResp != null && vipExerciseResp.getResponse_code() == 1) {
             List<VipExerciseResp.ExercisesBean> able = new ArrayList<>();
             List<VipExerciseResp.ExercisesBean> unable = new ArrayList<>();
             for (int i = 0; i < vipExerciseResp.getExercises().size(); i++) {

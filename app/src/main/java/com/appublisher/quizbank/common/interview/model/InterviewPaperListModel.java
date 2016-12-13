@@ -18,9 +18,11 @@ import com.appublisher.quizbank.common.interview.activity.InterviewPaperListActi
 import com.appublisher.quizbank.common.interview.adapter.FilterAreaAdapter;
 import com.appublisher.quizbank.common.interview.adapter.FilterYearAdapter;
 import com.appublisher.quizbank.common.interview.netdata.InterviewFilterResp;
-import com.appublisher.quizbank.common.vip.adapter.VipExerciseFilterCategoryAdapter;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jinbao on 2016/11/16.
@@ -35,7 +37,7 @@ public class InterviewPaperListModel {
 
     public void dealFilterResp(JSONObject response) {
         InterviewFilterResp interviewFilterResp = GsonManager.getModel(response, InterviewFilterResp.class);
-        if (interviewFilterResp.getResponse_code() == 1) {
+        if (interviewFilterResp != null && interviewFilterResp.getResponse_code() == 1) {
             mInterviewFilterResp = interviewFilterResp;
         }
     }
@@ -57,7 +59,11 @@ public class InterviewPaperListModel {
         if (mInterviewFilterResp == null) return;
         View categoryView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView categoryGridView = (GridView) categoryView.findViewById(R.id.gridview);
-        FilterYearAdapter categoryAdapter = new FilterYearAdapter(activity, mInterviewFilterResp.getYear());
+
+        List<Integer> list = mInterviewFilterResp.getYear();
+        list.add(0, 0);
+
+        FilterYearAdapter categoryAdapter = new FilterYearAdapter(activity, list);
         categoryGridView.setAdapter(categoryAdapter);
         yearPop = new PopupWindow(categoryView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -118,7 +124,15 @@ public class InterviewPaperListModel {
         if (mInterviewFilterResp == null) return;
         View categoryView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView categoryGridView = (GridView) categoryView.findViewById(R.id.gridview);
-        FilterAreaAdapter categoryAdapter = new FilterAreaAdapter(activity, mInterviewFilterResp.getArea());
+
+        List<InterviewFilterResp.AreaBean> list = mInterviewFilterResp.getArea();
+        if (list == null) list = new ArrayList<>();
+        InterviewFilterResp.AreaBean areaBean = new InterviewFilterResp.AreaBean();
+        areaBean.setArea("全部");
+        areaBean.setArea_id(0);
+        list.add(0, areaBean);
+
+        FilterAreaAdapter categoryAdapter = new FilterAreaAdapter(activity, list);
         categoryGridView.setAdapter(categoryAdapter);
         areaPop = new PopupWindow(categoryView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -158,7 +172,6 @@ public class InterviewPaperListModel {
                     areaPop.dismiss();
                     activity.getData();
                 }
-
             }
         });
 

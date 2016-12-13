@@ -58,7 +58,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         if ("paper_detail".equals(apiName)) {
             InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class);
-            if (interviewPaperDetailResp.getResponse_code() == 1) {
+            if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
                 list.clear();
                 list.addAll(interviewPaperDetailResp.getQuestions());
                 adaper.notifyDataSetChanged();
@@ -66,7 +66,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 if (list.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 }
-            } else if (interviewPaperDetailResp.getResponse_code() == 1001) {
+            } else if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1001) {
                 ToastManager.showToast(this, "没有面试题目");
             }
         }

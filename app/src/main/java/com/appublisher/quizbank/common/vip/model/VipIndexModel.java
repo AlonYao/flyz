@@ -26,7 +26,7 @@ public class VipIndexModel {
      */
     public static void dealEntryData(JSONObject response, VipIndexActivity activity) {
         VipIndexEntryDataResp vipIndexEntryDataResp = GsonManager.getModel(response, VipIndexEntryDataResp.class);
-        if (vipIndexEntryDataResp.getResponse_code() == 1) {
+        if (vipIndexEntryDataResp != null && vipIndexEntryDataResp.getResponse_code() == 1) {
             if (vipIndexEntryDataResp.isIs_vip_member()) {
                 SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                 editor.putBoolean("vip" + LoginModel.getUserId(), true);
@@ -105,7 +105,7 @@ public class VipIndexModel {
      */
     public static void dealEntryData(JSONObject response, VipIndexFragment fragment) {
         VipIndexEntryDataResp vipIndexEntryDataResp = GsonManager.getModel(response, VipIndexEntryDataResp.class);
-        if (vipIndexEntryDataResp.getResponse_code() == 1) {
+        if (vipIndexEntryDataResp != null && vipIndexEntryDataResp.getResponse_code() == 1) {
             if (vipIndexEntryDataResp.isIs_vip_member()) {
                 SharedPreferences.Editor editor = Globals.sharedPreferences.edit();
                 editor.putBoolean("vip" + LoginModel.getUserId(), true);

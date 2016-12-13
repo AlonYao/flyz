@@ -69,7 +69,7 @@ public class InterviewCategoryActivity extends BaseActivity implements RequestCa
         if (response == null || apiName == null) return;
         if ("interview_filter".equals(apiName)) {
             InterviewFilterResp interviewFilterResp = GsonManager.getModel(response, InterviewFilterResp.class);
-            if (interviewFilterResp.getResponse_code() == 1) {
+            if (interviewFilterResp != null && interviewFilterResp.getResponse_code() == 1) {
                 list.clear();
                 list.addAll(interviewFilterResp.getNotes());
                 adapter.notifyDataSetChanged();
