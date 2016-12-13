@@ -167,20 +167,20 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
 
     private void blur(Bitmap bkg, ImageView view) {
         float scaleFactor = 1;
-        float radius = 20;
-        Bitmap overlay = Bitmap.createBitmap(
-                (int) (view.getMeasuredWidth() / scaleFactor),
-                (int) (view.getMeasuredHeight() / scaleFactor),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(overlay);
-        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop()
-                / scaleFactor);
-        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
-        Paint paint = new Paint();
-        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-        canvas.drawBitmap(bkg, 0, 0, paint);
-        overlay = FastBlur.doBlur(overlay, (int) radius, true);
-        view.setImageBitmap(overlay);
+        float radius = 50;
+//        Bitmap overlay = Bitmap.createBitmap(
+//                (int) (view.getMeasuredWidth() / scaleFactor),
+//                (int) (view.getMeasuredHeight() / scaleFactor),
+//                Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(overlay);
+//        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop()
+//                / scaleFactor);
+//        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
+//        Paint paint = new Paint();
+//        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+//        canvas.drawBitmap(bkg, 0, 0, paint);
+        bkg = FastBlur.doBlur(bkg, (int) radius, true);
+        view.setImageBitmap(bkg);
     }
 
     @Override

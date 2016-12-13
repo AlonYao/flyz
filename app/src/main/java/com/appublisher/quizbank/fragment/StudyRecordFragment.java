@@ -83,7 +83,8 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
 
         // 初始化XListView
-        mXListView.addHeaderView(headView);
+        mXListView.addHeaderView(headView, null, false);
+
         mXListView.setXListViewListener(this);
         mXListView.setPullLoadEnable(true);
 

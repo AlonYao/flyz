@@ -1,11 +1,14 @@
 package com.appublisher.quizbank.common.interview.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.appublisher.quizbank.R;
 
 import java.util.List;
@@ -45,6 +48,13 @@ public class GuoKaoYearAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.interview_year_list_item, null);
             viewHolder.textView = (TextView) convertView.findViewById(R.id.text);
+
+            Drawable drawable = viewHolder.textView.getBackground();
+            if (drawable instanceof GradientDrawable) {
+                //noinspection deprecation
+                ((GradientDrawable) drawable).setColor(
+                        context.getResources().getColor(R.color.common_bg));
+            }
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.common.interview.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,14 @@ public class FilterAreaAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.pop_filter_item, null);
             viewHolder.textView = (TextView) convertView.findViewById(R.id.text);
+
+            Drawable drawable = viewHolder.textView.getBackground();
+            if (drawable instanceof GradientDrawable) {
+                //noinspection deprecation
+                ((GradientDrawable) drawable).setColor(
+                        context.getResources().getColor(R.color.common_bg));
+            }
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
