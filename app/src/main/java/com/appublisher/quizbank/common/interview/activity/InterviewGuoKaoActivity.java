@@ -75,7 +75,7 @@ public class InterviewGuoKaoActivity extends BaseActivity implements RequestCall
         if (response == null || apiName == null) return;
         if ("interview_filter".equals(apiName)) {
             InterviewFilterResp interviewFilterResp = GsonManager.getModel(response, InterviewFilterResp.class);
-            if (interviewFilterResp.getResponse_code() == 1) {
+            if (interviewFilterResp != null && interviewFilterResp.getResponse_code() == 1) {
                 list.clear();
                 list.addAll(interviewFilterResp.getGuokao_year());
                 adapter.notifyDataSetChanged();
