@@ -227,6 +227,7 @@ public class VipExerciseIndexModel {
         GridView categoryGridView = (GridView) categoryView.findViewById(R.id.gridview);
         VipExerciseFilterCategoryAdapter categoryAdapter = new VipExerciseFilterCategoryAdapter(activity, mVipExerciseFilterResp.getCategory_filter());
         categoryGridView.setAdapter(categoryAdapter);
+        categoryGridView.setNumColumns(2);
         categoryPop = new PopupWindow(categoryView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,

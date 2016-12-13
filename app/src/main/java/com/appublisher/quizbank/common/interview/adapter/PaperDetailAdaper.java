@@ -100,20 +100,20 @@ public class PaperDetailAdaper extends PagerAdapter {
                         analysisView.setVisibility(View.GONE);
                         analysisIm.setImageResource(R.drawable.interview_arrow_down);
                         if ("notice".equals(questionsBean.getStatus())) {
-                            analysisSwitchTv.setText("收起提示");
+                            analysisSwitchTv.setText("展开提示");
                             analysisTv.setVisibility(View.GONE);
                         } else {
-                            analysisSwitchTv.setText("收起解析");
+                            analysisSwitchTv.setText("展开解析");
                             analysisTv.setVisibility(View.VISIBLE);
                         }
                     } else {
                         analysisView.setVisibility(View.VISIBLE);
                         analysisIm.setImageResource(R.drawable.interview_arrow_up);
                         if ("notice".equals(questionsBean.getStatus())) {
-                            analysisSwitchTv.setText("展开提示");
+                            analysisSwitchTv.setText("收起提示");
                             analysisTv.setVisibility(View.GONE);
                         } else {
-                            analysisSwitchTv.setText("展开解析");
+                            analysisSwitchTv.setText("收起解析");
                             analysisTv.setVisibility(View.VISIBLE);
                         }
                     }
@@ -168,6 +168,5 @@ public class PaperDetailAdaper extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
-        super.destroyItem(container, position, object);
     }
 }

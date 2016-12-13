@@ -147,9 +147,10 @@ public class StudyIndexModel {
     public static void dealCarouselResp(JSONObject jsonObject, Fragment fragment) {
         CarouselResp carouselResp = GsonManager.getModel(jsonObject, CarouselResp.class);
         if (carouselResp != null && carouselResp.getResponse_code() == 1) {
+            if (fragment == null || fragment.getActivity() == null) return;
+
             int width = Utils.getWindowWidth(fragment.getActivity());
             int height = width / 69 * 20;
-
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 
             if (fragment instanceof StudyIndexFragment) {
