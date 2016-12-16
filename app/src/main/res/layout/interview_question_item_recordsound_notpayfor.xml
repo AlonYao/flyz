@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--滑动的scrollview-->
+    <include layout="@layout/interview_question_item_new"
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <!--底部录音界面-->
+    <include layout="@layout/interview_popupwindow_recordsound_fl"
+        android:id="@+id/recordsound"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+
+        />
+</RelativeLayout>

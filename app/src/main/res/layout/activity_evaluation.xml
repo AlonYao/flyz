@@ -161,8 +161,12 @@
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
-                        android:layout_alignBottom="@id/evaluation_totaltime_tv"
-                        android:text="@string/evaluation_min"/>
+                        android:text="@string/evaluation_min"
+                        android:layout_alignBottom="@+id/evaluation_totaltime_tv"
+                        android:layout_alignLeft="@+id/evaluation_totaltime_tv"
+                        android:layout_alignStart="@+id/evaluation_totaltime_tv"
+                        android:layout_marginLeft="19dp"
+                        android:layout_marginStart="19dp" />
                 </RelativeLayout>
 
                 <View
