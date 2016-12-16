@@ -26,7 +26,6 @@ import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.Shader;
 import android.util.AttributeSet;
@@ -174,6 +173,7 @@ public class LineChartViewForMock extends ChartView {
 				pointBean.setY(set.getEntry(i).getY());
 				mLastPointList.add(pointBean);
 
+				// 所有线条全部画完时，开始增加flag
 				if (mCurLineAmount < mLineAmount) continue;
 
 				// 最后日期的线
@@ -184,28 +184,46 @@ public class LineChartViewForMock extends ChartView {
 						style.gridPaint);
 
 				// 规定第一条线为历史成绩线，第二条线为历史模考平均分线
-				// 历史成绩flag
-				Bitmap bitmap = BitmapFactory.decodeResource(
-						getContext().getResources(), R.drawable.mock_report_score);
-				canvas.drawBitmap(
-						bitmap,
-						set.getEntry(i).getX() - bitmap.getWidth() / 2,
-						set.getEntry(i).getY() - bitmap.getHeight(),
-						mStyle.mDotsPaint);
 
-				String score = "79分";
-				Paint paint = new Paint();
-				paint.setTextSize(sp2px(mContext, 10));
-				paint.setColor(Color.WHITE);
-				paint.setStyle(Paint.Style.FILL_AND_STROKE);
-				paint.setAntiAlias(true);
-				Rect rect = new Rect();
-				paint.getTextBounds(score, 0, score.length(), rect);
-				canvas.drawText(
-						score,
-						set.getEntry(i).getX() - rect.width() / 2,
-						set.getEntry(i).getY() - bitmap.getHeight() / 2,
-						paint);
+				float scoreY = mLastPointList.get(0).getY();
+				float avgY = mLastPointList.get(1).getY();
+
+				if (scoreY >= avgY) {
+					// 分数在上，平均在下
+					// 绘制分数flag
+					Bitmap bitmap = BitmapFactory.decodeResource(
+							getContext().getResources(), R.drawable.mock_report_score_top);
+					canvas.drawBitmap(
+							bitmap,
+							set.getEntry(i).getX() - bitmap.getWidth() / 2,
+							set.getEntry(i).getY() - bitmap.getHeight(),
+							mStyle.mDotsPaint);
+				} else {
+					// 分数在下，平均在上
+				}
+
+//				// 历史成绩flag
+//				Bitmap bitmap = BitmapFactory.decodeResource(
+//						getContext().getResources(), R.drawable.mock_report_score);
+//				canvas.drawBitmap(
+//						bitmap,
+//						set.getEntry(i).getX() - bitmap.getWidth() / 2,
+//						set.getEntry(i).getY() - bitmap.getHeight(),
+//						mStyle.mDotsPaint);
+//
+//				String score = "79分";
+//				Paint paint = new Paint();
+//				paint.setTextSize(sp2px(mContext, 10));
+//				paint.setColor(Color.WHITE);
+//				paint.setStyle(Paint.Style.FILL_AND_STROKE);
+//				paint.setAntiAlias(true);
+//				Rect rect = new Rect();
+//				paint.getTextBounds(score, 0, score.length(), rect);
+//				canvas.drawText(
+//						score,
+//						set.getEntry(i).getX() - rect.width() / 2,
+//						set.getEntry(i).getY() - bitmap.getHeight() / 2,
+//						paint);
 
 				// 平均分flag
 
