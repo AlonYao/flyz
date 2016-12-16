@@ -41,6 +41,7 @@ import com.db.williamchart.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 
 /**
@@ -53,7 +54,7 @@ public abstract class ChartView extends RelativeLayout{
 	
 	
 	public static enum GridType {
-		FULL, VERTICAL, HORIZONTAL
+		FULL, VERTICAL, HORIZONTAL, NONE
     }
 
     public static enum Orientation {
@@ -136,7 +137,9 @@ public abstract class ChartView extends RelativeLayout{
 			chartTop = getPaddingTop() + verController.getLabelHeight()/2;
 			chartBottom = getMeasuredHeight() - getPaddingBottom();
 			chartLeft = getPaddingLeft();
-			chartRight = getMeasuredWidth() - getPaddingRight();
+			chartRight = getMeasuredWidth() - getPaddingRight() - 100;
+
+			Log.e("huaxiao", String.valueOf(getMeasuredWidth()));
 	
 			// Initialize controllers now that we have the measures
 			verController.init();	
@@ -644,23 +647,35 @@ public abstract class ChartView extends RelativeLayout{
 	
 	
 	private void drawHorizontalGrid(Canvas canvas){
-		
+
 		// Draw horizontal grid lines
 		for(Float pos : verController.labelsPos){
-			canvas.drawLine(getInnerChartLeft(), 
-								pos, 
-									getInnerChartRight(),
-										pos, 
-											style.gridPaint);
+//			canvas.drawLine(getInnerChartLeft(),
+//								pos,
+//									getInnerChartRight(),
+//										pos,
+//											style.gridPaint);
+
+			canvas.drawLine(0,
+					pos,
+					getInnerChartRight(),
+					pos,
+					style.gridPaint);
 		}
 		
 		// If there's no axis
 		if(!horController.hasAxis)
-			canvas.drawLine(getInnerChartLeft(), 
-								getInnerChartBottom(), 
-									getInnerChartRight(), 
-										getInnerChartBottom(), 
-											style.gridPaint);
+//			canvas.drawLine(getInnerChartLeft(),
+//								getInnerChartBottom(),
+//									getInnerChartRight(),
+//										getInnerChartBottom(),
+//											style.gridPaint);
+
+			canvas.drawLine(0,
+					getInnerChartBottom(),
+					getInnerChartRight(),
+					getInnerChartBottom(),
+					style.gridPaint);
 	}
 	
 	
@@ -1052,6 +1067,9 @@ public abstract class ChartView extends RelativeLayout{
 			style.hasHorizontalGrid = true;
 		}else if(type.compareTo(GridType.VERTICAL) == 0){
 			style.hasVerticalGrid = true;
+		}else if(type.compareTo(GridType.NONE) == 0) {
+			style.hasVerticalGrid = false;
+			style.hasHorizontalGrid = false;
 		}else{
 			style.hasHorizontalGrid = true;
 		}

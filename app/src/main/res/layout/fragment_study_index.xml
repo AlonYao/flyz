@@ -10,6 +10,39 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+            <!--&lt;!&ndash; 折线图 &ndash;&gt;-->
+            <!--<com.db.chart.view.LineChartViewForMock-->
+                <!--android:id="@+id/linechartname"-->
+                <!--android:layout_width="15dp"-->
+                <!--android:layout_height="209dp"-->
+                <!--android:paddingTop="20dp"-->
+                <!--android:paddingBottom="20dp"-->
+                <!--android:background="@color/white"/>-->
+            <!--<HorizontalScrollView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layerType="software">-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical">-->
+                    <!--&lt;!&ndash; 折线图 &ndash;&gt;-->
+                    <!--<com.db.chart.view.LineChartViewForMock-->
+                        <!--android:id="@+id/linechart"-->
+                        <!--android:layout_width="2000dp"-->
+                        <!--android:layout_height="209dp"-->
+                        <!--android:paddingTop="20dp"-->
+                        <!--android:paddingBottom="20dp"-->
+                        <!--android:paddingLeft="15dp"-->
+                        <!--android:background="@android:color/transparent"/>-->
+                <!--</LinearLayout>-->
+            <!--</HorizontalScrollView>-->
+        <!--</LinearLayout>-->
+
         <RelativeLayout
             android:id="@+id/carousel_view_rl"
             android:layout_width="match_parent"
