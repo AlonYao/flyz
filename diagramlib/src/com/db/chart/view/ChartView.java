@@ -41,7 +41,6 @@ import com.db.williamchart.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 
 /**
@@ -139,8 +138,6 @@ public abstract class ChartView extends RelativeLayout{
 			chartLeft = getPaddingLeft();
 			chartRight = getMeasuredWidth() - getPaddingRight() - 100;
 
-			Log.e("huaxiao", String.valueOf(getMeasuredWidth()));
-	
 			// Initialize controllers now that we have the measures
 			verController.init();	
 			mThresholdValue = verController.parsePos(0, mThresholdValue);

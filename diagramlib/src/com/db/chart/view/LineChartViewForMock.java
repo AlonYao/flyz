@@ -26,6 +26,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.Shader;
 import android.util.AttributeSet;
@@ -171,35 +172,77 @@ public class LineChartViewForMock extends ChartView {
 				PointBean pointBean = new PointBean();
 				pointBean.setX(set.getEntry(i).getX());
 				pointBean.setY(set.getEntry(i).getY());
+				pointBean.setValue(set.getEntry(i).getValue());
 				mLastPointList.add(pointBean);
 
 				// 所有线条全部画完时，开始增加flag
 				if (mCurLineAmount < mLineAmount) continue;
 
 				// 最后日期的线
+				Paint linePaint = new Paint();
+//				linePaint.setColor(Color.parseColor("#FF3131"));
+				linePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+				linePaint.setAntiAlias(true);
+				linePaint.setStrokeWidth(Tools.fromDpToPx(1));
 				canvas.drawLine(set.getEntry(i).getX(),
 						getInnerChartBottom(),
 						set.getEntry(i).getX(),
 						0,
-						style.gridPaint);
+						linePaint);
 
 				// 规定第一条线为历史成绩线，第二条线为历史模考平均分线
+				PointBean scorePoint = mLastPointList.get(0);
+				PointBean avgPoint = mLastPointList.get(1);
 
-				float scoreY = mLastPointList.get(0).getY();
-				float avgY = mLastPointList.get(1).getY();
+				float scoreY = scorePoint.getY();
+				float avgY = avgPoint.getY();
+				String text = "";
 
-				if (scoreY >= avgY) {
+				Paint textPaint = new Paint();
+				textPaint.setTextSize(sp2px(mContext, 10));
+				textPaint.setColor(Color.WHITE);
+				textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+				textPaint.setAntiAlias(true);
+
+				if (scoreY <= avgY) {
 					// 分数在上，平均在下
 					// 绘制分数flag
 					Bitmap bitmap = BitmapFactory.decodeResource(
 							getContext().getResources(), R.drawable.mock_report_score_top);
 					canvas.drawBitmap(
 							bitmap,
-							set.getEntry(i).getX() - bitmap.getWidth() / 2,
-							set.getEntry(i).getY() - bitmap.getHeight(),
+							scorePoint.getX() - bitmap.getWidth() / 2,
+							scorePoint.getY() - bitmap.getHeight(),
 							mStyle.mDotsPaint);
 				} else {
 					// 分数在下，平均在上
+					// 绘制分数flag
+					Bitmap bitmap = BitmapFactory.decodeResource(
+							getContext().getResources(), R.drawable.mock_report_score_bottom);
+					canvas.drawBitmap(
+							bitmap,
+							scorePoint.getX() - bitmap.getWidth() / 2,
+							scorePoint.getY(),
+							mStyle.mDotsPaint);
+
+					// 绘制分数文字
+					text = String.valueOf(scorePoint.getValue()) + "分";
+					Rect rect = new Rect();
+					textPaint.getTextBounds(text, 0, text.length(), rect);
+					canvas.drawText(
+							text,
+							scorePoint.getX() - rect.width() / 2,
+							scorePoint.getY() + rect.height() + bitmap.getHeight() / 3,
+							textPaint);
+
+					// 绘制平均flag
+					bitmap = BitmapFactory.decodeResource(
+							getContext().getResources(), R.drawable.mock_report_avg_top);
+					canvas.drawBitmap(
+							bitmap,
+							avgPoint.getX() - bitmap.getWidth() / 2,
+							avgPoint.getY() - bitmap.getHeight(),
+							mStyle.mDotsPaint);
 				}
 
 //				// 历史成绩flag

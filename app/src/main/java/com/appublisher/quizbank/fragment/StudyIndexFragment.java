@@ -2,6 +2,8 @@ package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -46,6 +48,12 @@ import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
+import com.db.chart.Tools;
+import com.db.chart.model.LineSet;
+import com.db.chart.view.LineChartView;
+import com.db.chart.view.LineChartViewForMock;
+import com.db.chart.view.XController;
+import com.db.chart.view.YController;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
@@ -161,114 +169,104 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
 
         setValue();
 
-//        LineChartViewForMock bbb = (LineChartViewForMock) view.findViewById(R.id.linechartname);
-//        String[] lineLabelsbbb = new String[]{"1"};  // X轴上显示的文字
-//        float[] lineValuesbbb = new float[]{0};  // 各个点的分值
-//
-//        Paint lineGridPaintbbb = new Paint();
-//        lineGridPaintbbb.setColor(getResources().getColor(R.color.common_line));
-//        lineGridPaintbbb.setStyle(Paint.Style.STROKE);
-//        lineGridPaintbbb.setAntiAlias(true);
-//        lineGridPaintbbb.setStrokeWidth(Tools.fromDpToPx(.75f));
-//
-//        bbb.reset();
-//
-//        LineSet dataSetbbb = new LineSet();
-//        dataSetbbb.addPoints(lineLabelsbbb, lineValuesbbb);
-//        dataSetbbb.setSmooth(true);
-//        dataSetbbb.setDashed(false);
-//        dataSetbbb.setDots(false)
-//                .setDotsColor(getResources().getColor(R.color.evaluation_diagram_line))
-//                .setDotsRadius(Tools.fromDpToPx(4))
-//                .setDotsStrokeThickness(Tools.fromDpToPx(2))
-//                .setDotsStrokeColor(
-//                        getResources().getColor(R.color.evaluation_diagram_line))
-//                .setLineColor(getResources().getColor(R.color.evaluation_diagram_line))
-//                .setLineThickness(Tools.fromDpToPx(3))
-//                .beginAt(0).endAt(1);
-//        bbb.addData(dataSetbbb);
-//
-//        bbb.setBorderSpacing(Tools.fromDpToPx(0))
-//                .setGrid(LineChartView.GridType.NONE, lineGridPaintbbb)
-//                .setXAxis(false)
-//                .setXLabels(XController.LabelPosition.OUTSIDE)
-//                .setYAxis(false)
-//                .setYLabels(YController.LabelPosition.OUTSIDE)
-//                .setAxisBorderValues(0, 10, 2)
-//                .show();
-//
-//
-//        LineChartViewForMock aaa = (LineChartViewForMock) view.findViewById(R.id.linechart);
-//        aaa.setLineAmount(2);
-//        // 根据值绘图
-//
-//        String[] lineLabels = new String[]{
-//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18", "09/18"};  // X轴上显示的文字
-//
-//        float[] lineValues = new float[]{1, 2, 3, 4, 5, 6, 7,
-//                1, 2, 3, 4, 5, 6, 7,
-//                1, 2, 3, 4, 5, 6, 7,
-//                1, 2, 3, 4, 5, 6, 7,
-//                1, 2, 3, 4, 5, 6, 7,
-//                1, 2, 3, 4, 5, 6, 7};  // 各个点的分值
-//
-//        Paint lineGridPaint = new Paint();
-//        lineGridPaint.setColor(getResources().getColor(R.color.common_line));
-//        lineGridPaint.setStyle(Paint.Style.STROKE);
-//        lineGridPaint.setAntiAlias(true);
-//        lineGridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
-//
-//        aaa.reset();
-//
-//        LineSet dataSet = new LineSet();
-//        dataSet.addPoints(lineLabels, lineValues);
-//        dataSet.setSmooth(false);
-//        dataSet.setDashed(false);
-//        dataSet.setDots(true)
-//                .setDotsColor(getResources().getColor(R.color.evaluation_diagram_line))
-//                .setDotsRadius(Tools.fromDpToPx(2))
-//                .setDotsStrokeThickness(Tools.fromDpToPx(2))
-//                .setDotsStrokeColor(
-//                        getResources().getColor(R.color.evaluation_diagram_line))
-//                .setLineColor(getResources().getColor(R.color.evaluation_diagram_line))
-//                .setLineThickness(Tools.fromDpToPx(2))
-//                .beginAt(0).endAt(42);
-//        aaa.addData(dataSet);
-//
-//        lineValues = new float[]{8, 9, 10, 7, 6, 5, 4,
-//                8, 9, 10, 7, 6, 5, 4,
-//                8, 9, 10, 7, 6, 5, 4,
-//                8, 9, 10, 7, 6, 5, 4,
-//                8, 9, 10, 7, 6, 5, 4,
-//                8, 9, 10, 7, 6, 5, 4};  // 各个点的分值
-//
-//        dataSet = new LineSet();
-//        dataSet.addPoints(lineLabels, lineValues);
-//        dataSet.setSmooth(false);
-//        dataSet.setDashed(false);
-//        dataSet.setDots(true)
-//                .setDotsColor(Color.parseColor("#4E90F5"))
-//                .setDotsRadius(Tools.fromDpToPx(2))
-//                .setDotsStrokeThickness(Tools.fromDpToPx(2))
-//                .setDotsStrokeColor(Color.parseColor("#4E90F5"))
-//                .setLineColor(Color.parseColor("#4E90F5"))
-//                .setLineThickness(Tools.fromDpToPx(2))
-//                .beginAt(0).endAt(42);
-//        aaa.addData(dataSet);
-//
-//        aaa.setBorderSpacing(Tools.fromDpToPx(0))
-//                .setGrid(LineChartView.GridType.HORIZONTAL, lineGridPaint)
-//                .setXAxis(false)
-//                .setXLabels(XController.LabelPosition.OUTSIDE)
-//                .setYAxis(false)
-//                .setYLabels(YController.LabelPosition.NONE)
-//                .setAxisBorderValues(0, 10, 2)
-//                .show();
+        LineChartViewForMock bbb = (LineChartViewForMock) view.findViewById(R.id.linechartname);
+        String[] lineLabelsbbb = new String[]{"1"};  // X轴上显示的文字
+        float[] lineValuesbbb = new float[]{0};  // 各个点的分值
+
+        Paint lineGridPaintbbb = new Paint();
+        lineGridPaintbbb.setColor(getResources().getColor(R.color.common_line));
+        lineGridPaintbbb.setStyle(Paint.Style.STROKE);
+        lineGridPaintbbb.setAntiAlias(true);
+        lineGridPaintbbb.setStrokeWidth(Tools.fromDpToPx(.75f));
+
+        bbb.reset();
+
+        LineSet dataSetbbb = new LineSet();
+        dataSetbbb.addPoints(lineLabelsbbb, lineValuesbbb);
+        dataSetbbb.setSmooth(true);
+        dataSetbbb.setDashed(false);
+        dataSetbbb.setDots(false)
+                .setDotsColor(getResources().getColor(R.color.evaluation_diagram_line))
+                .setDotsRadius(Tools.fromDpToPx(4))
+                .setDotsStrokeThickness(Tools.fromDpToPx(2))
+                .setDotsStrokeColor(
+                        getResources().getColor(R.color.evaluation_diagram_line))
+                .setLineColor(getResources().getColor(R.color.evaluation_diagram_line))
+                .setLineThickness(Tools.fromDpToPx(3))
+                .beginAt(0).endAt(1);
+        bbb.addData(dataSetbbb);
+
+        bbb.setBorderSpacing(Tools.fromDpToPx(0))
+                .setGrid(LineChartView.GridType.NONE, lineGridPaintbbb)
+                .setXAxis(false)
+                .setXLabels(XController.LabelPosition.OUTSIDE)
+                .setYAxis(false)
+                .setYLabels(YController.LabelPosition.OUTSIDE)
+                .setAxisBorderValues(0, 10, 2)
+                .show();
+
+
+        LineChartViewForMock aaa = (LineChartViewForMock) view.findViewById(R.id.linechart);
+        aaa.setLineAmount(2);
+        // 根据值绘图
+
+        String[] lineLabels = new String[]{
+                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
+                "09/18", "09/18", "09/18", "09/18", "09/18", ""};  // X轴上显示的文字
+
+        float[] lineValues = new float[]{
+                1, 2, 3, 4, 5, 6,
+                1, 2, 3, 4, 5, 6};  // 各个点的分值
+
+        Paint lineGridPaint = new Paint();
+        lineGridPaint.setColor(getResources().getColor(R.color.common_line));
+        lineGridPaint.setStyle(Paint.Style.STROKE);
+        lineGridPaint.setAntiAlias(true);
+        lineGridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
+
+        aaa.reset();
+
+        LineSet dataSet = new LineSet();
+        dataSet.addPoints(lineLabels, lineValues);
+        dataSet.setSmooth(false);
+        dataSet.setDashed(false);
+        dataSet.setDots(true)
+                .setDotsColor(getResources().getColor(R.color.evaluation_diagram_line))
+                .setDotsRadius(Tools.fromDpToPx(2))
+                .setDotsStrokeThickness(Tools.fromDpToPx(2))
+                .setDotsStrokeColor(
+                        getResources().getColor(R.color.evaluation_diagram_line))
+                .setLineColor(getResources().getColor(R.color.evaluation_diagram_line))
+                .setLineThickness(Tools.fromDpToPx(2))
+                .beginAt(0).endAt(11);
+        aaa.addData(dataSet);
+
+        lineValues = new float[]{
+                8, 9, 10, 7, 6, 5,
+                8, 9, 10, 7, 6, 5};  // 各个点的分值
+
+        dataSet = new LineSet();
+        dataSet.addPoints(lineLabels, lineValues);
+        dataSet.setSmooth(false);
+        dataSet.setDashed(false);
+        dataSet.setDots(true)
+                .setDotsColor(Color.parseColor("#4E90F5"))
+                .setDotsRadius(Tools.fromDpToPx(2))
+                .setDotsStrokeThickness(Tools.fromDpToPx(2))
+                .setDotsStrokeColor(Color.parseColor("#4E90F5"))
+                .setLineColor(Color.parseColor("#4E90F5"))
+                .setLineThickness(Tools.fromDpToPx(2))
+                .beginAt(0).endAt(11);
+        aaa.addData(dataSet);
+
+        aaa.setBorderSpacing(Tools.fromDpToPx(0))
+                .setGrid(LineChartView.GridType.HORIZONTAL, lineGridPaint)
+                .setXAxis(false)
+                .setXLabels(XController.LabelPosition.OUTSIDE)
+                .setYAxis(false)
+                .setYLabels(YController.LabelPosition.NONE)
+                .setAxisBorderValues(0, 10, 2)
+                .show();
 
 
         return view;
