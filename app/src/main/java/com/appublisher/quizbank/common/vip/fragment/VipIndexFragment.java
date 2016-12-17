@@ -2,8 +2,6 @@ package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -179,6 +177,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
 //        Paint paint = new Paint();
 //        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
 //        canvas.drawBitmap(bkg, 0, 0, paint);
+        if (bkg == null) return;
         bkg = FastBlur.doBlur(bkg, (int) radius, true);
         view.setImageBitmap(bkg);
     }

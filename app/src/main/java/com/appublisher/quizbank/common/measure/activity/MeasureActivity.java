@@ -406,6 +406,7 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
      * 模考时间到Alert
      */
     public void showMockTimeOutAlert() {
+        if (isFinishing()) return;
         new AlertDialog.Builder(this)
                 .setMessage("时间到了要交卷啦！")
                 .setTitle("提示")

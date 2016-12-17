@@ -877,7 +877,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         if (spf == null) return;
         int paperId = spf.getInt(CACHE_PAPER_ID, 0);
         String paperTpye = spf.getString(CACHE_PAPER_TYPE, "");
-        boolean redo = spf.getBoolean(CACHE_REDO, false);
+        boolean redo = getCacheRedo(spf);
         String answer = spf.getString(CACHE_USER_ANSWER, "");
         if (paperId == 0 || paperTpye.length() == 0 || answer.length() == 0) return;
 
@@ -893,6 +893,16 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         if (mContext instanceof BaseActivity) ((BaseActivity) mContext).showLoading();
         mRequest.submitPaper(MeasureParamBuilder.submitPaper(
                 paperId, paperTpye, redo, durtion, answer, doneStatus));
+    }
+
+    private boolean getCacheRedo(SharedPreferences spf) {
+        if (spf == null) return false;
+        // 兼容老版本
+        try {
+            return spf.getBoolean(CACHE_REDO, false);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void submitPaperDone() {
@@ -1079,7 +1089,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             } else {
                 // 提交做题数据
                 String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
-                boolean redo = cache.getBoolean(CACHE_REDO, false);
+                boolean redo = getCacheRedo(cache);
                 new QRequest(mContext, this).cacheSubmitPaper(
                         MeasureParamBuilder.submitPaper(
                                 paperId,
@@ -1181,12 +1191,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                                 int paperId = cache.getInt(CACHE_PAPER_ID, 0);
                                 String paperType = cache.getString(CACHE_PAPER_TYPE, "");
                                 String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
-                                String redo = cache.getString(CACHE_REDO, "false");
+                                boolean redo = getCacheRedo(cache);
                                 new QRequest(mContext).submitPaper(
                                         ParamBuilder.submitPaper(
                                                 String.valueOf(paperId),
                                                 paperType,
-                                                redo,
+                                                redo ? "true" : "false",
                                                 String.valueOf(countDuration(userAnswer)),
                                                 userAnswer,
                                                 "done")
