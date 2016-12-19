@@ -138,6 +138,9 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
             HashMap<String, String> map = new HashMap<>();
             UmengManager.onEventValue(this, "Zhineng", map, dur);
         }
+
+        // 停止计时
+        stopTimer();
     }
 
     @Override
