@@ -8,8 +8,6 @@ import android.widget.TextView;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
-import com.appublisher.lib_login.model.db.User;
-import com.appublisher.lib_login.model.db.UserDAO;
 import com.appublisher.lib_login.model.netdata.UserExamInfoModel;
 import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
@@ -18,7 +16,6 @@ import com.appublisher.quizbank.model.netdata.exam.ExamDetailModel;
 import com.appublisher.quizbank.model.netdata.exam.ExamItemModel;
 import com.appublisher.quizbank.model.netdata.mock.GufenM;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
-import com.appublisher.quizbank.network.QRequest;
 
 import org.json.JSONObject;
 
@@ -34,23 +31,18 @@ public class StudyIndexModel {
      *
      * @param textView textView
      */
-    public static void setExamCountDown(TextView textView, QRequest QRequest) {
-        User user = UserDAO.findById();
+    public static void setExamCountDown(TextView textView) {
+        if (textView == null) return;
 
-        if (user == null) return;
+        UserExamInfoModel examInfoModel = LoginModel.getExamInfo();
+        if (examInfoModel == null) return;
 
-
-        ExamItemModel examItemModel = GsonManager.getModel(user.exam, ExamItemModel.class);
-
-        if (examItemModel == null) return;
-
-        String name = examItemModel.getName();
-        String date = examItemModel.getDate();
+        String name = examInfoModel.getName();
+        String date = examInfoModel.getDate();
 
         long day = Utils.dateMinusNow(date);
         if (day < 0) {
             day = 0;
-            QRequest.getExamList();
         }
 
         String text = "距离" + name + "\n还有" + String.valueOf(day) + "天";
@@ -96,18 +88,6 @@ public class StudyIndexModel {
                 textView.setText(text);
             }
         }
-    }
-
-    /**
-     * 更新考试项目
-     *
-     * @param model    考试项目数据
-     * @param fragment HomePageFragment
-     */
-    public static void updateExam(ExamItemModel model, StudyIndexFragment fragment) {
-        if (model == null) return;
-        LoginModel.updateExamInfo(GsonManager.modelToString(model, ExamItemModel.class));
-        setExamCountDown(fragment.examNameTv, fragment.mQRequest);
     }
 
     /**
