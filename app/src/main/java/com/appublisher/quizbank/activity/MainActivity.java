@@ -159,6 +159,10 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 @Override
                 public void isSuccess(boolean isSuccess) {
                     if (isSuccess) {
+                        // 更新考试项目
+                        updateExamInfo();
+
+                        // 绑定手机号
                         final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
                         if (userInfoModel == null) return;
                         if (userInfoModel.getMobile_num() == null || "".equals(userInfoModel.getMobile_num())) {
@@ -400,7 +404,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     @SuppressLint("RtlHardcoded")
     @Override
     public void onBackPressed() {
-
         // 两次Back退出
         if (mDoubleBackToExit) {
             QuizBankApp.getInstance().exit();
@@ -417,6 +420,16 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 mDoubleBackToExit = false;
             }
         }, 2000);
+    }
+
+    public void updateExamInfo() {
+        try {
+            if (mStudyIndexFragment != null) {
+                mStudyIndexFragment.updateExam();
+            }
+        } catch (Exception e) {
+            // Empty
+        }
     }
 
     /**

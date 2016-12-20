@@ -390,7 +390,11 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         }
 
         // 更新用户考试项目
-        StudyIndexModel.updateExam(homePageResp.getExam_info(), this);
+        updateExam();
+    }
+
+    public void updateExam() {
+        StudyIndexModel.setExamCountDown(examNameTv);
     }
 
     @Override
