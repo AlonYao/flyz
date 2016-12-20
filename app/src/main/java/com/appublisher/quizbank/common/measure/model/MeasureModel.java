@@ -76,6 +76,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public int mHierarchyId;
     public int mMockDuration;
     public int mCurPagePosition;
+    public int mExerciseId;
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
@@ -91,7 +92,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     private SubmitListener mSubmitListener;
     private ServerTimeListener mServerTimeListener;
     private int mPaperDuration;
-
 
     public MeasureModel(Context context) {
         mContext = context;
@@ -925,6 +925,23 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         });
     }
 
+    public void autoSubmit() {
+        if (!(mContext instanceof MeasureActivity)) return;
+        submit(true, new SubmitListener() {
+            @Override
+            public void onComplete(boolean success, int exercise_id) {
+                if (success) {
+                    mExerciseId = exercise_id;
+
+                    // 清除做题缓存
+                    clearUserAnswerCache(mContext);
+                } else {
+                    ((MeasureActivity) mContext).showSubmitErrorToast();
+                }
+            }
+        });
+    }
+
     public void submitVipXCPaper() {
         SharedPreferences spf = getMeasureCache(mContext);
         if (spf == null) return;
@@ -957,7 +974,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 public void onTimeOut() {
                     // 超时处理
                     ((MeasureActivity) mContext).showMockTimeOutAlert();
-                    submitPaperDone();
+                    autoSubmit();
                 }
 
                 @Override
