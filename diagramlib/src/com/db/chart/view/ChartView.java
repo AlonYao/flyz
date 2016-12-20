@@ -61,7 +61,7 @@ public abstract class ChartView extends RelativeLayout{
     }
 
 	public static enum ChartType {
-		MOCK, DEFAULT
+		MOCK_BAR, MOCK, DEFAULT
 	}
 
     protected Orientation orientation;
@@ -182,6 +182,10 @@ public abstract class ChartView extends RelativeLayout{
 
 	public boolean isChartTypeMock() {
 		return chartType.compareTo(ChartType.MOCK) == 0;
+	}
+
+	public boolean isChartTypeMockBar() {
+		return chartType.compareTo(ChartType.MOCK_BAR) == 0;
 	}
 	
 	public ChartView(Context context, AttributeSet attrs) {

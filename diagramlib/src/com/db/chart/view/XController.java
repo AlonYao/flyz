@@ -170,13 +170,26 @@ public class XController extends AxisController{
 							chartView.style.labelPaint);
 				}
 
+			} else if (chartView.isChartTypeMockBar()) {
+				if (labelsPos == null || labelsPos.size() == 0) return;
+				float dex = labelsPos.get(0);
+				for(int i = 0; i < nLabels; i++){
+					if (i == 0) {
+						chartView.style.labelPaint.setTextAlign(Align.LEFT);
+					} else {
+						chartView.style.labelPaint.setTextAlign(Align.CENTER);
+					}
+					canvas.drawText(labels.get(i),
+							labelsPos.get(i) - dex,
+							mLabelVerCoord,
+							chartView.style.labelPaint);
+				}
 			} else {
 				for(int i = 0; i < nLabels; i++){
 					canvas.drawText(labels.get(i),
 							labelsPos.get(i),
 							mLabelVerCoord,
 							chartView.style.labelPaint);
-
 				}
 			}
         }

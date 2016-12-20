@@ -36,6 +36,15 @@ public class Tools {
         return dp * Resources.getSystem().getDisplayMetrics().density;
     }
 
+	/**
+	 * Converts sp size into pixels.
+	 *
+	 * @param sp   sp size to get converted
+	 * @return Pixel size
+	 */
+	public static float fromSpToPx(float sp) {
+		return sp * Resources.getSystem().getDisplayMetrics().scaledDensity;
+	}
 
     /**
      * Converts a {@link android.graphics.drawable.Drawable} into {@link android.graphics.Bitmap}.
