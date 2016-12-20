@@ -88,6 +88,8 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                         break;
 
                     case TIME_MOCK_OUT:
+                        activity.stopTimer();
+                        activity.setTitle("00:00");
                         activity.mModel.mMockDuration = 0;
                         activity.showLoading();
                         activity.mModel.getServerTimeStamp(
