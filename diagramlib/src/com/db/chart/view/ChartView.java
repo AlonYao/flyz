@@ -59,10 +59,13 @@ public abstract class ChartView extends RelativeLayout{
     public static enum Orientation {
         HORIZONTAL, VERTICAL
     }
-	
+
+	public static enum ChartType {
+		MOCK, DEFAULT
+	}
 
     protected Orientation orientation;
-
+	protected ChartType chartType = ChartType.DEFAULT;
 
 	/** Chart borders */
 	protected int chartTop;
@@ -136,7 +139,13 @@ public abstract class ChartView extends RelativeLayout{
 			chartTop = getPaddingTop() + verController.getLabelHeight()/2;
 			chartBottom = getMeasuredHeight() - getPaddingBottom();
 			chartLeft = getPaddingLeft();
-			chartRight = getMeasuredWidth() - getPaddingRight() - 100;
+
+			if (isChartTypeMock()) {
+				// 模考特殊处理
+				chartRight = getMeasuredWidth() - getPaddingRight() - 100;
+			} else {
+				chartRight = getMeasuredWidth() - getPaddingRight();
+			}
 
 			// Initialize controllers now that we have the measures
 			verController.init();	
@@ -167,8 +176,13 @@ public abstract class ChartView extends RelativeLayout{
 		}
 	};
 	
-	
-	
+	public void setChartType(ChartType type) {
+		chartType = type;
+	}
+
+	public boolean isChartTypeMock() {
+		return chartType.compareTo(ChartType.MOCK) == 0;
+	}
 	
 	public ChartView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -645,40 +659,43 @@ public abstract class ChartView extends RelativeLayout{
 	
 	private void drawHorizontalGrid(Canvas canvas){
 
-		// Draw horizontal grid lines
-		for(Float pos : verController.labelsPos){
-//			canvas.drawLine(getInnerChartLeft(),
-//								pos,
-//									getInnerChartRight(),
-//										pos,
-//											style.gridPaint);
+		if (isChartTypeMock()) {
+			// 模考特殊处理
+			// Draw horizontal grid lines
+			for(Float pos : verController.labelsPos){
+				canvas.drawLine(0,
+						pos,
+						getInnerChartRight(),
+						pos,
+						style.gridPaint);
+			}
+			// If there's no axis
+			if(!horController.hasAxis)
+				canvas.drawLine(0,
+						getInnerChartBottom(),
+						getInnerChartRight(),
+						getInnerChartBottom(),
+						style.gridPaint);
 
-			canvas.drawLine(0,
-					pos,
-					getInnerChartRight(),
-					pos,
-					style.gridPaint);
+		} else {
+			// Draw horizontal grid lines
+			for(Float pos : verController.labelsPos){
+				canvas.drawLine(getInnerChartLeft(),
+									pos,
+										getInnerChartRight(),
+											pos,
+												style.gridPaint);
+			}
+			// If there's no axis
+			if(!horController.hasAxis)
+				canvas.drawLine(getInnerChartLeft(),
+									getInnerChartBottom(),
+										getInnerChartRight(),
+											getInnerChartBottom(),
+												style.gridPaint);
 		}
-		
-		// If there's no axis
-		if(!horController.hasAxis)
-//			canvas.drawLine(getInnerChartLeft(),
-//								getInnerChartBottom(),
-//									getInnerChartRight(),
-//										getInnerChartBottom(),
-//											style.gridPaint);
-
-			canvas.drawLine(0,
-					getInnerChartBottom(),
-					getInnerChartRight(),
-					getInnerChartBottom(),
-					style.gridPaint);
 	}
-	
-	
-	
-	
-	
+
 	/*
 	 * --------------
 	 * Click Handler

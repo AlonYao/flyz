@@ -50,6 +50,7 @@ import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
 import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
+import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.db.chart.view.LineChartViewForMock;
 import com.db.chart.view.XController;
@@ -170,6 +171,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         setValue();
 
         LineChartViewForMock bbb = (LineChartViewForMock) view.findViewById(R.id.linechartname);
+        bbb.setChartType(ChartView.ChartType.MOCK);
         String[] lineLabelsbbb = new String[]{"1"};  // X轴上显示的文字
         float[] lineValuesbbb = new float[]{0};  // 各个点的分值
 
@@ -208,6 +210,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
 
         LineChartViewForMock aaa = (LineChartViewForMock) view.findViewById(R.id.linechart);
         aaa.setLineAmount(2);
+        aaa.setChartType(ChartView.ChartType.MOCK);
         // 根据值绘图
 
         String[] lineLabels = new String[]{
