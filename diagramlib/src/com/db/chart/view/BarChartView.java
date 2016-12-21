@@ -18,9 +18,13 @@ package com.db.chart.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Region;
 import android.util.AttributeSet;
 
+import com.db.chart.Tools;
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.model.ChartSet;
@@ -73,7 +77,14 @@ public class BarChartView extends BaseBarChartView {
 			
 			// Set first offset to draw a group of bars
             offset = data.get(0).getEntry(i).getX() - drawingOffset;
-			
+
+			// 文字Paint
+			Paint textPaint = new Paint();
+			textPaint.setTextSize(Tools.fromSpToPx(10));
+			textPaint.setColor(Color.BLACK);
+			textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+			textPaint.setAntiAlias(true);
+
 			for(int j = 0; j < nSets; j++){
 				
 				barSet = (BarSet) data.get(j);
@@ -93,16 +104,44 @@ public class BarChartView extends BaseBarChartView {
                             offset + barWidth, this.getInnerChartBottom());
 				
 				// Draw bar
-				if(bar.getValue() > 0)
+				if(bar.getValue() > 0) {
 					// Draw positive bar
-                    drawBar(canvas,
-                            offset, bar.getY(),
-                            offset + barWidth, yZeroCoord);
-				else
+					drawBar(canvas,
+							offset, bar.getY(),
+							offset + barWidth, yZeroCoord);
+
+					if (isChartTypeMockBar()) {
+						// 模考特殊处理
+						String text = String.valueOf(bar.getValue()) + "%";
+						Rect rect = new Rect();
+						textPaint.getTextBounds(text, 0, text.length(), rect);
+						float x = offset + barWidth / 2 - rect.width() / 2;
+
+						int barHeight = (int) (yZeroCoord - bar.getY());
+						if (rect.height() >= barHeight) {
+							textPaint.setColor(style.barPaint.getColor());
+							canvas.drawText(text, x, bar.getY() - 10, textPaint);
+						} else {
+							textPaint.setColor(Color.WHITE);
+							// 设置间距
+							int dex = barHeight - rect.height();
+							if (dex >= barHeight / 6) {
+								canvas.drawText(
+										text,
+										x,
+										bar.getY() + rect.height() + barHeight / 6,
+										textPaint);
+							} else {
+								canvas.drawText(text, x, bar.getY() + rect.height(), textPaint);
+							}
+						}
+					}
+				} else {
 					// Draw negative bar
-                    drawBar(canvas,
-                            offset, yZeroCoord,
-                            offset + barWidth, bar.getY());
+					drawBar(canvas,
+							offset, yZeroCoord,
+							offset + barWidth, bar.getY());
+				}
 
                 offset += barWidth;
 				

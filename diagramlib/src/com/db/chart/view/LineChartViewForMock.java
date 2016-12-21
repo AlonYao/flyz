@@ -134,9 +134,6 @@ public class LineChartViewForMock extends ChartView {
 
 	}
 
-
-
-
 	/**
 	 * Responsible for drawing points
 	 */

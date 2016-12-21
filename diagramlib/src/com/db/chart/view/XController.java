@@ -17,8 +17,13 @@
 package com.db.chart.view;
 
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint.Align;
+
+import com.db.williamchart.R;
 
 
 /**
@@ -146,14 +151,47 @@ public class XController extends AxisController{
         // Draw labels
         if(labelsPositioning != LabelPosition.NONE){
 
-            chartView.style.labelPaint.setTextAlign(Align.CENTER);
-            for(int i = 0; i < nLabels; i++){
-                canvas.drawText(labels.get(i),
-                                    labelsPos.get(i),
-                                        mLabelVerCoord,
-                                            chartView.style.labelPaint);
+			chartView.style.labelPaint.setTextAlign(Align.CENTER);
 
-            }
+			if (chartView.isChartTypeMock()) {
+				// 模考特殊处理
+				Bitmap bitmap = BitmapFactory.decodeResource(
+						chartView.getContext().getResources(), R.drawable.mock_report_date);
+				for(int i = 0; i < nLabels; i++){
+					if (i == nLabels - 2) {
+						chartView.style.labelPaint.setColor(Color.WHITE);
+					} else {
+						chartView.style.labelPaint.setColor(chartView.style.labelColor);
+					}
+
+					canvas.drawText(labels.get(i),
+							labelsPos.get(i),
+							mLabelVerCoord + bitmap.getHeight() / 5,
+							chartView.style.labelPaint);
+				}
+
+			} else if (chartView.isChartTypeMockBar()) {
+				if (labelsPos == null || labelsPos.size() == 0) return;
+				float dex = labelsPos.get(0);
+				for(int i = 0; i < nLabels; i++){
+					if (i == 0) {
+						chartView.style.labelPaint.setTextAlign(Align.LEFT);
+					} else {
+						chartView.style.labelPaint.setTextAlign(Align.CENTER);
+					}
+					canvas.drawText(labels.get(i),
+							labelsPos.get(i) - dex,
+							mLabelVerCoord,
+							chartView.style.labelPaint);
+				}
+			} else {
+				for(int i = 0; i < nLabels; i++){
+					canvas.drawText(labels.get(i),
+							labelsPos.get(i),
+							mLabelVerCoord,
+							chartView.style.labelPaint);
+				}
+			}
         }
     }
 

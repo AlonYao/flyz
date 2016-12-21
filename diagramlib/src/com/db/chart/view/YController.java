@@ -164,15 +164,18 @@ public class YController extends AxisController{
 
 			// Draw labels
 			for(int i = 0; i < nLabels; i++){
-//				canvas.drawText(labels.get(i),
-//									axisHorPosition - chartView.style.axisThickness/2 - distLabelToAxis,
-//										labelsPos.get(i) + getLabelHeight()/2,
-//											chartView.style.labelPaint);
-
-                canvas.drawText(labels.get(i),
-                        axisHorPosition - chartView.style.axisThickness/2 - distLabelToAxis,
-                        labelsPos.get(i) - getLabelHeight()/2,
-                        chartView.style.labelPaint);
+                if (chartView.isChartTypeMock()) {
+                    canvas.drawText(labels.get(i),
+                            axisHorPosition - chartView.style.axisThickness/2 - distLabelToAxis,
+                            labelsPos.get(i) - getLabelHeight()/2,
+                            chartView.style.labelPaint);
+                } else {
+                    canvas.drawText(
+                            labels.get(i),
+                            axisHorPosition - chartView.style.axisThickness/2 - distLabelToAxis,
+                            labelsPos.get(i) + getLabelHeight()/2,
+                            chartView.style.labelPaint);
+                }
 			}
 		}
 	}

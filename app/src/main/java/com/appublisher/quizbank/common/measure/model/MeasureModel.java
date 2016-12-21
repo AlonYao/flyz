@@ -76,6 +76,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     public int mHierarchyId;
     public int mMockDuration;
     public int mCurPagePosition;
+    public int mExerciseId;
     public boolean mRedo;
     public long mCurTimestamp;
     public String mPaperType;
@@ -91,7 +92,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
     private SubmitListener mSubmitListener;
     private ServerTimeListener mServerTimeListener;
     private int mPaperDuration;
-
 
     public MeasureModel(Context context) {
         mContext = context;
@@ -877,7 +877,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         if (spf == null) return;
         int paperId = spf.getInt(CACHE_PAPER_ID, 0);
         String paperTpye = spf.getString(CACHE_PAPER_TYPE, "");
-        boolean redo = spf.getBoolean(CACHE_REDO, false);
+        boolean redo = getCacheRedo(spf);
         String answer = spf.getString(CACHE_USER_ANSWER, "");
         if (paperId == 0 || paperTpye.length() == 0 || answer.length() == 0) return;
 
@@ -895,6 +895,16 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 paperId, paperTpye, redo, durtion, answer, doneStatus));
     }
 
+    private boolean getCacheRedo(SharedPreferences spf) {
+        if (spf == null) return false;
+        // 兼容老版本
+        try {
+            return spf.getBoolean(CACHE_REDO, false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void submitPaperDone() {
         if (!(mContext instanceof MeasureActivity)) return;
         submit(true, new SubmitListener() {
@@ -906,6 +916,23 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                     intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
                     mContext.startActivity(intent);
                     ((MeasureActivity) mContext).finish();
+                    // 清除做题缓存
+                    clearUserAnswerCache(mContext);
+                } else {
+                    ((MeasureActivity) mContext).showSubmitErrorToast();
+                }
+            }
+        });
+    }
+
+    public void autoSubmit() {
+        if (!(mContext instanceof MeasureActivity)) return;
+        submit(true, new SubmitListener() {
+            @Override
+            public void onComplete(boolean success, int exercise_id) {
+                if (success) {
+                    mExerciseId = exercise_id;
+
                     // 清除做题缓存
                     clearUserAnswerCache(mContext);
                 } else {
@@ -947,7 +974,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 public void onTimeOut() {
                     // 超时处理
                     ((MeasureActivity) mContext).showMockTimeOutAlert();
-                    submitPaperDone();
+                    autoSubmit();
                 }
 
                 @Override
@@ -1079,7 +1106,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             } else {
                 // 提交做题数据
                 String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
-                boolean redo = cache.getBoolean(CACHE_REDO, false);
+                boolean redo = getCacheRedo(cache);
                 new QRequest(mContext, this).cacheSubmitPaper(
                         MeasureParamBuilder.submitPaper(
                                 paperId,
@@ -1181,12 +1208,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                                 int paperId = cache.getInt(CACHE_PAPER_ID, 0);
                                 String paperType = cache.getString(CACHE_PAPER_TYPE, "");
                                 String userAnswer = cache.getString(CACHE_USER_ANSWER, "");
-                                String redo = cache.getString(CACHE_REDO, "false");
+                                boolean redo = getCacheRedo(cache);
                                 new QRequest(mContext).submitPaper(
                                         ParamBuilder.submitPaper(
                                                 String.valueOf(paperId),
                                                 paperType,
-                                                redo,
+                                                redo ? "true" : "false",
                                                 String.valueOf(countDuration(userAnswer)),
                                                 userAnswer,
                                                 "done")

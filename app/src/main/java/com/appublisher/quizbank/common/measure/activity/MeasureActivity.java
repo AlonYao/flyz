@@ -88,6 +88,8 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                         break;
 
                     case TIME_MOCK_OUT:
+                        activity.stopTimer();
+                        activity.setTitle("00:00");
                         activity.mModel.mMockDuration = 0;
                         activity.showLoading();
                         activity.mModel.getServerTimeStamp(
@@ -95,7 +97,7 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                                     @Override
                                     public void onTimeOut() {
                                         activity.showMockTimeOutAlert();
-                                        activity.mModel.submitPaperDone();
+                                        activity.mModel.autoSubmit();
                                     }
 
                                     @Override
@@ -138,6 +140,9 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
             HashMap<String, String> map = new HashMap<>();
             UmengManager.onEventValue(this, "Zhineng", map, dur);
         }
+
+        // 停止计时
+        stopTimer();
     }
 
     @Override
@@ -406,6 +411,7 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
      * 模考时间到Alert
      */
     public void showMockTimeOutAlert() {
+        if (isFinishing()) return;
         new AlertDialog.Builder(this)
                 .setMessage("时间到了要交卷啦！")
                 .setTitle("提示")
@@ -414,6 +420,12 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(
+                                        MeasureActivity.this, MeasureReportActivity.class);
+                                intent.putExtra(INTENT_PAPER_ID, mModel.mExerciseId);
+                                intent.putExtra(INTENT_PAPER_TYPE, MOCK);
+                                startActivity(intent);
+                                finish();
                                 dialog.dismiss();
                             }
                         }).create().show();

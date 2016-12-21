@@ -2,8 +2,6 @@ package com.appublisher.quizbank.common.vip.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -31,6 +30,7 @@ import com.appublisher.quizbank.common.vip.model.VipIndexModel;
 import com.appublisher.quizbank.common.vip.network.VipRequest;
 import com.appublisher.quizbank.utils.FastBlur;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -152,22 +152,11 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
                 UmengManager.onEvent(getContext(), "VIP", map);
             }
         });
-
-        avatarBgImage.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                avatarBgImage.getViewTreeObserver().removeOnPreDrawListener(this);
-                avatarBgImage.buildDrawingCache();
-                Bitmap bmp = avatarBgImage.getDrawingCache();
-                blur(bmp, avatarBgImage);
-                return true;
-            }
-        });
     }
 
     private void blur(Bitmap bkg, ImageView view) {
         float scaleFactor = 1;
-        float radius = 50;
+        float radius = 80;
 //        Bitmap overlay = Bitmap.createBitmap(
 //                (int) (view.getMeasuredWidth() / scaleFactor),
 //                (int) (view.getMeasuredHeight() / scaleFactor),
@@ -179,6 +168,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
 //        Paint paint = new Paint();
 //        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
 //        canvas.drawBitmap(bkg, 0, 0, paint);
+        if (bkg == null) return;
         bkg = FastBlur.doBlur(bkg, (int) radius, true);
         view.setImageBitmap(bkg);
     }
@@ -189,8 +179,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
 
         final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
         nickname.setText(userInfoModel == null ? "" : userInfoModel.getNickname());
-        LoginModel.setAvatar(getActivity(), avatarImage);
-        LoginModel.setAvatar(getActivity(), avatarBgImage);
+
         final UserExamInfoModel userExamInfoModel = LoginModel.getExamInfo();
         String name = userExamInfoModel == null ? "" : userExamInfoModel.getName();
         String date = userExamInfoModel == null ? "" : userExamInfoModel.getDate();
@@ -204,6 +193,41 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         mRequest.getVipIndexEntryData();
 
         avatarImage.setBackgroundResource(R.drawable.avatar_bg_shadow);
+
+        // 头像处理
+        LoginModel.setAvatar(avatarImage);
+        ImageManager.displayImage(
+                LoginModel.getUserAvatar(), avatarBgImage, new ImageManager.LoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                avatarBgImage.getViewTreeObserver().addOnPreDrawListener(
+                        new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        avatarBgImage.getViewTreeObserver().removeOnPreDrawListener(this);
+                        avatarBgImage.buildDrawingCache();
+                        Bitmap bmp = avatarBgImage.getDrawingCache();
+                        blur(bmp, avatarBgImage);
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
     }
 
     @Override
