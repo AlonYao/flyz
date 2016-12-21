@@ -16,9 +16,9 @@
         >
         <ImageView
             android:id="@+id/imagview_rerecording"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/vip_index_course"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/interview_rereordsound"/>
         <TextView
             android:layout_below="@+id/imagview_rerecording"
             android:layout_centerHorizontal="true"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_gravity="center"
-            android:src="@drawable/vip_index_course"/>
+            android:src="@drawable/interview_listen_recordsound"/>
         <TextView
             android:id="@+id/tv_record_play"
             android:layout_width="wrap_content"
@@ -77,9 +77,9 @@
         >
         <ImageView
             android:id="@+id/imagview_submit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/vip_index_course"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/submit"/>
         <TextView
             android:layout_below="@+id/imagview_submit"
             android:layout_centerHorizontal="true"

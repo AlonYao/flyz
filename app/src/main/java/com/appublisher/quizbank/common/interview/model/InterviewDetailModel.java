@@ -17,8 +17,10 @@ public class InterviewDetailModel implements RequestCallback {
     private Context mContext;
 
     public InterviewDetailModel(Context context) {
+
         mContext = context;
     }
+
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {

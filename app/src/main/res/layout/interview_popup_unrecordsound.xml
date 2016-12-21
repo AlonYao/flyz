@@ -7,6 +7,7 @@
     >
     <!--未录音的状态-->
     <LinearLayout
+        android:id="@+id/interview_unrecordsound_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,13 +18,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/vip_index_course"/>
+            android:background="@drawable/interview_recordsound"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:text="录音"
+            android:textColor="@color/common_text"
             android:textSize="10sp"/>
     </LinearLayout>
 

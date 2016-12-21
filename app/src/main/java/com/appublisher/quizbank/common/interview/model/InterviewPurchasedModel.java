@@ -8,8 +8,10 @@ import android.content.Context;
 
 public class InterviewPurchasedModel extends InterviewDetailModel {
 
+
     public InterviewPurchasedModel(Context context) {
         super(context);
     }
+
 
 }

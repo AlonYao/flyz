@@ -9,7 +9,7 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.interview.adapter.PaperDetailAdaper;
+import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 
@@ -24,7 +24,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private int paper_id;
     private InterviewRequest mRequest;
     private ViewPager viewPager;
-    private PaperDetailAdaper adaper;
+   // private PaperDetailAdaper adaper;
+    private InterviewDetailAdapter mAdaper;
     private List<InterviewPaperDetailResp.QuestionsBean> list;
 
 
@@ -42,8 +43,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
 
         list = new ArrayList<>();
-        adaper = new PaperDetailAdaper(this, list);
-        viewPager.setAdapter(adaper);
+     //   adaper = new PaperDetailAdaper(this, list);
+        mAdaper = new InterviewDetailAdapter(getSupportFragmentManager(),list);
+        viewPager.setAdapter(mAdaper);
 
         mRequest = new InterviewRequest(this, this);
 
@@ -61,8 +63,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
                 list.clear();
                 list.addAll(interviewPaperDetailResp.getQuestions());
-                adaper.notifyDataSetChanged();
-
+                mAdaper.notifyDataSetChanged();
                 if (list.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 }

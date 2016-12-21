@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/vip_index_course"/>
+                android:background="@drawable/interview_listen_recordsound"/>
             <TextView
                 android:id="@+id/tv_record_sounding"
                 android:layout_width="wrap_content"
@@ -33,6 +33,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:text="你的答案"
+                android:textColor="@color/common_text"
                 android:textSize="10sp"/>
             <TextView
                 android:id="@+id/tv_record_sounding_time"
@@ -41,6 +42,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="1dp"
                 android:text="111''"
+                android:textColor="@color/common_text"
                 android:textSize="10sp"/>
         </LinearLayout>
 

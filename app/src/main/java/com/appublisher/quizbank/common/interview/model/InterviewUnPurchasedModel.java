@@ -2,14 +2,29 @@ package com.appublisher.quizbank.common.interview.model;
 
 import android.content.Context;
 
-/**
- * Created by huaxiao on 2016/12/16.
- */
+import com.appublisher.quizbank.common.interview.fragment.InterviewUnPurchasedFragment;
+import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 
-public class InterviewUnPurchasedModel extends InterviewDetailModel {
+import java.util.List;
+
+
+
+public class InterviewUnPurchasedModel extends InterviewDetailModel{
+
+    private Context mContext;
+    private InterviewUnPurchasedFragment mFragment;
+
+    private List<InterviewPaperDetailResp.QuestionsBean> mList;
+
+
 
     public InterviewUnPurchasedModel(Context context) {
         super(context);
+        mContext = context;
+
+
+
     }
+
 
 }
