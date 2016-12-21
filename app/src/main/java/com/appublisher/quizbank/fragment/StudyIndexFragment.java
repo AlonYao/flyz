@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,11 +46,6 @@ import com.appublisher.quizbank.model.netdata.homepage.PaperTodayM;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.ProgressBarManager;
-import com.db.chart.Tools;
-import com.db.chart.model.BarSet;
-import com.db.chart.view.AxisController;
-import com.db.chart.view.BarChartView;
-import com.db.chart.view.ChartView;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONArray;
@@ -167,29 +161,29 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
 
         setValue();
 
-        String[] lineLabels = new String[]{
-                "0", "10", "20", "30", "40", "50",
-                "60", "70", "80", "90"};  // X轴上显示的文字
-
-        float[] lineValues = new float[]{
-                0.3f, 4f, 8f, 13f, 23f, 54f, 84f, 64f, 13f, 0.2f};  // 各个点的分值
-
-        BarChartView chartView = (BarChartView) view.findViewById(R.id.barChartView);
-
-        chartView.reset();
-        chartView.setChartType(ChartView.ChartType.MOCK_BAR);
-
-        BarSet barSet = new BarSet();
-        barSet.addBars(lineLabels, lineValues);
-//        chartView.setLabelColor(ContextCompat.getColor(getContext(), R.color.themecolor));
-        barSet.setColor(ContextCompat.getColor(getContext(), R.color.themecolor));
-
-        chartView.addData(barSet);
-        chartView.setYLabels(AxisController.LabelPosition.NONE);
-        chartView.setXAxis(false);
-        chartView.setYAxis(false);
-        chartView.setBarSpacing(Tools.fromDpToPx(15));
-        chartView.show();
+        // 先不要删除这块
+//        String[] lineLabels = new String[]{
+//                "0", "10", "20", "30", "40", "50",
+//                "60", "70", "80", "90"};  // X轴上显示的文字
+//
+//        float[] lineValues = new float[]{
+//                0.3f, 4f, 8f, 13f, 23f, 54f, 84f, 64f, 13f, 0.2f};  // 各个点的分值
+//
+//        BarChartView chartView = (BarChartView) view.findViewById(R.id.barChartView);
+//
+//        chartView.reset();
+//        chartView.setChartType(ChartView.ChartType.MOCK_BAR);
+//
+//        BarSet barSet = new BarSet();
+//        barSet.addBars(lineLabels, lineValues);
+//        barSet.setColor(ContextCompat.getColor(getContext(), R.color.themecolor));
+//
+//        chartView.addData(barSet);
+//        chartView.setYLabels(AxisController.LabelPosition.NONE);
+//        chartView.setXAxis(false);
+//        chartView.setYAxis(false);
+//        chartView.setBarSpacing(Tools.fromDpToPx(15));
+//        chartView.show();
 
         // 先不要删除这块
 //        LineChartViewForMock bbb = (LineChartViewForMock) view.findViewById(R.id.linechartname);
