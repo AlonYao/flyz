@@ -70,37 +70,57 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
 
-        if (mModel.isCollected(mCurPosition)) {
-            MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
-                    R.drawable.measure_analysis_collected), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        } else {
-            MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
-                    R.drawable.measure_analysis_uncollect), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        }
-
-        MenuItemCompat.setShowAsAction(
-                menu.add("分享").setIcon(R.drawable.share),
-                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
-        // 判断是否显示错题
-        if (ERROR.equals(mModel.mPaperType) && mModel.mIsFromFolder) {
-            MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
-                    R.drawable.measure_analysis_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        }
-
-        MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
-                R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
-        MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
-                R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
         if (mModel.isDescPage(mCurPosition)) {
-            // 说明页禁用icon
-            try {
-                menu.setGroupEnabled(0, false);
-            } catch (Exception e) {
-                // Empty
+            // 说明页特殊处理
+            MenuItemCompat.setShowAsAction(
+                    menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect_enable)
+                            .setEnabled(false),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+            MenuItemCompat.setShowAsAction(
+                    menu.add("分享").setIcon(R.drawable.share_enable).setEnabled(false),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+            // 判断是否显示错题
+            if (ERROR.equals(mModel.mPaperType) && mModel.mIsFromFolder) {
+                MenuItemCompat.setShowAsAction(
+                        menu.add("错题").setIcon(R.drawable.measure_analysis_delete_enable)
+                                .setEnabled(false),
+                        MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }
+
+            MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
+                    R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+            MenuItemCompat.setShowAsAction(
+                    menu.add("反馈").setIcon(R.drawable.measure_analysis_feedback_enable)
+                            .setEnabled(false),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        } else {
+            if (mModel.isCollected(mCurPosition)) {
+                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
+                        R.drawable.measure_analysis_collected), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            } else {
+                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(
+                        R.drawable.measure_analysis_uncollect), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            }
+
+            MenuItemCompat.setShowAsAction(
+                    menu.add("分享").setIcon(R.drawable.share),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+            // 判断是否显示错题
+            if (ERROR.equals(mModel.mPaperType) && mModel.mIsFromFolder) {
+                MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
+                        R.drawable.measure_analysis_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            }
+
+            MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
+                    R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+            MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
+                    R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);

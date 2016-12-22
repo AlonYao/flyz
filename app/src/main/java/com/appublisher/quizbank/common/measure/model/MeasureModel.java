@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.support.v7.app.AlertDialog;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -54,6 +57,7 @@ import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 
 import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
@@ -828,7 +832,40 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
 
                 flowLayout.addView(imgView);
 
-                ImageManager.displayImage(segment.text.toString(), imgView);
+                ImageManager.displayImage(segment.text.toString(), imgView,
+                        new ImageManager.LoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        if (loadedImage == null) return;
+
+                        // 对小于指定尺寸的图片进行放大(2.5倍)
+                        int width = loadedImage.getWidth();
+                        int height = loadedImage.getHeight();
+                        if (height < Utils.sp2px(context, 17) * 2) {
+                            Matrix matrix = new Matrix();
+                            matrix.postScale(2.5f, 2.5f);
+                            loadedImage = Bitmap.createBitmap(
+                                    loadedImage, 0, 0, width, height, matrix, true);
+                        }
+
+                        imgView.setImageBitmap(loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                    }
+                });
 
                 imgView.setOnClickListener(new View.OnClickListener() {
                     @Override
