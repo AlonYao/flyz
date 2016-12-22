@@ -127,15 +127,6 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-//        if (mCurAnswerModel != null && mCurAnswerModel.is_collected()) {
-//            menu.getItem(0).setIcon(R.drawable.measure_analysis_collected);
-//        }
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
