@@ -195,7 +195,7 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
         avatarImage.setBackgroundResource(R.drawable.avatar_bg_shadow);
 
         // 头像处理
-        LoginModel.setAvatar(avatarImage);
+        //LoginModel.setAvatar(avatarImage);
         ImageManager.displayImage(
                 LoginModel.getUserAvatar(), avatarBgImage, new ImageManager.LoadingListener() {
             @Override

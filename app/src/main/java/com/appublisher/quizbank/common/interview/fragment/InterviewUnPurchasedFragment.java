@@ -82,14 +82,11 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = activity;
-    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = getActivity();
         // InterviewPaperDetailResp.QuestionsBean 对象
         mQuestionbean = GsonManager.getModel(
                 getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);

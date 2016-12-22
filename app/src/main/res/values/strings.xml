@@ -231,5 +231,4 @@
     <string name="interview_index_star_analysis">名师解析</string>
     <string name="interview_index_category">分类突破</string>
     <string name="interview_index_history">历年真题</string>
-    <string name="title_activity_fragment">FragmentActivity</string>
 </resources>
