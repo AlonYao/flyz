@@ -209,6 +209,7 @@ public class MediaRecorderManager {
                     mCheckRecordStatusListener.onCheckRecordStatusFinished(true);
                 } catch (IOException e) {
                     // 异常处理
+                    e.printStackTrace();
                     mCheckRecordStatusListener.onCheckRecordStatusFinished(false);
                 } catch (Exception e) {
                     e.printStackTrace();
