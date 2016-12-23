@@ -1,7 +1,7 @@
 package com.appublisher.quizbank.common.interview.activity;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
@@ -12,6 +12,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
+import com.appublisher.quizbank.common.interview.viewgroup.MyViewPager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,11 +24,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     private int paper_id;
     private InterviewRequest mRequest;
-    private ViewPager viewPager;
-   // private PaperDetailAdaper adaper;
+    public MyViewPager viewPager;
     private InterviewDetailAdapter mAdaper;
     private List<InterviewPaperDetailResp.QuestionsBean> list;
-
+    public boolean isCanBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +39,42 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         paper_id = getIntent().getIntExtra("paper_id", 0);
         String paper_type = getIntent().getStringExtra("paper_type");
         int note_id = getIntent().getIntExtra("note_id", 0);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
+
 
 
         list = new ArrayList<>();
-     //   adaper = new PaperDetailAdaper(this, list);
-        mAdaper = new InterviewDetailAdapter(getSupportFragmentManager(),list);
+        mAdaper = new InterviewDetailAdapter(getSupportFragmentManager(), list, this);
         viewPager.setAdapter(mAdaper);
+        viewPager.setScroll(true);
 
         mRequest = new InterviewRequest(this, this);
 
         mRequest.getPaperDetail(paper_id, paper_type, note_id);
         showLoading();
+    }
+    public boolean setCanBack(boolean isCanBack){
+        this.isCanBack = isCanBack;
+        return isCanBack;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // 返回键
+            if( isCanBack ==false){
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isCanBack ==false){
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override

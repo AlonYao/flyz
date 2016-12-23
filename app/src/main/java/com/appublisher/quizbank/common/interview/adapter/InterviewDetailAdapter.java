@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.fragment.InterviewPurchasedFragment;
 import com.appublisher.quizbank.common.interview.fragment.InterviewUnPurchasedFragment;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
@@ -19,11 +20,12 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
 
     private List<InterviewPaperDetailResp.QuestionsBean> mList;
     private boolean isPurchased;
+    private final InterviewPaperDetailActivity mActivity;
 
-    public InterviewDetailAdapter(FragmentManager fm,
-                                  List<InterviewPaperDetailResp.QuestionsBean> list) {
+    public InterviewDetailAdapter(FragmentManager fm, List<InterviewPaperDetailResp.QuestionsBean> list, InterviewPaperDetailActivity activity) {
         super(fm);
         mList = list;
+        mActivity = activity;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
             if(isPurchased){
                 return InterviewPurchasedFragment.newInstance(questionbean,position,listLength);
             }else{
-                return InterviewUnPurchasedFragment.newInstance(questionbean,position,listLength);
+                return InterviewUnPurchasedFragment.newInstance(questionbean,position,listLength,mActivity);
             }
         } else{
             return null;
