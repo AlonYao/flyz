@@ -4,12 +4,16 @@
     android:id="@+id/activity_measure_mock_report"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/measure_bg"
     tools:context="com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity">
+
+    <include layout="@layout/toolbar"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/mock_report_srl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -20,16 +24,134 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!-- 模考名称 -->
                 <TextView
+                    android:id="@+id/mock_report_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:textColor="@color/measure_text"
                     android:text="2017国考腰果行测模考第二十期（模拟密卷）"/>
+
+                <!-- 模考成绩 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:orientation="vertical"
+                    android:background="@color/themecolor">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15sp"
+                        android:textColor="@android:color/white"
+                        android:text="模考成绩"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textSize="70sp"
+                            android:text="78"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textSize="23sp"
+                            android:text="分"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 击败考生&模考平均成绩&模考最高成绩 -->
+                <ViewStub
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout="@layout/measure_mock_report_viewstub_statistics"/>
+
+                <!-- 每题平均用时 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:background="@android:color/white">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="@color/measure_text"
+                        android:text="每题平均用时"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textSize="15sp"
+                        android:textColor="@color/measure_text"
+                        android:text="12.1秒"
+                        tools:ignore="RtlHardcoded" />
+                </RelativeLayout>
+
+                <!-- 柱状图 -->
+                <ViewStub
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout="@layout/measure_mock_report_viewstub_barchart"/>
+
+                <!-- 折线图 -->
+                <ViewStub
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout="@layout/measure_mock_report_viewstub_linechart"/>
+
+                <!-- 科目 -->
+                <ViewStub
+                    android:id="@+id/mock_report_category_vs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout="@layout/measure_report_viewstub_category"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"/>
 
             </LinearLayout>
 
         </ScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/mock_report_all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:background="@color/themecolor"
+            android:text="@string/measure_report_btn_all"/>
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/mock_report_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/measure_report_error_btn_bg"
+            android:textColor="@android:color/white"
+            android:text="@string/measure_report_btn_error"/>
+    </LinearLayout>
 
 </RelativeLayout>
