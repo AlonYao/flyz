@@ -7,7 +7,7 @@
     >
     <!--重录按钮-->
     <RelativeLayout
-        android:id="@+id/recordsound_rl_rerecording"
+        android:id="@+id/interview_recordsound_rl_rerecording"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -32,7 +32,7 @@
 
     <!--听一下按钮-->
     <LinearLayout
-        android:id="@+id/recordsounding_ll_play"
+        android:id="@+id/interview_recordsounding_ll_play"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -67,7 +67,7 @@
 
     <!--确认按钮-->
     <RelativeLayout
-        android:id="@+id/recordsounding_rl_submit"
+        android:id="@+id/interview_recordsounding_rl_submit"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"

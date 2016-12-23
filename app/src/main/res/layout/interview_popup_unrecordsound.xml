@@ -12,17 +12,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center"
+        android:gravity="center_horizontal"
         >
         <ImageView
             android:id="@+id/imagview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:background="@drawable/interview_recordsound"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:text="录音"
             android:textColor="@color/common_text"
