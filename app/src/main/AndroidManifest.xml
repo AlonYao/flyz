@@ -304,7 +304,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".common.measure.activity.MeasureMockReportActivity"></activity>
+        <activity
+            android:name=".common.measure.activity.MeasureMockReportActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_measure_mock_report"/>
 
     </application>
 
