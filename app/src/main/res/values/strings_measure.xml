@@ -46,4 +46,11 @@
 
     <string name="title_activity_measure_mock_report">模考报告</string>
 
+    <string name="mock_report_score">模考成绩</string>
+    <string name="mock_report_score_fen">分</string>
+    <string name="mock_report_statistics_defeat">击败考生</string>
+    <string name="mock_report_statistics_avg_score">模考平均成绩</string>
+    <string name="mock_report_statistics_best_score">模考最高成绩</string>
+    <string name="mock_report_statistics_avg_duration">每题平均用时</string>
+
 </resources>

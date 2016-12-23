@@ -303,13 +303,12 @@
             android:name=".common.measure.activity.MeasureBaseActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".common.measure.activity.MeasureMockReportActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_measure_mock_report"/>
-
+            android:label="@string/title_activity_measure_mock_report"
+            android:screenOrientation="portrait" />
+        <activity android:name=".common.measure.activity.MeasureReportBaseActivity"></activity>
     </application>
 
 </manifest>

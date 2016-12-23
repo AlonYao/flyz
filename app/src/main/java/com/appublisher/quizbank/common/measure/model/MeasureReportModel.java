@@ -263,7 +263,7 @@ public class MeasureReportModel extends MeasureModel {
         mTotalNum = totalNum;
     }
 
-    private List<MeasureReportCategoryBean> getCategorys(List<MeasureQuestionBean> questions,
+    public List<MeasureReportCategoryBean> getCategorys(List<MeasureQuestionBean> questions,
                                                          List<MeasureAnswerBean> answers) {
         List<MeasureReportCategoryBean> categorys = new ArrayList<>();
 

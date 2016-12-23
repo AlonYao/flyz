@@ -32,8 +32,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:textColor="@color/measure_text"
-                    android:text="2017国考腰果行测模考第二十期（模拟密卷）"/>
+                    android:textColor="@color/measure_text"/>
 
                 <!-- 模考成绩 -->
                 <LinearLayout
@@ -50,24 +49,24 @@
                         android:layout_marginTop="10dp"
                         android:textSize="15sp"
                         android:textColor="@android:color/white"
-                        android:text="模考成绩"/>
+                        android:text="@string/mock_report_score"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal">
                         <TextView
+                            android:id="@+id/mock_report_score"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
-                            android:textSize="70sp"
-                            android:text="78"/>
+                            android:textSize="70sp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
                             android:textSize="23sp"
-                            android:text="分"/>
+                            android:text="@string/mock_report_score_fen"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -91,15 +90,15 @@
                         android:layout_height="wrap_content"
                         android:textSize="15sp"
                         android:textColor="@color/measure_text"
-                        android:text="每题平均用时"/>
+                        android:text="@string/mock_report_statistics_avg_duration"/>
                     <TextView
+                        android:id="@+id/mock_report_statistics_avg_duration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:textSize="15sp"
                         android:textColor="@color/measure_text"
-                        android:text="12.1秒"
-                        tools:ignore="RtlHardcoded" />
+                        tools:ignore="RelativeOverlap,RtlHardcoded" />
                 </RelativeLayout>
 
                 <!-- 柱状图 -->
@@ -116,7 +115,7 @@
 
                 <!-- 科目 -->
                 <ViewStub
-                    android:id="@+id/mock_report_category_vs"
+                    android:id="@+id/measure_report_category_vs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout="@layout/measure_report_viewstub_category"
