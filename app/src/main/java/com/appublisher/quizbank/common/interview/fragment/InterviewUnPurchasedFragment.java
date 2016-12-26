@@ -84,7 +84,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private int mPosition;
     private int mListLength;
     private RelativeLayout mRecordParentView;
-    private View mUnRecordView;
+    public View mUnRecordView;
     private View mRecordingView;
     private View mUnsubmitView;
     private View mRecordedView;
@@ -162,7 +162,12 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         isStop = false;
+        mActivity.setCanBack(0);            // 默认设置返回键可以点击
+        // 设置toolbar
+        setToolbar();
+
         // 未付费页面的容器
         mUnPurchasedView = inflater.inflate(R.layout.interview_question_item_recordsound_notpayfor, container, false);
         //   status = recordStatus.RECORDABLE;
@@ -209,6 +214,14 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         };
 
         return mUnPurchasedView;
+    }
+
+    /*
+        *   设置toolbar
+        *  */
+    public void setToolbar(){
+        // 通过该InterviewPaperDetailActivity中设置静态方法来设置menu
+
     }
 
     private void panduanisAnswer() {
@@ -267,31 +280,20 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         mBottomContainer = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_popupwindow_recordsound_container);   //底部录音整体容器
 
 
-        // 材料行:逻辑显示与否根据数据集合判断
-        merterialView = mUnPurchasedView.findViewById(R.id.meterial_rl);
-        // 解析行:逻辑:点击事件:展开与折叠 & 是否答题的逻辑
-        analysisSwitchView = mUnPurchasedView.findViewById(R.id.analysis_switch_rl);
 
-        // 展示问题的容器
-        questionContent = (LinearLayout) mUnPurchasedView.findViewById(R.id.question_content);
-        //解析答案的容器
-        analysisView = mUnPurchasedView.findViewById(R.id.analysis_ll);
+        merterialView = mUnPurchasedView.findViewById(R.id.meterial_rl);       // 材料行:逻辑显示与否根据数据集合判断
 
-        //解析行的左面的文字
-        analysisSwitchTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_switch_tv);
-        // 解析行右面的ImageView:逻辑:展开:换图片 & 折叠换图片
-        analysisIm = (ImageView) mUnPurchasedView.findViewById(R.id.analysis_im);
-        // 解析行右面ImageView下面的文字
-        reminderTv = (TextView) mUnPurchasedView.findViewById(R.id.open_analysis);
+        analysisSwitchView = mUnPurchasedView.findViewById(R.id.analysis_switch_rl);       // 解析行:逻辑:点击事件:展开与折叠 & 是否答题的逻辑
 
-        // 答案中的标签:解析
-        analysisTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_tv);
-        // 答案中的标签:知识点
-        noteTv = (TextView) mUnPurchasedView.findViewById(R.id.note_tv);
-        // 答案中的标签:来源
-        sourceTv = (TextView) mUnPurchasedView.findViewById(R.id.source_tv);
-        //答案中的标签:关键词
-        keywordsTv = (TextView) mUnPurchasedView.findViewById(R.id.keywords_tv);
+        questionContent = (LinearLayout) mUnPurchasedView.findViewById(R.id.question_content);      // 展示问题的容器
+        analysisView = mUnPurchasedView.findViewById(R.id.analysis_ll);                 //解析答案的容器
+        analysisSwitchTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_switch_tv);        //解析行的左面的文字
+        analysisIm = (ImageView) mUnPurchasedView.findViewById(R.id.analysis_im);             // 解析行右面的ImageView:逻辑:展开:换图片 & 折叠换图片
+        reminderTv = (TextView) mUnPurchasedView.findViewById(R.id.open_analysis);          // 解析行右面ImageView下面的文字
+        analysisTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_tv);           // 答案中的标签:解析
+        noteTv = (TextView) mUnPurchasedView.findViewById(R.id.note_tv);               // 答案中的标签:知识点
+        sourceTv = (TextView) mUnPurchasedView.findViewById(R.id.source_tv);          // 答案中的标签:来源
+        keywordsTv = (TextView) mUnPurchasedView.findViewById(R.id.keywords_tv);       //答案中的标签:关键词
 
         initRecordSoundView();  //初始化录音界面的布局和控件
     }
@@ -365,46 +367,55 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
             analysisSwitchView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {     // 解析行的逻辑处理: 逻辑:点击事件:展开与折叠 & 是否答题的逻辑
-                    if (analysisView.getVisibility() == View.VISIBLE) {    // 展开-->折叠状态
-                        analysisView.setVisibility(View.GONE);
-                        analysisIm.setImageResource(R.drawable.interview_answer_lookover);
-                        if ("notice".equals(mQuestionbean.getStatus())) {
-                            analysisSwitchTv.setText("展开提示");
-                            reminderTv.setText("查看");
-                            analysisTv.setVisibility(View.GONE);
+                    boolean isAnswer = false;   // 是否已经答题
+                    if(isAnswer){               //已经答题
+                        if (analysisView.getVisibility() == View.VISIBLE) {    // 展开-->折叠状态
+                            analysisView.setVisibility(View.GONE);
+                            analysisIm.setImageResource(R.drawable.interview_answer_lookover);
+                            if ("notice".equals(mQuestionbean.getStatus())) {
+                                analysisSwitchTv.setText("展开提示");
+                                reminderTv.setText("查看");
+                                analysisTv.setVisibility(View.GONE);
+                            } else {
+                                analysisSwitchTv.setText("展开解析");
+                                reminderTv.setText("查看");
+                                analysisTv.setVisibility(View.VISIBLE);
+                            }
                         } else {
-                            analysisSwitchTv.setText("展开解析");
-                            reminderTv.setText("查看");
-                            analysisTv.setVisibility(View.VISIBLE);
+                            //   if(mQuestionbean.isAnswer || mQuestionbean.isPurchased){    // 具体到每道题:是否答题或者是否购买
+                            // 如果答完题状态
+                            analysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                            analysisIm.setImageResource(R.drawable.interview_answer_packup);
+                            if ("notice".equals(mQuestionbean.getStatus())) {
+                                analysisSwitchTv.setText("收起提示");
+                                reminderTv.setText("收起");
+                                analysisTv.setVisibility(View.GONE);
+                            } else {
+                                analysisSwitchTv.setText("收起解析");
+                                reminderTv.setText("收起");
+                                analysisTv.setVisibility(View.VISIBLE);
+                            }
+                            //     }else{
+                            /**弹窗逻辑处理
+                             *     并且需要获取当前的fragment,并再获取当前的activity,获取toolbar上的title的点击事件,
+                             *       不需要:可以获取当前的fragment,然后获取当前的model,在model中预先处理好弹窗方法
+                             *               主要就是刷新adapter,然后获取当前题目id,然后成功后,带上索引,进入当前索引
+                             *                   在基类model中处理弹窗的item的接口回调,然后交给子类,再由子类的model中刷新adapter(带上索引)
+                             * **/
+                            //        ToastManager.showToast(mActivity,"还没答题");
+                            //     }
                         }
-                    } else {
-                        //   if(mQuestionbean.isAnswer || mQuestionbean.isPurchased){    // 具体到每道题:是否答题或者是否购买
-                        // 如果答完题状态
-                        analysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
-                        analysisIm.setImageResource(R.drawable.interview_answer_packup);
-                        if ("notice".equals(mQuestionbean.getStatus())) {
-                            analysisSwitchTv.setText("收起提示");
-                            reminderTv.setText("收起");
-                            analysisTv.setVisibility(View.GONE);
-                        } else {
-                            analysisSwitchTv.setText("收起解析");
-                            reminderTv.setText("收起");
-                            analysisTv.setVisibility(View.VISIBLE);
-                        }
-                        //     }else{
-                        /**弹窗逻辑处理
-                         *     并且需要获取当前的fragment,并再获取当前的activity,获取toolbar上的title的点击事件,
-                         *       不需要:可以获取当前的fragment,然后获取当前的model,在model中预先处理好弹窗方法
-                         *               主要就是刷新adapter,然后获取当前题目id,然后成功后,带上索引,进入当前索引
-                         *                   在基类model中处理弹窗的item的接口回调,然后交给子类,再由子类的model中刷新adapter(带上索引)
-                         * **/
-                        //        ToastManager.showToast(mActivity,"还没答题");
-                        //     }
+                        // Umeng
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Action", "Answer");
+                        UmengManager.onEvent(mActivity, "InterviewProblem", map);
+                    }else{                      // 未答题
+                        // 弹窗处理:三个item
+                        InterviewUnPurchasedModel mUnPurchasedModel = new InterviewUnPurchasedModel(mActivity);
+                        String payUrl = "从集合中获取到的支付链接";
+                        mUnPurchasedModel.showNoAnswerDialog(mActivity,payUrl);
                     }
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "Answer");
-                    UmengManager.onEvent(mActivity, "InterviewProblem", map);
+
                 }
             });
 
@@ -477,19 +488,20 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     prepareRecord();
                     mUnRecordView.setVisibility(View.GONE);
                     mRecordingView.setVisibility(View.VISIBLE);
-
+                    analysisSwitchView.setClickable(false);         // 录音过程中不可点击
                     mActivity.viewPager.setScroll(false);   // 让viewpager拦截
-                    mActivity.setCanBack(false);     // 是否可以按返回键
+                    mActivity.setCanBack(1);     // 是否可以按返回键
                 }
 
             } else if (id == R.id.interview_recordsounding_cancle) {   // 点击取消功能
 
                 mActivity.viewPager.setScroll(true);    // 让viewPager不拦截
-                mActivity.setCanBack(true);              // 可以按返回键
+                mActivity.setCanBack(0);              // 可以按返回键
                 status = recordStatus.RECORDABLE;
                 stopRecord();
                 mRecordingView.setVisibility(View.GONE);
                 mUnRecordView.setVisibility(View.VISIBLE);
+                analysisSwitchView.setClickable(true);         // 未录音过程中可点击
                 isBlue = false;
                 mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
 
@@ -499,13 +511,14 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 //   if(一个常量记录图片变成了蓝色){
                 if (isBlue == true && timeRecording > 10) {
                     // 进入:已录音未提交页面
-                    mActivity.setCanBack(true);
-                    mActivity.viewPager.setScroll(true);
 
-                    mActivity.setCanBack(true);
+                    mActivity.viewPager.setScroll(false);    // 未提交页面也不可以滑动
+
+                    mActivity.setCanBack(2);                // 返回键设置不可返回
                     mediaRecorderManager.stop();
                     mRecordingView.setVisibility(View.GONE);
-                    mUnsubmitView.setVisibility(View.VISIBLE);
+                    mUnsubmitView.setVisibility(View.VISIBLE);       // 进入重录页面
+                    analysisSwitchView.setClickable(false);         // 录音过程中不可点击
                     mTvtimeNotSubmPlay.setText(timeRecording + "\"");
                     stopRecord();
                 } else {
@@ -515,7 +528,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 ToastManager.showToast(getActivity(), "正在录音,录音时间要超过60秒");
                 // 逻辑:计时
             } else if (id == R.id.interview_recordsound_rl_rerecording) {      //点击重录
-                mActivity.setCanBack(true);
+                mActivity.setCanBack(0);
                 mActivity.viewPager.setScroll(true);
                 resetRecord();
 
@@ -604,6 +617,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
             // 已录音未提交页面跳转到未录音状态
             mUnsubmitView.setVisibility(View.GONE);
             mUnRecordView.setVisibility(View.VISIBLE);
+            analysisSwitchView.setClickable(true);         // 未录音过程中可点击
             //prepareRecord();
             //   mTvtimeNotSubmPlay.setText(timeRecording+"\"");
 

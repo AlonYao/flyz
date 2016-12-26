@@ -3,44 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    >
-    <LinearLayout
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/pay_nine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:background="@color/login_white"
         android:gravity="center"
-        android:orientation="vertical"
-        android:background="@color/login_white">
+        android:padding="8dp"
+        android:text="付 ¥ 9, 解锁本题库全部解析"
+        android:textColor="@color/common_text"
+        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/pay_nine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:gravity="center"
-            android:textColor="@color/common_text"
-            android:text="付 ¥ 9, 解锁本题库全部解析"
-            android:textSize="14sp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/common_line"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_line" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/login_white"
-            android:layout_marginTop="5dp">
-            <TextView
-                android:id="@+id/cancle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:gravity="center"
-                android:textColor="@color/common_text"
-                android:text="取消"
-                android:textSize="14sp"/>
-        </RelativeLayout>
+    <TextView
+        android:id="@+id/viewalpha"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        />
 
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_line" />
+
+    <TextView
+        android:id="@+id/cancle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/login_white"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="取消"
+        android:textColor="@color/common_text"
+        android:textSize="16sp" />
+
 
 </LinearLayout>
