@@ -223,7 +223,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
 
     public void showLineChart(String[] lineLabels, float[] lineScore, float[] lineAvg) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_linechart_vs);
-        if (vs == null) return;
+        if (vs != null) return;
         vs.inflate();
 
         LineChartViewForMock yChart =
@@ -267,20 +267,20 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                 .show();
 
         // 根据值绘图
-        lineLabels = new String[]{
-                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-                "09/18", ""};  // X轴上显示的文字
-
-        lineScore = new float[]{
-                1, 2, 3, 4, 5, 6,
-                9, 0};  // 各个点的分值
+//        lineLabels = new String[]{
+//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
+//                "09/18", ""};  // X轴上显示的文字
+//
+//        lineScore = new float[]{
+//                1, 2, 3, 4, 5, 6,
+//                9, 0};  // 各个点的分值
 
         LineChartViewForMock chart =
                 (LineChartViewForMock) findViewById(R.id.mock_report_linechart);
         if (chart == null) return;
 
         // 计算容器长度
-        int length = lineLabels.length;
+        int length = lineLabels.length - 1;
         int width = length * 1200 / 30;
 
         LinearLayout.LayoutParams layoutParams;
@@ -318,9 +318,9 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                 .beginAt(0).endAt(lineLabels.length - 1);
         chart.addData(dataSet);
 
-        lineAvg = new float[]{
-                8, 9, 10, 7, 6, 5,
-                8, 0};  // 各个点的分值
+//        lineAvg = new float[]{
+//                8, 9, 10, 7, 6, 5,
+//                8, 0};  // 各个点的分值
 
         dataSet = new LineSet();
         dataSet.addPoints(lineLabels, lineAvg);
