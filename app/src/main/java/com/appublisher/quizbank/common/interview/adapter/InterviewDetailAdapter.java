@@ -28,6 +28,7 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
         mActivity = activity;
     }
 
+
     @Override
     public Fragment getItem(int position) {
         InterviewPaperDetailResp.QuestionsBean bean = mList.get(position);
@@ -35,13 +36,13 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
         int listLength = mList.size();
 
         isPurchased = false;
-        if (bean != null ) {
-            if(isPurchased){
-                return InterviewPurchasedFragment.newInstance(questionbean,position,listLength);
-            }else{
-                return InterviewUnPurchasedFragment.newInstance(questionbean,position,listLength,mActivity);
+        if (bean != null) {
+            if (isPurchased) {
+                return InterviewPurchasedFragment.newInstance(questionbean, position, listLength);
+            } else {
+                return InterviewUnPurchasedFragment.newInstance(questionbean, position, listLength, mActivity);
             }
-        } else{
+        } else {
             return null;
         }
     }

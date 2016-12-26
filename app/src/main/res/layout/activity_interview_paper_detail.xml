@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity">
 
-    <include layout="@layout/toolbar"
+    <!--<include layout="@layout/toolbar"-->
+        <!--/>-->
+    <include layout="@layout/interview_papertail_toolbar"
         />
-
     <!--&lt;!&ndash;自定义的viewpager&ndash;&gt;-->
     <com.appublisher.quizbank.common.interview.viewgroup.MyViewPager
         android:id="@+id/viewpager"

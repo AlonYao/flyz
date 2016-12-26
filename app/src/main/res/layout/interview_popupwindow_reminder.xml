@@ -3,69 +3,77 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    >
-    <LinearLayout
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/go_answer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:background="@color/login_white"
         android:gravity="center"
-        android:orientation="vertical"
-        android:background="@color/login_white">
-        <TextView
-            android:id="@+id/go_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:gravity="center"
-            android:textColor="@color/common_text"
-            android:text="去答题,获取本体解析"
-            android:textSize="14sp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/common_line"/>
-        <TextView
-            android:id="@+id/pay_one"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:gravity="center"
-            android:textColor="@color/common_text"
-            android:text="付 ¥ 0.01, 获取本题解析(仅一次机会)"
-            android:textSize="13sp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/common_line"/>
-        <TextView
-            android:id="@+id/pay_nine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:gravity="center"
-            android:textColor="@color/common_text"
-            android:text="付 ¥ 9, 解锁本题库全部解析"
-            android:textSize="14sp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/common_line"/>
+        android:padding="8dp"
+        android:text="去答题,获取本体解析"
+        android:textColor="@color/common_text"
+        android:textSize="16sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/login_white"
-            android:layout_marginTop="5dp">
-            <TextView
-                android:id="@+id/cancle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:gravity="center"
-                android:textColor="@color/common_text"
-                android:text="取消"
-                android:textSize="14sp"/>
-        </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_line" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/pay_one"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/login_white"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="付 ¥ 0.01, 获取本题解析(仅一次机会)"
+        android:textColor="@color/common_text"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_line" />
+
+    <TextView
+        android:id="@+id/pay_nine"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/login_white"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="付 ¥ 9, 解锁本题库全部解析"
+        android:textColor="@color/common_text"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_line" />
+
+    <TextView
+        android:id="@+id/viewalpha"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_line" />
+
+    <TextView
+        android:id="@+id/cancle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/login_white"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="取消"
+        android:textColor="@color/common_text"
+        android:textSize="16sp" />
+
 
 </LinearLayout>
