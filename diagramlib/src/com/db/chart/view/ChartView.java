@@ -139,13 +139,7 @@ public abstract class ChartView extends RelativeLayout{
 			chartTop = getPaddingTop() + verController.getLabelHeight()/2;
 			chartBottom = getMeasuredHeight() - getPaddingBottom();
 			chartLeft = getPaddingLeft();
-
-			if (isChartTypeMock()) {
-				// 模考特殊处理
-				chartRight = getMeasuredWidth() - getPaddingRight() - 100;
-			} else {
-				chartRight = getMeasuredWidth() - getPaddingRight();
-			}
+			chartRight = getMeasuredWidth() - getPaddingRight();
 
 			// Initialize controllers now that we have the measures
 			verController.init();	

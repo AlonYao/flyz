@@ -105,6 +105,8 @@ public class MeasureMockReportModel extends MeasureReportModel {
         }
 
         ((MeasureMockReportActivity) mContext).showBarChart(lineValues);
+
+        ((MeasureMockReportActivity) mContext).showLineChart(null, null, null);
     }
 
     private void showCategory(List<MeasureCategoryBean> categorys) {

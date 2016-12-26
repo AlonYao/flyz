@@ -113,8 +113,10 @@
 
                 <!-- 折线图 -->
                 <ViewStub
+                    android:id="@+id/mock_report_linechart_vs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout="@layout/measure_mock_report_viewstub_linechart"/>
 
                 <!-- 科目 -->

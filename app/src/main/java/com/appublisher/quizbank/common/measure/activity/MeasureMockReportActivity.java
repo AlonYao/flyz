@@ -13,8 +13,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
@@ -219,7 +221,11 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         chartView.show();
     }
 
-    public void showLineChart() {
+    public void showLineChart(String[] lineLabels, float[] lineScore, float[] lineAvg) {
+        ViewStub vs = (ViewStub) findViewById(R.id.mock_report_linechart_vs);
+        if (vs == null) return;
+        vs.inflate();
+
         LineChartViewForMock yChart =
                 (LineChartViewForMock) findViewById(R.id.mock_report_linechart_y);
         if (yChart == null) return;
@@ -230,17 +236,17 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         String[] lineLabelsY = new String[]{"1"};  // X轴上显示的文字
         float[] lineValuesY = new float[]{0};  // 各个点的分值
 
-        Paint lineGridPaintbbb = new Paint();
-        lineGridPaintbbb.setColor(ContextCompat.getColor(this, R.color.common_line));
-        lineGridPaintbbb.setStyle(Paint.Style.STROKE);
-        lineGridPaintbbb.setAntiAlias(true);
-        lineGridPaintbbb.setStrokeWidth(Tools.fromDpToPx(.75f));
+        Paint paintY = new Paint();
+        paintY.setColor(ContextCompat.getColor(this, R.color.common_line));
+        paintY.setStyle(Paint.Style.STROKE);
+        paintY.setAntiAlias(true);
+        paintY.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        LineSet dataSetbbb = new LineSet();
-        dataSetbbb.addPoints(lineLabelsY, lineValuesY);
-        dataSetbbb.setSmooth(true);
-        dataSetbbb.setDashed(false);
-        dataSetbbb.setDots(false)
+        LineSet dataSetY = new LineSet();
+        dataSetY.addPoints(lineLabelsY, lineValuesY);
+        dataSetY.setSmooth(true);
+        dataSetY.setDashed(false);
+        dataSetY.setDots(false)
                 .setDotsColor(ContextCompat.getColor(this, R.color.evaluation_diagram_line))
                 .setDotsRadius(Tools.fromDpToPx(4))
                 .setDotsStrokeThickness(Tools.fromDpToPx(2))
@@ -248,11 +254,11 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                         ContextCompat.getColor(this, R.color.evaluation_diagram_line))
                 .setLineColor(ContextCompat.getColor(this, R.color.evaluation_diagram_line))
                 .setLineThickness(Tools.fromDpToPx(3))
-                .beginAt(0).endAt(1);
-        yChart.addData(dataSetbbb);
+                .beginAt(0).endAt(0);
+        yChart.addData(dataSetY);
 
         yChart.setBorderSpacing(Tools.fromDpToPx(0))
-                .setGrid(LineChartView.GridType.NONE, lineGridPaintbbb)
+                .setGrid(LineChartView.GridType.NONE, paintY)
                 .setXAxis(false)
                 .setXLabels(XController.LabelPosition.OUTSIDE)
                 .setYAxis(false)
@@ -260,23 +266,36 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                 .setAxisBorderValues(0, 10, 2)
                 .show();
 
+        // 根据值绘图
+        lineLabels = new String[]{
+                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
+                "09/18", ""};  // X轴上显示的文字
+
+        lineScore = new float[]{
+                1, 2, 3, 4, 5, 6,
+                9, 0};  // 各个点的分值
 
         LineChartViewForMock chart =
                 (LineChartViewForMock) findViewById(R.id.mock_report_linechart);
         if (chart == null) return;
 
+        // 计算容器长度
+        int length = lineLabels.length;
+        int width = length * 1200 / 30;
+
+        LinearLayout.LayoutParams layoutParams;
+        if (length <= 7) {
+            layoutParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, (int) Tools.fromDpToPx(180));
+        } else {
+            layoutParams = new LinearLayout.LayoutParams(
+                    (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
+        }
+        chart.setLayoutParams(layoutParams);
+
         chart.setLineAmount(2);
         chart.setChartType(ChartView.ChartType.MOCK);
         chart.reset();
-
-        // 根据值绘图
-        String[] lineLabels = new String[]{
-                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-                "09/18", "09/18", "09/18", "09/18", "09/18", ""};  // X轴上显示的文字
-
-        float[] lineValues = new float[]{
-                1, 2, 3, 4, 5, 6,
-                1, 2, 3, 4, 5, 6};  // 各个点的分值
 
         Paint lineGridPaint = new Paint();
         lineGridPaint.setColor(ContextCompat.getColor(this, R.color.common_line));
@@ -285,7 +304,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         lineGridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
         LineSet dataSet = new LineSet();
-        dataSet.addPoints(lineLabels, lineValues);
+        dataSet.addPoints(lineLabels, lineScore);
         dataSet.setSmooth(false);
         dataSet.setDashed(false);
         dataSet.setDots(true)
@@ -296,15 +315,15 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                         ContextCompat.getColor(this, R.color.evaluation_diagram_line))
                 .setLineColor(ContextCompat.getColor(this, R.color.evaluation_diagram_line))
                 .setLineThickness(Tools.fromDpToPx(2))
-                .beginAt(0).endAt(11);
+                .beginAt(0).endAt(lineLabels.length - 1);
         chart.addData(dataSet);
 
-        lineValues = new float[]{
+        lineAvg = new float[]{
                 8, 9, 10, 7, 6, 5,
-                8, 9, 10, 7, 6, 5};  // 各个点的分值
+                8, 0};  // 各个点的分值
 
         dataSet = new LineSet();
-        dataSet.addPoints(lineLabels, lineValues);
+        dataSet.addPoints(lineLabels, lineAvg);
         dataSet.setSmooth(false);
         dataSet.setDashed(false);
         dataSet.setDots(true)
@@ -314,7 +333,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                 .setDotsStrokeColor(Color.parseColor("#4E90F5"))
                 .setLineColor(Color.parseColor("#4E90F5"))
                 .setLineThickness(Tools.fromDpToPx(2))
-                .beginAt(0).endAt(11);
+                .beginAt(0).endAt(lineLabels.length - 1);
         chart.addData(dataSet);
 
         chart.setBorderSpacing(Tools.fromDpToPx(0))
