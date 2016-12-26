@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@android:color/white"
     android:paddingLeft="15dp"
@@ -16,14 +17,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:text="历史记录"/>
+            android:text="@string/mock_report_linechart_history"/>
         <!-- 历史模考平均分 -->
         <LinearLayout
             android:id="@+id/mock_report_avg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
             <View
                 android:layout_width="50dp"
                 android:layout_height="1dp"
@@ -34,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/measure_text"
-                android:text="历史模考平均分"/>
+                android:text="@string/mock_report_linechart_avg"/>
         </LinearLayout>
         <!-- 历史成绩 -->
         <LinearLayout
@@ -42,7 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/mock_report_avg"
             android:layout_marginRight="15dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
             <View
                 android:layout_width="50dp"
                 android:layout_height="1dp"
@@ -53,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/measure_text"
-                android:text="历史成绩"/>
+                android:text="@string/mock_report_linechart_score"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -84,7 +87,8 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:paddingLeft="15dp"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
             </LinearLayout>
         </HorizontalScrollView>
     </LinearLayout>

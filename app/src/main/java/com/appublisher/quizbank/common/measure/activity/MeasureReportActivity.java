@@ -22,6 +22,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureScoresBean;
 import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
 import com.appublisher.quizbank.model.business.CommonModel;
@@ -284,6 +285,10 @@ public class MeasureReportActivity extends MeasureReportBaseActivity implements
                 0);
         textView.setLayoutParams(layoutParams);
         container.addView(textView);
+    }
+
+    public void showCategory(List<MeasureReportCategoryBean> list) {
+        showCategory(list, null);
     }
 
     /**

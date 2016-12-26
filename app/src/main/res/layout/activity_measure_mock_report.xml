@@ -17,7 +17,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="60dp"
+            android:clipToPadding="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,6 +82,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
@@ -103,6 +106,7 @@
 
                 <!-- 柱状图 -->
                 <ViewStub
+                    android:id="@+id/mock_report_barchart_vs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout="@layout/measure_mock_report_viewstub_barchart"/>
