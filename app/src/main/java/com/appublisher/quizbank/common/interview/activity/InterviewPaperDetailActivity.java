@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
