@@ -72,6 +72,7 @@ public class MeasureMockReportModel extends MeasureReportModel {
         mAnalysisBean = new MeasureAnalysisBean();
         mAnalysisBean.setCategorys(resp.getCategory());
 
+        showNotice(resp.getMock_rank());
         showMockName(resp.getExercise_name());
         showScore(resp.getScore());
         showAvgDur(resp.getAvg_duration());
@@ -79,6 +80,23 @@ public class MeasureMockReportModel extends MeasureReportModel {
         showBarChart(resp.getMock_rank());
         showLineChart(resp.getHistory_mock());
         showStatistics(resp.getHistory_mock());
+    }
+
+    private void showNotice(MeasureMockReportResp.MockRankBean mock_rank) {
+        if (!(mContext instanceof MeasureMockReportActivity)) return;
+        if (mock_rank == null || mock_rank.isAvailable()) {
+            ((MeasureMockReportActivity) mContext).hideNotice();
+            return;
+        }
+
+        String time = mock_rank.getAvailable_time();
+        try {
+            time = time.substring(5, 10);
+            time = time.replace("-", ":");
+        } catch (Exception e) {
+            // Empty
+        }
+        ((MeasureMockReportActivity) mContext).showNotice(time);
     }
 
     private void showStatistics(List<MeasureMockReportResp.HistoryMockBean> history_mock) {
