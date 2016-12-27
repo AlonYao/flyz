@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.interview.model;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Gravity;
@@ -10,10 +11,17 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.YaoguoUploadManager;
+import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.fragment.InterviewUnPurchasedFragment;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
+import com.appublisher.quizbank.common.interview.network.InterviewParamBuilder;
+import com.appublisher.quizbank.model.netdata.CommonResp;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -30,6 +38,8 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
     private InterviewUnPurchasedFragment mFragment;
 
     private List<InterviewPaperDetailResp.QuestionsBean> mList;
+    private ProgressDialog mProgressDialog;
+    private InterviewPaperDetailActivity mActivity;
 
 
     public InterviewUnPurchasedModel(Context context) {
@@ -147,7 +157,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                         new DialogInterface.OnClickListener() {// 确定
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ToastManager.showToast(mActivity,"返回本录音页面");
                                 dialog.dismiss();
                             }
                         })
@@ -156,12 +165,76 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+                                ToastManager.showToast(mActivity,"再按一次退出");
                                 // 返回上一级
                                 mActivity.setCanBack(0);
+
                             }
                         })
                 .create().show();
     }
 
+    /*
+    *   提交的弹窗
+    * */
+    public void showSubmitAnswerAlert(final InterviewPaperDetailActivity activity , String fileDir, InterviewPaperDetailResp.QuestionsBean mQuestionbean, final String durationTime){
+        mActivity = activity;
 
+        String userId = LoginModel.getUserId();
+        final int question_Id = mQuestionbean.getId();
+        String questionId = String.valueOf(question_Id);
+        final int duration = Integer.parseInt(durationTime);
+
+        String savePath = "/quizbank_interview/" + userId + "/" + questionId +".amr" ;
+        if (mProgressDialog == null) {
+            mProgressDialog = YaoguoUploadManager.getProgressDialog(mActivity);
+        }
+
+        mProgressDialog.show();
+        YaoguoUploadManager.CompleteListener completeListener = new YaoguoUploadManager.CompleteListener() {
+            @Override
+            public void onComplete(boolean isSuccess, String result, String url) {
+                if(isSuccess){
+                    mActivity.showLoading();
+                    // 重新进行数据请求:刷新adapter
+                    ToastManager.showToast(mActivity,"上传成功 ");
+                    mProgressDialog.cancel();
+                    mRequest.submitRecord(InterviewParamBuilder.submitPaper(question_Id,url,duration));    //提交数据
+//                    mActivity.getData();
+                }else{
+                    mProgressDialog.cancel();
+                    ToastManager.showToast(mActivity, "上传失败，请重试……");
+                }
+            }
+        };
+        YaoguoUploadManager.ProgressListener progressListener = new YaoguoUploadManager.ProgressListener() {
+            @Override
+            public void onRequestProgress(long bytesWrite, long contentLength) {
+                mProgressDialog.setProgress((int) ((100 * bytesWrite) / contentLength));
+            }
+        };
+        YaoguoUploadManager.blockUpload(fileDir,savePath,completeListener,progressListener);
+    }
+
+    /*
+    *   修改toolbar右侧为收藏:并处理点击逻辑
+    * */
+    public  void changeToolbarMenu(InterviewPaperDetailActivity mActivity,boolean isAnswer){
+
+        mActivity.setIsAnswer(isAnswer);
+    }
+
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("submit_record".equals(apiName)) {
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp != null && resp.getResponse_code() == 1) {
+                //获取数据
+                mActivity.getData();
+            } else {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }
+        }
+        mActivity.hideLoading();
+    }
 }

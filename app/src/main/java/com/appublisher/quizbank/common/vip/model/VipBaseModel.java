@@ -71,6 +71,7 @@ public class VipBaseModel implements RequestCallback{
         String localPath = paths.get(mCurUpLoadIndex);
         String savePath = getSavePath(exericiseId, type);
         if (mCurUpLoadIndex == 0) mSubmitImgUrl = "";
+
         YaoguoUploadManager.blockUpload(localPath, savePath,
                 new YaoguoUploadManager.CompleteListener() {
                     @Override

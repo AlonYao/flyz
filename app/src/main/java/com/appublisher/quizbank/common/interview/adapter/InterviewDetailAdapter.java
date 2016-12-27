@@ -34,13 +34,15 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
         InterviewPaperDetailResp.QuestionsBean bean = mList.get(position);
         String questionbean = GsonManager.modelToString(mList.get(position));
         int listLength = mList.size();
+        boolean isPurchased_audio = bean.isPurchased_audio();   // 是否为单次购买
+        boolean isPurchased_review = bean.isPurchased_review();   // 是否为全部购买
+        boolean is_collected = bean.isPurchased_review();   // 是否收藏
 
-        isPurchased = false;
         if (bean != null) {
-            if (isPurchased) {
-                return InterviewPurchasedFragment.newInstance(questionbean, position, listLength);
+            if (isPurchased_audio == true && isPurchased_review == true) {
+                return InterviewPurchasedFragment.newInstance(questionbean, position, listLength);       // 已付费页面
             } else {
-                return InterviewUnPurchasedFragment.newInstance(questionbean, position, listLength, mActivity);
+                return InterviewUnPurchasedFragment.newInstance(questionbean, position, listLength, mActivity);    // 未付费页面
             }
         } else {
             return null;

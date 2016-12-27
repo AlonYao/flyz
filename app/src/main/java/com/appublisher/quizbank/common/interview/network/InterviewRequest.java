@@ -7,6 +7,8 @@ import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
 
+import java.util.Map;
+
 /**
  * Created by jinbao on 2016/11/16.
  */
@@ -66,5 +68,13 @@ public class InterviewRequest extends Request implements InterviewApi {
                 + "&paper_id=" + paper_id
                 + "&paper_type=" + paper_type
                 + "&note_id=" + note_id, "paper_detail", "object");
+    }
+
+    /*
+    *   提交录音
+    * */
+    public void submitRecord(Map<String, String> params) {
+
+        postRequest(getFinalUrl(submitRecord), params, "submit_record", "object");
     }
 }

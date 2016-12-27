@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -26,9 +27,9 @@ import java.util.List;
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback {
 
     private int paper_id;
-    private InterviewRequest mRequest;
+    public InterviewRequest mRequest;
     public MyViewPager viewPager;
-    private InterviewDetailAdapter mAdaper;
+    public InterviewDetailAdapter mAdaper;
     private List<InterviewPaperDetailResp.QuestionsBean> list;
  //   public boolean isCanBack;
     private int whatView ;
@@ -36,6 +37,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private int recording = 1;
     private int recorded_unsbmit = 2;
     private InterviewUnPurchasedModel mUnPurchasedModel;
+    private boolean isAnswer;
+    private String paper_type;
+    private int note_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +48,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         setToolBar(this);
         setTitle("");
+
         paper_id = getIntent().getIntExtra("paper_id", 0);
-        String paper_type = getIntent().getStringExtra("paper_type");
-        int note_id = getIntent().getIntExtra("note_id", 0);
+        paper_type = getIntent().getStringExtra("paper_type");
+        note_id = getIntent().getIntExtra("note_id", 0);
+
         viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
-
-
 
         list = new ArrayList<>();
         mAdaper = new InterviewDetailAdapter(getSupportFragmentManager(), list, this);
@@ -65,13 +69,30 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         this.whatView = whatView;
         return whatView;
     }
+    public boolean setIsAnswer(boolean isAnswer){
+        this.isAnswer = isAnswer;
+        return isAnswer;
+    }
+
+    public void getData() {
+        mRequest.getPaperDetail(paper_id, paper_type, note_id);
+
+    }
+
     /*
     *   设置toolbar
     * */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItemCompat.setShowAsAction(menu.add("开启完整版"),MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        menu.clear();
 
+      //  isAnswer = false;
+        if(isAnswer ==false) {
+            MenuItemCompat.setShowAsAction(menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }else{
+            MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -118,9 +139,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 mUnPurchasedModel = new InterviewUnPurchasedModel(this);
             }
             mUnPurchasedModel.showBackPressedDailog(this);
-        }else {
-            super.onBackPressed();
         }
+        super.onBackPressed();
     }
 
     @Override

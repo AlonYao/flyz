@@ -35,6 +35,91 @@ public class InterviewPaperDetailResp {
         private String analysis;
         private String keywords;
         private String from;
+
+        private String question_audio;   //  问题录音
+        private int question_audio_duration;   // 录音时长
+        private String analysis_audio;   // 解析录音
+        private int analysis_audio_duration;   // 解析时长
+
+        private String user_audio;   // 用户的录音地址
+
+        private boolean purchased_review;   // 是否永久购买
+        private boolean purchased_audio;    //  是否单次购买
+        private boolean is_collected;    //  是否收藏
+
+        public boolean is_collected() {
+            return is_collected;
+        }
+
+        public void setIs_collected(boolean is_collected) {
+            this.is_collected = is_collected;
+        }
+
+        public boolean isPurchased_audio() {
+
+            return purchased_audio;
+        }
+
+        public void setPurchased_audio(boolean purchased_audio) {
+            this.purchased_audio = purchased_audio;
+        }
+
+        public boolean isPurchased_review() {
+
+            return purchased_review;
+        }
+
+        public void setPurchased_review(boolean purchased_review) {
+            this.purchased_review = purchased_review;
+        }
+
+        public String getUser_audio() {
+
+            return user_audio;
+        }
+
+        public void setUser_audio(String user_audio) {
+            this.user_audio = user_audio;
+        }
+
+        public int getAnalysis_audio_duration() {
+
+            return analysis_audio_duration;
+        }
+
+        public void setAnalysis_audio_duration(int analysis_audio_duration) {
+            this.analysis_audio_duration = analysis_audio_duration;
+        }
+
+        public String getAnalysis_audio() {
+
+            return analysis_audio;
+        }
+
+        public void setAnalysis_audio(String analysis_audio) {
+            this.analysis_audio = analysis_audio;
+        }
+
+        public int getQuestion_audio_duration() {
+
+            return question_audio_duration;
+        }
+
+        public void setQuestion_audio_duration(int question_audio_duration) {
+            this.question_audio_duration = question_audio_duration;
+        }
+
+        public String getQuestion_audio() {
+
+            return question_audio;
+        }
+
+        public void setQuestion_audio(String question_audio) {
+            this.question_audio = question_audio;
+        }
+
+
+
         private String status;
 
         public int getId() {
