@@ -19,4 +19,7 @@ public interface InterviewApi extends ApiConstants {
 
     //面试详情页
     public String interviewPaperDetail = baseUrl + "quizbank/interview_paper_detail";
+
+    // 提交录音
+    public String submitRecord = baseUrl + "quizbank/submit_record";
 }

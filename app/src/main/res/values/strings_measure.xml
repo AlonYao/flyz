@@ -52,5 +52,8 @@
     <string name="mock_report_statistics_avg_score">模考平均成绩</string>
     <string name="mock_report_statistics_best_score">模考最高成绩</string>
     <string name="mock_report_statistics_avg_duration">每题平均用时</string>
+    <string name="mock_report_linechart_history">历史记录</string>
+    <string name="mock_report_linechart_score">历史成绩</string>
+    <string name="mock_report_linechart_avg">历史模考平均分</string>
 
 </resources>

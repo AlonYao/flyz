@@ -18,12 +18,14 @@ import java.util.List;
 
 public class MeasureReportBaseActivity extends BaseActivity {
 
+    public static final String FROM_MOCK_REPORT = "from_mock_report";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    public void showCategory(List<MeasureReportCategoryBean> list) {
+    public void showCategory(List<MeasureReportCategoryBean> list, String from) {
         if (list == null || list.size() == 0) return;
 
         ViewStub vs = (ViewStub) findViewById(R.id.measure_report_category_vs);
@@ -36,8 +38,15 @@ public class MeasureReportBaseActivity extends BaseActivity {
         for (MeasureReportCategoryBean categoryBean : list) {
             if (categoryBean == null) continue;
 
-            View child = LayoutInflater.from(this).inflate(
-                    R.layout.practice_report_category, container, false);
+            View child;
+            if (FROM_MOCK_REPORT.equals(from)) {
+                child = LayoutInflater.from(this).inflate(
+                        R.layout.practice_report_category_formock, container, false);
+            } else {
+                child = LayoutInflater.from(this).inflate(
+                        R.layout.practice_report_category, container, false);
+            }
+
             TextView tvCategoryName =
                     (TextView) child.findViewById(R.id.practice_report_category);
             TextView tvCategoryRightNum =

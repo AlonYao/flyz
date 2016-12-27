@@ -19,6 +19,6 @@
     <com.db.chart.view.BarChartView
         android:id="@+id/mock_report_barChartView"
         android:layout_width="match_parent"
-        android:layout_height="210dp"/>
+        android:layout_height="180dp"/>
 
 </LinearLayout>
