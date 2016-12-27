@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 56
-        versionName "2.1.1"
+        versionCode 57
+        versionName "2.1.2"
 
         //参数
         manifestPlaceholders = [
@@ -61,14 +61,14 @@ android {
                                     APP_CHANNEL: "meizu"]
         }
 
-        wandoujia {
+        aliopen {
             manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
-                                    APP_CHANNEL: "wandoujia"]
+                                    APP_CHANNEL: "aliopen"]
         }
 
-        PPzhushou {
-            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
-                                    APP_CHANNEL: "PPzhushou"]
+        lenovo {
+            manifestPlaceholders = [APP_NAME   : "天天模考腰果公考",
+                                    APP_CHANNEL: "lenovo"]
         }
 
         vivo {
