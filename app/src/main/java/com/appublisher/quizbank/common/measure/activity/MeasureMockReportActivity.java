@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,6 +46,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
 
     private static final String MENU_SHARE = "分享";
     private static final int START_REFRESH = 1;
+    private static final int SCROLL_TO_RIGHT = 2;
 
     private MeasureMockReportModel mModel;
     private TextView mTvName;
@@ -53,6 +55,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
 
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public MsgHandler mHandler;
+    public HorizontalScrollView mHSView;
 
     public static class MsgHandler extends Handler {
         private WeakReference<MeasureMockReportActivity> mActivity;
@@ -70,6 +73,10 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                     case START_REFRESH:
                         // 显示时间
                         activity.mSwipeRefreshLayout.setRefreshing(true);
+                        break;
+
+                    case SCROLL_TO_RIGHT:
+                        activity.mHSView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
                         break;
                 }
             }
@@ -223,7 +230,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
 
     public void showLineChart(String[] lineLabels, float[] lineScore, float[] lineAvg) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_linechart_vs);
-        if (vs != null) return;
+        if (vs == null) return;
         vs.inflate();
 
         LineChartViewForMock yChart =
@@ -263,17 +270,8 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                 .setXLabels(XController.LabelPosition.OUTSIDE)
                 .setYAxis(false)
                 .setYLabels(YController.LabelPosition.OUTSIDE)
-                .setAxisBorderValues(0, 10, 2)
+                .setAxisBorderValues(0, 100, 20)
                 .show();
-
-        // 根据值绘图
-//        lineLabels = new String[]{
-//                "09/18", "09/18", "09/18", "09/18", "09/18", "09/18",
-//                "09/18", ""};  // X轴上显示的文字
-//
-//        lineScore = new float[]{
-//                1, 2, 3, 4, 5, 6,
-//                9, 0};  // 各个点的分值
 
         LineChartViewForMock chart =
                 (LineChartViewForMock) findViewById(R.id.mock_report_linechart);
@@ -318,10 +316,6 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                 .beginAt(0).endAt(lineLabels.length - 1);
         chart.addData(dataSet);
 
-//        lineAvg = new float[]{
-//                8, 9, 10, 7, 6, 5,
-//                8, 0};  // 各个点的分值
-
         dataSet = new LineSet();
         dataSet.addPoints(lineLabels, lineAvg);
         dataSet.setSmooth(false);
@@ -342,8 +336,38 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                 .setXLabels(XController.LabelPosition.OUTSIDE)
                 .setYAxis(false)
                 .setYLabels(YController.LabelPosition.NONE)
-                .setAxisBorderValues(0, 10, 2)
+                .setAxisBorderValues(0, 100, 20)
                 .show();
+
+        mHSView = (HorizontalScrollView) findViewById(R.id.mock_report_linechart_hs);
+        if (mHSView != null) {
+            mHandler.sendEmptyMessage(SCROLL_TO_RIGHT);
+        }
+    }
+
+    public void showStatistics(String defeat, String avg, String best) {
+        ViewStub vs = (ViewStub) findViewById(R.id.mock_report_statistics_vs);
+        if (vs == null) return;
+        vs.inflate();
+
+        TextView tvDefeat = (TextView) findViewById(R.id.mock_report_statistics_defeat);
+        TextView tvAvg = (TextView) findViewById(R.id.mock_report_statistics_avg);
+        TextView tvBest = (TextView) findViewById(R.id.mock_report_statistics_best);
+
+        if (tvDefeat != null) {
+            defeat = defeat + "%";
+            tvDefeat.setText(defeat);
+        }
+
+        if (tvAvg != null) {
+            avg = avg + "分";
+            tvAvg.setText(avg);
+        }
+
+        if (tvBest != null) {
+            best = best + "分";
+            tvBest.setText(best);
+        }
     }
 
 }

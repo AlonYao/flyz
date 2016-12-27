@@ -78,6 +78,19 @@ public class MeasureMockReportModel extends MeasureReportModel {
         showCategory(resp.getCategory());
         showBarChart(resp.getMock_rank());
         showLineChart(resp.getHistory_mock());
+        showStatistics(resp.getHistory_mock());
+    }
+
+    private void showStatistics(List<MeasureMockReportResp.HistoryMockBean> history_mock) {
+        if (!(mContext instanceof MeasureMockReportActivity)) return;
+        if (history_mock == null || history_mock.size() == 0) return;
+        MeasureMockReportResp.HistoryMockBean bean = history_mock.get(0);
+        if (bean == null) return;
+
+        ((MeasureMockReportActivity) mContext).showStatistics(
+                String.valueOf(bean.getDefeat()*100),
+                String.valueOf(bean.getAvg()),
+                String.valueOf(bean.getTop()));
     }
 
     private void showLineChart(List<MeasureMockReportResp.HistoryMockBean> history_mock) {
@@ -87,23 +100,18 @@ public class MeasureMockReportModel extends MeasureReportModel {
         int size = history_mock.size();
         if (size == 0) return;
 
+        if (size > 30) size = 30;
+
         String[] lineLabels = new String[size + 1];
-        float[] lineScore = new float[size + 1];
-        float[] lineAvg = new float[size + 1];
+        float[] lineScores = new float[size + 1];
+        float[] lineAvgs = new float[size + 1];
 
-        if (size > 30) {
-            lineLabels[30] = "";
-            lineScore[30] = 0;
-            lineAvg[30] = 0;
-        } else {
-            lineLabels[size] = "";
-            lineScore[size] = 0;
-            lineAvg[size] = 0;
-        }
+        lineLabels[size] = "";
+        lineScores[size] = 0;
+        lineAvgs[size] = 0;
 
+        int j = size - 1;
         for (int i = 0; i < size; i++) {
-            if (i > 29) continue; // 最多显示30个数据
-
             MeasureMockReportResp.HistoryMockBean bean = history_mock.get(i);
             if (bean == null) continue;
 
@@ -115,13 +123,15 @@ public class MeasureMockReportModel extends MeasureReportModel {
             } catch (Exception e) {
                 // Empty
             }
-            lineLabels[i] = date;
 
-            lineScore[i] = (float) bean.getUser_score();
-            lineAvg[i] = (float) bean.getAvg();
+            lineLabels[j] = date;
+            lineScores[j] = (float) bean.getUser_score();
+            lineAvgs[j] = (float) bean.getAvg();
+
+            j--;
         }
 
-        ((MeasureMockReportActivity) mContext).showLineChart(lineLabels, lineScore, lineAvg);
+        ((MeasureMockReportActivity) mContext).showLineChart(lineLabels, lineScores, lineAvgs);
     }
 
     private void showBarChart(MeasureMockReportResp.MockRankBean mock_rank) {

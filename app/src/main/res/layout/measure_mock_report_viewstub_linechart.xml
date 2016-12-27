@@ -67,12 +67,13 @@
         <!-- 折线图 -->
         <com.db.chart.view.LineChartViewForMock
             android:id="@+id/mock_report_linechart_y"
-            android:layout_width="14dp"
+            android:layout_width="16dp"
             android:layout_height="180dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:background="@color/white"/>
         <HorizontalScrollView
+            android:id="@+id/mock_report_linechart_hs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -86,7 +87,7 @@
                     android:layout_height="180dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    android:paddingLeft="14dp"
+                    android:paddingLeft="16dp"
                     android:background="@android:color/transparent"
                     tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </LinearLayout>

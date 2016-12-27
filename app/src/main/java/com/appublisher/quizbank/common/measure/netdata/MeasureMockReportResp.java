@@ -23,7 +23,6 @@ public class MeasureMockReportResp {
     private List<MeasureNotesBean> notes;
     private double score;
     private double defeat;
-    private double avg_score;
     private double avg_duration;
     private List<MeasureScoresBean> scores;
     private MockRankBean mock_rank;
@@ -59,6 +58,24 @@ public class MeasureMockReportResp {
         private double avg;
         private double user_score;
         private String date;
+        private double defeat;
+        private double top;
+
+        public double getDefeat() {
+            return defeat;
+        }
+
+        public void setDefeat(double defeat) {
+            this.defeat = defeat;
+        }
+
+        public double getTop() {
+            return top;
+        }
+
+        public void setTop(double top) {
+            this.top = top;
+        }
 
         public double getAvg() {
             return avg;
@@ -87,9 +104,18 @@ public class MeasureMockReportResp {
 
     public static class MockRankBean {
         private boolean available;
+        private String available_time;
         private List<Integer> distribute;
         private boolean defeat_up;
         private boolean score_up;
+
+        public String getAvailable_time() {
+            return available_time;
+        }
+
+        public void setAvailable_time(String available_time) {
+            this.available_time = available_time;
+        }
 
         public boolean isAvailable() {
             return available;
@@ -194,14 +220,6 @@ public class MeasureMockReportResp {
 
     public void setDefeat(double defeat) {
         this.defeat = defeat;
-    }
-
-    public double getAvg_score() {
-        return avg_score;
-    }
-
-    public void setAvg_score(double avg_score) {
-        this.avg_score = avg_score;
     }
 
     public List<MeasureCategoryBean> getCategory() {

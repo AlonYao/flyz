@@ -19,14 +19,14 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:textColor="@color/measure_text"
-            android:text="击败考生"/>
+            android:text="@string/mock_report_statistics_defeat"/>
         <TextView
+            android:id="@+id/mock_report_statistics_defeat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textSize="15sp"
             android:textColor="@color/measure_text"
-            android:text="88%"
             tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
@@ -49,14 +49,14 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:textColor="@color/measure_text"
-            android:text="模考平均成绩"/>
+            android:text="@string/mock_report_statistics_avg_score"/>
         <TextView
+            android:id="@+id/mock_report_statistics_avg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textSize="15sp"
             android:textColor="@color/measure_text"
-            android:text="88分"
             tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
@@ -79,14 +79,14 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:textColor="@color/measure_text"
-            android:text="模考最高成绩"/>
+            android:text="@string/mock_report_statistics_best_score"/>
         <TextView
+            android:id="@+id/mock_report_statistics_best"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textSize="15sp"
             android:textColor="@color/measure_text"
-            android:text="88分"
             tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
