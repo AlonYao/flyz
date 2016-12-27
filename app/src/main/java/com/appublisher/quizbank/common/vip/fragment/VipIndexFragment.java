@@ -196,38 +196,53 @@ public class VipIndexFragment extends Fragment implements RequestCallback {
 
         // 头像处理
         LoginModel.setAvatar(avatarImage);
-        ImageManager.displayImage(
+        String avatar = LoginModel.getUserAvatar();
+        if (avatar == null || avatar.length() == 0) {
+            avatarBgImage.getViewTreeObserver().addOnPreDrawListener(
+                    new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            avatarBgImage.getViewTreeObserver().removeOnPreDrawListener(this);
+                            avatarBgImage.buildDrawingCache();
+                            Bitmap bmp = avatarBgImage.getDrawingCache();
+                            blur(bmp, avatarBgImage);
+                            return true;
+                        }
+                    });
+        } else {
+            ImageManager.displayImage(
                 LoginModel.getUserAvatar(), avatarBgImage, new ImageManager.LoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                avatarBgImage.getViewTreeObserver().addOnPreDrawListener(
-                        new ViewTreeObserver.OnPreDrawListener() {
                     @Override
-                    public boolean onPreDraw() {
-                        avatarBgImage.getViewTreeObserver().removeOnPreDrawListener(this);
-                        avatarBgImage.buildDrawingCache();
-                        Bitmap bmp = avatarBgImage.getDrawingCache();
-                        blur(bmp, avatarBgImage);
-                        return true;
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        avatarBgImage.getViewTreeObserver().addOnPreDrawListener(
+                                new ViewTreeObserver.OnPreDrawListener() {
+                                    @Override
+                                    public boolean onPreDraw() {
+                                        avatarBgImage.getViewTreeObserver().removeOnPreDrawListener(this);
+                                        avatarBgImage.buildDrawingCache();
+                                        Bitmap bmp = avatarBgImage.getDrawingCache();
+                                        blur(bmp, avatarBgImage);
+                                        return true;
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
                     }
                 });
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
+        }
     }
 
     @Override
