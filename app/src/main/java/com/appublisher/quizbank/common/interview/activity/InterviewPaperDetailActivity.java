@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -21,7 +20,6 @@ import com.appublisher.quizbank.common.interview.viewgroup.MyViewPager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback {
@@ -30,7 +28,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public InterviewRequest mRequest;
     public MyViewPager viewPager;
     public InterviewDetailAdapter mAdaper;
-    private List<InterviewPaperDetailResp.QuestionsBean> list;
  //   public boolean isCanBack;
     private int whatView ;
     private int unrecord = 0;
@@ -54,10 +51,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         note_id = getIntent().getIntExtra("note_id", 0);
 
         viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
-
-        list = new ArrayList<>();
-        mAdaper = new InterviewDetailAdapter(getSupportFragmentManager(), list, this);
-        viewPager.setAdapter(mAdaper);
         viewPager.setScroll(true);
 
         mRequest = new InterviewRequest(this, this);
@@ -151,11 +144,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if ("paper_detail".equals(apiName)) {
             InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class);
             if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
-                list.clear();
-                list.addAll(interviewPaperDetailResp.getQuestions());
-                mAdaper.notifyDataSetChanged();
-                if (list.size() == 0) {
+                List<InterviewPaperDetailResp.QuestionsBean> list = interviewPaperDetailResp.getQuestions();
+                if (list == null || list.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
+                } else {
+                    mAdaper = new InterviewDetailAdapter(
+                            getSupportFragmentManager(),
+                            list,
+                            this);
+                    viewPager.setAdapter(mAdaper);
                 }
             } else if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1001) {
                 ToastManager.showToast(this, "没有面试题目");
