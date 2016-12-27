@@ -290,7 +290,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
             DisplayMetrics outMetrics = new DisplayMetrics();
             manager.getDefaultDisplay().getMetrics(outMetrics);
             int screenWidth = outMetrics.widthPixels;
-            width = (int) (screenWidth - Tools.fromDpToPx(15));
+            width = (int) (screenWidth - Tools.fromDpToPx(46));
 
             layoutParams = new LinearLayout.LayoutParams(
                     (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
