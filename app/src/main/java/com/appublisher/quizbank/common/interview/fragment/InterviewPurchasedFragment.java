@@ -30,12 +30,14 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
@@ -155,8 +157,10 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mActivity = (InterviewPaperDetailActivity) getActivity();
         status = RECORDABLE;
         mQuestionsBean = GsonManager.getModel(getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
+        mUnPurchasedModel = new InterviewUnPurchasedModel(mActivity);
         mPosition = getArguments().getInt(ARGS_POSITION);
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
+
     }
 
     @Nullable
@@ -167,6 +171,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mediaRecorderManager = new MediaRecorderManager(mActivity);
         mQuestionbean = GsonManager.getModel(
                 getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
+
+        user_audioUrl = mQuestionbean.getUser_audio();    // 录音提交后返回到地址
         initView();
         checkedIsAnswer();     // 需要一个返回到提交字段
         initFile();
@@ -216,18 +222,14 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     }
     private void checkedIsAnswer() {
 
+        Logger.e("checkedIsAnswer");
+
         // 根据解析时长来显示有无答案和解析
         // 回答的问题直接展开
         //  analysis_audio_duration = 1;
         if(user_audioUrl !=null &&  user_audioUrl.length() > 0){
             mUnRecordView.setVisibility(View.GONE);
             mRecordedView.setVisibility(View.VISIBLE);
-
-            // 修改toolbar
-            if(mUnPurchasedModel ==null){
-                new InterviewUnPurchasedModel(mActivity).changeToolbarMenu(mActivity,true);
-            }
-            mUnPurchasedModel.changeToolbarMenu(mActivity,true);
 
         }else{
             // 如果未答题:显示未录音页面
@@ -236,7 +238,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         }
     }
     private void initFile() {
-        fileFolder = FileManager.getRootFilePath(mActivity) + "/daily_interview/user/";
+        String userId = LoginModel.getUserId();
+        fileFolder = FileManager.getRootFilePath(mActivity) + "/quizbank_interview"+"/" + userId + "/";
 
         question_id = mPosition;            // 具体哪一个问题
 
@@ -317,7 +320,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mTvtimeNotSubmPlay = (TextView) mPurchasedView.findViewById(R.id.tv_record_sounding_play_time);       // 未提交录音:播放时间
 
 
-        mAnswer_listen_ll = (LinearLayout) mPurchasedView.findViewById(R.id.interview_answer_listen_ll);   // 已提交录音:播放整体
+        mAnswer_listen_ll = (LinearLayout) mPurchasedView.findViewById(R.id.interview_hadanswer_listen_ll);   // 已提交录音:播放整体
         mTvtimeHadSumbPlay = (TextView) mPurchasedView.findViewById(R.id.tv_recorded_sound_play_time);    // 已提交录音:播放时间
 
     }
@@ -672,11 +675,9 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 mediaRecorderManager.stop();  // 关闭播放器和录音器
                 mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionbean, FileManager.getVideoDuration(userAnswerFilePath));
 
-
-            } else if (id == R.id.interview_answer_listen_ll) {           // 已提交页面:播放按钮
+            } else if (id == R.id.interview_hadanswer_listen_ll) {           // 已提交页面:播放按钮
                 // 需要从网络获取
                 dealAnswer();
-
             }
         }
     };
@@ -685,9 +686,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     * */
     public void dealAnswer(){
 
-
         final String filePath = fileFolder + question_id + ".amr";
-        final String zipFilePath = fileFolder + question_id + ".zip";
         final File file = new File(filePath);
         String url = user_audioUrl;
         if (file.exists()) {
@@ -697,7 +696,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             // playTimer(); // 播放时间:递减
             play(filePath);
         } else{
-            InterviewModel.downloadVideo(mActivity,url,fileFolder,zipFilePath, new ICommonCallback() {
+            InterviewModel.downloadVideo(mActivity,url,filePath, new ICommonCallback() {
                 @Override
                 public void callback(boolean success) {
                     if(success){

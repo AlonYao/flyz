@@ -8,7 +8,7 @@
 
         <!--录音提交完成-->
         <LinearLayout
-            android:id="@+id/interview_answer_listen_ll"
+            android:id="@+id/interview_hadanswer_listen_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

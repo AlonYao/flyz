@@ -324,7 +324,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         mTvtimeNotSubmPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_sounding_play_time);       // 未提交录音:播放时间
 
 
-        mAnswer_listen_ll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_answer_listen_ll);   // 已提交录音:播放整体
+        mAnswer_listen_ll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_hadanswer_listen_ll);   // 已提交录音:播放整体
         mTvtimeHadSumbPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_recorded_sound_play_time);    // 已提交录音:播放时间
 
     }
@@ -550,7 +550,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionbean,FileManager.getVideoDuration(userAnswerFilePath));
               //  InterviewUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionbean);    // 录音地址, 录音的集合,回调接口
 
-            } else if (id == R.id.interview_answer_listen_ll) {           // 已提交页面:播放按钮
+            } else if (id == R.id.interview_hadanswer_listen_ll) {           // 已提交页面:播放按钮
                 // 需要从网络获取
                 dealAnswer();
 
@@ -562,9 +562,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     * */
     public void dealAnswer(){
 
-
         final String filePath = fileFolder + question_id + ".amr";
-        final String zipFilePath = fileFolder + question_id + ".zip";
         final File file = new File(filePath);
         String url = user_audioUrl;
         if (file.exists()) {
@@ -574,7 +572,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
            // playTimer(); // 播放时间:递减
             play(filePath);
         } else{
-            InterviewModel.downloadVideo(mActivity,url,fileFolder,zipFilePath, new ICommonCallback() {
+            InterviewModel.downloadVideo(mActivity,url,filePath, new ICommonCallback() {
                 @Override
                 public void callback(boolean success) {
                     if(success){

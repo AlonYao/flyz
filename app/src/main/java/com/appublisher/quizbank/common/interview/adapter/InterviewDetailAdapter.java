@@ -38,7 +38,7 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
      //   boolean isPurchased_review = bean.isPurchased_review();   // 是否为全部购买
         boolean is_collected = bean.isPurchased_review();   // 是否收藏
 
-        boolean isPurchased_audio = true;
+        boolean isPurchased_audio = false;
         boolean isPurchased_review = true;
         if (bean != null) {
             if (isPurchased_audio == true && isPurchased_review == true) {
