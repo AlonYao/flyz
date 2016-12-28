@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:background="@drawable/measure_search_bg">
+
+    <ImageView
+        android:id="@+id/measure_search_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/measure_search_icon"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/measure_search_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/measure_search_clear"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <EditText
+        android:id="@+id/measure_search_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/measure_search_icon"
+        android:layout_toLeftOf="@id/measure_search_clear"
+        android:maxLines="1"
+        android:maxLength="20"
+        android:ellipsize="end"
+        android:padding="5dp"
+        android:background="@null"
+        android:textColor="@color/measure_text"
+        tools:ignore="RtlHardcoded,TextFields" />
+
+</RelativeLayout>
