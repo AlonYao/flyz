@@ -640,5 +640,4 @@ dependencies {
     // 阿里百川
     compile(name: 'alisdk-feedback-2.3.0', ext: 'aar')
     compile(name: 'securityguardaar3-5.1.81', ext: 'aar')
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
