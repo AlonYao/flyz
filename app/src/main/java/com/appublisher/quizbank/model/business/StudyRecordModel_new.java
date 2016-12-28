@@ -1,16 +1,19 @@
 package com.appublisher.quizbank.model.business;
 
+import android.content.Context;
 import android.content.Intent;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
-import com.appublisher.quizbank.fragment.StudyRecordFragment;
+import com.appublisher.quizbank.fragment.StudyRecordFragment_new;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.model.netdata.history.HistoryPapersResp;
 
@@ -22,9 +25,16 @@ import java.util.HashMap;
 /**
  * StudyRecordFragment Model
  */
-public class StudyRecordModel {
+public class StudyRecordModel_new {
 
     private HistoryPapersListAdapter mHistoryPapersListAdapter;
+    private final Context mContext;
+    private final StudyRecordFragment_new mFragment;
+
+    public StudyRecordModel_new(Context context, StudyRecordFragment_new fragment) {
+        mContext = context;
+        mFragment = fragment;
+    }
 
     /**
      * 处理学习记录回调
@@ -32,7 +42,7 @@ public class StudyRecordModel {
      * @param fragment StudyRecordFragment
      * @param response 回调数据
      */
-    public void dealHistoryPapersResp(final StudyRecordFragment fragment,
+    public void dealHistoryPapersResp(final StudyRecordFragment_new fragment,
                                              JSONObject response) {
         if (response == null) {
             if (fragment.mIsRefresh) {
@@ -52,6 +62,9 @@ public class StudyRecordModel {
             }
             return;
         }
+        /**
+         *   在此处通过传进的常量判断进入哪一个adapter
+         * **/
 
         // 拼接数据
         if (fragment.mOffset == 0) {
@@ -125,9 +138,16 @@ public class StudyRecordModel {
      *
      * @param fragment StudyRecordFragment
      */
-    public static void showNullImg(StudyRecordFragment fragment) {
+    public static void showNullImg(StudyRecordFragment_new fragment) {
         fragment.mIvNull.setVisibility(View.VISIBLE);
         fragment.mXListView.setVisibility(View.GONE);
     }
-
+    /*
+    *   得到颜色值
+    * */
+    public int getThemeColor() {
+        TypedValue value = new TypedValue();
+        mContext.getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
+        return value.data;
+    }
 }

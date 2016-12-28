@@ -42,12 +42,21 @@ public class InterviewPaperDetailResp {
         private int analysis_audio_duration;   // 解析时长
 
         private String user_audio;   // 用户的录音地址
+        private int user_audio_duration;   // 用户的录音的时长
 
         private boolean purchased_review;   // 是否永久购买
         private boolean purchased_audio;    //  是否单次购买
         private boolean is_collected;    //  是否收藏
 
-        public boolean is_collected() {
+        public int getUser_audio_duration() {
+            return user_audio_duration;
+        }
+
+        public void setUser_audio_duration(int user_audio_duration) {
+            this.user_audio_duration = user_audio_duration;
+        }
+
+        public boolean getIs_collected() {
             return is_collected;
         }
 

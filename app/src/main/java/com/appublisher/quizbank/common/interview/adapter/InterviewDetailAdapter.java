@@ -28,7 +28,6 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
         mActivity = activity;
     }
 
-
     @Override
     public Fragment getItem(int position) {
         InterviewPaperDetailResp.QuestionsBean bean = mList.get(position);

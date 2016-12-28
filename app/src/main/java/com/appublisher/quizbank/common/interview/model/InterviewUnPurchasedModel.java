@@ -23,8 +23,6 @@ import com.appublisher.quizbank.model.netdata.CommonResp;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 
 /*
 *  本model为未付费页面:InterviewUnPurchasedFragment中Model
@@ -37,7 +35,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
     private Context mContext;
     private InterviewUnPurchasedFragment mFragment;
 
-    private List<InterviewPaperDetailResp.QuestionsBean> mList;
     private ProgressDialog mProgressDialog;
     private InterviewPaperDetailActivity mActivity;
 
@@ -47,7 +44,7 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
         mContext = context;
     }
     /*
-    *  显示未付费页面的弹窗
+    *  显示未付费页面的dailog
     *  jump_url:为跳转到支付页面的url
     * */
     public static void showNoAnswerDialog(final InterviewPaperDetailActivity mActivity, String jump_url){
@@ -108,7 +105,7 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
     }
 
     /*
-   *   创建开启完整版的弹窗
+   *   创建开启完整版的dailog
    * */
     public static void showOpenFullDialog(final InterviewPaperDetailActivity mActivity, String jump_url) {
         final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
@@ -216,14 +213,10 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
         YaoguoUploadManager.blockUpload(fileDir,savePath,completeListener,progressListener);
     }
 
+
     /*
-    *   修改toolbar右侧为收藏:并处理点击逻辑
+    *   录音提交后:返回的信息
     * */
-    public  void changeToolbarMenu(InterviewPaperDetailActivity mActivity,boolean isAnswer){
-
-        mActivity.setIsAnswer(isAnswer);
-    }
-
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if ("submit_record".equals(apiName)) {
@@ -231,10 +224,45 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             if (resp != null && resp.getResponse_code() == 1) {
                 //获取数据
                 mActivity.getData();
+
             } else {
                 ToastManager.showToast(mActivity,"刷新失败");
             }
         }
         mActivity.hideLoading();
     }
+
+    /*
+    *   检查menu是否为收藏状态
+    * */
+    public boolean isCollected(int position) {
+//        if (mAnswers == null || position >= mAnswers.size()) {
+//            return false;
+//        }
+//        MeasureAnswerBean answerBean = mAnswers.get(position);
+//        return answerBean != null && answerBean.is_collected();
+        return true;
+   }
+
+    /*
+    *   设置menu的状态
+    * */
+    public void setCollected(int position, boolean isCollected) {
+//        if (mAnswers == null || position >= mAnswers.size()) return;
+//        MeasureAnswerBean answerBean = mAnswers.get(position);
+//        if (answerBean == null) return;
+//        answerBean.setIs_collected(isCollected);
+//        mAnswers.set(position, answerBean);
+
+//        // 提交数据
+//        mRequest.collectQuestion(
+//                MeasureParamBuilder.collectQuestion(answerBean.getId(), isCollected));         // 向服务器提交信息:已经收藏
+
+        // 刷新
+//        if (mContext instanceof InterviewPaperDetailActivity) {
+//            ((InterviewPaperDetailActivity) mContext).invalidateOptionsMenu();    // 刷新menu
+//        }
+
+    }
+
 }

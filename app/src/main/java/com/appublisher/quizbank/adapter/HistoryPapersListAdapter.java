@@ -125,4 +125,5 @@ public class HistoryPapersListAdapter extends BaseAdapter {
         TextView tvContent;
         TextView tvDate;
     }
+
 }

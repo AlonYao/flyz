@@ -30,7 +30,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -138,7 +137,11 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private String user_audioUrl;
     private boolean isBlue;    // 记录是否满足录音时间后,确认按钮是否变蓝
     private MediaRecorderManager mediaRecorderManager;
-    private InterviewPaperDetailResp.QuestionsBean mQuestionbean;
+    private int user_audio_durationTime;
+    private String mQuestion_audioUrl;
+    private int question_audio_durationTime;
+    private String mAnalysis_audioUrl;
+    private int analysis_audio_durationTime;
 
 
     public static InterviewPurchasedFragment newInstance(String questionbean, int position,int listLength) {
@@ -156,10 +159,20 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         super.onCreate(savedInstanceState);
         mActivity = (InterviewPaperDetailActivity) getActivity();
         status = RECORDABLE;
-        mQuestionsBean = GsonManager.getModel(getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
+        mQuestionsBean = GsonManager.getModel(
+                getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
         mUnPurchasedModel = new InterviewUnPurchasedModel(mActivity);
         mPosition = getArguments().getInt(ARGS_POSITION);
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
+
+        user_audioUrl = mQuestionsBean.getUser_audio();    // 录音提交后返回到地址
+        user_audio_durationTime = mQuestionsBean.getUser_audio_duration();   // 提交录音返回的时长
+
+        mQuestion_audioUrl = mQuestionsBean.getQuestion_audio();    // 题目行的录音的地址
+        question_audio_durationTime = mQuestionsBean.getQuestion_audio_duration();   //题目行的录音的时长
+
+        mAnalysis_audioUrl = mQuestionsBean.getAnalysis_audio();    // 解析行录音的地址
+        analysis_audio_durationTime = mQuestionsBean.getAnalysis_audio_duration();  // 解析行录音时长
 
     }
 
@@ -169,10 +182,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         mPurchasedView = inflater.inflate(R.layout.interview_question_item_recordsound_hadpayfor, container, false);
         mediaRecorderManager = new MediaRecorderManager(mActivity);
-        mQuestionbean = GsonManager.getModel(
-                getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
 
-        user_audioUrl = mQuestionbean.getUser_audio();    // 录音提交后返回到地址
         initView();
         checkedIsAnswer();     // 需要一个返回到提交字段
         initFile();
@@ -203,7 +213,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                         if (timePlaying > 0) {
                             mTvtimeHadSumbPlay .setText(timePlaying + "\"");
                         }else{
-                            mTvtimeHadSumbPlay .setText(hadsbmitTime);
+                            mTvtimeHadSumbPlay.setText("播放完毕");
                         }
                         break;
                     case TIME_CANCEL:
@@ -216,23 +226,20 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             }
         };
 
-
-
         return mPurchasedView;
     }
     private void checkedIsAnswer() {
 
-        Logger.e("checkedIsAnswer");
-
         // 根据解析时长来显示有无答案和解析
         // 回答的问题直接展开
-        //  analysis_audio_duration = 1;
         if(user_audioUrl !=null &&  user_audioUrl.length() > 0){
+            status = HADSUBMIT;
             mUnRecordView.setVisibility(View.GONE);
             mRecordedView.setVisibility(View.VISIBLE);
-
+            mTvtimeHadSumbPlay.setText(user_audio_durationTime + "\"");
         }else{
             // 如果未答题:显示未录音页面
+            status = RECORDABLE;
             mUnRecordView.setVisibility(View.VISIBLE);
             analysisView.setVisibility(View.GONE);       //如果未答题:解析行折叠
         }
@@ -240,9 +247,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private void initFile() {
         String userId = LoginModel.getUserId();
         fileFolder = FileManager.getRootFilePath(mActivity) + "/quizbank_interview"+"/" + userId + "/";
-
         question_id = mPosition;            // 具体哪一个问题
-
         FileManager.mkDir(fileFolder);
         // 录音存储的文件路径
         userAnswerFilePath = fileFolder + question_id + ".amr";
@@ -272,7 +277,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         analysisSwitchView = mPurchasedView.findViewById(R.id.analysis_switch_rl);
         //解析行的左面的文字
         analysisSwitchTv = (TextView) mPurchasedView.findViewById(R.id.analysis_switch_tv);
-        //题目行右面的听语音的整体
+        //解析行右面的听语音的整体
         analysisListenLl = (LinearLayout) mPurchasedView.findViewById(R.id.interview_answer_listen_ll);
         //  final LinearLayout questionlookLl = (LinearLayout) view.findViewById(R.id.interview_lookquestion_ll);   //解析行右面的看文字的整体
         // 解析行右面的看文字的图片ImageView:逻辑:展开:换图片 & 折叠换图片
@@ -336,6 +341,9 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mRecordNotSubmit_ll_play.setOnClickListener(OnClickListener);    // 已录音未提交:播放整体
         mRecordNotSubmit_rl_submit.setOnClickListener(OnClickListener);    // 已录音未提交:提交整体
         mAnswer_listen_ll.setOnClickListener(OnClickListener);       // 已提交录音页面:播放整体
+        questionListenLl.setOnClickListener(OnClickListener);           // 题目行右面的听语音的整体
+        analysisListenLl.setOnClickListener(OnClickListener);           // 解析行右面的听语音的整体
+
 
         if (mQuestionsBean != null && mPosition < mListLength && mListLength >0 ) {
 
@@ -599,7 +607,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             int id = view.getId();
             if (id == R.id.interview_unrecordsound_ll) {    //如果点击了录音功能
 
-                if (status == RECORDABLE) {    //状态记录是否可以录音
+                if (status.equals(RECORDABLE) ) {    //状态记录是否可以录音
                     //先准备录音
                     prepareRecord();
                     mUnRecordView.setVisibility(View.GONE);
@@ -665,7 +673,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     isStop = true;
                     // 播放的逻辑及时间递减,播放完后:吐司提示
                     status = SUBMIT;               // 变成可提交状态
-                    play(userAnswerFilePath);
+                    play(userAnswerFilePath,status);
                 }
 
             } else if (id == R.id.interview_recordsounding_rl_submit) {      // 点击提交按钮
@@ -673,43 +681,57 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 // toolbar改变
                 // 显示dailog
                 mediaRecorderManager.stop();  // 关闭播放器和录音器
-                mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionbean, FileManager.getVideoDuration(userAnswerFilePath));
+                mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionsBean, FileManager.getVideoDuration(userAnswerFilePath));
 
             } else if (id == R.id.interview_hadanswer_listen_ll) {           // 已提交页面:播放按钮
                 // 需要从网络获取
-                dealAnswer();
+                status = HADSUBMIT;
+                if(isStop){
+                    isStop = false;
+                    mediaRecorderManager.stop();
+                    handler.sendEmptyMessage(TIME_CANCEL);
+                    mTvtimeHadSumbPlay.setText(user_audio_durationTime+"\"");
+
+                }else{
+                    isStop = true;
+                    // 需要从网络获取
+                    String url = user_audioUrl;
+                    dealAnswer(url);
+                }
+
+            }else if(id ==R.id.interview_question_listen_ll){      // 题目行右面的听语音的整体
+                String url = mQuestion_audioUrl;
+                dealAnswer(url);
+
+            }else if(id == R.id.interview_answer_listen_ll ){      // 解析行右面的听语音的整体
+                String url = mAnalysis_audioUrl ;
+                dealAnswer(url);
             }
         }
     };
     /*
     *   处理已提交录音的播放数据  dealAnswer(hotAnswerFolder, interviewM.getHottest_answer().getFile_url());
     * */
-    public void dealAnswer(){
+    public void dealAnswer(String url){
 
         final String filePath = fileFolder + question_id + ".amr";
         final File file = new File(filePath);
-        String url = user_audioUrl;
+//        String url = user_audioUrl;
+        status = HADSUBMIT;
         if (file.exists()) {
-            ToastManager.showToast(mActivity,"从本地获取的数据语音");
-            String videoDurationTime = FileManager.getVideoDuration(filePath);
-            hadsbmitTime = Integer.parseInt(videoDurationTime);
-            // playTimer(); // 播放时间:递减
-            play(filePath);
+           // playTimer(); // 播放时间:递减
+            play(filePath,status);
         } else{
             InterviewModel.downloadVideo(mActivity,url,filePath, new ICommonCallback() {
                 @Override
                 public void callback(boolean success) {
                     if(success){
-                        ToastManager.showToast(mActivity,"从网络下载了语音");
-                        String videoDurationTime = FileManager.getVideoDuration(filePath);
-//                        hadsbmitTime = Integer.parseInt(videoDurationTime);
                         //   playTimer(); // 播放时间:递减
-                        play(filePath);
+                        play(filePath,status);
                     }
                 }
             });
         }
-
     }
 
     /**
@@ -799,8 +821,9 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     /**
      * 播放:未提交时的播放;提交后的播放
      **/
-    public void play(String userAnswerFilePath) {
+    public void play(String userAnswerFilePath, String statusState) {
 
+        String status = statusState;
         mediaRecorderManager.mPlayFileName = userAnswerFilePath;
         mediaRecorderManager.onPlay(true, new MediaRecorderManager.PlayOverMethod() {
             @Override
@@ -808,31 +831,36 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
             }
         });
-        mTvtimeNotSubm.setText("停止播放");
+        if(status.equals(SUBMIT)) {
+            mTvtimeNotSubm.setText("停止播放");
+        }else if(status.equals(HADSUBMIT)){
+            mTvtimeHadSumbPlay .setText(user_audio_durationTime + "\"");
+        }
         //  时间展示:递减
-        playTimer();
+        playTimer(status);
     }
 
     /**
      * 播放的时间处理:递减
      **/
-    private void playTimer() {
+    private void playTimer(final String statusState) {
+        final String status = statusState;
         if (mTimer == null) {
             mTimer = new Timer();
         }
-        if (status == SUBMIT) {    // 未提交的状态:但是可提交
+        if (status.equals(SUBMIT)){    // 未提交的状态:但是可提交
             timePlaying = timeRecording;
-        }else if(status == HADSUBMIT){
-            timePlaying = hadsbmitTime;
+        }else if(status.equals(HADSUBMIT)){
+            timePlaying = user_audio_durationTime;
         }
 
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 timePlaying--;
-                if(status == SUBMIT) {
+                if(status.equals(SUBMIT)) {
                     handler.sendEmptyMessage(PLAYING);
-                }else if (status == HADSUBMIT){
+                }else if (status.equals(HADSUBMIT)){
                     handler.sendEmptyMessage(PLAYINGSUBMIT);
                 }
             }
