@@ -7,5 +7,6 @@
     <color name="measure_report_error_btn_bg">#FF6666</color>
     <color name="measure_bg">#EFEFF4</color>
     <color name="measure_mock_report_avg">#4E90F5</color>
+    <color name="measure_mock_report_notice">#FF6722</color>
 
 </resources>

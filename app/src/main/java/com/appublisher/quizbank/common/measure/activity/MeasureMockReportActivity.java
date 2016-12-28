@@ -10,11 +10,12 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -52,6 +53,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
     private TextView mTvName;
     private TextView mTvScore;
     private TextView mTvAvgDur;
+    private TextView mTvNotice;
 
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public MsgHandler mHandler;
@@ -155,6 +157,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mTvName = (TextView) findViewById(R.id.mock_report_name);
         mTvScore = (TextView) findViewById(R.id.mock_report_score);
         mTvAvgDur = (TextView) findViewById(R.id.mock_report_statistics_avg_duration);
+        mTvNotice = (TextView) findViewById(R.id.mock_report_notice);
         Button btnAll = (Button) findViewById(R.id.mock_report_all);
         Button btnError = (Button) findViewById(R.id.mock_report_error);
 
@@ -283,8 +286,14 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
 
         LinearLayout.LayoutParams layoutParams;
         if (length <= 7) {
+            WindowManager manager = this.getWindowManager();
+            DisplayMetrics outMetrics = new DisplayMetrics();
+            manager.getDefaultDisplay().getMetrics(outMetrics);
+            int screenWidth = outMetrics.widthPixels;
+            width = (int) (screenWidth - Tools.fromDpToPx(46));
+
             layoutParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, (int) Tools.fromDpToPx(180));
+                    (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
         } else {
             layoutParams = new LinearLayout.LayoutParams(
                     (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
@@ -368,6 +377,18 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
             best = best + "分";
             tvBest.setText(best);
         }
+    }
+
+    public void showNotice(String time) {
+        if (mTvNotice == null) return;
+        mTvNotice.setVisibility(View.VISIBLE);
+        time = "腰果正在努力的统计本次模考数据，预计会在今天" + time + "给出，请耐心等待...";
+        mTvNotice.setText(time);
+    }
+
+    public void hideNotice() {
+        if (mTvNotice == null) return;
+        mTvNotice.setVisibility(View.GONE);
     }
 
 }
