@@ -422,6 +422,65 @@ android {
         }
 
         /**
+         * baidu mianshi
+         */
+
+        "baidu-mianshi-1" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-1"]
+        }
+
+        "baidu-mianshi-2" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-2"]
+        }
+
+        "baidu-mianshi-3" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-3"]
+        }
+
+        "baidu-mianshi-4" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-4"]
+        }
+
+        "baidu-mianshi-5" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-5"]
+        }
+
+        "baidu-mianshi-6" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-6"]
+        }
+
+        "baidu-mianshi-7" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-7"]
+        }
+
+        "baidu-mianshi-8" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-8"]
+        }
+
+        "baidu-mianshi-9" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-9"]
+        }
+
+        "baidu-mianshi-10" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-10"]
+        }
+
+        "baidu-mianshi-qd" {
+            manifestPlaceholders = [APP_NAME   : "天天模考·腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-qd"]
+        }
+
+        /**
          * shenma
          */
 
