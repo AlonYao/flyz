@@ -3,43 +3,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:layout_marginRight="16dp"
-    android:background="@drawable/measure_search_bg"
     android:id="@+id/measure_search"
     tools:ignore="RtlHardcoded">
 
-    <ImageView
-        android:id="@+id/measure_search_icon"
+    <ImageButton
+        android:id="@+id/measure_search_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/measure_search_icon"
+        android:background="@null"
+        android:src="@drawable/measure_search_btn"
+        android:visibility="gone"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/measure_search_clear"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_marginRight="16dp"
+        android:layout_toLeftOf="@id/measure_search_btn"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/measure_search_clear"
-        tools:ignore="ContentDescription,RtlHardcoded" />
+        android:background="@drawable/measure_search_bg"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+        <ImageView
+            android:id="@+id/measure_search_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/measure_search_icon"
+            tools:ignore="ContentDescription" />
 
-    <EditText
-        android:id="@+id/measure_search_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/measure_search_icon"
-        android:layout_toLeftOf="@id/measure_search_clear"
-        android:maxLines="1"
-        android:maxLength="20"
-        android:ellipsize="end"
-        android:padding="5dp"
-        android:background="@null"
-        android:textColor="@color/measure_text"
-        tools:ignore="RtlHardcoded,TextFields" />
+        <ImageView
+            android:id="@+id/measure_search_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/measure_search_clear"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <EditText
+            android:id="@+id/measure_search_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/measure_search_icon"
+            android:layout_toLeftOf="@id/measure_search_clear"
+            android:maxLines="1"
+            android:maxLength="20"
+            android:ellipsize="end"
+            android:padding="5dp"
+            android:background="@null"
+            android:textColor="@color/measure_text"
+            tools:ignore="RtlHardcoded,TextFields" />
+    </RelativeLayout>
 
 </RelativeLayout>
