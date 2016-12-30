@@ -13,7 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -41,6 +43,7 @@ import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.grade.GradeManager;
 import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
+import com.appublisher.quizbank.common.measure.activity.MeasureSearchActivity;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
@@ -112,13 +115,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         mPromoteData = getIntent().getStringExtra(INTENT_PROMOTE);
         mPromoteQuizBankModel = new PromoteQuizBankModel(this);
 
-        rateCourseCountTv = (TextView) findViewById(R.id.opencourse_num_notice);
-
-        studyRadioButton = (RadioButton) findViewById(R.id.study);
-        courseRadioButton = (RadioButton) findViewById(R.id.course);
-        opencourseRadioButton = (RadioButton) findViewById(R.id.opencourse);
-        recordRadioButton = (RadioButton) findViewById(R.id.record);
-        vipRadioButton = (RadioButton) findViewById(R.id.vip);
+        initView();
 
         // 记录用户评价行为
         if (GradeDAO.isShowGradeAlert(Globals.appVersion)) {
@@ -186,6 +183,42 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         // 邀请评价
         GradeManager gradeManager = new GradeManager(this);
         gradeManager.dealGrade();
+    }
+
+    private void initView() {
+        rateCourseCountTv = (TextView) findViewById(R.id.opencourse_num_notice);
+        studyRadioButton = (RadioButton) findViewById(R.id.study);
+        courseRadioButton = (RadioButton) findViewById(R.id.course);
+        opencourseRadioButton = (RadioButton) findViewById(R.id.opencourse);
+        recordRadioButton = (RadioButton) findViewById(R.id.record);
+        vipRadioButton = (RadioButton) findViewById(R.id.vip);
+
+        // Measure Search View
+        initMeasureSearch();
+    }
+
+    private void initMeasureSearch() {
+        RelativeLayout searchView = (RelativeLayout) findViewById(R.id.measure_search);
+        if (searchView != null) {
+            searchView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, MeasureSearchActivity.class));
+                }
+            });
+        }
+
+        EditText editText = (EditText) findViewById(R.id.measure_search_et);
+        if (editText != null) {
+            editText.setFocusable(false);
+            editText.setFocusableInTouchMode(false);
+            editText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, MeasureSearchActivity.class));
+                }
+            });
+        }
     }
 
     public void setValue() {

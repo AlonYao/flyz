@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:background="@drawable/measure_search_bg">
+    android:layout_marginRight="16dp"
+    android:background="@drawable/measure_search_bg"
+    android:id="@+id/measure_search"
+    tools:ignore="RtlHardcoded">
 
     <ImageView
         android:id="@+id/measure_search_icon"

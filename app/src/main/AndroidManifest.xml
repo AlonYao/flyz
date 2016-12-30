@@ -308,8 +308,15 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_measure_mock_report"
             android:screenOrientation="portrait" />
-        <activity android:name=".common.measure.activity.MeasureReportBaseActivity" />
-        <activity android:name=".common.measure.activity.MeasureSearchActivity"></activity>
+        <activity
+            android:name=".common.measure.activity.MeasureReportBaseActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".common.measure.activity.MeasureSearchActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="stateVisible"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

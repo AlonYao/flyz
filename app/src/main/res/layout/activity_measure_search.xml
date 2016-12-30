@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.appublisher.quizbank.common.measure.activity.MeasureSearchActivity">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/measure_search_toolbar"/>
 
 </RelativeLayout>

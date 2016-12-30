@@ -12,5 +12,10 @@ public class MeasureSearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measure_search);
         setToolBar(this);
+        initView();
+    }
+
+    private void initView() {
+
     }
 }
