@@ -35,4 +35,7 @@ public interface MeasureApi extends ApiConstants{
     // 删除错题
     String deleteErrorQuestion = baseUrl + "quizbank/delete_error_question";
 
+    // 搜题
+    String searchQuestion = baseUrl + "quizbank/search_question";
+
 }

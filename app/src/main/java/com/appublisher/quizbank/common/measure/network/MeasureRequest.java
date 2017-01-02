@@ -122,4 +122,19 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
                 params, "delete_error_question", "object");
     }
 
+    /**
+     * 搜题
+     * @param keywords 关键词
+     * @param offset 起始
+     * @param count 位移
+     */
+    public void searchQuestion(String keywords, int offset, int count) {
+        asyncRequest(
+                getFinalUrl(searchQuestion) + "&search=1&keywords=" + keywords
+                        + "&offset=" + offset
+                        + "&count=" + count,
+                SEARCH_QUESTION,
+                "object");
+    }
+
 }
