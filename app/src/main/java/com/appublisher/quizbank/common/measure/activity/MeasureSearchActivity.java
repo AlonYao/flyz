@@ -6,13 +6,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.adapter.MeasureSearchAdapter;
 import com.appublisher.quizbank.common.measure.model.MeasureSearchModel;
+import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
 
-public class MeasureSearchActivity extends BaseActivity implements View.OnClickListener{
+import java.util.List;
+
+public class MeasureSearchActivity extends BaseActivity implements
+        View.OnClickListener, XListView.IXListViewListener{
 
     private EditText mEtSearch;
     private MeasureSearchModel mModel;
+    private XListView mListView;
+    private MeasureSearchAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,13 @@ public class MeasureSearchActivity extends BaseActivity implements View.OnClickL
         }
 
         mEtSearch = (EditText) findViewById(R.id.measure_search_et);
+
+        mListView = (XListView) findViewById(R.id.measure_search_lv);
+        if (mListView != null) {
+            mListView.setXListViewListener(this);
+            mListView.setPullRefreshEnable(false);
+            mListView.setPullLoadEnable(true);
+        }
     }
 
     @Override
@@ -49,5 +64,25 @@ public class MeasureSearchActivity extends BaseActivity implements View.OnClickL
                 mModel.search(text);
                 break;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        // Empty
+    }
+
+    @Override
+    public void onLoadMore() {
+        mModel.loadMore();
+    }
+
+    public void stopXListView() {
+        mListView.stopLoadMore();
+        mListView.stopRefresh();
+    }
+
+    public void showContent(List<MeasureSearchResp.SearchItemBean> list) {
+        mAdapter = new MeasureSearchAdapter(this, list);
+        mListView.setAdapter(mAdapter);
     }
 }
