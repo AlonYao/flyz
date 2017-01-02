@@ -21,31 +21,48 @@
 
     <!-- button -->
     <ImageButton
+        android:id="@+id/measure_search_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:src="@drawable/vip_totop"
         android:background="@null"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
     <!-- 解析 -->
     <LinearLayout
-        android:id="@+id/measure_search_analysis_container"
+        android:id="@+id/measure_search_analysis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/measure_search_right_answer"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/themecolor"
+                android:text="【正确答案】"/>
+            <TextView
+                android:id="@+id/measure_search_right_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/measure_search_analysis_container"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <TextView
-            android:id="@+id/measure_search_right_analysis"
+            android:id="@+id/measure_search_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <TextView
-            android:id="@+id/measure_search_right_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/measure_search_right_source"
+            android:id="@+id/measure_search_source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

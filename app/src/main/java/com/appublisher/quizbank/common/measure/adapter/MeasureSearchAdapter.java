@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class MeasureSearchAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<MeasureSearchResp.SearchItemBean> mList;
+    private boolean mIsShow = true;
 
     public MeasureSearchAdapter(Context context, List<MeasureSearchResp.SearchItemBean> list) {
         mContext = context;
@@ -73,6 +75,14 @@ public class MeasureSearchAdapter extends BaseAdapter {
                     (LinearLayout) convertView.findViewById(R.id.measure_search_question_container);
             viewHolder.mAnalysisContainer =
                     (LinearLayout) convertView.findViewById(R.id.measure_search_analysis_container);
+            viewHolder.mTvNote = (TextView) convertView.findViewById(R.id.measure_search_note);
+            viewHolder.mTvSource = (TextView) convertView.findViewById(R.id.measure_search_source);
+            viewHolder.mTvRightAnswer =
+                    (TextView) convertView.findViewById(R.id.measure_search_right_answer);
+            viewHolder.mBtnSwitch =
+                    (ImageButton) convertView.findViewById(R.id.measure_search_switch);
+            viewHolder.mAnalysis =
+                    (LinearLayout) convertView.findViewById(R.id.measure_search_analysis);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -83,7 +93,7 @@ public class MeasureSearchAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void setContent(int position, ViewHolder viewHolder) {
+    private void setContent(int position, final ViewHolder viewHolder) {
         if (mList == null || position >= mList.size()) return;
         MeasureSearchResp.SearchItemBean itemBean = mList.get(position);
         if (itemBean == null) return;
@@ -93,15 +103,34 @@ public class MeasureSearchAdapter extends BaseAdapter {
 
         // 解析
         showAnalysis(itemBean, viewHolder);
+
+        viewHolder.mBtnSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mIsShow) {
+                    viewHolder.mAnalysis.setVisibility(View.GONE);
+                    mIsShow = false;
+                } else {
+                    viewHolder.mAnalysis.setVisibility(View.VISIBLE);
+                    mIsShow = true;
+                }
+            }
+        });
     }
 
     private void showAnalysis(MeasureSearchResp.SearchItemBean itemBean, ViewHolder viewHolder) {
+        viewHolder.mTvRightAnswer.setText(itemBean.getAnswer());
 
+        addRichTextToContainer(viewHolder.mAnalysisContainer, itemBean.getAnalysis(), true);
+
+        String note = "知识点：" + itemBean.getNote_name();
+        viewHolder.mTvNote.setText(note);
+        String source = "来源：" + itemBean.getSource();
+        viewHolder.mTvSource.setText(source);
     }
 
     private void showQuestion(MeasureSearchResp.SearchItemBean itemBean,
                               LinearLayout questionContainer) {
-        if (itemBean == null) return;
         String question = itemBean.getQuestion();
         String a = itemBean.getOption_a();
         String b = itemBean.getOption_b();
@@ -119,7 +148,12 @@ public class MeasureSearchAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         LinearLayout mQuestionContainer;
+        TextView mTvRightAnswer;
         LinearLayout mAnalysisContainer;
+        TextView mTvNote;
+        TextView mTvSource;
+        ImageButton mBtnSwitch;
+        LinearLayout mAnalysis;
     }
 
     /**
