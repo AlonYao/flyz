@@ -1,11 +1,15 @@
 package com.appublisher.quizbank.common.measure.activity;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
@@ -24,6 +28,10 @@ public class MeasureSearchActivity extends BaseActivity implements
     private EditText mEtSearch;
     private XListView mListView;
     private MeasureSearchAdapter mAdapter;
+    private LinearLayout mNoticeView;
+    private TextView mNoneView;
+    private TextView mTvKeywords;
+    private TextView mTvCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,11 @@ public class MeasureSearchActivity extends BaseActivity implements
             mListView.setPullRefreshEnable(false);
             mListView.setPullLoadEnable(true);
         }
+
+        mNoticeView = (LinearLayout) findViewById(R.id.measure_search_notice);
+        mNoneView = (TextView) findViewById(R.id.measure_search_none);
+        mTvKeywords = (TextView) findViewById(R.id.measure_search_keywords);
+        mTvCount = (TextView) findViewById(R.id.measure_search_count);
     }
 
     @Override
@@ -91,10 +104,40 @@ public class MeasureSearchActivity extends BaseActivity implements
         mListView.setAdapter(mAdapter);
     }
 
+    public void showLoadMore(List<MeasureSearchResp.SearchItemBean> list) {
+        if (mAdapter == null) showContent(list);
+        mAdapter.notifyDataSetChanged();
+    }
+
     public void hideSoftKeyboard() {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (getCurrentFocus() == null) return;
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void showNoMoreToast() {
+        Toast.makeText(this, "暂无更多内容", Toast.LENGTH_SHORT).show();
+    }
+
+    public void showNotice(String keywords, int count) {
+        mNoticeView.setVisibility(View.VISIBLE);
+        mNoneView.setVisibility(View.GONE);
+
+        mTvKeywords.setTextColor(Color.RED);
+        if (keywords != null && keywords.length() > 10) {
+            keywords = keywords.substring(0, 10);
+            keywords = keywords + "…";
+        }
+        keywords = "\"" + keywords + "\"";
+        mTvKeywords.setText(keywords);
+
+        String countString = "行测题目，共有" + String.valueOf(count) + "题";
+        mTvCount.setText(countString);
+    }
+
+    public void showNone() {
+        mNoticeView.setVisibility(View.GONE);
+        mNoneView.setVisibility(View.VISIBLE);
     }
 }

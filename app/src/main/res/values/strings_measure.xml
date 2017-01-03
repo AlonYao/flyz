@@ -58,5 +58,7 @@
 
     <string name="measure_search_material_expand"><u>阅读全部材料</u></string>
     <string name="measure_search_material_packup"><u>收起全部材料</u></string>
+    <string name="measure_search_notice">搜索</string>
+    <string name="measure_search_none">还没有收录这个题，看看其他题目吧~</string>
 
 </resources>
