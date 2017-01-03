@@ -52,12 +52,12 @@ public class StudyRecordModel {
             }
             return;
         }
-
+        String type = "dd";
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mHistoryPapers = historyPapers;
             mHistoryPapersListAdapter = new HistoryPapersListAdapter(
-                    fragment.mActivity, fragment.mHistoryPapers);
+                    fragment.mActivity, fragment.mHistoryPapers, type);
             fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
         } else {
             fragment.mHistoryPapers.addAll(historyPapers);

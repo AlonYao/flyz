@@ -21,10 +21,15 @@ public class HistoryPapersListAdapter extends BaseAdapter {
 
     private Activity mActivity;
     private ArrayList<HistoryPaperM> mHistoryPapers;
+    private final String mType;
+    private final int VIEW_TYPE = 3;
+    private final int TYPE_1 = 0;
+    private final int TYPE_2 = 1;
 
-    public HistoryPapersListAdapter(Activity activity, ArrayList<HistoryPaperM> historyPapers) {
+    public HistoryPapersListAdapter(Activity activity, ArrayList<HistoryPaperM> historyPapers, String type) {
         mActivity = activity;
         mHistoryPapers = historyPapers;
+        mType = type;
     }
 
     @Override
@@ -42,11 +47,29 @@ public class HistoryPapersListAdapter extends BaseAdapter {
         return position;
     }
 
+    //每个convert view都会调用此方法，获得当前所需要的view样式
+    @Override
+    public int getItemViewType(int position) {
+        if ("write".equals(mType)) {
+            return TYPE_1;
+        }else if ("interview".equals(mType)) {
+            return TYPE_2;
+        }
+        return super.getItemViewType(position);
+    }
+
+    //返回样式的数量
+    @Override
+    public int getViewTypeCount () {
+        return 2;
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
+        int type = getItemViewType(position);
 
         if (convertView == null) {
+
             convertView = LayoutInflater.from(mActivity).inflate(
                     R.layout.studyrecord_lv_item, parent, false);
 
@@ -120,6 +143,12 @@ public class HistoryPapersListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
+        ImageView ivLogo;
+        TextView tvName;
+        TextView tvContent;
+        TextView tvDate;
+    }
+    private class ViewHolder2 {
         ImageView ivLogo;
         TextView tvName;
         TextView tvContent;

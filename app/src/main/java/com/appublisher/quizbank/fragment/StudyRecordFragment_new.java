@@ -222,6 +222,7 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
             dealInterview(true);
         }else{
             // 如果是面试页面
+            mModel.dealInterviewHistoryPapersResp(this, response);
             dealInterview(false);
         }
 

@@ -43,6 +43,7 @@ public interface MeasureConstants {
     String COLLECT_QUESTION = "collect_question";
     String COLLECT_ERROR_QUESTIONS = "collect_error_questions";
     String SERVER_CURRENT_TIME = "server_current_time";
+    String SEARCH_QUESTION = "search_question";
 
     /**
      * 缓存

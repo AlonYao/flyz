@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/measure_search_toolbar"/>
 
     <TextView
         android:id="@+id/opencourse_num_notice"
@@ -26,7 +26,6 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/tab_radiogroup"
         android:layout_below="@+id/toolbar"/>
-
 
     <View
         android:layout_width="match_parent"

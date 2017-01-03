@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.common.interview.activity;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -18,10 +17,6 @@ import com.appublisher.quizbank.common.interview.model.InterviewUnPurchasedModel
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.common.interview.viewgroup.MyViewPager;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,14 +37,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private String paper_type;
     private int note_id;
     private int mCurrentPagerId;   // 当前的viewPager的索引
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
     private String mFrom;
     public List<InterviewPaperDetailResp.QuestionsBean> list;
     private int mQuestionbeanId;
+
 
 
     @Override
@@ -73,10 +65,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mRequest.getPaperDetail(paper_id, paper_type, note_id); // 请求数据
 
         showLoading();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
     }
 
     public int setCanBack(int whatView) {
@@ -228,41 +216,4 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void requestEndedWithError(VolleyError error, String apiName) {
         hideLoading();
     }
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("InterviewPaperDetail Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
-
 }
