@@ -34,14 +34,16 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private int unrecord = 0;
     private int recording = 1;
     private int recorded_unsbmit = 2;
-    private InterviewUnPurchasedModel mUnPurchasedModel;
+    public InterviewUnPurchasedModel mUnPurchasedModel;
     private String paper_type;
     private int note_id;
     private int mCurrentPagerId;   // 当前的viewPager的索引
 
     private String mFrom;
     public List<InterviewPaperDetailResp.QuestionsBean> list;
-    private int mQuestionbeanId;
+    private boolean mIsBuyAll = false;
+    private InterviewPaperDetailResp.AllAudioBean mAllAudioBean;
+    private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     private String type;
     private String time;
     private String dataFrom;
@@ -102,12 +104,16 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }
-        }else{
-            MenuItemCompat.setShowAsAction(menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
+
+        // 购买状态
+        if (!mIsBuyAll) {
+            MenuItemCompat.setShowAsAction(
+                    menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
+
         return super.onCreateOptionsMenu(menu);
    }
-
 
     /**
      * 通过fragment中穿件来的id判断具体是录音页面哪个状态:进行分别处理
@@ -134,7 +140,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     mUnPurchasedModel = new InterviewUnPurchasedModel(this);
                 }
                 String openNineUrl = "打开全部的链接";
-                mUnPurchasedModel.showOpenFullDialog(this, openNineUrl);
+                mUnPurchasedModel.showOpenFullDialog();
             }
         }else if("收藏".equals(item.getTitle())){
             // 检验是否收藏
@@ -168,6 +174,20 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         super.onBackPressed();
     }
 
+    public InterviewPaperDetailResp.AllAudioBean getAllAudioBean() {
+        return mAllAudioBean;
+    }
+
+    public InterviewPaperDetailResp.SingleAudioBean getSingleAudioBean() {
+        return mSingleAudioBean;
+    }
+
+    public int getCurQuestionId() {
+        if (list == null || mCurrentPagerId < 0 || mCurrentPagerId >= list.size()) return 0;
+        InterviewPaperDetailResp.QuestionsBean bean = list.get(mCurrentPagerId);
+        if (bean == null) return 0;
+        return bean.getId();
+    }
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
@@ -175,12 +195,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (response == null || apiName == null) return;
 
         if ("paper_detail".equals(apiName)) {
-            //Logger.e(response.toString());
-            InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
-
-            if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
-
-                list = interviewPaperDetailResp.getQuestions();         // 获取问题的数据集合
+            InterviewPaperDetailResp resp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
+            if (resp != null && resp.getResponse_code() == 1) {
+                // 获取问题的数据集合
+                list = resp.getQuestions();
                 if (list == null || list.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 } else {
@@ -189,17 +207,23 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             list,
                             this,
                             mFrom);
-
-                   invalidateOptionsMenu(); // 刷新menu
                     // 给model数据
                     viewPager.setAdapter(mAdaper);
                 }
-            } else if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1001) {
+
+                // 购买信息
+                mAllAudioBean = resp.getAll_audio();
+                if (mAllAudioBean != null) {
+                    mIsBuyAll = mAllAudioBean.is_purchased();
+                }
+
+                mSingleAudioBean = resp.getSingle_audio();
+
+                invalidateOptionsMenu(); // 刷新menu
+            } else if (resp != null && resp.getResponse_code() == 1001) {
                 ToastManager.showToast(this, "没有面试题目");
             }
-        }else if("history_interview_detail".equals(apiName)){             // 处理记录页面的面试页面的数据
-            //Logger.e(response.toString());
-
+        } else if("history_interview_detail".equals(apiName)){             // 处理记录页面的面试页面的数据
             InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
 
             if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
@@ -223,6 +247,17 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         }
     }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        hideLoading();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        hideLoading();
+    }
+
     private void initListener(ViewPager viewPager) {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -241,16 +276,5 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
             }
         });
-    }
-
-
-    @Override
-    public void requestCompleted(JSONArray response, String apiName) {
-        hideLoading();
-    }
-
-    @Override
-    public void requestEndedWithError(VolleyError error, String apiName) {
-        hideLoading();
     }
 }

@@ -10,6 +10,24 @@ public class InterviewPaperDetailResp {
 
     private int response_code;
     private List<QuestionsBean> questions;
+    private SingleAudioBean single_audio;
+    private AllAudioBean all_audio;
+
+    public SingleAudioBean getSingle_audio() {
+        return single_audio;
+    }
+
+    public void setSingle_audio(SingleAudioBean single_audio) {
+        this.single_audio = single_audio;
+    }
+
+    public AllAudioBean getAll_audio() {
+        return all_audio;
+    }
+
+    public void setAll_audio(AllAudioBean all_audio) {
+        this.all_audio = all_audio;
+    }
 
     public int getResponse_code() {
         return response_code;
@@ -25,6 +43,84 @@ public class InterviewPaperDetailResp {
 
     public void setQuestions(List<QuestionsBean> questions) {
         this.questions = questions;
+    }
+
+    public static class SingleAudioBean {
+        private int product_id;
+        private String product_type;
+        private double price;
+        boolean is_purchased;
+
+        public int getProduct_id() {
+            return product_id;
+        }
+
+        public void setProduct_id(int product_id) {
+            this.product_id = product_id;
+        }
+
+        public String getProduct_type() {
+            return product_type;
+        }
+
+        public void setProduct_type(String product_type) {
+            this.product_type = product_type;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public boolean is_purchased() {
+            return is_purchased;
+        }
+
+        public void setIs_purchased(boolean is_purchased) {
+            this.is_purchased = is_purchased;
+        }
+    }
+
+    public static class AllAudioBean {
+        private int product_id;
+        private String product_type;
+        private double price;
+        boolean is_purchased;
+
+        public int getProduct_id() {
+            return product_id;
+        }
+
+        public void setProduct_id(int product_id) {
+            this.product_id = product_id;
+        }
+
+        public String getProduct_type() {
+            return product_type;
+        }
+
+        public void setProduct_type(String product_type) {
+            this.product_type = product_type;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public boolean is_purchased() {
+            return is_purchased;
+        }
+
+        public void setIs_purchased(boolean is_purchased) {
+            this.is_purchased = is_purchased;
+        }
     }
 
     public static class QuestionsBean {
