@@ -10,9 +10,8 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
-import com.appublisher.quizbank.common.interview.activity.InterviewCategoryActivity;
-import com.appublisher.quizbank.common.interview.activity.InterviewGuoKaoActivity;
-import com.appublisher.quizbank.common.interview.activity.InterviewPaperListActivity;
+import com.appublisher.quizbank.adapter.InterviewHistoryPapersListAdapter;
+import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
@@ -30,9 +29,10 @@ import java.util.HashMap;
  */
 public class StudyRecordModel_new {
 
-    private HistoryPapersListAdapter mHistoryPapersListAdapter;
+    public HistoryPapersListAdapter mHistoryPapersListAdapter;
     private final Context mContext;
     private final StudyRecordFragment_new mFragment;
+    public InterviewHistoryPapersListAdapter mInterviewHistoryPapersListAdapter;
 
     public StudyRecordModel_new(Context context, StudyRecordFragment_new fragment) {
         mContext = context;
@@ -65,15 +65,13 @@ public class StudyRecordModel_new {
             }
             return;
         }
-        /**
-         *   在此处通过传进的常量判断进入哪一个adapter
-         * **/
+
         String type = "write";
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mHistoryPapers = historyPapers;
             mHistoryPapersListAdapter = new HistoryPapersListAdapter(
-                    fragment.mActivity, fragment.mHistoryPapers, type);
+                    fragment.mActivity, fragment.mHistoryPapers);
             fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
         } else {
             fragment.mHistoryPapers.addAll(historyPapers);
@@ -136,7 +134,7 @@ public class StudyRecordModel_new {
                 });
     }
     /**
-     *  再创建一个方法:专门用来处理
+     *  处理面试页面的数据和点击事件
      * */
     public void dealInterviewHistoryPapersResp(final StudyRecordFragment_new fragment,
                                                JSONObject response) {
@@ -164,17 +162,17 @@ public class StudyRecordModel_new {
 
         String type = "interview";
         // 拼接数据
-        if (fragment.mOffset == 0) {
+        if (fragment.mInterviewOffset == 0) {
 
-            fragment.mHistoryPapers = mhistoryPapers;
-            mHistoryPapersListAdapter = new HistoryPapersListAdapter(           // 将数据集合封装给adapter
-                    fragment.mActivity, fragment.mHistoryPapers, type);
+            fragment.mInterviewHistoryPapers = mhistoryPapers;
+            mInterviewHistoryPapersListAdapter = new InterviewHistoryPapersListAdapter(
+                    fragment.mActivity ,fragment.mInterviewHistoryPapers);
 
-            fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
+            fragment.mXListView.setAdapter(mInterviewHistoryPapersListAdapter);
         } else {
 
-            fragment.mHistoryPapers.addAll(mhistoryPapers);
-            mHistoryPapersListAdapter.notifyDataSetChanged();
+            fragment.mInterviewHistoryPapers.addAll(mhistoryPapers);
+            mInterviewHistoryPapersListAdapter.notifyDataSetChanged();
         }
 
         fragment.mIvNull.setVisibility(View.GONE);
@@ -190,58 +188,21 @@ public class StudyRecordModel_new {
                                     View view,
                                     int position,
                                     long id) {
-                if (fragment.mHistoryPapers == null
-                        || position - 2 >= fragment.mHistoryPapers.size())
+                if (fragment.mInterviewHistoryPapers == null
+                        || position - 2 >= fragment.mInterviewHistoryPapers.size())
                     return;
 
-                HistoryPaperM mInterviewhistoryPaper = fragment.mHistoryPapers.get(position - 2);
+                HistoryPaperM mInterviewhistoryPaper = fragment.mInterviewHistoryPapers.get(position - 2);
 
                 if (mInterviewhistoryPaper == null) return;
+                String itemType = mInterviewhistoryPaper.getType();
+                String time = mInterviewhistoryPaper.getTime();
+                Intent intent = new Intent(fragment.mActivity, InterviewPaperDetailActivity.class); // 直接进入数据展示界面
+                intent.putExtra("dataFrom", "studyRecordInterview");
+                intent.putExtra("itemType", itemType);
+                intent.putExtra("time", time);
+                fragment.mActivity.startActivity(intent);
 
-                String type = mInterviewhistoryPaper.getType();
-
-                if ("guokao".equals(type)) {
-                    // 跳转至国考精选界面
-                    final Intent intent = new Intent(fragment.mActivity, InterviewGuoKaoActivity.class);
-                    fragment.mActivity.startActivity(intent);
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "List");
-                    UmengManager.onEvent(fragment.getContext(), "Record", map);
-
-                } else if ("teacher".equals(type)) {
-                    // 跳转至名师解析界面
-                    final Intent intent = new Intent(fragment.mActivity, InterviewPaperListActivity.class);
-                    intent.putExtra("from", "teacher");
-                    fragment.mActivity.startActivity(intent);
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Redo", mInterviewhistoryPaper.getPaper_type());
-                    UmengManager.onEvent(fragment.getContext(), "Record", map);
-
-                }else if ("category".equals(type)) {
-                    // 跳转至名师解析界面
-                    final Intent intent = new Intent(fragment.mActivity, InterviewCategoryActivity.class);
-                    fragment.mActivity.startActivity(intent);
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Redo", mInterviewhistoryPaper.getPaper_type());
-                    UmengManager.onEvent(fragment.getContext(), "Record", map);
-
-                }else if ("history".equals(type)) {
-                    // 跳转至名师解析界面
-                    final Intent intent = new Intent(fragment.mActivity, InterviewPaperListActivity.class);
-                    intent.putExtra("from", "history");
-                    fragment.mActivity.startActivity(intent);
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Redo", mInterviewhistoryPaper.getPaper_type());
-                    UmengManager.onEvent(fragment.getContext(), "Record", map);
-                }
             }
         });
     }

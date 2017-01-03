@@ -21,15 +21,10 @@ public class HistoryPapersListAdapter extends BaseAdapter {
 
     private Activity mActivity;
     private ArrayList<HistoryPaperM> mHistoryPapers;
-    private final String mType;
-    private final int VIEW_TYPE = 3;
-    private final int TYPE_1 = 0;
-    private final int TYPE_2 = 1;
 
-    public HistoryPapersListAdapter(Activity activity, ArrayList<HistoryPaperM> historyPapers, String type) {
+    public HistoryPapersListAdapter(Activity activity, ArrayList<HistoryPaperM> historyPapers) {
         mActivity = activity;
         mHistoryPapers = historyPapers;
-        mType = type;
     }
 
     @Override
@@ -47,67 +42,43 @@ public class HistoryPapersListAdapter extends BaseAdapter {
         return position;
     }
 
-    //每个convert view都会调用此方法，获得当前所需要的view样式
-    @Override
-    public int getItemViewType(int position) {
-        if ("write".equals(mType)) {
-            return TYPE_1;
-        }else if ("interview".equals(mType)) {
-            return TYPE_2;
-        }
-        return super.getItemViewType(position);
-    }
-
-    //返回样式的数量
-    @Override
-    public int getViewTypeCount () {
-        return 2;
-    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-        int type = getItemViewType(position);
 
+        WriteViewHolder mWriteViewHolder;
+        // 笔试页面
         if (convertView == null) {
-
-            convertView = LayoutInflater.from(mActivity).inflate(
+            convertView = LayoutInflater.from(mActivity).inflate(          // 笔试页面item
                     R.layout.studyrecord_lv_item, parent, false);
+            mWriteViewHolder = new WriteViewHolder();
+            mWriteViewHolder.ivLogo = (ImageView) convertView.findViewById(R.id.studyrecord_logo);
+            mWriteViewHolder.tvName = (TextView) convertView.findViewById(R.id.studyrecord_name);
+            mWriteViewHolder.tvContent = (TextView) convertView.findViewById(R.id.studyrecord_content);
+            mWriteViewHolder.tvDate = (TextView) convertView.findViewById(R.id.studyrecord_date);
 
-            viewHolder = new ViewHolder();
-            viewHolder.ivLogo =
-                    (ImageView) convertView.findViewById(R.id.studyrecord_logo);
-            viewHolder.tvName = (TextView) convertView.findViewById(R.id.studyrecord_name);
-            viewHolder.tvContent = (TextView) convertView.findViewById(R.id.studyrecord_content);
-            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.studyrecord_date);
-
-            convertView.setTag(viewHolder);
+            convertView.setTag(mWriteViewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            mWriteViewHolder = (WriteViewHolder) convertView.getTag();
         }
-
+        // 给控件赋值
         if (mHistoryPapers != null && mHistoryPapers.size() > position) {
             HistoryPaperM historyPaper = mHistoryPapers.get(position);
-
             if (historyPaper != null) {
                 // Logo
-                setLogo(viewHolder.ivLogo, historyPaper.getPaper_type());
-
+                setLogo(mWriteViewHolder.ivLogo, historyPaper.getPaper_type());
                 // 标题
-                viewHolder.tvName.setText(historyPaper.getName());
-
+                mWriteViewHolder.tvName.setText(historyPaper.getName());
                 // 正确率&完成状态
                 String status = historyPaper.getStatus();
-
                 if ("done".equals(status)) {
-                    viewHolder.tvContent.setText("正确率"
+                    mWriteViewHolder.tvContent.setText("正确率"
                             + Utils.rateToPercent(historyPaper.getAccuracy())
                             + "%");
                 } else {
-                    viewHolder.tvContent.setText("未完成");
+                    mWriteViewHolder.tvContent.setText("未完成");
                 }
-
                 // 时间
-                viewHolder.tvDate.setText(historyPaper.getAction_time());
+                mWriteViewHolder.tvDate.setText(historyPaper.getAction_time());
             }
         }
 
@@ -137,18 +108,12 @@ public class HistoryPapersListAdapter extends BaseAdapter {
             ivLogo.setImageResource(R.drawable.record_gufen);
         } else if ("mock".equals(paperType)) {
             ivLogo.setImageResource(R.drawable.record_mock);
-        } else {
+        }else {
             ivLogo.setImageResource(R.drawable.record_special);
         }
     }
 
-    private class ViewHolder {
-        ImageView ivLogo;
-        TextView tvName;
-        TextView tvContent;
-        TextView tvDate;
-    }
-    private class ViewHolder2 {
+    private class WriteViewHolder {
         ImageView ivLogo;
         TextView tvName;
         TextView tvContent;

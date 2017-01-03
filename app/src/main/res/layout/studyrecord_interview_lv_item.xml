@@ -21,10 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="150dp"
+        android:layout_marginRight="170dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="日期"
+        android:text="类别"
         android:textColor="@color/common_text"
         android:textSize="18sp"
         />
@@ -37,7 +37,6 @@
         android:maxLines="1"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="40dp"
         android:textColor="@color/common_grey_text"
         android:text="年月日"
         android:textSize="14sp" />

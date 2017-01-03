@@ -2,7 +2,9 @@ package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressBarManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.customui.XListView;
@@ -46,22 +49,25 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
     public Activity mActivity;
     public XListView mXListView;
     public ArrayList<HistoryPaperM> mHistoryPapers;
+    public ArrayList<HistoryPaperM> mInterviewHistoryPapers;
     public int mOffset;
     public ImageView mIvNull;
     public boolean mIsRefresh;
 
     private int mCount;
-    private QRequest mQRequest;
+    public QRequest mQRequest;
     private View mView;
 
     private StudyRecordModel_new mModel;            // 新的model
     private RadioButton mWriteButton;
     private RadioButton mInterviewButton;
-    private boolean isWriteView = true;    // true是笔试页面,false是面试页面
+    private boolean isWriteView ;    // true是笔试页面,false是面试页面
     private RadioGroup radioGroup;
     private RelativeLayout mWriteCollectRl;
     private RelativeLayout mWritewrongRl;
     private RelativeLayout mInterviewcollectRl;
+    public int mInterviewOffset;
+
 
 
     @Override
@@ -70,9 +76,12 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
         mActivity = getActivity();
         mIsRefresh = false;
         mOffset = 0;
+        mInterviewOffset = 0;
         mCount = 10;
+        isWriteView = true;
         mQRequest = new QRequest(mActivity, this);
         mHistoryPapers = new ArrayList<>();
+        mInterviewHistoryPapers = new ArrayList<>();
         mModel = new StudyRecordModel_new(mActivity,this);
     }
 
@@ -98,9 +107,11 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
         mXListView.addHeaderView(headView, null, false);
 
         mXListView.setXListViewListener(this);
-        mXListView.setPullLoadEnable(true);
+        mXListView.setPullLoadEnable(true);        // 刷新
+
         setRadioButtonLeftChecked(mWriteButton);
         setRadioButtonRightUnChecked(mInterviewButton);
+
 
         // showLoading
         ProgressBarManager.showProgressBar(mView);
@@ -159,23 +170,45 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
                     isWriteView = true;
                     setRadioButtonLeftChecked(mWriteButton);
                     setRadioButtonRightUnChecked(mInterviewButton);
-                   // mQRequest.getHistoryPapers(mOffset, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
+
+                    SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("isWriteView", isWriteView);
+                    editor.commit();
+                    if (mHistoryPapers == null || mHistoryPapers.size() == 0) {
+                        mQRequest.getHistoryPapers(0, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
+                    } else {
+                        mXListView.setAdapter(mModel.mHistoryPapersListAdapter);
+                    }
+                    dealInterview(true);
                 } else {
                     setRadioButtonLeftUnChecked(mWriteButton);
+                    dealInterview(false);
                 }
             }
         });
         mInterviewButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {    // 面试的button
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {  // 记录页面:面试按钮
                 if (isChecked) {
                     isWriteView = false;
                     setRadioButtonRightChecked(mInterviewButton);
                     setRadioButtonLeftUnChecked(mWriteButton);
 
-              //      mQRequest.getHistoryPapers(mOffset, mCount);           // 需要修改参数
+                    SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("isWriteView", isWriteView);
+                    editor.commit();
+
+                    if (mHistoryPapers == null || mHistoryPapers.size() == 0) {
+                        mQRequest.getStudyRecordInterviewHistoryPapers(0, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
+                    } else {
+                        mXListView.setAdapter(mModel.mInterviewHistoryPapersListAdapter);    // 重新设置adapter
+                    }
+                    dealInterview(false);
                 } else {
                     setRadioButtonRightUnChecked(mInterviewButton);
+                    dealInterview(true);
                 }
             }
         });
@@ -185,11 +218,25 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
     @Override
     public void onResume() {
         super.onResume();
+
         // 获取数据
         if (!isHidden()) {
             refreshData();
-        }
 
+            SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
+            boolean iswriteView = sp.getBoolean("isWriteView", false);
+            if (iswriteView) {   // 如果是笔试  -->换新条件
+
+                Logger.e("11111111");
+
+                mWriteButton.setChecked(true);
+            } else {            // 如果是面试
+
+                Logger.e("2222222222");
+
+                mInterviewButton.setChecked(true);
+            }
+        }
         // Umeng
         MobclickAgent.onPageStart("StudyRecordFragment");
 
@@ -197,9 +244,11 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
         TCAgent.onPageStart(mActivity, "StudyRecordFragment");
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
+        Logger.e("onpause");
         // TalkingData
         TCAgent.onPageEnd(mActivity, "StudyRecordFragment");
     }
@@ -207,8 +256,23 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+
         if (!hidden) {
             refreshData();
+
+            SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
+            boolean iswriteView = sp.getBoolean("isWriteView", false);
+            if (iswriteView) {   // 如果是笔试  -->换新条件
+
+                Logger.e("hiden 11111111");
+
+                mWriteButton.setChecked(true);
+            } else {            // 如果是面试
+
+                Logger.e("hiden 2222222222");
+
+                mInterviewButton.setChecked(true);
+            }
         }
     }
 
@@ -217,15 +281,18 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
     * */
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
-        if ("history_papers".equals(apiName)) {
-            mModel.dealHistoryPapersResp(this, response);
-            dealInterview(true);
-        }else{
-            // 如果是面试页面
-            mModel.dealInterviewHistoryPapersResp(this, response);
-            dealInterview(false);
-        }
+        if (response == null || apiName == null) return;
 
+        if ("history_papers".equals(apiName)) {
+
+            mModel.dealHistoryPapersResp(this, response);
+         //   dealInterview(true);
+        }else if("user_interview_record".equals(apiName)){
+
+            // 如果是面试页面:处理数据
+            mModel.dealInterviewHistoryPapersResp(this, response);
+         //   dealInterview(false);
+        }
         setLoadFinish();
     }
     /*
@@ -237,6 +304,7 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
            mWriteCollectRl.setVisibility(View.VISIBLE);
            mWritewrongRl.setVisibility(View.VISIBLE);
            mInterviewcollectRl.setVisibility(View.GONE);
+
        }else{
            mWriteCollectRl.setVisibility(View.GONE);
            mWritewrongRl.setVisibility(View.GONE);
@@ -256,16 +324,27 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
 
     @Override
     public void onRefresh() {
-        mOffset = 0;
-        mHistoryPapers = new ArrayList<>();
-        mQRequest.getHistoryPapers(mOffset, mCount);
+        if(isWriteView){
+            mOffset = 0;
+            mHistoryPapers = new ArrayList<>();
+            mQRequest.getHistoryPapers(mOffset, mCount);
+        }else{
+            mInterviewOffset = 0;
+            mInterviewHistoryPapers = new ArrayList<>();
+            mQRequest.getStudyRecordInterviewHistoryPapers(mInterviewOffset, mCount);
+        }
         mIsRefresh = true;
     }
 
     @Override
     public void onLoadMore() {
-        mOffset = mOffset + mCount;
-        mQRequest.getHistoryPapers(mOffset, mCount);
+        if(isWriteView){
+            mOffset = mOffset + mCount;
+            mQRequest.getHistoryPapers(mOffset, mCount);
+        }else{
+            mInterviewOffset = mInterviewOffset + mCount;
+            mQRequest.getStudyRecordInterviewHistoryPapers(mInterviewOffset, mCount);
+        }
         mIsRefresh = false;
     }
 
@@ -290,6 +369,7 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
         mXListView.stopLoadMore();
         mXListView.setRefreshTime(
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
     }
 
     public void setRadioGroupBg(RadioGroup radioGroup) {
@@ -383,4 +463,5 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
         gd.setStroke(strokeWidth, strokeColor);
         radioButton.setBackgroundDrawable(gd);
     }
+
 }

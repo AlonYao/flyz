@@ -179,15 +179,11 @@ public class QRequest extends Request implements QApiConstants {
     }
     /**
      * 获取学习记录的面试列表
-     *
-     * @param offset 开始位置(从1开始)
-     * @param count  数量
      */
-//    public void getHistoryPapers(int offset, int count) {
-//        asyncRequest(getFinalUrl(getHistoryPapers) + "&offset=" + offset
-//                + "&count=" + count, "history_papers", "object");
-//    }
-
+    public void getStudyRecordInterviewHistoryPapers(int offset, int count){
+        asyncRequest(getFinalUrl(getStudyRecordInterview) + "&offset=" + offset
+                + "&count=" + count, "user_interview_record", "object");
+    }
     /**
      * 获取能力评估
      */
