@@ -163,7 +163,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
 
-       mPosition = getArguments().getInt(ARGS_POSITION);          // 问题的索引
+        mPosition = getArguments().getInt(ARGS_POSITION);          // 问题的索引
 
 
         user_audioUrl = mQuestionbean.getUser_audio();    // 录音提交后返回到地址
@@ -391,9 +391,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                         UmengManager.onEvent(mActivity, "InterviewProblem", map);
                     }else{                      // 未答题
                         // 弹窗处理:三个item
-                        InterviewUnPurchasedModel mUnPurchasedModel = new InterviewUnPurchasedModel(mActivity);
-                        String payUrl = "从集合中获取到的支付链接";
-                        mUnPurchasedModel.showNoAnswerDialog(mActivity,payUrl);
+                        mActivity.mUnPurchasedModel.showNoAnswerDialog();
                     }
 
                 }
