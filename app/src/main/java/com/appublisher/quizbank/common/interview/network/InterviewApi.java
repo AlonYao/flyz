@@ -22,4 +22,7 @@ public interface InterviewApi extends ApiConstants {
 
     // 提交录音
     public String submitRecord = baseUrl + "quizbank/submit_record";
+
+    // 收藏、取消收藏题目
+    String collectQuestion = baseUrl + "quizbank/update_collected_status";
 }

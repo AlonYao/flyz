@@ -77,4 +77,14 @@ public class InterviewRequest extends Request implements InterviewApi {
 
         postRequest(getFinalUrl(submitRecord), params, "submit_record", "object");
     }
+
+    /**
+     * 收藏&取消收藏题目
+     *
+     * @param params 参数
+     */
+    public void collectQuestion(Map<String, String> params) {
+        postRequest(getFinalUrl(collectQuestion), params, "update_collected_status", "object");   // 第三个是apiName
+
+    }
 }

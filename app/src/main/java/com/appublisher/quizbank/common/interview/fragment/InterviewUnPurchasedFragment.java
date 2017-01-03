@@ -83,6 +83,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private static final String ARGS_QUESTIONBEAN = "questionbean";
     private static final String ARGS_POSITION = "position";
     private static final String ARGS_LISTLENGTH = "listLength";
+    private static final String QUESTIONTYPE = "questiontype";
     private InterviewPaperDetailResp.QuestionsBean mQuestionbean;
     private int mPosition;
     private int mListLength;
@@ -134,27 +135,17 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private String SUBMIT = "submit";              //可提交
     private String HADSUBMIT = "hadSubmit";      // 已提交
     private String status;
-    private int hadsbmitTime;
     private int user_audio_durationTime;
     private boolean is_collected;
+    private String questionType;
 
-
-//    private enum recordStatus {   //枚举记录录音的状态
-//
-//        RECORDABLE,
-//
-//        CONFIRMABLE,
-//
-//        SUBMIT
-//        //
-//
-//    }
-
-    public static Fragment newInstance(String questionbean, int position, int listLength, InterviewPaperDetailActivity mctivity) {
+    public static Fragment newInstance(String questionbean, int position, int listLength, InterviewPaperDetailActivity mctivity,String questionType) {
         Bundle args = new Bundle();
         args.putString(ARGS_QUESTIONBEAN, questionbean);
         args.putInt(ARGS_POSITION, position);
         args.putInt(ARGS_LISTLENGTH, listLength);
+        args.putString(QUESTIONTYPE, questionType);    // 问题的类型
+
         InterviewUnPurchasedFragment fragment = new InterviewUnPurchasedFragment();
         fragment.setArguments(args);
         return fragment;
@@ -165,14 +156,15 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         super.onCreate(savedInstanceState);
 
         mActivity = (InterviewPaperDetailActivity) getActivity();
-//        mActivity.invalidateOptionsMenu(); // 刷新menu
 
         mQuestionbean = GsonManager.getModel(
                 getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
+        questionType = getArguments().getString(QUESTIONTYPE);  // 问题的类型
+
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
 
        mPosition = getArguments().getInt(ARGS_POSITION);          // 问题的索引
-     //   mPosition = mQuestionbean.getId();
+
 
         user_audioUrl = mQuestionbean.getUser_audio();    // 录音提交后返回到地址
         user_audio_durationTime = mQuestionbean.getUser_audio_duration();    // 用户的录音时长
@@ -190,11 +182,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         isStop = false;
         mActivity.setCanBack(0);            // 默认设置返回键可以点击
 
-      //  mActivity.invalidateOptionsMenu(); // 刷新menu
-
         // 未付费页面的容器
         mUnPurchasedView = inflater.inflate(R.layout.interview_question_item_recordsound_notpayfor, container, false);
-        //   status = recordStatus.RECORDABLE;
 
         initView();
 
@@ -246,31 +235,18 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     }
 
     private void checkedIsAnswer() {
-
         // 根据解析时长来显示有无答案和解析
         // 回答的问题直接展开
         if(user_audioUrl !=null &&  user_audioUrl.length() > 0){
-
-            mActivity.setIsAnswer(true);    // 已经答题
-            is_collected = true;
-            // 检查题目是否收藏
-            if (is_collected){
-               // toolbar显示收藏
-                mActivity.setIsCollect(true);
-            }else{
-                // toolbar显示不收藏
-                mActivity.setIsCollect(false);
-            }
 
             mUnRecordView.setVisibility(View.GONE);
             mRecordedView.setVisibility(View.VISIBLE);
             mTvtimeHadSumbPlay .setText(user_audio_durationTime + "\"");
             status = HADSUBMIT;
-         //  mUnPurchasedModel.changeToolbarMenu(mActivity,true);
 
         }else{
             status = RECORDABLE;
-            mActivity.setIsAnswer(false);        // 没有答题
+
              // 如果未答题:显示未录音页面
             mUnRecordView.setVisibility(View.VISIBLE);
             analysisView.setVisibility(View.GONE);       //如果未答题:解析行折叠
@@ -292,8 +268,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
         mScrollview = (ScrollView) mUnPurchasedView.findViewById(R.id.scrollView);   //scrollview整体
         mBottomContainer = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_popupwindow_recordsound_container);   //底部录音整体容器
-
-
 
         merterialView = mUnPurchasedView.findViewById(R.id.meterial_rl);       // 材料行:逻辑显示与否根据数据集合判断
 
@@ -563,7 +537,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 // toolbar改变
                 // 显示dailog
                 mediaRecorderManager.stop();  // 关闭播放器和录音器
-                mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionbean,FileManager.getVideoDuration(userAnswerFilePath));
+                mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionbean,FileManager.getVideoDuration(userAnswerFilePath),questionType);
 
 
             } else if (id == R.id.interview_hadanswer_listen_ll) {           // 已提交页面:播放按钮
