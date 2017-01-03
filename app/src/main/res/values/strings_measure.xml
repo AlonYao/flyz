@@ -56,4 +56,9 @@
     <string name="mock_report_linechart_score">历史成绩</string>
     <string name="mock_report_linechart_avg">历史模考平均分</string>
 
+    <string name="measure_search_material_expand"><u>阅读全部材料</u></string>
+    <string name="measure_search_material_packup"><u>收起全部材料</u></string>
+    <string name="measure_search_notice">搜索</string>
+    <string name="measure_search_none">还没有收录这个题，看看其他题目吧~</string>
+
 </resources>

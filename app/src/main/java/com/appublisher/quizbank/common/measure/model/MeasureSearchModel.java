@@ -27,6 +27,7 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     private MeasureRequest mRequest;
     private String mCurKeywords;
     private int mOffset;
+    private List<MeasureSearchResp.SearchItemBean> mList;
 
     public MeasureSearchModel(Context context) {
         mContext = context;
@@ -48,9 +49,37 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     }
 
     private void dealSearchQuestionResp(JSONObject response) {
+        if (!(mContext instanceof MeasureSearchActivity)) return;
+
         MeasureSearchResp resp = GsonManager.getModel(response, MeasureSearchResp.class);
-        if (resp == null || resp.getResponse_code() != 1) return;
-        showContent(resp.getList());
+        if (resp == null || resp.getResponse_code() != 1) {
+            resetOffset();
+            return;
+        }
+
+        if (mOffset == 0) {
+            if (resp.getList() == null || resp.getList().size() == 0) {
+                ((MeasureSearchActivity) mContext).showNone();
+            } else {
+                ((MeasureSearchActivity) mContext).showNotice(mCurKeywords, resp.getTotal());
+            }
+            mList = resp.getList();
+            showContent(mList);
+        } else {
+            if (resp.getList() == null || resp.getList().size() == 0) {
+                ((MeasureSearchActivity) mContext).showNoMoreToast();
+                resetOffset();
+            } else {
+                mList.addAll(resp.getList());
+                showLoadMore(mList);
+            }
+        }
+
+    }
+
+    private void showLoadMore(List<MeasureSearchResp.SearchItemBean> list) {
+        if (!(mContext instanceof MeasureSearchActivity)) return;
+        ((MeasureSearchActivity) mContext).showLoadMore(list);
     }
 
     private void showContent(List<MeasureSearchResp.SearchItemBean> list) {
@@ -61,11 +90,13 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
         hideLoading();
+        resetOffset();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         hideLoading();
+        resetOffset();
     }
 
     private void hideLoading() {
@@ -78,5 +109,17 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     public void loadMore() {
         mOffset = mOffset + COUNT;
         mRequest.searchQuestion(mCurKeywords, mOffset, COUNT);
+    }
+
+    public String getCurKeywords() {
+        return mCurKeywords;
+    }
+
+    private void resetOffset() {
+        if (mOffset <= 0) {
+            mOffset = 0;
+        } else {
+            mOffset = mOffset - COUNT;
+        }
     }
 }
