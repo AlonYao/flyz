@@ -1,7 +1,9 @@
 package com.appublisher.quizbank.common.measure.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -17,8 +19,9 @@ import java.util.List;
 public class MeasureSearchActivity extends BaseActivity implements
         View.OnClickListener, XListView.IXListViewListener{
 
+    public MeasureSearchModel mModel;
+
     private EditText mEtSearch;
-    private MeasureSearchModel mModel;
     private XListView mListView;
     private MeasureSearchAdapter mAdapter;
 
@@ -62,6 +65,8 @@ public class MeasureSearchActivity extends BaseActivity implements
 
                 showLoading();
                 mModel.search(text);
+
+                hideSoftKeyboard();
                 break;
         }
     }
@@ -84,5 +89,12 @@ public class MeasureSearchActivity extends BaseActivity implements
     public void showContent(List<MeasureSearchResp.SearchItemBean> list) {
         mAdapter = new MeasureSearchAdapter(this, list);
         mListView.setAdapter(mAdapter);
+    }
+
+    public void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() == null) return;
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 }

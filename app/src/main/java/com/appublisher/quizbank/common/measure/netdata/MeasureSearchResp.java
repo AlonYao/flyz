@@ -69,6 +69,19 @@ public class MeasureSearchResp {
         private String question_notes;
         private String type;
         private List<Integer> note_ids;
+        private List<SearchItemBean> questions;
+
+        public boolean is_collected() {
+            return is_collected;
+        }
+
+        public List<SearchItemBean> getQuestions() {
+            return questions;
+        }
+
+        public void setQuestions(List<SearchItemBean> questions) {
+            this.questions = questions;
+        }
 
         public int getId() {
             return id;

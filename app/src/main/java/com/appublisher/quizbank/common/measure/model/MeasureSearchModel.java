@@ -79,4 +79,8 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
         mOffset = mOffset + COUNT;
         mRequest.searchQuestion(mCurKeywords, mOffset, COUNT);
     }
+
+    public String getCurKeywords() {
+        return mCurKeywords;
+    }
 }

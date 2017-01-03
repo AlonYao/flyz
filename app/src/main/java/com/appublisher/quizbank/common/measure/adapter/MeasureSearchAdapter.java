@@ -3,7 +3,12 @@ package com.appublisher.quizbank.common.measure.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +25,7 @@ import com.appublisher.lib_basic.ImageManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.activity.MeasureSearchActivity;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -41,7 +47,7 @@ public class MeasureSearchAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<MeasureSearchResp.SearchItemBean> mList;
-    private boolean mIsShow = true;
+    private boolean mIsAnalysisShow = false;
 
     public MeasureSearchAdapter(Context context, List<MeasureSearchResp.SearchItemBean> list) {
         mContext = context;
@@ -104,24 +110,34 @@ public class MeasureSearchAdapter extends BaseAdapter {
         // 解析
         showAnalysis(itemBean, viewHolder);
 
+        // 开关
         viewHolder.mBtnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mIsShow) {
+                if (mIsAnalysisShow) {
                     viewHolder.mAnalysis.setVisibility(View.GONE);
-                    mIsShow = false;
+                    mIsAnalysisShow = false;
+                    viewHolder.mBtnSwitch.setImageResource(R.drawable.measure_search_expand);
                 } else {
                     viewHolder.mAnalysis.setVisibility(View.VISIBLE);
-                    mIsShow = true;
+                    mIsAnalysisShow = true;
+                    viewHolder.mBtnSwitch.setImageResource(R.drawable.measure_search_packup);
                 }
             }
         });
     }
 
+    /**
+     * 显示解析部分
+     * @param itemBean 数据
+     * @param viewHolder ViewHolder
+     */
     private void showAnalysis(MeasureSearchResp.SearchItemBean itemBean, ViewHolder viewHolder) {
         viewHolder.mTvRightAnswer.setText(itemBean.getAnswer());
 
-        addRichTextToContainer(viewHolder.mAnalysisContainer, itemBean.getAnalysis(), true);
+        viewHolder.mAnalysisContainer.removeAllViews();
+        String text = "【解析】" + itemBean.getAnalysis();
+        addRichTextToContainer(viewHolder.mAnalysisContainer, text, true);
 
         String note = "知识点：" + itemBean.getNote_name();
         viewHolder.mTvNote.setText(note);
@@ -129,6 +145,11 @@ public class MeasureSearchAdapter extends BaseAdapter {
         viewHolder.mTvSource.setText(source);
     }
 
+    /**
+     * 显示题目部分
+     * @param itemBean data
+     * @param questionContainer view
+     */
     private void showQuestion(MeasureSearchResp.SearchItemBean itemBean,
                               LinearLayout questionContainer) {
         String question = itemBean.getQuestion();
@@ -138,22 +159,61 @@ public class MeasureSearchAdapter extends BaseAdapter {
         String d = itemBean.getOption_d();
 
         String text = question + "\n\n"
-                + "A." + a + "\n\n"
-                + "B." + b + "\n\n"
-                + "C." + c + "\n\n"
+                + "A." + a + "\n"
+                + "B." + b + "\n"
+                + "C." + c + "\n"
                 + "D." + d;
 
+        questionContainer.removeAllViews();
         addRichTextToContainer(questionContainer, text, true);
     }
 
-    private static class ViewHolder {
-        LinearLayout mQuestionContainer;
-        TextView mTvRightAnswer;
-        LinearLayout mAnalysisContainer;
-        TextView mTvNote;
-        TextView mTvSource;
-        ImageButton mBtnSwitch;
-        LinearLayout mAnalysis;
+    /**
+     * 获取关键词
+     * @return String
+     */
+    private String getKeywords() {
+        if (mContext instanceof MeasureSearchActivity) {
+            return ((MeasureSearchActivity) mContext).mModel.getCurKeywords();
+        }
+        return null;
+    }
+
+    /**
+     * 格式化
+     * @param text 源数据
+     * @param textView TextView
+     */
+    private void formatText(String text, TextView textView) {
+        if (text == null) return;
+        String keywords = getKeywords();
+        if (keywords != null) {
+            SpannableString ss = new SpannableString(text);
+            int start = text.indexOf(keywords, 0);
+            while (start != -1) {
+                ss.setSpan(
+                        new ForegroundColorSpan(Color.RED),
+                        start,
+                        start + keywords.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                start = start + keywords.length();
+                start = text.indexOf(keywords, start);
+            }
+
+            // 预留字段特殊处理：【解析】
+            if (text.contains("【解析】")) {
+                start = text.indexOf("【解析】", 0);
+                ss.setSpan(
+                    new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.themecolor)),
+                    start,
+                    4,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            textView.setText(ss);
+        } else {
+            textView.setText(text);
+        }
     }
 
     /**
@@ -177,7 +237,7 @@ public class MeasureSearchAdapter extends BaseAdapter {
         // 用 Holder 模式更新列表数据
         FlowLayout flowLayout = new FlowLayout(mContext);
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(
-                AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.WRAP_CONTENT,
                 AbsListView.LayoutParams.WRAP_CONTENT);
         flowLayout.setLayoutParams(params);
         flowLayout.setGravity(Gravity.CENTER_VERTICAL);
@@ -196,7 +256,10 @@ public class MeasureSearchAdapter extends BaseAdapter {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setTextColor(mContext.getResources().getColor(R.color.common_text));
                 textView.setLineSpacing(0, 1.4f);
-                textView.setText(segment.text);
+
+                // 标记关键词
+                formatText(segment.text.toString(), textView);
+
                 flowLayout.addView(textView);
 
                 // text长按复制
@@ -268,4 +331,15 @@ public class MeasureSearchAdapter extends BaseAdapter {
 
         container.addView(flowLayout);
     }
+
+    private static class ViewHolder {
+        LinearLayout mQuestionContainer;
+        TextView mTvRightAnswer;
+        LinearLayout mAnalysisContainer;
+        TextView mTvNote;
+        TextView mTvSource;
+        ImageButton mBtnSwitch;
+        LinearLayout mAnalysis;
+    }
+
 }
