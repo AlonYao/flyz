@@ -10,6 +10,9 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
+import com.appublisher.quizbank.common.interview.activity.InterviewCategoryActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewGuoKaoActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewPaperListActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
@@ -65,12 +68,12 @@ public class StudyRecordModel_new {
         /**
          *   在此处通过传进的常量判断进入哪一个adapter
          * **/
-
+        String type = "write";
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mHistoryPapers = historyPapers;
             mHistoryPapersListAdapter = new HistoryPapersListAdapter(
-                    fragment.mActivity, fragment.mHistoryPapers);
+                    fragment.mActivity, fragment.mHistoryPapers, type);
             fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
         } else {
             fragment.mHistoryPapers.addAll(historyPapers);
@@ -132,7 +135,116 @@ public class StudyRecordModel_new {
                     }
                 });
     }
+    /**
+     *  再创建一个方法:专门用来处理
+     * */
+    public void dealInterviewHistoryPapersResp(final StudyRecordFragment_new fragment,
+                                               JSONObject response) {
+        if (response == null) {
+            if (fragment.mIsRefresh) {
+                showNullImg(fragment);
+            }
+            return;
+        }
 
+        HistoryPapersResp historyPapersResp =
+                GsonManager.getModel(response.toString(), HistoryPapersResp.class);  // 将数据封装到了一个bean中
+//        InterviewHistoryPapersResp mInterviewHistoryPapersResp =
+//                GsonManager.getModel(response.toString(), InterviewHistoryPapersResp.class);
+
+        if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) return;
+
+        final ArrayList<HistoryPaperM> mhistoryPapers = historyPapersResp.getList();
+        if (mhistoryPapers == null || mhistoryPapers.size() == 0) {
+            if (fragment.mIsRefresh) {
+                showNullImg(fragment);
+            }
+            return;
+        }
+
+        String type = "interview";
+        // 拼接数据
+        if (fragment.mOffset == 0) {
+
+            fragment.mHistoryPapers = mhistoryPapers;
+            mHistoryPapersListAdapter = new HistoryPapersListAdapter(           // 将数据集合封装给adapter
+                    fragment.mActivity, fragment.mHistoryPapers, type);
+
+            fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
+        } else {
+
+            fragment.mHistoryPapers.addAll(mhistoryPapers);
+            mHistoryPapersListAdapter.notifyDataSetChanged();
+        }
+
+        fragment.mIvNull.setVisibility(View.GONE);
+        fragment.mXListView.setVisibility(View.VISIBLE);
+
+
+        /**
+         *    条目的点击事件
+         */
+        fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent,
+                                    View view,
+                                    int position,
+                                    long id) {
+                if (fragment.mHistoryPapers == null
+                        || position - 2 >= fragment.mHistoryPapers.size())
+                    return;
+
+                HistoryPaperM mInterviewhistoryPaper = fragment.mHistoryPapers.get(position - 2);
+
+                if (mInterviewhistoryPaper == null) return;
+
+                String type = mInterviewhistoryPaper.getType();
+
+                if ("guokao".equals(type)) {
+                    // 跳转至国考精选界面
+                    final Intent intent = new Intent(fragment.mActivity, InterviewGuoKaoActivity.class);
+                    fragment.mActivity.startActivity(intent);
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "List");
+                    UmengManager.onEvent(fragment.getContext(), "Record", map);
+
+                } else if ("teacher".equals(type)) {
+                    // 跳转至名师解析界面
+                    final Intent intent = new Intent(fragment.mActivity, InterviewPaperListActivity.class);
+                    intent.putExtra("from", "teacher");
+                    fragment.mActivity.startActivity(intent);
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Redo", mInterviewhistoryPaper.getPaper_type());
+                    UmengManager.onEvent(fragment.getContext(), "Record", map);
+
+                }else if ("category".equals(type)) {
+                    // 跳转至名师解析界面
+                    final Intent intent = new Intent(fragment.mActivity, InterviewCategoryActivity.class);
+                    fragment.mActivity.startActivity(intent);
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Redo", mInterviewhistoryPaper.getPaper_type());
+                    UmengManager.onEvent(fragment.getContext(), "Record", map);
+
+                }else if ("history".equals(type)) {
+                    // 跳转至名师解析界面
+                    final Intent intent = new Intent(fragment.mActivity, InterviewPaperListActivity.class);
+                    intent.putExtra("from", "history");
+                    fragment.mActivity.startActivity(intent);
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Redo", mInterviewhistoryPaper.getPaper_type());
+                    UmengManager.onEvent(fragment.getContext(), "Record", map);
+                }
+            }
+        });
+    }
     /**
      * 显示空白图片
      *

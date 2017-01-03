@@ -7,9 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
-import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -23,7 +21,6 @@ import com.appublisher.quizbank.common.interview.viewgroup.MyViewPager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback {
@@ -32,7 +29,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public InterviewRequest mRequest;
     public MyViewPager viewPager;
     public InterviewDetailAdapter mAdaper;
-    //   public boolean isCanBack;
     private int whatView;
     private int unrecord = 0;
     private int recording = 1;
@@ -40,9 +36,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private InterviewUnPurchasedModel mUnPurchasedModel;
     private String paper_type;
     private int note_id;
-    private boolean isCollect;   // 是否收藏
-    private boolean isAnswer;    // 是否答题
     private int mCurrentPagerId;   // 当前的viewPager的索引
+
+    private String mFrom;
+    public List<InterviewPaperDetailResp.QuestionsBean> list;
+    private int mQuestionbeanId;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,63 +51,50 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         setToolBar(this);
         setTitle("");
-
+        mFrom = getIntent().getStringExtra("from");          // 来源:问题的类型
         paper_id = getIntent().getIntExtra("paper_id", 0);
         paper_type = getIntent().getStringExtra("paper_type");
         note_id = getIntent().getIntExtra("note_id", 0);
 
         viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
         viewPager.setScroll(true);
+        initListener(viewPager);
+        mUnPurchasedModel = new InterviewUnPurchasedModel(this);
 
         mRequest = new InterviewRequest(this, this);
+        mRequest.getPaperDetail(paper_id, paper_type, note_id); // 请求数据
 
-        mRequest.getPaperDetail(paper_id, paper_type, note_id);
         showLoading();
     }
-
-
 
     public int setCanBack(int whatView) {
         this.whatView = whatView;
         return whatView;
     }
 
-    public boolean setIsAnswer(boolean isanswer) {
-        Logger.e("aaaaaaaa");
-        isAnswer = isanswer;
-        return isAnswer;
-    }
-
     public void getData() {
         mRequest.getPaperDetail(paper_id, paper_type, note_id);
-
     }
-
-    // item 是否为收藏状态
-    public boolean setIsCollect(boolean iscollect) {
-        isCollect = iscollect;
-        return isCollect;
-    }
-
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {      // 动态修改menu
-        if (isAnswer) {
-            if (isCollect) {
+   public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        if (list == null) return super.onCreateOptionsMenu(menu);
+
+        if(mUnPurchasedModel.getIsAnswer( mCurrentPagerId, this)){ // 判断是否回答 -->需要放到model中,因为涉及到修改   在此处应该讲bean 传给model
+            if(mUnPurchasedModel.getIsCollected( mCurrentPagerId, this)){
                 MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            } else {
-                Logger.e("ccccccccc");
+            }else{
                 MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }
-        } else {
-            Logger.e("bbbbbbbb");
+        }else{
             MenuItemCompat.setShowAsAction(menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
+        return super.onCreateOptionsMenu(menu);
+   }
 
-        return super.onPrepareOptionsMenu(menu);
-    }
 
     /**
      * 通过fragment中穿件来的id判断具体是录音页面哪个状态:进行分别处理
@@ -138,27 +125,16 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         }else if("收藏".equals(item.getTitle())){
             // 检验是否收藏
-            if (mUnPurchasedModel.isCollected(mCurrentPagerId)) {
+            if (mUnPurchasedModel.getIsCollected(mCurrentPagerId, this)) {   // 判断当前viewpager的小题是否收藏
                 // 如果是已收藏状态，取消收藏
-                mUnPurchasedModel.setCollected(mCurrentPagerId, false);
+                mUnPurchasedModel.setCollected(mCurrentPagerId, false,this);
                 ToastManager.showToast(this, "取消收藏");
-
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "Cancel");
-                UmengManager.onEvent(this, "ReviewDetail", map);
 
             } else {
                 // 如果是未收藏状态，收藏
-                mUnPurchasedModel.setCollected(mCurrentPagerId, true);
+                mUnPurchasedModel.setCollected(mCurrentPagerId, true, this);
                 ToastManager.showToast(this, "收藏成功");
-
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "Collect");
-                UmengManager.onEvent(this, "ReviewDetail", map);
             }
-
       }
         return super.onOptionsItemSelected(item);
     }
@@ -184,21 +160,24 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void requestCompleted(JSONObject response, String apiName) {
         hideLoading();
         if (response == null || apiName == null) return;
-
         if ("paper_detail".equals(apiName)) {
-            InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class);
+            InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
+
             if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
-                List<InterviewPaperDetailResp.QuestionsBean> list = interviewPaperDetailResp.getQuestions();
+
+                // 获取问题的数据集合
+                list = interviewPaperDetailResp.getQuestions();
+
                 if (list == null || list.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 } else {
-                    mAdaper = new InterviewDetailAdapter(
+                    mAdaper = new InterviewDetailAdapter(               // 将数据传给adapter
                             getSupportFragmentManager(),
                             list,
-                            this);
+                            this,
+                            mFrom);
 
-                    invalidateOptionsMenu(); // 刷新menu
-                    initListener(viewPager);
+                   invalidateOptionsMenu(); // 刷新menu
                     // 给model数据
                     viewPager.setAdapter(mAdaper);
                 }

@@ -86,6 +86,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private static final String ARGS_QUESTIONBEAN = "questionbean";
     private static final String ARGS_POSITION = "position";
     private static final String ARGS_LISTLENGTH = "listLength";
+    private static final String QUESTIONTYPE = "questiontype";
     private InterviewPaperDetailResp.QuestionsBean mQuestionsBean;
     private int mPosition;
     private int mListLength;
@@ -142,13 +143,15 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private int question_audio_durationTime;
     private String mAnalysis_audioUrl;
     private int analysis_audio_durationTime;
+    private String questionType;
 
 
-    public static InterviewPurchasedFragment newInstance(String questionbean, int position,int listLength) {
+    public static InterviewPurchasedFragment newInstance(String questionbean, int position,int listLength,String questionType) {
         Bundle args = new Bundle();
         args.putString(ARGS_QUESTIONBEAN, questionbean);
         args.putInt(ARGS_POSITION, position);
         args.putInt(ARGS_LISTLENGTH, listLength);
+        args.putString(QUESTIONTYPE, questionType);    // 问题的类型
         InterviewPurchasedFragment fragment = new InterviewPurchasedFragment();
         fragment.setArguments(args);
         return fragment;
@@ -161,6 +164,9 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         status = RECORDABLE;
         mQuestionsBean = GsonManager.getModel(
                 getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
+        // 问题的类型
+        questionType = getArguments().getString(QUESTIONTYPE);
+
         mUnPurchasedModel = new InterviewUnPurchasedModel(mActivity);
         mPosition = getArguments().getInt(ARGS_POSITION);
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
@@ -681,7 +687,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 // toolbar改变
                 // 显示dailog
                 mediaRecorderManager.stop();  // 关闭播放器和录音器
-                mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionsBean, FileManager.getVideoDuration(userAnswerFilePath));
+               mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionsBean, FileManager.getVideoDuration(userAnswerFilePath),questionType);
 
             } else if (id == R.id.interview_hadanswer_listen_ll) {           // 已提交页面:播放按钮
                 // 需要从网络获取

@@ -35,4 +35,16 @@ public class HistoryPaperM {
     public String getAction_time() {
         return action_time;
     }
+
+    // 第二种item类型:放在同一个bean中
+    String type;
+    String time;
+
+    public String getType() {
+        return type;
+    }
+
+    public String getTime() {
+        return time;
+    }
 }
