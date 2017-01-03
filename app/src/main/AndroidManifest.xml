@@ -311,12 +311,16 @@
         <activity
             android:name=".common.measure.activity.MeasureReportBaseActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".common.measure.activity.MeasureSearchActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="stateVisible"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".activity.RecordCollectActivity"
+            android:label="@string/title_activity_record_collect"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

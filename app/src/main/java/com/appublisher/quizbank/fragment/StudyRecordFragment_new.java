@@ -26,6 +26,7 @@ import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
+import com.appublisher.quizbank.activity.RecordCollectActivity;
 import com.appublisher.quizbank.model.business.StudyRecordModel_new;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.QRequest;
@@ -153,14 +154,10 @@ public class StudyRecordFragment_new extends Fragment implements RequestCallback
         mInterviewcollectRl.setOnClickListener(new View.OnClickListener() {    // 面试页面:收藏
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(getActivity(), CommonFragmentActivity.class);
-                intent.putExtra("from", "collect");
+                final Intent intent = new Intent(getActivity(), RecordCollectActivity.class);
+              //  intent.putExtra("from", "collect");
                 startActivity(intent);
 
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "Collect");
-                UmengManager.onEvent(getContext(), "Record", map);
             }
         });
         mWriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {     // 笔试radiobutton

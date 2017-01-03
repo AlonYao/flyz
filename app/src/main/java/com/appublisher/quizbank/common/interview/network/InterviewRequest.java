@@ -81,6 +81,15 @@ public class InterviewRequest extends Request implements InterviewApi {
     }
 
     /*
+    *    获取记录页面中面试页面:收藏页面中的数据
+    * */
+    public void getRecordInterviewCollectDetail(){
+        asyncRequest(getFinalUrl(recordInterviewCollectDetail),
+               "get_note_list", "object"
+        );
+    }
+
+    /*
     *   提交录音
     * */
     public void submitRecord(Map<String, String> params) {
