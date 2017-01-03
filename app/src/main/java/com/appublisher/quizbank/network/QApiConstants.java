@@ -186,4 +186,9 @@ public interface QApiConstants extends ApiConstants {
     //PNG is lossless so quality is ignored but must be provided
     int DISK_IMAGECACHE_QUALITY = 100;
     String DISK_IMAGECACHE_FOLDER = "url_img";
+
+    /*
+    *   获取记录页面:面试页面的数据
+    * */
+    String getStudyRecordInterview = baseUrl + "quizbank/user_interview_record";
 }

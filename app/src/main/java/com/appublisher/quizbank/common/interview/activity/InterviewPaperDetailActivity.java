@@ -11,6 +11,7 @@ import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.model.InterviewUnPurchasedModel;
@@ -43,6 +44,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private boolean mIsBuyAll = false;
     private InterviewPaperDetailResp.AllAudioBean mAllAudioBean;
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
+    private String type;
+    private String time;
+    private String dataFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +60,24 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         paper_type = getIntent().getStringExtra("paper_type");
         note_id = getIntent().getIntExtra("note_id", 0);
 
+        type = getIntent().getStringExtra("itemType");      // item类型
+        time = getIntent().getStringExtra("time");          // 时间
+
         viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
         viewPager.setScroll(true);
         initListener(viewPager);
         mUnPurchasedModel = new InterviewUnPurchasedModel(this);
 
         mRequest = new InterviewRequest(this, this);
-        mRequest.getPaperDetail(paper_id, paper_type, note_id); // 请求数据
+
+        dataFrom = getIntent().getStringExtra("dataFrom");  // 来源:怎么把studyrecordfragment传进来
+
+        if("studyRecordInterview".equals(dataFrom)){       // 数据来源自记录页面的面试页面
+            int userId = Integer.parseInt(LoginModel.getUserId());
+            mRequest.getStudyRecordInterviewPaperDetail(userId, type, time);
+        }else{
+            mRequest.getPaperDetail(paper_id, paper_type, note_id); // 请求数据
+        }
 
         showLoading();
     }
@@ -178,12 +193,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void requestCompleted(JSONObject response, String apiName) {
         hideLoading();
         if (response == null || apiName == null) return;
+
         if ("paper_detail".equals(apiName)) {
             InterviewPaperDetailResp resp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
             if (resp != null && resp.getResponse_code() == 1) {
                 // 获取问题的数据集合
                 list = resp.getQuestions();
-
                 if (list == null || list.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 } else {
@@ -206,6 +221,28 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
                 invalidateOptionsMenu(); // 刷新menu
             } else if (resp != null && resp.getResponse_code() == 1001) {
+                ToastManager.showToast(this, "没有面试题目");
+            }
+        } else if("history_interview_detail".equals(apiName)){             // 处理记录页面的面试页面的数据
+            InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
+
+            if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
+
+                list = interviewPaperDetailResp.getQuestions();         // 获取问题的数据集合
+                if (list == null || list.size() == 0) {
+                    ToastManager.showToast(this, "没有面试题目");
+                } else {
+                    mAdaper = new InterviewDetailAdapter(               // 将数据传给adapter
+                            getSupportFragmentManager(),
+                            list,
+                            this,
+                            mFrom);
+
+                    invalidateOptionsMenu(); // 刷新menu
+                    // 给model数据
+                    viewPager.setAdapter(mAdaper);
+                }
+            } else if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1001) {
                 ToastManager.showToast(this, "没有面试题目");
             }
         }

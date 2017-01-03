@@ -25,4 +25,7 @@ public interface InterviewApi extends ApiConstants {
 
     // 收藏、取消收藏题目
     String collectQuestion = baseUrl + "quizbank/update_collected_status";
+
+    // 记录页面的面试页面的数据
+    public String studyRecordInterviewPaperDetail = baseUrl + "quizbank/history_interview_detail";
 }
