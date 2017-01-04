@@ -38,6 +38,7 @@ import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
+import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
@@ -254,7 +255,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     }
 
     private void initFile() {
-        fileFolder = FileManager.getRootFilePath(mActivity) + "/daily_interview/user/";
+        String userId = LoginModel.getUserId();
+        fileFolder = FileManager.getRootFilePath(mActivity) + "/interview" +"/" + userId + "/";;
 
         question_id = mPosition;            // 具体哪一个问题
 

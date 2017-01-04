@@ -249,7 +249,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     }
     private void initFile() {
         String userId = LoginModel.getUserId();
-        fileFolder = FileManager.getRootFilePath(mActivity) + "/quizbank_interview"+"/" + userId + "/";
+        fileFolder = FileManager.getRootFilePath(mActivity) + "/interview"+"/" + userId + "/";
         question_id = mPosition;            // 具体哪一个问题
         FileManager.mkDir(fileFolder);
         // 录音存储的文件路径
