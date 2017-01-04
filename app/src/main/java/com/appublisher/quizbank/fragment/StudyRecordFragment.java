@@ -199,7 +199,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {  // 记录页面:面试按钮
                 if (isChecked) {
-                   // Logger.e("切换到面试button");
+                    //Logger.e("切换到面试button");
                     isWriteView = false;
                     setRadioButtonRightChecked(mInterviewButton);
                     setRadioButtonLeftUnChecked(mWriteButton);
@@ -209,7 +209,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
 
-                    if (mHistoryPapers == null || mHistoryPapers.size() == 0) {
+                    if (mInterviewHistoryPapers == null || mInterviewHistoryPapers.size() == 0) {
                     //    mQRequest.getStudyRecordInterviewHistoryPapers(0, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
                         mPage = 1;
                         mQRequest.getStudyRecordInterviewHistoryPapersNew(mPage);     // 默认只加载第一页数据
