@@ -14,6 +14,7 @@ import com.appublisher.quizbank.adapter.InterviewHistoryPapersListAdapter;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
@@ -99,12 +100,19 @@ public class StudyRecordModel {
 
                         if ("done".equals(status)) {
                             // 跳转至练习报告页面
-                            Intent intent = new Intent(
-                                    fragment.mActivity, MeasureReportActivity.class);
+                            Intent intent;
+                            if (MeasureConstants.MOCK.equals(historyPaper.getPaper_type())) {
+                                // 模考报告页面
+                                intent = new Intent(
+                                        fragment.mActivity, MeasureMockReportActivity.class);
+                            } else {
+                                intent = new Intent(
+                                        fragment.mActivity, MeasureReportActivity.class);
+                                intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
+                                        historyPaper.getPaper_type());
+                            }
                             intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
                                     historyPaper.getPaper_id());
-                            intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
-                                    historyPaper.getPaper_type());
                             fragment.mActivity.startActivity(intent);
 
                             // Umeng

@@ -32,7 +32,7 @@ import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.dao.MockDAO;
@@ -431,9 +431,8 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     UmengManager.onEvent(this, "Mock", map);
 
                 } else if (exercise_id != -1) {//进入练习报告页
-                    Intent intent = new Intent(this, MeasureReportActivity.class);
+                    Intent intent = new Intent(this, MeasureMockReportActivity.class);
                     intent.putExtra(MeasureConstants.INTENT_PAPER_ID, exercise_id);
-                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOCK);
                     startActivity(intent);
 
                     // Umeng

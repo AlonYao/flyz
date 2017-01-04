@@ -30,6 +30,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
@@ -948,9 +949,14 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             @Override
             public void onComplete(boolean success, int exercise_id) {
                 if (success) {
-                    Intent intent = new Intent(mContext, MeasureReportActivity.class);
+                    Intent intent;
+                    if (MOCK.equals(mPaperType)) {
+                        intent = new Intent(mContext, MeasureMockReportActivity.class);
+                    } else {
+                        intent = new Intent(mContext, MeasureReportActivity.class);
+                        intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
+                    }
                     intent.putExtra(INTENT_PAPER_ID, exercise_id);
-                    intent.putExtra(INTENT_PAPER_TYPE, mPaperType);
                     mContext.startActivity(intent);
                     ((MeasureActivity) mContext).finish();
                     // 清除做题缓存

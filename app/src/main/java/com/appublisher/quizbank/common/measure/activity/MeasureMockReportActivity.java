@@ -147,7 +147,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
     private void initData() {
         mModel = new MeasureMockReportModel(this);
         mHandler = new MsgHandler(this);
-        mModel.mPaperId = 2627;
+        mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mPaperType = MOCK;
         mModel.getData();
     }
