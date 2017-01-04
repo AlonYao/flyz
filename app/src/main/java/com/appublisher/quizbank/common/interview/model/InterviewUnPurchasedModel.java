@@ -238,7 +238,7 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
         String questionId = String.valueOf(question_Id);
         final int duration = Integer.parseInt(durationTime);
 
-        String savePath = "/quizbank_interview/" + userId + "/" + questionId +".amr" ;
+        String savePath = "/yaoguo_interview/" + userId + "/" + questionId +".amr" ;
         if (mProgressDialog == null) {
             mProgressDialog = YaoguoUploadManager.getProgressDialog(mActivity);
         }
