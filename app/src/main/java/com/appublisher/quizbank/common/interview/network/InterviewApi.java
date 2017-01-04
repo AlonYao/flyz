@@ -29,7 +29,10 @@ public interface InterviewApi extends ApiConstants {
     // 记录页面的面试页面的数据
     public String studyRecordInterviewPaperDetail = baseUrl + "quizbank/history_interview_detail";
 
+    // 记录页面中面试中的条目的数据
+    public String recordInterviewDetail = baseUrl + "quizbank/get_note_list";
+
     // 记录页面中面试中的收藏的数据
-    public String recordInterviewCollectDetail = baseUrl + "quizbank/get_note_list";
+    public String recordInterviewCollectDetail = baseUrl + "quizbank/get_note_collect";
 
 }

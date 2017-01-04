@@ -72,9 +72,15 @@ public class InterviewRequest extends Request implements InterviewApi {
     /*
     *   记录页面中的面试页面的数据
     * */
-    public void getStudyRecordInterviewPaperDetail(int user_id, String type, String time){
+//    public void getStudyRecordInterviewPaperDetail(int user_id, String type, String time){
+//        asyncRequest(getFinalUrl(studyRecordInterviewPaperDetail)
+//                + "&user_id=" + user_id
+//                + "&type=" + type
+//                + "&time=" + time, "history_interview_detail", "object"
+//        );
+//    }
+    public void getStudyRecordInterviewPaperDetail(String type, String time){
         asyncRequest(getFinalUrl(studyRecordInterviewPaperDetail)
-                + "&user_id=" + user_id
                 + "&type=" + type
                 + "&time=" + time, "history_interview_detail", "object"
         );
@@ -84,8 +90,17 @@ public class InterviewRequest extends Request implements InterviewApi {
     *    获取记录页面中面试页面:收藏页面中的数据
     * */
     public void getRecordInterviewCollectDetail(){
-        asyncRequest(getFinalUrl(recordInterviewCollectDetail),
+        asyncRequest(getFinalUrl(recordInterviewDetail),
                "get_note_list", "object"
+        );
+    }
+    /*
+    *   获取面试页面中的收藏页面的数据
+    * */
+    public void getRecordInterviewCollectPaperDetail(int note_id){
+        asyncRequest(getFinalUrl(recordInterviewCollectDetail)
+                + "&note_id=" + note_id,
+                "get_note_collect", "object"
         );
     }
 

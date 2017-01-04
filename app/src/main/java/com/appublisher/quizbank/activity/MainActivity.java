@@ -48,7 +48,7 @@ import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.vip.fragment.VipIndexFragment;
 import com.appublisher.quizbank.dao.GradeDAO;
 import com.appublisher.quizbank.fragment.StudyIndexFragment;
-import com.appublisher.quizbank.fragment.StudyRecordFragment_new;
+import com.appublisher.quizbank.fragment.StudyRecordFragment;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.PromoteQuizBankModel;
 import com.appublisher.quizbank.model.netdata.course.RateCourseResp;
@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
      **/
     private FragmentManager mFragmentManager;
     private CourseFragment mCourseFragment;
-    private StudyRecordFragment_new mStudyRecordFragment;
+    private StudyRecordFragment mStudyRecordFragment;
    // private StudyRecordFragment mStudyRecordFragment;
     private VipIndexFragment mVipIndexFragment;
     private StudyIndexFragment mStudyIndexFragment;
@@ -369,7 +369,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             MenuItemCompat.setShowAsAction(menu.add("下载").setIcon(R.drawable.actionbar_download),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             MenuItemCompat.setShowAsAction(menu.add("评分").setIcon(R.drawable.actionbar_rate), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        } else if (mCurFragment instanceof StudyRecordFragment_new) {
+        } else if (mCurFragment instanceof StudyRecordFragment) {
             MenuItemCompat.setShowAsAction(menu.add("设置").setIcon(R.drawable.actionbar_setting),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         } else if (mCurFragment instanceof InterviewIndexFragment) {
@@ -544,7 +544,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 if (mStudyRecordFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
                    // mStudyRecordFragment = new StudyRecordFragment();
-                    mStudyRecordFragment = new StudyRecordFragment_new();
+                    mStudyRecordFragment = new StudyRecordFragment();
                     transaction.add(R.id.container_view, mStudyRecordFragment, RECORD);
                 } else {
                     // 如果Fragment不为空，则直接将它显示出来
@@ -623,7 +623,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // 记录
      //   mStudyRecordFragment = (StudyRecordFragment) mFragmentManager.findFragmentByTag(RECORD);
-        mStudyRecordFragment = (StudyRecordFragment_new) mFragmentManager.findFragmentByTag(RECORD); // 新
+        mStudyRecordFragment = (StudyRecordFragment) mFragmentManager.findFragmentByTag(RECORD); // 新
         if (mStudyRecordFragment != null) transaction.hide(mStudyRecordFragment);
 
         //Vip

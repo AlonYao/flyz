@@ -184,6 +184,13 @@ public class QRequest extends Request implements QApiConstants {
         asyncRequest(getFinalUrl(getStudyRecordInterview) + "&offset=" + offset
                 + "&count=" + count, "user_interview_record", "object");
     }
+    // 获取学习记录的面试列表:带有page
+    public void getStudyRecordInterviewHistoryPapersNew(int page){
+        //Logger.e("page==="+String.valueOf(page));
+        asyncRequest(getFinalUrl(getStudyRecordInterview) + "&page=" + page ,
+                "user_interview_record", "object"
+        );
+    }
     /**
      * 获取能力评估
      */

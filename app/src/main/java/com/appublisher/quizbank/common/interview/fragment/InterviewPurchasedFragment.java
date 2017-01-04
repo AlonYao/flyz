@@ -24,7 +24,6 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -113,7 +112,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private String SUBMIT = "submit";              //可提交
     private String HADSUBMIT = "hadSubmit";      // 已提交
     private String status;
-    private int hadsbmitTime;
     private String fileFolder;
     private int question_id;
     private String userAnswerFilePath;
@@ -129,7 +127,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private int timePlaying;
     private TextView mTvtimeNotSubm;
     private InterviewPaperDetailActivity mActivity;
-    private ScrollView mScrollview;
     private RelativeLayout mBottomContainer;
     private int timePlayed;             // 记录录音播放时长
     private boolean isStop;           //是否停止播放
@@ -261,47 +258,27 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
     private void initView() {
 
-        // 材料行:逻辑显示与否根据数据集合判断
-        merterialView = mPurchasedView.findViewById(R.id.meterial_rl);
-
-        // 题目行:逻辑:点击事件:展开与折叠
-        questionSwitchView = mPurchasedView.findViewById(R.id.analysis_quesition_rl);
-        //  题目行左面的文字
-        questionSwitchTv = (TextView) mPurchasedView.findViewById(R.id.question_switch_tv);
-        //题目行右面的听语音的整体
-        questionListenLl = (LinearLayout) mPurchasedView.findViewById(R.id.interview_question_listen_ll);
+        merterialView = mPurchasedView.findViewById(R.id.meterial_rl);   // 材料行:逻辑显示与否根据数据集合判断
+        questionSwitchView = mPurchasedView.findViewById(R.id.analysis_quesition_rl);   // 题目行:逻辑:点击事件:展开与折叠
+        questionSwitchTv = (TextView) mPurchasedView.findViewById(R.id.question_switch_tv);    //  题目行左面的文字
+        questionListenLl = (LinearLayout) mPurchasedView.findViewById(R.id.interview_question_listen_ll);   //题目行右面的听语音的整体
         //   final LinearLayout questionlookLl = (LinearLayout) view.findViewById(R.id.interview_lookquestion_ll);   //题目行右面的看文字的整体
-        //题目行右面的看文字的图片
-        questionIm = (ImageView) mPurchasedView.findViewById(R.id.interview_lookquestion_im);
-        //  题目行右面的看文字的文字
-        questionTv = (TextView) mPurchasedView.findViewById(R.id.interview_lookquestion_tv);
 
-        // 展示问题的容器,默认不显示
-        questionContent = (LinearLayout) mPurchasedView.findViewById(R.id.question_content);
-
-        // 解析行:逻辑:点击事件:展开与折叠 & 是否答题的逻辑
-        analysisSwitchView = mPurchasedView.findViewById(R.id.analysis_switch_rl);
-        //解析行的左面的文字
-        analysisSwitchTv = (TextView) mPurchasedView.findViewById(R.id.analysis_switch_tv);
-        //解析行右面的听语音的整体
-        analysisListenLl = (LinearLayout) mPurchasedView.findViewById(R.id.interview_answer_listen_ll);
+        questionIm = (ImageView) mPurchasedView.findViewById(R.id.interview_lookquestion_im);   //题目行右面的看文字的图片
+        questionTv = (TextView) mPurchasedView.findViewById(R.id.interview_lookquestion_tv);    //  题目行右面的看文字的文字
+        questionContent = (LinearLayout) mPurchasedView.findViewById(R.id.question_content);    // 展示问题的容器,默认不显示
+        analysisSwitchView = mPurchasedView.findViewById(R.id.analysis_switch_rl);          // 解析行:逻辑:点击事件:展开与折叠 & 是否答题的逻
+        analysisSwitchTv = (TextView) mPurchasedView.findViewById(R.id.analysis_switch_tv);     //解析行的左面的文字
+        analysisListenLl = (LinearLayout) mPurchasedView.findViewById(R.id.interview_answer_listen_ll);      //解析行右面的听语音的整体
         //  final LinearLayout questionlookLl = (LinearLayout) view.findViewById(R.id.interview_lookquestion_ll);   //解析行右面的看文字的整体
-        // 解析行右面的看文字的图片ImageView:逻辑:展开:换图片 & 折叠换图片
-        analysisIm = (ImageView) mPurchasedView.findViewById(R.id.analysis_im);
-        // 解析行右面看文字的文字ImageView下面的文字
-        reminderTv = (TextView) mPurchasedView.findViewById(R.id.open_analysis);
 
-        //解析答案的容器
-        analysisView = mPurchasedView.findViewById(R.id.analysis_ll);
-
-        // 答案中的标签:解析
-        analysisTv = (TextView) mPurchasedView.findViewById(R.id.analysis_tv);
-        // 答案中的标签:知识点
-        noteTv = (TextView) mPurchasedView.findViewById(R.id.note_tv);
-        // 答案中的标签:来源
-        sourceTv = (TextView) mPurchasedView.findViewById(R.id.source_tv);
-        //答案中的标签:关键词
-        keywordsTv = (TextView) mPurchasedView.findViewById(R.id.keywords_tv);
+        analysisIm = (ImageView) mPurchasedView.findViewById(R.id.analysis_im);         // 解析行右面的看文字的图片ImageView:逻辑:展开:换图片 & 折叠换图片
+        reminderTv = (TextView) mPurchasedView.findViewById(R.id.open_analysis);        // 解析行右面看文字的文字ImageView下面的文字
+        analysisView = mPurchasedView.findViewById(R.id.analysis_ll);               //解析答案的容器
+        analysisTv = (TextView) mPurchasedView.findViewById(R.id.analysis_tv);           // 答案中的标签:解析
+        noteTv = (TextView) mPurchasedView.findViewById(R.id.note_tv);              // 答案中的标签:知识点
+        sourceTv = (TextView) mPurchasedView.findViewById(R.id.source_tv);           // 答案中的标签:来源
+        keywordsTv = (TextView) mPurchasedView.findViewById(R.id.keywords_tv);          //答案中的标签:关键词
 
         initRecordSoundView();
     }
@@ -333,9 +310,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         mAnswer_listen_ll = (LinearLayout) mPurchasedView.findViewById(R.id.interview_hadanswer_listen_ll);   // 已提交录音:播放整体
         mTvtimeHadSumbPlay = (TextView) mPurchasedView.findViewById(R.id.tv_recorded_sound_play_time);    // 已提交录音:播放时间
-
+        setBackgroundAlpha(); // 设置背景的透明度
     }
-
     private void initListener() {
 
         // 监听录音控件
@@ -878,5 +854,10 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         handler.sendEmptyMessage(TIME_CANCEL);
+    }
+
+    // 设置背景的透明度
+    public void setBackgroundAlpha(){
+       // mUnRecordView.getBackground().setAlpha(0);
     }
 }

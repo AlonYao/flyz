@@ -45,16 +45,10 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
 
     private Context mContext;
     private InterviewUnPurchasedFragment mFragment;
-
     private ProgressDialog mProgressDialog;
     private InterviewPaperDetailActivity mActivity;
-    private boolean isAnswer;
-    private boolean isCollect;
-    private int mViewpgId;
-    private InterviewPaperDetailResp.QuestionsBean mQuestionbean;
-    private List<InterviewPaperDetailResp.QuestionsBean> list;
     private String type;
-    private String type1;
+
 
     public InterviewUnPurchasedModel(Context context) {
         super(context);
@@ -299,13 +293,10 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp != null && resp.getResponse_code() == 1) {
                 Logger.e("收藏的回调成功");
-
             } else {
-
                 ToastManager.showToast(mActivity,"刷新失败");
             }
         }
-
     }
 
     /*

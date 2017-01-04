@@ -11,7 +11,6 @@ import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.model.InterviewUnPurchasedModel;
@@ -46,7 +45,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     private String type;
     private String time;
-    private String dataFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +68,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         mRequest = new InterviewRequest(this, this);
 
-        dataFrom = getIntent().getStringExtra("dataFrom");  // 来源:怎么把studyrecordfragment传进来
+        String dataFrom = getIntent().getStringExtra("dataFrom");  // 来源:怎么把studyrecordfragment传进来
 
         if("studyRecordInterview".equals(dataFrom)){       // 数据来源自记录页面的面试页面
-            int userId = Integer.parseInt(LoginModel.getUserId());
-            mRequest.getStudyRecordInterviewPaperDetail(userId, type, time);
-        }else{
+            mRequest.getStudyRecordInterviewPaperDetail(type, time);
+        }else if("recordCollect".equals(dataFrom)){        // 来源: 记录页面的收藏页面
+        //   Logger.e("进入interviewpaperdetail界面");
+            int note_id = getIntent().getIntExtra("note_id", 0);
+            mRequest.getRecordInterviewCollectPaperDetail(note_id);
+        } else{
             mRequest.getPaperDetail(paper_id, paper_type, note_id); // 请求数据
         }
 
@@ -229,6 +230,30 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
 
                 list = interviewPaperDetailResp.getQuestions();         // 获取问题的数据集合
+                if (list == null || list.size() == 0) {
+                    ToastManager.showToast(this, "没有面试题目");
+                } else {
+                    mAdaper = new InterviewDetailAdapter(               // 将数据传给adapter
+                            getSupportFragmentManager(),
+                            list,
+                            this,
+                            mFrom);
+
+                    invalidateOptionsMenu(); // 刷新menu
+                    // 给model数据
+                    viewPager.setAdapter(mAdaper);
+                }
+            } else if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1001) {
+                ToastManager.showToast(this, "没有面试题目");
+            }
+        } else if ("get_note_collect".equals(apiName)){        // 面试页面的收藏页面
+
+            //Logger.e("get_note_collect"+ response.toString());
+            InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
+
+            if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
+                list = interviewPaperDetailResp.getQuestions();         // 获取问题的数据集合
+               // Logger.e("list==="+ list.toString());
                 if (list == null || list.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 } else {

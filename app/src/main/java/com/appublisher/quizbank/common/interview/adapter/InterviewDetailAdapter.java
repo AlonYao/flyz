@@ -19,7 +19,6 @@ import java.util.List;
 public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
 
     private List<InterviewPaperDetailResp.QuestionsBean> mList;
-    private boolean isPurchased;
     private final InterviewPaperDetailActivity mActivity;
     private final String questionType;
 
@@ -34,16 +33,14 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
 
         InterviewPaperDetailResp.QuestionsBean bean = mList.get(position);    // 具体的哪一道题
-
         String questionbean = GsonManager.modelToString(mList.get(position));
 
         int listLength = mList.size();
-      //  boolean isPurchased_audio = bean.isPurchased_audio();   // 是否为单次购买
-     //   boolean isPurchased_review = bean.isPurchased_review();   // 是否为全部购买
-        boolean is_collected = bean.isPurchased_review();   // 是否收藏
+        boolean isPurchased_audio = bean.isPurchased_audio();   // 是否为单次购买
+        boolean isPurchased_review = bean.isPurchased_review();   // 是否为全部购买
 
-        boolean isPurchased_audio = false;
-        boolean isPurchased_review = true;
+//        boolean isPurchased_audio = true;
+//        boolean isPurchased_review = true;
         if (bean != null) {
             if (isPurchased_audio == true && isPurchased_review == true) {
                 return InterviewPurchasedFragment.newInstance(questionbean, position, listLength,questionType);       // 已付费页面

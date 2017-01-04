@@ -1,12 +1,17 @@
 package com.appublisher.quizbank.model.business;
 
+import android.content.Context;
 import android.content.Intent;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
+import com.appublisher.quizbank.adapter.InterviewHistoryPapersListAdapter;
+import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
@@ -24,7 +29,15 @@ import java.util.HashMap;
  */
 public class StudyRecordModel {
 
-    private HistoryPapersListAdapter mHistoryPapersListAdapter;
+    public HistoryPapersListAdapter mHistoryPapersListAdapter;
+    private final Context mContext;
+    private final StudyRecordFragment mFragment;
+    public InterviewHistoryPapersListAdapter mInterviewHistoryPapersListAdapter;
+
+    public StudyRecordModel(Context context, StudyRecordFragment fragment) {
+        mContext = context;
+        mFragment = fragment;
+    }
 
     /**
      * 处理学习记录回调
@@ -53,6 +66,7 @@ public class StudyRecordModel {
             return;
         }
 
+        String type = "write";
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mHistoryPapers = historyPapers;
@@ -119,7 +133,79 @@ public class StudyRecordModel {
                     }
                 });
     }
+    /**
+     *  处理面试页面的数据和点击事件
+     * */
+    public void dealInterviewHistoryPapersResp(final StudyRecordFragment fragment,
+                                               JSONObject response) {
+        //Logger.e("面试页面response===" + response.toString());
+        if (response == null) {
+            if (fragment.mIsRefresh) {
+                showNullImg(fragment);
+            }
+            fragment.setmPage();    // 加载数据失败,将累加的页数减去
+            return;
+        }
 
+        HistoryPapersResp historyPapersResp =
+                GsonManager.getModel(response.toString(), HistoryPapersResp.class);  // 将数据封装到了一个bean中
+
+        if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) {
+            fragment.setmPage();
+            return;
+        }
+
+        final ArrayList<HistoryPaperM> mhistoryPapers = historyPapersResp.getList();
+        if (mhistoryPapers == null || mhistoryPapers.size() == 0) {
+            if (fragment.mIsRefresh) {
+                showNullImg(fragment);
+            }
+            fragment.setmPage();
+            return;
+        }
+
+        // 拼接数据
+        if (fragment.mPage == 1) {
+            fragment.mInterviewHistoryPapers = mhistoryPapers;
+            mInterviewHistoryPapersListAdapter = new InterviewHistoryPapersListAdapter(
+                    fragment.mActivity ,fragment.mInterviewHistoryPapers);
+
+            fragment.mXListView.setAdapter(mInterviewHistoryPapersListAdapter);
+        } else {
+            fragment.mInterviewHistoryPapers.addAll(mhistoryPapers);
+            mInterviewHistoryPapersListAdapter.notifyDataSetChanged();
+        }
+
+        fragment.mIvNull.setVisibility(View.GONE);
+        fragment.mXListView.setVisibility(View.VISIBLE);
+
+        /**
+         *    条目的点击事件
+         */
+        fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent,
+                                    View view,
+                                    int position,
+                                    long id) {
+                if (fragment.mInterviewHistoryPapers == null
+                        || position - 2 >= fragment.mInterviewHistoryPapers.size())
+                    return;
+
+                HistoryPaperM mInterviewhistoryPaper = fragment.mInterviewHistoryPapers.get(position - 2);
+
+                if (mInterviewhistoryPaper == null) return;
+                String itemType = mInterviewhistoryPaper.getType();
+                String time = mInterviewhistoryPaper.getTime();
+                Intent intent = new Intent(fragment.mActivity, InterviewPaperDetailActivity.class); // 直接进入数据展示界面
+                intent.putExtra("dataFrom", "studyRecordInterview");
+                intent.putExtra("itemType", itemType);
+                intent.putExtra("time", time);
+                fragment.mActivity.startActivity(intent);
+
+            }
+        });
+    }
     /**
      * 显示空白图片
      *
@@ -129,5 +215,12 @@ public class StudyRecordModel {
         fragment.mIvNull.setVisibility(View.VISIBLE);
         fragment.mXListView.setVisibility(View.GONE);
     }
-
+    /*
+    *   得到颜色值
+    * */
+    public int getThemeColor() {
+        TypedValue value = new TypedValue();
+        mContext.getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
+        return value.data;
+    }
 }
