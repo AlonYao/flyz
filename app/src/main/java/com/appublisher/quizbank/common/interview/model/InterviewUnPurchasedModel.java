@@ -48,7 +48,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
     private ProgressDialog mProgressDialog;
     private InterviewPaperDetailActivity mActivity;
     private String type;
-    private int mViewpagerPosition;
 
 
     public InterviewUnPurchasedModel(Context context) {
@@ -236,7 +235,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
         final String type = questiontype;                 // 问题的类型guokao/teacher/category/before
         String userId = LoginModel.getUserId();
         final int question_Id = mQuestionbean.getId();
-        mViewpagerPosition = question_Id;
         String questionId = String.valueOf(question_Id);
         final int duration = Integer.parseInt(durationTime);
 
@@ -286,7 +284,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                 //获取数据
                 // 在此需要在封装成一次bean对象
                 mActivity.getData();
-                mActivity.setViewPagerItem(mViewpagerPosition - 1); // 修改viewPager
             } else {
                 Logger.e("录音提交失败");
                 ToastManager.showToast(mActivity,"刷新失败");

@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/white">
-
-    <com.appublisher.lib_basic.customui.XListView
-        android:id="@+id/studyrecord_lv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:divider="@color/common_line"
-        android:dividerHeight="0px"
-        android:scrollbars="none" />
 
     <include layout="@layout/progressbar" />
 
-    <include
-        layout="@layout/quizbank_null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+    <include layout="@layout/fragment_studyrecord_headview_new"
+        android:id="@+id/headview_new"
+        />
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.appublisher.lib_basic.customui.XListView
+            android:id="@+id/studyrecord_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:divider="@color/common_line"
+            android:dividerHeight="0px"
+            android:scrollbars="none" />
+        <include
+            layout="@layout/quizbank_null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+</LinearLayout>

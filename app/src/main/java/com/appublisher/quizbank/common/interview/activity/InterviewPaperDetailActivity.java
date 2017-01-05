@@ -214,6 +214,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             mFrom);
                     // 给model数据
                     viewPager.setAdapter(mAdaper);
+
+                    // 选中当前viewpager
+                    setViewPagerItem();
                 }
 
                 // 购买信息
@@ -310,10 +313,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     /*
     *   提交录音后,选中当前viewPager,并刷新menu
     * */
-    public void setViewPagerItem(int position){
-        viewPager.setCurrentItem(position);
+    public void setViewPagerItem(){
+       // Logger.e("setViewPagerItem中mCurrentPagerId===" + mCurrentPagerId);
         invalidateOptionsMenu();
         viewPager.setScroll(true);
+        viewPager.setCurrentItem(mCurrentPagerId);
     }
 
 
