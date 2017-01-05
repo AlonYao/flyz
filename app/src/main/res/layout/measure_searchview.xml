@@ -42,6 +42,7 @@
             android:layout_gravity="center_vertical"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:visibility="gone"
             android:src="@drawable/measure_search_clear"
             tools:ignore="ContentDescription,RtlHardcoded" />
 
@@ -51,12 +52,17 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/measure_search_icon"
             android:layout_toLeftOf="@id/measure_search_clear"
+            android:hint="@string/measure_search_hint"
+            android:textColorHint="@color/measure_search_hint"
             android:maxLines="1"
             android:maxLength="20"
             android:ellipsize="end"
             android:padding="5dp"
             android:background="@null"
             android:textColor="@color/measure_text"
+            android:textSize="16sp"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             tools:ignore="RtlHardcoded,TextFields" />
     </RelativeLayout>
 
