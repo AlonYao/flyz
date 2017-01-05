@@ -94,10 +94,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     @Override
    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        if (list == null) return super.onCreateOptionsMenu(menu);
+
+        return super.onCreateOptionsMenu(menu);
+   }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
 
         if(mUnPurchasedModel.getIsAnswer( mCurrentPagerId, this)){ // 判断是否回答 -->需要放到model中,因为涉及到修改   在此处应该讲bean 传给model
+           // Logger.e("onPrepareOptionsMenu中:mCurrentPagerId===" + mCurrentPagerId);
             if(mUnPurchasedModel.getIsCollected( mCurrentPagerId, this)){
                 MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
@@ -106,15 +111,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }
         }
-
         // 购买状态
         if (!mIsBuyAll) {
             MenuItemCompat.setShowAsAction(
                     menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
 
-        return super.onCreateOptionsMenu(menu);
-   }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     /**
      * 通过fragment中穿件来的id判断具体是录音页面哪个状态:进行分别处理
@@ -288,12 +292,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {       //  当前viewpager
                 mCurrentPagerId = position;
+                invalidateOptionsMenu();
+             //   Logger.e("onPageSelected中:mCurrentPagerId===" + position);
             }
 
             @Override
@@ -302,4 +307,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         });
     }
+    /*
+    *   提交录音后,选中当前viewPager,并刷新menu
+    * */
+    public void setViewPagerItem(int position){
+        viewPager.setCurrentItem(position);
+        invalidateOptionsMenu();
+        viewPager.setScroll(true);
+    }
+
+
 }
