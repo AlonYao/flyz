@@ -3,10 +3,14 @@ package com.appublisher.quizbank.common.measure.activity;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +36,7 @@ public class MeasureSearchActivity extends BaseActivity implements
     private TextView mNoneView;
     private TextView mTvKeywords;
     private TextView mTvCount;
+    private ImageView mIvClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,12 @@ public class MeasureSearchActivity extends BaseActivity implements
             btnSearch.setOnClickListener(this);
         }
 
-        mEtSearch = (EditText) findViewById(R.id.measure_search_et);
+        mIvClear = (ImageView) findViewById(R.id.measure_search_clear);
+        if (mIvClear != null) {
+            mIvClear.setOnClickListener(this);
+        }
+
+        initEditText();
 
         mListView = (XListView) findViewById(R.id.measure_search_lv);
         if (mListView != null) {
@@ -68,18 +78,53 @@ public class MeasureSearchActivity extends BaseActivity implements
         mTvCount = (TextView) findViewById(R.id.measure_search_count);
     }
 
+    private void initEditText() {
+        mEtSearch = (EditText) findViewById(R.id.measure_search_et);
+        if (mEtSearch == null) return;
+
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int length = s.toString().length();
+                if (length > 0) {
+                    mIvClear.setVisibility(View.VISIBLE);
+                } else {
+                    mIvClear.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mEtSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER
+                        && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    search();
+                }
+                return false;
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.measure_search_btn:
-                if (mEtSearch == null) return;
-                String text = mEtSearch.getText().toString();
-                if (text.length() == 0) return;
+                search();
+                break;
 
-                showLoading();
-                mModel.search(text);
-
-                hideSoftKeyboard();
+            case R.id.measure_search_clear:
+                mEtSearch.setText("");
                 break;
         }
     }
@@ -97,6 +142,17 @@ public class MeasureSearchActivity extends BaseActivity implements
     public void stopXListView() {
         mListView.stopLoadMore();
         mListView.stopRefresh();
+    }
+
+    private void search() {
+        if (mEtSearch == null) return;
+        String text = mEtSearch.getText().toString();
+        if (text.length() == 0) return;
+
+        showLoading();
+        mModel.search(text);
+
+        hideSoftKeyboard();
     }
 
     public void showContent(List<MeasureSearchResp.SearchItemBean> list) {

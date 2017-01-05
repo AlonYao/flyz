@@ -85,6 +85,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private static final String INTERVIEW = "Interview";
 
     private TextView rateCourseCountTv;
+    private RelativeLayout mSearchView;
 
     private RadioButton studyRadioButton;
     public RadioButton courseRadioButton;
@@ -198,9 +199,9 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     }
 
     private void initMeasureSearch() {
-        RelativeLayout searchView = (RelativeLayout) findViewById(R.id.measure_search);
-        if (searchView != null) {
-            searchView.setOnClickListener(new View.OnClickListener() {
+        mSearchView = (RelativeLayout) findViewById(R.id.measure_search);
+        if (mSearchView != null) {
+            mSearchView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(MainActivity.this, MeasureSearchActivity.class));
@@ -379,6 +380,13 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             MenuItemCompat.setShowAsAction(
                     menu.add("公开课评分").setIcon(R.drawable.actionbar_rate),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
+
+        // 搜题框处理
+        if (mCurFragment instanceof StudyIndexFragment) {
+            mSearchView.setVisibility(View.VISIBLE);
+        } else {
+            mSearchView.setVisibility(View.GONE);
         }
 
         return super.onCreateOptionsMenu(menu);

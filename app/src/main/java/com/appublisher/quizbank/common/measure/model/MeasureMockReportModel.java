@@ -91,7 +91,7 @@ public class MeasureMockReportModel extends MeasureReportModel {
 
         String time = mock_rank.getAvailable_time();
         try {
-            time = time.substring(5, 10);
+            time = time.substring(11, 16);
             time = time.replace("-", ":");
         } catch (Exception e) {
             // Empty
