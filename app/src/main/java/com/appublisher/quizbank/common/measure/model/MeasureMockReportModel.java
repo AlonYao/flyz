@@ -8,6 +8,7 @@ import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivit
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureMockReportResp;
@@ -77,9 +78,15 @@ public class MeasureMockReportModel extends MeasureReportModel {
         showScore(resp.getMock_rank());
         showAvgDur(resp.getAvg_duration());
         showCategory(resp.getCategory());
+        showNotes(resp.getNotes());
         showBarChart(resp.getMock_rank());
         showLineChart(resp.getHistory_mock());
         showStatistics(resp.getMock_rank());
+    }
+
+    private void showNotes(List<MeasureNotesBean> notes) {
+        if (mContext instanceof MeasureMockReportActivity)
+            ((MeasureMockReportActivity) mContext).showNotes(notes);
     }
 
     private void showNotice(MeasureMockReportResp.MockRankBean mock_rank) {
