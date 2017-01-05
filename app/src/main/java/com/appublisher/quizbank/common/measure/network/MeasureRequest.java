@@ -130,7 +130,7 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
      */
     public void searchQuestion(String keywords, int offset, int count) {
         asyncRequest(
-                getFinalUrl(searchQuestion) + "&search=1&keywords=" + keywords
+                getFinalUrl(searchQuestion) + "&search=9&keywords=" + keywords
                         + "&offset=" + offset
                         + "&count=" + count,
                 SEARCH_QUESTION,
