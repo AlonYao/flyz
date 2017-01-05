@@ -359,7 +359,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 @Override
                 public void onClick(View v) {     // 解析行的逻辑处理: 逻辑:点击事件:展开与折叠 & 是否答题的逻辑
 
-                    if(user_audioUrl !=null &&  user_audioUrl.length() > 0){               // 已经答题
+                    if (isDone() || isBuyAll() || isBuySingle()) {               // 已经答题
                         if (analysisView.getVisibility() == View.VISIBLE) {    // 展开-->折叠状态
                             analysisView.setVisibility(View.GONE);
                             analysisIm.setImageResource(R.drawable.interview_answer_lookover);
@@ -391,7 +391,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                         HashMap<String, String> map = new HashMap<>();
                         map.put("Action", "Answer");
                         UmengManager.onEvent(mActivity, "InterviewProblem", map);
-                    }else{                      // 未答题
+                    } else {                      // 未答题
                         // 弹窗处理:三个item
                         mActivity.mUnPurchasedModel.showNoAnswerDialog();
                     }
@@ -416,6 +416,20 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         mRecordNotSubmit_ll_play.setOnClickListener(OnClickListener);    // 已录音未提交:播放整体
         mRecordNotSubmit_rl_submit.setOnClickListener(OnClickListener);    // 已录音未提交:提交整体
         mAnswer_listen_ll.setOnClickListener(OnClickListener);       // 已提交录音页面:播放整体
+    }
+
+    private boolean isDone() {
+        return user_audioUrl != null && user_audioUrl.length() > 0;
+    }
+
+    private boolean isBuySingle() {
+        return mQuestionbean != null && mQuestionbean.isPurchased_audio();
+    }
+
+    private boolean isBuyAll() {
+        if (mActivity == null) return false;
+        InterviewPaperDetailResp.AllAudioBean bean = mActivity.getAllAudioBean();
+        return bean != null && bean.is_purchased();
     }
 
     //展示答案
