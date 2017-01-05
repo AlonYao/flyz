@@ -108,6 +108,42 @@ public class MeasureMockReportResp {
         private List<Integer> distribute;
         private boolean defeat_up;
         private boolean score_up;
+        private double top;
+        private double avg;
+        private double defeat;
+        private double user_score;
+
+        public double getTop() {
+            return top;
+        }
+
+        public void setTop(double top) {
+            this.top = top;
+        }
+
+        public double getAvg() {
+            return avg;
+        }
+
+        public void setAvg(double avg) {
+            this.avg = avg;
+        }
+
+        public double getDefeat() {
+            return defeat;
+        }
+
+        public void setDefeat(double defeat) {
+            this.defeat = defeat;
+        }
+
+        public double getUser_score() {
+            return user_score;
+        }
+
+        public void setUser_score(double user_score) {
+            this.user_score = user_score;
+        }
 
         public String getAvailable_time() {
             return available_time;

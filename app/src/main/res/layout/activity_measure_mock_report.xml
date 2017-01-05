@@ -139,6 +139,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout="@layout/measure_report_viewstub_category"
+                    android:layout_marginTop="10dp"/>
+
+                <!-- 知识点 -->
+                <ViewStub
+                    android:id="@+id/measure_report_notes_vs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout="@layout/measure_report_viewstub_notes"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"/>
 

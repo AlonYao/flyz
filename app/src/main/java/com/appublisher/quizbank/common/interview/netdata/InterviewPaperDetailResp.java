@@ -179,8 +179,7 @@ public class InterviewPaperDetailResp {
         }
 
         public String getUser_audio() {
-
-            return user_audio;
+            return user_audio == null ? "" : user_audio;
         }
 
         public void setUser_audio(String user_audio) {

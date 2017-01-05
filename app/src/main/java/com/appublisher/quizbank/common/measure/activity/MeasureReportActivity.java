@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureScoresBean;
 import com.appublisher.quizbank.common.measure.model.MeasureReportModel;
@@ -150,52 +148,6 @@ public class MeasureReportActivity extends MeasureReportBaseActivity implements
         }
     }
 
-    public void showNotes(List<MeasureNotesBean> list) {
-        ViewStub vs = (ViewStub) findViewById(R.id.measure_report_notes_vs);
-        if (vs == null) return;
-        vs.inflate();
-
-        ImageView ivNoChange = (ImageView) findViewById(R.id.measure_report_notenochange);
-        LinearLayout container = (LinearLayout) findViewById(R.id.measure_report_notes_container);
-        if (ivNoChange == null || container == null) return;
-
-        if (list == null || list.size() == 0) {
-            ivNoChange.setVisibility(View.VISIBLE);
-        } else {
-            ivNoChange.setVisibility(View.GONE);
-
-            for (MeasureNotesBean notesBean : list) {
-                if (notesBean == null) continue;
-
-                View child = LayoutInflater.from(this).inflate(
-                        R.layout.practice_report_note, container, false);
-                TextView tvNoteName = (TextView) child.findViewById(R.id.practice_report_note);
-                ImageView ivLevelPre =
-                        (ImageView) child.findViewById(R.id.practice_report_note_pre);
-                ImageView ivLevelNow =
-                        (ImageView) child.findViewById(R.id.practice_report_note_now);
-                ImageView ivLevelChange =
-                        (ImageView) child.findViewById(R.id.practice_report_note_change);
-
-                tvNoteName.setText(notesBean.getName());
-
-                int levelPre = notesBean.getFrom();
-                int levelNow = notesBean.getTo();
-
-                setLevelImg(levelPre, ivLevelPre);
-                setLevelImg(levelNow, ivLevelNow);
-
-                if (levelPre > levelNow) {
-                    ivLevelChange.setImageResource(R.drawable.practice_report_down);
-                } else {
-                    ivLevelChange.setImageResource(R.drawable.practice_report_up);
-                }
-
-                container.addView(child);
-            }
-        }
-    }
-
     public void showYourScore(String text) {
         ViewStub vs = (ViewStub) findViewById(R.id.measure_report_yourscore_vs);
         if (vs == null) return;
@@ -289,30 +241,6 @@ public class MeasureReportActivity extends MeasureReportBaseActivity implements
 
     public void showCategory(List<MeasureReportCategoryBean> list) {
         showCategory(list, null);
-    }
-
-    /**
-     * 设置知识点变化img
-     *
-     * @param level 知识点等级
-     * @param view  知识点等级view
-     */
-    private void setLevelImg(int level, ImageView view) {
-        if (level == 0) {
-            view.setImageResource(R.drawable.practice_report_level0);
-        } else if (level == 1) {
-            view.setImageResource(R.drawable.practice_report_level1);
-        } else if (level == 2) {
-            view.setImageResource(R.drawable.practice_report_level2);
-        } else if (level == 3) {
-            view.setImageResource(R.drawable.practice_report_level3);
-        } else if (level == 4) {
-            view.setImageResource(R.drawable.practice_report_level4);
-        } else if (level == 5) {
-            view.setImageResource(R.drawable.practice_report_level5);
-        } else {
-            view.setImageResource(R.drawable.practice_report_level0);
-        }
     }
 
     @Override
