@@ -74,12 +74,12 @@ public class MeasureMockReportModel extends MeasureReportModel {
 
         showNotice(resp.getMock_rank());
         showMockName(resp.getExercise_name());
-        showScore(resp.getScore());
+        showScore(resp.getMock_rank());
         showAvgDur(resp.getAvg_duration());
         showCategory(resp.getCategory());
         showBarChart(resp.getMock_rank());
         showLineChart(resp.getHistory_mock());
-        showStatistics(resp.getHistory_mock());
+        showStatistics(resp.getMock_rank());
     }
 
     private void showNotice(MeasureMockReportResp.MockRankBean mock_rank) {
@@ -99,16 +99,14 @@ public class MeasureMockReportModel extends MeasureReportModel {
         ((MeasureMockReportActivity) mContext).showNotice(time);
     }
 
-    private void showStatistics(List<MeasureMockReportResp.HistoryMockBean> history_mock) {
+    private void showStatistics(MeasureMockReportResp.MockRankBean mockRankBean) {
         if (!(mContext instanceof MeasureMockReportActivity)) return;
-        if (history_mock == null || history_mock.size() == 0) return;
-        MeasureMockReportResp.HistoryMockBean bean = history_mock.get(0);
-        if (bean == null) return;
+        if (mockRankBean == null || !mockRankBean.isAvailable()) return;
 
         ((MeasureMockReportActivity) mContext).showStatistics(
-                String.valueOf(bean.getDefeat()*100),
-                String.valueOf(bean.getAvg()),
-                String.valueOf(bean.getTop()));
+                String.valueOf(mockRankBean.getDefeat()*100),
+                String.valueOf(mockRankBean.getAvg()),
+                String.valueOf(mockRankBean.getTop()));
     }
 
     private void showLineChart(List<MeasureMockReportResp.HistoryMockBean> history_mock) {
@@ -201,9 +199,12 @@ public class MeasureMockReportModel extends MeasureReportModel {
             ((MeasureMockReportActivity) mContext).showAvgDur(String.valueOf(avg_duration));
     }
 
-    private void showScore(double score) {
-        if (mContext instanceof MeasureMockReportActivity)
-            ((MeasureMockReportActivity) mContext).showScore(String.valueOf(score));
+    private void showScore(MeasureMockReportResp.MockRankBean mockRankBean) {
+        if (!(mContext instanceof MeasureMockReportActivity)) return;
+        if (mockRankBean == null) return;
+
+        ((MeasureMockReportActivity) mContext).showScore(
+                String.valueOf(mockRankBean.getUser_score()));
     }
 
     private void showMockName(String name) {

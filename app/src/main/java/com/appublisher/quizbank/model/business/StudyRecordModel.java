@@ -82,7 +82,6 @@ public class StudyRecordModel {
         fragment.mXListView.setVisibility(View.VISIBLE);
 
         fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-<<<<<<< HEAD
             @Override
             public void onItemClick(AdapterView<?> parent,
                                     View view,
@@ -91,103 +90,52 @@ public class StudyRecordModel {
                 if (fragment.mHistoryPapers == null
                         || position - 2 >= fragment.mHistoryPapers.size())
                     return;
-                if ("write".equals(mFrom)) {
-                    HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position - 2);
 
-                    if (historyPaper == null) return;
+                HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position - 2);
 
-                    String status = historyPaper.getStatus();
+                if (historyPaper == null) return;
 
-                    if ("done".equals(status)) {
-                        // 跳转至练习报告页面
-                        Intent intent = new Intent(
+                String status = historyPaper.getStatus();
+
+                if ("done".equals(status)) {
+                    // 跳转至练习报告页面
+                    Intent intent;
+                    if (MeasureConstants.MOCK.equals(historyPaper.getPaper_type())) {
+                        // 模考报告页面
+                        intent = new Intent(
+                                fragment.mActivity, MeasureMockReportActivity.class);
+                    } else {
+                        intent = new Intent(
                                 fragment.mActivity, MeasureReportActivity.class);
-                        intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
-                                historyPaper.getPaper_id());
                         intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
                                 historyPaper.getPaper_type());
-                        fragment.mActivity.startActivity(intent);
-
-                        // Umeng
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("Action", "List");
-                        UmengManager.onEvent(fragment.getContext(), "Record", map);
-
-                    } else if ("undone".equals(status)) {
-                        // 跳转至做题页面
-                        Intent intent = new Intent(
-                                fragment.mActivity, MeasureActivity.class);
-                        intent.putExtra(
-                                MeasureConstants.INTENT_PAPER_ID,
-                                historyPaper.getPaper_id());
-                        intent.putExtra(
-                                MeasureConstants.INTENT_PAPER_TYPE,
-                                historyPaper.getPaper_type());
-                        intent.putExtra(MeasureConstants.INTENT_REDO, true);
-                        fragment.mActivity.startActivity(intent);
-
-                        // Umeng
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("Redo", historyPaper.getPaper_type());
-                        UmengManager.onEvent(fragment.getContext(), "Record", map);
-=======
-                    @Override
-                    public void onItemClick(AdapterView<?> parent,
-                                            View view,
-                                            int position,
-                                            long id) {
-                        if (fragment.mHistoryPapers == null
-                                || position - 2 >= fragment.mHistoryPapers.size())
-                            return;
-
-                        HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position - 2);
-
-                        if (historyPaper == null) return;
-
-                        String status = historyPaper.getStatus();
-
-                        if ("done".equals(status)) {
-                            // 跳转至练习报告页面
-                            Intent intent;
-                            if (MeasureConstants.MOCK.equals(historyPaper.getPaper_type())) {
-                                // 模考报告页面
-                                intent = new Intent(
-                                        fragment.mActivity, MeasureMockReportActivity.class);
-                            } else {
-                                intent = new Intent(
-                                        fragment.mActivity, MeasureReportActivity.class);
-                                intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
-                                        historyPaper.getPaper_type());
-                            }
-                            intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
-                                    historyPaper.getPaper_id());
-                            fragment.mActivity.startActivity(intent);
-
-                            // Umeng
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("Action", "List");
-                            UmengManager.onEvent(fragment.getContext(), "Record", map);
-
-                        } else if ("undone".equals(status)) {
-                            // 跳转至做题页面
-                            Intent intent = new Intent(
-                                    fragment.mActivity, MeasureActivity.class);
-                            intent.putExtra(
-                                    MeasureConstants.INTENT_PAPER_ID,
-                                    historyPaper.getPaper_id());
-                            intent.putExtra(
-                                    MeasureConstants.INTENT_PAPER_TYPE,
-                                    historyPaper.getPaper_type());
-                            intent.putExtra(MeasureConstants.INTENT_REDO, true);
-                            fragment.mActivity.startActivity(intent);
-
-                            // Umeng
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("Redo", historyPaper.getPaper_type());
-                            UmengManager.onEvent(fragment.getContext(), "Record", map);
-                        }
->>>>>>> 1e2b0f0c60dee183cf67897c38815df789e3110e
                     }
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
+                            historyPaper.getPaper_id());
+                    fragment.mActivity.startActivity(intent);
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "List");
+                    UmengManager.onEvent(fragment.getContext(), "Record", map);
+
+                } else if ("undone".equals(status)) {
+                    // 跳转至做题页面
+                    Intent intent = new Intent(
+                            fragment.mActivity, MeasureActivity.class);
+                    intent.putExtra(
+                            MeasureConstants.INTENT_PAPER_ID,
+                            historyPaper.getPaper_id());
+                    intent.putExtra(
+                            MeasureConstants.INTENT_PAPER_TYPE,
+                            historyPaper.getPaper_type());
+                    intent.putExtra(MeasureConstants.INTENT_REDO, true);
+                    fragment.mActivity.startActivity(intent);
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Redo", historyPaper.getPaper_type());
+                    UmengManager.onEvent(fragment.getContext(), "Record", map);
                 }
             }
         });
