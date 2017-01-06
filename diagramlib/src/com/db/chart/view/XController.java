@@ -164,10 +164,19 @@ public class XController extends AxisController{
 						chartView.style.labelPaint.setColor(chartView.style.labelColor);
 					}
 
-					canvas.drawText(labels.get(i),
-							labelsPos.get(i),
-							mLabelVerCoord + bitmap.getHeight() / 5,
-							chartView.style.labelPaint);
+					if ("mock_x".equals(labels.get(i))) {
+						chartView.style.labelPaint.setColor(Color.TRANSPARENT);
+						canvas.drawText(labels.get(i),
+								labelsPos.get(i),
+								mLabelVerCoord + bitmap.getHeight() / 5,
+								chartView.style.labelPaint);
+						chartView.style.labelPaint.setColor(chartView.style.labelColor);
+					} else {
+						canvas.drawText(labels.get(i),
+								labelsPos.get(i),
+								mLabelVerCoord + bitmap.getHeight() / 5,
+								chartView.style.labelPaint);
+					}
 				}
 
 			} else if (chartView.isChartTypeMockBar()) {

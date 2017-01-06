@@ -60,22 +60,23 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
         <!-- 折线图 -->
         <com.db.chart.view.LineChartViewForMock
             android:id="@+id/mock_report_linechart_y"
-            android:layout_width="16dp"
+            android:layout_width="match_parent"
             android:layout_height="180dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:background="@color/white"/>
+            android:background="@android:color/transparent"/>
         <HorizontalScrollView
             android:id="@+id/mock_report_linechart_hs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            tools:ignore="RtlHardcoded">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,11 +88,11 @@
                     android:layout_height="180dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    android:paddingLeft="16dp"
+                    android:paddingLeft="20dp"
                     android:background="@android:color/transparent"
                     tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </LinearLayout>
         </HorizontalScrollView>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

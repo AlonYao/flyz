@@ -10,12 +10,10 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -243,7 +241,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         yChart.setChartType(ChartView.ChartType.MOCK);
         yChart.reset();
 
-        String[] lineLabelsY = new String[]{"1"};  // X轴上显示的文字
+        String[] lineLabelsY = new String[]{"mock_x"};  // X轴上显示的文字
         float[] lineValuesY = new float[]{0};  // 各个点的分值
 
         Paint paintY = new Paint();
@@ -268,7 +266,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         yChart.addData(dataSetY);
 
         yChart.setBorderSpacing(Tools.fromDpToPx(0))
-                .setGrid(LineChartView.GridType.NONE, paintY)
+                .setGrid(LineChartView.GridType.HORIZONTAL, paintY)
                 .setXAxis(false)
                 .setXLabels(XController.LabelPosition.OUTSIDE)
                 .setYAxis(false)
@@ -283,21 +281,9 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         // 计算容器长度
         int length = lineLabels.length - 1;
         int width = length * 1200 / 30;
-
         LinearLayout.LayoutParams layoutParams;
-        if (length <= 7) {
-            WindowManager manager = this.getWindowManager();
-            DisplayMetrics outMetrics = new DisplayMetrics();
-            manager.getDefaultDisplay().getMetrics(outMetrics);
-            int screenWidth = outMetrics.widthPixels;
-            width = (int) (screenWidth - Tools.fromDpToPx(46));
-
-            layoutParams = new LinearLayout.LayoutParams(
-                    (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
-        } else {
-            layoutParams = new LinearLayout.LayoutParams(
-                    (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
-        }
+        layoutParams = new LinearLayout.LayoutParams(
+                (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
         chart.setLayoutParams(layoutParams);
 
         chart.setLineAmount(2);
@@ -340,7 +326,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         chart.addData(dataSet);
 
         chart.setBorderSpacing(Tools.fromDpToPx(0))
-                .setGrid(LineChartView.GridType.HORIZONTAL, lineGridPaint)
+                .setGrid(LineChartView.GridType.NONE, lineGridPaint)
                 .setXAxis(false)
                 .setXLabels(XController.LabelPosition.OUTSIDE)
                 .setYAxis(false)
