@@ -50,25 +50,27 @@
                     android:textColor="@color/measure_text"/>
 
                 <!-- 模考成绩 -->
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="20dp"
                     android:background="@color/themecolor">
                     <TextView
+                        android:id="@+id/mock_report_score_flag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:textSize="15sp"
                         android:textColor="@android:color/white"
                         android:text="@string/mock_report_score"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/mock_report_score_flag"
                         android:orientation="horizontal">
                         <TextView
                             android:id="@+id/mock_report_score"
@@ -83,7 +85,15 @@
                             android:textSize="23sp"
                             android:text="@string/mock_report_score_fen"/>
                     </LinearLayout>
-                </LinearLayout>
+                    <!-- 排名&分数上升 -->
+                    <ImageView
+                        android:id="@+id/mock_report_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription,RtlHardcoded" />
+                </RelativeLayout>
 
                 <!-- 击败考生&模考平均成绩&模考最高成绩 -->
                 <ViewStub

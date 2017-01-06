@@ -75,13 +75,22 @@ public class MeasureMockReportModel extends MeasureReportModel {
 
         showNotice(resp.getMock_rank());
         showMockName(resp.getExercise_name());
-        showScore(resp.getMock_rank());
+        showScore(resp.getScore());
         showAvgDur(resp.getAvg_duration());
         showCategory(resp.getCategory());
         showNotes(resp.getNotes());
         showBarChart(resp.getMock_rank());
         showLineChart(resp.getHistory_mock());
         showStatistics(resp.getMock_rank());
+        showUp(resp.getMock_rank());
+    }
+
+    private void showUp(MeasureMockReportResp.MockRankBean mock_rank) {
+        if (!(mContext instanceof MeasureMockReportActivity)) return;
+        if (mock_rank == null || !mock_rank.isAvailable()) return;
+
+        ((MeasureMockReportActivity) mContext).showUp(
+                mock_rank.isDefeat_up(), mock_rank.isScore_up());
     }
 
     private void showNotes(List<MeasureNotesBean> notes) {
@@ -206,12 +215,10 @@ public class MeasureMockReportModel extends MeasureReportModel {
             ((MeasureMockReportActivity) mContext).showAvgDur(String.valueOf(avg_duration));
     }
 
-    private void showScore(MeasureMockReportResp.MockRankBean mockRankBean) {
+    private void showScore(double score) {
         if (!(mContext instanceof MeasureMockReportActivity)) return;
-        if (mockRankBean == null) return;
-
         ((MeasureMockReportActivity) mContext).showScore(
-                String.valueOf(mockRankBean.getUser_score()));
+                String.valueOf(score));
     }
 
     private void showMockName(String name) {
