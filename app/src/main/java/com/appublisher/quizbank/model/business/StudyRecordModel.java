@@ -87,12 +87,12 @@ public class StudyRecordModel {
                                     View view,
                                     int position,
                                     long id) {
-
                 if (fragment.mHistoryPapers == null
-                        || position  >= fragment.mHistoryPapers.size() || !"write".equals(mFrom))
+                        || position - 1 >= fragment.mHistoryPapers.size()
+                        || !"write".equals(mFrom))
                     return;
 
-                HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position);
+                HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position - 1);
 
                 if (historyPaper == null) return;
                 String status = historyPaper.getStatus();
@@ -197,10 +197,12 @@ public class StudyRecordModel {
                                     int position,
                                     long id) {
                 if (fragment.mInterviewHistoryPapers == null
-                        || position >= fragment.mInterviewHistoryPapers.size() || !"interview".equals(mFrom))
+                        || position - 1 >= fragment.mInterviewHistoryPapers.size()
+                        || !"interview".equals(mFrom))
                     return;
 
-                HistoryPaperM mInterviewhistoryPaper = fragment.mInterviewHistoryPapers.get(position);
+                HistoryPaperM mInterviewhistoryPaper =
+                        fragment.mInterviewHistoryPapers.get(position - 1);
 
                 if (mInterviewhistoryPaper == null) return;
                 String itemType = mInterviewhistoryPaper.getType();
