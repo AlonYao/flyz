@@ -80,7 +80,7 @@ public class BarChartView extends BaseBarChartView {
 
 			// 文字Paint
 			Paint textPaint = new Paint();
-			textPaint.setTextSize(Tools.fromSpToPx(10));
+			textPaint.setTextSize(Tools.fromSpToPx(8));
 			textPaint.setColor(Color.BLACK);
 			textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 			textPaint.setAntiAlias(true);
@@ -91,7 +91,7 @@ public class BarChartView extends BaseBarChartView {
 				bar = (Bar) barSet.getEntry(i);
 				
 				// If entry value is 0 it won't be drawn
-				if(!barSet.isVisible() || bar.getValue() == 0)
+				if(!barSet.isVisible())
 					continue;
 
 				style.barPaint.setColor(bar.getColor());
@@ -119,6 +119,7 @@ public class BarChartView extends BaseBarChartView {
 
 						int barHeight = (int) (yZeroCoord - bar.getY());
 						if (rect.height() >= barHeight) {
+							// 文字在上方
 							textPaint.setColor(style.barPaint.getColor());
 							canvas.drawText(text, x, bar.getY() - 10, textPaint);
 						} else {
@@ -135,6 +136,16 @@ public class BarChartView extends BaseBarChartView {
 								canvas.drawText(text, x, bar.getY() + rect.height(), textPaint);
 							}
 						}
+					}
+				} else if (bar.getValue() == 0) {
+					if (isChartTypeMockBar()) {
+						// 模考特殊处理
+						String text = "0.0%";
+						Rect rect = new Rect();
+						textPaint.getTextBounds(text, 0, text.length(), rect);
+						float x = offset + barWidth / 2 - rect.width() / 2;
+						textPaint.setColor(style.barPaint.getColor());
+						canvas.drawText(text, x, bar.getY() - 10, textPaint);
 					}
 				} else {
 					// Draw negative bar
