@@ -13,7 +13,7 @@ import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailRes
 import java.util.List;
 
 /**
- * Created by huaxiao on 2016/12/16.
+ * 面试模块
  */
 
 public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
@@ -36,25 +36,31 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
         String questionbean = GsonManager.modelToString(mList.get(position));
 
         int listLength = mList.size();
-        boolean isPurchased_audio = bean.isPurchased_audio();   // 是否为单次购买
-        boolean isPurchased_review = bean.isPurchased_review();   // 是否为全部购买
-
-//        boolean isPurchased_audio = true;
-//        boolean isPurchased_review = true;
-        if (bean != null) {
-            if (isPurchased_audio == true && isPurchased_review == true) {
-                return InterviewPurchasedFragment.newInstance(questionbean, position, listLength,questionType);       // 已付费页面
-            } else {
-                return InterviewUnPurchasedFragment.newInstance(questionbean, position, listLength, mActivity,questionType);    // 未付费页面
-            }
+        if (hasPurchasedAction(bean)) {
+            return InterviewPurchasedFragment.newInstance(
+                    questionbean, position, listLength,questionType);       // 已付费页面
         } else {
-            return null;
+            return InterviewUnPurchasedFragment.newInstance(
+                    questionbean, position, listLength, mActivity,questionType);    // 未付费页面
         }
     }
 
     @Override
     public int getCount() {
         return mList == null ? 0 : mList.size();
+    }
+
+    private boolean hasPurchasedAction(InterviewPaperDetailResp.QuestionsBean bean) {
+        // 判断是否开启完整版
+        if (mActivity != null) {
+            InterviewPaperDetailResp.AllAudioBean allAudioBean = mActivity.getAllAudioBean();
+            if (allAudioBean != null && allAudioBean.is_purchased()) {
+                return true;
+            }
+        }
+
+        // 判断是否有单次购买
+        return bean != null && bean.isPurchased_audio();
     }
 
 }

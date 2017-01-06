@@ -199,8 +199,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         hideLoading();
         if (response == null || apiName == null) return;
 
-        if ("paper_detail".equals(apiName)) {
-            InterviewPaperDetailResp resp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
+        if ("paper_detail".equals(apiName) || "history_interview_detail".equals(apiName)
+                || "get_note_collect".equals(apiName)) {
+            InterviewPaperDetailResp resp =
+                    GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
             if (resp != null && resp.getResponse_code() == 1) {
                 // 获取问题的数据集合
                 list = resp.getQuestions();
@@ -229,52 +231,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
                 invalidateOptionsMenu(); // 刷新menu
             } else if (resp != null && resp.getResponse_code() == 1001) {
-                ToastManager.showToast(this, "没有面试题目");
-            }
-        } else if("history_interview_detail".equals(apiName)){             // 处理记录页面的面试页面的数据
-            InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
-
-            if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
-
-                list = interviewPaperDetailResp.getQuestions();         // 获取问题的数据集合
-                if (list == null || list.size() == 0) {
-                    ToastManager.showToast(this, "没有面试题目");
-                } else {
-                    mAdaper = new InterviewDetailAdapter(               // 将数据传给adapter
-                            getSupportFragmentManager(),
-                            list,
-                            this,
-                            mFrom);
-
-                    invalidateOptionsMenu(); // 刷新menu
-                    // 给model数据
-                    viewPager.setAdapter(mAdaper);
-                }
-            } else if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1001) {
-                ToastManager.showToast(this, "没有面试题目");
-            }
-        } else if ("get_note_collect".equals(apiName)){        // 面试页面的收藏页面
-
-            //Logger.e("get_note_collect"+ response.toString());
-            InterviewPaperDetailResp interviewPaperDetailResp = GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
-
-            if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1) {
-                list = interviewPaperDetailResp.getQuestions();         // 获取问题的数据集合
-               // Logger.e("list==="+ list.toString());
-                if (list == null || list.size() == 0) {
-                    ToastManager.showToast(this, "没有面试题目");
-                } else {
-                    mAdaper = new InterviewDetailAdapter(               // 将数据传给adapter
-                            getSupportFragmentManager(),
-                            list,
-                            this,
-                            mFrom);
-
-                    invalidateOptionsMenu(); // 刷新menu
-                    // 给model数据
-                    viewPager.setAdapter(mAdaper);
-                }
-            } else if (interviewPaperDetailResp != null && interviewPaperDetailResp.getResponse_code() == 1001) {
                 ToastManager.showToast(this, "没有面试题目");
             }
         }
