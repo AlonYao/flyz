@@ -65,7 +65,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:gravity="center_horizontal"
-                    android:layout_toLeftOf="@+id/interview_question_listen_ll"
+                    android:layout_toLeftOf="@+id/interview_hadquestion_listen_ll"
                     android:orientation="vertical">
 
                     <ImageView
@@ -86,7 +86,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/interview_question_listen_ll"
+                    android:id="@+id/interview_hadquestion_listen_ll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
