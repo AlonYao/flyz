@@ -175,6 +175,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 mUnPurchasedModel = new InterviewUnPurchasedModel(this);
             }
             mUnPurchasedModel.showBackPressedDailog(this);
+            return;
         }
         super.onBackPressed();
     }
