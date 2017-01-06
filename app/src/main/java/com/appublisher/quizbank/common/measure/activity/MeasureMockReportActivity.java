@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
     private TextView mTvScore;
     private TextView mTvAvgDur;
     private TextView mTvNotice;
+    private ImageView mIvUp;
 
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public MsgHandler mHandler;
@@ -156,6 +158,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mTvScore = (TextView) findViewById(R.id.mock_report_score);
         mTvAvgDur = (TextView) findViewById(R.id.mock_report_statistics_avg_duration);
         mTvNotice = (TextView) findViewById(R.id.mock_report_notice);
+        mIvUp = (ImageView) findViewById(R.id.mock_report_up);
         Button btnAll = (Button) findViewById(R.id.mock_report_all);
         Button btnError = (Button) findViewById(R.id.mock_report_error);
 
@@ -375,6 +378,21 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
     public void hideNotice() {
         if (mTvNotice == null) return;
         mTvNotice.setVisibility(View.GONE);
+    }
+
+    public void showUp(boolean isRankUp, boolean isScoreUp) {
+        int res = 0;
+        if (isRankUp && isScoreUp) {
+            res = R.drawable.measure_mock_report_all_up;
+        } else if (isRankUp) {
+            res = R.drawable.measure_mock_report_rank_up;
+        } else if (isScoreUp) {
+            res = R.drawable.measure_mock_report_score_up;
+        }
+
+        if (res == 0) return;
+        mIvUp.setVisibility(View.VISIBLE);
+        mIvUp.setImageResource(res);
     }
 
 }
