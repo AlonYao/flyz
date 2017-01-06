@@ -14,10 +14,10 @@ public class TimeUtils {
 
         if(minutes>0){
             if(seconds < 10){
-                DateTimes = minutes + "\"" + "0" + seconds;
+                DateTimes = minutes + "\'" + "0" + seconds + "\"";
                 return DateTimes;
             }
-            DateTimes = minutes + "\"" + seconds;
+            DateTimes = minutes + "\'" + seconds + "\"";
         }else{
             DateTimes = seconds + "\"";
         }

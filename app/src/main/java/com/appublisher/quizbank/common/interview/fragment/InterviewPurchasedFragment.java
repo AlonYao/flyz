@@ -4,16 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -31,7 +25,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
-import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
@@ -77,7 +70,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private LinearLayout analysisListenLl;
     private ImageView analysisIm;
     private TextView reminderTv;
-    private View analysisView;
     private TextView analysisTv;
     private TextView noteTv;
     private TextView sourceTv;
@@ -133,6 +125,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private String questionType;
     private String questionFileFolder;
     private String analysisFileFolder;
+    private LinearLayout analysisView;
 
 
     public static InterviewPurchasedFragment newInstance(String questionbean, int position,int listLength,String questionType) {
@@ -278,7 +271,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         analysisIm = (ImageView) mPurchasedView.findViewById(R.id.analysis_im);         // 解析行右面的看文字的图片ImageView:逻辑:展开:换图片 & 折叠换图片
         reminderTv = (TextView) mPurchasedView.findViewById(R.id.open_analysis);        // 解析行右面看文字的文字ImageView下面的文字
-        analysisView = mPurchasedView.findViewById(R.id.analysis_ll);               //解析答案的容器
+        //解析答案的容器
+        analysisView = (LinearLayout) mPurchasedView.findViewById(R.id.analysis_ll);
         analysisTv = (TextView) mPurchasedView.findViewById(R.id.analysis_tv);           // 答案中的标签:解析
         noteTv = (TextView) mPurchasedView.findViewById(R.id.note_tv);              // 答案中的标签:知识点
         sourceTv = (TextView) mPurchasedView.findViewById(R.id.source_tv);           // 答案中的标签:来源
@@ -355,12 +349,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             questionContent.setVisibility(View.GONE);  // 题目的展示容器默认不显示
             analysisView.setVisibility(View.GONE);  // 解析答案的容器默认不显示
 
-//            if ("notice".equals(mQuestionsBean.getStatus())) {   //判断解析行左面的文字是"提示"还是"解析"
-//                analysisSwitchTv.setText("展开提示");
-//            } else {
-//                analysisSwitchTv.setText("展开解析");
-//            }
-
             /**
              *  本类为已付费页面的类,不用再和服务器交互:题目行的逻辑处理:逻辑:点击事件:展开与折叠;听语音播放但不可暂停
              * **/
@@ -396,25 +384,21 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                         analysisView.setVisibility(View.GONE);
                         analysisIm.setImageResource(R.drawable.interview_answer_lookover);
                         if ("notice".equals(mQuestionsBean.getStatus())) {
-                         //   analysisSwitchTv.setText("展开提示");
                             reminderTv.setText("看文字");
-                            analysisTv.setVisibility(View.GONE);
+//                            analysisTv.setVisibility(View.GONE);
                         } else {
-                        //    analysisSwitchTv.setText("展开解析");
                             reminderTv.setText("看文字");
-                            analysisTv.setVisibility(View.VISIBLE);
+//                            analysisTv.setVisibility(View.VISIBLE);
                         }
                     } else {
                         analysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
                         analysisIm.setImageResource(R.drawable.interview_answer_packup);
                         if ("notice".equals(mQuestionsBean.getStatus())) {
-                        //    analysisSwitchTv.setText("收起提示");
                             reminderTv.setText("不看文字");
-                            analysisTv.setVisibility(View.GONE);
+//                            analysisTv.setVisibility(View.GONE);
                         } else {
-                         //   analysisSwitchTv.setText("收起解析");
                             reminderTv.setText("不看文字");
-                            analysisTv.setVisibility(View.VISIBLE);
+//                            analysisTv.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -429,37 +413,41 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             String rich = (mPosition + 1) + "/" + mListLength + "  " + mQuestionsBean.getQuestion();
             addRichTextToContainer((Activity) mActivity, questionContent, rich, true);
 
-            SpannableString analysis = new SpannableString("【解析】" + mQuestionsBean.getAnalysis());
-            ForegroundColorSpan colorSpan = new ForegroundColorSpan(mActivity.getResources().getColor(R.color.themecolor));
-            AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(mActivity, 15));
-            StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+            // 解析行的文字处理
+            String analysis = (mPosition + 1) + "/" + mListLength + "  " + mQuestionsBean.getAnalysis();
+            addRichTextToContainer((Activity) mActivity, analysisView, analysis, true);
 
-            //解析
-            analysis.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            analysis.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            analysis.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            analysisTv.setText(analysis);
-
-            //知识点
-            SpannableString note = new SpannableString("【知识点】" + mQuestionsBean.getNotes());
-            note.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            note.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            note.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            noteTv.setText(note);
-
-            //来源
-            SpannableString source = new SpannableString("【来源】" + mQuestionsBean.getFrom());
-            source.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            source.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            source.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sourceTv.setText(source);
-
-            //关键词
-            SpannableString keywords = new SpannableString("【关键词】" + mQuestionsBean.getKeywords());
-            keywords.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            keywords.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            keywords.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            keywordsTv.setText(keywords);
+//            SpannableString analysis = new SpannableString("【解析】" + mQuestionsBean.getAnalysis());
+//            ForegroundColorSpan colorSpan = new ForegroundColorSpan(mActivity.getResources().getColor(R.color.themecolor));
+//            AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(mActivity, 15));
+//            StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+//
+//            //解析
+//            analysis.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            analysis.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            analysis.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            analysisTv.setText(analysis);
+//
+//            //知识点
+//            SpannableString note = new SpannableString("【知识点】" + mQuestionsBean.getNotes());
+//            note.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            note.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            note.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            noteTv.setText(note);
+//
+//            //来源
+//            SpannableString source = new SpannableString("【来源】" + mQuestionsBean.getFrom());
+//            source.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            source.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            source.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            sourceTv.setText(source);
+//
+//            //关键词
+//            SpannableString keywords = new SpannableString("【关键词】" + mQuestionsBean.getKeywords());
+//            keywords.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            keywords.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            keywords.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            keywordsTv.setText(keywords);
         }
     }
     /**
@@ -586,6 +574,15 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     merterialView.setClickable(false);
                     mActivity.viewPager.setScroll(false);   // 让viewpager拦截
                     mActivity.setCanBack(1);     // 是否可以按返回键
+                    // 禁止题目和解析语音播放
+                    merterialView.setClickable(false);
+                    questionSwitchView.setClickable(false);
+                    questionListenLl.setClickable(false);
+                    analysisSwitchView.setClickable(false);
+                    analysisListenLl.setClickable(false);
+                    analysisSwitchView.setClickable(false);
+
+
                 }
 
             } else if (id == R.id.interview_recordsounding_cancle) {   // 点击取消功能
@@ -597,10 +594,15 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 stopRecord();
                 mRecordingView.setVisibility(View.GONE);
                 mUnRecordView.setVisibility(View.VISIBLE);
-                analysisSwitchView.setClickable(true);         // 未录音过程中可点击
-                merterialView.setClickable(true);         // 未录音过程中可点击
                 isBlue = false;
                 mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
+                // 禁止题目和解析语音播放
+                merterialView.setClickable(true);
+                questionSwitchView.setClickable(true);
+                questionListenLl.setClickable(true);
+                analysisSwitchView.setClickable(true);
+                analysisListenLl.setClickable(true);
+                analysisSwitchView.setClickable(true);
 
             } else if (id == R.id.interview_recordsounding_rl_confirm) {   //点击确认功能
 
@@ -612,8 +614,13 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     mediaRecorderManager.stop();
                     mRecordingView.setVisibility(View.GONE);
                     mUnsubmitView.setVisibility(View.VISIBLE);       // 进入重录页面
-                    analysisSwitchView.setClickable(false);         // 录音过程中不可点击
+                    // 禁止题目和解析语音播放
                     merterialView.setClickable(false);
+                    questionSwitchView.setClickable(false);
+                    questionListenLl.setClickable(false);
+                    analysisSwitchView.setClickable(false);
+                    analysisListenLl.setClickable(false);
+                    analysisSwitchView.setClickable(false);
                     if(timeRecording >= 120){
                         mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(120));
                     }else{
@@ -641,9 +648,14 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     mUnsubmitView.setVisibility(View.GONE);
                     mRecordingView.setVisibility(View.VISIBLE);
                     mActivity.setCanBack(1);     // 是否可以按返回键
-                    analysisSwitchView.setClickable(false);         // 录音过程中不可点击
-                    merterialView.setClickable(false);
                     mActivity.viewPager.setScroll(false);   // 让viewpager拦截
+                    // 禁止题目和解析语音播放
+                    merterialView.setClickable(false);
+                    questionSwitchView.setClickable(false);
+                    questionListenLl.setClickable(false);
+                    analysisSwitchView.setClickable(false);
+                    analysisListenLl.setClickable(false);
+                    analysisSwitchView.setClickable(false);
 
                 }
             } else if (id == R.id.interview_recordsounding_ll_play) {       //点击播放按钮
