@@ -425,7 +425,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                                         mActivity.showLoading();
                                         mActivity.getData();
                                         mAlertDialog.dismiss();
-                                        ToastManager.showToast(mActivity, "支付成功");
                                     }
                                 });
                             } else {
@@ -444,7 +443,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                                         mActivity.showLoading();
                                         mActivity.getData();
                                         mAlertDialog.dismiss();
-                                        ToastManager.showToast(mActivity, "支付成功");
                                     }
                                 });
                             } else {
