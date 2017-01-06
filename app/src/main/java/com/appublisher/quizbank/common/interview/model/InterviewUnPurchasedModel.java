@@ -283,7 +283,9 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                 Logger.e("录音提交成功");
                 //获取数据
                 // 在此需要在封装成一次bean对象
+                mActivity.setCanBack(0);
                 mActivity.getData();
+
             } else {
                 Logger.e("录音提交失败");
                 ToastManager.showToast(mActivity,"刷新失败");

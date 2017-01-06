@@ -4,18 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -33,7 +27,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
-import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
@@ -73,7 +66,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private View merterialView;
     private View analysisSwitchView;
     private LinearLayout questionContent;
-    private View analysisView;
     private TextView analysisSwitchTv;
     private ImageView analysisIm;
     private TextView reminderTv;
@@ -129,6 +121,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private String status;
     private int user_audio_durationTime;
     private String questionType;
+    private LinearLayout analysisView;
 
     public static Fragment newInstance(String questionbean, int position, int listLength, InterviewPaperDetailActivity mctivity,String questionType) {
         Bundle args = new Bundle();
@@ -239,7 +232,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
             mUnRecordView.setVisibility(View.GONE);
             mRecordedView.setVisibility(View.VISIBLE);
-//            mTvtimeHadSumbPlay .setText(user_audio_durationTime + "\"");
             mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(user_audio_durationTime));
             status = HADSUBMIT;
 
@@ -270,7 +262,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         analysisSwitchView = mUnPurchasedView.findViewById(R.id.analysis_switch_rl);       // 解析行:逻辑:点击事件:展开与折叠 & 是否答题的逻辑
 
         questionContent = (LinearLayout) mUnPurchasedView.findViewById(R.id.question_content);      // 展示问题的容器
-        analysisView = mUnPurchasedView.findViewById(R.id.analysis_ll);                 //解析答案的容器
+//        analysisView = mUnPurchasedView.findViewById(R.id.analysis_ll);                 //解析答案的容器
+        analysisView = (LinearLayout) mUnPurchasedView.findViewById(R.id.unpurchased_analysis_ll);      //解析答案的容器
         analysisSwitchTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_switch_tv);        //解析行的左面的文字
         analysisIm = (ImageView) mUnPurchasedView.findViewById(R.id.analysis_im);             // 解析行右面的ImageView:逻辑:展开:换图片 & 折叠换图片
         reminderTv = (TextView) mUnPurchasedView.findViewById(R.id.open_analysis);          // 解析行右面ImageView下面的文字
@@ -308,7 +301,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         mTvtimeNotSubm = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_play);                              // 未提交录音:播放的文字
         mTvtimeNotSubmPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_sounding_play_time);       // 未提交录音:播放时间
 
-
         mAnswer_listen_ll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_hadanswer_listen_ll);   // 已提交录音:播放整体
         mTvtimeHadSumbPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_recorded_sound_play_time);    // 已提交录音:播放时间
 
@@ -340,11 +332,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
             analysisView.setVisibility(View.GONE);  // 解析答案的容器默认不显示
 
-//            if ("notice".equals(mQuestionbean.getStatus())) {   //判断解析行左面的文字是"提示"还是"解析"
-//                analysisSwitchTv.setText("展开提示");
-//            } else {
-//                analysisSwitchTv.setText("展开解析");
-//            }
             /**
              *  展开解析时需要监听是否已经答题: 用一个常量字符记录(在基类中处理录音页面的逻辑时)
              * **/
@@ -356,26 +343,22 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                             analysisView.setVisibility(View.GONE);
                             analysisIm.setImageResource(R.drawable.interview_answer_lookover);
                             if ("notice".equals(mQuestionbean.getStatus())) {
-                            //    analysisSwitchTv.setText("展开提示");
                                 reminderTv.setText("查看");
-                                analysisTv.setVisibility(View.GONE);
+//                                analysisTv.setVisibility(View.GONE);
                             } else {
-                             //   analysisSwitchTv.setText("展开解析");
                                 reminderTv.setText("查看");
-                                analysisTv.setVisibility(View.VISIBLE);
+//                                analysisTv.setVisibility(View.VISIBLE);
                             }
                         } else {
                             // 如果答完题状态
                             analysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
                             analysisIm.setImageResource(R.drawable.interview_answer_packup);
                             if ("notice".equals(mQuestionbean.getStatus())) {
-                             //   analysisSwitchTv.setText("收起提示");
                                 reminderTv.setText("收起");
-                                analysisTv.setVisibility(View.GONE);
+//                                analysisTv.setVisibility(View.GONE);
                             } else {
-                            //    analysisSwitchTv.setText("收起解析");
                                 reminderTv.setText("收起");
-                                analysisTv.setVisibility(View.VISIBLE);
+//                                analysisTv.setVisibility(View.VISIBLE);
                             }
                         }
                         // Umeng
@@ -395,7 +378,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
             addRichTextToContainer((Activity) mActivity, questionContent, rich, true);
 
             showAnswer(); // 展示答案解析
-
         }
 
         // 监听录音控件
@@ -425,38 +407,43 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
     //展示答案
     private void showAnswer() {
-        //下面是展示答案的文字的处理
-        SpannableString analysis = new SpannableString("【解析】" + mQuestionbean.getAnalysis());
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(mActivity.getResources().getColor(R.color.themecolor));
-        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(mActivity, 15));
-        StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
 
-        //解析
-        analysis.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        analysis.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        analysis.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        analysisTv.setText(analysis);
+        // 解析行的文字处理
+        String analysis = (mPosition + 1) + "/" + mListLength + "  " + mQuestionbean.getAnalysis();
+        addRichTextToContainer((Activity) mActivity, analysisView, analysis, true);
 
-        //知识点
-        SpannableString note = new SpannableString("【知识点】" + mQuestionbean.getNotes());
-        note.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        note.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        note.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        noteTv.setText(note);
-
-        //来源
-        SpannableString source = new SpannableString("【来源】" + mQuestionbean.getFrom());
-        source.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        source.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        source.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sourceTv.setText(source);
-
-        //关键词
-        SpannableString keywords = new SpannableString("【关键词】" + mQuestionbean.getKeywords());
-        keywords.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        keywords.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        keywords.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        keywordsTv.setText(keywords);
+//        //下面是展示答案的文字的处理
+//        SpannableString analysis = new SpannableString("【解析】" + mQuestionbean.getAnalysis());
+//        ForegroundColorSpan colorSpan = new ForegroundColorSpan(mActivity.getResources().getColor(R.color.themecolor));
+//        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(mActivity, 15));
+//        StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+//
+//        //解析
+//        analysis.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        analysis.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        analysis.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        analysisTv.setText(analysis);
+//
+//        //知识点
+//        SpannableString note = new SpannableString("【知识点】" + mQuestionbean.getNotes());
+//        note.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        note.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        note.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        noteTv.setText(note);
+//
+//        //来源
+//        SpannableString source = new SpannableString("【来源】" + mQuestionbean.getFrom());
+//        source.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        source.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        source.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        sourceTv.setText(source);
+//
+//        //关键词
+//        SpannableString keywords = new SpannableString("【关键词】" + mQuestionbean.getKeywords());
+//        keywords.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        keywords.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        keywords.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        keywordsTv.setText(keywords);
 
     }
     /**
