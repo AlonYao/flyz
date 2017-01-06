@@ -103,7 +103,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         mRequest = new MeasureRequest(context, this);
     }
 
-    interface SubmitListener {
+    public interface SubmitListener {
         void onComplete(boolean success, int exercise_id);
     }
 

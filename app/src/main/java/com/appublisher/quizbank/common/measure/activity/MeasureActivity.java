@@ -317,15 +317,27 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                 .setPositiveButton(R.string.alert_mock_p,
                         new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(final DialogInterface dialog, int which) {
                                 // 更新当前页面的时长
                                 mModel.saveSubmitDuration();
                                 // 提交数据
-                                mModel.submit(true);
-                                // 清除缓存
-                                MeasureModel.clearUserAnswerCache(MeasureActivity.this);
-                                dialog.dismiss();
-                                finish();
+                                mModel.submit(true, new MeasureModel.SubmitListener() {
+                                    @Override
+                                    public void onComplete(boolean success, int exercise_id) {
+                                        if (success) {
+                                            Intent intent = new Intent(
+                                                    MeasureActivity.this,
+                                                    MeasureMockReportActivity.class);
+                                            intent.putExtra(INTENT_PAPER_ID, exercise_id);
+                                            startActivity(intent);
+
+                                            // 清除缓存
+                                            MeasureModel.clearUserAnswerCache(MeasureActivity.this);
+                                            dialog.dismiss();
+                                            finish();
+                                        }
+                                    }
+                                });
                             }
                         }).show();
     }

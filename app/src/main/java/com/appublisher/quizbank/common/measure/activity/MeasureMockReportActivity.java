@@ -284,6 +284,9 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         // 计算容器长度
         int length = lineLabels.length - 1;
         int width = length * 1200 / 30;
+        if (length <= 7) {
+            width = width + (int) Tools.fromDpToPx(10);
+        }
         LinearLayout.LayoutParams layoutParams;
         layoutParams = new LinearLayout.LayoutParams(
                 (int) Tools.fromDpToPx(width), (int) Tools.fromDpToPx(180));
