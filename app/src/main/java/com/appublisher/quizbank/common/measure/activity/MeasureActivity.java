@@ -321,11 +321,22 @@ public class MeasureActivity extends MeasureBaseActivity implements MeasureConst
                                 // 更新当前页面的时长
                                 mModel.saveSubmitDuration();
                                 // 提交数据
-                                mModel.submit(true);
+                                mModel.submit(true, new MeasureModel.SubmitListener() {
+                                    @Override
+                                    public void onComplete(boolean success, int exercise_id) {
+                                        if (success) {
+                                            Intent intent = new Intent(
+                                                    MeasureActivity.this,
+                                                    MeasureMockReportActivity.class);
+                                            intent.putExtra(INTENT_PAPER_ID, exercise_id);
+                                            startActivity(intent);
+                                        }
+                                        finish();
+                                    }
+                                });
                                 // 清除缓存
                                 MeasureModel.clearUserAnswerCache(MeasureActivity.this);
                                 dialog.dismiss();
-                                finish();
                             }
                         }).show();
     }
