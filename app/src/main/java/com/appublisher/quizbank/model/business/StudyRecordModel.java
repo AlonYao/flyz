@@ -6,6 +6,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
@@ -51,7 +52,9 @@ public class StudyRecordModel {
 
         final String mFrom = from;
         if (response == null) {
+            Logger.e("aaaaaresponse==="+response.toString());
             if (fragment.mIsRefresh) {
+                Logger.e("bbbresponse==="+response.toString());
                 fragment.showIvNull();
             }
             return;
@@ -59,17 +62,26 @@ public class StudyRecordModel {
 
         HistoryPapersResp historyPapersResp =
                 GsonManager.getModel(response.toString(), HistoryPapersResp.class);
-        if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) return;
+        if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) {
+            Logger.e("cccresponse==="+response.toString());
+            return;
+        }
 
         final ArrayList<HistoryPaperM> historyPapers = historyPapersResp.getList();
         if (historyPapers == null || historyPapers.size() == 0) {
-            if (fragment.mIsRefresh) {
+//            if (fragment.mIsRefresh) {
+//                fragment.showIvNull();
+//            }
+            Logger.e("dddresponse==="+response.toString());
+            if(fragment.mHistoryPapers == null || fragment.mHistoryPapers.size() == 0){
                 fragment.showIvNull();
+            }else{
+                fragment.showXListview();;
             }
             return;
         }
 
-        fragment.showXListview();
+      //  fragment.showXListview();
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mHistoryPapers = historyPapers;
@@ -148,8 +160,10 @@ public class StudyRecordModel {
                                                JSONObject response, String from) {
         final String mFrom = from;
         if (response == null) {
+            Logger.e("response1 ===" + response.toString());
             if (fragment.mIsRefresh) {
                 fragment.showIvNull();
+
             }
             fragment.setmPage();    // 加载数据失败,将累加的页数减去
             return;
@@ -159,6 +173,7 @@ public class StudyRecordModel {
                 GsonManager.getModel(response.toString(), HistoryPapersResp.class);  // 将数据封装到了一个bean中
 
         if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) {
+            Logger.e("response2 ===" + response.toString());
             fragment.showIvNull();
             fragment.setmPage();
             return;
@@ -166,14 +181,24 @@ public class StudyRecordModel {
 
         final ArrayList<HistoryPaperM> mhistoryPapers = historyPapersResp.getList();
         if (mhistoryPapers == null || mhistoryPapers.size() == 0) {
-            if (fragment.mIsRefresh) {
+            Logger.e("response3 ===" + response.toString());
+//            if (fragment.mIsRefresh) {
+//                Logger.e("response4 ===" + response.toString());
+//                fragment.showIvNull();
+//            }
+            // 判断上一次加载时的集合是否为空
+            if(fragment.mInterviewHistoryPapers == null || fragment.mInterviewHistoryPapers.size() == 0){
+                Logger.e("response4 ==="+response.toString());
                 fragment.showIvNull();
+            }else{
+                Logger.e("response5 ==="+response.toString());
+                fragment.showXListview();;
             }
             fragment.setmPage();
             return;
         }
 
-        fragment.showXListview();
+    //    fragment.showXListview();
 
         // 拼接数据
         if (fragment.mPage == 1) {
@@ -203,7 +228,6 @@ public class StudyRecordModel {
 
                 HistoryPaperM mInterviewhistoryPaper =
                         fragment.mInterviewHistoryPapers.get(position - 1);
-
                 if (mInterviewhistoryPaper == null) return;
                 String itemType = mInterviewhistoryPaper.getType();
                 String time = mInterviewhistoryPaper.getTime();
