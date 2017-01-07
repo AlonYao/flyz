@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.common.measure.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -410,6 +412,39 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         if (res == 0) return;
         mIvUp.setVisibility(View.VISIBLE);
         mIvUp.setImageResource(res);
+    }
+
+    @Override
+    public void showUpAlert(boolean isRankUp, boolean isScoreUp) {
+        String title = "恭喜";
+        String nBtn = "暗爽就好";
+        String pBtn = "嘚瑟一下";
+        String msg = "";
+        if (isRankUp && isScoreUp) {
+            msg = "你的模考分数和排名都提升啦";
+        } else if (isRankUp) {
+            msg = "你的模考排名提升啦";
+        } else if (isScoreUp) {
+            msg = "你的模考分数提升啦";
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setNegativeButton(nBtn,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setPositiveButton(pBtn,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
     }
 
 }

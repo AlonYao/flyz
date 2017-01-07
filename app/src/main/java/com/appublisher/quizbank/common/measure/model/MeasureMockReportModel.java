@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.common.measure.model;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -81,6 +83,57 @@ public class MeasureMockReportModel extends MeasureReportModel {
     private void showUp(MeasureMockReportResp.MockRankBean mock_rank) {
         if (mock_rank == null || !mock_rank.isAvailable()) return;
         mView.showUp(mock_rank.isDefeat_up(), mock_rank.isScore_up());
+
+        if (!isShowUpBefore()) {
+            mView.showUpAlert(mock_rank.isDefeat_up(), mock_rank.isScore_up());
+            updateShowUpIds();
+        }
+    }
+
+    private boolean isShowUpBefore() {
+        SharedPreferences spf = MeasureModel.getMeasureCache(mContext);
+        if (spf == null) return false;
+
+        try {
+            String cache = spf.getString(CACHE_MOCK_UP_PAPER_IDS, "");
+            if (cache.length() == 0) return false;
+
+            JSONArray ids = new JSONArray(cache);
+            int length = ids.length();
+            for (int i = 0; i < length; i++) {
+                if (mPaperId == (int) ids.get(i)) return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private void updateShowUpIds() {
+        if (isShowUpBefore()) return;
+
+        SharedPreferences spf = MeasureModel.getMeasureCache(mContext);
+        if (spf == null) return;
+
+        try {
+            String cache = spf.getString(CACHE_MOCK_UP_PAPER_IDS, "");
+
+            JSONArray ids;
+            if (cache.length() > 0) {
+                ids = new JSONArray(spf.getString(CACHE_MOCK_UP_PAPER_IDS, ""));
+            } else {
+                ids = new JSONArray();
+            }
+            ids.put(mPaperId);
+            String s = ids.toString();
+            SharedPreferences.Editor editor = spf.edit();
+            editor.putString(CACHE_MOCK_UP_PAPER_IDS, s);
+            editor.commit();
+        } catch (Exception e) {
+            // Empty
+        }
     }
 
     private void showNotice(MeasureMockReportResp.MockRankBean mock_rank) {

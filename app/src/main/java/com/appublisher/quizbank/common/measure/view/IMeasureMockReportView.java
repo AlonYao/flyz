@@ -33,4 +33,6 @@ public interface IMeasureMockReportView extends IMeasureReportBaseView{
     void hideNotice();
 
     void showUp(boolean isRankUp, boolean isScoreUp);
+
+    void showUpAlert(boolean isRankUp, boolean isScoreUp);
 }
