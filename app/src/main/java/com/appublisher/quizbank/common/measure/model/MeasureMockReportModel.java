@@ -84,7 +84,7 @@ public class MeasureMockReportModel extends MeasureReportModel {
         if (mock_rank == null || !mock_rank.isAvailable()) return;
         mView.showUp(mock_rank.isDefeat_up(), mock_rank.isScore_up());
 
-        if (!isShowUpBefore()) {
+        if ((mock_rank.isDefeat_up() || mock_rank.isDefeat_up()) && !isShowUpBefore()) {
             mView.showUpAlert(mock_rank.isDefeat_up(), mock_rank.isScore_up());
             updateShowUpIds();
         }
@@ -155,8 +155,12 @@ public class MeasureMockReportModel extends MeasureReportModel {
     private void showStatistics(MeasureMockReportResp.MockRankBean mockRankBean) {
         if (mockRankBean == null || !mockRankBean.isAvailable()) return;
 
+        double defeat = mockRankBean.getDefeat() * 100;
+        BigDecimal bigDecimal = new BigDecimal(defeat);
+        defeat = bigDecimal.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+
         mView.showStatistics(
-                String.valueOf(mockRankBean.getDefeat()*100),
+                String.valueOf(defeat),
                 String.valueOf(mockRankBean.getAvg()),
                 String.valueOf(mockRankBean.getTop()));
     }

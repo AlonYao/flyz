@@ -426,6 +426,8 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
             msg = "你的模考排名提升啦";
         } else if (isScoreUp) {
             msg = "你的模考分数提升啦";
+        } else {
+            return;
         }
 
         new AlertDialog.Builder(this)
