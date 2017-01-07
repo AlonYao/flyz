@@ -17,6 +17,7 @@ import com.appublisher.quizbank.common.interview.model.InterviewUnPurchasedModel
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.common.interview.viewgroup.MyViewPager;
+import com.appublisher.quizbank.common.utils.MediaRecorderManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +46,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     private String type;
     private String time;
+    public MediaRecorderManager recorderManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         type = getIntent().getStringExtra("itemType");      // item类型
         time = getIntent().getStringExtra("time");          // 时间
+
+        recorderManager = new MediaRecorderManager(getApplicationContext()); // 所有fragment中用同一个录音器
 
         viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
         viewPager.setScroll(true);
@@ -79,7 +83,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         } else{
             mRequest.getPaperDetail(paper_id, paper_type, note_id); // 请求数据
         }
-
         showLoading();
     }
 
@@ -253,13 +256,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
 
             @Override
             public void onPageSelected(int position) {       //  当前viewpager
                 mCurrentPagerId = position;
                 invalidateOptionsMenu();
-             //   Logger.e("onPageSelected中:mCurrentPagerId===" + position);
+                // 需要监听录音功能,上一页的题目是否在播放中:
             }
 
             @Override

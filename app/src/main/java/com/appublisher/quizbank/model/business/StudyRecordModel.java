@@ -31,10 +31,10 @@ import java.util.HashMap;
  */
 public class StudyRecordModel {
 
-    public HistoryPapersListAdapter mHistoryPapersListAdapter;
+    public HistoryPapersListAdapter mWrittenAdapter;
     private final Context mContext;
     private final StudyRecordFragment mFragment;
-    public InterviewHistoryPapersListAdapter mInterviewHistoryPapersListAdapter;
+    public InterviewHistoryPapersListAdapter mInterviewAdapter;
 
     public StudyRecordModel(Context context, StudyRecordFragment fragment) {
         mContext = context;
@@ -69,7 +69,7 @@ public class StudyRecordModel {
 //            if (fragment.mIsRefresh) {
 //                fragment.showIvNull();
 //            }
-            if(fragment.mHistoryPapers == null || fragment.mHistoryPapers.size() == 0){
+            if(fragment.mWrittenList == null || fragment.mWrittenList.size() == 0){
                 fragment.showIvNull();
             }else{
                 fragment.showXListview();;
@@ -80,13 +80,13 @@ public class StudyRecordModel {
       //  fragment.showXListview();
         // 拼接数据
         if (fragment.mOffset == 0) {
-            fragment.mHistoryPapers = historyPapers;
-            mHistoryPapersListAdapter = new HistoryPapersListAdapter(
-                    fragment.mActivity, fragment.mHistoryPapers);
-            fragment.mXListView.setAdapter(mHistoryPapersListAdapter);
+            fragment.mWrittenList = historyPapers;
+            mWrittenAdapter = new HistoryPapersListAdapter(
+                    fragment.mActivity, fragment.mWrittenList);
+            fragment.mXListView.setAdapter(mWrittenAdapter);
         } else {
-            fragment.mHistoryPapers.addAll(historyPapers);
-            mHistoryPapersListAdapter.notifyDataSetChanged();
+            fragment.mWrittenList.addAll(historyPapers);
+            mWrittenAdapter.notifyDataSetChanged();
         }
 
         fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,12 +95,12 @@ public class StudyRecordModel {
                                     View view,
                                     int position,
                                     long id) {
-                if (fragment.mHistoryPapers == null
-                        || position - 1 >= fragment.mHistoryPapers.size()
+                if (fragment.mWrittenList == null
+                        || position - 1 >= fragment.mWrittenList.size()
                         || !"write".equals(mFrom))
                     return;
 
-                HistoryPaperM historyPaper = fragment.mHistoryPapers.get(position - 1);
+                HistoryPaperM historyPaper = fragment.mWrittenList.get(position - 1);
 
                 if (historyPaper == null) return;
                 String status = historyPaper.getStatus();
@@ -181,7 +181,7 @@ public class StudyRecordModel {
 //                fragment.showIvNull();
 //            }
             // 判断上一次加载时的集合是否为空
-            if(fragment.mInterviewHistoryPapers == null || fragment.mInterviewHistoryPapers.size() == 0){
+            if(fragment.mInterviewList == null || fragment.mInterviewList.size() == 0){
                 fragment.showIvNull();
             }else{
                 fragment.showXListview();;
@@ -194,14 +194,14 @@ public class StudyRecordModel {
 
         // 拼接数据
         if (fragment.mPage == 1) {
-            fragment.mInterviewHistoryPapers = mhistoryPapers;
-            mInterviewHistoryPapersListAdapter = new InterviewHistoryPapersListAdapter(
-                    fragment.mActivity, fragment.mInterviewHistoryPapers);
+            fragment.mInterviewList = mhistoryPapers;
+            mInterviewAdapter = new InterviewHistoryPapersListAdapter(
+                    fragment.mActivity, fragment.mInterviewList);
 
-            fragment.mXListView.setAdapter(mInterviewHistoryPapersListAdapter);
+            fragment.mXListView.setAdapter(mInterviewAdapter);
         } else {
-            fragment.mInterviewHistoryPapers.addAll(mhistoryPapers);
-            mInterviewHistoryPapersListAdapter.notifyDataSetChanged();
+            fragment.mInterviewList.addAll(mhistoryPapers);
+            mInterviewAdapter.notifyDataSetChanged();
         }
 
         /**
@@ -213,13 +213,13 @@ public class StudyRecordModel {
                                     View view,
                                     int position,
                                     long id) {
-                if (fragment.mInterviewHistoryPapers == null
-                        || position - 1 >= fragment.mInterviewHistoryPapers.size()
+                if (fragment.mInterviewList == null
+                        || position - 1 >= fragment.mInterviewList.size()
                         || !"interview".equals(mFrom))
                     return;
-
+                Logger.e("itemd");
                 HistoryPaperM mInterviewhistoryPaper =
-                        fragment.mInterviewHistoryPapers.get(position - 1);
+                        fragment.mInterviewList.get(position - 1);
                 if (mInterviewhistoryPaper == null) return;
                 String itemType = mInterviewhistoryPaper.getType();
                 String time = mInterviewhistoryPaper.getTime();

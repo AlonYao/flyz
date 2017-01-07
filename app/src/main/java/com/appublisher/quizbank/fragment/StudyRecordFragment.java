@@ -49,8 +49,8 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     public Activity mActivity;
     public XListView mXListView;
-    public ArrayList<HistoryPaperM> mHistoryPapers;
-    public ArrayList<HistoryPaperM> mInterviewHistoryPapers;
+    public ArrayList<HistoryPaperM> mWrittenList;
+    public ArrayList<HistoryPaperM> mInterviewList;
     public int mOffset;
     public int mPage;
     public ImageView mIvNull;
@@ -83,8 +83,8 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mCount = 10;
         isWriteView = true;
         mQRequest = new QRequest(mActivity, this);
-        mHistoryPapers = new ArrayList<>();
-        mInterviewHistoryPapers = new ArrayList<>();
+        mWrittenList = new ArrayList<>();
+        mInterviewList = new ArrayList<>();
         mModel = new StudyRecordModel(mActivity,this);
     }
 
@@ -175,11 +175,13 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
-                    if (mHistoryPapers == null || mHistoryPapers.size() == 0) {
+
+                    if (mWrittenList == null || mWrittenList.size() == 0) {
                         mQRequest.getHistoryPapers(0, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
                     } else {
                         showXListview();
-                        mXListView.setAdapter(mModel.mHistoryPapersListAdapter);
+                        mXListView.setAdapter(mModel.mWrittenAdapter);
+                        mModel.mWrittenAdapter.notifyDataSetChanged();
                     }
                     dealInterview(true);
                 } else {
@@ -202,12 +204,13 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
 
-                    if (mInterviewHistoryPapers == null || mInterviewHistoryPapers.size() == 0) {
+                    if (mInterviewList == null || mInterviewList.size() == 0) {
                         mPage = 1;
                         mQRequest.getStudyRecordInterviewHistoryPapersNew(mPage);     // 默认只加载第一页数据
                     } else {
                         showXListview();
-                        mXListView.setAdapter(mModel.mInterviewHistoryPapersListAdapter);    // 重新设置adapter
+                        mXListView.setAdapter(mModel.mInterviewAdapter);
+                        mModel.mInterviewAdapter.notifyDataSetChanged();// 重新设置adapter
                     }
                     dealInterview(false);
                 } else {
@@ -316,11 +319,11 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     public void onRefresh() {
         if(isWriteView){
             mOffset = 0;
-            mHistoryPapers = new ArrayList<>();
+            mWrittenList = new ArrayList<>();
             mQRequest.getHistoryPapers(mOffset, mCount);
         }else{
             mPage = 1;
-            mInterviewHistoryPapers = new ArrayList<>();
+            mInterviewList = new ArrayList<>();
             mQRequest.getStudyRecordInterviewHistoryPapersNew(mPage);
         }
         mIsRefresh = true;
