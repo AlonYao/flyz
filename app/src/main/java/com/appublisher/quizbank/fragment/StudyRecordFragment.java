@@ -165,9 +165,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mWriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {     // 笔试radiobutton
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 笔试button处理
                 if (isChecked) {
                     isWriteView = true;
-                    Logger.e("点击了笔试button");
                     setRadioButtonLeftChecked(mWriteButton);
                     setRadioButtonRightUnChecked(mInterviewButton);
 
@@ -175,12 +175,15 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
+
                     if (mHistoryPapers == null || mHistoryPapers.size() == 0) {
                         mQRequest.getHistoryPapers(0, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
                     } else {
                         showXListview();
                         mXListView.setAdapter(mModel.mHistoryPapersListAdapter);
                     }
+                    mXListView.setOnItemClickListener(mModel.writtenListener);
+
                     dealInterview(true);
                 } else {
                     setRadioButtonLeftUnChecked(mWriteButton);
@@ -191,6 +194,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mInterviewButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {    // 面试的button
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {  // 记录页面:面试按钮
+                // 面试button处理
                 if (isChecked) {
                     isWriteView = false;
                     Logger.e("点击了面试button");
@@ -209,6 +213,8 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                         showXListview();
                         mXListView.setAdapter(mModel.mInterviewHistoryPapersListAdapter);    // 重新设置adapter
                     }
+                    mXListView.setOnItemClickListener(mModel.interviewListener);
+
                     dealInterview(false);
                 } else {
                     setRadioButtonRightUnChecked(mInterviewButton);
@@ -276,12 +282,10 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         if (response == null || apiName == null) return;
 
         if ("history_papers".equals(apiName)) {         //  记录页面:笔试
-            String mFrom = "write";
-            mModel.dealHistoryPapersResp(this, response, mFrom);
+            mModel.dealHistoryPapersResp(this, response);
 
         }else if("user_interview_record".equals(apiName)){   // 记录页面:面试
-            String mFrom = "interview";
-            mModel.dealInterviewHistoryPapersResp(this, response , mFrom);  // 如果是面试页面:处理数据
+            mModel.dealInterviewHistoryPapersResp(this, response);  // 如果是面试页面:处理数据
         }
         setLoadFinish();
     }
