@@ -192,6 +192,15 @@ public class XController extends AxisController{
 							labelsPos.get(i) - dex,
 							mLabelVerCoord,
 							chartView.style.labelPaint);
+
+					if (i == nLabels - 1) {
+						// 显示额外的一位
+						chartView.style.labelPaint.setTextAlign(Align.LEFT);
+						canvas.drawText("100",
+								labelsPos.get(i),
+								mLabelVerCoord,
+								chartView.style.labelPaint);
+					}
 				}
 			} else {
 				for(int i = 0; i < nLabels; i++){

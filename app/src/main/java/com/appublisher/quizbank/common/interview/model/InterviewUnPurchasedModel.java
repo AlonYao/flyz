@@ -418,11 +418,15 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                     new PayModel(mActivity).aliPay(entity, new PayListener() {
                         @Override
                         public void isPaySuccess(boolean isPaySuccess, String orderId) {
-                            ToastManager.showToast(mActivity, String.valueOf(isPaySuccess));
                             if (isPaySuccess) {
-                                mActivity.showLoading();
-                                mActivity.getData();
-                                mAlertDialog.dismiss();
+                                mActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mActivity.showLoading();
+                                        mActivity.getData();
+                                        mAlertDialog.dismiss();
+                                    }
+                                });
                             } else {
                                 ToastManager.showToast(mActivity, "支付失败");
                             }
@@ -433,9 +437,14 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                         @Override
                         public void isPaySuccess(boolean isPaySuccess, String orderId) {
                             if (isPaySuccess) {
-                                mActivity.showLoading();
-                                mActivity.getData();
-                                mAlertDialog.dismiss();
+                                mActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mActivity.showLoading();
+                                        mActivity.getData();
+                                        mAlertDialog.dismiss();
+                                    }
+                                });
                             } else {
                                 ToastManager.showToast(mActivity, "支付失败");
                             }

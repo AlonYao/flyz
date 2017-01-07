@@ -163,7 +163,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         user_audioUrl = mQuestionsBean.getUser_audio();    // 录音提交后返回到地址
         user_audio_durationTime = mQuestionsBean.getUser_audio_duration();   // 提交录音返回的时长
-
     }
 
     @Nullable
@@ -502,6 +501,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setTextColor(activity.getResources().getColor(R.color.common_text));
                 textView.setText(segment.text);
+                textView.setLineSpacing(0, 1.4f);
                 flowLayout.addView(textView);
 
                 // text长按复制
@@ -564,6 +564,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         }
         container.addView(flowLayout);
     }
+
     /**
      *   底部录音页面中各个控件的点击事件
      * */

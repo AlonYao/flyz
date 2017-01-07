@@ -100,6 +100,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
 
         if(mUnPurchasedModel.getIsAnswer( mCurrentPagerId, this)){ // 判断是否回答 -->需要放到model中,因为涉及到修改   在此处应该讲bean 传给model
            // Logger.e("onPrepareOptionsMenu中:mCurrentPagerId===" + mCurrentPagerId);
