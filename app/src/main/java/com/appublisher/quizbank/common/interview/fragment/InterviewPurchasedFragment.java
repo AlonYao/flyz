@@ -4,10 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -25,6 +31,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.Request;
@@ -128,6 +135,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private LinearLayout analysisView;
 
 
+
     public static InterviewPurchasedFragment newInstance(String questionbean, int position,int listLength,String questionType) {
         Bundle args = new Bundle();
         args.putString(ARGS_QUESTIONBEAN, questionbean);
@@ -175,18 +183,18 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case RECORD_SUBMIT:
-                        if (timeRecording >= 10 && timeRecording <= 120) {
+                        if (timeRecording >= 60 && timeRecording <= 360) {
                             status = CONFIRMABLE;
                             mIvRecordSound.setImageResource(R.drawable.interview_confrim_blue);
                         }
                     case RECORD_TIME:
-                        if (timeRecording >= 0 && timeRecording <= 120) {
-                            if(timeRecording == 90){
+                        if (timeRecording >= 0 && timeRecording <= 360) {
+                            if(timeRecording == 330){
                                 ToastManager.showToast(mActivity,"还有30秒");
                             }
                             mTvtimeRecording.setText(TimeUtils.formatDateTime(timeRecording));
 
-                        }else if(timeRecording > 120){
+                        }else if(timeRecording > 360){
                             handler.sendEmptyMessage(TIME_CANCEL);
                             mediaRecorderManager.stop();
                         }
@@ -413,41 +421,41 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             String rich = (mPosition + 1) + "/" + mListLength + "  " + mQuestionsBean.getQuestion();
             addRichTextToContainer((Activity) mActivity, questionContent, rich, true);
 
-            // 解析行的文字处理
-            String analysis = (mPosition + 1) + "/" + mListLength + "  " + mQuestionsBean.getAnalysis();
-            addRichTextToContainer((Activity) mActivity, analysisView, analysis, true);
+            ForegroundColorSpan colorSpan = new ForegroundColorSpan(mActivity.getResources().getColor(R.color.themecolor));
+            AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(mActivity, 15));
+            StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
 
-//            SpannableString analysis = new SpannableString("【解析】" + mQuestionsBean.getAnalysis());
-//            ForegroundColorSpan colorSpan = new ForegroundColorSpan(mActivity.getResources().getColor(R.color.themecolor));
-//            AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(mActivity, 15));
-//            StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
-//
-//            //解析
-//            analysis.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            analysis.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            analysis.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            analysisTv.setText(analysis);
-//
-//            //知识点
-//            SpannableString note = new SpannableString("【知识点】" + mQuestionsBean.getNotes());
-//            note.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            note.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            note.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            noteTv.setText(note);
-//
-//            //来源
-//            SpannableString source = new SpannableString("【来源】" + mQuestionsBean.getFrom());
-//            source.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            source.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            source.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            sourceTv.setText(source);
-//
-//            //关键词
-//            SpannableString keywords = new SpannableString("【关键词】" + mQuestionsBean.getKeywords());
-//            keywords.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            keywords.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            keywords.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            keywordsTv.setText(keywords);
+            //解析
+            SpannableString analysis = new SpannableString("【解析】"+ mQuestionsBean.getAnalysis() );
+            analysis.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            analysis.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            analysis.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            analysisTv.setLineSpacing(0, 1.4f);
+            analysisTv.setText(analysis);
+
+            //知识点
+            SpannableString note = new SpannableString("【知识点】" + mQuestionsBean.getNotes());
+            note.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            note.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            note.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            noteTv.setLineSpacing(0, 1.4f);
+            noteTv.setText(note);
+
+            //来源
+            SpannableString source = new SpannableString("【来源】" + mQuestionsBean.getFrom());
+            source.setSpan(colorSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            source.setSpan(sizeSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            source.setSpan(styleSpan, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sourceTv.setLineSpacing(0, 1.4f);
+            sourceTv.setText(source);
+
+            //关键词
+            SpannableString keywords = new SpannableString("【关键词】" + mQuestionsBean.getKeywords());
+            keywords.setSpan(colorSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            keywords.setSpan(sizeSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            keywords.setSpan(styleSpan, 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            keywordsTv.setLineSpacing(0, 1.4f);
+            keywordsTv.setText(keywords);
         }
     }
     /**
@@ -607,7 +615,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             } else if (id == R.id.interview_recordsounding_rl_confirm) {   //点击确认功能
 
                 //   if(一个常量记录图片变成了蓝色){
-                if (isBlue == true && timeRecording > 10) {
+                if (isBlue == true && timeRecording > 60) {
                     mActivity.viewPager.setScroll(false);    // 未提交页面也不可以滑动
                     isStop = false;
                     mActivity.setCanBack(2);                // 返回键设置不可返回
@@ -621,8 +629,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     analysisSwitchView.setClickable(false);
                     analysisListenLl.setClickable(false);
                     analysisSwitchView.setClickable(false);
-                    if(timeRecording >= 120){
-                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(120));
+                    if(timeRecording >= 360){
+                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(360));
                     }else{
                         mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(timeRecording));
                     }
@@ -665,8 +673,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     handler.sendEmptyMessage(TIME_CANCEL);
                     mTvtimeNotSubm.setText("听一下");
 
-                    if(timeRecording >= 120){
-                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(120));
+                    if(timeRecording >= 360){
+                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(360));
                     }else{
                         mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(timeRecording));
                     }
@@ -841,7 +849,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             @Override
             public void run() {
                 timeRecording++;
-                if (timeRecording >= 10 && timeRecording <= 120) {
+                if (timeRecording >= 60 && timeRecording <= 360) {
                     handler.sendEmptyMessage(RECORD_SUBMIT);
                     isBlue = true;
                 }

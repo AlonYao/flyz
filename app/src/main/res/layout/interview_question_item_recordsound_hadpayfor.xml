@@ -224,48 +224,47 @@
                 android:id="@+id/analysis_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="30dp"
                 android:orientation="vertical">
 
-                <!--<TextView-->
-                    <!--android:id="@+id/analysis_tv"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:paddingLeft="30dp"-->
-                    <!--android:paddingRight="30dp"-->
-                    <!--android:paddingTop="10dp"-->
-                    <!--android:textColor="@color/common_text"-->
-                    <!--android:textSize="16sp" />-->
+                <TextView
+                    android:id="@+id/analysis_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/common_text"
+                    android:textSize="16sp" />
 
-                <!--<TextView-->
-                    <!--android:id="@+id/note_tv"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:paddingLeft="30dp"-->
-                    <!--android:paddingRight="30dp"-->
-                    <!--android:paddingTop="10dp"-->
-                    <!--android:textColor="@color/common_text"-->
-                    <!--android:textSize="16sp" />-->
+                <TextView
+                    android:id="@+id/note_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/common_text"
+                    android:textSize="16sp" />
 
-                <!--<TextView-->
-                    <!--android:id="@+id/source_tv"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:paddingLeft="30dp"-->
-                    <!--android:paddingRight="30dp"-->
-                    <!--android:paddingTop="10dp"-->
-                    <!--android:textColor="@color/common_text"-->
-                    <!--android:textSize="16sp" />-->
+                <TextView
+                    android:id="@+id/source_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/common_text"
+                    android:textSize="16sp" />
 
-                <!--<TextView-->
-                    <!--android:id="@+id/keywords_tv"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:paddingLeft="30dp"-->
-                    <!--android:paddingRight="30dp"-->
-                    <!--android:paddingTop="10dp"-->
-                    <!--android:textColor="@color/common_text"-->
-                    <!--android:textSize="16sp" />-->
+                <TextView
+                    android:id="@+id/keywords_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/common_text"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

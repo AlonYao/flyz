@@ -52,9 +52,7 @@ public class StudyRecordModel {
 
         final String mFrom = from;
         if (response == null) {
-            Logger.e("aaaaaresponse==="+response.toString());
             if (fragment.mIsRefresh) {
-                Logger.e("bbbresponse==="+response.toString());
                 fragment.showIvNull();
             }
             return;
@@ -63,7 +61,6 @@ public class StudyRecordModel {
         HistoryPapersResp historyPapersResp =
                 GsonManager.getModel(response.toString(), HistoryPapersResp.class);
         if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) {
-            Logger.e("cccresponse==="+response.toString());
             return;
         }
 
@@ -72,7 +69,6 @@ public class StudyRecordModel {
 //            if (fragment.mIsRefresh) {
 //                fragment.showIvNull();
 //            }
-            Logger.e("dddresponse==="+response.toString());
             if(fragment.mHistoryPapers == null || fragment.mHistoryPapers.size() == 0){
                 fragment.showIvNull();
             }else{
@@ -173,7 +169,6 @@ public class StudyRecordModel {
                 GsonManager.getModel(response.toString(), HistoryPapersResp.class);  // 将数据封装到了一个bean中
 
         if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) {
-            Logger.e("response2 ===" + response.toString());
             fragment.showIvNull();
             fragment.setmPage();
             return;
@@ -181,17 +176,14 @@ public class StudyRecordModel {
 
         final ArrayList<HistoryPaperM> mhistoryPapers = historyPapersResp.getList();
         if (mhistoryPapers == null || mhistoryPapers.size() == 0) {
-            Logger.e("response3 ===" + response.toString());
 //            if (fragment.mIsRefresh) {
 //                Logger.e("response4 ===" + response.toString());
 //                fragment.showIvNull();
 //            }
             // 判断上一次加载时的集合是否为空
             if(fragment.mInterviewHistoryPapers == null || fragment.mInterviewHistoryPapers.size() == 0){
-                Logger.e("response4 ==="+response.toString());
                 fragment.showIvNull();
             }else{
-                Logger.e("response5 ==="+response.toString());
                 fragment.showXListview();;
             }
             fragment.setmPage();

@@ -96,7 +96,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mXListView = (XListView) mView.findViewById(R.id.studyrecord_lv);
         mIvNull = (ImageView) mView.findViewById(R.id.quizbank_null);
 
-        //View headView = inflater.inflate(R.layout.fragment_studyrecord_headview_new, null);
         View headView = mView.findViewById(R.id.headview_new);
 
         mWriteCollectRl = (RelativeLayout) headView.findViewById(R.id.write_collect_rl);    // 笔试:收藏
@@ -106,9 +105,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         radioGroup = (RadioGroup) headView.findViewById(R.id.record_radiogroup);
         mWriteButton = (RadioButton) headView.findViewById(R.id.radiobutton_write_button);   // 笔试button
         mInterviewButton = (RadioButton) headView.findViewById(R.id.radiobutton_interview_button);   // 面试button
-
-        // 初始化XListView
-       // mXListView.addHeaderView(headView, null, false);
 
         mXListView.setXListViewListener(this);
         mXListView.setPullLoadEnable(true);        // 刷新
