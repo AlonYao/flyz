@@ -26,6 +26,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.model.MeasureMockReportModel;
+import com.appublisher.quizbank.common.measure.view.IMeasureMockReportView;
 import com.db.chart.Tools;
 import com.db.chart.model.BarSet;
 import com.db.chart.model.LineSet;
@@ -42,7 +43,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MeasureMockReportActivity extends MeasureReportBaseActivity implements
-        SwipeRefreshLayout.OnRefreshListener, MeasureConstants, View.OnClickListener{
+        SwipeRefreshLayout.OnRefreshListener, MeasureConstants, View.OnClickListener,
+        IMeasureMockReportView{
 
     private static final String MENU_SHARE = "分享";
     private static final int START_REFRESH = 1;
@@ -145,7 +147,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
     }
 
     private void initData() {
-        mModel = new MeasureMockReportModel(this);
+        mModel = new MeasureMockReportModel(this, this);
         mHandler = new MsgHandler(this);
         mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mPaperType = MOCK;
@@ -181,31 +183,38 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mModel.getData();
     }
 
+    @Override
     public void startRefresh() {
         mHandler.sendEmptyMessage(START_REFRESH);
     }
 
+    @Override
     public void stopRefresh() {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    @Override
     public void showMockName(String name) {
         mTvName.setText(name);
     }
 
+    @Override
     public void showScore(String score) {
         mTvScore.setText(score);
     }
 
+    @Override
     public void showAvgDur(String dur) {
         dur = dur + "秒";
         mTvAvgDur.setText(dur);
     }
 
+    @Override
     public void showCategory(List<MeasureReportCategoryBean> list) {
         showCategory(list, FROM_MOCK_REPORT);
     }
 
+    @Override
     public void showBarChart(float[] lineValues) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_barchart_vs);
         if (vs == null) return;
@@ -232,6 +241,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         chartView.show();
     }
 
+    @Override
     public void showLineChart(String[] lineLabels, float[] lineScore, float[] lineAvg) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_linechart_vs);
         if (vs == null) return;
@@ -346,6 +356,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         }
     }
 
+    @Override
     public void showStatistics(String defeat, String avg, String best) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_statistics_vs);
         if (vs == null) return;
@@ -371,6 +382,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         }
     }
 
+    @Override
     public void showNotice(String time) {
         if (mTvNotice == null) return;
         mTvNotice.setVisibility(View.VISIBLE);
@@ -378,11 +390,13 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mTvNotice.setText(time);
     }
 
+    @Override
     public void hideNotice() {
         if (mTvNotice == null) return;
         mTvNotice.setVisibility(View.GONE);
     }
 
+    @Override
     public void showUp(boolean isRankUp, boolean isScoreUp) {
         int res = 0;
         if (isRankUp && isScoreUp) {
