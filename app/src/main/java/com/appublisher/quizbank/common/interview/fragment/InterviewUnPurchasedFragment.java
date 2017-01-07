@@ -375,7 +375,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
             //下面的是展示问题的文字的处理
             String rich = (mPosition + 1) + "/" + mListLength + "  " + mQuestionbean.getQuestion();
-            addRichTextToContainer((Activity) mActivity, questionContent, rich, true);
+            addRichTextToContainer(mActivity, questionContent, rich, true);
 
             showAnswer(); // 展示答案解析
         }
@@ -745,6 +745,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 textView.setLayoutParams(p);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setTextColor(activity.getResources().getColor(R.color.common_text));
+                textView.setLineSpacing(0, 1.4f);
                 textView.setText(segment.text);
                 flowLayout.addView(textView);
 
