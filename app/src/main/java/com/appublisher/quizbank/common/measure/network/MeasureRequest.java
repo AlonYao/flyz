@@ -7,6 +7,7 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -129,10 +130,15 @@ public class MeasureRequest extends Request implements MeasureApi, MeasureConsta
      * @param count 位移
      */
     public void searchQuestion(String keywords, int offset, int count) {
-        asyncRequest(
-                getFinalUrl(searchQuestion) + "&search=9&keywords=" + keywords
-                        + "&offset=" + offset
-                        + "&count=" + count,
+        Map<String, String> params = new HashMap<>();
+        params.put("search", "9");
+        params.put("keywords", keywords);
+        params.put("offset", String.valueOf(offset));
+        params.put("count", String.valueOf(count));
+
+        postRequest(
+                getFinalUrl(searchQuestion),
+                params,
                 SEARCH_QUESTION,
                 "object");
     }

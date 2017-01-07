@@ -567,7 +567,7 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
      * 获取做题模块缓存
      * @return SharedPreferences
      */
-    private static SharedPreferences getMeasureCache(Context context) {
+    public static SharedPreferences getMeasureCache(Context context) {
         if (context == null) return null;
         return context.getSharedPreferences(YAOGUO_MEASURE, Context.MODE_PRIVATE);
     }

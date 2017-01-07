@@ -1,17 +1,18 @@
 package com.appublisher.quizbank.common.measure.model;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureCategoryBean;
-import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureMockReportResp;
+import com.appublisher.quizbank.common.measure.view.IMeasureMockReportView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,14 +27,17 @@ import java.util.List;
 
 public class MeasureMockReportModel extends MeasureReportModel {
 
-    public MeasureMockReportModel(Context context) {
+    private IMeasureMockReportView mView;
+
+    public MeasureMockReportModel(Context context, IMeasureMockReportView view) {
         super(context);
+        mView = view;
     }
 
     @Override
     public void getData() {
         super.getData();
-        startRefresh();
+        mView.startRefresh();
     }
 
     @Override
@@ -41,29 +45,19 @@ public class MeasureMockReportModel extends MeasureReportModel {
         if (HISTORY_EXERCISE_DETAIL.equals(apiName)) {
             dealHistoryExerciseDetail(response);
         }
-        stopRefresh();
+        mView.stopRefresh();
     }
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
         super.requestCompleted(response, apiName);
-        stopRefresh();
+        mView.stopRefresh();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         super.requestEndedWithError(error, apiName);
-        stopRefresh();
-    }
-
-    private void startRefresh() {
-        if (mContext instanceof MeasureMockReportActivity)
-            ((MeasureMockReportActivity) mContext).startRefresh();
-    }
-
-    private void stopRefresh() {
-        if (mContext instanceof MeasureMockReportActivity)
-            ((MeasureMockReportActivity) mContext).stopRefresh();
+        mView.stopRefresh();
     }
 
     private void dealHistoryExerciseDetail(JSONObject response) {
@@ -73,12 +67,13 @@ public class MeasureMockReportModel extends MeasureReportModel {
         mAnalysisBean = new MeasureAnalysisBean();
         mAnalysisBean.setCategorys(resp.getCategory());
 
+        mView.showMockName(resp.getExercise_name());
+        mView.showScore(String.valueOf(resp.getScore()));
+        mView.showAvgDur(String.valueOf(resp.getAvg_duration()));
+        mView.showNotes(resp.getNotes());
+
         showNotice(resp.getMock_rank());
-        showMockName(resp.getExercise_name());
-        showScore(resp.getScore());
-        showAvgDur(resp.getAvg_duration());
         showCategory(resp.getCategory());
-        showNotes(resp.getNotes());
         showBarChart(resp.getMock_rank());
         showLineChart(resp.getHistory_mock());
         showStatistics(resp.getMock_rank());
@@ -86,22 +81,64 @@ public class MeasureMockReportModel extends MeasureReportModel {
     }
 
     private void showUp(MeasureMockReportResp.MockRankBean mock_rank) {
-        if (!(mContext instanceof MeasureMockReportActivity)) return;
         if (mock_rank == null || !mock_rank.isAvailable()) return;
+        mView.showUp(mock_rank.isDefeat_up(), mock_rank.isScore_up());
 
-        ((MeasureMockReportActivity) mContext).showUp(
-                mock_rank.isDefeat_up(), mock_rank.isScore_up());
+        if ((mock_rank.isDefeat_up() || mock_rank.isDefeat_up()) && !isShowUpBefore()) {
+            mView.showUpAlert(mock_rank.isDefeat_up(), mock_rank.isScore_up());
+            updateShowUpIds();
+        }
     }
 
-    private void showNotes(List<MeasureNotesBean> notes) {
-        if (mContext instanceof MeasureMockReportActivity)
-            ((MeasureMockReportActivity) mContext).showNotes(notes);
+    private boolean isShowUpBefore() {
+        SharedPreferences spf = MeasureModel.getMeasureCache(mContext);
+        if (spf == null) return false;
+
+        try {
+            String cache = spf.getString(CACHE_MOCK_UP_PAPER_IDS, "");
+            if (cache.length() == 0) return false;
+
+            JSONArray ids = new JSONArray(cache);
+            int length = ids.length();
+            for (int i = 0; i < length; i++) {
+                if (mPaperId == (int) ids.get(i)) return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private void updateShowUpIds() {
+        if (isShowUpBefore()) return;
+
+        SharedPreferences spf = MeasureModel.getMeasureCache(mContext);
+        if (spf == null) return;
+
+        try {
+            String cache = spf.getString(CACHE_MOCK_UP_PAPER_IDS, "");
+
+            JSONArray ids;
+            if (cache.length() > 0) {
+                ids = new JSONArray(spf.getString(CACHE_MOCK_UP_PAPER_IDS, ""));
+            } else {
+                ids = new JSONArray();
+            }
+            ids.put(mPaperId);
+            String s = ids.toString();
+            SharedPreferences.Editor editor = spf.edit();
+            editor.putString(CACHE_MOCK_UP_PAPER_IDS, s);
+            editor.commit();
+        } catch (Exception e) {
+            // Empty
+        }
     }
 
     private void showNotice(MeasureMockReportResp.MockRankBean mock_rank) {
-        if (!(mContext instanceof MeasureMockReportActivity)) return;
         if (mock_rank == null || mock_rank.isAvailable()) {
-            ((MeasureMockReportActivity) mContext).hideNotice();
+            mView.hideNotice();
             return;
         }
 
@@ -112,21 +149,23 @@ public class MeasureMockReportModel extends MeasureReportModel {
         } catch (Exception e) {
             // Empty
         }
-        ((MeasureMockReportActivity) mContext).showNotice(time);
+        mView.showNotice(time);
     }
 
     private void showStatistics(MeasureMockReportResp.MockRankBean mockRankBean) {
-        if (!(mContext instanceof MeasureMockReportActivity)) return;
         if (mockRankBean == null || !mockRankBean.isAvailable()) return;
 
-        ((MeasureMockReportActivity) mContext).showStatistics(
-                String.valueOf(mockRankBean.getDefeat()*100),
+        double defeat = mockRankBean.getDefeat() * 100;
+        BigDecimal bigDecimal = new BigDecimal(defeat);
+        defeat = bigDecimal.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        mView.showStatistics(
+                String.valueOf(defeat),
                 String.valueOf(mockRankBean.getAvg()),
                 String.valueOf(mockRankBean.getTop()));
     }
 
     private void showLineChart(List<MeasureMockReportResp.HistoryMockBean> history_mock) {
-        if (!(mContext instanceof MeasureMockReportActivity)) return;
         if (history_mock == null) return;
 
         int size = history_mock.size();
@@ -163,12 +202,10 @@ public class MeasureMockReportModel extends MeasureReportModel {
             j--;
         }
 
-        ((MeasureMockReportActivity) mContext).showLineChart(lineLabels, lineScores, lineAvgs);
+        mView.showLineChart(lineLabels, lineScores, lineAvgs);
     }
 
     private void showBarChart(MeasureMockReportResp.MockRankBean mock_rank) {
-        if (!(mContext instanceof MeasureMockReportActivity)) return;
-
         if (mock_rank == null) return;
         List<Integer> list = mock_rank.getDistribute();
         if (list == null || list.size() == 0) return;
@@ -191,12 +228,10 @@ public class MeasureMockReportModel extends MeasureReportModel {
             lineValues[i] = f;
         }
 
-        ((MeasureMockReportActivity) mContext).showBarChart(lineValues);
+        mView.showBarChart(lineValues);
     }
 
     private void showCategory(List<MeasureCategoryBean> categorys) {
-        if (!(mContext instanceof MeasureMockReportActivity)) return;
-
         List<MeasureQuestionBean> questions = new ArrayList<>();
         List<MeasureAnswerBean> answers = new ArrayList<>();
         if (categorys != null) {
@@ -206,23 +241,8 @@ public class MeasureMockReportModel extends MeasureReportModel {
                 answers.addAll(category.getAnswers());
             }
             List<MeasureReportCategoryBean> categoryList = getCategorys(questions, answers);
-            ((MeasureMockReportActivity) mContext).showCategory(categoryList);
+            mView.showCategory(categoryList);
         }
     }
 
-    private void showAvgDur(double avg_duration) {
-        if (mContext instanceof MeasureMockReportActivity)
-            ((MeasureMockReportActivity) mContext).showAvgDur(String.valueOf(avg_duration));
-    }
-
-    private void showScore(double score) {
-        if (!(mContext instanceof MeasureMockReportActivity)) return;
-        ((MeasureMockReportActivity) mContext).showScore(
-                String.valueOf(score));
-    }
-
-    private void showMockName(String name) {
-        if (mContext instanceof MeasureMockReportActivity)
-            ((MeasureMockReportActivity) mContext).showMockName(name);
-    }
 }

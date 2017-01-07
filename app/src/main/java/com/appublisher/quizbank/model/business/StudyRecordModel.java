@@ -48,9 +48,8 @@ public class StudyRecordModel {
      * @param response 回调数据
      */
     public void dealHistoryPapersResp(final StudyRecordFragment fragment,
-                                      JSONObject response, final String from) {
+                                      JSONObject response) {
 
-        final String mFrom = from;
         if (response == null) {
             if (fragment.mIsRefresh) {
                 fragment.showIvNull();
@@ -89,74 +88,73 @@ public class StudyRecordModel {
             mWrittenAdapter.notifyDataSetChanged();
         }
 
-        fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent,
-                                    View view,
-                                    int position,
-                                    long id) {
-                if (fragment.mWrittenList == null
-                        || position - 1 >= fragment.mWrittenList.size()
-                        || !"write".equals(mFrom))
-                    return;
-
-                HistoryPaperM historyPaper = fragment.mWrittenList.get(position - 1);
-
-                if (historyPaper == null) return;
-                String status = historyPaper.getStatus();
-
-                if ("done".equals(status)) {
-                    // 跳转至练习报告页面
-                    Intent intent;
-                    if (MeasureConstants.MOCK.equals(historyPaper.getPaper_type())) {
-                        // 模考报告页面
-                        intent = new Intent(
-                                fragment.mActivity, MeasureMockReportActivity.class);
-                    } else {
-                        intent = new Intent(
-                                fragment.mActivity, MeasureReportActivity.class);
-                        intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
-                                historyPaper.getPaper_type());
-                    }
-                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
-                            historyPaper.getPaper_id());
-                    fragment.mActivity.startActivity(intent);
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "List");
-                    UmengManager.onEvent(fragment.getContext(), "Record", map);
-
-                } else if ("undone".equals(status)) {
-                    // 跳转至做题页面
-                    Intent intent = new Intent(
-                            fragment.mActivity, MeasureActivity.class);
-                    intent.putExtra(
-                            MeasureConstants.INTENT_PAPER_ID,
-                            historyPaper.getPaper_id());
-                    intent.putExtra(
-                            MeasureConstants.INTENT_PAPER_TYPE,
-                            historyPaper.getPaper_type());
-                    intent.putExtra(MeasureConstants.INTENT_REDO, true);
-                    fragment.mActivity.startActivity(intent);
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Redo", historyPaper.getPaper_type());
-                    UmengManager.onEvent(fragment.getContext(), "Record", map);
-                }
-            }
-        });
+        mFragment.mXListView.setOnItemClickListener(writtenListener);
     }
+
+    public AdapterView.OnItemClickListener writtenListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent,
+                                View view,
+                                int position,
+                                long id) {
+            if (mFragment.mWrittenList == null
+                    || position - 1 >= mFragment.mWrittenList.size())
+                return;
+
+            HistoryPaperM historyPaper = mFragment.mWrittenList.get(position - 1);
+
+            if (historyPaper == null) return;
+            String status = historyPaper.getStatus();
+
+            if ("done".equals(status)) {
+                // 跳转至练习报告页面
+                Intent intent;
+                if (MeasureConstants.MOCK.equals(historyPaper.getPaper_type())) {
+                    // 模考报告页面
+                    intent = new Intent(
+                            mContext, MeasureMockReportActivity.class);
+                } else {
+                    intent = new Intent(
+                            mContext, MeasureReportActivity.class);
+                    intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
+                            historyPaper.getPaper_type());
+                }
+                intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
+                        historyPaper.getPaper_id());
+                mContext.startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "List");
+                UmengManager.onEvent(mContext, "Record", map);
+
+            } else if ("undone".equals(status)) {
+                // 跳转至做题页面
+                Intent intent = new Intent(
+                        mContext, MeasureActivity.class);
+                intent.putExtra(
+                        MeasureConstants.INTENT_PAPER_ID,
+                        historyPaper.getPaper_id());
+                intent.putExtra(
+                        MeasureConstants.INTENT_PAPER_TYPE,
+                        historyPaper.getPaper_type());
+                intent.putExtra(MeasureConstants.INTENT_REDO, true);
+                mContext.startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Redo", historyPaper.getPaper_type());
+                UmengManager.onEvent(mContext, "Record", map);
+            }
+        }
+    };
 
     /**
      * 处理面试页面的数据和点击事件
      */
     public void dealInterviewHistoryPapersResp(final StudyRecordFragment fragment,
-                                               JSONObject response, String from) {
-        final String mFrom = from;
+                                               JSONObject response) {
         if (response == null) {
-            Logger.e("response1 ===" + response.toString());
             if (fragment.mIsRefresh) {
                 fragment.showIvNull();
 
@@ -204,33 +202,31 @@ public class StudyRecordModel {
             mInterviewAdapter.notifyDataSetChanged();
         }
 
-        /**
-         *    条目的点击事件
-         */
-        fragment.mXListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent,
-                                    View view,
-                                    int position,
-                                    long id) {
-                if (fragment.mInterviewList == null
-                        || position - 1 >= fragment.mInterviewList.size()
-                        || !"interview".equals(mFrom))
-                    return;
-                Logger.e("itemd");
-                HistoryPaperM mInterviewhistoryPaper =
-                        fragment.mInterviewList.get(position - 1);
-                if (mInterviewhistoryPaper == null) return;
-                String itemType = mInterviewhistoryPaper.getType();
-                String time = mInterviewhistoryPaper.getTime();
-                Intent intent = new Intent(fragment.mActivity, InterviewPaperDetailActivity.class); // 直接进入数据展示界面
-                intent.putExtra("dataFrom", "studyRecordInterview");
-                intent.putExtra("itemType", itemType);
-                intent.putExtra("time", time);
-                fragment.mActivity.startActivity(intent);
-            }
-        });
+        mFragment.mXListView.setOnItemClickListener(interviewListener);
     }
+
+    public AdapterView.OnItemClickListener interviewListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent,
+                                View view,
+                                int position,
+                                long id) {
+            if (mFragment.mInterviewList == null
+                    || position - 1 >= mFragment.mInterviewList.size())
+                return;
+
+            HistoryPaperM mInterviewhistoryPaper =
+                    mFragment.mInterviewList.get(position - 1);
+            if (mInterviewhistoryPaper == null) return;
+            String itemType = mInterviewhistoryPaper.getType();
+            String time = mInterviewhistoryPaper.getTime();
+            Intent intent = new Intent(mContext, InterviewPaperDetailActivity.class); // 直接进入数据展示界面
+            intent.putExtra("dataFrom", "studyRecordInterview");
+            intent.putExtra("itemType", itemType);
+            intent.putExtra("time", time);
+            mContext.startActivity(intent);
+        }
+    };
 
     /**
      * 显示空白图片

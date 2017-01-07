@@ -1,6 +1,8 @@
 package com.appublisher.quizbank.common.measure.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -26,6 +28,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
 import com.appublisher.quizbank.common.measure.model.MeasureMockReportModel;
+import com.appublisher.quizbank.common.measure.view.IMeasureMockReportView;
 import com.db.chart.Tools;
 import com.db.chart.model.BarSet;
 import com.db.chart.model.LineSet;
@@ -42,7 +45,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MeasureMockReportActivity extends MeasureReportBaseActivity implements
-        SwipeRefreshLayout.OnRefreshListener, MeasureConstants, View.OnClickListener{
+        SwipeRefreshLayout.OnRefreshListener, MeasureConstants, View.OnClickListener,
+        IMeasureMockReportView{
 
     private static final String MENU_SHARE = "分享";
     private static final int START_REFRESH = 1;
@@ -145,7 +149,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
     }
 
     private void initData() {
-        mModel = new MeasureMockReportModel(this);
+        mModel = new MeasureMockReportModel(this, this);
         mHandler = new MsgHandler(this);
         mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mPaperType = MOCK;
@@ -181,31 +185,38 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mModel.getData();
     }
 
+    @Override
     public void startRefresh() {
         mHandler.sendEmptyMessage(START_REFRESH);
     }
 
+    @Override
     public void stopRefresh() {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    @Override
     public void showMockName(String name) {
         mTvName.setText(name);
     }
 
+    @Override
     public void showScore(String score) {
         mTvScore.setText(score);
     }
 
+    @Override
     public void showAvgDur(String dur) {
         dur = dur + "秒";
         mTvAvgDur.setText(dur);
     }
 
+    @Override
     public void showCategory(List<MeasureReportCategoryBean> list) {
         showCategory(list, FROM_MOCK_REPORT);
     }
 
+    @Override
     public void showBarChart(float[] lineValues) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_barchart_vs);
         if (vs == null) return;
@@ -232,6 +243,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         chartView.show();
     }
 
+    @Override
     public void showLineChart(String[] lineLabels, float[] lineScore, float[] lineAvg) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_linechart_vs);
         if (vs == null) return;
@@ -346,6 +358,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         }
     }
 
+    @Override
     public void showStatistics(String defeat, String avg, String best) {
         ViewStub vs = (ViewStub) findViewById(R.id.mock_report_statistics_vs);
         if (vs == null) return;
@@ -371,6 +384,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         }
     }
 
+    @Override
     public void showNotice(String time) {
         if (mTvNotice == null) return;
         mTvNotice.setVisibility(View.VISIBLE);
@@ -378,11 +392,13 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mTvNotice.setText(time);
     }
 
+    @Override
     public void hideNotice() {
         if (mTvNotice == null) return;
         mTvNotice.setVisibility(View.GONE);
     }
 
+    @Override
     public void showUp(boolean isRankUp, boolean isScoreUp) {
         int res = 0;
         if (isRankUp && isScoreUp) {
@@ -396,6 +412,41 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         if (res == 0) return;
         mIvUp.setVisibility(View.VISIBLE);
         mIvUp.setImageResource(res);
+    }
+
+    @Override
+    public void showUpAlert(boolean isRankUp, boolean isScoreUp) {
+        String title = "恭喜";
+        String nBtn = "暗爽就好";
+        String pBtn = "嘚瑟一下";
+        String msg = "";
+        if (isRankUp && isScoreUp) {
+            msg = "你的模考分数和排名都提升啦";
+        } else if (isRankUp) {
+            msg = "你的模考排名提升啦";
+        } else if (isScoreUp) {
+            msg = "你的模考分数提升啦";
+        } else {
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setNegativeButton(nBtn,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setPositiveButton(pBtn,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
     }
 
 }

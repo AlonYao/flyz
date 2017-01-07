@@ -14,10 +14,11 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.bean.MeasureNotesBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureReportCategoryBean;
+import com.appublisher.quizbank.common.measure.view.IMeasureReportBaseView;
 
 import java.util.List;
 
-public class MeasureReportBaseActivity extends BaseActivity {
+public class MeasureReportBaseActivity extends BaseActivity implements IMeasureReportBaseView{
 
     public static final String FROM_MOCK_REPORT = "from_mock_report";
 
@@ -26,6 +27,7 @@ public class MeasureReportBaseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
     public void showCategory(List<MeasureReportCategoryBean> list, String from) {
         if (list == null || list.size() == 0) return;
 
@@ -86,6 +88,7 @@ public class MeasureReportBaseActivity extends BaseActivity {
         }
     }
 
+    @Override
     public void showNotes(List<MeasureNotesBean> list) {
         ViewStub vs = (ViewStub) findViewById(R.id.measure_report_notes_vs);
         if (vs == null) return;
