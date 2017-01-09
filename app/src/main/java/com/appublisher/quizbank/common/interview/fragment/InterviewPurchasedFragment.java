@@ -30,7 +30,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -184,7 +183,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case RECORD_SUBMIT:
-                        if (timeRecording >= 10 && timeRecording <= 360) {
+                        if (timeRecording >= 60 && timeRecording <= 360) {
                             status = CONFIRMABLE;
                             mIvRecordSound.setImageResource(R.drawable.interview_confrim_blue);
                         }
@@ -588,13 +587,11 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
                 // 需要判断录音器是否已经存在,如果存在销毁,停止
                 if(mActivity.recorderManager != null){
-                    Logger.e("mActivity.recorderManager录音器不为空");
                     mActivity.recorderManager.stop();
                     //先准备录音
                     prepareRecord();
                 }else{
                     if(status == RECORDABLE) {
-                        Logger.e("mActivity.recorderManager录音器为空");
                         //先准备录音
                         prepareRecord();
                     }
@@ -621,7 +618,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             } else if (id == R.id.interview_recordsounding_rl_confirm) {   //点击确认功能
 
                 //   if(一个常量记录图片变成了蓝色){
-                if (isBlue == true && timeRecording > 10) {
+                if (isBlue == true && timeRecording > 60) {
                     mActivity.viewPager.setScroll(false);    // 未提交页面也不可以滑动
                     isStop = false;
                     mActivity.setCanBack(2);                // 返回键设置不可返回
@@ -878,7 +875,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             @Override
             public void run() {
                 timeRecording++;
-                if (timeRecording >= 10 && timeRecording <= 360) {
+                if (timeRecording >= 60 && timeRecording <= 360) {
                     handler.sendEmptyMessage(RECORD_SUBMIT);
                     isBlue = true;
                 }

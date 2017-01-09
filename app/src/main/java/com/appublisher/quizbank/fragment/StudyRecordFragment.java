@@ -19,7 +19,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressBarManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.customui.XListView;
@@ -113,7 +112,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
         setValue();
 
-        SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
+        SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
         boolean iswriteView = sp.getBoolean("isWriteView", true);
         if (iswriteView) {   // 如果是笔试
             mWriteButton.setChecked(true);
@@ -171,15 +170,12 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     setRadioButtonLeftChecked(mWriteButton);
                     setRadioButtonRightUnChecked(mInterviewButton);
 
-                    SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
+                    SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
+                    SharedPreferences.Editor editor =  sp.edit();
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
 
-
                     if (mWrittenList == null || mWrittenList.size() == 0) {
-
-
                         mQRequest.getHistoryPapers(0, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
                     } else {
                         showXListview();
@@ -201,12 +197,12 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                 // 面试button处理
                 if (isChecked) {
                     isWriteView = false;
-                    Logger.e("点击了面试button");
+
                     setRadioButtonRightChecked(mInterviewButton);
                     setRadioButtonLeftUnChecked(mWriteButton);
 
-                    SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
+                    SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
+                    SharedPreferences.Editor editor =  sp.edit();
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
 
@@ -237,12 +233,10 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     @Override
     public void onResume() {
         super.onResume();
-        Logger.e("onResume");
         // 获取数据
         if (!isHidden()) {
             refreshData();
-
-            SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
+            SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
             boolean iswriteView = sp.getBoolean("isWriteView", true);
             if (iswriteView) {   // 如果是笔试
                 mWriteButton.setChecked(true);

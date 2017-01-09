@@ -15,7 +15,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.YaoguoUploadManager;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -280,21 +279,18 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
 
             if (resp != null && resp.getResponse_code() == 1) {
-                Logger.e("录音提交成功");
                 //获取数据
                 // 在此需要在封装成一次bean对象
                 mActivity.setCanBack(0);
                 mActivity.getData();
 
             } else {
-                Logger.e("录音提交失败");
                 ToastManager.showToast(mActivity,"刷新失败");
             }
             mActivity.hideLoading();
         }else if("update_collected_status".equals(apiName)){    //  收藏后的回调
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp != null && resp.getResponse_code() == 1) {
-                Logger.e("收藏的回调成功");
             } else {
                 ToastManager.showToast(mActivity,"刷新失败");
             }
@@ -322,7 +318,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
    * */
     public boolean getIsAnswer(int position, InterviewPaperDetailActivity activity) {
 
-       // Logger.e("getIsAnswer中position===" + position);
         InterviewPaperDetailActivity mActivity = activity;
         List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.list;
         if (list == null) return false;

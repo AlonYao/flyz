@@ -1,12 +1,15 @@
 package com.appublisher.quizbank.common.interview.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +86,31 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SharedPreferences sp = getActivity().getSharedPreferences("interview", Context.MODE_PRIVATE);
+        boolean isFirstCome = sp.getBoolean("isFirstCome", true);
+        if(isFirstCome){
+            skipToSheet();
+        }
+    }
+    /**
+     * 跳转至答题卡
+     */
+    public void skipToSheet() {
+        SharedPreferences sp = getActivity().getSharedPreferences("interview", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("isFirstCome",false);
+        editor.commit();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment fragment = getFragmentManager().findFragmentByTag("InterviewGuideFragment");
+        if (fragment != null) {
+            transaction.remove(fragment);
+        }
+        InterviewGuideFragment mGuideFragment = new InterviewGuideFragment();
+        mGuideFragment.show(transaction, "InterviewGuideFragment");
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -119,7 +147,7 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Jingxuan");
-                UmengManager.onEvent(getContext(), "InterviewPage", map);
+                UmengManager.onEvent(getActivity(), "InterviewPage", map);
             }
         });
 
@@ -133,7 +161,7 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Jiexi");
-                UmengManager.onEvent(getContext(), "InterviewPage", map);
+                UmengManager.onEvent(getActivity(), "InterviewPage", map);
             }
         });
 
@@ -146,7 +174,7 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Tupo");
-                UmengManager.onEvent(getContext(), "InterviewPage", map);
+                UmengManager.onEvent(getActivity(), "InterviewPage", map);
             }
         });
 
@@ -160,7 +188,7 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Zhenti");
-                UmengManager.onEvent(getContext(), "InterviewPage", map);
+                UmengManager.onEvent(getActivity(), "InterviewPage", map);
             }
         });
 
@@ -226,7 +254,6 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
             mLlDots.addView(initDot());
         }
         mLlDots.getChildAt(0).setSelected(true);
-
         startCarousel();
     }
 
