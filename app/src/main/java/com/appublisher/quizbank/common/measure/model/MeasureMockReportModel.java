@@ -64,6 +64,10 @@ public class MeasureMockReportModel extends MeasureReportModel {
         MeasureMockReportResp resp = GsonManager.getModel(response, MeasureMockReportResp.class);
         if (resp == null || resp.getResponse_code() != 1) return;
 
+        // 用于分享
+        mPaperName = resp.getExercise_name();
+        mScore = resp.getScore();
+
         mAnalysisBean = new MeasureAnalysisBean();
         mAnalysisBean.setCategorys(resp.getCategory());
 
@@ -84,7 +88,7 @@ public class MeasureMockReportModel extends MeasureReportModel {
         if (mock_rank == null || !mock_rank.isAvailable()) return;
         mView.showUp(mock_rank.isDefeat_up(), mock_rank.isScore_up());
 
-        if ((mock_rank.isDefeat_up() || mock_rank.isDefeat_up()) && !isShowUpBefore()) {
+        if ((mock_rank.isDefeat_up() || mock_rank.isScore_up()) && !isShowUpBefore()) {
             mView.showUpAlert(mock_rank.isDefeat_up(), mock_rank.isScore_up());
             updateShowUpIds();
         }
