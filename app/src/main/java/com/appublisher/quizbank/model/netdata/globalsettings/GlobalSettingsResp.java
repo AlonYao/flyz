@@ -23,6 +23,15 @@ public class GlobalSettingsResp {
     private String course_share_url;
     private List<ExerciseIntroBean> exercise_intro;
     private List<RateTagsBean> rate_tags;
+    private String mock_share_url;
+
+    public String getMock_share_url() {
+        return mock_share_url;
+    }
+
+    public void setMock_share_url(String mock_share_url) {
+        this.mock_share_url = mock_share_url;
+    }
 
     public int getResponse_code() {
         return response_code;

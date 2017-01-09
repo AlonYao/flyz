@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
@@ -58,6 +59,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
     private TextView mTvAvgDur;
     private TextView mTvNotice;
     private ImageView mIvUp;
+    private ScrollView mSvMain;
 
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public MsgHandler mHandler;
@@ -112,7 +114,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (MENU_SHARE.equals(item.getTitle())) {
-            // Empty
+            mModel.setUmengShare();
         }
 
         return false;
@@ -154,6 +156,9 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mModel.mPaperId = getIntent().getIntExtra(INTENT_PAPER_ID, 0);
         mModel.mPaperType = MOCK;
         mModel.getData();
+
+        // 用于分享
+        mModel.setScrollView(mSvMain);
     }
 
     private void initView() {
@@ -163,6 +168,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         mTvAvgDur = (TextView) findViewById(R.id.mock_report_statistics_avg_duration);
         mTvNotice = (TextView) findViewById(R.id.mock_report_notice);
         mIvUp = (ImageView) findViewById(R.id.mock_report_up);
+        mSvMain = (ScrollView) findViewById(R.id.mock_report_sv);
         Button btnAll = (Button) findViewById(R.id.mock_report_all);
         Button btnError = (Button) findViewById(R.id.mock_report_error);
 
@@ -419,7 +425,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         String title = "恭喜";
         String nBtn = "暗爽就好";
         String pBtn = "嘚瑟一下";
-        String msg = "";
+        String msg;
         if (isRankUp && isScoreUp) {
             msg = "你的模考分数和排名都提升啦";
         } else if (isRankUp) {
@@ -433,6 +439,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(msg)
+                .setCancelable(false)
                 .setNegativeButton(nBtn,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -444,6 +451,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                mModel.setUmengShare();
                                 dialog.dismiss();
                             }
                         }).show();

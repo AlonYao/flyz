@@ -38,8 +38,8 @@ import java.util.List;
 public class MeasureReportModel extends MeasureModel {
 
     public MeasureAnalysisBean mAnalysisBean;
+    public double mScore;
 
-    private double mScore;
     private double mDefeat;
     private int mRigthNum;
     private int mTotalNum;
@@ -343,12 +343,9 @@ public class MeasureReportModel extends MeasureModel {
      */
     public void setUmengShare() {
         GlobalSettingsResp globalSettingsResp = CommonModel.getGlobalSetting(mContext);
+        if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1) return;
 
-        String baseUrl = "http://m.yaoguo.cn/appShare/index.html#/appShare/pr?";
-        if (globalSettingsResp != null && globalSettingsResp.getResponse_code() == 1) {
-            baseUrl = globalSettingsResp.getReport_share_url();
-        }
-
+        String baseUrl = globalSettingsResp.getReport_share_url();
         baseUrl = baseUrl + "user_id=" + LoginModel.getUserId()
                 + "&user_token=" + LoginModel.getUserToken()
                 + "&exercise_id=" + mPaperId
@@ -372,6 +369,11 @@ public class MeasureReportModel extends MeasureModel {
                     + "中拿了"
                     + mScore
                     + "分，棒棒哒！";
+            baseUrl = globalSettingsResp.getMock_share_url()
+                    + "user_id=" + LoginModel.getUserId()
+                    + "&user_token=" + LoginModel.getUserToken()
+                    + "&exercise_id=" + mPaperId
+                    + "&paper_type=" + mPaperType;
         } else {
             content = "刷了一套题，正确率竟然达到了"
                     + Utils.getPercent1(mRigthNum, mTotalNum)
