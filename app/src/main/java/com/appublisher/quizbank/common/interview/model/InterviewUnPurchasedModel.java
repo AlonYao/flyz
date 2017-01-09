@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_pay.PayListener;
 import com.appublisher.lib_pay.PayModel;
@@ -24,6 +25,8 @@ import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailRes
 import com.appublisher.quizbank.model.netdata.CommonResp;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 
 /*
@@ -78,6 +81,11 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             public void onClick(View view) {
                 mAalertDialog.dismiss();
                 mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "1");
+                UmengManager.onEvent(mActivity, "InterviewAnswer", map);
             }
         });
 
@@ -105,6 +113,11 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
 
                 mAalertDialog.dismiss();
                 mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "2");
+                UmengManager.onEvent(mActivity, "InterviewAnswer", map);
             }
         });
 
@@ -124,6 +137,11 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
 
                 mAalertDialog.dismiss();
                 mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "3");
+                UmengManager.onEvent(mActivity, "InterviewAnswer", map);
             }
         });
     }
@@ -169,6 +187,11 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
 
                 mAalertDialog.dismiss();
                 mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "1");
+                UmengManager.onEvent(mActivity, "InterviewVip", map);
             }
         });
         cancle.setOnClickListener(new View.OnClickListener() {
@@ -262,6 +285,12 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                             }
                         }
                     });
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "2");
+                    UmengManager.onEvent(mActivity, "InterviewVip", map);
+
                 } else if (wxPay.isChecked()) {
                     new PayModel(mActivity).wxPay(entity, new PayListener() {
                         @Override
@@ -280,6 +309,11 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
                             }
                         }
                     });
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "2");
+                    UmengManager.onEvent(mActivity, "InterviewVip", map);
                 }
             }
         });

@@ -338,10 +338,14 @@ public class MeasureReportModel extends MeasureModel {
         return "";
     }
 
+    public void setUmengShare() {
+        setUmengShare("Report");
+    }
+
     /**
      * 设置友盟分享
      */
-    public void setUmengShare() {
+    public void setUmengShare(String from) {
         GlobalSettingsResp globalSettingsResp = CommonModel.getGlobalSetting(mContext);
         if (globalSettingsResp == null || globalSettingsResp.getResponse_code() != 1) return;
 
@@ -386,7 +390,7 @@ public class MeasureReportModel extends MeasureModel {
                 .setTargetUrl(baseUrl)
                 .setSinaWithoutTargetUrl(true)
                 .setUmImage(UmengManager.getUMImage(mContext, mScrollView))
-                .setFrom("Report");
+                .setFrom(from);
         UmengManager.shareAction(
                 (Activity) mContext,
                 umShareEntity,

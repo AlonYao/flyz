@@ -205,6 +205,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(MainActivity.this, MeasureSearchActivity.class));
+                    // Umeng
+                    UmengManager.onEvent(MainActivity.this, "Search");
                 }
             });
         }
@@ -217,6 +219,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(MainActivity.this, MeasureSearchActivity.class));
+                    // Umeng
+                    UmengManager.onEvent(MainActivity.this, "Search");
                 }
             });
         }

@@ -114,7 +114,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (MENU_SHARE.equals(item.getTitle())) {
-            mModel.setUmengShare();
+            mModel.setUmengShare("MockReport");
         }
 
         return false;
@@ -445,13 +445,18 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+                                // Umeng
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("Type", "CloseMock");
+                                UmengManager.onEvent(
+                                        MeasureMockReportActivity.this, "Share", map);
                             }
                         })
                 .setPositiveButton(pBtn,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mModel.setUmengShare();
+                                mModel.setUmengShare("ShareMock");
                                 dialog.dismiss();
                             }
                         }).show();

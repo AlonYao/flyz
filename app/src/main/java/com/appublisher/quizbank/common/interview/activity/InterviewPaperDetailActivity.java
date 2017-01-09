@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -23,6 +24,7 @@ import com.appublisher.quizbank.common.utils.MediaRecorderManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback {
@@ -157,10 +159,20 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 mModel.setCollected(mCurrentPagerId, false,this);
                 ToastManager.showToast(this, "取消收藏");
 
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Cancel");
+                UmengManager.onEvent(this, "InterviewAnalysis", map);
+
             } else {
                 // 如果是未收藏状态，收藏
                 mModel.setCollected(mCurrentPagerId, true, this);
                 ToastManager.showToast(this, "收藏成功");
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Collect");
+                UmengManager.onEvent(this, "InterviewAnalysis", map);
             }
       }
         return super.onOptionsItemSelected(item);

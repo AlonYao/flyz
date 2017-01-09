@@ -325,7 +325,11 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                         // Umeng
                         HashMap<String, String> map = new HashMap<>();
                         map.put("Action", "Material");
-                        UmengManager.onEvent(mActivity, "InterviewProblem", map);
+                        if (isDone()) {
+                            UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                        } else {
+                            UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                        }
                     }
                 });
             } else {
@@ -361,11 +365,20 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                         }
                         // Umeng
                         HashMap<String, String> map = new HashMap<>();
-                        map.put("Action", "Answer");
-                        UmengManager.onEvent(mActivity, "InterviewProblem", map);
+                        map.put("Action", "ReadA");
+                        if (isDone()) {
+                            UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                        } else {
+                            UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                        }
+
                     } else {                      // 未答题
                         // 弹窗处理:三个item
                         mActivity.mUnPurchasedModel.showNoAnswerDialog();
+                        // Umeng
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("Action", "Answer");
+                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
                     }
 
                 }
@@ -468,6 +481,12 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                         prepareRecord();    //先准备录音
                     }
                 }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Record");
+                UmengManager.onEvent(mActivity, "InterviewRecord", map);
+
             } else if (id == R.id.interview_recordsounding_cancle) {   // 点击取消功能
 
                 mActivity.viewPager.setScroll(true);    // 让viewPager不拦截
@@ -481,6 +500,11 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 merterialView.setClickable(true);
                 isBlue = false;
                 mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Cancel");
+                UmengManager.onEvent(mActivity, "InterviewRecord", map);
 
             } else if (id == R.id.interview_recordsounding_rl_confirm) {   //点击确认功能
 
@@ -502,6 +526,11 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 } else {
                     ToastManager.showToast(mActivity, "录音时间要超过60秒");
                 }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Conform");
+                UmengManager.onEvent(mActivity, "InterviewRecord", map);
 
             } else if (id == R.id.interview_recordsounding_ll) {             // 点击录音整体
                 ToastManager.showToast(getActivity(), "正在录音,录音时间要超过60秒");
@@ -525,6 +554,12 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     mActivity.viewPager.setScroll(false);
 
                 }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Remake");
+                UmengManager.onEvent(mActivity, "InterviewRecord", map);
+
             } else if (id == R.id.interview_recordsounding_ll_play) {       //点击未提交播放按钮
                 if(isStop){
                     isStop = false;
@@ -544,10 +579,20 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     play(userAnswerFilePath,status);
                 }
 
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Playaudio");
+                UmengManager.onEvent(mActivity, "InterviewRecord", map);
+
             } else if (id == R.id.interview_recordsounding_rl_submit) {      // 点击提交按钮
 
                 mediaRecorderManager.stop();  // 关闭播放器和录音器
                 mUnPurchasedModel.showSubmitAnswerAlert(mActivity, userAnswerFilePath, mQuestionbean,FileManager.getVideoDuration(userAnswerFilePath),questionType);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Submit");
+                UmengManager.onEvent(mActivity, "InterviewRecord", map);
 
             } else if (id == R.id.interview_hadanswer_listen_ll) {           // 已提交播放按钮
 
@@ -564,6 +609,11 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     isStop = true;
                     dealAnswer();   // 处理自己提交的录音
                 }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Answer");
+                UmengManager.onEvent(mActivity, "InterviewRecord", map);
             }
         }
     };
