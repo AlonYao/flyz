@@ -88,7 +88,7 @@ public class MeasureMockReportModel extends MeasureReportModel {
         if (mock_rank == null || !mock_rank.isAvailable()) return;
         mView.showUp(mock_rank.isDefeat_up(), mock_rank.isScore_up());
 
-        if ((mock_rank.isDefeat_up() || mock_rank.isDefeat_up()) && !isShowUpBefore()) {
+        if ((mock_rank.isDefeat_up() || mock_rank.isScore_up()) && !isShowUpBefore()) {
             mView.showUpAlert(mock_rank.isDefeat_up(), mock_rank.isScore_up());
             updateShowUpIds();
         }
