@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.appublisher.lib_basic.DownloadAsyncTask;
 import com.appublisher.lib_basic.FileManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
 
@@ -17,23 +16,24 @@ public class InterviewModel {
      * 下载&解压&播放
      *
      * @param url     下载链接
-     * @param zipFile zip文件名
+     * @param localFile    文件名
      */
-    public static void downloadVoiceVideo(final Context context, String url, final String fileFolder, final String zipFile, final ICommonCallback ICommonCallback) {
+    public static void downloadVoiceVideo(final Context context, String url, final String fileFolder, final String localFile, final ICommonCallback ICommonCallback) {
         ProgressDialogManager.showProgressDialog(context);
         DownloadAsyncTask mDownloadAsyncTask = new DownloadAsyncTask(
                 url,
-                zipFile,
+                localFile,
                 new DownloadAsyncTask.FinishListener() {
                     @Override
                     public void onFinished() {
                         ProgressDialogManager.closeProgressDialog();
-                        File file = new File(zipFile);
+                        File file = new File(localFile);
                         if (file.exists()) {
-                            Logger.e("filename=="+file.getName());
-                            ToastManager.showToast(context, "音频下载成功");
-                            FileManager.unzipFiles(fileFolder, zipFile);
-                            FileManager.deleteFiles(zipFile);
+                            if(file.getName().contains(".zip")){
+                                ToastManager.showToast(context, "音频下载成功");
+                                FileManager.unzipFiles(fileFolder, localFile);
+                                FileManager.deleteFiles(localFile);
+                            }
                             ICommonCallback.callback(true);
                         } else {
                             ICommonCallback.callback(false);

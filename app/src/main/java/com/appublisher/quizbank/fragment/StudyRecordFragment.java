@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +24,7 @@ import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.RecordCollectActivity;
 import com.appublisher.quizbank.model.business.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
@@ -46,7 +46,6 @@ import java.util.HashMap;
 public class StudyRecordFragment extends Fragment implements RequestCallback,
         XListView.IXListViewListener {
 
-    public Activity mActivity;
     public XListView mXListView;
     public ArrayList<HistoryPaperM> mWrittenList;
     public ArrayList<HistoryPaperM> mInterviewList;
@@ -69,12 +68,13 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     private RelativeLayout mInterviewcollectRl;
     public int mInterviewOffset;
     private int mAddpage;
+    public MainActivity mActivity;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = getActivity();
+        mActivity = (MainActivity) getActivity();
         mIsRefresh = false;
         mOffset = 0;
         mAddpage = 1;
@@ -112,7 +112,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
         setValue();
 
-        SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
+        SharedPreferences sp = mActivity.getSharedPreferences("interviewRecord", Context.MODE_PRIVATE);
         boolean iswriteView = sp.getBoolean("isWriteView", true);
         if (iswriteView) {   // 如果是笔试
             mWriteButton.setChecked(true);
@@ -170,7 +170,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     setRadioButtonLeftChecked(mWriteButton);
                     setRadioButtonRightUnChecked(mInterviewButton);
 
-                    SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
+                    SharedPreferences sp = mActivity.getSharedPreferences("interviewRecord", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor =  sp.edit();
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
@@ -201,7 +201,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     setRadioButtonRightChecked(mInterviewButton);
                     setRadioButtonLeftUnChecked(mWriteButton);
 
-                    SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
+                    SharedPreferences sp = mActivity.getSharedPreferences("interviewRecord", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor =  sp.edit();
                     editor.putBoolean("isWriteView", isWriteView);
                     editor.commit();
@@ -236,7 +236,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         // 获取数据
         if (!isHidden()) {
             refreshData();
-            SharedPreferences sp = mActivity.getSharedPreferences("quizbank_store", 0);
+            SharedPreferences sp = mActivity.getSharedPreferences("interviewRecord", Context.MODE_PRIVATE);
             boolean iswriteView = sp.getBoolean("isWriteView", true);
             if (iswriteView) {   // 如果是笔试
                 mWriteButton.setChecked(true);
@@ -263,7 +263,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         if (!hidden) {
             refreshData();
 
-            SharedPreferences sp = mActivity.getSharedPreferences("radiobutton", Context.MODE_PRIVATE);
+            SharedPreferences sp = mActivity.getSharedPreferences("interviewRecord", Context.MODE_PRIVATE);
             boolean iswriteView = sp.getBoolean("isWriteView", true);
             if (iswriteView) {   // 如果是笔试  -->换新条件
                 mWriteButton.setChecked(true);

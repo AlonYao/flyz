@@ -114,8 +114,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private final int TIME_CANCEL = 1;
     private final int RECORD_TIME = 2;
     private final int RECORD_SUBMIT = 3;
-    private final int PLAYING = 5;           // 正在播放
-    private final int PLAYINGSUBMIT = 6;           // 已提交后的正在播放
+    private final int PLAYING = 4;           // 正在播放
+    private final int PLAYINGSUBMIT = 5;           // 已提交后的正在播放
     private int timePlaying;
     private TextView mTvtimeNotSubm;
     private InterviewPaperDetailActivity mActivity;
@@ -130,7 +130,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private String questionType;
     private LinearLayout analysisView;
     private MediaRecorderManager mediaRecorderManager;
-    private MediaRecorderManager mediaRecorderManager2;
+
 
     public static Fragment newInstance(String questionbean, int position, int listLength, InterviewPaperDetailActivity mctivity,String questionType) {
         Bundle args = new Bundle();
@@ -232,8 +232,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     }
 
     private void checkedIsAnswer() {
-        // 根据解析时长来显示有无答案和解析
-        // 回答的问题直接展开
+
         if(mQuestionbean.getUser_audio() !=null &&  mQuestionbean.getUser_audio().length() > 0){
 
             mUnRecordView.setVisibility(View.GONE);
@@ -243,8 +242,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
         }else{
             status = RECORDABLE;
-
-             // 如果未答题:显示未录音页面
             mUnRecordView.setVisibility(View.VISIBLE);
             analysisView.setVisibility(View.GONE);       //如果未答题:解析行折叠
         }
@@ -263,20 +260,19 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
     private void initView() {
 
-        merterialView = mUnPurchasedView.findViewById(R.id.meterial_rl);       // 材料行:逻辑显示与否根据数据集合判断
+        merterialView = mUnPurchasedView.findViewById(R.id.meterial_rl);
 
-        analysisSwitchView = mUnPurchasedView.findViewById(R.id.analysis_switch_rl);       // 解析行:逻辑:点击事件:展开与折叠 & 是否答题的逻辑
+        analysisSwitchView = mUnPurchasedView.findViewById(R.id.analysis_switch_rl);
 
-        questionContent = (LinearLayout) mUnPurchasedView.findViewById(R.id.question_content);      // 展示问题的容器
-        analysisView = (LinearLayout) mUnPurchasedView.findViewById(R.id.unpurchased_analysis_ll);      //解析答案的容器
-        //解析答案的容器
-        analysisSwitchTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_switch_tv);        //解析行的左面的文字
-        analysisIm = (ImageView) mUnPurchasedView.findViewById(R.id.analysis_im);             // 解析行右面的ImageView:逻辑:展开:换图片 & 折叠换图片
-        reminderTv = (TextView) mUnPurchasedView.findViewById(R.id.open_analysis);          // 解析行右面ImageView下面的文字
-        analysisTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_tv);           // 答案中的标签:解析
-        noteTv = (TextView) mUnPurchasedView.findViewById(R.id.note_tv);               // 答案中的标签:知识点
-        sourceTv = (TextView) mUnPurchasedView.findViewById(R.id.source_tv);          // 答案中的标签:来源
-        keywordsTv = (TextView) mUnPurchasedView.findViewById(R.id.keywords_tv);       //答案中的标签:关键词
+        questionContent = (LinearLayout) mUnPurchasedView.findViewById(R.id.question_content);
+        analysisView = (LinearLayout) mUnPurchasedView.findViewById(R.id.unpurchased_analysis_ll);
+
+        analysisIm = (ImageView) mUnPurchasedView.findViewById(R.id.analysis_im);
+        reminderTv = (TextView) mUnPurchasedView.findViewById(R.id.open_analysis);
+        analysisTv = (TextView) mUnPurchasedView.findViewById(R.id.analysis_tv);
+        noteTv = (TextView) mUnPurchasedView.findViewById(R.id.note_tv);
+        sourceTv = (TextView) mUnPurchasedView.findViewById(R.id.source_tv);
+        keywordsTv = (TextView) mUnPurchasedView.findViewById(R.id.keywords_tv);
 
         initRecordSoundView();  //初始化录音界面的布局和控件
         checkedIsAnswer();     // 需要一个返回到提交字段
@@ -287,28 +283,28 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
      */
     private void initRecordSoundView() {
 
-        mUnRecordView = mUnPurchasedView.findViewById(R.id.interview_popup_unrecordsound);       //未录音页面
-        mRecordingView = mUnPurchasedView.findViewById(R.id.interview_popup_recordsounding);    // 正在录音页面
-        mUnsubmitView = mUnPurchasedView.findViewById(R.id.interview_popup_recordsounding_unsubmit);   //已录音,未提交页面
-        mRecordedView = mUnPurchasedView.findViewById(R.id.interview_popup_recordsounded);       //已提交页面
+        mUnRecordView = mUnPurchasedView.findViewById(R.id.interview_popup_unrecordsound);
+        mRecordingView = mUnPurchasedView.findViewById(R.id.interview_popup_recordsounding);
+        mUnsubmitView = mUnPurchasedView.findViewById(R.id.interview_popup_recordsounding_unsubmit);
+        mRecordedView = mUnPurchasedView.findViewById(R.id.interview_popup_recordsounded);
 
         // 初始化各自的控件
-        mUnrecordsound_ll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_unrecordsound_ll);  //未录音中间图片文字整体
+        mUnrecordsound_ll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_unrecordsound_ll);
 
-        mRecordsounding_cancle = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_cancle);   // 正在录音:取消整体
-        mRecordsounding_confirm = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_rl_confirm);    // 正在录音:确认整体
-        mRecordsoundingll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_ll);       // 正在录音:中间的整体
-        mTvtimeRecording = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_sounding_time);     //正在录音监听时间
-        mIvRecordSound = (ImageView) mUnPurchasedView.findViewById(R.id.imagview_confirm);              //正在录音:确认图片
+        mRecordsounding_cancle = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_cancle);
+        mRecordsounding_confirm = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_rl_confirm);
+        mRecordsoundingll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_ll);
+        mTvtimeRecording = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_sounding_time);
+        mIvRecordSound = (ImageView) mUnPurchasedView.findViewById(R.id.imagview_confirm);
 
-        mRecordNotSubmit_rl = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsound_rl_rerecording);     // 未提交录音:重录整体
-        mRecordNotSubmit_ll_play = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_ll_play);     // 未提交录音: 播放整体
-        mRecordNotSubmit_rl_submit = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_rl_submit);  //未提交录音:提交整体
-        mTvtimeNotSubm = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_play);                              // 未提交录音:播放的文字
-        mTvtimeNotSubmPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_sounding_play_time);       // 未提交录音:播放时间
+        mRecordNotSubmit_rl = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsound_rl_rerecording);
+        mRecordNotSubmit_ll_play = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_ll_play);
+        mRecordNotSubmit_rl_submit = (RelativeLayout) mUnPurchasedView.findViewById(R.id.interview_recordsounding_rl_submit);
+        mTvtimeNotSubm = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_play);
+        mTvtimeNotSubmPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_record_sounding_play_time);
 
-        mAnswer_listen_ll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_hadanswer_listen_ll);   // 已提交录音:播放整体
-        mTvtimeHadSumbPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_recorded_sound_play_time);    // 已提交录音:播放时间
+        mAnswer_listen_ll = (LinearLayout) mUnPurchasedView.findViewById(R.id.interview_hadanswer_listen_ll);
+        mTvtimeHadSumbPlay = (TextView) mUnPurchasedView.findViewById(R.id.tv_recorded_sound_play_time);
 
     }
 
@@ -343,28 +339,24 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
              * **/
             analysisSwitchView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {     // 解析行的逻辑处理: 逻辑:点击事件:展开与折叠 & 是否答题的逻辑
+                public void onClick(View v) {     // 解析行的逻辑处理:
                     if (isDone() || isBuyAll() || isBuySingle()) {               // 已经答题
-                        if (analysisView.getVisibility() == View.VISIBLE) {    // 展开-->折叠状态
+                        if (analysisView.getVisibility() == View.VISIBLE) {
                             analysisView.setVisibility(View.GONE);
                             analysisIm.setImageResource(R.drawable.interview_answer_lookover);
                             if ("notice".equals(mQuestionbean.getStatus())) {
                                 reminderTv.setText("查看");
-//                                analysisTv.setVisibility(View.GONE);
                             } else {
                                 reminderTv.setText("查看");
-//                                analysisTv.setVisibility(View.VISIBLE);
                             }
                         } else {
                             // 如果答完题状态
-                            analysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                            analysisView.setVisibility(View.VISIBLE);
                             analysisIm.setImageResource(R.drawable.interview_answer_packup);
                             if ("notice".equals(mQuestionbean.getStatus())) {
                                 reminderTv.setText("收起");
-//                                analysisTv.setVisibility(View.GONE);
                             } else {
                                 reminderTv.setText("收起");
-//                                analysisTv.setVisibility(View.VISIBLE);
                             }
                         }
                         // Umeng
@@ -387,14 +379,14 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         }
 
         // 监听录音控件
-        mUnrecordsound_ll.setOnClickListener(OnClickListener);   // 未录音中间图片整体
-        mRecordsounding_cancle.setOnClickListener(OnClickListener);  // 录音中取消整体
-        mRecordsounding_confirm.setOnClickListener(OnClickListener); //录音中确认整体
-        mRecordsoundingll.setOnClickListener(OnClickListener);        //录音中播放整体
-        mRecordNotSubmit_rl.setOnClickListener(OnClickListener);    // 已录音未提交:重录整体
-        mRecordNotSubmit_ll_play.setOnClickListener(OnClickListener);    // 已录音未提交:播放整体
-        mRecordNotSubmit_rl_submit.setOnClickListener(OnClickListener);    // 已录音未提交:提交整体
-        mAnswer_listen_ll.setOnClickListener(OnClickListener);       // 已提交录音页面:播放整体
+        mUnrecordsound_ll.setOnClickListener(OnClickListener);
+        mRecordsounding_cancle.setOnClickListener(OnClickListener);
+        mRecordsounding_confirm.setOnClickListener(OnClickListener);
+        mRecordsoundingll.setOnClickListener(OnClickListener);
+        mRecordNotSubmit_rl.setOnClickListener(OnClickListener);
+        mRecordNotSubmit_ll_play.setOnClickListener(OnClickListener);
+        mRecordNotSubmit_rl_submit.setOnClickListener(OnClickListener);
+        mAnswer_listen_ll.setOnClickListener(OnClickListener);
     }
 
     private boolean isDone() {
@@ -466,44 +458,40 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 // 需要判断录音器是否已经存在,如果存在销毁,停止
                 if(mActivity.recorderManager != null){
                     mActivity.recorderManager.stop();
-                    // 在activity中拿到textview,然后设置
 
                     handler.sendEmptyMessage(TIME_CANCEL);
                     mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(user_audio_durationTime));
-                    //先准备录音
-                    prepareRecord();
+                    prepareRecord(); // 先准备录音
 
                 }else{
                     if(status == RECORDABLE) {
-                        //先准备录音
-                        prepareRecord();
+                        prepareRecord();    //先准备录音
                     }
                 }
             } else if (id == R.id.interview_recordsounding_cancle) {   // 点击取消功能
 
                 mActivity.viewPager.setScroll(true);    // 让viewPager不拦截
-                mActivity.setCanBack(0);              // 可以按返回键
+                mActivity.setCanBack(0);                  // 可以按返回键
                 status = RECORDABLE;
                 mTvtimeRecording.setText("0" + "\"");
                 stopRecord();
                 mRecordingView.setVisibility(View.GONE);
                 mUnRecordView.setVisibility(View.VISIBLE);
-                analysisSwitchView.setClickable(true);         // 未录音过程中可点击
-                merterialView.setClickable(true);         // 未录音过程中可点击
+                analysisSwitchView.setClickable(true);
+                merterialView.setClickable(true);
                 isBlue = false;
                 mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
 
             } else if (id == R.id.interview_recordsounding_rl_confirm) {   //点击确认功能
 
-                //   if(一个常量记录图片变成了蓝色){
                 if (isBlue == true && timeRecording > 60) {
                     mActivity.viewPager.setScroll(false);    // 未提交页面也不可以滑动
                     isStop = false;
                     mActivity.setCanBack(2);                // 返回键设置不可返回
                     mediaRecorderManager.stop();
                     mRecordingView.setVisibility(View.GONE);
-                    mUnsubmitView.setVisibility(View.VISIBLE);       // 进入重录页面
-                    analysisSwitchView.setClickable(false);         // 录音过程中不可点击
+                    mUnsubmitView.setVisibility(View.VISIBLE);
+                    analysisSwitchView.setClickable(false);
                     merterialView.setClickable(false);
                     if(timeRecording >= 360){
                         mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(360));
@@ -517,7 +505,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
             } else if (id == R.id.interview_recordsounding_ll) {             // 点击录音整体
                 ToastManager.showToast(getActivity(), "正在录音,录音时间要超过60秒");
-                // 逻辑:计时
+
             } else if (id == R.id.interview_recordsound_rl_rerecording) {      //点击重录
 
                 if (mediaRecorderManager != null) {
@@ -531,10 +519,10 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     prepareRecord();
                     mUnsubmitView.setVisibility(View.GONE);
                     mRecordingView.setVisibility(View.VISIBLE);
-                    mActivity.setCanBack(1);     // 是否可以按返回键
+                    mActivity.setCanBack(1);
                     analysisSwitchView.setClickable(false);         // 录音过程中不可点击
                     merterialView.setClickable(false);
-                    mActivity.viewPager.setScroll(false);   // 让viewpager拦截
+                    mActivity.viewPager.setScroll(false);
 
                 }
             } else if (id == R.id.interview_recordsounding_ll_play) {       //点击未提交播放按钮
@@ -552,7 +540,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
                 }else{
                     isStop = true;
-                    // 播放的逻辑及时间递减,播放完后:吐司提示
                     status = SUBMIT;               // 变成可提交状态
                     play(userAnswerFilePath,status);
                 }
@@ -581,30 +568,43 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         }
     };
     /*
-    *   处理已提交录音的播放数据  dealAnswer(hotAnswerFolder, interviewM.getHottest_answer().getFile_url());
+    *   处理已提交录音的播放数据
     * */
     public void dealAnswer(){
 
         final String filePath = fileFolder + question_id + ".amr";
+        final String zipFilePath = fileFolder + question_id + ".zip";
         final File file = new File(filePath);
         status = HADSUBMIT;
         if (file.exists()) {
             ToastManager.showToast(mActivity,"从本地获取的数据语音");
             playHadsubmit(filePath,status);
         } else{
-            InterviewModel.downloadVideo(mActivity,mQuestionbean.getUser_audio(),filePath, new ICommonCallback() {
-                @Override
-                public void callback(boolean success) {
-                    if(success){
-                       ToastManager.showToast(mActivity,"从网络下载了语音");
-                        playHadsubmit(filePath,status);
+            String url = mQuestionbean.getUser_audio();
+            if (url == null) return;
+
+            if (url.contains(".amr")) {
+                InterviewModel.downloadVoiceVideo(mActivity, mQuestionbean.getUser_audio(), fileFolder, filePath, new ICommonCallback() {
+                    @Override
+                    public void callback(boolean success) {
+                        if(success){
+                            playHadsubmit(filePath,status);
+                        }
                     }
-                }
-            });
+                });
+            } else if (url.contains(".zip")){
+                InterviewModel.downloadVoiceVideo(mActivity, mQuestionbean.getUser_audio(), fileFolder, zipFilePath, new ICommonCallback() {
+                    @Override
+                    public void callback(boolean success) {
+                        if(success){
+                            playHadsubmit(filePath,status);
+                        }
+                    }
+                });
+            }
         }
         // 设置屏幕常亮
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
     }
 
     /**
@@ -699,7 +699,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         // 设置屏幕常亮
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //  时间展示:递减
         playTimer(status);
     }
 
@@ -718,7 +717,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         }else if(status.equals(HADSUBMIT)){
             mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(user_audio_durationTime));
         }
-        //  时间展示:递减
         playTimer(status);
         // 设置屏幕常亮
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

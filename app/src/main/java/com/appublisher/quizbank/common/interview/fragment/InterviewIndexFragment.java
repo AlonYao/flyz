@@ -96,7 +96,7 @@ public class InterviewIndexFragment extends Fragment implements RequestCallback 
         }
     }
     /**
-     * 跳转至答题卡
+     * 跳转至面试引导页
      */
     public void skipToSheet() {
         SharedPreferences sp = getActivity().getSharedPreferences("interview", Context.MODE_PRIVATE);

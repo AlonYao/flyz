@@ -3,6 +3,8 @@ package com.appublisher.quizbank.common.interview.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ public class InterviewGuideFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // 全屏处理
         setStyle(DialogFragment.STYLE_NORMAL, R.style.Measure_Dialog_FullScreen);
     }
@@ -32,6 +35,9 @@ public class InterviewGuideFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.interview_guide_background, container);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.themecolor));
+        toolbar.setTitle("面试");
         initView();
         initListener();
         return view;

@@ -13,6 +13,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
+import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.model.InterviewUnPurchasedModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
@@ -46,6 +47,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private String type;
     private String time;
     public MediaRecorderManager recorderManager;
+    private InterviewDetailModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +69,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
         viewPager.setScroll(true);
         initListener(viewPager);
-        mUnPurchasedModel = new InterviewUnPurchasedModel(this);
 
+        mUnPurchasedModel = new InterviewUnPurchasedModel(this);
+        mModel = new InterviewDetailModel(this);
         mRequest = new InterviewRequest(this, this);
 
-        String dataFrom = getIntent().getStringExtra("dataFrom");  // 来源:怎么把studyrecordfragment传进来
+        String dataFrom = getIntent().getStringExtra("dataFrom");
 
         if("studyRecordInterview".equals(dataFrom)){       // 数据来源自记录页面的面试页面
             mRequest.getStudyRecordInterviewPaperDetail(type, time);
@@ -103,8 +106,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
 
-        if(mUnPurchasedModel.getIsAnswer( mCurrentPagerId, this)){ // 判断是否回答 -->需要放到model中,因为涉及到修改   在此处应该讲bean 传给model
-            if(mUnPurchasedModel.getIsCollected( mCurrentPagerId, this)){
+        if(mModel.getIsAnswer( mCurrentPagerId, this)){  // 判断是否回答
+            if(mModel.getIsCollected( mCurrentPagerId, this)){
                 MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }else{
@@ -131,10 +134,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (whatView == recording) {
                 return true;
             } else if (whatView == recorded_unsbmit) {
-                if (mUnPurchasedModel == null) {
-                    mUnPurchasedModel = new InterviewUnPurchasedModel(this);
+                if (mModel == null) {
+                    mModel = new InterviewDetailModel(this);
                 }
-                mUnPurchasedModel.showBackPressedDailog(this);   // 显示退出dailog
+                mModel.showBackPressedDailog(this);   // 显示退出dailog
 
                 return true;
             }
@@ -149,14 +152,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         }else if("收藏".equals(item.getTitle())){
             // 检验是否收藏
-            if (mUnPurchasedModel.getIsCollected(mCurrentPagerId, this)) {   // 判断当前viewpager的小题是否收藏
+            if (mModel.getIsCollected(mCurrentPagerId, this)) {   // 判断当前viewpager的小题是否收藏
                 // 如果是已收藏状态，取消收藏
-                mUnPurchasedModel.setCollected(mCurrentPagerId, false,this);
+                mModel.setCollected(mCurrentPagerId, false,this);
                 ToastManager.showToast(this, "取消收藏");
 
             } else {
                 // 如果是未收藏状态，收藏
-                mUnPurchasedModel.setCollected(mCurrentPagerId, true, this);
+                mModel.setCollected(mCurrentPagerId, true, this);
                 ToastManager.showToast(this, "收藏成功");
             }
       }
@@ -171,10 +174,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (whatView == recording) {
             return;
         } else if (whatView == recorded_unsbmit) {
-            if (mUnPurchasedModel == null) {
-                mUnPurchasedModel = new InterviewUnPurchasedModel(this);
+            if (mModel == null) {
+                mModel = new InterviewDetailModel(this);
             }
-            mUnPurchasedModel.showBackPressedDailog(this);
+            mModel.showBackPressedDailog(this);   // 显示退出dailog
             return;
         }
         super.onBackPressed();
@@ -274,6 +277,4 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         viewPager.setScroll(true);
         viewPager.setCurrentItem(mCurrentPagerId);
     }
-
-
 }
