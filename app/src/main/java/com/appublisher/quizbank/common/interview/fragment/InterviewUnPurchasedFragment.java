@@ -32,7 +32,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -575,7 +574,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     handler.sendEmptyMessage(TIME_CANCEL);
                     mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(user_audio_durationTime));
                 }else{
-                    Logger.e("");
                     isStop = true;
                     dealAnswer();   // 处理自己提交的录音
                 }
@@ -703,7 +701,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
         //  时间展示:递减
         playTimer(status);
-//        mActivity.playTimer(user_audio_durationTime);
     }
 
     public void play(String userAnswerFilePath, String statusState) {
@@ -866,8 +863,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                 });
             }
         }
-
         container.addView(flowLayout);
     }
-
 }

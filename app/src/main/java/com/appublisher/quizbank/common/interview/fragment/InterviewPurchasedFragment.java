@@ -254,7 +254,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         questionFileFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/question_audio/";
         analysisFileFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/analysis_audio/";
 
-//        question_id = mPosition;            // 具体哪一个问题
         question_id = mQuestionsBean.getId();            // 具体哪一个问题
         FileManager.mkDir(fileFolder);
         FileManager.mkDir(questionFileFolder);
@@ -296,7 +295,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         }else{
             analysisListenLl.setVisibility(View.VISIBLE);
         }
-
         initRecordSoundView();
     }
 
@@ -326,7 +324,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         mAnswer_listen_ll = (LinearLayout) mPurchasedView.findViewById(R.id.interview_hadanswer_listen_ll);   // 已提交录音:播放整体
         mTvtimeHadSumbPlay = (TextView) mPurchasedView.findViewById(R.id.tv_recorded_sound_play_time);    // 已提交录音:播放时间
-        setBackgroundAlpha(); // 设置背景的透明度
+
     }
     private void initListener() {
 
@@ -403,20 +401,16 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                         analysisIm.setImageResource(R.drawable.interview_answer_lookover);
                         if ("notice".equals(mQuestionsBean.getStatus())) {
                             reminderTv.setText("看文字");
-//                            analysisTv.setVisibility(View.GONE);
                         } else {
                             reminderTv.setText("看文字");
-//                            analysisTv.setVisibility(View.VISIBLE);
                         }
                     } else {
                         analysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
                         analysisIm.setImageResource(R.drawable.interview_answer_packup);
                         if ("notice".equals(mQuestionsBean.getStatus())) {
                             reminderTv.setText("不看文字");
-//                            analysisTv.setVisibility(View.GONE);
                         } else {
                             reminderTv.setText("不看文字");
-//                            analysisTv.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -710,11 +704,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     dealAnswer();    // 处理自己提交的录音
                 }
             }else if(id ==R.id.interview_hadquestion_listen_ll){      // 题目行右面的听语音的整体
-
                 dealQuestionVedio();     // 处理题目行语音数据
-
             }else if(id == R.id.interview_answer_listen_ll ){      // 解析行右面的听语音的整体
-
                 dealAnalysisVedio();    // 处理解析行语音数据
             }
         }
@@ -964,8 +955,4 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         handler.sendEmptyMessage(TIME_CANCEL);
     }
 
-    // 设置背景的透明度
-    public void setBackgroundAlpha(){
-       // mUnRecordView.getBackground().setAlpha(0);
-    }
 }

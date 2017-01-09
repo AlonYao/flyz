@@ -38,7 +38,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private String paper_type;
     private int note_id;
     private int mCurrentPagerId;   // 当前的viewPager的索引
-
     private String mFrom;
     public List<InterviewPaperDetailResp.QuestionsBean> list;
     private boolean mIsBuyAll = false;
@@ -77,7 +76,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if("studyRecordInterview".equals(dataFrom)){       // 数据来源自记录页面的面试页面
             mRequest.getStudyRecordInterviewPaperDetail(type, time);
         }else if("recordCollect".equals(dataFrom)){        // 来源: 记录页面的收藏页面
-        //   Logger.e("进入interviewpaperdetail界面");
             int note_id = getIntent().getIntExtra("note_id", 0);
             mRequest.getRecordInterviewCollectPaperDetail(note_id);
         } else{
@@ -106,7 +104,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         menu.clear();
 
         if(mUnPurchasedModel.getIsAnswer( mCurrentPagerId, this)){ // 判断是否回答 -->需要放到model中,因为涉及到修改   在此处应该讲bean 传给model
-           // Logger.e("onPrepareOptionsMenu中:mCurrentPagerId===" + mCurrentPagerId);
             if(mUnPurchasedModel.getIsCollected( mCurrentPagerId, this)){
                 MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
@@ -148,7 +145,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 if (mUnPurchasedModel == null) {
                     mUnPurchasedModel = new InterviewUnPurchasedModel(this);
                 }
-                String openNineUrl = "打开全部的链接";
                 mUnPurchasedModel.showOpenFullDialog();
             }
         }else if("收藏".equals(item.getTitle())){
@@ -221,7 +217,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             mFrom);
                     // 给model数据
                     viewPager.setAdapter(mAdaper);
-
                     // 选中当前viewpager
                     setViewPagerItem();
                 }
@@ -263,7 +258,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             public void onPageSelected(int position) {       //  当前viewpager
                 mCurrentPagerId = position;
                 invalidateOptionsMenu();
-                // 需要监听录音功能,上一页的题目是否在播放中:
             }
 
             @Override
@@ -276,7 +270,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     *   提交录音后,选中当前viewPager,并刷新menu
     * */
     public void setViewPagerItem(){
-       // Logger.e("setViewPagerItem中mCurrentPagerId===" + mCurrentPagerId);
         invalidateOptionsMenu();
         viewPager.setScroll(true);
         viewPager.setCurrentItem(mCurrentPagerId);

@@ -36,9 +36,6 @@ import java.util.List;
 
 /*
 *  本model为未付费页面:InterviewUnPurchasedFragment中Model
-*  主要处理:
-*           1.两种弹窗的背景及弹窗中的item点击事件
-*           2.支付成功和支付失败的处理
 * */
 public class InterviewUnPurchasedModel extends InterviewDetailModel{
 
@@ -231,7 +228,7 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
     * */
     public void showSubmitAnswerAlert(final InterviewPaperDetailActivity activity , String fileDir, InterviewPaperDetailResp.QuestionsBean mQuestionbean, final String durationTime,String questiontype){
         mActivity = activity;
-        final String type = questiontype;                 // 问题的类型guokao/teacher/category/before
+        final String type = questiontype;                 // 问题的类型
         String userId = LoginModel.getUserId();
         final int question_Id = mQuestionbean.getId();
         String questionId = String.valueOf(question_Id);
@@ -345,9 +342,7 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             mBean.setIs_collected(false);
             type = "cancel_collect";
         }
-
         mActivity.list.set(position, mBean);        // 刷新list
-
         // 提交数据
         mRequest.collectQuestion(InterviewParamBuilder.submitCollectStated(type,mBean.getId()));     // 向服务器提交收藏状态
 
@@ -355,8 +350,6 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
         if (mContext instanceof InterviewPaperDetailActivity) {
             ((InterviewPaperDetailActivity) mContext).invalidateOptionsMenu();    // 刷新menu
         }
-
-
     }
 
     public int getCurQuestionId(int position,InterviewPaperDetailActivity activity) {
