@@ -6,7 +6,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
@@ -65,9 +64,6 @@ public class StudyRecordModel {
 
         final ArrayList<HistoryPaperM> historyPapers = historyPapersResp.getList();
         if (historyPapers == null || historyPapers.size() == 0) {
-//            if (fragment.mIsRefresh) {
-//                fragment.showIvNull();
-//            }
             if(fragment.mWrittenList == null || fragment.mWrittenList.size() == 0){
                 fragment.showIvNull();
             }else{
@@ -76,7 +72,6 @@ public class StudyRecordModel {
             return;
         }
 
-      //  fragment.showXListview();
         // 拼接数据
         if (fragment.mOffset == 0) {
             fragment.mWrittenList = historyPapers;
@@ -174,10 +169,6 @@ public class StudyRecordModel {
 
         final ArrayList<HistoryPaperM> mhistoryPapers = historyPapersResp.getList();
         if (mhistoryPapers == null || mhistoryPapers.size() == 0) {
-//            if (fragment.mIsRefresh) {
-//                Logger.e("response4 ===" + response.toString());
-//                fragment.showIvNull();
-//            }
             // 判断上一次加载时的集合是否为空
             if(fragment.mInterviewList == null || fragment.mInterviewList.size() == 0){
                 fragment.showIvNull();
@@ -187,8 +178,6 @@ public class StudyRecordModel {
             fragment.setmPage();
             return;
         }
-
-    //    fragment.showXListview();
 
         // 拼接数据
         if (fragment.mPage == 1) {
