@@ -68,8 +68,8 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
         TextView cancle = (TextView) mWindow.findViewById(R.id.cancle);
 
         // 0.01元处理
-        InterviewPaperDetailResp.SingleAudioBean bean = mActivity.getSingleAudioBean();
-        if (bean != null && bean.is_purchased()) {
+        final InterviewPaperDetailResp.SingleAudioBean singleAudioBean = mActivity.getSingleAudioBean();
+        if (singleAudioBean != null && singleAudioBean.is_purchased()) {
             payOne.setTextColor(Color.GRAY);
         } else {
             payOne.setTextColor(ContextCompat.getColor(mActivity, R.color.common_text));
@@ -97,16 +97,22 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             }
         });
 
+        String singlePayText = "付 ¥ 0.01, 解锁本题库全部解析";
+        if (singleAudioBean != null) {
+            singlePayText = "付 ¥ " + String.valueOf(singleAudioBean.getPrice())
+                    + ", 解锁本题库全部解析";
+        }
+        payOne.setText(singlePayText);
+
         payOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 0.01元支付
-                InterviewPaperDetailResp.SingleAudioBean bean = mActivity.getSingleAudioBean();
-                if (bean == null || bean.is_purchased()) return;
+                if (singleAudioBean == null || singleAudioBean.is_purchased()) return;
 
                 ProductEntity entity = new ProductEntity();
-                entity.setProduct_id(String.valueOf(bean.getProduct_id()));
-                entity.setProduct_type(bean.getProduct_type());
+                entity.setProduct_id(String.valueOf(singleAudioBean.getProduct_id()));
+                entity.setProduct_type(singleAudioBean.getProduct_type());
                 entity.setProduct_count(String.valueOf(1));
                 entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
                 showChoicePay(entity);
@@ -121,16 +127,22 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             }
         });
 
+        String allPayText = "付 ¥ 9, 解锁本题库全部解析";
+        final InterviewPaperDetailResp.AllAudioBean allAudioBean = mActivity.getAllAudioBean();
+        if (allAudioBean != null) {
+            allPayText = "付 ¥ " + String.valueOf(allAudioBean.getPrice()) + ", 解锁本题库全部解析";
+        }
+        payNine.setText(allPayText);
+
         payNine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 9元支付
-                InterviewPaperDetailResp.AllAudioBean bean = mActivity.getAllAudioBean();
-                if (bean == null || bean.is_purchased()) return;
+                if (allAudioBean == null || allAudioBean.is_purchased()) return;
 
                 ProductEntity entity = new ProductEntity();
-                entity.setProduct_id(String.valueOf(bean.getProduct_id()));
-                entity.setProduct_type(bean.getProduct_type());
+                entity.setProduct_id(String.valueOf(allAudioBean.getProduct_id()));
+                entity.setProduct_type(allAudioBean.getProduct_type());
                 entity.setProduct_count(String.valueOf(1));
                 entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
                 showChoicePay(entity);
@@ -170,12 +182,18 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
         TextView payNine = (TextView) mWindow.findViewById(R.id.pay_nine);
         TextView cancle = (TextView) mWindow.findViewById(R.id.cancle);
 
+        String allPayText = "付 ¥ 9, 解锁本题库全部解析";
+        final InterviewPaperDetailResp.AllAudioBean bean = mActivity.getAllAudioBean();
+        if (bean != null) {
+            allPayText = "付 ¥ " + String.valueOf(bean.getPrice()) + ", 解锁本题库全部解析";
+        }
+        payNine.setText(allPayText);
+
         // 点击事件
         payNine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 9元支付
-                InterviewPaperDetailResp.AllAudioBean bean = mActivity.getAllAudioBean();
                 if (bean == null || bean.is_purchased()) return;
 
                 ProductEntity entity = new ProductEntity();
