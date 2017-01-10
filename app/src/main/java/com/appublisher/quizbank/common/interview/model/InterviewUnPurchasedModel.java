@@ -97,10 +97,10 @@ public class InterviewUnPurchasedModel extends InterviewDetailModel{
             }
         });
 
-        String singlePayText = "付 ¥ 0.01, 解锁本题库全部解析";
+        String singlePayText = "付 ¥ 0.01, 获取本题解析(仅一次机会)";
         if (singleAudioBean != null) {
             singlePayText = "付 ¥ " + String.valueOf(singleAudioBean.getPrice())
-                    + ", 解锁本题库全部解析";
+                    + ", 获取本题解析(仅一次机会)";
         }
         payOne.setText(singlePayText);
 
