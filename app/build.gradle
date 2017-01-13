@@ -475,6 +475,46 @@ android {
                                     APP_CHANNEL: "baidu-mianshi-10"]
         }
 
+        "baidu-mianshi-11" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-11"]
+        }
+
+        "baidu-mianshi-12" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-12"]
+        }
+
+        "baidu-mianshi-13" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-13"]
+        }
+
+        "baidu-mianshi-14" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-14"]
+        }
+
+        "baidu-mianshi-15" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-15"]
+        }
+
+        "baidu-mianshi-16" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-16"]
+        }
+
+        "baidu-mianshi-17" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-17"]
+        }
+
+        "baidu-mianshi-18" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "baidu-mianshi-18"]
+        }
+
         "baidu-mianshi-qd" {
             manifestPlaceholders = [APP_NAME   : "腰果公考",
                                     APP_CHANNEL: "baidu-mianshi-qd"]
@@ -625,6 +665,11 @@ android {
         "wyms-8" {
             manifestPlaceholders = [APP_NAME   : "腰果公考",
                                     APP_CHANNEL: "wyms-8"]
+        }
+
+        "360-bylf" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "360-bylf"]
         }
 
         AppUpdate {
