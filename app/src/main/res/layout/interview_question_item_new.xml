@@ -107,7 +107,7 @@
         <!--显示正确答案模块-->
 
         <LinearLayout
-            android:id="@+id/unpurchased_analysis_ll"
+            android:id="@+id/analysis_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

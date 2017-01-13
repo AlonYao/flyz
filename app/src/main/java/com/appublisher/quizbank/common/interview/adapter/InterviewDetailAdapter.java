@@ -41,7 +41,7 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
                     questionbean, position, listLength,questionType);       // 已付费页面
         } else {
             return InterviewUnPurchasedFragment.newInstance(
-                    questionbean, position, listLength, mActivity,questionType);    // 未付费页面
+                    questionbean, position, listLength, questionType);    // 未付费页面
         }
     }
 

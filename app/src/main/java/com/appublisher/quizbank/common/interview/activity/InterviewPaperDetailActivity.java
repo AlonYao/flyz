@@ -15,10 +15,9 @@ import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
-import com.appublisher.quizbank.common.interview.model.InterviewUnPurchasedModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
-import com.appublisher.quizbank.common.interview.viewgroup.MyViewPager;
+import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
 import com.appublisher.quizbank.common.utils.MediaRecorderManager;
 
 import org.json.JSONArray;
@@ -29,27 +28,24 @@ import java.util.List;
 
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback {
 
-    private int paper_id;
+    private static final int UNRECORD = 0;
+    private static final int RECORDING = 1;
+    private static final int RECORDEDUNSBMIT = 2;
+    private int mPaperId;
     public InterviewRequest mRequest;
-    public MyViewPager viewPager;
+    public ScrollExtendViewPager mViewPager;
     public InterviewDetailAdapter mAdaper;
-    private int whatView;
-    private int unrecord = 0;
-    private int recording = 1;
-    private int recorded_unsbmit = 2;
-    public InterviewUnPurchasedModel mUnPurchasedModel;
-    private String paper_type;
-    private int note_id;
+    private int mWhatView;
+    private String mPaperType;
+    private int mNoteId;
     private int mCurrentPagerId;   // 当前的viewPager的索引
     private String mFrom;
-    public List<InterviewPaperDetailResp.QuestionsBean> list;
+    public List<InterviewPaperDetailResp.QuestionsBean> mList;
     private boolean mIsBuyAll = false;
     private InterviewPaperDetailResp.AllAudioBean mAllAudioBean;
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
-    private String type;
-    private String time;
-    public MediaRecorderManager recorderManager;
-    private InterviewDetailModel mModel;
+    public InterviewDetailModel mModel;
+    public MediaRecorderManager mMediaRecorderManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +55,22 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         setToolBar(this);
         setTitle("");
         mFrom = getIntent().getStringExtra("from");          // 来源:问题的类型
-        paper_id = getIntent().getIntExtra("paper_id", 0);
-        paper_type = getIntent().getStringExtra("paper_type");
-        note_id = getIntent().getIntExtra("note_id", 0);
+        mPaperId = getIntent().getIntExtra("paper_id", 0);
+        mPaperType = getIntent().getStringExtra("paper_type");
+        mNoteId = getIntent().getIntExtra("note_id", 0);
 
-        type = getIntent().getStringExtra("itemType");      // item类型
-        time = getIntent().getStringExtra("time");          // 时间
+        String type = getIntent().getStringExtra("itemType");      // item类型
+        String time = getIntent().getStringExtra("time");          // 时间
 
-        recorderManager = new MediaRecorderManager(getApplicationContext()); // 所有fragment中用同一个录音器
+        // 所有fragment中用同一个录音器
+        mMediaRecorderManager = new MediaRecorderManager(getApplicationContext());
 
-        viewPager = (MyViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
-        viewPager.setScroll(true);
-        initListener(viewPager);
+        mViewPager = (ScrollExtendViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
 
-        mUnPurchasedModel = new InterviewUnPurchasedModel(this);
+        if(mViewPager == null ) return;
+        mViewPager.setScroll(true);
+        initListener(mViewPager);
+
         mModel = new InterviewDetailModel(this);
         mRequest = new InterviewRequest(this, this);
 
@@ -84,32 +82,26 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             int note_id = getIntent().getIntExtra("note_id", 0);
             mRequest.getRecordInterviewCollectPaperDetail(note_id);
         } else{
-            mRequest.getPaperDetail(paper_id, paper_type, note_id); // 请求数据
+            mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId); // 请求数据
         }
         showLoading();
     }
 
-    public int setCanBack(int whatView) {
-        this.whatView = whatView;
-        return whatView;
+    public void setCanBack(int view) {
+        mWhatView = view;
     }
-
     public void getData() {
-        mRequest.getPaperDetail(paper_id, paper_type, note_id);
+        mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId);
     }
-
-    @Override
-   public boolean onCreateOptionsMenu(Menu menu) {
-
-        return super.onCreateOptionsMenu(menu);
-   }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
-
-        if(mModel.getIsAnswer( mCurrentPagerId, this)){  // 判断是否回答
-            if(mModel.getIsCollected( mCurrentPagerId, this)){
+        if (mList == null || mCurrentPagerId < 0 ) {
+            mCurrentPagerId = 0;
+        }
+        if(mModel.getIsAnswer( mCurrentPagerId)){  // 判断是否回答
+            if(mModel.getIsCollected( mCurrentPagerId)){
                 MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
                         MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }else{
@@ -122,7 +114,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             MenuItemCompat.setShowAsAction(
                     menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -132,31 +123,22 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // 返回键
-            if (whatView == recording) {
+            if (mWhatView == RECORDING) {
                 return true;
-            } else if (whatView == recorded_unsbmit) {
-                if (mModel == null) {
-                    mModel = new InterviewDetailModel(this);
-                }
-                mModel.showBackPressedDailog(this);   // 显示退出dailog
-
+            } else if (mWhatView == RECORDEDUNSBMIT) {
+                InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
                 return true;
             }
         } else if ("开启完整版".equals(item.getTitle())) {
-            if (whatView == recording || whatView == recorded_unsbmit) {
+            if (mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT) {
                 return true;
-            } else if (whatView == unrecord) {
-                if (mUnPurchasedModel == null) {
-                    mUnPurchasedModel = new InterviewUnPurchasedModel(this);
-                }
-                mUnPurchasedModel.showOpenFullDialog();
+            } else if (mWhatView == UNRECORD) {
+                mModel.showOpenFullDialog();
             }
         }else if("收藏".equals(item.getTitle())){
-            // 检验是否收藏
-            if (mModel.getIsCollected(mCurrentPagerId, this)) {   // 判断当前viewpager的小题是否收藏
-                // 如果是已收藏状态，取消收藏
-                mModel.setCollected(mCurrentPagerId, false,this);
+            if (mModel.getIsCollected(mCurrentPagerId)) {   // 判断当前viewpager的小题是否收藏
+
+                mModel.setCollected(mCurrentPagerId, false);
                 ToastManager.showToast(this, "取消收藏");
 
                 // Umeng
@@ -165,8 +147,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 UmengManager.onEvent(this, "InterviewAnalysis", map);
 
             } else {
-                // 如果是未收藏状态，收藏
-                mModel.setCollected(mCurrentPagerId, true, this);
+
+                mModel.setCollected(mCurrentPagerId, true);
                 ToastManager.showToast(this, "收藏成功");
 
                 // Umeng
@@ -183,13 +165,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     @Override
     public void onBackPressed() {
-        if (whatView == recording) {
+        if (mWhatView == RECORDING) {
             return;
-        } else if (whatView == recorded_unsbmit) {
-            if (mModel == null) {
-                mModel = new InterviewDetailModel(this);
-            }
-            mModel.showBackPressedDailog(this);   // 显示退出dailog
+        } else if (mWhatView == RECORDEDUNSBMIT) {
+            InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
             return;
         }
         super.onBackPressed();
@@ -204,8 +183,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     public int getCurQuestionId() {
-        if (list == null || mCurrentPagerId < 0 || mCurrentPagerId >= list.size()) return 0;
-        InterviewPaperDetailResp.QuestionsBean bean = list.get(mCurrentPagerId);
+        if (mList == null || mCurrentPagerId < 0 || mCurrentPagerId >= mList.size()) return 0;
+        InterviewPaperDetailResp.QuestionsBean bean = mList.get(mCurrentPagerId);
         if (bean == null) return 0;
         return bean.getId();
     }
@@ -221,17 +200,17 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
             if (resp != null && resp.getResponse_code() == 1) {
                 // 获取问题的数据集合
-                list = resp.getQuestions();
-                if (list == null || list.size() == 0) {
+                mList = resp.getQuestions();
+                if (mList == null || mList.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 } else {
                     mAdaper = new InterviewDetailAdapter(               // 将数据传给adapter
                             getSupportFragmentManager(),
-                            list,
+                            mList,
                             this,
                             mFrom);
                     // 给model数据
-                    viewPager.setAdapter(mAdaper);
+                    mViewPager.setAdapter(mAdaper);
                     // 选中当前viewpager
                     setViewPagerItem();
                 }
@@ -243,7 +222,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 }
 
                 mSingleAudioBean = resp.getSingle_audio();
-
                 invalidateOptionsMenu(); // 刷新menu
             } else if (resp != null && resp.getResponse_code() == 1001) {
                 ToastManager.showToast(this, "没有面试题目");
@@ -263,21 +241,16 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     private void initListener(ViewPager viewPager) {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {       //  当前viewpager
                 mCurrentPagerId = position;
                 invalidateOptionsMenu();
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
@@ -286,7 +259,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     public void setViewPagerItem(){
         invalidateOptionsMenu();
-        viewPager.setScroll(true);
-        viewPager.setCurrentItem(mCurrentPagerId);
+        mViewPager.setScroll(true);
+        mViewPager.setCurrentItem(mCurrentPagerId);
     }
 }

@@ -4,14 +4,28 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.YaoguoUploadManager;
-import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.model.business.LoginModel;
+import com.appublisher.lib_pay.PayListener;
+import com.appublisher.lib_pay.PayModel;
+import com.appublisher.lib_pay.ProductEntity;
+import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewParamBuilder;
@@ -21,81 +35,45 @@ import com.appublisher.quizbank.model.netdata.CommonResp;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by huaxiao on 2016/12/16.
- */
 
 public class InterviewDetailModel implements RequestCallback {
 
-    private Context mContext;
     public InterviewRequest mRequest;
     private InterviewPaperDetailActivity mActivity;
     private ProgressDialog mProgressDialog;
-    private String type;
 
     public InterviewDetailModel(Context context) {
-        mContext = context;
-        mRequest = new InterviewRequest(context, this);
-    }
-
-
-    @Override
-    public void requestCompleted(JSONObject response, String apiName) {
-        if ("submit_record".equals(apiName)) {
-
-            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
-
-            if (resp != null && resp.getResponse_code() == 1) {
-                mActivity.setCanBack(0);
-                mActivity.getData();
-
-            } else {
-                ToastManager.showToast(mActivity,"刷新失败");
-            }
-            mActivity.hideLoading();
+        if (context instanceof InterviewPaperDetailActivity) {
+            mActivity = (InterviewPaperDetailActivity) context;
         }
-
-    }
-
-    @Override
-    public void requestCompleted(JSONArray response, String apiName) {
-        if (mContext instanceof BaseActivity)
-            ((BaseActivity) mContext).hideLoading();
-    }
-
-    @Override
-    public void requestEndedWithError(VolleyError error, String apiName) {
-        if (mContext instanceof BaseActivity)
-            ((BaseActivity) mContext).hideLoading();
+        mRequest = new InterviewRequest(context, this);
     }
 
     /*
    *   提交的弹窗
    * */
-    public void showSubmitAnswerAlert(final InterviewPaperDetailActivity activity , String fileDir, InterviewPaperDetailResp.QuestionsBean mQuestionbean, final String durationTime, String questiontype){
-        mActivity = activity;
-        final String type = questiontype;                 // 问题的类型
+    public void showSubmitAnswerProgressBar(String fileDir, InterviewPaperDetailResp.QuestionsBean mQuestionbean, final String durationTime,final String questiontype){
         String userId = LoginModel.getUserId();
         final int question_Id = mQuestionbean.getId();
-        String questionId = String.valueOf(question_Id);
         final int duration = Integer.parseInt(durationTime);
 
-        String savePath = "/yaoguo_interview/" + userId + "/" + questionId +".amr" ;
+        String savePath = "/yaoguo_interview/" + userId + "/" + String.valueOf(mQuestionbean.getId()) +".amr" ;
         if (mProgressDialog == null) {
             mProgressDialog = YaoguoUploadManager.getProgressDialog(mActivity);
         }
-
         mProgressDialog.show();
+
         YaoguoUploadManager.CompleteListener completeListener = new YaoguoUploadManager.CompleteListener() {
             @Override
             public void onComplete(boolean isSuccess, String result, String url) {
                 if(isSuccess){
                     mActivity.showLoading();
-                    ToastManager.showToast(mActivity,"上传成功 ");
                     mProgressDialog.cancel();
-                    mRequest.submitRecord(InterviewParamBuilder.submitPaper(question_Id,url,duration,type));    //提交录音数据
+                    ToastManager.showToast(mActivity,"上传成功 ");
+                    mRequest.submitRecord(InterviewParamBuilder.submitPaper(question_Id,url,duration,questiontype));    //提交录音数据
 
                 }else{
                     mProgressDialog.cancel();
@@ -109,13 +87,14 @@ public class InterviewDetailModel implements RequestCallback {
                 mProgressDialog.setProgress((int) ((100 * bytesWrite) / contentLength));
             }
         };
-        YaoguoUploadManager.blockUpload(fileDir,savePath,completeListener,progressListener);
+        YaoguoUploadManager.formUpload(fileDir,savePath,completeListener,progressListener);
     }
 
     /*
    *  创建重录页面dialog
    * */
     public static void showBackPressedDailog(final InterviewPaperDetailActivity mActivity){
+        if (mActivity.isFinishing()) return;
         new AlertDialog.Builder(mActivity)
                 .setMessage("放弃本次作答")
                 .setTitle("提示")
@@ -131,9 +110,8 @@ public class InterviewDetailModel implements RequestCallback {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                ToastManager.showToast(mActivity,"再按一次退出");
                                 // 返回上一级
-                                mActivity.setCanBack(0);
+                                mActivity.finish();
                             }
                         })
                 .create().show();
@@ -142,44 +120,32 @@ public class InterviewDetailModel implements RequestCallback {
     /*
    *   检查menu是否为收藏状态:需要获取数据:由fragment传进来
    * */
-    public boolean getIsCollected(int position, InterviewPaperDetailActivity activity) {
-        InterviewPaperDetailActivity mActivity = activity;
-        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.list;
-        if (list == null) return false;
+    public boolean getIsCollected(int position) {
+        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.mList;
+        if(list == null || list.size()<= 0 || position > list.size() || position < 0) return false;
         InterviewPaperDetailResp.QuestionsBean mBean = list.get(position);
-
-        if(mBean.getIs_collected()){
-            return true;
-        }else{
-            return false;
-        }
-
+        return mBean != null && mBean.getIs_collected();
     }
     /*
-   *   检查menu是否为收藏状态
+   *   检查menu是否回答
    * */
-    public boolean getIsAnswer(int position, InterviewPaperDetailActivity activity) {
-
-        InterviewPaperDetailActivity mActivity = activity;
-        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.list;
-        if (list == null) return false;
+    public boolean getIsAnswer(int position) {
+        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.mList;
+        if(list == null || list.size()<= 0 || position > list.size() || position < 0) return false;
         InterviewPaperDetailResp.QuestionsBean mBean = list.get(position);
 
-        if(mBean.getUser_audio() != null && mBean.getUser_audio().length() > 0 ){
-            return true;
-        }else{
-            return  false;
-        }
-
+        return mBean!= null && mBean.getUser_audio() != null && mBean.getUser_audio().length() > 0;
     }
     /*
     *   设置menu的状态 :由fragment传入数据,由activity来判断
     * */
-    public void setCollected(int position, boolean isCollected, InterviewPaperDetailActivity activity) {
-        InterviewPaperDetailActivity mActivity = activity;
-        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.list;
+    public void setCollected(int position, boolean isCollected) {
+        if (mActivity == null) return;
+        List<InterviewPaperDetailResp.QuestionsBean> list =  mActivity.mList;
+        if(list == null || list.size()<= 0 || position > list.size() || position < 0) return;
         InterviewPaperDetailResp.QuestionsBean mBean = list.get(position);
-
+        if(mBean == null ) return;
+        String type;
         if(isCollected){   // 将收藏变为true
             mBean.setIs_collected(true);
             type = "collect";
@@ -187,13 +153,315 @@ public class InterviewDetailModel implements RequestCallback {
             mBean.setIs_collected(false);
             type = "cancel_collect";
         }
-        mActivity.list.set(position, mBean);        // 刷新list
+        mActivity.mList.set(position, mBean);        // 刷新list
         // 提交数据
         mRequest.collectQuestion(InterviewParamBuilder.submitCollectStated(type,mBean.getId()));     // 向服务器提交收藏状态
 
         // 刷新menu
-        if (mContext instanceof InterviewPaperDetailActivity) {
-            ((InterviewPaperDetailActivity) mContext).invalidateOptionsMenu();    // 刷新menu
+        if (mActivity instanceof InterviewPaperDetailActivity) {
+            mActivity.invalidateOptionsMenu();    // 刷新menu
         }
     }
+    /*
+  *  显示未付费页面的dailog
+  * */
+    public void showNoAnswerDialog(){
+        if (mActivity == null) return;
+
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
+        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        mAalertDialog.show();
+
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_reminder);
+        setWindowBackground(mWindow);
+
+        TextView goAnswer = (TextView) mWindow.findViewById(R.id.go_answer);
+        TextView paySingle = (TextView) mWindow.findViewById(R.id.pay_one);
+        TextView payAll = (TextView) mWindow.findViewById(R.id.pay_nine);
+        TextView cancle = (TextView) mWindow.findViewById(R.id.cancle);
+
+        // 0.01元处理
+        final InterviewPaperDetailResp.SingleAudioBean singleAudioBean = mActivity.getSingleAudioBean();
+        if (singleAudioBean != null && singleAudioBean.is_purchased()) {
+            paySingle.setTextColor(Color.GRAY);
+        } else {
+            paySingle.setTextColor(ContextCompat.getColor(mActivity, R.color.common_text));
+        }
+
+        // 处理点击事件
+        goAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+                mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "1");
+                UmengManager.onEvent(mActivity, "InterviewAnswer", map);
+            }
+        });
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+                mActivity.setCanBack(0);              // 可以按返回键
+            }
+        });
+
+        String singlePayText = "付 ¥ 0.01, 获取本题解析(仅一次机会)";
+        if (singleAudioBean != null) {
+            singlePayText = "付 ¥ " + String.valueOf(singleAudioBean.getPrice())
+                    + ", 获取本题解析(仅一次机会)";
+        }
+        paySingle.setText(singlePayText);
+
+        paySingle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 0.01元支付
+                if (singleAudioBean == null || singleAudioBean.is_purchased()) return;
+
+                ProductEntity entity = new ProductEntity();
+                entity.setProduct_id(String.valueOf(singleAudioBean.getProduct_id()));
+                entity.setProduct_type(singleAudioBean.getProduct_type());
+                entity.setProduct_count(String.valueOf(1));
+                entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
+                showChoicePay(entity);
+
+                mAalertDialog.dismiss();
+                mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "2");
+                UmengManager.onEvent(mActivity, "InterviewAnswer", map);
+            }
+        });
+
+        String allPayText = "付 ¥ 9, 解锁本题库全部解析";
+        final InterviewPaperDetailResp.AllAudioBean allAudioBean = mActivity.getAllAudioBean();
+        if (allAudioBean != null) {
+            allPayText = "付 ¥ " + String.valueOf(allAudioBean.getPrice()) + ", 解锁本题库全部解析";
+        }
+        payAll.setText(allPayText);
+
+        payAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 9元支付
+                if (allAudioBean == null || allAudioBean.is_purchased()) return;
+
+                ProductEntity entity = new ProductEntity();
+                entity.setProduct_id(String.valueOf(allAudioBean.getProduct_id()));
+                entity.setProduct_type(allAudioBean.getProduct_type());
+                entity.setProduct_count(String.valueOf(1));
+                entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
+                showChoicePay(entity);
+
+                mAalertDialog.dismiss();
+                mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "3");
+                UmengManager.onEvent(mActivity, "InterviewAnswer", map);
+            }
+        });
+    }
+
+    /*
+   *   创建开启完整版的dailog
+   * */
+    public void showOpenFullDialog() {
+
+        if (mActivity == null) return;
+
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
+        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        mAalertDialog.show();
+
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_openfull);
+        setWindowBackground(mWindow);
+
+        TextView payNine = (TextView) mWindow.findViewById(R.id.pay_nine);
+        TextView cancle = (TextView) mWindow.findViewById(R.id.cancle);
+
+        String allPayText = "付 ¥ 9, 解锁本题库全部解析";
+        final InterviewPaperDetailResp.AllAudioBean bean = mActivity.getAllAudioBean();
+        if (bean != null) {
+            allPayText = "付 ¥ " + String.valueOf(bean.getPrice()) + ", 解锁本题库全部解析";
+        }
+        payNine.setText(allPayText);
+
+        // 点击事件
+        payNine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 9元支付
+                if (bean == null || bean.is_purchased()) return;
+
+                ProductEntity entity = new ProductEntity();
+                entity.setProduct_id(String.valueOf(bean.getProduct_id()));
+                entity.setProduct_type(bean.getProduct_type());
+                entity.setProduct_count(String.valueOf(1));
+                entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
+                showChoicePay(entity);
+
+                mAalertDialog.dismiss();
+                mActivity.setCanBack(0);              // 可以按返回键
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "1");
+                UmengManager.onEvent(mActivity, "InterviewVip", map);
+            }
+        });
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+                mActivity.setCanBack(0);              // 可以按返回键
+            }
+        });
+    }
+
+    private void setWindowBackground(Window mWindow){
+
+        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
+        mWindow.setGravity(Gravity.BOTTOM);                         // 除底部弹出
+        mWindow.getDecorView().setPadding(0, 0, 0, 0);                 // 消除边距
+        WindowManager.LayoutParams layoutParams = mWindow.getAttributes();
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;        // 背景宽度设置成和屏幕宽度一致
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindow.setAttributes(layoutParams);
+
+    }
+
+    /**
+     * 选择支付方式
+     */
+    private void showChoicePay(final ProductEntity entity) {
+        if (entity == null || mActivity == null || mActivity.isFinishing()) return;
+        final AlertDialog mAlertDialog = new AlertDialog.Builder(mActivity).create();
+        mAlertDialog.setCancelable(true);
+        mAlertDialog.show();
+
+        Window window = mAlertDialog.getWindow();
+        if (window == null) return;
+        window.setContentView(R.layout.alert_choice_pay);
+        window.setBackgroundDrawableResource(R.color.transparency);
+
+        final CheckBox aliPay = (CheckBox) window.findViewById(R.id.aliPay);
+        final CheckBox wxPay = (CheckBox) window.findViewById(R.id.wxPay);
+
+        aliPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    wxPay.setChecked(false);
+            }
+        });
+
+        wxPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    aliPay.setChecked(false);
+            }
+        });
+
+        Button payBtn = (Button) window.findViewById(R.id.pay_btn);
+        payBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!aliPay.isChecked() && !wxPay.isChecked()) {
+                    ToastManager.showToast(mActivity, "请选择支付方式");
+                } else if (aliPay.isChecked()) {
+                    new PayModel(mActivity).aliPay(entity, new PayListener() {
+                        @Override
+                        public void isPaySuccess(boolean isPaySuccess, String orderId) {
+                            if (isPaySuccess) {
+                                mActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mActivity.showLoading();
+                                        mActivity.getData();
+                                        mAlertDialog.dismiss();
+                                    }
+                                });
+                            } else {
+                                ToastManager.showToast(mActivity, "支付失败");
+                            }
+                        }
+                    });
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "2");
+                    UmengManager.onEvent(mActivity, "InterviewVip", map);
+
+                } else if (wxPay.isChecked()) {
+                    new PayModel(mActivity).wxPay(entity, new PayListener() {
+                        @Override
+                        public void isPaySuccess(boolean isPaySuccess, String orderId) {
+                            if (isPaySuccess) {
+                                mActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mActivity.showLoading();
+                                        mActivity.getData();
+                                        mAlertDialog.dismiss();
+                                    }
+                                });
+                            } else {
+                                ToastManager.showToast(mActivity, "支付失败");
+                            }
+                        }
+                    });
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "2");
+                    UmengManager.onEvent(mActivity, "InterviewVip", map);
+                }
+            }
+        });
+    }
+    @Override
+    public void requestCompleted(JSONObject response, String apiName) {
+        if ("submit_record".equals(apiName)) {
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp != null && resp.getResponse_code() == 1) {
+                mActivity.setCanBack(0);
+                mActivity.getData();
+            } else {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }
+            mActivity.hideLoading();
+        }else if("update_collected_status".equals(apiName)){    //  收藏后的回调
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }
+        }
+    }
+
+    @Override
+    public void requestCompleted(JSONArray response, String apiName) {
+        if (mActivity != null)
+            mActivity.hideLoading();
+    }
+
+    @Override
+    public void requestEndedWithError(VolleyError error, String apiName) {
+        if (mActivity != null)
+            mActivity.hideLoading();
+    }
+
 }
