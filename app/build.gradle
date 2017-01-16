@@ -623,6 +623,31 @@ android {
                                     APP_CHANNEL: "wyyd-8"]
         }
 
+        "wyyd-31" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "wyyd-31"]
+        }
+
+        "wyyd-32" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "wyyd-32"]
+        }
+
+        "wyyd-33" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "wyyd-33"]
+        }
+
+        "wyyd-34" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "wyyd-34"]
+        }
+
+        "wyyd-35" {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "wyyd-35"]
+        }
+
         /**
          * wyms
          */
