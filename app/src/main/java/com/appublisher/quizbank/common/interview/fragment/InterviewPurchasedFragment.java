@@ -75,6 +75,16 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionListenLl = (LinearLayout) mFragmentView.findViewById(R.id.interview_hadquestion_listen_ll);
         mAnalysisListenLl = (LinearLayout) mFragmentView.findViewById(R.id.interview_answer_listen_ll);
 
+        if (mQuestionBean.getQuestion_audio() == null || mQuestionBean.getQuestion_audio_duration() == 0){
+            mQuestionListenLl.setVisibility(View.GONE);
+        }else{
+            mQuestionListenLl.setVisibility(View.VISIBLE);
+        }
+        if (mQuestionBean.getAnalysis_audio() == null || mQuestionBean.getAnalysis_audio_duration() == 0){
+            mAnalysisListenLl.setVisibility(View.GONE);
+        }else{
+            mAnalysisListenLl.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
