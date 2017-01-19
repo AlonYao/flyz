@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by jinbao on 2017/1/18.
  */
 
-public class MediaRecordManagerUtil implements OnTimerCallback {
+public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
 
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
