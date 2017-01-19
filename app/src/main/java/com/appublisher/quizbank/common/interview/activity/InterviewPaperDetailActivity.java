@@ -211,6 +211,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             mFrom);
                     // 给model数据
                     mViewPager.setAdapter(mAdaper);
+                    // 设置viewPager缓存也个数
+                    int childCount = mViewPager.getAdapter().getCount();         // viewPager的总共的页数
+                    mViewPager.setOffscreenPageLimit(childCount -1);
                     // 选中当前viewpager
                     setViewPagerItem();
                 }
