@@ -19,7 +19,6 @@ import java.util.LinkedList;
  */
 public class QuizBankApp extends Application {
 
-    public LinkedList<Activity> mActivityList = new LinkedList<>();
     public static QuizBankApp mInstance;
 
     @Override
@@ -63,22 +62,6 @@ public class QuizBankApp extends Application {
     // 单例模式中获取唯一的QuizBankApp实例
     public static QuizBankApp getInstance() {
         return mInstance;
-    }
-
-    // 添加Activity到容器中
-    public void addActivity(Activity activity) {
-        if (mActivityList == null) mActivityList = new LinkedList<>();
-
-        mActivityList.add(activity);
-    }
-
-    // 遍历所有Activity并finish
-    public void exit() {
-        if (mActivityList == null) return;
-
-        for (Activity activity : mActivityList) {
-            activity.finish();
-        }
     }
 
 }

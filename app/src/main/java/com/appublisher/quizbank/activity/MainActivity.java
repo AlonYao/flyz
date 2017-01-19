@@ -128,9 +128,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // 初始化反馈
         CommonModel.initFeedback(this);
-
-        // Add Activity
-        QuizBankApp.getInstance().addActivity(this);
     }
 
     @Override
@@ -453,7 +450,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     public void onBackPressed() {
         // 两次Back退出
         if (mDoubleBackToExit) {
-            QuizBankApp.getInstance().exit();
             super.onBackPressed();
             return;
         }
