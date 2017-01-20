@@ -144,6 +144,15 @@ public class InterviewPaperDetailResp {
         private boolean purchased_audio;    //  是否单次购买
         private boolean is_collected;    //  是否收藏
 
+        private String listen_review;       // 是否已经点评
+        public String getListen_review() {
+            return listen_review;
+        }
+
+        public void setListen_review(String listen_review) {
+            this.listen_review = listen_review;
+        }
+
         public int getUser_audio_duration() {
             return user_audio_duration;
         }

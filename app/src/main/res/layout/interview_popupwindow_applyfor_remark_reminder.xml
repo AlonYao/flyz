@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginLeft="15dp"
+        android:text="您将在3个工作日内收到名师点评。"
+        android:textColor="@color/common_text"
+        android:textSize="16dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginLeft="15dp"
+        android:text="请在“记录-面试-名师点评”中查看。"
+        android:textColor="@color/common_text"
+        android:textSize="16dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginLeft="15dp"
+        android:text="为了避免错过点评,请打开手机通知哦!"
+        android:textColor="@color/grey"
+        android:textSize="14dp"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="@color/common_line" />
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="知道了"
+        android:textColor="@color/blue"
+        android:textSize="18sp" />
+
+
+</LinearLayout>
