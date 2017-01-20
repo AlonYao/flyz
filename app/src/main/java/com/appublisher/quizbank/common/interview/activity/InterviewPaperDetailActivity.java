@@ -18,6 +18,7 @@ import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
+import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.common.utils.MediaRecorderManager;
 
 import org.json.JSONArray;
@@ -31,7 +32,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private static final int UNRECORD = 0;
     private static final int RECORDING = 1;
     private static final int RECORDEDUNSBMIT = 2;
-    private static final int TEACHERREMARK = 3;
     private int mPaperId;
     public InterviewRequest mRequest;
     public ScrollExtendViewPager mViewPager;
@@ -48,6 +48,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public InterviewDetailModel mModel;
     public MediaRecorderManager mMediaRecorderManager;
     private boolean isTeacherRemark;
+    public MediaRecordManagerUtil mMediaRecorderManagerUtil;        // 新的播放器类
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         // 所有fragment中用同一个录音器
         mMediaRecorderManager = new MediaRecorderManager(getApplicationContext());
-
+        mMediaRecorderManagerUtil = new MediaRecordManagerUtil();
         mViewPager = (ScrollExtendViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
 
         if(mViewPager == null ) return;
