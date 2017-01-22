@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class InterviewDetailModel implements RequestCallback {
+public class InterviewDetailModel extends InterviewModel implements RequestCallback {
 
     public InterviewRequest mRequest;
     private InterviewPaperDetailActivity mActivity;

@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.common.interview.network;
+package com.appublisher.quizbank.common.interview.model;
 
 
 import android.content.Context;
@@ -7,6 +7,7 @@ import com.appublisher.lib_basic.DownloadAsyncTask;
 import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.quizbank.common.interview.network.ICommonCallback;
 
 import java.io.File;
 
@@ -44,33 +45,24 @@ public class InterviewModel {
                 null);
         mDownloadAsyncTask.execute();
     }
+    /*
+    *   修改时间格式
+    * */
+    public String formatDateTime(int mss) {
 
-    /**
-     * 下载&解压&播放
-     *
-     * @param url     下载链接
-     */
-    public static void downloadVideo(final Context context, String url, final String path, final ICommonCallback ICommonCallback) {
-        ProgressDialogManager.showProgressDialog(context);
-        DownloadAsyncTask mDownloadAsyncTask = new DownloadAsyncTask(
-                url,
-                path,
-                new DownloadAsyncTask.FinishListener() {
-                    @Override
-                    public void onFinished() {
-                        ProgressDialogManager.closeProgressDialog();
-                        File file = new File(path);
-                        if (file.exists()) {
-                            ToastManager.showToast(context, "音频下载成功");
-                            ICommonCallback.callback(true);
-                        } else {
-                            ICommonCallback.callback(false);
-                            ToastManager.showToast(context, "音频下载失败，请重试");
-                        }
-                    }
-                },
-                null);
-        mDownloadAsyncTask.execute();
+        String DateTimes ;
+        int minutes = ( mss % ( 60 * 60) ) / 60;
+        int seconds = mss % 60;
+
+        if(minutes>0){
+            if(seconds < 10){
+                DateTimes = minutes + "\'" + "0" + seconds + "\"";
+                return DateTimes;
+            }
+            DateTimes = minutes + "\'" + seconds + "\"";
+        }else{
+            DateTimes = seconds + "\"";
+        }
+        return DateTimes;
     }
-
 }
