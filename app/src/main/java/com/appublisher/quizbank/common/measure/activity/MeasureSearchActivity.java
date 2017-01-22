@@ -21,11 +21,12 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSearchAdapter;
 import com.appublisher.quizbank.common.measure.model.MeasureSearchModel;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
+import com.appublisher.quizbank.common.measure.view.IMeasureSearchView;
 
 import java.util.List;
 
 public class MeasureSearchActivity extends BaseActivity implements
-        View.OnClickListener, XListView.IXListViewListener{
+        View.OnClickListener, XListView.IXListViewListener, IMeasureSearchView{
 
     public MeasureSearchModel mModel;
 
@@ -48,7 +49,7 @@ public class MeasureSearchActivity extends BaseActivity implements
     }
 
     private void initData() {
-        mModel = new MeasureSearchModel(this);
+        mModel = new MeasureSearchModel(this, this);
     }
 
     private void initView() {
@@ -139,11 +140,6 @@ public class MeasureSearchActivity extends BaseActivity implements
         mModel.loadMore();
     }
 
-    public void stopXListView() {
-        mListView.stopLoadMore();
-        mListView.stopRefresh();
-    }
-
     private void search() {
         if (mEtSearch == null) return;
         String text = mEtSearch.getText().toString();
@@ -155,16 +151,29 @@ public class MeasureSearchActivity extends BaseActivity implements
         hideSoftKeyboard();
     }
 
+    /**
+     * View Implement
+     */
+
+    @Override
+    public void stopXListView() {
+        mListView.stopLoadMore();
+        mListView.stopRefresh();
+    }
+
+    @Override
     public void showContent(List<MeasureSearchResp.SearchItemBean> list) {
         mAdapter = new MeasureSearchAdapter(this, list);
         mListView.setAdapter(mAdapter);
     }
 
+    @Override
     public void showLoadMore(List<MeasureSearchResp.SearchItemBean> list) {
         if (mAdapter == null) showContent(list);
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
     public void hideSoftKeyboard() {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -172,10 +181,12 @@ public class MeasureSearchActivity extends BaseActivity implements
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 
+    @Override
     public void showNoMoreToast() {
         Toast.makeText(this, "暂无更多内容", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
     public void showNotice(String keywords, int count) {
         mNoticeView.setVisibility(View.VISIBLE);
         mNoneView.setVisibility(View.GONE);
@@ -192,6 +203,7 @@ public class MeasureSearchActivity extends BaseActivity implements
         mTvCount.setText(countString);
     }
 
+    @Override
     public void showNone() {
         mNoticeView.setVisibility(View.GONE);
         mNoneView.setVisibility(View.VISIBLE);
