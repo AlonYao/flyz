@@ -7,9 +7,9 @@ import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
-import com.appublisher.quizbank.common.measure.activity.MeasureSearchActivity;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
+import com.appublisher.quizbank.common.measure.view.IMeasureSearchView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,10 +29,12 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     private String mCurKeywords;
     private int mOffset;
     private List<MeasureSearchResp.SearchItemBean> mList;
+    private IMeasureSearchView mView;
 
-    public MeasureSearchModel(Context context) {
+    public MeasureSearchModel(Context context, IMeasureSearchView view) {
         mContext = context;
         mRequest = new MeasureRequest(context, this);
+        mView = view;
     }
 
     public void search(String keywords) {
@@ -50,8 +52,6 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     }
 
     private void dealSearchQuestionResp(JSONObject response) {
-        if (!(mContext instanceof MeasureSearchActivity)) return;
-
         MeasureSearchResp resp = GsonManager.getModel(response, MeasureSearchResp.class);
         if (resp == null || resp.getResponse_code() != 1) {
             resetOffset();
@@ -60,35 +60,25 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
 
         if (mOffset == 0) {
             if (resp.getList() == null || resp.getList().size() == 0) {
-                ((MeasureSearchActivity) mContext).showNone();
+                mView.showNone();
             } else {
-                ((MeasureSearchActivity) mContext).showNotice(mCurKeywords, resp.getTotal());
+                mView.showNotice(mCurKeywords, resp.getTotal());
             }
             mList = resp.getList();
-            showContent(mList);
+            mView.showContent(mList);
 
             // Umeng
             UmengManager.onEvent(mContext, "Searchlist");
         } else {
             if (resp.getList() == null || resp.getList().size() == 0) {
-                ((MeasureSearchActivity) mContext).showNoMoreToast();
+                mView.showNoMoreToast();
                 resetOffset();
             } else {
                 mList.addAll(resp.getList());
-                showLoadMore(mList);
+                mView.showLoadMore(mList);
             }
         }
 
-    }
-
-    private void showLoadMore(List<MeasureSearchResp.SearchItemBean> list) {
-        if (!(mContext instanceof MeasureSearchActivity)) return;
-        ((MeasureSearchActivity) mContext).showLoadMore(list);
-    }
-
-    private void showContent(List<MeasureSearchResp.SearchItemBean> list) {
-        if (!(mContext instanceof MeasureSearchActivity)) return;
-        ((MeasureSearchActivity) mContext).showContent(list);
     }
 
     @Override
@@ -104,10 +94,8 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     }
 
     private void hideLoading() {
-        if (mContext instanceof MeasureSearchActivity) {
-            ((MeasureSearchActivity) mContext).hideLoading();
-            ((MeasureSearchActivity) mContext).stopXListView();
-        }
+        mView.hideLoading();
+        mView.stopXListView();
     }
 
     public void loadMore() {
