@@ -35,4 +35,10 @@ public interface InterviewApi extends ApiConstants {
     // 记录页面中面试中的收藏的数据
     public String recordInterviewCollectDetail = baseUrl + "quizbank/get_note_collect";
 
+    // 名师点评的剩余的次数
+    public String teacherRemarkRemainder = baseUrl + "product/get_user_service_status";
+
+    // 申请名师点评
+    public String applyForTeacherRemark = baseUrl + "quizbank/update_comment_status";
+
 }

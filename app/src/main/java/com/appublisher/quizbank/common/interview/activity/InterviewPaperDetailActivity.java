@@ -17,6 +17,7 @@ import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
+import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
 import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.common.utils.MediaRecorderManager;
@@ -27,7 +28,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback {
+public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback, InterviewDetailBaseFragmentCallBak {
 
     private static final int UNRECORD = 0;
     private static final int RECORDING = 1;
@@ -74,7 +75,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mViewPager.setScroll(true);
         initListener(mViewPager);
 
-        mModel = new InterviewDetailModel(this);
+        mModel = new InterviewDetailModel(this, this);
         mRequest = new InterviewRequest(this, this);
 
         String dataFrom = getIntent().getStringExtra("dataFrom");
@@ -286,5 +287,19 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     public void setIsTeacherRemarkView(boolean isTeacherRemark){
         this.isTeacherRemark = isTeacherRemark;
+    }
+
+    @Override
+    public void refreshTeacherRemarkRemainder(int num) {
+
+    }
+
+    @Override
+    public void popupAppliedForRemarkReminderAlert() {
+
+    }
+    @Override
+    public void refreshTeacherRemarkState() {
+
     }
 }

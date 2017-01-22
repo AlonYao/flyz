@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,6 +52,7 @@ import com.appublisher.quizbank.common.interview.model.InterviewModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.ICommonCallback;
 import com.appublisher.quizbank.common.interview.view.IIterviewDetailBaseFragmentView;
+import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
@@ -70,7 +72,7 @@ import java.util.Timer;
  * // 在基类fragment中获取录音界面的四个布局,然后创建各自的model对象,在各自的model中处理点击事件
  */
 
-public abstract class  InterviewDetailBaseFragment extends Fragment implements IIterviewDetailBaseFragmentView {
+public abstract class  InterviewDetailBaseFragment extends Fragment implements IIterviewDetailBaseFragmentView, InterviewDetailBaseFragmentCallBak {
 
     public String RECORDABLE = "recordable";                    //可录音
     public static final String CONFIRMABLE = "confirmable";   //可确认
@@ -142,15 +144,15 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     private String mRemarkState;
     private InterviewTeacherRemarkGuideFragment mInterviewTeacherRemarkGuideFragment;
     private int mOffset;
-    private boolean isPause;
-    private boolean isFirstPlay;
+    private int mTeacherRemarkRemainderNum;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (InterviewPaperDetailActivity) getActivity();
-        mModel = new InterviewDetailModel(mActivity);
+//        mModel = new InterviewDetailModel(mActivity);
+        mModel = new InterviewDetailModel(mActivity, this);
 
     }
     @Nullable
@@ -158,8 +160,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         isStop = false;
-        isPause = false;
-        isFirstPlay = true;                 // 第一次播放已提交时的录音
         mActivity.setCanBack(0);            // 默认设置返回键可以点击
         mStatus = RECORDABLE;
 
@@ -182,6 +182,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
 
     private void checkIsAnswer() {
         if(mQuestionBean.getUser_audio() !=null &&  mQuestionBean.getUser_audio().length() > 0){
+            getTeacherRemarkRemainder();          // 获取名师点评剩余的次数
             changeRecordView(5);
             checkTeacherRemarkState();      // 检查点评的状态
             checkIsFirstSubmit();           // 检查是否第一次提交题
@@ -198,12 +199,36 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             mAnalysisView.setVisibility(View.GONE);       //如果未答题:解析行折叠
         }
     }
+    // 获取名师点评剩余的次数
+    private void getTeacherRemarkRemainder(){
+        mModel.mRequest.getTeacherRemarkRemainder(2);           // 通过model来获取
+    }
+
+    // 回调接口,获取名师点评的剩余的次数
+    @Override
+    public void refreshTeacherRemarkRemainder(int num) {
+        mTeacherRemarkRemainderNum = num;
+//        mTeacherRemarkRemainderNum = 0;
+        Logger.e("mTeacherRemarkRemainderNum==="+mTeacherRemarkRemainderNum);
+        // 修改点评次数
+        changeTeacherRemarkNum();
+    }
+
+    // 申请点评后,点评次数减一,刷新点评状态
+    @Override
+    public void refreshTeacherRemarkState() {
+        --mTeacherRemarkRemainderNum;
+        changeTeacherRemarkNum();
+        //
+        mNotRemarkLl.setVisibility(View.GONE);
+        mWaitRemarkingTv.setVisibility(View.VISIBLE);
+        mExistRemarkLl.setVisibility(View.GONE);
+    }
+
     /*
-    *   检查已经答题后:名师点评的状态
-    * */
+            *   检查已经答题后:名师点评的状态
+            * */
     private void checkTeacherRemarkState() {
-        // TODO: 2017/1/20  mRequest.请求次数的接口,交给model处理,modle中通过接口类来显示次数
-        // 次数需要创建请求对象,进行请求
 //        mRemarkState = mQuestionBean.getListen_review();
         mRemarkState = UNHEAR;
         if ( mRemarkState.equals(UNHEAR) ){             // 没有申请名师点评
@@ -307,7 +332,8 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
 
         ImageView cancleRemarkIv = (ImageView) mWindow.findViewById(R.id.cancle_applyfor_remark);
         TextView confirmRemarkTv = (TextView) mWindow.findViewById(R.id.confirm_applyfor_remark);
-        TextView surplusRemarkNumbTv = (TextView) mWindow.findViewById(R.id.surplus_numb);      // 点评还剩的次数
+        TextView applyForRemarkNumbTv = (TextView) mWindow.findViewById(R.id.applyfor_remainder_numb);      // 点评还剩的次数
+        applyForRemarkNumbTv.setText(String.valueOf(mTeacherRemarkRemainderNum));
 
         cancleRemarkIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -320,10 +346,13 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             @Override
             public void onClick(View view) {
                 // 发送请求:请求点评, 需要回调
-                //mModel.申请点评
+                // TODO: 2017/1/22  mModel.申请点评
+                mModel.mRequest.applyForTeacherRemark(mQuestionBean.getId(), "buy");
+                mAalertDialog.dismiss();
             }
         });
     }
+
     /*
     *   申请后的提示弹窗: 在modle中处理后通过iview接口类进行弹窗
     *  */
@@ -352,6 +381,54 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 mAalertDialog.dismiss();
             }
         });
+    }
+
+    /*
+    *   提示购买的alert
+    * */
+    private void popupReminderPurchasedAlert(){
+        if (mActivity.isFinishing()) return;
+
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
+        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+
+        mAalertDialog.show();
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_reminder_purchased_remark);
+        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
+
+        mWindow.setGravity(Gravity.CENTER);
+
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        DisplayMetrics metrics = new DisplayMetrics();
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        lp.width = (int)(metrics.widthPixels * 0.8);
+        lp.height = (int)(metrics.heightPixels * 0.35);
+
+        mWindow.setAttributes(lp);
+
+
+        TextView cancle = (TextView) mWindow.findViewById(R.id.purchased_remark_cancle);
+        TextView confirm = (TextView) mWindow.findViewById(R.id.purchased_remark_confirm);
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+                // TODO: 2017/1/22 购买
+            }
+        });
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+            }
+        });
+
+
     }
 
 
@@ -753,6 +830,8 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
 
             } else if(id == R.id.purchased_remark_tv){      // 购买链接
                 // TODO: 2017/1/20 点击购买:请求,modle中处理,接口来回调刷新
+                // 跳转到购买页面
+                popupReminderPurchasedAlert();
             }
         }
     };
@@ -827,11 +906,32 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         }else if(i == 5){
             mUnRecordView.setVisibility(View.GONE);
             mRecordedView.setVisibility(View.VISIBLE);
+            mPurchasedLinkTv.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+            mPurchasedLinkTv .getPaint().setAntiAlias(true);//抗锯齿
         }else{
             mRecordingView.setVisibility(View.GONE);
             mUnsubmitView.setVisibility(View.VISIBLE);
         }
     }
+    /*
+    *   修改点评次数
+    * */
+    private void changeTeacherRemarkNum(){
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(ContextCompat.getColor(mActivity,R.color.opencourse_btn_bg));
+        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Utils.sp2px(mActivity, 16));
+        StyleSpan styleSpan = new StyleSpan(Typeface.NORMAL);
+
+        //解析
+        SpannableString analysis =   new SpannableString("您有"+ String.valueOf(mTeacherRemarkRemainderNum) + "次点评申请");
+        int length = String.valueOf(mTeacherRemarkRemainderNum).length() + 2;
+
+        analysis.setSpan(colorSpan, 2, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        analysis.setSpan(sizeSpan, 2, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        analysis.setSpan(styleSpan, 2, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mRemarkNumb.setText(analysis);
+
+    }
+
     /**
      * 准备录音
      */
@@ -918,8 +1018,15 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
          //需要判断哪一个状态
         switch (mRemarkState){
             case UNHEAR:
-                // 申请弹窗
-                popupApplyForRemarkAlert();
+                // 先得判断申请的次数
+                if(mTeacherRemarkRemainderNum >0){
+                    // 申请弹窗
+                    popupApplyForRemarkAlert();
+                }else{
+                    // 购买alert
+                    popupReminderPurchasedAlert();
+                }
+
                 break;
             case COMMENT:
                 ToastManager.showToast(mActivity, "点评中");
@@ -1002,7 +1109,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         if(mStatus.equals(SUBMIT)){     // 未提交时
             mTvtimeNotSubmPlay.setText(mModel.formatDateTime(unPlayDur));
         }else if(mStatus.equals(HADSUBMIT)){        // 已提交时
-            Logger.e("倒计时调用");
             mTvtimeHadSumbPlay.setText(mModel.formatDateTime(unPlayDur));
         }
     }
@@ -1059,5 +1165,3 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         super.onDestroyView();
     }
 }
-
-

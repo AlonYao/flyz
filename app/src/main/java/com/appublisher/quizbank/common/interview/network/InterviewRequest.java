@@ -105,6 +105,26 @@ public class InterviewRequest extends Request implements InterviewApi {
     }
 
     /*
+    *   获取名师点评的剩余的次数
+    * */
+    public void getTeacherRemarkRemainder(int type){
+        asyncRequest(getFinalUrl(teacherRemarkRemainder)
+                        + "&type=" + type,
+                "get_user_service_status", "object"
+        );
+    }
+    /*
+    *   申请名师点评
+    * */
+    public void applyForTeacherRemark(int question_id, String type){
+        asyncRequest(getFinalUrl(applyForTeacherRemark)
+                        + "&question_id=" + question_id
+                        + "&type=" + type,
+                "update_comment_status", "object"
+        );
+    }
+
+    /*
     *   提交录音
     * */
     public void submitRecord(Map<String, String> params) {
