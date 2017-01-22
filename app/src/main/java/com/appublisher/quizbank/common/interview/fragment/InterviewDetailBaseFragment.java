@@ -148,6 +148,8 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     private String mRemarkState;
     private InterviewTeacherRemarkGuideFragment mInterviewTeacherRemarkGuideFragment;
     private int mOffset;
+    private boolean isPause;
+    private boolean isFirstPlay;
 
 
     @Override
@@ -162,6 +164,8 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         isStop = false;
+        isPause = false;
+        isFirstPlay = true;                 // 第一次播放已提交时的录音
         mActivity.setCanBack(0);            // 默认设置返回键可以点击
         mStatus = RECORDABLE;
 
@@ -844,33 +848,44 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     *   处理用户已提交后的语音: 播放,暂停,记录断点,播放..
     * */
     private void dealUserHadSubmittedAudio() {
-        if(isStop){
-            isStop = false;
+//        if(isStop){
+//            isStop = false;
+////            stopPlay();
+//            pausePlay();
+//            changeTime();
+//        }else{
+//            mStatus = HADSUBMIT;
+//            isStop = true;
+//            dealDownLoadAudio(mRecordFolder, mQuestionBean.getUser_audio());
+//            changeTime();
+////            showRecordCutDownDuration();            // 显示倒计时
+//        }
+        if(isPause){                // 暂停
+            isPause = false;
+//            isFirstPlay = false;
 //            stopPlay();
-            pausePlay();
+            pausePlay();            // 暂停播放
             changeTime();
-        }else{
+        }else{                      // 播放
             mStatus = HADSUBMIT;
-            isStop = true;
+            isPause = true;
             dealDownLoadAudio(mRecordFolder, mQuestionBean.getUser_audio());
             changeTime();
 //            showRecordCutDownDuration();            // 显示倒计时
+            // 显示播放的时间
+            showTime();
         }
     }
-
     /*
-    *   暂停播放
+    *   显示已提交录音播放时的时间
     * */
-    private void pausePlay() {
-        mActivity.mMediaRecorderManagerUtil.playOnPause(new MediaRecordManagerUtil.IPlayFileOffsetCallback() {
-            @Override
-            public void onPlayOffset(int offset) {
-                mOffset = offset;
-                Logger.e("mOffset==="+mOffset);
-                mTvtimeHadSumbPlay.setText(mModel.formatDateTime(offset));
-                mHandler.sendEmptyMessage(TIME_CANCEL);
-            }
-        });
+    private void showTime(){
+        // 常量需要记录断点时的时间:默认为零 需要区分
+        if(mOffset == 0){
+            // 显示时间:
+        }else{
+           // 需要在暂停阶段记录此时的播放时间
+        }
     }
 
     /*
@@ -1043,7 +1058,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         }, 0, 1000);
     }
     /*
-    *  处理名师点评部分
+    *  处理名师点评部分:
     * */
     private void dealTeacherRemarkPart(){
          //需要判断哪一个状态
@@ -1078,7 +1093,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     }
 
     /*
-  *   播放语音
+  *   播放语音: 播放时需要 实时返回时间
   * */
     public void play(String userAnswerFilePath) {
         mActivity.mMediaRecorderManagerUtil.setPlayFilePath(userAnswerFilePath);
@@ -1092,10 +1107,27 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 ToastManager.showToast(mActivity, "播放完成");
             }
         });
-
         // 设置屏幕常亮
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
+
+    /*
+   *   暂停播放: 需要记录两个状态: 断点位置,播放时的时间
+   * */
+    private void pausePlay() {
+        mActivity.mMediaRecorderManagerUtil.playOnPause(new MediaRecordManagerUtil.IPlayFileOffsetCallback() {
+            @Override
+            public void onPlayOffset(int offset) {
+                mOffset = offset;                         // 记录断点
+                Logger.e("mOffset==="+mOffset);
+                String text = (String)(mTvtimeHadSumbPlay.getText());           // 断点时需要
+                int i = Integer.parseInt(text);
+                mTvtimeHadSumbPlay.setText(mModel.formatDateTime(i));
+                mHandler.sendEmptyMessage(TIME_CANCEL);         // 此时时间应该不能再走动
+            }
+        });
+    }
+
     /*
     *   记录播放时的时长:断点
     * */
@@ -1105,7 +1137,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mActivity.mMediaRecorderManagerUtil.stopPlay();
         String duration = (String)(mTvtimeHadSumbPlay.getText());
         mOffset = Integer.parseInt(duration);
-
     }
 
     /*

@@ -48,7 +48,7 @@ public class InterviewModel {
     /*
     *   修改时间格式
     * */
-    public static String formatDateTime(int mss) {
+    public String formatDateTime(int mss) {
 
         String DateTimes ;
         int minutes = ( mss % ( 60 * 60) ) / 60;
