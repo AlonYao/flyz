@@ -18,6 +18,7 @@ import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
+import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.common.utils.MediaRecorderManager;
 
 import org.json.JSONArray;
@@ -46,6 +47,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     public InterviewDetailModel mModel;
     public MediaRecorderManager mMediaRecorderManager;
+    private boolean isTeacherRemark;
+    public MediaRecordManagerUtil mMediaRecorderManagerUtil;        // 新的播放器类
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         // 所有fragment中用同一个录音器
         mMediaRecorderManager = new MediaRecorderManager(getApplicationContext());
-
+        mMediaRecorderManagerUtil = new MediaRecordManagerUtil();
         mViewPager = (ScrollExtendViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
 
         if(mViewPager == null ) return;
@@ -100,15 +103,23 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mList == null || mCurrentPagerId < 0 ) {
             mCurrentPagerId = 0;
         }
-        if(mModel.getIsAnswer( mCurrentPagerId)){  // 判断是否回答
-            if(mModel.getIsCollected( mCurrentPagerId)){
-                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
-                        MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            }else{
-                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
-                        MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        if(isTeacherRemark){            // 是否为名师引导页
+            setDisplayHomeAsUpEnabled(this, false);
+            // 名师点评引导页
+            MenuItemCompat.setShowAsAction(
+                    menu.add("关闭"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }else{
+            if(mModel.getIsAnswer( mCurrentPagerId)){  // 判断是否回答
+                if(mModel.getIsCollected( mCurrentPagerId)){
+                    MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
+                            MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+                }else{
+                    MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
+                            MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+                }
             }
         }
+
         // 购买状态
         if (!mIsBuyAll) {
             MenuItemCompat.setShowAsAction(
@@ -135,7 +146,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             } else if (mWhatView == UNRECORD) {
                 mModel.showOpenFullDialog();
             }
-        }else if("收藏".equals(item.getTitle())){
+        } else if("收藏".equals(item.getTitle())){
             if (mModel.getIsCollected(mCurrentPagerId)) {   // 判断当前viewpager的小题是否收藏
 
                 mModel.setCollected(mCurrentPagerId, false);
@@ -156,7 +167,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 map.put("Action", "Collect");
                 UmengManager.onEvent(this, "InterviewAnalysis", map);
             }
-      }
+      } else if("关闭".equals(item.getTitle())){
+            getSupportFragmentManager().popBackStack(); // 将引导页fragment推出heap
+            isTeacherRemark = false;
+            setDisplayHomeAsUpEnabled(this, true);
+            invalidateOptionsMenu();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -264,5 +280,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         invalidateOptionsMenu();
         mViewPager.setScroll(true);
         mViewPager.setCurrentItem(mCurrentPagerId);
+    }
+    /*
+    *   是否为名师引导页
+    * */
+    public void setIsTeacherRemarkView(boolean isTeacherRemark){
+        this.isTeacherRemark = isTeacherRemark;
     }
 }

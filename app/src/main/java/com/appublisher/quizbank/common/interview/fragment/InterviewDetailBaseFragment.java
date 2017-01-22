@@ -2,7 +2,10 @@ package com.appublisher.quizbank.common.interview.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
@@ -11,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -23,6 +27,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ImageView;
@@ -33,22 +38,23 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.ScaleImageActivity;
+import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
+import com.appublisher.quizbank.common.interview.model.InterviewModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.ICommonCallback;
-import com.appublisher.quizbank.common.interview.network.InterviewModel;
 import com.appublisher.quizbank.common.interview.view.IIterviewDetailBaseFragmentView;
-import com.appublisher.quizbank.common.utils.MediaRecorderManager;
-import com.appublisher.quizbank.common.utils.TimeUtils;
+import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
@@ -75,11 +81,14 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public static final String CONFIRMABLE = "confirmable";   //可确认
     public static final String SUBMIT = "submit";              //可提交
     public static final String HADSUBMIT = "hadSubmit";      // 已提交
-    private static final int TIME_CANCEL = 1;
-    private static final int RECORD_TIME = 2;
-    private static final int RECORD_SUBMIT = 3;
-    private static final int PLAYING = 4;                   // 正在播放
-    private static final int PLAYINGSUBMIT = 5;           // 已提交后的正在播放
+    private static final String UNHEAR = "unhear";           // 没有申请名师点评
+    private static final String COMMENT = "comment";           // 等待点评中
+    private static final String HEAR = "hear";                  // 已返回点评
+    private static final int RECORD_TIME = 1;
+    private static final int RECORD_SUBMIT = 2;
+    private static final int PLAYING = 3;                   // 正在播放
+    private static final int PLAYINGSUBMIT = 4;           // 已提交后的正在播放
+    private static final int TIME_CANCEL = 0;
     public View mUnRecordView;
     public View mRecordingView;
     public InterviewPaperDetailActivity mActivity;
@@ -96,7 +105,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public RelativeLayout mRecordNotSubmit_rl_submit;
     public TextView mTvtimeNotSubm;
     public TextView mTvtimeNotSubmPlay;
-    public LinearLayout mAnswer_listen_ll;
+    public RelativeLayout mAnswer_listen_ll;
     public TextView mTvtimeHadSumbPlay;
     public boolean isStop;           //是否停止播放
     public String mStatus;
@@ -123,6 +132,22 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public TextView mReminderTv;
     private InterviewHandler mHandler;
     private String mTemporaryFilePath;
+    private RoundProgressBarWidthNumber mUserAnswerProgressBar;
+    private RoundProgressBarWidthNumber mTeacherRemarkProgressBar;
+    private RelativeLayout mTeacherRemarkRl;
+    private TextView mRemarkNumb;
+    private ImageView mQuestionHelpIv;
+    private TextView mPurchasedLinkTv;
+    private LinearLayout mNotRemarkLl;
+    private TextView mUserAnswerTv;
+    private TextView mTeacherRemarkPlayTime;
+    private TextView mTeacherRemarkPlayState;
+    private TextView mUserAnswerPlayState;
+    private LinearLayout mExistRemarkLl;
+    private TextView mWaitRemarkingTv;
+    private String mRemarkState;
+    private InterviewTeacherRemarkGuideFragment mInterviewTeacherRemarkGuideFragment;
+    private int mOffset;
 
 
     @Override
@@ -145,12 +170,12 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mQuestionType = initChildQuestionType();
 
         mHandler = new InterviewHandler(this);
-
+        mOffset = 0;
         initRecordView();             // 初始化录音页面控件
         checkIsAnswer();
         initChildView();
         initRecordView();             // 初始化录音页面控件
-        initRerodFile();             // 初始化录音文件
+        initRecordFile();             // 初始化录音文件
         initChildListener();
         initRecordListener();
         showQuestion();
@@ -161,10 +186,12 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     private void checkIsAnswer() {
         if(mQuestionBean.getUser_audio() !=null &&  mQuestionBean.getUser_audio().length() > 0){
             changeRecordView(5);
+            checkTeacherRemarkState();      // 检查点评的状态
+            checkIsFirstSubmit();           // 检查是否第一次提交题
             if (mQuestionBean.getUser_audio_duration() >= 360){
-                mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(360));
+                mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
             }else{
-                mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(mQuestionBean.getUser_audio_duration() + 1));
+                mTvtimeHadSumbPlay.setText(mModel.formatDateTime(mQuestionBean.getUser_audio_duration() + 1));
             }
             mStatus = HADSUBMIT;
 
@@ -174,14 +201,160 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             mAnalysisView.setVisibility(View.GONE);       //如果未答题:解析行折叠
         }
     }
+    /*
+    *   检查已经答题后:名师点评的状态
+    * */
+    private void checkTeacherRemarkState() {
+        // TODO: 2017/1/20  mRequest.请求次数的接口,交给model处理,modle中通过接口类来显示次数
+        // 次数需要创建请求对象,进行请求
+//        mRemarkState = mQuestionBean.getListen_review();
+        mRemarkState = UNHEAR;
+        if ( mRemarkState.equals(UNHEAR) ){             // 没有申请名师点评
+            mNotRemarkLl.setVisibility(View.VISIBLE);
+            mWaitRemarkingTv.setVisibility(View.GONE);
+            mExistRemarkLl.setVisibility(View.GONE);
+        }else if( mRemarkState.equals(COMMENT)){        // 点评中
+            mNotRemarkLl.setVisibility(View.GONE);
+            mWaitRemarkingTv.setVisibility(View.VISIBLE);
+            mExistRemarkLl.setVisibility(View.GONE);
+        }else{                                          // 已回复点评
+            mNotRemarkLl.setVisibility(View.GONE);
+            mWaitRemarkingTv.setVisibility(View.GONE);
+            mExistRemarkLl.setVisibility(View.VISIBLE);
+        }
+    }
+    /*
+    *   检查是否第一次提交题
+    * */
+    private void checkIsFirstSubmit(){
 
-    private void initRerodFile() {
-        String userId = LoginModel.getUserId();
-        mRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/"  + userId + "/user_answer/";            // 自己录音的路径
-        FileManager.mkDir(mRecordFolder);
+        SharedPreferences sp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+        boolean isFirstSubmit = sp.getBoolean("isFirstSubmit", true);
+        if (isFirstSubmit){
+            // 弹出引导浮层
+            popupGuideFloating();
+            SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+            SharedPreferences.Editor edit = shp.edit();
+            edit.putBoolean("isFirstSubmit", false);
+            edit.apply();
+        }
+    }
+    /*
+    *   弹出引导浮层
+    * */
+    private void popupGuideFloating(){
+        if (mActivity == null) return;
 
-        mUserAnswerFilePath = mRecordFolder + mQuestionBean.getId() + ".amr";        // 录音存储的文件路径
-        mTemporaryFilePath = mRecordFolder + mQuestionBean.getId() + "temp.amr";        // 临时文件的存储路径
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity, R.style.NoBackGroundDialog).create();
+        mAalertDialog.setCanceledOnTouchOutside(true);
+        mAalertDialog.show();
+
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_applyfor_remark_guide_floating);
+
+        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
+
+        mWindow.setGravity(Gravity.END | Gravity.BOTTOM);
+
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        DisplayMetrics metrics = new DisplayMetrics();
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        lp.x = (int)(metrics.widthPixels * 0.04);
+        lp.y = (int)(metrics.heightPixels * 0.2);
+        lp.width = (int)(metrics.widthPixels * 0.75);
+        lp.height = (int)(metrics.heightPixels * 0.2);
+        lp.alpha = 0.8f;
+
+        mWindow.setAttributes(lp);
+
+        ImageView cancle = (ImageView) mWindow.findViewById(R.id.cancel_guide_floating);
+        LinearLayout lookRemarkLl = (LinearLayout) mWindow.findViewById(R.id.lookover_teacher_remark);
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+            }
+        });
+        lookRemarkLl.setOnClickListener(new View.OnClickListener() {        // 了解名师点评
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+                skipToRemarkHelpFragment(); // 跳转到帮助页面
+            }
+        });
+
+    }
+
+    // 弹出申请名师点评弹窗
+    private void popupApplyForRemarkAlert() {
+        if (mActivity == null) return;
+
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
+        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        mAalertDialog.show();
+
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_applyfor_remark);
+
+        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
+        mWindow.setGravity(Gravity.BOTTOM);                         // 除底部弹出
+        mWindow.getDecorView().setPadding(0, 0, 0, 0);                 // 消除边距
+        WindowManager.LayoutParams layoutParams = mWindow.getAttributes();
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;        // 背景宽度设置成和屏幕宽度一致
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindow.setAttributes(layoutParams);
+
+        ImageView cancleRemarkIv = (ImageView) mWindow.findViewById(R.id.cancle_applyfor_remark);
+        TextView confirmRemarkTv = (TextView) mWindow.findViewById(R.id.confirm_applyfor_remark);
+        TextView surplusRemarkNumbTv = (TextView) mWindow.findViewById(R.id.surplus_numb);      // 点评还剩的次数
+
+        cancleRemarkIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+            }
+        });
+
+        confirmRemarkTv.setOnClickListener(new View.OnClickListener() {     // 确认申请点评的按钮
+            @Override
+            public void onClick(View view) {
+                // 发送请求:请求点评, 需要回调
+                //mModel.申请点评
+            }
+        });
+    }
+    /*
+    *   申请后的提示弹窗: 在modle中处理后通过iview接口类进行弹窗
+    *  */
+    @Override
+    public void popupAppliedForRemarkReminderAlert() {
+        if (mActivity == null) return;
+
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
+        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        mAalertDialog.show();
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_applyfor_remark_reminder);
+        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
+        mWindow.setGravity(Gravity.BOTTOM);                         // 除底部弹出
+        WindowManager.LayoutParams layoutParams = mWindow.getAttributes();
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;        // 背景宽度设置成和屏幕宽度一致
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindow.setAttributes(layoutParams);
+
+        TextView confirm = (TextView) mWindow.findViewById(R.id.confirm);
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+            }
+        });
     }
 
     public static class InterviewHandler extends Handler{
@@ -208,18 +381,18 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                             if(fragment.mTimeRecording == 330){
                                 fragment.showReminderToast();
                             }
-                            fragment.mTvtimeRecording.setText(TimeUtils.formatDateTime(fragment.mTimeRecording));
+                            fragment.mTvtimeRecording.setText(fragment.mModel.formatDateTime(fragment.mTimeRecording));
                         }else if(fragment.mTimeRecording > 360){
                             fragment.mHandler.sendEmptyMessage(TIME_CANCEL);
-                            fragment.mActivity.mMediaRecorderManager.stop();
+                            fragment.mActivity.mMediaRecorderManagerUtil.stopReocrd();
                         }
                         break;
                     case PLAYING:
                         if (fragment.mTimePlaying >= 0) {
-                            fragment.mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(fragment.mTimePlaying));
+                            fragment.mTvtimeNotSubmPlay.setText(fragment.mModel.formatDateTime(fragment.mTimePlaying));
                         } else {
                             String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
-                            fragment.mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(Integer.parseInt(duration)+1));
+                            fragment.mTvtimeNotSubmPlay.setText(fragment.mModel.formatDateTime(Integer.parseInt(duration)+1));
                             fragment.mHandler.sendEmptyMessage(TIME_CANCEL);
                             fragment.isStop = false;
                             fragment.mTvtimeNotSubm.setText("听一下");
@@ -227,7 +400,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                         break;
                     case PLAYINGSUBMIT:
                         if (fragment.mTimePlaying >= 0) {
-                            fragment.mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(fragment.mTimePlaying));
+                            fragment.mTvtimeHadSumbPlay.setText(fragment.mModel.formatDateTime(fragment.mTimePlaying));
                         }else{
                             fragment.changeTime();
                             fragment.isStop = false;
@@ -283,8 +456,21 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mTvtimeNotSubm = (TextView) mFragmentView.findViewById(R.id.tv_record_play);
         mTvtimeNotSubmPlay = (TextView) mFragmentView.findViewById(R.id.tv_record_sounding_play_time);
 
-        mAnswer_listen_ll = (LinearLayout) mFragmentView.findViewById(R.id.interview_hadanswer_listen_ll);
+        mAnswer_listen_ll = (RelativeLayout) mFragmentView.findViewById(R.id.interview_hadanswer_listen_rl);
         mTvtimeHadSumbPlay = (TextView) mFragmentView.findViewById(R.id.tv_recorded_sound_play_time);
+
+        mTeacherRemarkRl = (RelativeLayout) mFragmentView.findViewById(R.id.teacher_remark_rl);         // 点评进度条整体
+        mUserAnswerProgressBar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.user_answer_progressbar_left);           // 用户答案进度条
+        mTeacherRemarkProgressBar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.teacher_remark_progressbar_right);    // 老师点评进度条
+        mRemarkNumb = (TextView) mFragmentView.findViewById(R.id.teacher_remark_number);            // 点评次数
+        mQuestionHelpIv = (ImageView) mFragmentView.findViewById(R.id.question_help_iv);            // 问号图标
+        mPurchasedLinkTv = (TextView) mFragmentView.findViewById(R.id.purchased_remark_tv);         // 购买链接
+        mWaitRemarkingTv = (TextView) mFragmentView.findViewById(R.id.teacher_remark_waiting_tv);       // 点评中
+        mUserAnswerPlayState = (TextView) mFragmentView.findViewById(R.id.user_answer_state_tv);           // 用户答案播放的状态
+        mTeacherRemarkPlayTime = (TextView) mFragmentView.findViewById(R.id.teacher_remark_time);   // 具有老师点评时的时间
+        mTeacherRemarkPlayState = (TextView) mFragmentView.findViewById(R.id.teacher_remark_state_tv);  // 具有老师点评时播放的状态
+        mNotRemarkLl = (LinearLayout) mFragmentView.findViewById(R.id.teacher_notremark_ll);      // 没有申请点评
+        mExistRemarkLl = (LinearLayout) mFragmentView.findViewById(R.id.teacher_remark_offered_ll);     // 存在老师点评整体
 
 
         if (mQuestionBean != null ) {
@@ -310,6 +496,15 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             mAnalysisView.setVisibility(View.GONE);  // 解析答案的容器默认不显示
         }
     }
+
+    private void initRecordFile() {
+        String userId = LoginModel.getUserId();
+        mRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/"  + userId + "/user_answer/";            // 自己录音的路径
+        FileManager.mkDir(mRecordFolder);
+
+        mUserAnswerFilePath = mRecordFolder + mQuestionBean.getId() + ".amr";        // 录音存储的文件路径
+        mTemporaryFilePath = mRecordFolder + mQuestionBean.getId() + "temp.amr";        // 临时文件的存储路径
+    }
     public void initRecordListener(){   // 录音控件的监听事件
 
         // 监听录音控件
@@ -321,6 +516,11 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mRecordNotSubmit_ll_play.setOnClickListener(OnClickListener);
         mRecordNotSubmit_rl_submit.setOnClickListener(OnClickListener);
         mAnswer_listen_ll.setOnClickListener(OnClickListener);
+
+        // 名师点评部分
+        mTeacherRemarkRl.setOnClickListener(OnClickListener);   // 名师点评
+        mQuestionHelpIv.setOnClickListener(OnClickListener);    // 问号
+        mPurchasedLinkTv.setOnClickListener(OnClickListener);   // 购买链接
     }
 
     public void showReminderToast() {
@@ -495,10 +695,9 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         public void onClick(View view) {
             int id = view.getId();
             if (id == R.id.interview_unrecordsound_ll) {    //如果点击了录音功能
-
                 if(mStatus.equals(RECORDABLE)){
                     // 需要判断录音器是否已经存在,如果存在销毁,停止
-                    if(mActivity.mMediaRecorderManager != null){
+                    if(mActivity.mMediaRecorderManagerUtil != null){
                         stopRecord();
                     }
                     isCanTouch(false);
@@ -513,15 +712,14 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 }
 
             } else if (id == R.id.interview_recordsounding_cancle) {   // 点击取消功能: 判断有效文件是否存在
-
                 stopRecord();
                 isCanTouch(true);
                 // 检查可提交文件是否存在,如果存在,回到未提交页面,否则回到未录音页面
-                if ( checkIsRecordFileExist() ){     // 录音文件存在,进入可提交页面
+                if ( checkIsRecordFileExist() && isCanSubmit){     // 录音文件存在,进入可提交页面
                     mActivity.setCanBack(2);
                     // 修改录音文字
                     String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
-                    mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(Integer.parseInt(duration)+1));
+                    mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
                     changeRecordView(6);
                 }else{
                     mActivity.setCanBack(0);                    // 不可以按返回键
@@ -537,8 +735,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 UmengManager.onEvent(mActivity, "InterviewRecord", map);
 
             } else if (id == R.id.interview_recordsounding_rl_confirm) {   //点击确认功能
-
-                if (isCanSubmit && mTimeRecording > 5) {
+                if (isCanSubmit) {
                     stopRecord();
                     isCanTouch(true);
                     mActivity.setCanBack(2);                // 返回键设置不可返回,点击有弹窗
@@ -546,12 +743,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                     // 此时录音文件已经存在,判断确认文件是否存在,时长是否为零
                     changeFileName();
                     changeRecordView(3);
-
-                    if(mTimeRecording >= 360){
-                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(360));
-                    }else{
-                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(mTimeRecording));
-                    }
+                    showRecordedDuration();             // 显示录音的时长
                 } else {
                     ToastManager.showToast(mActivity, "录音时间要超过60秒");
                 }
@@ -565,13 +757,13 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 ToastManager.showToast(getActivity(), "正在录音,录音时间要超过60秒");
 
             } else if (id == R.id.interview_recordsound_rl_rerecording) {      //点击重录
-
-                if (mActivity.mMediaRecorderManager != null) {
+                if (mActivity.mMediaRecorderManagerUtil != null) {
+                    stopPlay();         // 停止播放语音
                     mStatus = RECORDABLE;
                     String zero = "0\"";
                     mTvtimeRecording.setText(zero);
                     mTvtimeNotSubm.setText("听一下");
-                    isCanSubmit = false;
+                    isCanSubmit = true;
                     mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
                     isCanTouch(false);
                     mActivity.setCanBack(1);
@@ -587,21 +779,21 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             } else if (id == R.id.interview_recordsounding_ll_play) {       //点击未提交播放按钮
                 if(isStop){
                     isStop = false;
-                    stopRecord();
+                    stopPlay();             // 停止播放语音
                     mTvtimeNotSubm.setText("听一下");
-
                     if(mTimeRecording >= 360){
-                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(360));
+                        mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
                     }else{
                         String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
-                        mTvtimeNotSubmPlay.setText(TimeUtils.formatDateTime(Integer.parseInt(duration)+1));
+                        mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
                     }
                 }else{
                     isStop = true;
                     mStatus = SUBMIT;               // 变成可提交状态
                     mTvtimeNotSubm.setText("停止播放");
                     play(mUserAnswerFilePath);
-                    playTimer(mStatus);
+                    // 倒计时显示时间
+                    showRecordCutDownDuration();
                 }
 
                 // Umeng
@@ -610,36 +802,88 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 UmengManager.onEvent(mActivity, "InterviewRecord", map);
 
             } else if (id == R.id.interview_recordsounding_rl_submit) {      // 点击提交按钮
-                stopRecord();
+                stopPlay();
                 mModel.showSubmitAnswerProgressBar(mUserAnswerFilePath, mQuestionBean, FileManager.getVideoDuration(mUserAnswerFilePath), mQuestionType);
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Submit");
                 UmengManager.onEvent(mActivity, "InterviewRecord", map);
-
-            } else if (id == R.id.interview_hadanswer_listen_ll) {           // 已提交播放按钮
-
-                if(isStop){
-                    isStop = false;
-                    stopRecord();
-                    changeTime();
-
-                }else{
-                    mStatus = HADSUBMIT;
-                    isStop = true;
-                    dealDownLoadAudio(mRecordFolder, mQuestionBean.getUser_audio());
-                    changeTime();
-                    playTimer(mStatus);
-                }
+            } else if (id == R.id.interview_hadanswer_listen_rl) {           // 已提交播放按钮
+                // 处理已提交录音: 播放,暂停,播放,记录断点
+                dealUserHadSubmittedAudio();
+//                if(isStop){
+//                    isStop = false;
+//                    stopPlay();
+//                    changeTime();
+//                }else{
+//                    mStatus = HADSUBMIT;
+//                    isStop = true;
+//                    dealDownLoadAudio(mRecordFolder, mQuestionBean.getUser_audio());
+//                    changeTime();
+//                    showRecordCutDownDuration();
+//                }
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Answer");
                 UmengManager.onEvent(mActivity, "InterviewRecord", map);
+            } else if(id == R.id.teacher_remark_rl){        // 名师点评部分
+                // 处理名师点评部分
+                dealTeacherRemarkPart();
+            } else if(id == R.id.question_help_iv){         // 问号
+                // 跳转到帮助页面
+                skipToRemarkHelpFragment();
+
+            } else if(id == R.id.purchased_remark_tv){      // 购买链接
+                // TODO: 2017/1/20 点击购买:请求,modle中处理,接口来回调刷新
             }
         }
     };
+    /*
+    *   处理用户已提交后的语音: 播放,暂停,记录断点,播放..
+    * */
+    private void dealUserHadSubmittedAudio() {
+        if(isStop){
+            isStop = false;
+//            stopPlay();
+            pausePlay();
+            changeTime();
+        }else{
+            mStatus = HADSUBMIT;
+            isStop = true;
+            dealDownLoadAudio(mRecordFolder, mQuestionBean.getUser_audio());
+            changeTime();
+//            showRecordCutDownDuration();            // 显示倒计时
+        }
+    }
+
+    /*
+    *   暂停播放
+    * */
+    private void pausePlay() {
+        mActivity.mMediaRecorderManagerUtil.playOnPause(new MediaRecordManagerUtil.IPlayFileOffsetCallback() {
+            @Override
+            public void onPlayOffset(int offset) {
+                mOffset = offset;
+                Logger.e("mOffset==="+mOffset);
+                mTvtimeHadSumbPlay.setText(mModel.formatDateTime(offset));
+                mHandler.sendEmptyMessage(TIME_CANCEL);
+            }
+        });
+    }
+
+    /*
+    *   跳转到帮助页面
+    * */
+    private void skipToRemarkHelpFragment() {
+        FragmentTransaction transaction = mActivity.getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null).replace(R.id.interview_fragment_container, new InterviewTeacherRemarkGuideFragment()).commit();
+        // 修改toolbar
+        mActivity.setIsTeacherRemarkView(true);
+        mActivity.invalidateOptionsMenu();
+    }
+
     /*
     *   修改临时录音文件的名称为确认文件名
     * */
@@ -662,9 +906,9 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
 
     private void changeTime() {
         if (mQuestionBean.getUser_audio_duration() >= 360){
-            mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(360));
+            mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
         }else{
-            mTvtimeHadSumbPlay.setText(TimeUtils.formatDateTime(mQuestionBean.getUser_audio_duration() + 1));
+            mTvtimeHadSumbPlay.setText(mModel.formatDateTime(mQuestionBean.getUser_audio_duration() + 1));
         }
     }
     private void changeRecordView(int i) {
@@ -695,15 +939,14 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
      * 准备录音
      */
     public void prepareRecord() {
-        // 录音逻辑:
-        new MediaRecorderManager(mActivity, new MediaRecorderManager.CheckRecordStatusListener() {
+        mActivity.mMediaRecorderManagerUtil.checkRecordStatus(new MediaRecordManagerUtil.ICheckRecordStatusListener() {
             @Override
             public void onCheckRecordStatusFinished(boolean enableRecord) {
                 if (enableRecord) {
                     startRecord();         // 开始录音
                 }
             }
-        }).checkRecordStatus();
+        });
     }
 
     private void isCanTouch(boolean isCanTouch){
@@ -725,89 +968,146 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
      * 开始录音:将录音的文件先存入缓存文件中
      **/
     public void startRecord() {
-        mActivity.mMediaRecorderManager.mFileName = mTemporaryFilePath;     // 先将文件存入缓存文件中,最后通过改名进行保存
+        mActivity.mMediaRecorderManagerUtil.setRecordFilePath(mTemporaryFilePath);
         if (FileManager.isFile(mTemporaryFilePath)) {
             FileManager.deleteFiles(mTemporaryFilePath);
         }
-        mActivity.mMediaRecorderManager.onRecord(true);
-        startTimer();
-        // 设置屏幕常亮
-        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-    /**
-     * 开始时间
-     */
-    public void startTimer() {
-        if (mTimer == null) {
-            mTimer = new Timer();
-        }
-        //记录录音时间
-        mTimeRecording = 0;
-        mTimer.schedule(new TimerTask() {
+        mActivity.mMediaRecorderManagerUtil.startRecord(new MediaRecordManagerUtil.IRecordDurationCallback() {
             @Override
-            public void run() {
-                mTimeRecording++;
-                if (mTimeRecording >= 5 && mTimeRecording <= 360) {
-                    isCanSubmit =  true;
-                    mHandler.sendEmptyMessage(RECORD_SUBMIT);
-                }
-                mHandler.sendEmptyMessage(RECORD_TIME);
-            }
-        }, 0, 1000);
-    }
-
-    /**
-     * 停止录音
-     */
-    public void stopRecord() {
-        mHandler.sendEmptyMessage(TIME_CANCEL);
-        mActivity.mMediaRecorderManager.stop();
-    }
-
-    /*
-  *   播放语音
-  * */
-    public void play(String userAnswerFilePath) {
-        mActivity.mMediaRecorderManager.mPlayFileName = userAnswerFilePath;
-        mActivity.mMediaRecorderManager.onPlay(true, new MediaRecorderManager.PlayOverMethod() {
-            @Override
-            public void playOver(boolean isPlay) {
-
+            public void onRecordDuration(int duration) {
+                // 处理录音的时长
+                showRecordingDuration(duration);
             }
         });
         // 设置屏幕常亮
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
-    /**
-     * 播放的时间处理:递减
-     **/
-    private void playTimer(final String status) {
+    /*
+    *   显示正在录音的时长
+    * */
+    private void showRecordingDuration(int duration) {
+        if(duration >=0 && duration <=20){
+            if(duration >=5 ){
+                isCanSubmit = true;
+                mIvRecordSound.setImageResource(R.drawable.interview_confrim_blue);
+                if (duration == 15){
+                    showReminderToast();
+                }
+                if (duration >20){
+                    mActivity.mMediaRecorderManagerUtil.stopReocrd();
+                }
+            }else{
+                mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
+            }
+            mTvtimeRecording.setText(mModel.formatDateTime(duration));
+        }
+    }
+    /*
+    *  显示已经录音的时长
+    * */
+    private void showRecordedDuration(){
+        String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+        if(Integer.parseInt(duration) >= 360){
+            mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
+        }else{
+            mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+        }
+    }
+    /*
+    *  显示录音时间的倒计时
+    * */
+    private void showRecordCutDownDuration(){
         if (mTimer == null) {
             mTimer = new Timer();
         }
-        if (status.equals(SUBMIT)){    // 未提交的状态:但是可提交
+        if (mStatus.equals(SUBMIT)){    // 未提交的状态:但是可提交
             String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
             mTimePlaying = Integer.parseInt(duration)+1;
-        }else if(status.equals(HADSUBMIT)){
+        }else if(mStatus.equals(HADSUBMIT)){
             if (mQuestionBean.getUser_audio_duration() >= 360){
                 mTimePlaying = 360;
             }else{
                 mTimePlaying = mQuestionBean.getUser_audio_duration() + 1;
             }
         }
-
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 mTimePlaying--;
-                if(status.equals(SUBMIT)) {
+                if(mStatus.equals(SUBMIT)) {
                     mHandler.sendEmptyMessage(PLAYING);
-                }else if (status.equals(HADSUBMIT)){
+                }else if (mStatus.equals(HADSUBMIT)){
                     mHandler.sendEmptyMessage(PLAYINGSUBMIT);
                 }
             }
         }, 0, 1000);
     }
+    /*
+    *  处理名师点评部分
+    * */
+    private void dealTeacherRemarkPart(){
+         //需要判断哪一个状态
+        switch (mRemarkState){
+            case UNHEAR:
+                // 申请弹窗
+                popupApplyForRemarkAlert();
+                break;
+            case COMMENT:
+                ToastManager.showToast(mActivity, "点评中");
+                break;
+            case HEAR:
+                // TODO: 2017/1/20 播放语音
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 停止录音
+     */
+    public void stopRecord() {
+        mActivity.mMediaRecorderManagerUtil.stopReocrd();
+    }
+    /*
+    *   停止播放语音
+    * */
+    public void stopPlay() {
+        mHandler.sendEmptyMessage(TIME_CANCEL);
+        mActivity.mMediaRecorderManagerUtil.stopPlay();
+    }
+
+    /*
+  *   播放语音
+  * */
+    public void play(String userAnswerFilePath) {
+        mActivity.mMediaRecorderManagerUtil.setPlayFilePath(userAnswerFilePath);
+        //播放的断点
+//        mOffset = 0;
+        //随时需要记录断点
+//        recordPlayingOffset();
+        mActivity.mMediaRecorderManagerUtil.startPlay(mOffset, new MediaRecordManagerUtil.IPlayCompleteCallback() {
+            @Override
+            public void onPlayComplete() {
+                ToastManager.showToast(mActivity, "播放完成");
+            }
+        });
+
+        // 设置屏幕常亮
+        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+    /*
+    *   记录播放时的时长:断点
+    * */
+    private void recordPlayingOffset(){
+
+        // 如果点击暂停,常量记录断点的值
+        mActivity.mMediaRecorderManagerUtil.stopPlay();
+        String duration = (String)(mTvtimeHadSumbPlay.getText());
+        mOffset = Integer.parseInt(duration);
+
+    }
+
     /*
     *  处理下载的问题行的语音
     * */
@@ -818,6 +1118,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         File file = new File(filePath);
         File zipFile = new File(zipFilePath);
         if (file.exists() ) {                                   // 如果文件存在直接播放
+            Logger.e("文件已经存在");
             play(filePath);
         } else if(zipFile.exists()){
             FileManager.unzipFiles(mFileFolder, zipFilePath); // 将参数二所对应的文件解压到参数一对应的文件中
@@ -854,7 +1155,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             }
         });
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
