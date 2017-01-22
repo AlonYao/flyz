@@ -24,6 +24,7 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
     private FileInputStream mPlayFileInputStream;
     private int mRecordDuration = 0;
     private IRecordDurationCallback mIRecordDurationCallback;
+    private IPlayFileCountdownCallback mIPlayFileCountdownCallback;
 
     public MediaRecordManagerUtil() {
         mTimerUtil = new TimerUtil(this);
@@ -31,8 +32,15 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
 
     @Override
     public void onTimerTick() {
+
         if (mIRecordDurationCallback != null)
             mIRecordDurationCallback.onRecordDuration(++mRecordDuration);
+
+        if (mIPlayFileCountdownCallback != null) {
+            if (mPlayer != null) {
+                mIPlayFileCountdownCallback.onPlayCountdown((mPlayer.getDuration() - mPlayer.getCurrentPosition()) / 1000);
+            }
+        }
     }
 
     public void checkRecordStatus(final ICheckRecordStatusListener iCheckRecordStatusListener) {
@@ -128,6 +136,8 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
             mRecorder.release();
             mRecorder = null;
         }
+        if (mIRecordDurationCallback != null)
+            mIRecordDurationCallback = null;
     }
 
     /**
@@ -166,8 +176,38 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
         }
     }
 
-    public void startPlay() {
+    public void startPlay(int offset, final IPlayCompleteCallback iPlayCompleteCallback, final IPlayFileCountdownCallback iPlayFileCountdownCallback) {
+        if (mPlayFilePath == null || "".equals(mPlayFilePath)) return;
+        if (offset < 0) return;
+        if (mPlayer != null) return;
+        mPlayer = new MediaPlayer();
+        try {
+            File file = new File(mPlayFilePath);
+            mPlayFileInputStream = new FileInputStream(file);
+            mPlayer.setDataSource(mPlayFileInputStream.getFD());
+            mPlayer.prepare();
+            mPlayer.seekTo(offset);
+            Log.i("dur", "===" + mPlayer.getDuration());
 
+            // 播放
+            mPlayer.start();
+            if (iPlayFileCountdownCallback != null) {
+                mTimerUtil.start();
+                this.mIPlayFileCountdownCallback = iPlayFileCountdownCallback;
+            }
+
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    stopPlay();
+                    if (iPlayCompleteCallback != null)
+                        iPlayCompleteCallback.onPlayComplete();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            //播放文件地址有误
+        }
     }
 
     /**
@@ -179,18 +219,8 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
         if (mPlayer != null) {
             if (iPlayFileOffsetCallback != null)
                 iPlayFileOffsetCallback.onPlayOffset(mPlayer.getCurrentPosition());
-            mPlayer.release();
-            mPlayer = null;
         }
-
-        if (mPlayFileInputStream != null) {
-            try {
-                mPlayFileInputStream.close();
-                mPlayFileInputStream = null;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        stopPlay();
     }
 
     public void stopPlay() {
@@ -207,6 +237,11 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
                 e.printStackTrace();
             }
         }
+
+        if (mIPlayFileCountdownCallback != null)
+            mIPlayFileCountdownCallback = null;
+
+        mTimerUtil.stop();
     }
 
 
@@ -229,6 +264,13 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
      */
     public interface IPlayFileOffsetCallback {
         void onPlayOffset(int offset);
+    }
+
+    /**
+     * 播放倒计时
+     */
+    public interface IPlayFileCountdownCallback {
+        void onPlayCountdown(int unPlayDur);
     }
 
     /**
