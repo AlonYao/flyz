@@ -17,8 +17,6 @@ public interface IMeasureSearchView extends IBaseView{
 
     void showLoadMore(List<MeasureSearchResp.SearchItemBean> list);
 
-    void hideSoftKeyboard();
-
     void showNoMoreToast();
 
     void showNotice(String keywords, int count);

@@ -2,25 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:background="@color/measure_bg">
+    android:background="@android:color/white">
 
-    <!-- 材料 -->
-    <include layout="@layout/measure_search_material_item"
-        android:id="@+id/measure_search_material_root"
-        android:layout_width="match_parent"
+    <!-- 内容 -->
+    <TextView
+        android:id="@+id/measure_search_item_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_marginBottom="10dp"
+        android:textSize="17sp"
+        android:textColor="@color/measure_text"/>
 
-    <!-- 题目 -->
-    <LinearLayout
-        android:id="@+id/measure_search_question_root"
-        android:layout_width="match_parent"
+    <!-- 来源 -->
+    <TextView
+        android:id="@+id/measure_search_item_source"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:textSize="12sp"/>
 
 </LinearLayout>
