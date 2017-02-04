@@ -7,12 +7,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.FileManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
-import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
@@ -36,13 +33,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private TextView mQuestionTv;
     private LinearLayout mQuestionListenLl;
     private LinearLayout mAnalysisListenLl;
-    private String mQuestionFileFolder;
-    private String mAnalysisFileFolder;
     private TextView mQuestionSwitchTv;
-    private RoundProgressBarWidthNumber mQuestionAudioProgressbar;
-    private RoundProgressBarWidthNumber mAnalysisAudioProgressbar;
-    private ImageView mQuestionAudioIv;
-    private ImageView mAnalysisAudioIv;
+
 
     public static InterviewPurchasedFragment newInstance(String questionBean, int position,int listLength,String questionType) {
         Bundle args = new Bundle();
@@ -66,14 +58,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionType = getArguments().getString(QUESTIONTYPE);
         mPosition = getArguments().getInt(ARGS_POSITION);
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
-        initFile();
-    }
 
-    private void initFile() {
-        mQuestionFileFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + LoginModel.getUserId() + "/question_audio/";
-        mAnalysisFileFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + LoginModel.getUserId() + "/analysis_audio/";
-        FileManager.mkDir(mQuestionFileFolder);
-        FileManager.mkDir(mAnalysisFileFolder);
     }
 
     @Override
@@ -84,13 +69,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         mQuestionListenLl = (LinearLayout) mFragmentView.findViewById(R.id.interview_hadquestion_listen_ll);
         mAnalysisListenLl = (LinearLayout) mFragmentView.findViewById(R.id.interview_answer_listen_ll);
-
-        mQuestionAudioProgressbar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.question_audio_progressbar);
-        mQuestionAudioProgressbar.setIsExistInsideText(false);
-        mAnalysisAudioProgressbar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.analysis_audio_progressbar);
-        mAnalysisAudioProgressbar.setIsExistInsideText(false);
-        mQuestionAudioIv = (ImageView) mFragmentView.findViewById(R.id.question_audio_listen_audio_iv);
-        mAnalysisAudioIv = (ImageView) mFragmentView.findViewById(R.id.analysis_audio_listen_audio_iv);
 
         if (mQuestionBean.getQuestion_audio() == null || mQuestionBean.getQuestion_audio_duration() == 0){
             mQuestionListenLl.setVisibility(View.GONE);
@@ -134,7 +112,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         /**
          *  本类为已付费页面的类,不用再和服务器交互:题目行的逻辑处理:逻辑:点击事件:展开与折叠;听语音播放但不可暂停
          * **/
-
         mQuestionSwitchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,9 +174,9 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             }
         });
 
-            /*
-            *  题目行语音
-            * */
+        /*
+        *  题目行语音
+        * */
         mQuestionListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,8 +184,13 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }else{
-                    mStatus = QUESTIONITEM;
-                    dealDownLoadAudio(mQuestionFileFolder, mQuestionBean.getQuestion_audio());
+                    if (isPlaying.equals(QUESTIONITEM)){
+                        isQuestionAudioPause = true;
+                    }else{
+                        // 判断是否存在其他的正在播放的语音
+                        changePlayingMediaToPauseState();
+                    }
+                    dealQuestionAudioPlayState();
 
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
@@ -221,9 +203,9 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 }
             }
         });
-            /*
-            *  解析行语音
-            * */
+        /*
+        *  解析行语音
+        * */
         mAnalysisListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,8 +213,13 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }else{
-                    mStatus = ANALYSISITEM;
-                    dealDownLoadAudio(mAnalysisFileFolder, mQuestionBean.getAnalysis_audio());
+                    if(isPlaying.equals(ANALYSISITEM)){
+                        isAnalysisAudioPause = true;
+                    }else{
+                        // 判断是否存在其他的正在播放的语音
+                        changePlayingMediaToPauseState();
+                    }
+                    dealAnalysisAudioPlayState();
 
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
@@ -260,10 +247,14 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         String filePath = mQuestionFileFolder + mQuestionBean.getId() + ".amr";
+        String analysisFilePath = mAnalysisFileFolder + mQuestionBean.getId() + ".amr";
         File file = new File(filePath);
+        File analysisfile = new File(analysisFilePath);
         if (file.exists() ) {                                   // 如果文件存在直接播放
-            Logger.e("onDestroyView中删除mQuestionFileFolder已经存在文件");
             FileManager.deleteFiles(filePath);
+        }
+        if (analysisfile.exists() ) {                                   // 如果文件存在直接播放
+            FileManager.deleteFiles(analysisFilePath);
         }
     }
 }

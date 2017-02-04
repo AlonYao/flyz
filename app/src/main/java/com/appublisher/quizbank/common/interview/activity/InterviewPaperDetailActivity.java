@@ -272,6 +272,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             public void onPageSelected(int position) {       //  当前viewpager
                 mCurrentPagerId = position;
                 invalidateOptionsMenu();
+                // 需要将暂停的状态的播放器恢复默认状态-->需要获取进度条等控件
+                // TODO: 2017/2/4 获取fragment中的控件
+             //   InterviewPurchasedFragment interviewPurchasedFragment = new InterviewPurchasedFragment();
+             //   TextView textView = (TextView) interviewPurchasedFragment.getView().findViewById(R.id.listenanswer_tv);
+//                View fragment = LayoutInflater.from(getApplicationContext()).inflate(R.layout.interview_question_item_recordsound_hadpayfor, null);
+//                TextView textView = (TextView)fragment.findViewById(R.id.listenanswer_tv);
+//                textView.setText("拿到控件");
             }
             @Override
             public void onPageScrollStateChanged(int state) {
