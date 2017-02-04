@@ -39,7 +39,8 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
 
     public void search(String keywords) {
         mCurKeywords = keywords;
-        mRequest.searchQuestion(keywords, 0, COUNT);
+        mOffset = 0;
+        mRequest.searchQuestion(keywords, mOffset, COUNT);
     }
 
     @Override

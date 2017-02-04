@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.quizbank.R;
@@ -172,6 +174,12 @@ public class MeasureSearchActivity extends BaseActivity implements
     public void showContent(List<MeasureSearchResp.SearchItemBean> list) {
         mAdapter = new MeasureSearchAdapter(this, list);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Logger.e(String.valueOf(position));
+            }
+        });
     }
 
     @Override
