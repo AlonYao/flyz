@@ -151,6 +151,13 @@ public class MeasureSearchActivity extends BaseActivity implements
         hideSoftKeyboard();
     }
 
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() == null) return;
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
     /**
      * View Implement
      */
@@ -171,14 +178,6 @@ public class MeasureSearchActivity extends BaseActivity implements
     public void showLoadMore(List<MeasureSearchResp.SearchItemBean> list) {
         if (mAdapter == null) showContent(list);
         mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void hideSoftKeyboard() {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (getCurrentFocus() == null) return;
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override
