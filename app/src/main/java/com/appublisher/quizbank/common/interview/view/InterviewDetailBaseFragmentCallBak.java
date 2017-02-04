@@ -9,7 +9,4 @@ public interface InterviewDetailBaseFragmentCallBak {
     // 申请点评后,进行弹窗
     void popupAppliedForRemarkReminderAlert();
 
-    // 申请点评后,申请次数减一,并且刷新状态
-    void refreshTeacherRemarkState();
-
 }

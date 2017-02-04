@@ -123,7 +123,16 @@ public class InterviewRequest extends Request implements InterviewApi {
                 "update_comment_status", "object"
         );
     }
-
+    /*
+   *   修改已经听过名师点评
+   * */
+    public void updateCommentStatusToListen(int question_id, String type){
+        asyncRequest(getFinalUrl(applyForTeacherRemark)
+                        + "&question_id=" + question_id
+                        + "&type=" + type,
+                "updateCommentStatusToListen", "object"
+        );
+    }
     /*
     *   提交录音
     * */

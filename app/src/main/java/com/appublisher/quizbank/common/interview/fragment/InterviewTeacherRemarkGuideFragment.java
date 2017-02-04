@@ -24,5 +24,4 @@ public class InterviewTeacherRemarkGuideFragment extends Fragment {
         return inflater.inflate(R.layout.interview_fragment_teacherremark_guide, container, false);
     }
 
-
 }

@@ -16,7 +16,6 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.YaoguoUploadManager;
@@ -347,7 +346,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     }
 
     private void setWindowBackground(Window mWindow){
-
         mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
         mWindow.setGravity(Gravity.BOTTOM);                         // 除底部弹出
         mWindow.getDecorView().setPadding(0, 0, 0, 0);                 // 消除边距
@@ -415,7 +413,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             }
                         }
                     });
-
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Action", "2");
@@ -439,7 +436,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             }
                         }
                     });
-
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Action", "2");
@@ -473,20 +469,24 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 // 回调刷新
                 List<InterviewTeacherRemarkNumResp.Data> mDataList = resp.getData();
                 if (mDataList != null && mDataList.size() > 0) {
-                    Logger.e("得到的次数为mDataList.get(0).getVal()==="+mDataList.get(0).getVal());
                     mInterfaceViewCallBak.refreshTeacherRemarkRemainder(mDataList.get(0).getVal());
                 }
             } else {
                 ToastManager.showToast(mActivity,"刷新失败");
             }
-        } else if("update_comment_status".equals(apiName)){     // 获取名师点评
+        } else if("update_comment_status".equals(apiName)){     // 申请名师点评
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp == null || resp.getResponse_code() != 1) {
                 ToastManager.showToast(mActivity,"刷新失败");
             }else {
-                // 通知view 申请次数减一,并且刷新
-                Logger.e("请求成功");
-                mInterfaceViewCallBak.refreshTeacherRemarkState();
+                // 刷新申请的次数
+                mActivity.getData();
+                mInterfaceViewCallBak.popupAppliedForRemarkReminderAlert();
+            }
+        } else if("updateCommentStatusToListen".equals(apiName)){     // 修改已经听过名师点评
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) {
+                ToastManager.showToast(mActivity,"刷新失败");
             }
         }
     }

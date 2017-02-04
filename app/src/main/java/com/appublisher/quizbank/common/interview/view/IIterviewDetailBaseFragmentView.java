@@ -11,8 +11,6 @@ public interface IIterviewDetailBaseFragmentView {
     InterviewPaperDetailResp.QuestionsBean initChildData();
     String initChildQuestionType();
     void initChildListener();
-    void banFragmentTouch();
-    void releaseFragmentTouch();
     String getChildFragmentRich();
 
 }

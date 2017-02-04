@@ -94,6 +94,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void setCanBack(int view) {
         mWhatView = view;
     }
+
     public void getData() {
         mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId);
     }
@@ -119,13 +120,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
                 }
             }
+
+            // 购买状态
+            if (!mIsBuyAll) {
+                MenuItemCompat.setShowAsAction(
+                        menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            }
         }
 
-        // 购买状态
-        if (!mIsBuyAll) {
-            MenuItemCompat.setShowAsAction(
-                    menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -136,6 +138,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (mWhatView == RECORDING) {
+                ToastManager.showToast(this, "请专心录音哦");
                 return true;
             } else if (mWhatView == RECORDEDUNSBMIT) {
                 InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
@@ -183,6 +186,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     public void onBackPressed() {
         if (mWhatView == RECORDING) {
+            ToastManager.showToast(this, "请专心录音哦");
             return;
         } else if (mWhatView == RECORDEDUNSBMIT) {
             InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
@@ -209,7 +213,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         hideLoading();
-        if (response == null || apiName == null) return;
+        if (response == null || apiName == null)  return ;
 
         if ("paper_detail".equals(apiName) || "history_interview_detail".equals(apiName)
                 || "get_note_collect".equals(apiName)) {
@@ -290,16 +294,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     @Override
-    public void refreshTeacherRemarkRemainder(int num) {
-
-    }
+    public void refreshTeacherRemarkRemainder(int num) {}
 
     @Override
-    public void popupAppliedForRemarkReminderAlert() {
+    public void popupAppliedForRemarkReminderAlert() { }
 
-    }
-    @Override
-    public void refreshTeacherRemarkState() {
-
-    }
 }
