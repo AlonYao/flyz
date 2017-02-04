@@ -63,14 +63,6 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     }
 
     @Override
-    public void banFragmentTouch() {
-    }
-
-    @Override
-    public void releaseFragmentTouch() {
-    }
-
-    @Override
     public int setLayoutResouceId() {               // 传给basefragment布局id
         return R.layout.interview_question_item_recordsound_notpayfor;
     }

@@ -17,6 +17,7 @@ import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
+import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
 import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.common.utils.MediaRecorderManager;
@@ -27,7 +28,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback {
+public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback, InterviewDetailBaseFragmentCallBak {
 
     private static final int UNRECORD = 0;
     private static final int RECORDING = 1;
@@ -74,7 +75,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mViewPager.setScroll(true);
         initListener(mViewPager);
 
-        mModel = new InterviewDetailModel(this);
+        mModel = new InterviewDetailModel(this, this);
         mRequest = new InterviewRequest(this, this);
 
         String dataFrom = getIntent().getStringExtra("dataFrom");
@@ -93,6 +94,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void setCanBack(int view) {
         mWhatView = view;
     }
+
     public void getData() {
         mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId);
     }
@@ -118,13 +120,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
                 }
             }
+
+            // 购买状态
+            if (!mIsBuyAll) {
+                MenuItemCompat.setShowAsAction(
+                        menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            }
         }
 
-        // 购买状态
-        if (!mIsBuyAll) {
-            MenuItemCompat.setShowAsAction(
-                    menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -135,6 +138,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (mWhatView == RECORDING) {
+                ToastManager.showToast(this, "请专心录音哦");
                 return true;
             } else if (mWhatView == RECORDEDUNSBMIT) {
                 InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
@@ -182,6 +186,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     public void onBackPressed() {
         if (mWhatView == RECORDING) {
+            ToastManager.showToast(this, "请专心录音哦");
             return;
         } else if (mWhatView == RECORDEDUNSBMIT) {
             InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
@@ -208,7 +213,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         hideLoading();
-        if (response == null || apiName == null) return;
+        if (response == null || apiName == null)  return ;
 
         if ("paper_detail".equals(apiName) || "history_interview_detail".equals(apiName)
                 || "get_note_collect".equals(apiName)) {
@@ -287,4 +292,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void setIsTeacherRemarkView(boolean isTeacherRemark){
         this.isTeacherRemark = isTeacherRemark;
     }
+
+    @Override
+    public void refreshTeacherRemarkRemainder(int num) {}
+
+    @Override
+    public void popupAppliedForRemarkReminderAlert() { }
+
 }

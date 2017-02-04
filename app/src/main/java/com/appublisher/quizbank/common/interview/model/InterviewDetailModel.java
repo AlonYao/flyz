@@ -28,8 +28,10 @@ import com.appublisher.lib_pay.ProductEntity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
+import com.appublisher.quizbank.common.interview.netdata.InterviewTeacherRemarkNumResp;
 import com.appublisher.quizbank.common.interview.network.InterviewParamBuilder;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
+import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 
 import org.json.JSONArray;
@@ -44,12 +46,24 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     public InterviewRequest mRequest;
     private InterviewPaperDetailActivity mActivity;
     private ProgressDialog mProgressDialog;
+    private final InterviewDetailBaseFragmentCallBak mInterfaceViewCallBak;
+    //    private final IIterviewDetailBaseFragmentView mInterfaceView;
 
-    public InterviewDetailModel(Context context) {
+//    public InterviewDetailModel(Context context) {
+//        if (context instanceof InterviewPaperDetailActivity) {
+//            mActivity = (InterviewPaperDetailActivity) context;
+//        }
+//        mRequest = new InterviewRequest(context, this);
+//
+//    }
+
+    public InterviewDetailModel(Context context, InterviewDetailBaseFragmentCallBak interviewDetailBaseFragmentViewCallBak) {
+        super();
         if (context instanceof InterviewPaperDetailActivity) {
             mActivity = (InterviewPaperDetailActivity) context;
         }
         mRequest = new InterviewRequest(context, this);
+        mInterfaceViewCallBak = interviewDetailBaseFragmentViewCallBak;
     }
 
     /*
@@ -332,7 +346,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     }
 
     private void setWindowBackground(Window mWindow){
-
         mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
         mWindow.setGravity(Gravity.BOTTOM);                         // 除底部弹出
         mWindow.getDecorView().setPadding(0, 0, 0, 0);                 // 消除边距
@@ -400,7 +413,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             }
                         }
                     });
-
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Action", "2");
@@ -424,7 +436,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             }
                         }
                     });
-
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Action", "2");
@@ -433,8 +444,11 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
             }
         });
     }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        if (response == null || apiName == null) return;
+
         if ("submit_record".equals(apiName)) {
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp != null && resp.getResponse_code() == 1) {
@@ -444,7 +458,32 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 ToastManager.showToast(mActivity,"刷新失败");
             }
             mActivity.hideLoading();
-        }else if("update_collected_status".equals(apiName)){    //  收藏后的回调
+        } else if("update_collected_status".equals(apiName)){    //  收藏后的回调
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }
+        } else if("get_user_service_status".equals(apiName)){       // 获取名师点评的次数
+            InterviewTeacherRemarkNumResp resp = GsonManager.getModel(response, InterviewTeacherRemarkNumResp.class);
+            if (resp != null && resp.getResponse_code() == 1) {
+                // 回调刷新
+                List<InterviewTeacherRemarkNumResp.Data> mDataList = resp.getData();
+                if (mDataList != null && mDataList.size() > 0) {
+                    mInterfaceViewCallBak.refreshTeacherRemarkRemainder(mDataList.get(0).getVal());
+                }
+            } else {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }
+        } else if("update_comment_status".equals(apiName)){     // 申请名师点评
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }else {
+                // 刷新申请的次数
+                mActivity.getData();
+                mInterfaceViewCallBak.popupAppliedForRemarkReminderAlert();
+            }
+        } else if("updateCommentStatusToListen".equals(apiName)){     // 修改已经听过名师点评
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp == null || resp.getResponse_code() != 1) {
                 ToastManager.showToast(mActivity,"刷新失败");
