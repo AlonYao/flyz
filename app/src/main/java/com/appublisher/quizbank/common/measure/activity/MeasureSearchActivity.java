@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,10 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSearchAdapter;
 import com.appublisher.quizbank.common.measure.model.MeasureSearchModel;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
@@ -28,7 +29,7 @@ import com.appublisher.quizbank.common.measure.view.IMeasureSearchView;
 import java.util.List;
 
 public class MeasureSearchActivity extends BaseActivity implements
-        View.OnClickListener, XListView.IXListViewListener, IMeasureSearchView{
+        View.OnClickListener, XListView.IXListViewListener, IMeasureSearchView, MeasureConstants{
 
     public MeasureSearchModel mModel;
 
@@ -177,7 +178,13 @@ public class MeasureSearchActivity extends BaseActivity implements
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Logger.e(String.valueOf(position));
+                Intent intent = new Intent(
+                        MeasureSearchActivity.this, MeasureAnalysisActivity.class);
+                intent.putExtra(INTENT_IS_FROM_SEARCH, true);
+                intent.putExtra(
+                        INTENT_ANALYSIS_BEAN,
+                        mModel.getAnalysisBeanByPosition(position - 1));
+                startActivity(intent);
             }
         });
     }
