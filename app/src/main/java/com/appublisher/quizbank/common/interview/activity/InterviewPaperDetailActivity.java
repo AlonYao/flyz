@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
@@ -14,6 +15,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
+import com.appublisher.quizbank.common.interview.fragment.InterviewDetailBaseFragment;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
@@ -272,6 +274,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             public void onPageSelected(int position) {       //  当前viewpager
                 mCurrentPagerId = position;
                 invalidateOptionsMenu();
+                // 需要将暂停的状态的播放器恢复默认状态
+                changeFragmentPauseToDefault();
             }
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -279,10 +283,54 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         });
     }
     /*
+    *   需要将暂停的状态的播放器恢复默认状态-->需要获取进度条等控件
+    * */
+    private void changeFragmentPauseToDefault() {
+        if (mAdaper.mFragmentList == null || mAdaper.mFragmentList.size() <= 0) return;
+        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mCurrentPagerId);
+        if(fragment.mUserAnswerFilePath != null && fragment.checkIsRecordFileExist() && !fragment.isStop ){
+            fragment.mOffset = 0;
+            fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
+            String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
+            fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+            fragment.mTvtimeNotSubm.setText("听语音");
+        }
+        if( !fragment.isUserHadSubmitAnswerPause){
+            fragment.mOffset = 0;
+            fragment.mUserAnswerProgressBar.setProgress(100);
+            if (fragment.mQuestionBean.getUser_audio_duration() >= 360){
+                fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
+            }else{
+                fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(fragment.mQuestionBean.getUser_audio_duration() + 1));
+            }
+            fragment.mUserAnswerPlayState.setText("听语音");
+        }
+        if( !fragment.isQuestionAudioPause){
+            fragment.mQuestionAudioOffset = 0;
+            fragment.mQuestionAudioProgressbar.setProgress(100);
+            fragment.mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
+            fragment.mQuestionAudioTv.setText("听语音");
+        }
+        if( !fragment.isAnalysisAudioPause){
+            fragment.mAnalysisAudioOffset = 0;
+            fragment.mAnalysisAudioProgressbar.setProgress(100);
+            fragment.mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
+            fragment.mAnalysisAudioTv.setText("听语音");
+        }
+        if( !fragment.isTeacherAnswerPause && fragment.mRemarkState.equals("hadRemarked")){
+            fragment.mTeacherRemarkAudioOffset = 0;
+            fragment.mTeacherRemarkProgressBar.setProgress(100);
+            fragment.mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getTeacher_audio_duration()));
+            fragment.mTeacherRemarkPlayState.setText("收听点评");
+        }
+    }
+
+    /*
     *   提交录音后,选中当前viewPager,并刷新menu
     * */
     public void setViewPagerItem(){
         invalidateOptionsMenu();
+        if(mViewPager == null) return;
         mViewPager.setScroll(true);
         mViewPager.setCurrentItem(mCurrentPagerId);
     }
