@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.interview.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
@@ -30,7 +29,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private InterviewPaperDetailActivity mActivity;
     private String mQuestionType;
 
-    public static Fragment newInstance(String questionBean, int position, int listLength, String questionType) {
+    public static InterviewUnPurchasedFragment newInstance(String questionBean, int position, int listLength, String questionType) {
         Bundle args = new Bundle();
         args.putString(ARGS_QUESTIONBEAN, questionBean);
         args.putInt(ARGS_POSITION, position);

@@ -110,7 +110,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionContent.setVisibility(View.GONE);  // 题目的展示容器默认不显示
 
         /**
-         *  本类为已付费页面的类,不用再和服务器交互:题目行的逻辑处理:逻辑:点击事件:展开与折叠;听语音播放但不可暂停
+         *  题目行的逻辑处理
          * **/
         mQuestionSwitchView.setOnClickListener(new View.OnClickListener() {
             @Override

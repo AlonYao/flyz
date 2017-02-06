@@ -10,6 +10,7 @@ import com.appublisher.quizbank.common.interview.fragment.InterviewPurchasedFrag
 import com.appublisher.quizbank.common.interview.fragment.InterviewUnPurchasedFragment;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,12 +22,14 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
     private List<InterviewPaperDetailResp.QuestionsBean> mList;
     private final InterviewPaperDetailActivity mActivity;
     private final String questionType;
+    public final ArrayList<Fragment> mFragmentList;
 
     public InterviewDetailAdapter(FragmentManager fm, List<InterviewPaperDetailResp.QuestionsBean> list, InterviewPaperDetailActivity activity,String questionFrom) {
         super(fm);
         mList = list;
         mActivity = activity;
         questionType = questionFrom;      // 问题的类型
+        mFragmentList = new ArrayList<>();
     }
 
     @Override
@@ -37,11 +40,19 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
 
         int listLength = mList.size();
         if (hasPurchasedAction(bean)) {
-            return InterviewPurchasedFragment.newInstance(
-                    questionbean, position, listLength,questionType);       // 已付费页面
+            InterviewPurchasedFragment interviewPurchasedFragment = InterviewPurchasedFragment.newInstance(
+                    questionbean, position, listLength, questionType);
+            if(mFragmentList != null){
+                mFragmentList.add(interviewPurchasedFragment);
+            }
+            return interviewPurchasedFragment;       // 已付费页面
         } else {
-            return InterviewUnPurchasedFragment.newInstance(
-                    questionbean, position, listLength, questionType);    // 未付费页面
+            InterviewUnPurchasedFragment interviewUnPurchasedFragment = InterviewUnPurchasedFragment.newInstance(
+                    questionbean, position, listLength, questionType);
+            if(mFragmentList != null){
+                mFragmentList.add(interviewUnPurchasedFragment);
+            }
+            return interviewUnPurchasedFragment;    // 未付费页面
         }
     }
 
