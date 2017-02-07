@@ -45,15 +45,21 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (InterviewPaperDetailActivity) getActivity();
-
         mQuestionBean = GsonManager.getModel(
                 getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
         mQuestionType = getArguments().getString(QUESTIONTYPE);  // 问题的类型
-
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
-
         mPosition = getArguments().getInt(ARGS_POSITION);          // 问题的索引
+    }
 
+    @Override
+    public String getIsUnPurchasedOrPurchasedView() {
+        return "UnPurchasedView";
+    }
+
+    @Override
+    public int getChildViewPosition() {                 // 获取当前的view的id
+        return mPosition;
     }
 
     @Override
