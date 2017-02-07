@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.model.MeasureAnalysisModel;
 import com.appublisher.quizbank.common.measure.model.MeasureModel;
 
 import java.math.BigDecimal;
@@ -105,7 +107,7 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
     }
 
     private void showAnalysis() {
-        if (mQuestion == null || mAnswer == null) return;
+        if (mQuestion == null) return;
 
         ViewStub vs = (ViewStub) mRoot.findViewById(R.id.measure_analysis_viewstub);
         vs.inflate();
@@ -120,10 +122,13 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
         // 正确答案
         String rightAnswer = mQuestion.getAnswer();
         String sRight = "【正确答案】 " + (rightAnswer == null ? "" : rightAnswer) + "；";
-        if (mAnswer.getAnswer() != null && mAnswer.getAnswer().length() > 0) {
+        if (mAnswer != null && mAnswer.getAnswer() != null && mAnswer.getAnswer().length() > 0) {
             sRight = sRight + "你的选择是" + mAnswer.getAnswer();
         } else {
-            showNoAnswerFlag();
+            // 显示未答
+            if (!isFromSearch()) {
+                showNoAnswerFlag();
+            }
         }
         tvRightAnswer.setText(sRight);
 
@@ -181,7 +186,7 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
     }
 
     private void setOptionStatus() {
-        if (mQuestion == null || mAnswer == null) return;
+        if (mQuestion == null) return;
 
         // 正确答案
         String rightAnswer = mQuestion.getAnswer();
@@ -196,7 +201,7 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
         }
 
         // 错误答案
-        if (mAnswer.is_right()) return;
+        if (mAnswer == null || mAnswer.is_right()) return;
         String userAnswer = mAnswer.getAnswer();
         if (OPTION_A.equals(userAnswer)) {
             setOptionBg(mTvOptionA, false);
@@ -232,5 +237,13 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
         mTvOptionB = (TextView) mRoot.findViewById(R.id.measure_option_b_tv);
         mTvOptionC = (TextView) mRoot.findViewById(R.id.measure_option_c_tv);
         mTvOptionD = (TextView) mRoot.findViewById(R.id.measure_option_d_tv);
+    }
+
+    private boolean isFromSearch() {
+        if (getActivity() instanceof MeasureAnalysisActivity) {
+            MeasureAnalysisModel model = ((MeasureAnalysisActivity) getActivity()).mModel;
+            return model.mIsFromSearch;
+        }
+        return false;
     }
 }

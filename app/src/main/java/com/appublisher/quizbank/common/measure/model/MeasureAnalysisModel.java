@@ -27,6 +27,7 @@ public class MeasureAnalysisModel extends MeasureModel{
     public MeasureAnalysisBean mAnalysisBean;
     public boolean mIsErrorOnly;
     public boolean mIsFromFolder;
+    public boolean mIsFromSearch;
     public int mSize;
 
     private List<MeasureQuestionBean> mQuestions;

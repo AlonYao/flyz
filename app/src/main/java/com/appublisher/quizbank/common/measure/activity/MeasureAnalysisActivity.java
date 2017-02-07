@@ -111,13 +111,17 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
             // 判断是否显示错题
-            if (ERROR.equals(mModel.mPaperType) && mModel.mIsFromFolder) {
+            if (ERROR.equals(mModel.mPaperType) && mModel.mIsFromFolder
+                    && !mModel.mIsFromSearch) {
                 MenuItemCompat.setShowAsAction(menu.add("错题").setIcon(
                         R.drawable.measure_analysis_delete), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }
 
-            MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
-                    R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            // 判断是否显示答题卡
+            if (!mModel.mIsFromSearch) {
+                MenuItemCompat.setShowAsAction(menu.add("答题卡").setIcon(
+                        R.drawable.measure_icon_answersheet), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            }
 
             MenuItemCompat.setShowAsAction(menu.add("反馈").setIcon(
                     R.drawable.measure_analysis_feedback), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
@@ -230,6 +234,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         mModel.mIsFromFolder = getIntent().getBooleanExtra(INTENT_IS_FROM_FOLDER, false);
         mModel.mHierarchyId = getIntent().getIntExtra(INTENT_HIERARCHY_ID, 0);
         mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
+        mModel.mIsFromSearch = getIntent().getBooleanExtra(INTENT_IS_FROM_SEARCH, false);
         mModel.getData();
         setModel(mModel);
     }
@@ -244,6 +249,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
                                        float positionOffset,
                                        int positionOffsetPixels) {
                 // 最后一页再往后滑，弹出末题引导
+                if (mModel.mIsFromSearch) return;
                 if (mCurPosition == mModel.getSize() - 1 && positionOffsetPixels == 0) {
                     if (mEnterLastPageCount >= 5) {
                         showLastPageAlert();

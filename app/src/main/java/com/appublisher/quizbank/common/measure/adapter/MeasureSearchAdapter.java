@@ -74,24 +74,71 @@ public class MeasureSearchAdapter extends BaseAdapter {
         MeasureSearchResp.SearchItemBean itemBean = mList.get(position);
         if (itemBean == null) return;
 
-        // 显示内容
+        if ("material".equals(itemBean.getType())) {
+            List<MeasureSearchResp.SearchItemBean> items = itemBean.getQuestions();
+            if (items == null) return;
+
+            for (MeasureSearchResp.SearchItemBean item : items) {
+                if (item == null) continue;
+                String text = getStringContainsKeywords(item);
+                if (text == null || text.length() == 0) continue;
+
+                formatText(text, viewHolder.mTvContent, true);
+            }
+        } else {
+            formatText(getStringContainsKeywords(itemBean), viewHolder.mTvContent, false);
+        }
+    }
+
+//    private boolean show(MeasureSearchResp.SearchItemBean itemBean, ViewHolder viewHolder) {
+//        if (itemBean == null || viewHolder == null) return false;
+//
+//        boolean isContainsKeywords = true;
+//
+//        // 显示内容
+//        if (isContainsKeywords(itemBean.getQuestion())) {
+//            formatText(itemBean.getQuestion(), viewHolder.mTvContent);
+//        } else if (isContainsKeywords(itemBean.getOption_a())) {
+//            formatText(itemBean.getOption_a(), viewHolder.mTvContent);
+//        } else if (isContainsKeywords(itemBean.getOption_b())) {
+//            formatText(itemBean.getOption_b(), viewHolder.mTvContent);
+//        } else if (isContainsKeywords(itemBean.getOption_c())) {
+//            formatText(itemBean.getOption_c(), viewHolder.mTvContent);
+//        } else if (isContainsKeywords(itemBean.getOption_d())) {
+//            formatText(itemBean.getOption_d(), viewHolder.mTvContent);
+//        } else if (isContainsKeywords(itemBean.getMaterial())) {
+//            formatText(itemBean.getMaterial(), viewHolder.mTvContent);
+//        } else {
+//            isContainsKeywords = false;
+//        }
+//
+//        if (isContainsKeywords) {
+//            // 显示来源
+//            String source = "来源：" + itemBean.getSource();
+//            viewHolder.mTvSource.setText(source);
+//        }
+//
+//        return isContainsKeywords;
+//    }
+
+    private String getStringContainsKeywords(MeasureSearchResp.SearchItemBean itemBean) {
+        if (itemBean == null) return "";
+
         if (isContainsKeywords(itemBean.getQuestion())) {
-            formatText(itemBean.getQuestion(), viewHolder.mTvContent);
+            return itemBean.getQuestion();
         } else if (isContainsKeywords(itemBean.getOption_a())) {
-            formatText(itemBean.getOption_a(), viewHolder.mTvContent);
+            return itemBean.getOption_a();
         } else if (isContainsKeywords(itemBean.getOption_b())) {
-            formatText(itemBean.getOption_b(), viewHolder.mTvContent);
+            return itemBean.getOption_b();
         } else if (isContainsKeywords(itemBean.getOption_c())) {
-            formatText(itemBean.getOption_c(), viewHolder.mTvContent);
+            return itemBean.getOption_c();
         } else if (isContainsKeywords(itemBean.getOption_d())) {
-            formatText(itemBean.getOption_d(), viewHolder.mTvContent);
+            return itemBean.getOption_d();
         } else if (isContainsKeywords(itemBean.getMaterial())) {
-            formatText(itemBean.getMaterial(), viewHolder.mTvContent);
+            return itemBean.getMaterial();
         }
 
-        // 显示来源
-        String source = "来源：" + itemBean.getSource();
-        viewHolder.mTvSource.setText(source);
+        return "";
     }
 
     private boolean isContainsKeywords(String text) {
@@ -115,8 +162,10 @@ public class MeasureSearchAdapter extends BaseAdapter {
      * @param text 源数据
      * @param textView TextView
      */
-    private void formatText(String text, TextView textView) {
+    private void formatText(String text, TextView textView, boolean isMaterial) {
         if (text == null) return;
+
+        if (isMaterial) text = "(材料) " + text;
 
         // 去掉图片
         int start = text.indexOf("<img=");
@@ -131,32 +180,38 @@ public class MeasureSearchAdapter extends BaseAdapter {
         }
 
         String keywords = getKeywords();
-        if (keywords != null) {
-            SpannableString ss = new SpannableString(text);
-            start = text.indexOf(keywords, 0);
-            while (start != -1) {
-                ss.setSpan(
-                        new ForegroundColorSpan(Color.RED),
-                        start,
-                        start + keywords.length(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                start = start + keywords.length();
-                start = text.indexOf(keywords, start);
-            }
+        if (keywords == null) return;
 
-            // 预留字段特殊处理：材料：
-            if (text.contains("材料：")) {
-                ss.setSpan(
+        // 首个关键字前最多保留20个字符
+        start = text.indexOf(keywords, 0);
+        if (start > 20) {
+            int dex = start - 20;
+            String sub = text.substring(0, dex);
+            text = text.replaceFirst(sub, "...");
+        }
+
+        SpannableString ss = new SpannableString(text);
+        start = text.indexOf(keywords, 0);
+        while (start != -1) {
+            ss.setSpan(
+                    new ForegroundColorSpan(Color.RED),
+                    start,
+                    start + keywords.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            start = start + keywords.length();
+            start = text.indexOf(keywords, start);
+        }
+
+        // 预留字段特殊处理：材料：
+        if (text.contains("(材料)")) {
+            ss.setSpan(
                     new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.themecolor)),
                     0,
-                    2,
+                    4,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-
-            textView.setText(ss);
-        } else {
-            textView.setText(text);
         }
+
+        textView.setText(ss);
     }
 
     private static class ViewHolder {

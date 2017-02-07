@@ -42,8 +42,16 @@ public class MeasureAnalysisAdapter extends FragmentStatePagerAdapter{
             return MeasureTabAllRightFragment.newInstance();
         } else {
             // 题目页面
-            String question = GsonManager.modelToString(mQuestions.get(position));
-            String answer = GsonManager.modelToString(mAnswers.get(position));
+            String question = "";
+            if (mQuestions != null && position < mQuestions.size()) {
+                question = GsonManager.modelToString(mQuestions.get(position));
+            }
+
+            String answer = "";
+            if (mAnswers != null && position < mAnswers.size()) {
+                answer = GsonManager.modelToString(mAnswers.get(position));
+            }
+
             return MeasureAnalysisItemFragment.newInstance(question, answer, position);
         }
     }
