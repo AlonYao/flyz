@@ -1132,6 +1132,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 break;
         }
         mActivity.setPlayingViewState(isPlaying);           // 需要传值给activity: 播放器属于哪一个正在播放
+        mActivity.setIsExitsPlayingMedia(true);
     }
 
     /*
@@ -1140,6 +1141,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     private void pausePlay() {
         isPlaying = NONE;
         mActivity.setPlayingViewState(isPlaying);
+        mActivity.setIsExitsPlayingMedia(false);
         mActivity.mMediaRecorderManagerUtil.playOnPause(new MediaRecordManagerUtil.IPlayFileOffsetCallback() {
             @Override
             public void onPlayOffset(int offset) {
@@ -1172,6 +1174,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     private void dealPlayedCompletedViewState(){
         isPlaying = NONE;
         mActivity.setPlayingViewState(isPlaying);
+        mActivity.setIsExitsPlayingMedia(false);
         switch (mStatus){
             case SUBMIT:
                 String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
@@ -1417,7 +1420,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         lp.height = (int)(metrics.heightPixels * 0.35);
 
         mWindow.setAttributes(lp);
-
 
         TextView cancle = (TextView) mWindow.findViewById(R.id.purchased_remark_cancle);
         TextView confirm = (TextView) mWindow.findViewById(R.id.purchased_remark_confirm);

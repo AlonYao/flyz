@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="18dp"
                 android:orientation="vertical"
                 >
                 <TextView
@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="27dp"
                 android:visibility="gone"
                 android:text="点评中"
                 android:textSize="15dp"
@@ -148,7 +148,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="3dp"
+            android:layout_marginTop="77dp"
            >
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -161,7 +161,7 @@
                     android:id="@+id/teacher_remark_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="15dp"
                     android:textColor="@color/common_text"
                     android:text="您有xx次点评申请"/>
                 <ImageView

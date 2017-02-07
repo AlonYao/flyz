@@ -103,8 +103,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     } else {
                         // 如果答完题状态
                         mAnalysisView.setVisibility(View.VISIBLE);
-                        mAnalysisIm.setImageResource(R.drawable.interview_answer_packup);
-                        mReminderTv.setText("收起");
+                        mAnalysisIm.setImageResource(R.drawable.interview_fold_up);
+                        mReminderTv.setText("不看文字");
                     }
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();

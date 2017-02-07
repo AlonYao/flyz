@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.common.interview.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -60,6 +62,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public MediaRecordManagerUtil mMediaRecorderManagerUtil;        // 新的播放器类
     public String playingViewState;
     private int mPlayingChildViewId;
+    private boolean isExitsPlayingMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         String type = getIntent().getStringExtra("itemType");      // item类型
         String time = getIntent().getStringExtra("time");          // 时间
-        playingViewState = "none";
+        playingViewState = NONE;
+        isExitsPlayingMedia = false;
         // 所有fragment中用同一个录音器
         mMediaRecorderManager = new MediaRecorderManager(getApplicationContext());
         mMediaRecorderManagerUtil = new MediaRecordManagerUtil();
@@ -154,6 +158,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
                 return true;
             }
+            if (isExitsPlayingMedia){
+                // 将播放状态的播放器变成停止状态
+                changePlayingMediaToStop();
+                return true;
+            }
         } else if ("开启完整版".equals(item.getTitle())) {
             if (mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT) {
                 return true;
@@ -202,7 +211,32 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
             return;
         }
+        if (isExitsPlayingMedia){
+            // 将播放状态的播放器变成停止状态
+            changePlayingMediaToStop();
+            return;
+        }
         super.onBackPressed();
+    }
+    /*
+    *   设置页面中是否存在播放的播放器
+    * */
+    public void setIsExitsPlayingMedia(boolean isExitsPlayingMedia){
+        this.isExitsPlayingMedia = isExitsPlayingMedia;
+    }
+    /*
+    *
+    * */
+    public void changePlayingMediaToStop(){
+        // 弹窗提示
+        SharedPreferences sp = getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+        boolean isFirstCheckBox = sp.getBoolean("isFirstCheckBox", true);
+        if (isFirstCheckBox){
+            InterviewDetailModel.showStopMediaPlayingDailog(this);
+        }else{
+            mMediaRecorderManagerUtil.stopPlay();
+            finish();
+        }
     }
 
     public InterviewPaperDetailResp.AllAudioBean getAllAudioBean() {
