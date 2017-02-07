@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.YaoguoUploadManager;
@@ -131,6 +134,62 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 .create().show();
     }
 
+    /*
+    *   创建停止播放语音的弹窗提示
+    * */
+    public static void showStopMediaPlayingDailog(final InterviewPaperDetailActivity mActivity){
+        Logger.e("进入弹窗方法");
+        //  弹窗提示
+        if (mActivity.isFinishing()) return;
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
+        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        mAalertDialog.show();
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_reminder_stopplaying_media);
+        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
+        mWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        DisplayMetrics metrics = new DisplayMetrics();
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        lp.width = (int)(metrics.widthPixels * 0.8);
+        lp.height = (int)(metrics.heightPixels * 0.35);
+        mWindow.setAttributes(lp);
+        TextView stopPlaying = (TextView) mWindow.findViewById(R.id.stop_playing);
+        TextView continuePlaying = (TextView) mWindow.findViewById(R.id.continue_playing);
+        final CheckBox checkBox = (CheckBox) mWindow.findViewById(R.id.stop_playing_checkbox);
+
+        stopPlaying.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.mMediaRecorderManagerUtil.stopPlay();
+                mAalertDialog.dismiss();
+                // 返回上一级
+                mActivity.finish();
+                if(checkBox.isChecked()){
+                    // 记录状态
+                    SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = shp.edit();
+                    edit.putBoolean("isFirstCheckBox", false);
+                    edit.apply();
+                }
+            }
+        });
+        continuePlaying.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+                if(checkBox.isChecked()){
+                    // 记录状态
+                    SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = shp.edit();
+                    edit.putBoolean("isFirstCheckBox", false);
+                    edit.apply();
+                }
+            }
+        });
+
+    }
     /*
    *   检查menu是否为收藏状态:需要获取数据:由fragment传进来
    * */

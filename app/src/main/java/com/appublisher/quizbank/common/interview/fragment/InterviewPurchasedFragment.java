@@ -62,6 +62,16 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     }
 
     @Override
+    public String getIsUnPurchasedOrPurchasedView() {
+        return "PurchasedView";
+    }
+
+    @Override
+    public int getChildViewPosition() {         // 获取当前的view的id
+        return mPosition;
+    }
+
+    @Override
     public void initChildView() {
         mQuestionIm = (ImageView) mFragmentView.findViewById(R.id.interview_lookquestion_im);
         mQuestionTv = (TextView) mFragmentView.findViewById(R.id.interview_lookquestion_tv);

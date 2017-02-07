@@ -156,13 +156,12 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public String mQuestionFileFolder;
     public String mAnalysisFileFolder;
     public String isPlaying;
-    public String mRecordFileDuration;
+    public String isUnPurchasedOrPurchasedView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (InterviewPaperDetailActivity) getActivity();
-//        mModel = new InterviewDetailModel(mActivity);
         mModel = new InterviewDetailModel(mActivity, this);
 
     }
@@ -186,6 +185,8 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mQuestionAudioOffset = 0;
         mAnalysisAudioOffset = 0;
         mTeacherRemarkAudioOffset = 0;
+        mActivity.setPlayingViewState(NONE); // 初始化时美哦与播放器播放
+        isUnPurchasedOrPurchasedView = getIsUnPurchasedOrPurchasedView();       // 获取是哪一个页面
         initRecordView();             // 初始化录音页面控件
         checkIsAnswer();
         initChildView();
@@ -335,13 +336,15 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mExistRemarkLl = (LinearLayout) mFragmentView.findViewById(R.id.teacher_remark_offered_ll);     // 存在老师点评整体
 
         mQuestionAudioProgressbar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.question_audio_progressbar);
-        mQuestionAudioProgressbar.setIsExistInsideText(false);
         mAnalysisAudioProgressbar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.analysis_audio_progressbar);
-        mAnalysisAudioProgressbar.setIsExistInsideText(false);
         mQuestionAudioIv = (ImageView) mFragmentView.findViewById(R.id.question_audio_listen_audio_iv);
         mAnalysisAudioIv = (ImageView) mFragmentView.findViewById(R.id.analysis_audio_listen_audio_iv);
         mQuestionAudioTv = (TextView) mFragmentView.findViewById(R.id.listenquestion_tv);
         mAnalysisAudioTv = (TextView) mFragmentView.findViewById(R.id.listenanswer_tv);
+        if (isUnPurchasedOrPurchasedView.equals("PurchasedView")){
+            mQuestionAudioProgressbar.setIsExistInsideText(false);
+            mAnalysisAudioProgressbar.setIsExistInsideText(false);
+        }
 
         if (mQuestionBean != null ) {
             //材料
@@ -372,6 +375,9 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         }
     }
 
+    /*
+    *   初始化录音文件
+    * */
     private void initRecordFile() {
         String userId = LoginModel.getUserId();
         mRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/"  + userId + "/user_answer/";            // 自己录音的路径
@@ -730,33 +736,34 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     *   将正在播放的语音变成暂停状态
     * */
     public void changePlayingMediaToPauseState() {
+
         switch (isPlaying){
             case SUBMIT:
-                isStop = false;
                 pausePlay();
+                isStop = false;
                 mTvtimeNotSubm.setText("继续听");
                 break;
             case HADSUBMIT:
-                isUserHadSubmitAnswerPause = false;
                 pausePlay();
+                isUserHadSubmitAnswerPause = false;
                 mUserAnswerPlayState.setText("继续听");
                 break;
             case QUESTIONITEM:
+                pausePlay();
                 isQuestionAudioPause = false;
                 mQuestionAudioIv.setImageResource(R.drawable.interview_listen_pause);
                 mQuestionAudioTv.setText("继续听");
-                pausePlay();
                 break;
             case ANALYSISITEM:
+                pausePlay();
                 isAnalysisAudioPause = false;
                 mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_pause);
                 mAnalysisAudioTv.setText("继续听");
-                pausePlay();
                 break;
             case TEACHERREMARK:
+                pausePlay();
                 isTeacherAnswerPause = false;
                 mTeacherRemarkPlayState.setText("继续听");
-                pausePlay();
                 break;
             case NONE:
                 isStop = false;
@@ -1045,7 +1052,11 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
   *   播放语音: 需要四个不同的断点
   * */
     public void play(String filePath) {
-
+        if(mActivity.mMediaRecorderManagerUtil != null){
+            mActivity.mMediaRecorderManagerUtil.stopPlay();
+            mActivity.changPlayingViewToDeafault();  // 检验是否存在别的页面正在播放的播放器
+        }
+        if (filePath.equals("")) return;
         mActivity.mMediaRecorderManagerUtil.setPlayFilePath(filePath);
         //播放的断点
         mActivity.mMediaRecorderManagerUtil.startPlay(getOffset(), new MediaRecordManagerUtil.IPlayCompleteCallback() {
@@ -1091,6 +1102,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     *   播放时状态的处理
     * */
     private void dealPlayingViewState(int unPlayDur){
+        mActivity.setPlayingChildViewId(getChildViewPosition());        // 获取存在播放状态的状态的view的id
         switch (mStatus){
             case SUBMIT:                     // 未提交时
                 isPlaying = SUBMIT;
@@ -1110,23 +1122,26 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 break;
             case QUESTIONITEM:              // 题目行语音
                 isPlaying = QUESTIONITEM;
-                // 题目行的进度条
-                mQuestionAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getQuestion_audio_duration()));
+                mQuestionAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getQuestion_audio_duration()));   // 题目行的进度条
                 break;
             case ANALYSISITEM:              // 解析行语音
                 isPlaying = ANALYSISITEM;
-                // 解析行的进度条
-                mAnalysisAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));
+                mAnalysisAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));   // 解析行的进度条
                 break;
             default:
                 break;
         }
+        mActivity.setPlayingViewState(isPlaying);           // 需要传值给activity: 播放器属于哪一个正在播放
+        mActivity.setIsExitsPlayingMedia(true);
     }
+
     /*
     *   暂停状态: 记录断点,记录各自暂停的状态
     * */
     private void pausePlay() {
         isPlaying = NONE;
+        mActivity.setPlayingViewState(isPlaying);
+        mActivity.setIsExitsPlayingMedia(false);
         mActivity.mMediaRecorderManagerUtil.playOnPause(new MediaRecordManagerUtil.IPlayFileOffsetCallback() {
             @Override
             public void onPlayOffset(int offset) {
@@ -1158,6 +1173,8 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     * */
     private void dealPlayedCompletedViewState(){
         isPlaying = NONE;
+        mActivity.setPlayingViewState(isPlaying);
+        mActivity.setIsExitsPlayingMedia(false);
         switch (mStatus){
             case SUBMIT:
                 String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
@@ -1403,7 +1420,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         lp.height = (int)(metrics.heightPixels * 0.35);
 
         mWindow.setAttributes(lp);
-
 
         TextView cancle = (TextView) mWindow.findViewById(R.id.purchased_remark_cancle);
         TextView confirm = (TextView) mWindow.findViewById(R.id.purchased_remark_confirm);

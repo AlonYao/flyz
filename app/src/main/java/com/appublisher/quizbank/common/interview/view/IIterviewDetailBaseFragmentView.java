@@ -12,5 +12,7 @@ public interface IIterviewDetailBaseFragmentView {
     String initChildQuestionType();
     void initChildListener();
     String getChildFragmentRich();
+    String getIsUnPurchasedOrPurchasedView();       //获取是未付费还是已付费页面
+    int getChildViewPosition();     // 具体viewpager的索引
 
 }
