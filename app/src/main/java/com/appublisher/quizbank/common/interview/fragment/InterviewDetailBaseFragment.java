@@ -2,8 +2,11 @@ package com.appublisher.quizbank.common.interview.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -14,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
@@ -36,6 +40,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -157,6 +162,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public String mAnalysisFileFolder;
     public String isPlaying;
     public String isUnPurchasedOrPurchasedView;
+    private PhoneBroadcastReceiver mPhoneBroadcastReceiver;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -164,10 +170,17 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mActivity = (InterviewPaperDetailActivity) getActivity();
         mModel = new InterviewDetailModel(mActivity, this);
 
+        // 动态注册广播
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.intent.action.NEW_OUTGOING_CALL");
+        filter.addAction("android.intent.action.PHONE_STATE");
+        mPhoneBroadcastReceiver = new PhoneBroadcastReceiver();
+        mActivity.registerReceiver(mPhoneBroadcastReceiver, filter);
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Logger.e("onCreateView");
         isStop = false;
         isUserHadSubmitAnswerPause = false;
         isCanTouch = true;
@@ -188,9 +201,9 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mActivity.setPlayingViewState(NONE); // 初始化时美哦与播放器播放
         isUnPurchasedOrPurchasedView = getIsUnPurchasedOrPurchasedView();       // 获取是哪一个页面
         initRecordView();             // 初始化录音页面控件
-        checkIsAnswer();
         initChildView();
         initRecordView();             // 初始化录音页面控件
+        checkIsAnswer();
         setIsCanTouch();
         initRecordFile();             // 初始化录音文件
         initChildListener();
@@ -199,6 +212,43 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         showAnswer();
         return mFragmentView;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Logger.e("onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logger.e("onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Logger.e("onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Logger.e("onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Logger.e("onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Logger.e("onDetach");
+    }
+
     private void checkIsAnswer() {
         if(mQuestionBean.getUser_audio() !=null &&  mQuestionBean.getUser_audio().length() > 0){
             getTeacherRemarkRemainder();          // 获取名师点评剩余的次数
@@ -511,7 +561,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 textView.setLineSpacing(0, 1.4f);
                 textView.setText(segment.text);
                 flowLayout.addView(textView);
-
                 // text长按复制
                 if (textClick) {
                     CommonModel.setTextLongClickCopy(textView);
@@ -523,9 +572,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 imgView.setLayoutParams(p);
-
                 imgView.setImageResource(R.drawable.measure_loading_img);
-
                 flowLayout.addView(imgView);
 
                 // 异步加载图片
@@ -536,9 +583,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                     @Override
                     public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                         Bitmap data = imageContainer.getBitmap();
-
                         if (data == null) return;
-
                         // 对小于指定尺寸的图片进行放大(2倍)
                         int width = data.getWidth();
                         int height = data.getHeight();
@@ -547,18 +592,14 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                             matrix.postScale(2.0f, 2.0f);
                             data = Bitmap.createBitmap(data, 0, 0, width, height, matrix, true);
                         }
-
                         imgView.setImageBitmap(data);
                     }
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
                     }
                 };
-
                 request.loadImage(segment.text.toString(), imageListener);
-
                 imgView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -647,7 +688,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
 
             } else if (id == R.id.interview_recordsounding_ll) {             // 点击录音整体
                 if(isCanTouch)
-                ToastManager.showToast(getActivity(), "正在录音,录音时间要超过60秒");
+                    ToastManager.showToast(getActivity(), "正在录音,录音时间要超过60秒");
 
             } else if (id == R.id.interview_recordsound_rl_rerecording) {      //点击重录
                 if (mActivity.mMediaRecorderManagerUtil != null) {
@@ -736,7 +777,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     *   将正在播放的语音变成暂停状态
     * */
     public void changePlayingMediaToPauseState() {
-
         switch (isPlaying){
             case SUBMIT:
                 pausePlay();
@@ -1048,9 +1088,9 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mActivity.mMediaRecorderManagerUtil.stopPlay();
     }
 
-  /*
-  *   播放语音: 需要四个不同的断点
-  * */
+    /*
+    *   播放语音: 需要四个不同的断点
+    * */
     public void play(String filePath) {
         if(mActivity.mMediaRecorderManagerUtil != null){
             mActivity.mMediaRecorderManagerUtil.stopPlay();
@@ -1139,6 +1179,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     *   暂停状态: 记录断点,记录各自暂停的状态
     * */
     private void pausePlay() {
+        Logger.e("去暂停");
         isPlaying = NONE;
         mActivity.setPlayingViewState(isPlaying);
         mActivity.setIsExitsPlayingMedia(false);
@@ -1159,6 +1200,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                     case ANALYSISITEM:
                         mStatus = RECORDABLE;
                         mAnalysisAudioOffset = offset;
+                        Logger.e("mAnalysisAudioOffset==="+mAnalysisAudioOffset);
                         break;
                     case TEACHERREMARK:
                         mTeacherRemarkAudioOffset = offset;
@@ -1278,8 +1320,15 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         DisplayMetrics metrics = new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
+        int width = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int height = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        mTeacherRemarkProgressBar.measure(width, height);
+        int teacherRemarkProgressBarHeight = mTeacherRemarkProgressBar.getMeasuredHeight();     // 测量的是它的父控件的大小
+
         lp.x = (int)(metrics.widthPixels * 0.04);
-        lp.y = (int)(metrics.heightPixels * 0.2);
+        lp.y = teacherRemarkProgressBarHeight + 10 ;           // y轴偏移量
         lp.width = (int)(metrics.widthPixels * 0.75);
         lp.height = (int)(metrics.heightPixels * 0.2);
         lp.alpha = 0.8f;
@@ -1440,10 +1489,39 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             }
         });
     }
-
+    /*
+    *   广播接收者: 处理电话监听状态
+    * */
+    private class PhoneBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 如果是拨打电话
+            if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
+                if (mActivity.mMediaRecorderManagerUtil != null){
+                    mActivity.mMediaRecorderManagerUtil.stopPlay();
+                }
+            } else {
+                // 如果是来电
+                TelephonyManager tManager = (TelephonyManager) context
+                        .getSystemService(Service.TELEPHONY_SERVICE);
+                switch (tManager.getCallState()) {
+                    case TelephonyManager.CALL_STATE_RINGING:   // 响铃
+                        changePlayingMediaToPauseState();
+                        break;
+                    case TelephonyManager.CALL_STATE_OFFHOOK:   //通话中
+                        break;
+                    case TelephonyManager.CALL_STATE_IDLE:      //待机状态
+                        break;
+                }
+            }
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Logger.e("onDestroyView");
+        mActivity.unregisterReceiver(mPhoneBroadcastReceiver);  // 取消注册广播
+
         String filePath = mRecordFolder + mQuestionBean.getId() + ".amr";
         String teacherRemarkPath = mTeacherRemarkRecordFolder + mQuestionBean.getId() + ".amr";
         File file = new File(filePath);
