@@ -40,7 +40,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -180,7 +179,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Logger.e("onCreateView");
         isStop = false;
         isUserHadSubmitAnswerPause = false;
         isCanTouch = true;
@@ -211,42 +209,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         showQuestion();
         showAnswer();
         return mFragmentView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Logger.e("onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Logger.e("onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Logger.e("onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Logger.e("onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Logger.e("onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Logger.e("onDetach");
     }
 
     private void checkIsAnswer() {
@@ -1179,7 +1141,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     *   暂停状态: 记录断点,记录各自暂停的状态
     * */
     private void pausePlay() {
-        Logger.e("去暂停");
         isPlaying = NONE;
         mActivity.setPlayingViewState(isPlaying);
         mActivity.setIsExitsPlayingMedia(false);
@@ -1200,7 +1161,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                     case ANALYSISITEM:
                         mStatus = RECORDABLE;
                         mAnalysisAudioOffset = offset;
-                        Logger.e("mAnalysisAudioOffset==="+mAnalysisAudioOffset);
                         break;
                     case TEACHERREMARK:
                         mTeacherRemarkAudioOffset = offset;
@@ -1519,7 +1479,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Logger.e("onDestroyView");
         mActivity.unregisterReceiver(mPhoneBroadcastReceiver);  // 取消注册广播
 
         String filePath = mRecordFolder + mQuestionBean.getId() + ".amr";
