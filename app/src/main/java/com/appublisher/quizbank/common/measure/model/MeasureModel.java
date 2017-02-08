@@ -783,8 +783,6 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                                               boolean textClick) {
         if (rich == null || rich.length() <= 0) return;
 
-//        Request request = new Request(activity);
-
         // 通过迭代装饰方式构造解析器
         IParser parser = new ImageParser(context);
 
