@@ -323,6 +323,9 @@
             android:label="@string/title_activity_record_collect"
             android:theme="@style/AppTheme"></activity>
 
+        <!--监听是否存在其他应用播放器的服务-->
+        <service android:name="com.appublisher.quizbank.common.interview.service.MediaPlayingService" >
+        </service>
     </application>
 
 </manifest>

@@ -54,6 +54,7 @@ import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.model.InterviewModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.network.ICommonCallback;
+import com.appublisher.quizbank.common.interview.service.MediaPlayingService;
 import com.appublisher.quizbank.common.interview.view.IIterviewDetailBaseFragmentView;
 import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
@@ -73,7 +74,6 @@ import java.util.HashMap;
  * Created by huaxiao on 2016/12/16.
  * // 在基类fragment中获取录音界面的四个布局,然后创建各自的model对象,在各自的model中处理点击事件
  */
-
 public abstract class  InterviewDetailBaseFragment extends Fragment implements IIterviewDetailBaseFragmentView, InterviewDetailBaseFragmentCallBak {
 
     public String RECORDABLE = "recordable";                    //可录音
@@ -162,6 +162,8 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public String isPlaying;
     public String isUnPurchasedOrPurchasedView;
     private PhoneBroadcastReceiver mPhoneBroadcastReceiver;
+    private AudioStreamFocusReceiver mAudioStreamFocusReceiver;
+    private boolean isGetAudioFocus;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -175,6 +177,12 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         filter.addAction("android.intent.action.PHONE_STATE");
         mPhoneBroadcastReceiver = new PhoneBroadcastReceiver();
         mActivity.registerReceiver(mPhoneBroadcastReceiver, filter);
+
+        //动态注册广播接收器
+        mAudioStreamFocusReceiver = new AudioStreamFocusReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.appublisher.quizbank.common.interview.fragment.AUDIOSTREAMFOCUSRECEIVER");
+        mActivity.registerReceiver(mAudioStreamFocusReceiver, intentFilter);
     }
     @Nullable
     @Override
@@ -196,7 +204,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mQuestionAudioOffset = 0;
         mAnalysisAudioOffset = 0;
         mTeacherRemarkAudioOffset = 0;
-        mActivity.setPlayingViewState(NONE); // 初始化时美哦与播放器播放
+        mActivity.setPlayingViewState(NONE); // 初始化时没有播放器播放
         isUnPurchasedOrPurchasedView = getIsUnPurchasedOrPurchasedView();       // 获取是哪一个页面
         initRecordView();             // 初始化录音页面控件
         initChildView();
@@ -1054,9 +1062,16 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     *   播放语音: 需要四个不同的断点
     * */
     public void play(String filePath) {
+        // 检验是否存在其他应用正在播放音乐: 获取音频焦点
+        getAudioStreamFocus();
+//        if (!isGetAudioFocus) {
+//            Logger.e("没有获取到焦点");
+//            return;
+//        }
+        // 检验是否存在别的页面正在播放的播放器
         if(mActivity.mMediaRecorderManagerUtil != null){
             mActivity.mMediaRecorderManagerUtil.stopPlay();
-            mActivity.changPlayingViewToDeafault();  // 检验是否存在别的页面正在播放的播放器
+            mActivity.changPlayingViewToDeafault();
         }
         if (filePath.equals("")) return;
         mActivity.mMediaRecorderManagerUtil.setPlayFilePath(filePath);
@@ -1076,6 +1091,12 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         // 设置屏幕常亮
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
+    /*
+    *   获取音频流焦点
+    * */
+    private void getAudioStreamFocus(){
+        mActivity.startService(new Intent(mActivity, MediaPlayingService.class)); // 开启服务
+    };
     /*
     *   获取不同播放状态下的断点值
     * */
@@ -1457,9 +1478,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         public void onReceive(Context context, Intent intent) {
             // 如果是拨打电话
             if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
-                if (mActivity.mMediaRecorderManagerUtil != null){
-                    mActivity.mMediaRecorderManagerUtil.stopPlay();
-                }
+                changePlayingMediaToPauseState();
             } else {
                 // 如果是来电
                 TelephonyManager tManager = (TelephonyManager) context
@@ -1476,10 +1495,25 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             }
         }
     }
+    /*
+    *   获取音频焦点的广播接收者
+    * */
+    private class AudioStreamFocusReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            isGetAudioFocus = intent.getExtras().getBoolean("isGetAudioFocus", false); // 是否获取到了焦点
+            if (!isGetAudioFocus){
+                changePlayingMediaToPauseState();
+            }
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mActivity.unregisterReceiver(mPhoneBroadcastReceiver);  // 取消注册广播
+        mActivity.unregisterReceiver(mAudioStreamFocusReceiver);  // 取消注册广播
+        mActivity.stopService(new Intent(mActivity, MediaPlayingService.class));          // 取消注册服务
 
         String filePath = mRecordFolder + mQuestionBean.getId() + ".amr";
         String teacherRemarkPath = mTeacherRemarkRecordFolder + mQuestionBean.getId() + ".amr";
