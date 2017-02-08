@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -321,6 +322,10 @@
             android:name=".activity.RecordCollectActivity"
             android:label="@string/title_activity_record_collect"
             android:theme="@style/AppTheme"></activity>
+
+        <!--监听是否存在其他应用播放器的服务-->
+        <service android:name="com.appublisher.quizbank.common.interview.service.MediaPlayingService" >
+        </service>
     </application>
 
 </manifest>
