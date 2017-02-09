@@ -11,6 +11,7 @@ android {
         targetSdkVersion 21
         versionCode 58
         versionName "2.2.0"
+        multiDexEnabled true
 
         //参数
         manifestPlaceholders = [
@@ -31,10 +32,10 @@ android {
          * 常用
          */
 
-        baidu {
-            manifestPlaceholders = [APP_NAME   : "腰果公考",
-                                    APP_CHANNEL: "baidu"]
-        }
+//        baidu {
+//            manifestPlaceholders = [APP_NAME   : "腰果公考",
+//                                    APP_CHANNEL: "baidu"]
+//        }
 
 //        "360" {
 //            manifestPlaceholders = [APP_NAME   : "腰果公考",
@@ -91,10 +92,10 @@ android {
 //                                    APP_CHANNEL: "appchina"]
 //        }
 //
-//        other {
-//            manifestPlaceholders = [APP_NAME   : "腰果公考",
-//                                    APP_CHANNEL: "other"]
-//        }
+        other {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "other"]
+        }
 
 //        samsung {
 //            manifestPlaceholders = [APP_NAME   : "腰果公考",
