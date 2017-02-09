@@ -285,10 +285,10 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
             }
         });
 
-        String singlePayText = "付 ¥ 0.01, 获取本题解析(仅一次机会)";
+        String singlePayText = "付 ¥ 0.01, 获取本题解析(此体验机会仅限一次)";
         if (singleAudioBean != null) {
             singlePayText = "付 ¥ " + String.valueOf(singleAudioBean.getPrice())
-                    + ", 获取本题解析(仅一次机会)";
+                    + ", 获取本题解析(此体验机会仅限一次)";
         }
         paySingle.setText(singlePayText);
 

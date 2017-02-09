@@ -111,7 +111,7 @@
                             android:id="@+id/question_audio_listen_audio_iv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/interview_listen_audio"
+                            android:src="@drawable/interview_audio_playing_animation"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>

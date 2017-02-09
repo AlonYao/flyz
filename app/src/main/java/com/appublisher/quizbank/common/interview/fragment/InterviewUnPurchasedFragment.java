@@ -114,10 +114,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     } else {
                         UmengManager.onEvent(mActivity, "InterviewQuestion", map);
                     }
-
                 } else {                      // 未答题
                     // 弹窗处理:三个item
-
                     mActivity.mModel.showNoAnswerDialog();
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();

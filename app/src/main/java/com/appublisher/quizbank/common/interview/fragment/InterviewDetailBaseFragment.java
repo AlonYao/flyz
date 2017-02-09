@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -163,7 +164,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public String isUnPurchasedOrPurchasedView;
     private PhoneBroadcastReceiver mPhoneBroadcastReceiver;
     private AudioStreamFocusReceiver mAudioStreamFocusReceiver;
-    private boolean isGetAudioFocus;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,17 +172,17 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mModel = new InterviewDetailModel(mActivity, this);
 
         // 动态注册广播
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.intent.action.NEW_OUTGOING_CALL");
-        filter.addAction("android.intent.action.PHONE_STATE");
+        IntentFilter phoneCallingFilter = new IntentFilter();
+        phoneCallingFilter.addAction("android.intent.action.NEW_OUTGOING_CALL");
+        phoneCallingFilter.addAction("android.intent.action.PHONE_STATE");
         mPhoneBroadcastReceiver = new PhoneBroadcastReceiver();
-        mActivity.registerReceiver(mPhoneBroadcastReceiver, filter);
+        mActivity.registerReceiver(mPhoneBroadcastReceiver, phoneCallingFilter);
 
         //动态注册广播接收器
+        IntentFilter audioFocusFilter = new IntentFilter();
+        audioFocusFilter.addAction("com.appublisher.quizbank.common.interview.fragment.AUDIOSTREAMFOCUSRECEIVER");
         mAudioStreamFocusReceiver = new AudioStreamFocusReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.appublisher.quizbank.common.interview.fragment.AUDIOSTREAMFOCUSRECEIVER");
-        mActivity.registerReceiver(mAudioStreamFocusReceiver, intentFilter);
+        mActivity.registerReceiver(mAudioStreamFocusReceiver, audioFocusFilter);
     }
     @Nullable
     @Override
@@ -1064,10 +1064,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     public void play(String filePath) {
         // 检验是否存在其他应用正在播放音乐: 获取音频焦点
         getAudioStreamFocus();
-//        if (!isGetAudioFocus) {
-//            Logger.e("没有获取到焦点");
-//            return;
-//        }
         // 检验是否存在别的页面正在播放的播放器
         if(mActivity.mMediaRecorderManagerUtil != null){
             mActivity.mMediaRecorderManagerUtil.stopPlay();
@@ -1096,7 +1092,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     * */
     private void getAudioStreamFocus(){
         mActivity.startService(new Intent(mActivity, MediaPlayingService.class)); // 开启服务
-    };
+    }
     /*
     *   获取不同播放状态下的断点值
     * */
@@ -1146,10 +1142,14 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             case QUESTIONITEM:              // 题目行语音
                 isPlaying = QUESTIONITEM;
                 mQuestionAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getQuestion_audio_duration()));   // 题目行的进度条
+                // 中间图片的动画集合
+                mediaPlayingAnimation(true);
                 break;
             case ANALYSISITEM:              // 解析行语音
                 isPlaying = ANALYSISITEM;
                 mAnalysisAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));   // 解析行的进度条
+                // 中间图片的动画集合
+                mediaPlayingAnimation(true);
                 break;
             default:
                 break;
@@ -1157,7 +1157,32 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
         mActivity.setPlayingViewState(isPlaying);           // 需要传值给activity: 播放器属于哪一个正在播放
         mActivity.setIsExitsPlayingMedia(true);
     }
-
+    /*
+    *  中间图片的动画:播放,停止
+    * */
+    public void mediaPlayingAnimation(boolean isPlaying){
+        if(isPlaying){
+            if (mStatus.equals(QUESTIONITEM)) {
+                mQuestionAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
+                AnimationDrawable questionAudioIv = (AnimationDrawable) mQuestionAudioIv.getDrawable();
+                questionAudioIv.start();
+            }else if(mStatus.equals(ANALYSISITEM)){
+                mAnalysisAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
+                AnimationDrawable analysisAudioIv = (AnimationDrawable) mAnalysisAudioIv.getDrawable();
+                analysisAudioIv.start();
+            }
+        }else{
+            if (mStatus.equals(QUESTIONITEM)) {
+                mQuestionAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
+                AnimationDrawable questionAudioIv = (AnimationDrawable) mQuestionAudioIv.getDrawable();
+                questionAudioIv.stop();
+            }else if(mStatus.equals(ANALYSISITEM)){
+                mAnalysisAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
+                AnimationDrawable analysisAudioIv = (AnimationDrawable) mAnalysisAudioIv.getDrawable();
+                analysisAudioIv.stop();
+            }
+        }
+    }
     /*
     *   暂停状态: 记录断点,记录各自暂停的状态
     * */
@@ -1178,10 +1203,12 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                     case QUESTIONITEM:
                         mStatus = RECORDABLE;
                         mQuestionAudioOffset = offset;
+                        mediaPlayingAnimation(false);
                         break;
                     case ANALYSISITEM:
                         mStatus = RECORDABLE;
                         mAnalysisAudioOffset = offset;
+                        mediaPlayingAnimation(false);
                         break;
                     case TEACHERREMARK:
                         mTeacherRemarkAudioOffset = offset;
@@ -1190,7 +1217,6 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
             }
         });
     }
-
     /*
     *   播放完成时的状态
     * */
@@ -1218,11 +1244,13 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
                 isQuestionAudioPause = false;
                 mQuestionAudioProgressbar.setProgress(100);
                 mQuestionAudioOffset = 0;
+                mediaPlayingAnimation(false);
                 break;
             case ANALYSISITEM:
                 isAnalysisAudioPause = false;
                 mAnalysisAudioProgressbar.setProgress(100);
                 mAnalysisAudioOffset = 0;
+                mediaPlayingAnimation(false);
                 break;
             case TEACHERREMARK:
                 mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(mQuestionBean.getTeacher_audio_duration()));
@@ -1501,7 +1529,7 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
     private class AudioStreamFocusReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            isGetAudioFocus = intent.getExtras().getBoolean("isGetAudioFocus", false); // 是否获取到了焦点
+            boolean isGetAudioFocus =  intent.getExtras().getBoolean("isGetAudioFocus", false); // 是否获取到了焦点
             if (!isGetAudioFocus){
                 changePlayingMediaToPauseState();
             }
