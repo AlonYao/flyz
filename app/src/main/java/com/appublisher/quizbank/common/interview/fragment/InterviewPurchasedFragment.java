@@ -7,13 +7,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
-import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 
+import java.io.File;
 import java.util.HashMap;
 
 
@@ -32,8 +33,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     private TextView mQuestionTv;
     private LinearLayout mQuestionListenLl;
     private LinearLayout mAnalysisListenLl;
-    private String mQuestionFileFolder;
-    private String mAnalysisFileFolder;
+    private TextView mQuestionSwitchTv;
+
 
     public static InterviewPurchasedFragment newInstance(String questionBean, int position,int listLength,String questionType) {
         Bundle args = new Bundle();
@@ -57,20 +58,24 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionType = getArguments().getString(QUESTIONTYPE);
         mPosition = getArguments().getInt(ARGS_POSITION);
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
-        initFile();
+
     }
 
-    private void initFile() {
-        mQuestionFileFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + LoginModel.getUserId() + "/question_audio/";
-        mAnalysisFileFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + LoginModel.getUserId() + "/analysis_audio/";
-        FileManager.mkDir(mQuestionFileFolder);
-        FileManager.mkDir(mAnalysisFileFolder);
+    @Override
+    public String getIsUnPurchasedOrPurchasedView() {
+        return "PurchasedView";
+    }
+
+    @Override
+    public int getChildViewPosition() {         // 获取当前的view的id
+        return mPosition;
     }
 
     @Override
     public void initChildView() {
         mQuestionIm = (ImageView) mFragmentView.findViewById(R.id.interview_lookquestion_im);
         mQuestionTv = (TextView) mFragmentView.findViewById(R.id.interview_lookquestion_tv);
+        mQuestionSwitchTv = (TextView) mFragmentView.findViewById(R.id.question_switch_tv);
 
         mQuestionListenLl = (LinearLayout) mFragmentView.findViewById(R.id.interview_hadquestion_listen_ll);
         mAnalysisListenLl = (LinearLayout) mFragmentView.findViewById(R.id.interview_answer_listen_ll);
@@ -85,6 +90,12 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         }else{
             mAnalysisListenLl.setVisibility(View.VISIBLE);
         }
+        showQuestionId();
+    }
+
+    private void showQuestionId() {
+        // 题目行的文字处理
+        mQuestionSwitchTv.setText("第 " + (mPosition + 1) + "/" + mListLength + " 题");
     }
 
     @Override
@@ -107,30 +118,36 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         if (mQuestionBean == null || mPosition >= mListLength || mPosition < 0) return;
 
         mQuestionContent.setVisibility(View.GONE);  // 题目的展示容器默认不显示
+
         /**
-         *  本类为已付费页面的类,不用再和服务器交互:题目行的逻辑处理:逻辑:点击事件:展开与折叠;听语音播放但不可暂停
+         *  题目行的逻辑处理
          * **/
         mQuestionSwitchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mQuestionContent.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
-                    mQuestionContent.setVisibility(View.GONE);
-                    mQuestionIm.setImageResource(R.drawable.interview_answer_lookover);
-                    mQuestionTv.setText("看文字");
+                if( !isCanTouch){
+                    ToastManager.showToast(mActivity, "请专心录音哦");
+                    return;
+                } else{
+                    if (mQuestionContent.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
+                        mQuestionContent.setVisibility(View.GONE);
+                        mQuestionIm.setImageResource(R.drawable.interview_answer_lookover);
+                        mQuestionTv.setText("看文字");
 
-                } else {
-                    mQuestionContent.setVisibility(View.VISIBLE);           // 折叠-->展开状态
-                    mQuestionIm.setImageResource(R.drawable.interview_answer_packup);
-                    mQuestionTv.setText("不看文字");
-                }
+                    } else {
+                        mQuestionContent.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                        mQuestionIm.setImageResource(R.drawable.interview_fold_up);
+                        mQuestionTv.setText("不看文字");
+                    }
 
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "ReadQ");
-                if (isDone()) {
-                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                } else {
-                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "ReadQ");
+                    if (isDone()) {
+                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                    } else {
+                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    }
                 }
             }
         });
@@ -141,79 +158,91 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mAnalysisSwitchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAnalysisView.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
-                    mAnalysisView.setVisibility(View.GONE);
-                    mAnalysisIm.setImageResource(R.drawable.interview_answer_lookover);
-                    mReminderTv.setText("看文字");
-                } else {
-                    mAnalysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
-                    mAnalysisIm.setImageResource(R.drawable.interview_answer_packup);
-                    mReminderTv.setText("不看文字");
-                }
+                if( !isCanTouch){
+                    ToastManager.showToast(mActivity, "请专心录音哦");
+                    return;
+                } else{
+                    if (mAnalysisView.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
+                        mAnalysisView.setVisibility(View.GONE);
+                        mAnalysisIm.setImageResource(R.drawable.interview_answer_lookover);
+                        mReminderTv.setText("看文字");
+                    } else {
+                        mAnalysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                        mAnalysisIm.setImageResource(R.drawable.interview_fold_up);
+                        mReminderTv.setText("不看文字");
+                    }
 
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "ReadA");
-                if (isDone()) {
-                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                } else {
-                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "ReadA");
+                    if (isDone()) {
+                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                    } else {
+                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    }
                 }
             }
         });
 
-            /*
-            *  题目行语音
-            * */
+        /*
+        *  题目行语音
+        * */
         mQuestionListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if( !isCanTouch){
+                    ToastManager.showToast(mActivity, "请专心录音哦");
+                    return;
+                }else{
+                    if (isPlaying.equals(QUESTIONITEM)){
+                        isQuestionAudioPause = true;
+                    }else{
+                        // 判断是否存在其他的正在播放的语音
+                        changePlayingMediaToPauseState();
+                    }
+                    dealQuestionAudioPlayState();
 
-                dealDownLoadAudio(mQuestionFileFolder, mQuestionBean.getQuestion_audio());
-
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "ListenQ");
-                if (isDone()) {
-                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                } else {
-                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "ListenQ");
+                    if (isDone()) {
+                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                    } else {
+                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    }
                 }
             }
         });
-            /*
-            *  解析行语音
-            * */
+        /*
+        *  解析行语音
+        * */
         mAnalysisListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if( !isCanTouch){
+                    ToastManager.showToast(mActivity, "请专心录音哦");
+                    return;
+                }else{
+                    if(isPlaying.equals(ANALYSISITEM)){
+                        isAnalysisAudioPause = true;
+                    }else{
+                        // 判断是否存在其他的正在播放的语音
+                        changePlayingMediaToPauseState();
+                    }
+                    dealAnalysisAudioPlayState();
 
-                dealDownLoadAudio(mAnalysisFileFolder, mQuestionBean.getAnalysis_audio());
-
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "ListenA");
-                if (isDone()) {
-                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                } else {
-                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "ListenA");
+                    if (isDone()) {
+                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                    } else {
+                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                    }
                 }
             }
         });
     }
-    @Override
-    public void releaseFragmentTouch() {
-        mQuestionListenLl.setClickable(true);
-        mAnalysisListenLl.setClickable(true);
-        mQuestionSwitchView.setClickable(true);
-    }
-    @Override
-    public void banFragmentTouch() {
-        mQuestionListenLl.setClickable(false);
-        mAnalysisListenLl.setClickable(false);
-        mQuestionSwitchView.setClickable(false);
-    }
-
 
     @Override
     public String getChildFragmentRich() {
@@ -224,4 +253,18 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         return mQuestionBean != null && mQuestionBean.getUser_audio().length() > 0;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        String filePath = mQuestionFileFolder + mQuestionBean.getId() + ".amr";
+        String analysisFilePath = mAnalysisFileFolder + mQuestionBean.getId() + ".amr";
+        File file = new File(filePath);
+        File analysisfile = new File(analysisFilePath);
+        if (file.exists() ) {                                   // 如果文件存在直接播放
+            FileManager.deleteFiles(filePath);
+        }
+        if (analysisfile.exists() ) {                                   // 如果文件存在直接播放
+            FileManager.deleteFiles(analysisFilePath);
+        }
+    }
 }

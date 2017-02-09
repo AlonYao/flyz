@@ -49,4 +49,11 @@ public interface InterviewApi extends ApiConstants {
 
     //获取点评列表
     public String commentList = baseUrl + "quizbank/teacher_comment_list";
+
+    // 名师点评的剩余的次数
+    public String teacherRemarkRemainder = baseUrl + "product/get_user_service_status";
+
+    // 申请名师点评
+    public String applyForTeacherRemark = baseUrl + "quizbank/update_comment_status";
+
 }

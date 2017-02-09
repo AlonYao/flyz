@@ -140,17 +140,38 @@ public class InterviewPaperDetailResp {
         private String user_audio;   // 用户的录音地址
         private int user_audio_duration;   // 用户的录音的时长
 
-        private boolean purchased_review;   // 是否永久购买
-        private boolean purchased_audio;    //  是否单次购买
+        private boolean purchased_review;   // 是否购买名师点评
+        private boolean purchased_audio;    //
         private boolean is_collected;    //  是否收藏
 
-        private String listen_review;       // 是否已经点评
-        public String getListen_review() {
-            return listen_review;
+        private String comment_status;       // 点评的状态
+
+        private String teacher_name;        // 名师点评老师
+        private String teacher_audio;       // 点评语音
+        private int teacher_audio_duration;     // 点评时长
+
+        public String getTeacher_name() {   return teacher_name; }
+        public void setTeacher_name(String teacher_name) {
+            this.teacher_name = teacher_name;
+        }
+        public String getTeacher_audio() { return teacher_audio;}
+        public void setTeacher_audio(String teacher_audio) {
+            this.teacher_audio = teacher_audio;
+        }
+        public int getTeacher_audio_duration() {
+            return teacher_audio_duration;
         }
 
-        public void setListen_review(String listen_review) {
-            this.listen_review = listen_review;
+        public void setTeacher_audio_duration(int teacher_audio_duration) {
+            this.teacher_audio_duration = teacher_audio_duration;
+        }
+
+        public String getComment_status() {
+            return comment_status;
+        }
+
+        public void setComment_status(String comment_status) {
+            this.comment_status = comment_status;
         }
 
         public int getUser_audio_duration() {

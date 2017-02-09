@@ -9,7 +9,8 @@
         android:id="@+id/interview_hadanswer_listen_rl"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="42dp"
@@ -21,6 +22,7 @@
             android:progress="100"
             app:progress_text_color="?attr/colorPrimary"
             app:radius="60dp"
+            app:centerColor="@color/white"
             android:layout_alignParentLeft="true" />
         <TextView
             android:id="@+id/tv_recorded_sound_play_time"
@@ -55,7 +57,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:layout_marginTop="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
         >
@@ -72,13 +75,14 @@
                 android:progress="100"
                 app:progress_text_color="?attr/colorPrimary"
                 app:radius="60dp"
+                app:centerColor="@color/white"
                 />
             <LinearLayout
                 android:id="@+id/teacher_notremark_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="18dp"
                 android:orientation="vertical"
                 >
                 <TextView
@@ -102,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="27dp"
                 android:visibility="gone"
                 android:text="点评中"
                 android:textSize="15dp"
@@ -144,7 +148,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="3dp"
+            android:layout_marginTop="77dp"
            >
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -157,7 +161,7 @@
                     android:id="@+id/teacher_remark_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="15dp"
                     android:textColor="@color/common_text"
                     android:text="您有xx次点评申请"/>
                 <ImageView

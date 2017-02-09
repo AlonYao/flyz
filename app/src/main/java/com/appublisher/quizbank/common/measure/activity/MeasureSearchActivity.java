@@ -1,6 +1,7 @@
 package com.appublisher.quizbank.common.measure.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,14 +20,16 @@ import android.widget.Toast;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.adapter.MeasureSearchAdapter;
 import com.appublisher.quizbank.common.measure.model.MeasureSearchModel;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
+import com.appublisher.quizbank.common.measure.view.IMeasureSearchView;
 
 import java.util.List;
 
 public class MeasureSearchActivity extends BaseActivity implements
-        View.OnClickListener, XListView.IXListViewListener{
+        View.OnClickListener, XListView.IXListViewListener, IMeasureSearchView, MeasureConstants{
 
     public MeasureSearchModel mModel;
 
@@ -48,7 +52,7 @@ public class MeasureSearchActivity extends BaseActivity implements
     }
 
     private void initData() {
-        mModel = new MeasureSearchModel(this);
+        mModel = new MeasureSearchModel(this, this);
     }
 
     private void initView() {
@@ -139,11 +143,6 @@ public class MeasureSearchActivity extends BaseActivity implements
         mModel.loadMore();
     }
 
-    public void stopXListView() {
-        mListView.stopLoadMore();
-        mListView.stopRefresh();
-    }
-
     private void search() {
         if (mEtSearch == null) return;
         String text = mEtSearch.getText().toString();
@@ -155,27 +154,53 @@ public class MeasureSearchActivity extends BaseActivity implements
         hideSoftKeyboard();
     }
 
-    public void showContent(List<MeasureSearchResp.SearchItemBean> list) {
-        mAdapter = new MeasureSearchAdapter(this, list);
-        mListView.setAdapter(mAdapter);
-    }
-
-    public void showLoadMore(List<MeasureSearchResp.SearchItemBean> list) {
-        if (mAdapter == null) showContent(list);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    public void hideSoftKeyboard() {
+    private void hideSoftKeyboard() {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (getCurrentFocus() == null) return;
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 
+    /**
+     * View Implement
+     */
+
+    @Override
+    public void stopXListView() {
+        mListView.stopLoadMore();
+        mListView.stopRefresh();
+    }
+
+    @Override
+    public void showContent(List<MeasureSearchResp.SearchItemBean> list) {
+        mAdapter = new MeasureSearchAdapter(this, list);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(
+                        MeasureSearchActivity.this, MeasureAnalysisActivity.class);
+                intent.putExtra(INTENT_IS_FROM_SEARCH, true);
+                intent.putExtra(
+                        INTENT_ANALYSIS_BEAN,
+                        mModel.getAnalysisBeanByPosition(position - 1));
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void showLoadMore(List<MeasureSearchResp.SearchItemBean> list) {
+        if (mAdapter == null) showContent(list);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void showNoMoreToast() {
         Toast.makeText(this, "暂无更多内容", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
     public void showNotice(String keywords, int count) {
         mNoticeView.setVisibility(View.VISIBLE);
         mNoneView.setVisibility(View.GONE);
@@ -192,6 +217,7 @@ public class MeasureSearchActivity extends BaseActivity implements
         mTvCount.setText(countString);
     }
 
+    @Override
     public void showNone() {
         mNoticeView.setVisibility(View.GONE);
         mNoneView.setVisibility(View.VISIBLE);

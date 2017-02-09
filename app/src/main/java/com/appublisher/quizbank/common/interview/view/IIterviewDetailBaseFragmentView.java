@@ -11,13 +11,8 @@ public interface IIterviewDetailBaseFragmentView {
     InterviewPaperDetailResp.QuestionsBean initChildData();
     String initChildQuestionType();
     void initChildListener();
-    void banFragmentTouch();
-    void releaseFragmentTouch();
     String getChildFragmentRich();
+    String getIsUnPurchasedOrPurchasedView();       //获取是未付费还是已付费页面
+    int getChildViewPosition();     // 具体viewpager的索引
 
-    // 申请名师点评的弹窗
-    //void popupApplyForRemarkAlert();
-
-    // 申请点评后,进行弹窗
-   void popupAppliedForRemarkReminderAlert();
 }

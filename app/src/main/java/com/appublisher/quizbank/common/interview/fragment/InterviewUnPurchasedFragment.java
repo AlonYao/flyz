@@ -1,7 +1,6 @@
 package com.appublisher.quizbank.common.interview.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
@@ -30,7 +29,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     private InterviewPaperDetailActivity mActivity;
     private String mQuestionType;
 
-    public static Fragment newInstance(String questionBean, int position, int listLength, String questionType) {
+    public static InterviewUnPurchasedFragment newInstance(String questionBean, int position, int listLength, String questionType) {
         Bundle args = new Bundle();
         args.putString(ARGS_QUESTIONBEAN, questionBean);
         args.putInt(ARGS_POSITION, position);
@@ -46,28 +45,26 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (InterviewPaperDetailActivity) getActivity();
-
         mQuestionBean = GsonManager.getModel(
                 getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
         mQuestionType = getArguments().getString(QUESTIONTYPE);  // 问题的类型
-
         mListLength = getArguments().getInt(ARGS_LISTLENGTH);
-
         mPosition = getArguments().getInt(ARGS_POSITION);          // 问题的索引
+    }
 
+    @Override
+    public String getIsUnPurchasedOrPurchasedView() {
+        return "UnPurchasedView";
+    }
+
+    @Override
+    public int getChildViewPosition() {                 // 获取当前的view的id
+        return mPosition;
     }
 
     @Override
     public String getChildFragmentRich() {           // 传给basefragment问题数据
         return (mPosition + 1) + "/" + mListLength + "  " + mQuestionBean.getQuestion();
-    }
-
-    @Override
-    public void banFragmentTouch() {
-    }
-
-    @Override
-    public void releaseFragmentTouch() {
     }
 
     @Override
@@ -106,8 +103,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     } else {
                         // 如果答完题状态
                         mAnalysisView.setVisibility(View.VISIBLE);
-                        mAnalysisIm.setImageResource(R.drawable.interview_answer_packup);
-                        mReminderTv.setText("收起");
+                        mAnalysisIm.setImageResource(R.drawable.interview_fold_up);
+                        mReminderTv.setText("不看文字");
                     }
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
@@ -117,10 +114,8 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     } else {
                         UmengManager.onEvent(mActivity, "InterviewQuestion", map);
                     }
-
                 } else {                      // 未答题
                     // 弹窗处理:三个item
-
                     mActivity.mModel.showNoAnswerDialog();
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();

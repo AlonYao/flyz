@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.YaoguoUploadManager;
@@ -28,8 +31,10 @@ import com.appublisher.lib_pay.ProductEntity;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
+import com.appublisher.quizbank.common.interview.netdata.InterviewTeacherRemarkNumResp;
 import com.appublisher.quizbank.common.interview.network.InterviewParamBuilder;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
+import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.model.netdata.CommonResp;
 
 import org.json.JSONArray;
@@ -44,12 +49,24 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     public InterviewRequest mRequest;
     private InterviewPaperDetailActivity mActivity;
     private ProgressDialog mProgressDialog;
+    private final InterviewDetailBaseFragmentCallBak mInterfaceViewCallBak;
+    //    private final IIterviewDetailBaseFragmentView mInterfaceView;
 
-    public InterviewDetailModel(Context context) {
+//    public InterviewDetailModel(Context context) {
+//        if (context instanceof InterviewPaperDetailActivity) {
+//            mActivity = (InterviewPaperDetailActivity) context;
+//        }
+//        mRequest = new InterviewRequest(context, this);
+//
+//    }
+
+    public InterviewDetailModel(Context context, InterviewDetailBaseFragmentCallBak interviewDetailBaseFragmentViewCallBak) {
+        super();
         if (context instanceof InterviewPaperDetailActivity) {
             mActivity = (InterviewPaperDetailActivity) context;
         }
         mRequest = new InterviewRequest(context, this);
+        mInterfaceViewCallBak = interviewDetailBaseFragmentViewCallBak;
     }
 
     /*
@@ -117,6 +134,62 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 .create().show();
     }
 
+    /*
+    *   创建停止播放语音的弹窗提示
+    * */
+    public static void showStopMediaPlayingDailog(final InterviewPaperDetailActivity mActivity){
+        Logger.e("进入弹窗方法");
+        //  弹窗提示
+        if (mActivity.isFinishing()) return;
+        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
+        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        mAalertDialog.show();
+        Window mWindow = mAalertDialog.getWindow();
+        if (mWindow == null) return;
+        mWindow.setContentView(R.layout.interview_popupwindow_reminder_stopplaying_media);
+        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
+        mWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        DisplayMetrics metrics = new DisplayMetrics();
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        lp.width = (int)(metrics.widthPixels * 0.8);
+        lp.height = (int)(metrics.heightPixels * 0.35);
+        mWindow.setAttributes(lp);
+        TextView stopPlaying = (TextView) mWindow.findViewById(R.id.stop_playing);
+        TextView continuePlaying = (TextView) mWindow.findViewById(R.id.continue_playing);
+        final CheckBox checkBox = (CheckBox) mWindow.findViewById(R.id.stop_playing_checkbox);
+
+        stopPlaying.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.mMediaRecorderManagerUtil.stopPlay();
+                mAalertDialog.dismiss();
+                // 返回上一级
+                mActivity.finish();
+                if(checkBox.isChecked()){
+                    // 记录状态
+                    SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = shp.edit();
+                    edit.putBoolean("isFirstCheckBox", false);
+                    edit.apply();
+                }
+            }
+        });
+        continuePlaying.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAalertDialog.dismiss();
+                if(checkBox.isChecked()){
+                    // 记录状态
+                    SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = shp.edit();
+                    edit.putBoolean("isFirstCheckBox", false);
+                    edit.apply();
+                }
+            }
+        });
+
+    }
     /*
    *   检查menu是否为收藏状态:需要获取数据:由fragment传进来
    * */
@@ -212,10 +285,10 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
             }
         });
 
-        String singlePayText = "付 ¥ 0.01, 获取本题解析(仅一次机会)";
+        String singlePayText = "付 ¥ 0.01, 获取本题解析(此体验机会仅限一次)";
         if (singleAudioBean != null) {
             singlePayText = "付 ¥ " + String.valueOf(singleAudioBean.getPrice())
-                    + ", 获取本题解析(仅一次机会)";
+                    + ", 获取本题解析(此体验机会仅限一次)";
         }
         paySingle.setText(singlePayText);
 
@@ -332,7 +405,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     }
 
     private void setWindowBackground(Window mWindow){
-
         mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
         mWindow.setGravity(Gravity.BOTTOM);                         // 除底部弹出
         mWindow.getDecorView().setPadding(0, 0, 0, 0);                 // 消除边距
@@ -400,7 +472,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             }
                         }
                     });
-
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Action", "2");
@@ -424,7 +495,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             }
                         }
                     });
-
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Action", "2");
@@ -433,8 +503,11 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
             }
         });
     }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        if (response == null || apiName == null) return;
+
         if ("submit_record".equals(apiName)) {
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp != null && resp.getResponse_code() == 1) {
@@ -444,7 +517,32 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 ToastManager.showToast(mActivity,"刷新失败");
             }
             mActivity.hideLoading();
-        }else if("update_collected_status".equals(apiName)){    //  收藏后的回调
+        } else if("update_collected_status".equals(apiName)){    //  收藏后的回调
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }
+        } else if("get_user_service_status".equals(apiName)){       // 获取名师点评的次数
+            InterviewTeacherRemarkNumResp resp = GsonManager.getModel(response, InterviewTeacherRemarkNumResp.class);
+            if (resp != null && resp.getResponse_code() == 1) {
+                // 回调刷新
+                List<InterviewTeacherRemarkNumResp.Data> mDataList = resp.getData();
+                if (mDataList != null && mDataList.size() > 0) {
+                    mInterfaceViewCallBak.refreshTeacherRemarkRemainder(mDataList.get(0).getVal());
+                }
+            } else {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }
+        } else if("update_comment_status".equals(apiName)){     // 申请名师点评
+            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
+            if (resp == null || resp.getResponse_code() != 1) {
+                ToastManager.showToast(mActivity,"刷新失败");
+            }else {
+                // 刷新申请的次数
+                mActivity.getData();
+                mInterfaceViewCallBak.popupAppliedForRemarkReminderAlert();
+            }
+        } else if("updateCommentStatusToListen".equals(apiName)){     // 修改已经听过名师点评
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp == null || resp.getResponse_code() != 1) {
                 ToastManager.showToast(mActivity,"刷新失败");
