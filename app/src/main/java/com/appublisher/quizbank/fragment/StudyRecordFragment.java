@@ -21,13 +21,17 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ProgressBarManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.customui.XListView;
+import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.RecordCollectActivity;
 import com.appublisher.quizbank.common.interview.activity.TeacherCommentListActivity;
+import com.appublisher.quizbank.common.interview.netdata.InterviewCommentListResp;
+import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.model.business.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
 import com.appublisher.quizbank.network.QRequest;
@@ -59,6 +63,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     private int mCount;
     public QRequest mQRequest;
+    public InterviewRequest mIRequest;
     private View mView;
 
     private StudyRecordModel mModel;            // 新的model
@@ -76,6 +81,8 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     private int mAddpage;
     public MainActivity mActivity;
 
+    private View mInterviewRedPoint;
+    private View mCommentRedPoint;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +94,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mInterviewOffset = 0;
         mCount = 10;
         mQRequest = new QRequest(mActivity, this);
+        mIRequest = new InterviewRequest(mActivity, this);
         mWrittenList = new ArrayList<>();
         mInterviewList = new ArrayList<>();
         mModel = new StudyRecordModel(mActivity, this);
@@ -109,6 +117,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mInterviewCommentRl = (RelativeLayout) headView.findViewById(R.id.interview_comment_rl);
         mWriteHeadView = headView.findViewById(R.id.write_tab_view);
         mInterviewHeadView = headView.findViewById(R.id.interview_tab_view);
+
+        mInterviewRedPoint = headView.findViewById(R.id.interview_red_point);
+        mCommentRedPoint = headView.findViewById(R.id.comment_red_point);
 
         radioGroup = (RadioGroup) headView.findViewById(R.id.record_radiogroup);
         mWriteButton = (RadioButton) headView.findViewById(R.id.radiobutton_write_button);   // 笔试button
@@ -267,6 +278,29 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
         } else if ("user_interview_record".equals(apiName)) {   // 记录页面:面试
             mModel.dealInterviewHistoryPapersResp(this, response);  // 如果是面试页面:处理数据
+        } else if ("comment_list".equals(apiName)) {
+            InterviewCommentListResp commentListResp = GsonManager.getModel(response, InterviewCommentListResp.class);
+            if (commentListResp.getResponse_code() == 1) {
+                if (commentListResp.getList().size() >= 0) {
+                    mInterviewRedPoint.setVisibility(View.VISIBLE);
+                    mCommentRedPoint.setVisibility(View.VISIBLE);
+
+                    int height = ((MainActivity) getActivity()).recordRadioButton.getHeight();
+                    int marginRight = (int) (Utils.getWindowWidth(getActivity()) / 5 * 1.22);
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                            30, 30);
+                    lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    lp.bottomMargin = (int) (height * 0.7);
+                    lp.rightMargin = marginRight;
+                    ((MainActivity) getActivity()).recordTip.setLayoutParams(lp);
+                    ((MainActivity) getActivity()).recordTip.setVisibility(View.VISIBLE);
+                } else {
+                    mInterviewRedPoint.setVisibility(View.INVISIBLE);
+                    mCommentRedPoint.setVisibility(View.INVISIBLE);
+                    ((MainActivity) getActivity()).recordTip.setVisibility(View.INVISIBLE);
+                }
+            }
         }
         setLoadFinish();
     }
@@ -295,6 +329,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
             mQRequest.getStudyRecordInterviewHistoryPapersNew(mPage);
         }
         mIsRefresh = true;
+
+        mIRequest.getCommentList(0, -1, 1);
+
     }
 
     @Override

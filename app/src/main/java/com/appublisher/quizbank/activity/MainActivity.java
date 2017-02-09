@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private FragmentManager mFragmentManager;
     private CourseFragment mCourseFragment;
     private StudyRecordFragment mStudyRecordFragment;
-   // private StudyRecordFragment mStudyRecordFragment;
+    // private StudyRecordFragment mStudyRecordFragment;
     private VipIndexFragment mVipIndexFragment;
     private StudyIndexFragment mStudyIndexFragment;
     private InterviewIndexFragment mInterviewIndexFragment;
@@ -92,6 +92,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     public RadioButton recordRadioButton;
     private RadioButton opencourseRadioButton;
     private RadioButton vipRadioButton;
+    public View recordTip;
 
     private String indexString = "study";//study or interview
 
@@ -190,6 +191,8 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         opencourseRadioButton = (RadioButton) findViewById(R.id.opencourse);
         recordRadioButton = (RadioButton) findViewById(R.id.record);
         vipRadioButton = (RadioButton) findViewById(R.id.vip);
+
+        recordTip = findViewById(R.id.record_tip);
 
         // Measure Search View
         initMeasureSearch();
@@ -551,7 +554,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
                 // 记录
                 if (mStudyRecordFragment == null) {
                     // 如果Fragment为空，则创建一个并添加到界面上
-                   // mStudyRecordFragment = new StudyRecordFragment();
+                    // mStudyRecordFragment = new StudyRecordFragment();
                     mStudyRecordFragment = new StudyRecordFragment();
                     transaction.add(R.id.container_view, mStudyRecordFragment, RECORD);
                 } else {
@@ -630,7 +633,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         if (mCourseFragment != null) transaction.hide(mCourseFragment);
 
         // 记录
-     //   mStudyRecordFragment = (StudyRecordFragment) mFragmentManager.findFragmentByTag(RECORD);
+        //   mStudyRecordFragment = (StudyRecordFragment) mFragmentManager.findFragmentByTag(RECORD);
         mStudyRecordFragment = (StudyRecordFragment) mFragmentManager.findFragmentByTag(RECORD); // 新
         if (mStudyRecordFragment != null) transaction.hide(mStudyRecordFragment);
 

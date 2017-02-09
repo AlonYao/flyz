@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/filter"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="1dp"
         android:clipToPadding="false"
         android:divider="@color/common_line"
         android:dividerHeight="1px"
@@ -97,6 +97,7 @@
             android:src="@drawable/course_null" />
 
         <TextView
+            android:id="@+id/null_status"
             style="@style/CommonColorTextView16"
             android:layout_marginTop="15dp"
             android:text="您还没有名师点评哦！" />

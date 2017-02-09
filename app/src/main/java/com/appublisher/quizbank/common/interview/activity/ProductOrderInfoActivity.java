@@ -8,6 +8,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -33,6 +34,8 @@ public class ProductOrderInfoActivity extends BaseActivity implements RequestCal
     private CheckBox mAliCheckBox;
     private CheckBox mWxCheckBox;
     private Button mPayBtn;
+
+    private static final int PAY_SUCCESS = 200;
 
 
     @Override
@@ -106,8 +109,10 @@ public class ProductOrderInfoActivity extends BaseActivity implements RequestCal
                         @Override
                         public void isPaySuccess(boolean isPaySuccess, String orderId) {
                             if (isPaySuccess) {
-                                setResult(200);
+                                setResult(PAY_SUCCESS);
                                 finish();
+                            } else {
+                                ToastManager.showToast(ProductOrderInfoActivity.this, "支付失败");
                             }
                         }
                     });
@@ -116,8 +121,10 @@ public class ProductOrderInfoActivity extends BaseActivity implements RequestCal
                         @Override
                         public void isPaySuccess(boolean isPaySuccess, String orderId) {
                             if (isPaySuccess) {
-                                setResult(200);
+                                setResult(PAY_SUCCESS);
                                 finish();
+                            } else {
+                                ToastManager.showToast(ProductOrderInfoActivity.this, "支付失败");
                             }
                         }
                     });

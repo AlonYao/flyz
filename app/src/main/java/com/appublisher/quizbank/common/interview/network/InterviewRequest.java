@@ -190,4 +190,6 @@ public class InterviewRequest extends Request implements InterviewApi {
     public void getCommentList(int status_id, int note_id, int page) {
         asyncRequest(getFinalUrl(commentList) + "&status_id=" + status_id + "&note_id=" + note_id + "&page=" + page, "comment_list", "object");
     }
+
+
 }

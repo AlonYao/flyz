@@ -28,7 +28,7 @@ public class InterviewTeacherRemarkNumResp {
 
     public static class Data {
         private String id;
-        private int val;
+        private String val;
 
         public String getId() {
             return id;
@@ -37,11 +37,11 @@ public class InterviewTeacherRemarkNumResp {
             this.id = id;
         }
 
-        public int getVal() {
+        public String getVal() {
             return val;
         }
 
-        public void setVal(int val) {
+        public void setVal(String val) {
             this.val = val;
         }
     }

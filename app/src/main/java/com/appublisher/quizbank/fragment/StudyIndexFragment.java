@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -28,6 +29,7 @@ import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.activity.GuFenListActivity;
 import com.appublisher.quizbank.activity.HistoryMokaoActivity;
+import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.MockPreActivity;
 import com.appublisher.quizbank.activity.SpecialProjectActivity;
 import com.appublisher.quizbank.adapter.CarouselAdapter;
@@ -280,6 +282,21 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
 
         // 更新用户考试项目
         updateExam();
+
+        if (homePageResp.isHas_comments()) {
+            int height = ((MainActivity) getActivity()).recordRadioButton.getHeight();
+            int marginRight = (int) (Utils.getWindowWidth(getActivity()) / 5 * 1.22);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    30, 30);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            lp.bottomMargin = (int) (height * 0.7);
+            lp.rightMargin = marginRight;
+            ((MainActivity) getActivity()).recordTip.setLayoutParams(lp);
+            ((MainActivity) getActivity()).recordTip.setVisibility(View.VISIBLE);
+        } else {
+            ((MainActivity) getActivity()).recordTip.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void updateExam() {

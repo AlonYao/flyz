@@ -6,35 +6,51 @@
     android:orientation="vertical">
 
     <!--radiobutton-->
-    <RadioGroup
-        android:id="@+id/record_radiogroup"
+    <RelativeLayout
         android:layout_width="190dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
-        <RadioButton
-            android:id="@+id/radiobutton_write_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:gravity="center"
-            android:text="笔试"
-            android:textSize="16sp" />
+        <RadioGroup
+            android:id="@+id/record_radiogroup"
+            android:layout_width="190dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/radiobutton_interview_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:gravity="center"
-            android:text="面试"
-            android:textSize="16sp" />
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/radiobutton_write_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="笔试"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_interview_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="面试"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <View
+            android:id="@+id/interview_red_point"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="23dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/red_point_shape"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/write_tab_view"
@@ -107,8 +123,7 @@
         android:layout_height="80dp"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:visibility="gone"
-        >
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/interview_collect_rl"
@@ -156,6 +171,7 @@
                 android:background="@drawable/record_comment" />
 
             <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -163,6 +179,15 @@
                 android:layout_toRightOf="@+id/comment_iv"
                 android:text="名师点评"
                 android:textColor="@color/apptheme" />
+
+            <View
+                android:id="@+id/comment_red_point"
+                android:layout_width="30px"
+                android:layout_height="30px"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/comment_iv"
+                android:background="@drawable/red_point_shape"
+                android:visibility="invisible" />
         </RelativeLayout>
     </LinearLayout>
 

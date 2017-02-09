@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include layout="@layout/measure_search_toolbar"/>
+    <include layout="@layout/measure_search_toolbar" />
 
     <TextView
         android:id="@+id/opencourse_num_notice"
@@ -25,13 +25,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/tab_radiogroup"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@+id/toolbar" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_above="@+id/tab_radiogroup"
-        android:background="@color/common_line"/>
+        android:background="@color/common_line" />
 
     <RadioGroup
         android:id="@+id/tab_radiogroup"
@@ -44,7 +44,7 @@
             android:id="@+id/study"
             style="@style/TabRadioButton"
             android:drawableTop="@drawable/tab_study_selector"
-            android:text="@string/study_index"/>
+            android:text="@string/study_index" />
 
         <RadioButton
             android:id="@+id/course"
@@ -70,5 +70,17 @@
             android:drawableTop="@drawable/tab_vip"
             android:text="@string/vip_index" />
     </RadioGroup>
+
+    <View
+        android:id="@+id/record_tip"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="70px"
+        android:layout_marginRight="10dp"
+        android:visibility="invisible"
+        android:background="@drawable/red_point_shape" />
+
 
 </RelativeLayout>

@@ -14,6 +14,16 @@ public class HomePageResp {
     int latest_notify;
     ExamItemModel exam_info;
 
+    private boolean has_comments;
+
+    public boolean isHas_comments() {
+        return has_comments;
+    }
+
+    public void setHas_comments(boolean has_comments) {
+        this.has_comments = has_comments;
+    }
+
     public ExamItemModel getExam_info() {
         return exam_info;
     }

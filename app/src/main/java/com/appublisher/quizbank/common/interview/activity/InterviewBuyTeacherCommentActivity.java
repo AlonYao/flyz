@@ -16,6 +16,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.CommentProductsAdapter;
 import com.appublisher.quizbank.common.interview.netdata.CommentProductM;
 import com.appublisher.quizbank.common.interview.netdata.InterviewCommentProductsResp;
+import com.appublisher.quizbank.common.interview.netdata.InterviewTeacherRemarkNumResp;
 import com.appublisher.quizbank.common.interview.network.InterviewParamBuilder;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -29,10 +30,10 @@ public class InterviewBuyTeacherCommentActivity extends BaseActivity implements 
 
     private TextView mCommentCountTv;
     private ListView mListView;
-    private int mCommentCount;
     private InterviewRequest mRequest;
     private CommentProductsAdapter mAdapter;
     private InterviewCommentProductsResp mCommentProductsResp;
+    private static final int PAY_SUCCESS = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class InterviewBuyTeacherCommentActivity extends BaseActivity implements 
 
         setToolBar(this);
 
-        mCommentCount = getIntent().getIntExtra("comment_count", -1);
         mRequest = new InterviewRequest(this, this);
         mAdapter = new CommentProductsAdapter(this);
 
@@ -52,8 +52,6 @@ public class InterviewBuyTeacherCommentActivity extends BaseActivity implements 
     public void initViews() {
         mCommentCountTv = (TextView) findViewById(R.id.comment_count);
         mListView = (ListView) findViewById(R.id.listView);
-        if (mCommentCount != -1)
-            mCommentCountTv.setText(String.valueOf(mCommentCount));
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -69,6 +67,7 @@ public class InterviewBuyTeacherCommentActivity extends BaseActivity implements 
 
     public void getData() {
         showLoading();
+        mRequest.getTeacherRemarkRemainder(2);
         mRequest.getTeacherCommentProducts();
     }
 
@@ -89,9 +88,21 @@ public class InterviewBuyTeacherCommentActivity extends BaseActivity implements 
             if (response.optInt("response_code") == 1) {
                 final Intent intent = new Intent(this, ProductOrderInfoActivity.class);
                 intent.putExtra("order_num", response.optInt("order_num"));
-                startActivity(intent);
+                startActivityForResult(intent, PAY_SUCCESS);
             } else {
                 ToastManager.showToast(this, "订单创建失败，请联系客服");
+            }
+        } else if ("get_user_service_status".equals(apiName)) {
+            InterviewTeacherRemarkNumResp interviewTeacherRemarkNumResp = GsonManager.getModel(response, InterviewTeacherRemarkNumResp.class);
+            if (interviewTeacherRemarkNumResp.getResponse_code() == 1) {
+                if (interviewTeacherRemarkNumResp.getData().size() < 1) return;
+                for (int i = 0; i < interviewTeacherRemarkNumResp.getData().size(); i++) {
+                    if ("num".equals(interviewTeacherRemarkNumResp.getData().get(i).getId())) {
+                        mCommentCountTv.setText(interviewTeacherRemarkNumResp.getData().get(0).getVal());
+                        return;
+                    }
+                }
+
             }
         }
 
@@ -105,5 +116,14 @@ public class InterviewBuyTeacherCommentActivity extends BaseActivity implements 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
         hideLoading();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PAY_SUCCESS && resultCode == PAY_SUCCESS) {
+            setResult(PAY_SUCCESS);
+            finish();
+        }
     }
 }

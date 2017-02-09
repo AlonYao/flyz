@@ -1,24 +1,40 @@
 package com.appublisher.quizbank.common.interview.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
+import com.appublisher.lib_course.coursecenter.CourseFragment;
+import com.appublisher.lib_course.offline.activity.OfflineActivity;
+import com.appublisher.lib_course.opencourse.fragment.OpenCourseFragment;
+import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.R;
+import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.common.interview.adapter.InterviewCommentListAdapter;
+import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.common.interview.model.InterviewCommentListModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewCommentM;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
+import com.appublisher.quizbank.fragment.StudyIndexFragment;
+import com.appublisher.quizbank.fragment.StudyRecordFragment;
+import com.appublisher.quizbank.network.QApiConstants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TeacherCommentListActivity extends BaseActivity implements RequestCallback {
@@ -29,8 +45,9 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
     public TextView mCommentNoteTv;
     public ImageView mCommentStatusIv;
     public ImageView mCommentNoteIv;
-    private XListView mListView;
+    public XListView mListView;
     public View mNullView;
+    public TextView mNullStatus;
     public ImageView mCommentIntroduction;
 
     private InterviewRequest mRequest;
@@ -59,6 +76,24 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
         getData();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+
+        MenuItemCompat.setShowAsAction(menu.add("购买").setTitle("购买"),
+                MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if ("购买".equals(item.getTitle())) {
+            final Intent intent = new Intent(this, InterviewBuyTeacherCommentActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void initViews() {
         mCommentStatusRl = findViewById(R.id.comment_status_rl);
         mCommentNoteRl = findViewById(R.id.comment_note_rl);
@@ -68,6 +103,7 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
         mCommentNoteIv = (ImageView) findViewById(R.id.comment_note_arrow);
         mListView = (XListView) findViewById(R.id.listView);
         mNullView = findViewById(R.id.null_view);
+        mNullStatus = (TextView) findViewById(R.id.null_status);
         mCommentIntroduction = (ImageView) findViewById(R.id.comment_introduction);
         mListView.setPullLoadEnable(true);
         mListView.setAdapter(mAdapter);
@@ -102,6 +138,17 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
             }
         });
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position > mList.size()) return;
+                final Intent intent = new Intent(TeacherCommentListActivity.this, InterviewPaperDetailActivity.class);
+                intent.putExtra("dataFrom", "record_comment");
+                intent.putExtra("record_id", mList.get(position - 1).getRecord_id());
+                startActivity(intent);
+            }
+        });
+
         mCommentIntroduction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +169,7 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
 
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
+        hideLoading();
         if (response == null) return;
         if ("comment_filter".equals(apiName)) {
             mCommentListModel.dealCommentFilterResp(response);
@@ -134,11 +182,11 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
 
     @Override
     public void requestCompleted(JSONArray response, String apiName) {
-
+        hideLoading();
     }
 
     @Override
     public void requestEndedWithError(VolleyError error, String apiName) {
-
+        hideLoading();
     }
 }

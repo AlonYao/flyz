@@ -59,4 +59,6 @@
 
     <!--面试界面的弹窗背景色-->
     <color name="popupwindow_recordsound">#E4E4E5</color>
+
+    <color name="red_point">#FF342E</color>
 </resources>

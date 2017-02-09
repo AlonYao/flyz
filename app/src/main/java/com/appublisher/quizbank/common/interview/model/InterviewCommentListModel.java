@@ -190,8 +190,17 @@ public class InterviewCommentListModel {
             activity.mList.addAll(interviewCommentListResp.getList());
             activity.mAdapter.notifyDataSetChanged();
 
-            if (activity.mList.size() == 0 && activity.status_id == -1 && activity.note_id == -1) {
+            if (activity.mList.size() == 0) {
                 activity.mNullView.setVisibility(View.VISIBLE);
+                activity.mListView.setVisibility(View.GONE);
+                if (activity.status_id == -1 && activity.note_id == -1) {
+                    activity.mNullStatus.setText("您还没有名师点评哦！");
+                } else {
+                    activity.mNullStatus.setText("没有相关条件的点评");
+                }
+            } else {
+                activity.mNullView.setVisibility(View.GONE);
+                activity.mListView.setVisibility(View.VISIBLE);
             }
         }
     }
