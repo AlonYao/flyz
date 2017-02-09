@@ -103,7 +103,15 @@ public class InterviewRequest extends Request implements InterviewApi {
                 "get_note_collect", "object"
         );
     }
-
+    /*
+   *   获取名师点评的数据
+   * */
+    public void getRecordInterviewTeacherRemark(int record_id){
+        asyncRequest(getFinalUrl(recordInterviewTeacherRemark)
+                        + "&record_id=" + record_id,
+                "teacher_comment_detail", "object"
+        );
+    }
     /*
     *   获取名师点评的剩余的次数
     * */

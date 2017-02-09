@@ -58,7 +58,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     public InterviewDetailModel mModel;
     public MediaRecorderManager mMediaRecorderManager;
-    private boolean isTeacherRemark;
     public MediaRecordManagerUtil mMediaRecorderManagerUtil;        // 新的播放器类
     public String playingViewState;
     private int mPlayingChildViewId;
@@ -99,7 +98,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         }else if("recordCollect".equals(dataFrom)){        // 来源: 记录页面的收藏页面
             int note_id = getIntent().getIntExtra("note_id", 0);
             mRequest.getRecordInterviewCollectPaperDetail(note_id);
-        } else{
+        }else if("record_comment".equals(dataFrom)){             // 来自名师点评页
+            //todo 获取recordId
+            int record_id = getIntent().getIntExtra("record_id", 0);
+            mRequest.getRecordInterviewTeacherRemark(record_id);
+        }else{
             mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId); // 请求数据
         }
         showLoading();
@@ -119,29 +122,20 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mList == null || mCurrentPagerId < 0 ) {
             mCurrentPagerId = 0;
         }
-        if(isTeacherRemark){            // 是否为名师引导页
-            setDisplayHomeAsUpEnabled(this, false);
-            // 名师点评引导页
-            MenuItemCompat.setShowAsAction(
-                    menu.add("关闭"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        }else{
-            if(mModel.getIsAnswer( mCurrentPagerId)){  // 判断是否回答
-                if(mModel.getIsCollected( mCurrentPagerId)){
-                    MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
-                            MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-                }else{
-                    MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
-                            MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-                }
-            }
-
-            // 购买状态
-            if (!mIsBuyAll) {
-                MenuItemCompat.setShowAsAction(
-                        menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        if(mModel.getIsAnswer( mCurrentPagerId)){  // 判断是否回答
+            if(mModel.getIsCollected( mCurrentPagerId)){
+                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
+                        MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+            }else{
+                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
+                        MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
             }
         }
-
+        // 购买状态
+        if (!mIsBuyAll) {
+            MenuItemCompat.setShowAsAction(
+                    menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -190,12 +184,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 map.put("Action", "Collect");
                 UmengManager.onEvent(this, "InterviewAnalysis", map);
             }
-      } else if("关闭".equals(item.getTitle())){
-            getSupportFragmentManager().popBackStack(); // 将引导页fragment推出heap
-            isTeacherRemark = false;
-            setDisplayHomeAsUpEnabled(this, true);
-            invalidateOptionsMenu();
-        }
+      }
         return super.onOptionsItemSelected(item);
     }
 
@@ -260,7 +249,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (response == null || apiName == null)  return ;
 
         if ("paper_detail".equals(apiName) || "history_interview_detail".equals(apiName)
-                || "get_note_collect".equals(apiName)) {
+                || "get_note_collect".equals(apiName) || "teacher_comment_detail".equals(apiName)) {
             InterviewPaperDetailResp resp =
                     GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
             if (resp != null && resp.getResponse_code() == 1) {
@@ -378,12 +367,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mViewPager.setScroll(true);
         mViewPager.setCurrentItem(mCurrentPagerId);
     }
-    /*
-    *   是否为名师引导页
-    * */
-    public void setIsTeacherRemarkView(boolean isTeacherRemark){
-        this.isTeacherRemark = isTeacherRemark;
-    }
+
     /*
     *   由fragment传入正在播放的播放器
     * */

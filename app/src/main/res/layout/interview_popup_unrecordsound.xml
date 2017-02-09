@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="140dp"
-    android:gravity="center"
     android:background="@color/popupwindow_recordsound"
     >
     <!--未录音的状态-->
@@ -14,6 +13,7 @@
         android:layout_gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="5dp"
+        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         >
         <ImageView
@@ -37,5 +37,23 @@
             android:textSize="12sp"/>
     </LinearLayout>
 
-
-</LinearLayout>
+    <ImageView
+        android:id="@+id/teacher_remark_open_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="5dp"
+        android:paddingTop="20dp"
+        android:src="@drawable/teacher_remark_open"
+        />
+    <ImageView
+        android:id="@+id/teacher_remark_close_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="5dp"
+        android:paddingTop="20dp"
+        android:visibility="gone"
+        android:src="@drawable/teacher_remark_close"
+        />
+</RelativeLayout>
