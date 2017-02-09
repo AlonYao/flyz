@@ -346,8 +346,9 @@ public abstract class  InterviewDetailBaseFragment extends Fragment implements I
 
         // 用户答案进度条
         mUserAnswerProgressBar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.user_answer_progressbar_left);
-
+        mUserAnswerProgressBar.setIsExistInsideText(false);
         mTeacherRemarkProgressBar = (RoundProgressBarWidthNumber) mFragmentView.findViewById(R.id.teacher_remark_progressbar_right);    // 老师点评进度条
+        mTeacherRemarkProgressBar.setIsExistInsideText(false);
         mRemarkNumb = (TextView) mFragmentView.findViewById(R.id.teacher_remark_number);            // 点评次数
         mQuestionHelpIv = (ImageView) mFragmentView.findViewById(R.id.question_help_iv);            // 问号图标
         mPurchasedLinkTv = (TextView) mFragmentView.findViewById(R.id.purchased_remark_tv);         // 购买链接
