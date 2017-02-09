@@ -1,23 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/baseView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/common_bg"
-    tools:context="com.appublisher.quizbank.activity.EvaluationActivity"
-    android:id="@+id/baseView">
+    android:orientation="vertical"
+    tools:context="com.appublisher.quizbank.activity.EvaluationActivity">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <ScrollView
         android:id="@+id/evaluation_sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
+        android:background="@color/common_bg"
         android:clipToPadding="false"
-        android:scrollbars="none"
-        android:background="@color/common_bg">
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,8 +43,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/evaluation_text_gray"
-                        android:text="@string/evaluation_score"/>
+                        android:text="@string/evaluation_score"
+                        android:textColor="@color/evaluation_text_gray" />
 
                     <TextView
                         android:id="@+id/evaluation_score_tv"
@@ -52,8 +52,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/practice_report_zero"
                         android:textColor="@color/common_text"
-                        android:textStyle="bold"
-                        android:textSize="43sp"/>
+                        android:textSize="43sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <!-- 排名 -->
@@ -66,8 +66,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:textColor="@color/evaluation_text_gray"
-                        android:text="@string/evaluation_rank"/>
+                        android:text="@string/evaluation_rank"
+                        android:textColor="@color/evaluation_text_gray" />
 
                     <LinearLayout
                         android:id="@+id/evaluation_rank_ll"
@@ -80,16 +80,16 @@
                             android:id="@+id/evaluation_rank_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/common_text"
                             android:text="@string/practice_report_zero"
-                            android:textStyle="bold"
-                            android:textSize="43sp"/>
+                            android:textColor="@color/common_text"
+                            android:textSize="43sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="10dp"
-                            android:text="@string/homepage_percent"/>
+                            android:text="@string/homepage_percent" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -104,8 +104,7 @@
                 android:orientation="vertical">
 
                 <!-- 学习天数 -->
-                <RelativeLayout
-                    style="@style/EvaluationListRl">
+                <RelativeLayout style="@style/EvaluationListRl">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -113,31 +112,29 @@
                         android:layout_centerVertical="true"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
+
                         <ImageView
                             style="@style/EvaluationListLogo"
                             tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/EvaluationListTitleTv"/>
+                        <TextView style="@style/EvaluationListTitleTv" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/evaluation_learningdays_tv"
-                        style="@style/EvaluationListCountTvBig"/>
+                        style="@style/EvaluationListCountTvBig" />
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
-                        android:text="@string/evaluation_day"
                         android:layout_alignBottom="@id/evaluation_learningdays_tv"
+                        android:text="@string/evaluation_day"
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
 
-                <View
-                    style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 模考时长 -->
-                <RelativeLayout
-                    style="@style/EvaluationListRl">
+                <RelativeLayout style="@style/EvaluationListRl">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -145,6 +142,7 @@
                         android:layout_centerVertical="true"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
+
                         <ImageView
                             style="@style/EvaluationListLogo"
                             android:src="@drawable/evaluation_totaltime"
@@ -152,37 +150,36 @@
 
                         <TextView
                             style="@style/EvaluationListTitleTv"
-                            android:text="@string/evaluation_totaltime"/>
+                            android:text="@string/evaluation_totaltime" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/evaluation_totaltime_tv"
-                        style="@style/EvaluationListCountTvBig"/>
+                        style="@style/EvaluationListCountTvBig" />
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
-                        android:text="@string/evaluation_min"
                         android:layout_alignBottom="@+id/evaluation_totaltime_tv"
                         android:layout_alignLeft="@+id/evaluation_totaltime_tv"
                         android:layout_alignStart="@+id/evaluation_totaltime_tv"
                         android:layout_marginLeft="19dp"
-                        android:layout_marginStart="19dp" />
+                        android:layout_marginStart="19dp"
+                        android:text="@string/evaluation_min" />
                 </RelativeLayout>
 
-                <View
-                    style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 答题量 -->
-                <RelativeLayout
-                    style="@style/EvaluationListRl">
+                <RelativeLayout style="@style/EvaluationListRl">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:orientation="horizontal"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
+
                         <ImageView
                             style="@style/EvaluationListLogo"
                             android:src="@drawable/evaluation_totalquestions"
@@ -192,13 +189,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
+
                             <TextView
                                 style="@style/EvaluationListTitleTv"
-                                android:text="@string/evaluation_totalquestions"/>
+                                android:text="@string/evaluation_totalquestions" />
+
                             <TextView
                                 style="@style/EvaluationListTitleTvSmall"
-                                android:text="@string/evaluation_average"
-                                android:layout_marginTop="5dp"/>
+                                android:layout_marginTop="5dp"
+                                android:text="@string/evaluation_average" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -208,42 +207,41 @@
                         android:id="@+id/evaluation_totalquestions_tv"
                         style="@style/EvaluationListCountTvBig"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="15dp"/>
+                        android:layout_marginTop="15dp" />
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
                         android:layout_alignBottom="@id/evaluation_totalquestions_tv"
-                        android:text="@string/evaluation_dao"/>
+                        android:text="@string/evaluation_dao" />
 
                     <TextView
                         android:id="@+id/evaluation_avaragequestions_tv"
+                        style="@style/EvaluationListCountTvBig"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="15dp"
-                        android:textSize="16sp"
-                        style="@style/EvaluationListCountTvBig"/>
+                        android:textSize="16sp" />
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
                         android:layout_alignBottom="@id/evaluation_avaragequestions_tv"
                         android:text="@string/evaluation_dao"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
                 </RelativeLayout>
 
-                <View
-                    style="@style/SettingLine"/>
+                <View style="@style/SettingLine" />
 
                 <!-- 正确率 -->
-                <RelativeLayout
-                    style="@style/EvaluationListRl">
+                <RelativeLayout style="@style/EvaluationListRl">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:orientation="horizontal"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
+
                         <ImageView
                             style="@style/EvaluationListLogo"
                             android:src="@drawable/evaluation_accuracy"
@@ -253,13 +251,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
+
                             <TextView
                                 style="@style/EvaluationListTitleTv"
-                                android:text="@string/evaluation_accuracy"/>
+                                android:text="@string/evaluation_accuracy" />
+
                             <TextView
                                 style="@style/EvaluationListTitleTvSmall"
-                                android:text="@string/evaluation_average"
-                                android:layout_marginTop="5dp"/>
+                                android:layout_marginTop="5dp"
+                                android:text="@string/evaluation_average" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -268,25 +268,25 @@
                         android:id="@+id/evaluation_accuracy_tv"
                         style="@style/EvaluationListCountTvBig"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="15dp"/>
+                        android:layout_marginTop="15dp" />
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
                         android:layout_alignBottom="@id/evaluation_accuracy_tv"
-                        android:text="@string/homepage_percent"/>
+                        android:text="@string/homepage_percent" />
 
                     <TextView
                         android:id="@+id/evaluation_avarageaccuracy_tv"
+                        style="@style/EvaluationListCountTvBig"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="15dp"
-                        android:textSize="16sp"
-                        style="@style/EvaluationListCountTvBig"/>
+                        android:textSize="16sp" />
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
                         android:layout_alignBottom="@id/evaluation_avarageaccuracy_tv"
                         android:text="@string/homepage_percent"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -309,50 +309,50 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
                     android:layout_marginLeft="36dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/evaluation_history"/>
+                    android:text="@string/evaluation_history" />
 
                 <!-- 折线图 -->
                 <com.db.chart.view.LineChartView
                     android:id="@+id/linechart"
                     android:layout_width="match_parent"
                     android:layout_height="209dp"
-                    android:paddingTop="20dp"
+                    android:background="@color/white"
                     android:paddingBottom="20dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:background="@color/white"/>
+                    android:paddingTop="20dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginLeft="36dp"
                 android:layout_marginRight="36dp"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/evaluation_summarysource"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/evaluation_text_gray"/>
+                    android:textColor="@color/evaluation_text_gray" />
 
                 <TextView
                     android:id="@+id/evaluation_calculationbasis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:textColor="@color/evaluation_text_gray"/>
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/evaluation_text_gray" />
 
                 <TextView
                     android:id="@+id/evaluation_summarydate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/evaluation_text_gray"/>
+                    android:textColor="@color/evaluation_text_gray" />
             </LinearLayout>
 
         </LinearLayout>

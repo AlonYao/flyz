@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_product_order_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    tools:context="com.appublisher.quizbank.common.interview.activity.ProductOrderInfoActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/CommonColorTextView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="15dp"
+                android:text="商品订单已提交"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:id="@+id/product_info_tv"
+                    style="@style/CommonColorTextView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="商品信息" />
+
+                <TextView
+                    android:id="@+id/product_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/product_info_tv"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/common_grey_text"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="1px"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    style="@style/CommonColorTextView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="订单金额：" />
+
+                <TextView
+                    android:id="@+id/product_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/login_red"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="1px"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    style="@style/CommonColorTextView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="订单号：" />
+
+                <TextView
+                    android:id="@+id/order_num"
+                    style="@style/CommonColorTextView16"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="2dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    style="@style/CommonColorTextView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="还需支付：" />
+
+                <TextView
+                    android:id="@+id/pay_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/login_red"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/alipay_view"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="1px"
+                android:background="@color/white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <ImageView
+                    android:id="@+id/alipay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/alipay" />
+
+                <TextView
+                    style="@style/CommonColorTextView16"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/alipay"
+                    android:gravity="center_vertical"
+                    android:text="支付宝支付：" />
+
+                <CheckBox
+                    android:id="@+id/ali_checkbox"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/checkbox_pay_selector"
+                    android:button="@null"
+                    android:checked="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/wxpay_view"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="1px"
+                android:background="@color/white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <ImageView
+                    android:id="@+id/wxpay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/wxpay" />
+
+                <TextView
+                    style="@style/CommonColorTextView16"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/wxpay"
+                    android:gravity="center_vertical"
+                    android:text="微信支付：" />
+
+                <CheckBox
+                    android:id="@+id/wx_checkbox"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/checkbox_pay_selector"
+                    android:button="@null" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/pay_btn"
+        style="@style/CommonSubmitView"
+        android:layout_alignParentBottom="true"
+        android:text="立即支付" />
+
+</RelativeLayout>

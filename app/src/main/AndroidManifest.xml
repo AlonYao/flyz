@@ -320,7 +320,19 @@
         <activity
             android:name=".activity.RecordCollectActivity"
             android:label="@string/title_activity_record_collect"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".common.interview.activity.InterviewBuyTeacherCommentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_buy_teacher_comment" />
+        <activity
+            android:name=".common.interview.activity.ProductOrderInfoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_order_status" />
+        <activity
+            android:name=".common.interview.activity.TeacherCommentListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_teacher_comment_list" />
     </application>
 
 </manifest>

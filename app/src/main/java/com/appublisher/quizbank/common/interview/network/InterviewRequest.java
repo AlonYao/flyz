@@ -69,6 +69,7 @@ public class InterviewRequest extends Request implements InterviewApi {
                 + "&paper_type=" + paper_type
                 + "&note_id=" + note_id, "paper_detail", "object");
     }
+
     /*
     *   记录页面中的面试页面的数据
     * */
@@ -79,7 +80,7 @@ public class InterviewRequest extends Request implements InterviewApi {
 //                + "&time=" + time, "history_interview_detail", "object"
 //        );
 //    }
-    public void getStudyRecordInterviewPaperDetail(String type, String time){
+    public void getStudyRecordInterviewPaperDetail(String type, String time) {
         asyncRequest(getFinalUrl(studyRecordInterviewPaperDetail)
                 + "&type=" + type
                 + "&time=" + time, "history_interview_detail", "object"
@@ -89,17 +90,18 @@ public class InterviewRequest extends Request implements InterviewApi {
     /*
     *    获取记录页面中面试页面:收藏页面中的数据
     * */
-    public void getRecordInterviewCollectDetail(){
+    public void getRecordInterviewCollectDetail() {
         asyncRequest(getFinalUrl(recordInterviewDetail),
-               "get_note_list", "object"
+                "get_note_list", "object"
         );
     }
+
     /*
     *   获取面试页面中的收藏页面的数据
     * */
-    public void getRecordInterviewCollectPaperDetail(int note_id){
+    public void getRecordInterviewCollectPaperDetail(int note_id) {
         asyncRequest(getFinalUrl(recordInterviewCollectDetail)
-                + "&note_id=" + note_id,
+                        + "&note_id=" + note_id,
                 "get_note_collect", "object"
         );
     }
@@ -120,5 +122,43 @@ public class InterviewRequest extends Request implements InterviewApi {
     public void collectQuestion(Map<String, String> params) {
         postRequest(getFinalUrl(collectQuestion), params, "update_collected_status", "object");   // 第三个是apiName
 
+    }
+
+    /**
+     * 获取名师点评商品列表
+     */
+    public void getTeacherCommentProducts() {
+        asyncRequest(getFinalUrl(interviewCommentProducts), "comment_products", "object");
+    }
+
+    /**
+     * 创建系统订单
+     *
+     * @param params
+     */
+    public void genOrder(Map<String, String> params) {
+        postRequest(getFinalUrl(interviewGenOrder), params, "gen_order", "object");
+    }
+
+    /**
+     * 订单信息
+     */
+    public void getOrderStatus(int order_num) {
+        asyncRequest(getFinalUrl(orderStatus) + "&order_num=" + order_num, "order_status", "object");
+
+    }
+
+    /**
+     * 点评filter
+     */
+    public void getCommentFilter() {
+        asyncRequest(getFinalUrl(commentFilter), "comment_filter", "object");
+    }
+
+    /**
+     * 获取点评列表
+     */
+    public void getCommentList(int status_id, int note_id, int page) {
+        asyncRequest(getFinalUrl(commentList) + "&status_id=" + status_id + "&note_id=" + note_id + "&page=" + page, "comment_list", "object");
     }
 }
