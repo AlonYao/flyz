@@ -2,18 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <include layout="@layout/progressbar" />
 
-    <include layout="@layout/fragment_studyrecord_headview_new"
+    <include
         android:id="@+id/headview_new"
-        />
+        layout="@layout/fragment_studyrecord_headview_new" />
 
-    <RelativeLayout
+
+    <LinearLayout
+        android:id="@+id/record_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/record_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="25dp"
+                android:text="学习记录"
+                android:textColor="@color/apptheme"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/common_line" />
 
         <com.appublisher.lib_basic.customui.XListView
             android:id="@+id/studyrecord_lv"
@@ -23,12 +51,13 @@
             android:divider="@color/common_line"
             android:dividerHeight="0px"
             android:scrollbars="none" />
-        <include
-            layout="@layout/quizbank_null"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
-    </RelativeLayout>
+    </LinearLayout>
+
+    <include
+        layout="@layout/quizbank_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        />
 
 </LinearLayout>

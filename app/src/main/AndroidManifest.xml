@@ -324,11 +324,24 @@
             android:theme="@style/AppTheme" />
 
         <!-- 监听是否存在其他应用播放器的服务 -->
-        <service android:name=".common.interview.service.MediaPlayingService"></service>
+        <service android:name=".common.interview.service.MediaPlayingService"/>
+
+        <activity
+            android:name=".common.interview.activity.InterviewBuyTeacherCommentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_buy_teacher_comment" />
+        <activity
+            android:name=".common.interview.activity.ProductOrderInfoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_order_status" />
+        <activity
+            android:name=".common.interview.activity.TeacherCommentListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_teacher_comment_list" />
 
         <activity
             android:name=".activity.TeacherRemarkGuideActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

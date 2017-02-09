@@ -335,8 +335,17 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--没有背景的dialog-->
-    <style name="NoBackGroundDialog" parent="android:style/Theme.Dialog" >
+    <style name="NoBackGroundDialog" parent="android:style/Theme.Dialog">
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="CommonSubmitView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@color/apptheme</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:gravity">center</item>
     </style>
 
 

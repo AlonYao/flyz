@@ -232,4 +232,8 @@
     <string name="interview_index_category">分类突破</string>
     <string name="interview_index_history">历年真题</string>
     <string name="title_activity_record_collect">RecordCollectActivity</string>
+    <string name="interview_teacher_comment_count">剩余名师点评次数</string>
+    <string name="title_activity_buy_teacher_comment">购买名师点评</string>
+    <string name="title_activity_order_status">订单详情</string>
+    <string name="title_activity_teacher_comment_list">名师点评</string>
 </resources>

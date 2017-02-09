@@ -36,98 +36,138 @@
             android:textSize="16sp" />
     </RadioGroup>
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/write_tab_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
-        <TextView
-            android:id="@+id/record_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:paddingBottom="15dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="15dp"
-            android:text="学习记录"
-            android:textColor="@color/apptheme"
-            android:textSize="16sp" />
+        android:layout_height="80dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/write_collect_rl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="120dp">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/collect_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/record_collect_tab" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/collect_iv"
                 android:text="收藏"
                 android:textColor="@color/apptheme" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/studyrecordbg" />
         </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/common_line" />
 
         <RelativeLayout
             android:id="@+id/write_wrong_rl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="40dp">
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/wrong_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/record_wrong_tab" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/wrong_iv"
                 android:text="错题"
                 android:textColor="@color/apptheme" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/studyrecordbg" />
         </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/interview_tab_view"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
 
         <RelativeLayout
             android:id="@+id/interview_collect_rl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="40dp"
-            android:visibility="gone">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/interview_collect_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/record_collect_tab" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/interview_collect_iv"
                 android:text="收藏"
                 android:textColor="@color/apptheme" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/common_line" />
+
+        <RelativeLayout
+            android:id="@+id/interview_comment_rl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/comment_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/record_comment" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/studyrecordbg" />
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/comment_iv"
+                android:text="名师点评"
+                android:textColor="@color/apptheme" />
         </RelativeLayout>
-
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@color/common_line" />
-
+        android:layout_height="15dp"
+        android:background="@color/common_bg" />
 </LinearLayout>
