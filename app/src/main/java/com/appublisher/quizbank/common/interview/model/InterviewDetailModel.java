@@ -36,6 +36,7 @@ import com.appublisher.quizbank.common.interview.network.InterviewParamBuilder;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.model.netdata.CommonResp;
+import com.appublisher.quizbank.network.QApiConstants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -78,6 +79,10 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         final int duration = Integer.parseInt(durationTime);
 
         String savePath = "/yaoguo_interview/" + userId + "/" + String.valueOf(mQuestionbean.getId()) +".amr" ;
+        if (QApiConstants.baseUrl.contains("dev")) {
+            savePath = "/dev/yaoguo_interview/" + userId + "/" + String.valueOf(mQuestionbean.getId()) +".amr" ;
+        }
+
         if (mProgressDialog == null) {
             mProgressDialog = YaoguoUploadManager.getProgressDialog(mActivity);
         }
