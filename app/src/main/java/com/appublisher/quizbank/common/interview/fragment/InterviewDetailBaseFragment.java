@@ -169,7 +169,6 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     private AudioStreamFocusReceiver mAudioStreamFocusReceiver;
     private ImageView mTeacherRemarkOpenIv;
     private ImageView mTeacherRemarkColseIv;
-
     private static final int PAY_SUCCESS = 200;
 
     @Override
@@ -750,13 +749,11 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     @Override
                     public void onAnimationStart(Animation animation) {
                     }
-
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         mTeacherRemarkOpenIv.setVisibility(View.GONE);
                         mTeacherRemarkColseIv.setVisibility(View.VISIBLE);
                     }
-
                     @Override
                     public void onAnimationRepeat(Animation animation) {
                     }
@@ -774,13 +771,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 translateAnimation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
+                        mTeacherRemarkOpenIv.setVisibility(View.VISIBLE);
                     }
-
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         mTeacherRemarkOpenIv.setVisibility(View.VISIBLE);
                     }
-
                     @Override
                     public void onAnimationRepeat(Animation animation) {
                     }
@@ -795,16 +791,14 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == PAY_SUCCESS) {
-            if (resultCode == PAY_SUCCESS) {
-                mActivity.getData();    // 重新刷新页面
-            }
+        if (requestCode == PAY_SUCCESS && resultCode == PAY_SUCCESS) {
+            mActivity.getData();    // 重新刷新页面
         }
     }
 
     /*
-        *   将正在播放的语音变成暂停状态
-        * */
+    *   将正在播放的语音变成暂停状态
+    * */
     public void changePlayingMediaToPauseState() {
         switch (isPlaying) {
             case SUBMIT:
@@ -990,7 +984,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             } else {
                 mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
             }
-            mTvtimeRecording.setText(mModel.formatDateTime(duration));
+            if(duration > 20){
+                mTvtimeRecording.setText(mModel.formatDateTime(20));
+            }else{
+                mTvtimeRecording.setText(mModel.formatDateTime(duration));
+            }
+
         }
     }
 
@@ -999,8 +998,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     * */
     private void showRecordedDuration() {
         String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
-        if (Integer.parseInt(duration) >= 360) {
-            mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
+        if (Integer.parseInt(duration) >= 20) {
+            mTvtimeNotSubmPlay.setText(mModel.formatDateTime(20));
         } else {
             mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration) + 1));
         }
@@ -1042,7 +1041,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 ToastManager.showToast(mActivity, "点评中");
                 break;
             case HADREMARKED:
-                dealTeacherRemarkAudioState();   // 已经点评
+                dealTeacherRemarkAudioState();   // 已经点评:播放名师点评
                 break;
             default:
                 break;
@@ -1057,7 +1056,6 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         if (mQuestionBean.getComment_status().equals(UNLISTEN)) {
             mModel.mRequest.updateCommentStatusToListen(mQuestionBean.getId(), "hear"); // 和申请购买是同一个api
         }
-
         dealTeacherRemarkAudioPlayState();
     }
 
@@ -1366,14 +1364,14 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     /*
     *  处理下载的语音:解压
     * */
-    private void downLoadAudio(String vedioUrl, String mFileFolder, final String filePath, String zipFilePath) {
+    private void downLoadAudio(String vedioUrl, final String mFileFolder, final String filePath, String zipFilePath) {
         String localFilePath;
         if (zipFilePath != null) {       // .zip 格式
             localFilePath = zipFilePath;
         } else {
             localFilePath = filePath;
         }
-        InterviewModel.downloadVoiceVideo(mActivity, vedioUrl, mFileFolder, localFilePath, new ICommonCallback() {
+        InterviewModel.downloadVoiceVideo(mActivity, vedioUrl, mFileFolder, localFilePath, new ICommonCallback() {        // mFileFolder时解压后存文件的目录
             @Override
             public void callback(boolean success) {
                 if (success) {

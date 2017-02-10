@@ -1,5 +1,7 @@
 package com.appublisher.quizbank.model.netdata.history;
 
+import com.appublisher.quizbank.common.interview.netdata.InterviewRecordListItemBean;
+
 import java.util.ArrayList;
 
 /**
@@ -8,13 +10,15 @@ import java.util.ArrayList;
 public class HistoryPapersResp {
 
     int response_code;
-    ArrayList<HistoryPaperM> list;
+    ArrayList<InterviewRecordListItemBean> list;
+
 
     public int getResponse_code() {
         return response_code;
     }
 
-    public ArrayList<HistoryPaperM> getList() {
+    public ArrayList<InterviewRecordListItemBean> getList() {
         return list;
     }
+
 }

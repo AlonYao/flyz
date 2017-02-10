@@ -12,6 +12,8 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.adapter.InterviewHistoryPapersListAdapter;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
+import com.appublisher.quizbank.common.interview.netdata.InterviewRecordListItemBean;
+import com.appublisher.quizbank.common.interview.netdata.InterviewRecordListItemResp;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
@@ -56,8 +58,8 @@ public class StudyRecordModel {
             return;
         }
 
-        HistoryPapersResp historyPapersResp =
-                GsonManager.getModel(response.toString(), HistoryPapersResp.class);
+        InterviewRecordListItemResp historyPapersResp =
+                GsonManager.getModel(response.toString(), InterviewRecordListItemResp.class);
         if (historyPapersResp == null || historyPapersResp.getResponse_code() != 1) {
             return;
         }
@@ -167,7 +169,7 @@ public class StudyRecordModel {
             return;
         }
 
-        final ArrayList<HistoryPaperM> mhistoryPapers = historyPapersResp.getList();
+        final ArrayList<InterviewRecordListItemBean> mhistoryPapers = historyPapersResp.getList();
         if (mhistoryPapers == null || mhistoryPapers.size() == 0) {
             // 判断上一次加载时的集合是否为空
             if(fragment.mInterviewList == null || fragment.mInterviewList.size() == 0){
@@ -204,7 +206,7 @@ public class StudyRecordModel {
                     || position - 1 >= mFragment.mInterviewList.size())
                 return;
 
-            HistoryPaperM mInterviewhistoryPaper =
+            InterviewRecordListItemBean mInterviewhistoryPaper =
                     mFragment.mInterviewList.get(position - 1);
             if (mInterviewhistoryPaper == null) return;
             String itemType = mInterviewhistoryPaper.getType();

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
+import com.appublisher.quizbank.common.interview.netdata.InterviewRecordListItemBean;
 
 import java.util.ArrayList;
 
@@ -19,10 +19,10 @@ import java.util.ArrayList;
 public class InterviewHistoryPapersListAdapter extends BaseAdapter {
 
     private Activity mActivity;
-    private ArrayList<HistoryPaperM> mHistoryPapers;
+    private ArrayList<InterviewRecordListItemBean> mHistoryPapers;
 
 
-    public InterviewHistoryPapersListAdapter(Activity activity, ArrayList<HistoryPaperM> historyPapers) {
+    public InterviewHistoryPapersListAdapter(Activity activity, ArrayList<InterviewRecordListItemBean> historyPapers) {
         mActivity = activity;
         mHistoryPapers = historyPapers;
 
@@ -60,7 +60,7 @@ public class InterviewHistoryPapersListAdapter extends BaseAdapter {
             }
             // 给控件赋值
             if (mHistoryPapers != null && mHistoryPapers.size() > position) {
-                HistoryPaperM historyPaper = mHistoryPapers.get(position);
+                InterviewRecordListItemBean historyPaper = mHistoryPapers.get(position);
                 if (historyPaper != null) {
                     // 设置Logo
                  setLogo(mInterviewViewHolder.ivLogo, historyPaper.getType());

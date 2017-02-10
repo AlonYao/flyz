@@ -1,9 +1,7 @@
 package com.appublisher.quizbank.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,6 +29,7 @@ import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.RecordCollectActivity;
 import com.appublisher.quizbank.common.interview.activity.TeacherCommentListActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewCommentListResp;
+import com.appublisher.quizbank.common.interview.netdata.InterviewRecordListItemBean;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.model.business.StudyRecordModel;
 import com.appublisher.quizbank.model.netdata.history.HistoryPaperM;
@@ -54,7 +53,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     public XListView mXListView;
     public ArrayList<HistoryPaperM> mWrittenList;
-    public ArrayList<HistoryPaperM> mInterviewList;
+    public ArrayList<InterviewRecordListItemBean> mInterviewList;
     public int mOffset;
     public int mPage;
     public ImageView mIvNull;
