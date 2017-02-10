@@ -335,12 +335,12 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_order_status" />
         <activity
-            android:name=".common.interview.activity.TeacherCommentListActivity"
+            android:name=".common.interview.activity.InterviewCommentListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_teacher_comment_list" />
 
         <activity
-            android:name=".activity.TeacherRemarkGuideActivity"
+            android:name=".common.interview.activity.InterviewCommentGuideActivity"
             android:theme="@style/AppTheme"/>
     </application>
 
