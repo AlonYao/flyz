@@ -19,7 +19,7 @@ public class InterviewModel {
      * @param url     下载链接
      * @param localFile    文件名
      */
-    public static void downloadVoiceVideo(final Context context, String url, final String fileFolder, final String localFile, final ICommonCallback ICommonCallback) {
+    public static void downloadVoiceVideo(final Context context, String url, final String fileFolder, final String localFile, final int questionId , final ICommonCallback ICommonCallback) {
         ProgressDialogManager.showProgressDialog(context);
         DownloadAsyncTask mDownloadAsyncTask = new DownloadAsyncTask(
                 url,
@@ -34,6 +34,17 @@ public class InterviewModel {
                                 ToastManager.showToast(context, "音频下载成功");
                                 FileManager.unzipFiles(fileFolder, localFile);
                                 FileManager.deleteFiles(localFile);
+                                // 重命名文件名
+                                File fileDir = new File(fileFolder);
+                                File[] files = fileDir.listFiles();
+                                for(File downloadFile:files) {
+                                    if(downloadFile.exists() && downloadFile.isFile()){
+                                        String renameFilePath = fileFolder + questionId + ".amr";
+                                        if (!downloadFile.getAbsolutePath().equals(renameFilePath)){
+                                            FileManager.renameFile(downloadFile.getAbsolutePath(), renameFilePath);
+                                        }
+                                    }
+                                }
                             }
                             ICommonCallback.callback(true);
                         } else {

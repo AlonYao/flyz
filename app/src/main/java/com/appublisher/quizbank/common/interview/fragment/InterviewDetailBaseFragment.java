@@ -50,8 +50,8 @@ import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.interview.activity.InterviewCommentGuideActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewBuyTeacherCommentActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewCommentGuideActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
@@ -410,7 +410,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     private void initRecordFile() {
         String userId = LoginModel.getUserId();
         mRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/user_answer/";            // 自己录音的路径
-        mTeacherRemarkRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/teacher_answer/";     // 名师点评录音的路径
+        mTeacherRemarkRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/teacher_audio/";     // 名师点评录音的路径
         FileManager.mkDir(mRecordFolder);
         FileManager.mkDir(mTeacherRemarkRecordFolder);
 
@@ -1362,7 +1362,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     }
 
     /*
-    *  处理下载的语音:解压
+    *  处理下载的语音:解压 : 传进来id
     * */
     private void downLoadAudio(String vedioUrl, final String mFileFolder, final String filePath, String zipFilePath) {
         String localFilePath;
@@ -1371,7 +1371,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         } else {
             localFilePath = filePath;
         }
-        InterviewModel.downloadVoiceVideo(mActivity, vedioUrl, mFileFolder, localFilePath, new ICommonCallback() {        // mFileFolder时解压后存文件的目录
+        InterviewModel.downloadVoiceVideo(mActivity, vedioUrl, mFileFolder, localFilePath, mQuestionBean.getId(), new ICommonCallback() {        // mFileFolder时解压后存文件的目录
             @Override
             public void callback(boolean success) {
                 if (success) {
