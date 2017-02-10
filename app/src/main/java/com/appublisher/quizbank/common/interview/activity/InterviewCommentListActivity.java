@@ -11,33 +11,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
-import com.appublisher.lib_course.coursecenter.CourseFragment;
-import com.appublisher.lib_course.offline.activity.OfflineActivity;
-import com.appublisher.lib_course.opencourse.fragment.OpenCourseFragment;
-import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.common.interview.adapter.InterviewCommentListAdapter;
-import com.appublisher.quizbank.common.interview.fragment.InterviewIndexFragment;
 import com.appublisher.quizbank.common.interview.model.InterviewCommentListModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewCommentM;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
-import com.appublisher.quizbank.fragment.StudyIndexFragment;
-import com.appublisher.quizbank.fragment.StudyRecordFragment;
-import com.appublisher.quizbank.network.QApiConstants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class TeacherCommentListActivity extends BaseActivity implements RequestCallback {
+public class InterviewCommentListActivity extends BaseActivity implements RequestCallback {
 
     public View mCommentStatusRl;
     public View mCommentNoteRl;
@@ -113,14 +102,14 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
         mCommentStatusRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCommentListModel.showCommentStatusPop(TeacherCommentListActivity.this);
+                mCommentListModel.showCommentStatusPop(InterviewCommentListActivity.this);
             }
         });
 
         mCommentNoteRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCommentListModel.showCommentNotePop(TeacherCommentListActivity.this);
+                mCommentListModel.showCommentNotePop(InterviewCommentListActivity.this);
             }
         });
 
@@ -142,7 +131,7 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position > mList.size()) return;
-                final Intent intent = new Intent(TeacherCommentListActivity.this, InterviewPaperDetailActivity.class);
+                final Intent intent = new Intent(InterviewCommentListActivity.this, InterviewPaperDetailActivity.class);
                 intent.putExtra("dataFrom", "record_comment");
                 intent.putExtra("record_id", mList.get(position - 1).getRecord_id());
                 startActivity(intent);
@@ -152,7 +141,8 @@ public class TeacherCommentListActivity extends BaseActivity implements RequestC
         mCommentIntroduction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                final Intent intent = new Intent(InterviewCommentListActivity.this, InterviewCommentGuideActivity.class);
+                startActivity(intent);
             }
         });
     }

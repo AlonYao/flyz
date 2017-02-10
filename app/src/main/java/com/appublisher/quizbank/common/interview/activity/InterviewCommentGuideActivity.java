@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.activity;
+package com.appublisher.quizbank.common.interview.activity;
 
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.quizbank.R;
 
-public class TeacherRemarkGuideActivity extends BaseActivity {
+public class InterviewCommentGuideActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
