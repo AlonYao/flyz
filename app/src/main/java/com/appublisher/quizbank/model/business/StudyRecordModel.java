@@ -11,7 +11,6 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.HistoryPapersListAdapter;
 import com.appublisher.quizbank.adapter.InterviewHistoryPapersListAdapter;
-import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
 import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
@@ -114,8 +113,10 @@ public class StudyRecordModel {
                     intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
                             historyPaper.getPaper_type());
                 }
-                intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
-                        historyPaper.getPaper_id());
+                intent.putExtra(
+                        MeasureConstants.INTENT_PAPER_ID, historyPaper.getPaper_id());
+                intent.putExtra(
+                        MeasureConstants.INTENT_HIERARCHY_ID, historyPaper.getHierarchy_id());
                 mContext.startActivity(intent);
 
                 // Umeng
@@ -200,20 +201,20 @@ public class StudyRecordModel {
                                 View view,
                                 int position,
                                 long id) {
-            if (mFragment.mInterviewList == null
-                    || position - 1 >= mFragment.mInterviewList.size())
-                return;
-
-            HistoryPaperM mInterviewhistoryPaper =
-                    mFragment.mInterviewList.get(position - 1);
-            if (mInterviewhistoryPaper == null) return;
-            String itemType = mInterviewhistoryPaper.getType();
-            String time = mInterviewhistoryPaper.getTime();
-            Intent intent = new Intent(mContext, InterviewPaperDetailActivity.class); // 直接进入数据展示界面
-            intent.putExtra("dataFrom", "studyRecordInterview");
-            intent.putExtra("itemType", itemType);
-            intent.putExtra("time", time);
-            mContext.startActivity(intent);
+//            if (mFragment.mInterviewList == null
+//                    || position - 1 >= mFragment.mInterviewList.size())
+//                return;
+//
+//            HistoryPaperM mInterviewhistoryPaper =
+//                    mFragment.mInterviewList.get(position - 1);
+//            if (mInterviewhistoryPaper == null) return;
+//            String itemType = mInterviewhistoryPaper.getType();
+//            String time = mInterviewhistoryPaper.getTime();
+//            Intent intent = new Intent(mContext, InterviewPaperDetailActivity.class); // 直接进入数据展示界面
+//            intent.putExtra("dataFrom", "studyRecordInterview");
+//            intent.putExtra("itemType", itemType);
+//            intent.putExtra("time", time);
+//            mContext.startActivity(intent);
         }
     };
 
