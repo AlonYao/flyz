@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.interview.activity.TeacherCommentListActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewCommentListActivity;
 import com.appublisher.quizbank.common.interview.adapter.InterviewCommentFilterNoteAdapter;
 import com.appublisher.quizbank.common.interview.adapter.InterviewCommentFilterStatusAdapter;
 import com.appublisher.quizbank.common.interview.netdata.CommentFilterResp;
@@ -35,7 +35,7 @@ public class InterviewCommentListModel {
     private TextView noteSelectedText;
 
 
-    public void showCommentStatusPop(TeacherCommentListActivity activity) {
+    public void showCommentStatusPop(InterviewCommentListActivity activity) {
         if (mCommentFilterResp == null) return;
         if (mStatusPop == null)
             initStatusPop(activity);
@@ -43,14 +43,14 @@ public class InterviewCommentListModel {
         mStatusPop.showAsDropDown(activity.mCommentStatusRl, 0, 2);
     }
 
-    public void showCommentNotePop(TeacherCommentListActivity activity) {
+    public void showCommentNotePop(InterviewCommentListActivity activity) {
         if (mCommentFilterResp == null) return;
         if (mNotePop == null)
             initNotePop(activity);
         mNotePop.showAsDropDown(activity.mCommentNoteRl, 0, 2);
     }
 
-    public void initStatusPop(final TeacherCommentListActivity activity) {
+    public void initStatusPop(final InterviewCommentListActivity activity) {
         View statusView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView gridView = (GridView) statusView.findViewById(R.id.gridview);
         CommentFilterResp.StatusBean statusBean = new CommentFilterResp.StatusBean();
@@ -109,7 +109,7 @@ public class InterviewCommentListModel {
         });
     }
 
-    public void initNotePop(final TeacherCommentListActivity activity) {
+    public void initNotePop(final InterviewCommentListActivity activity) {
         View statusView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView gridView = (GridView) statusView.findViewById(R.id.gridview);
         CommentFilterResp.NotesBean notesBean = new CommentFilterResp.NotesBean();
@@ -180,7 +180,7 @@ public class InterviewCommentListModel {
         }
     }
 
-    public void dealCommentListResp(JSONObject jsonObject, TeacherCommentListActivity activity) {
+    public void dealCommentListResp(JSONObject jsonObject, InterviewCommentListActivity activity) {
         InterviewCommentListResp interviewCommentListResp = GsonManager.getModel(jsonObject, InterviewCommentListResp.class);
         if (interviewCommentListResp.getResponse_code() == 1) {
             if (activity.page == 1) {

@@ -50,7 +50,7 @@ import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.TeacherRemarkGuideActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewCommentGuideActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewBuyTeacherCommentActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
@@ -855,7 +855,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     *   跳转到帮助页面
     * */
     private void skipToRemarkHelpActivity() {
-        Intent intent = new Intent(mActivity, TeacherRemarkGuideActivity.class);
+        Intent intent = new Intent(mActivity, InterviewCommentGuideActivity.class);
         startActivity(intent);
     }
 

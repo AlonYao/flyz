@@ -65,9 +65,7 @@ public class InterviewHistoryPapersListAdapter extends BaseAdapter {
                     // 设置Logo
                  setLogo(mInterviewViewHolder.ivLogo, historyPaper.getType());
                  setText(mInterviewViewHolder.tvName, historyPaper.getType());
-
                  mInterviewViewHolder.tvDate.setText(historyPaper.getTime());
-
                 }
             }
         return convertView;

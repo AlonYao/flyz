@@ -116,8 +116,10 @@ public class StudyRecordModel {
                     intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE,
                             historyPaper.getPaper_type());
                 }
-                intent.putExtra(MeasureConstants.INTENT_PAPER_ID,
-                        historyPaper.getPaper_id());
+                intent.putExtra(
+                        MeasureConstants.INTENT_PAPER_ID, historyPaper.getPaper_id());
+                intent.putExtra(
+                        MeasureConstants.INTENT_HIERARCHY_ID, historyPaper.getHierarchy_id());
                 mContext.startActivity(intent);
 
                 // Umeng

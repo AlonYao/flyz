@@ -28,6 +28,13 @@ android {
 
     // 渠道
     productFlavors {
+
+        dev {
+            minSdkVersion 21
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "dev"]
+        }
+
         /**
          * 常用
          */
@@ -749,6 +756,7 @@ dependencies {
     compile 'com.coolerfall:android-http-download-manager:1.5.1'
     compile 'com.liulishuo.filedownloader:library:0.2.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:multidex:1.0.1'
     // 小班
     compile(name: 'multi-image-selector', ext: 'aar')
     compile 'com.android.support:design:23.2.0'

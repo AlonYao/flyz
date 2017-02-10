@@ -27,7 +27,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.MainActivity;
 import com.appublisher.quizbank.activity.RecordCollectActivity;
-import com.appublisher.quizbank.common.interview.activity.TeacherCommentListActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewCommentListActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewCommentListResp;
 import com.appublisher.quizbank.common.interview.netdata.InterviewRecordListItemBean;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
@@ -175,7 +175,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mInterviewCommentRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(getActivity(), TeacherCommentListActivity.class);
+                final Intent intent = new Intent(getActivity(), InterviewCommentListActivity.class);
                 startActivity(intent);
             }
         });
