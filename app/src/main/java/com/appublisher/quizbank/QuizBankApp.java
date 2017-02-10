@@ -1,10 +1,11 @@
 package com.appublisher.quizbank;
 
-import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.multidex.MultiDex;
 
 import com.appublisher.lib_basic.ActiveAndroidManager;
 import com.appublisher.lib_basic.LibBasicManager;
@@ -12,14 +13,18 @@ import com.appublisher.lib_login.model.business.LoginModel;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
 
-import java.util.LinkedList;
-
 /**
  * QuizBankApp
  */
 public class QuizBankApp extends Application {
 
     public static QuizBankApp mInstance;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
 
     @Override
     public void onCreate() {

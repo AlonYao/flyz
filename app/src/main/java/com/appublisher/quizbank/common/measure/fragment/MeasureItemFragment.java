@@ -298,8 +298,10 @@ public class MeasureItemFragment extends MeasureBaseFragment implements
         List<MeasureExcludeBean> list = ((MeasureActivity) getActivity()).mModel.mExcludes;
         if (list == null || mQuestion == null) return false;
         int order = mQuestion.getQuestion_order();
-        if (order >= list.size()) return false;
-        MeasureExcludeBean bean = list.get(order);
+
+        int index = order - 1;
+        if (index < 0 || index >= list.size()) return false;
+        MeasureExcludeBean bean = list.get(index);
         if (bean == null) return false;
 
         if (OPTION_A.equals(option)) {
@@ -321,8 +323,10 @@ public class MeasureItemFragment extends MeasureBaseFragment implements
         List<MeasureExcludeBean> list = ((MeasureActivity) getActivity()).mModel.mExcludes;
         if (list == null || mQuestion == null) return;
         int order = mQuestion.getQuestion_order();
-        if (order >= list.size()) return;
-        MeasureExcludeBean bean = list.get(order);
+
+        int index = order - 1;
+        if (index < 0 || index >= list.size()) return;
+        MeasureExcludeBean bean = list.get(index);
         if (bean == null) return;
 
         if (OPTION_A.equals(option)) {
@@ -335,7 +339,7 @@ public class MeasureItemFragment extends MeasureBaseFragment implements
             bean.setExclude_d(isExclude);
         }
 
-        list.set(order, bean);
+        list.set(index, bean);
         ((MeasureActivity) getActivity()).mModel.mExcludes = list;
     }
 
