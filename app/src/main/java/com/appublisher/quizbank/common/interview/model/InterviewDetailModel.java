@@ -51,15 +51,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     private InterviewPaperDetailActivity mActivity;
     private ProgressDialog mProgressDialog;
     private final InterviewDetailBaseFragmentCallBak mInterfaceViewCallBak;
-    //    private final IIterviewDetailBaseFragmentView mInterfaceView;
-
-//    public InterviewDetailModel(Context context) {
-//        if (context instanceof InterviewPaperDetailActivity) {
-//            mActivity = (InterviewPaperDetailActivity) context;
-//        }
-//        mRequest = new InterviewRequest(context, this);
-//
-//    }
 
     public InterviewDetailModel(Context context, InterviewDetailBaseFragmentCallBak interviewDetailBaseFragmentViewCallBak) {
         super();
