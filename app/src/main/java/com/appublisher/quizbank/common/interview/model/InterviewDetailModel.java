@@ -193,16 +193,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         return mBean != null && mBean.getIs_collected();
     }
     /*
-   *   检查menu是否回答
-   * */
-    public boolean getIsAnswer(int position) {
-        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.mList;
-        if(list == null || list.size()<= 0 || position > list.size() || position < 0) return false;
-        InterviewPaperDetailResp.QuestionsBean mBean = list.get(position);
-
-        return mBean!= null && mBean.getUser_audio() != null && mBean.getUser_audio().length() > 0;
-    }
-    /*
     *   设置menu的状态 :由fragment传入数据,由activity来判断
     * */
     public void setCollected(int position, boolean isCollected) {

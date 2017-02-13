@@ -605,7 +605,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     // 需要判断录音器是否已经存在,如果存在销毁,停止
                     if (mActivity.mMediaRecorderManagerUtil != null) {
                         stopRecord();
+                        stopPlay();
                     }
+                    mActivity.changPlayingViewToDeafault();
                     isCanTouch = false;
                     setIsCanTouch();
                     mActivity.setCanBack(1);                  // 不可以按返回键
@@ -1324,12 +1326,14 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mQuestionAudioProgressbar.setProgress(100);
                 mQuestionAudioOffset = 0;
                 mediaPlayingAnimation(false);
+                mStatus = RECORDABLE;
                 break;
             case ANALYSISITEM:
                 isAnalysisAudioPause = false;
                 mAnalysisAudioProgressbar.setProgress(100);
                 mAnalysisAudioOffset = 0;
                 mediaPlayingAnimation(false);
+                mStatus = RECORDABLE;
                 break;
             case TEACHERREMARK:
                 mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(mQuestionBean.getTeacher_audio_duration()));
@@ -1469,7 +1473,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         ImageView cancleRemarkIv = (ImageView) mWindow.findViewById(R.id.cancle_applyfor_remark);
         TextView confirmRemarkTv = (TextView) mWindow.findViewById(R.id.confirm_applyfor_remark);
         TextView applyForRemarkNumbTv = (TextView) mWindow.findViewById(R.id.applyfor_remainder_numb);      // 点评还剩的次数
-        applyForRemarkNumbTv.setText(String.valueOf(mTeacherRemarkRemainderNum));
+        String numText = mTeacherRemarkRemainderNum + "次";
+        applyForRemarkNumbTv.setText(numText);
 
         cancleRemarkIv.setOnClickListener(new View.OnClickListener() {
             @Override

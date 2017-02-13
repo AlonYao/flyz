@@ -7,7 +7,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ToastManager;
@@ -25,10 +24,8 @@ import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmen
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
 import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.common.utils.MediaRecorderManager;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -122,14 +119,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mList == null || mCurrentPagerId < 0 ) {
             mCurrentPagerId = 0;
         }
-        if(mModel.getIsAnswer( mCurrentPagerId)){  // 判断是否回答
-            if(mModel.getIsCollected( mCurrentPagerId)){
-                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
-                        MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            }else{
-                MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
-                        MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-            }
+        if(mModel.getIsCollected( mCurrentPagerId)){
+            MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        }else{
+            MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
+                    MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
         // 购买状态
         if (!mIsBuyAll) {
@@ -165,7 +160,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         } else if("收藏".equals(item.getTitle())){
             if (mModel.getIsCollected(mCurrentPagerId)) {   // 判断当前viewpager的小题是否收藏
-
                 mModel.setCollected(mCurrentPagerId, false);
                 ToastManager.showToast(this, "取消收藏");
 
@@ -173,9 +167,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Cancel");
                 UmengManager.onEvent(this, "InterviewAnalysis", map);
-
             } else {
-
                 mModel.setCollected(mCurrentPagerId, true);
                 ToastManager.showToast(this, "收藏成功");
 
@@ -314,7 +306,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         });
     }
     /*
-    *   需要将暂停的状态的播放器恢复默认状态-->需要获取进度条等控件
+    *   需要将暂停的状态的播放器恢复默认状态
     * */
     private void changeFragmentPauseToDefault() {
         if (mAdaper.mFragmentList.size() <= 0) return;
@@ -381,6 +373,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void changPlayingViewToDeafault(){
         if (mAdaper.mFragmentList.size() <= 0) return;
         InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mPlayingChildViewId);  // mPlayingChildViewId为存在播放状态的播放器的页面的id
+        fragment.mStatus = fragment.RECORDABLE;
         switch(playingViewState){
             case QUESTIONITEM:
                 fragment.mQuestionAudioProgressbar.setProgress(100);
