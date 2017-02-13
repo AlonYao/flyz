@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -51,15 +50,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     private InterviewPaperDetailActivity mActivity;
     private ProgressDialog mProgressDialog;
     private final InterviewDetailBaseFragmentCallBak mInterfaceViewCallBak;
-    //    private final IIterviewDetailBaseFragmentView mInterfaceView;
-
-//    public InterviewDetailModel(Context context) {
-//        if (context instanceof InterviewPaperDetailActivity) {
-//            mActivity = (InterviewPaperDetailActivity) context;
-//        }
-//        mRequest = new InterviewRequest(context, this);
-//
-//    }
 
     public InterviewDetailModel(Context context, InterviewDetailBaseFragmentCallBak interviewDetailBaseFragmentViewCallBak) {
         super();
@@ -263,9 +253,38 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         // 0.01元处理
         final InterviewPaperDetailResp.SingleAudioBean singleAudioBean = mActivity.getSingleAudioBean();
         if (singleAudioBean != null && singleAudioBean.is_purchased()) {
-            paySingle.setTextColor(Color.GRAY);
+            paySingle.setVisibility(View.GONE);
         } else {
             paySingle.setTextColor(ContextCompat.getColor(mActivity, R.color.common_text));
+            String singlePayText = "付 ¥ 0.01, 获取本题解析(此体验机会仅限一次)";
+            if (singleAudioBean != null) {
+                singlePayText = "付 ¥ " + String.valueOf(singleAudioBean.getPrice())
+                        + ", 获取本题解析(此体验机会仅限一次)";
+            }
+            paySingle.setText(singlePayText);
+
+            paySingle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 0.01元支付
+                    if (singleAudioBean == null || singleAudioBean.is_purchased()) return;
+
+                    ProductEntity entity = new ProductEntity();
+                    entity.setProduct_id(String.valueOf(singleAudioBean.getProduct_id()));
+                    entity.setProduct_type(singleAudioBean.getProduct_type());
+                    entity.setProduct_count(String.valueOf(1));
+                    entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
+                    showChoicePay(entity);
+
+                    mAalertDialog.dismiss();
+                    mActivity.setCanBack(0);              // 可以按返回键
+
+                    // Umeng
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Action", "2");
+                    UmengManager.onEvent(mActivity, "InterviewAnswer", map);
+                }
+            });
         }
 
         // 处理点击事件
@@ -287,36 +306,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
             public void onClick(View view) {
                 mAalertDialog.dismiss();
                 mActivity.setCanBack(0);              // 可以按返回键
-            }
-        });
-
-        String singlePayText = "付 ¥ 0.01, 获取本题解析(此体验机会仅限一次)";
-        if (singleAudioBean != null) {
-            singlePayText = "付 ¥ " + String.valueOf(singleAudioBean.getPrice())
-                    + ", 获取本题解析(此体验机会仅限一次)";
-        }
-        paySingle.setText(singlePayText);
-
-        paySingle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 0.01元支付
-                if (singleAudioBean == null || singleAudioBean.is_purchased()) return;
-
-                ProductEntity entity = new ProductEntity();
-                entity.setProduct_id(String.valueOf(singleAudioBean.getProduct_id()));
-                entity.setProduct_type(singleAudioBean.getProduct_type());
-                entity.setProduct_count(String.valueOf(1));
-                entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
-                showChoicePay(entity);
-
-                mAalertDialog.dismiss();
-                mActivity.setCanBack(0);              // 可以按返回键
-
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "2");
-                UmengManager.onEvent(mActivity, "InterviewAnswer", map);
             }
         });
 
