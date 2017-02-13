@@ -22,21 +22,15 @@ import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_login.model.business.LoginModel;
-import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.EvaluationActivity;
 import com.appublisher.quizbank.common.grade.ICommonCallback;
 import com.appublisher.quizbank.common.measure.activity.MeasureReportActivity;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
-import com.umeng.fb.FeedbackAgent;
-import com.umeng.fb.model.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 通用模型
@@ -183,42 +177,6 @@ public class CommonModel {
                 }
             }
         });
-    }
-
-    /**
-     * 跳转到友盟反馈
-     * @param activity Activity
-     */
-    public static void skipToUmengFeedback(Activity activity) {
-        final FeedbackAgent agent = new FeedbackAgent(activity);
-        agent.startFeedbackActivity();
-
-        UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-
-        if (userInfoModel == null) return;
-
-        UserInfo info = agent.getUserInfo();
-        if (info == null)
-            info = new UserInfo();
-        Map<String, String> contact = info.getContact();
-        if (contact == null)
-            contact = new HashMap<>();
-
-        contact.put("plain",
-                "userId:" + userInfoModel.getUser_id()
-                        + ",sno:" + userInfoModel.getSno()
-                        + ",userMobile:" + userInfoModel.getMobile_num()
-                        + ",userName:" + userInfoModel.getNickname());
-        info.setContact(contact);
-
-        agent.setUserInfo(info);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                agent.updateUserInfo();
-            }
-        }).start();
     }
 
     /**
