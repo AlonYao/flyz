@@ -8,7 +8,7 @@ public class InterviewCommentM {
     private int record_id;
     private String question;
     private String note_name;
-    private String comment_status;
+    private int comment_status;
 
     public int getRecord_id() {
         return record_id;
@@ -34,11 +34,11 @@ public class InterviewCommentM {
         this.note_name = note_name;
     }
 
-    public String getComment_status() {
+    public int getComment_status() {
         return comment_status;
     }
 
-    public void setComment_status(String comment_status) {
+    public void setComment_status(int comment_status) {
         this.comment_status = comment_status;
     }
 }

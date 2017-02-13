@@ -61,17 +61,14 @@ public class CommentProductsAdapter extends BaseAdapter {
         }
         final CommentProductM commentProductM = commentProductsResp.getList().get(position);
         if (commentProductM != null) {
-            if (position == 0 && commentProductsResp.isFirst_buy()) {
-                viewHolder.firstBuyTv.setVisibility(View.VISIBLE);
-                viewHolder.discountTv.setVisibility(View.INVISIBLE);
-            } else {
+            if (position == 0) {
                 viewHolder.firstBuyTv.setVisibility(View.INVISIBLE);
-            }
-
-            if (position == 1) {
+                viewHolder.discountTv.setVisibility(View.INVISIBLE);
+                if (commentProductsResp.isFirst_buy())
+                    viewHolder.firstBuyTv.setVisibility(View.VISIBLE);
+            } else if (position == 1) {
                 viewHolder.discountTv.setText("9折");
-            }
-            if (position == 2) {
+            } else if (position == 2) {
                 viewHolder.discountTv.setText("8折");
             }
 

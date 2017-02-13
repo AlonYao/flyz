@@ -13,7 +13,7 @@
             style="@style/CommonColorTextView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="15dp"
             android:text="1次"
             android:textSize="18sp" />
 
@@ -48,7 +48,7 @@
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/interview_comment_product_price_bg_shape"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
