@@ -128,27 +128,27 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 if( !isCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
-                } else{
-                    if (mQuestionContent.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
-                        mQuestionContent.setVisibility(View.GONE);
-                        mQuestionIm.setImageResource(R.drawable.interview_answer_lookover);
-                        mQuestionTv.setText("看文字");
-
-                    } else {
-                        mQuestionContent.setVisibility(View.VISIBLE);           // 折叠-->展开状态
-                        mQuestionIm.setImageResource(R.drawable.interview_fold_up);
-                        mQuestionTv.setText("不看文字");
-                    }
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "ReadQ");
-                    if (isDone()) {
-                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                    } else {
-                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
-                    }
                 }
+                if (mQuestionContent.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
+                    mQuestionContent.setVisibility(View.GONE);
+                    mQuestionIm.setImageResource(R.drawable.interview_answer_lookover);
+                    mQuestionTv.setText("看文字");
+
+                } else {
+                    mQuestionContent.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                    mQuestionIm.setImageResource(R.drawable.interview_fold_up);
+                    mQuestionTv.setText("不看文字");
+                }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "ReadQ");
+                if (isDone()) {
+                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                } else {
+                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                }
+
             }
         });
 
@@ -161,26 +161,26 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 if( !isCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
-                } else{
-                    if (mAnalysisView.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
-                        mAnalysisView.setVisibility(View.GONE);
-                        mAnalysisIm.setImageResource(R.drawable.interview_answer_lookover);
-                        mReminderTv.setText("看文字");
-                    } else {
-                        mAnalysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
-                        mAnalysisIm.setImageResource(R.drawable.interview_fold_up);
-                        mReminderTv.setText("不看文字");
-                    }
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "ReadA");
-                    if (isDone()) {
-                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                    } else {
-                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
-                    }
                 }
+                if (mAnalysisView.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
+                    mAnalysisView.setVisibility(View.GONE);
+                    mAnalysisIm.setImageResource(R.drawable.interview_answer_lookover);
+                    mReminderTv.setText("看文字");
+                } else {
+                    mAnalysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                    mAnalysisIm.setImageResource(R.drawable.interview_fold_up);
+                    mReminderTv.setText("不看文字");
+                }
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "ReadA");
+                if (isDone()) {
+                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                } else {
+                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                }
+
             }
         });
 
@@ -193,24 +193,24 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 if( !isCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
-                }else{
-                    if (isPlaying.equals(QUESTIONITEM)){
-                        isQuestionAudioPause = true;
-                    }else{
-                        // 判断是否存在其他的正在播放的语音
-                        changePlayingMediaToPauseState();
-                    }
-                    dealQuestionAudioPlayState();
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "ListenQ");
-                    if (isDone()) {
-                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                    } else {
-                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
-                    }
                 }
+                if (isPlaying.equals(QUESTIONITEM)){
+                    isQuestionAudioPause = true;
+                }else{
+                    // 判断是否存在其他的正在播放的语音
+                    changePlayingMediaToPauseState();
+                }
+                dealQuestionAudioPlayState();
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "ListenQ");
+                if (isDone()) {
+                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                } else {
+                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                }
+
             }
         });
         /*
@@ -222,24 +222,24 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 if( !isCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
-                }else{
-                    if(isPlaying.equals(ANALYSISITEM)){
-                        isAnalysisAudioPause = true;
-                    }else{
-                        // 判断是否存在其他的正在播放的语音
-                        changePlayingMediaToPauseState();
-                    }
-                    dealAnalysisAudioPlayState();
-
-                    // Umeng
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("Action", "ListenA");
-                    if (isDone()) {
-                        UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
-                    } else {
-                        UmengManager.onEvent(mActivity, "InterviewQuestion", map);
-                    }
                 }
+                if(isPlaying.equals(ANALYSISITEM)){
+                    isAnalysisAudioPause = true;
+                }else{
+                    // 判断是否存在其他的正在播放的语音
+                    changePlayingMediaToPauseState();
+                }
+                dealAnalysisAudioPlayState();
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "ListenA");
+                if (isDone()) {
+                    UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
+                } else {
+                    UmengManager.onEvent(mActivity, "InterviewQuestion", map);
+                }
+
             }
         });
     }

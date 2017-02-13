@@ -34,14 +34,16 @@ public class InterviewModel {
                                 ToastManager.showToast(context, "音频下载成功");
                                 FileManager.unzipFiles(fileFolder, localFile);
                                 FileManager.deleteFiles(localFile);
-                                // 重命名文件名
-                                File fileDir = new File(fileFolder);
-                                File[] files = fileDir.listFiles();
-                                for(File downloadFile:files) {
-                                    if(downloadFile.exists() && downloadFile.isFile()){
-                                        String renameFilePath = fileFolder + questionId + ".amr";
-                                        if (!downloadFile.getAbsolutePath().equals(renameFilePath)){
-                                            FileManager.renameFile(downloadFile.getAbsolutePath(), renameFilePath);
+                                if( fileFolder.contains("teacher_audio")) {
+                                    // 重命名文件名
+                                    File fileDir = new File(fileFolder);
+                                    File[] files = fileDir.listFiles();
+                                    for(File downloadFile:files) {
+                                        if(downloadFile.exists() && downloadFile.isFile()){
+                                            String renameFilePath = fileFolder + questionId + ".amr";
+                                            if (!downloadFile.getAbsolutePath().equals(renameFilePath)){
+                                                FileManager.renameFile(downloadFile.getAbsolutePath(), renameFilePath);
+                                            }
                                         }
                                     }
                                 }

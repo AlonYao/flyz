@@ -17,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.YaoguoUploadManager;
@@ -133,7 +132,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     *   创建停止播放语音的弹窗提示
     * */
     public static void showStopMediaPlayingDailog(final InterviewPaperDetailActivity mActivity){
-        Logger.e("进入弹窗方法");
         //  弹窗提示
         if (mActivity.isFinishing()) return;
         final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
@@ -525,6 +523,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                     mInterfaceViewCallBak.refreshTeacherRemarkRemainder(mDataList.get(0).getVal());
                 }
             } else {
+                mInterfaceViewCallBak.refreshTeacherRemarkRemainder("0");
                 ToastManager.showToast(mActivity,"刷新失败");
             }
         } else if("update_comment_status".equals(apiName)){     // 申请名师点评

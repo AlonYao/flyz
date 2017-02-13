@@ -144,7 +144,7 @@ public class InterviewPaperDetailResp {
         private boolean purchased_audio;    //
         private boolean is_collected;    //  是否收藏
 
-        private String comment_status;       // 点评的状态
+        private int comment_status;       // 点评的状态
 
         private String teacher_name;        // 名师点评老师
         private String teacher_audio;       // 点评语音
@@ -166,11 +166,11 @@ public class InterviewPaperDetailResp {
             this.teacher_audio_duration = teacher_audio_duration;
         }
 
-        public String getComment_status() {
+        public int getComment_status() {
             return comment_status;
         }
 
-        public void setComment_status(String comment_status) {
+        public void setComment_status(int comment_status) {
             this.comment_status = comment_status;
         }
 
