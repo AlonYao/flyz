@@ -56,7 +56,14 @@ public class InterviewCommentListAdapter extends BaseAdapter {
 
         viewHolder.questionContent.setText(list.get(position).getQuestion());
         viewHolder.noteName.setText(list.get(position).getNote_name());
-        viewHolder.statusTv.setText(list.get(position).getComment_status());
+        if (list.get(position).getComment_status() == 0) {
+            viewHolder.statusTv.setText("未收听");
+        } else if (list.get(position).getComment_status() == 1) {
+            viewHolder.statusTv.setText("已收听");
+        } else if (list.get(position).getComment_status() == 2) {
+            viewHolder.statusTv.setText("点评中");
+        }
+
 
         return convertView;
     }

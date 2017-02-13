@@ -60,7 +60,7 @@ public class CommentFilterResp {
     public static class StatusBean {
 
         private int status_id;
-        private String comment_status;
+        private String status_name;
 
         public int getStatus_id() {
             return status_id;
@@ -71,11 +71,11 @@ public class CommentFilterResp {
         }
 
         public String getComment_status() {
-            return comment_status;
+            return status_name;
         }
 
-        public void setComment_status(String comment_status) {
-            this.comment_status = comment_status;
+        public void setComment_status(String status_name) {
+            this.status_name = status_name;
         }
     }
 }
