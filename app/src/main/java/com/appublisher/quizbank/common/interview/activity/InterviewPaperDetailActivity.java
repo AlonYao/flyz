@@ -350,8 +350,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 fragment.mAnalysisAudioTv.setText("听语音");
             }
         }
-        if(fragment.mRemarkState == null || fragment.mRemarkState.length() <= 0) return;
-        if( !fragment.isTeacherAnswerPause && fragment.mRemarkState.equals("hadRemarked")){
+        if(fragment.mRemarkState < 0) return;
+        if( !fragment.isTeacherAnswerPause && fragment.mRemarkState ==fragment.HADREMARKED ){
             fragment.mTeacherRemarkAudioOffset = 0;
             fragment.mTeacherRemarkProgressBar.setProgress(100);
             fragment.mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getTeacher_audio_duration()));

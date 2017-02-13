@@ -81,10 +81,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public static final String SUBMIT = "submit";              //可提交
     public static final String HADSUBMIT = "hadSubmit";      // 已提交
     public static final String TEACHERREMARK = "teacherRemark";      // 名师点评
-    private static final String NOTAPPLYFORREMARK = "notApplyForRemark";   // 没有申请名师点评
-    private static final String COMMENT = "点评中";          // 等待点评中
-    private static final String HADREMARKED = "hadRemarked";     // 已经点评
-    private static final String UNLISTEN = "未听";            // 没有收听
+    private static final int NOTAPPLYFORREMARK = 3;   // 没有申请名师点评
+    private static final int COMMENT = 2;          // 等待点评中
+    public static final int HADREMARKED = 4;     // 已经点评
+    private static final int UNLISTEN = 0;            // 没有收听
     public static final String QUESTIONITEM = "questionItem";
     public static final String ANALYSISITEM = "analysisItem";
     public static final String NONE = "none";
@@ -136,7 +136,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public TextView mUserAnswerPlayState;
     private LinearLayout mExistRemarkLl;
     private TextView mWaitRemarkingTv;
-    public String mRemarkState;
+    public int mRemarkState;
     private String mTeacherRemarkRecordFolder;
     public boolean isCanTouch;
     public int mOffset;
@@ -266,9 +266,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             mWaitRemarkingTv.setVisibility(View.GONE);
             mExistRemarkLl.setVisibility(View.GONE);
         } else {                      // 申请了名师点评,需要判断:点评中 or 已点评
-            if (mQuestionBean == null || mQuestionBean.getComment_status() == null
-                    || mQuestionBean.getComment_status().length() <= 0) return;
-            if (mQuestionBean.getComment_status().equals(COMMENT)) {
+            if (mQuestionBean == null
+                    || mQuestionBean.getComment_status() < 0) return;
+            if (mQuestionBean.getComment_status() == COMMENT ) {
                 // 点评中
                 mNotRemarkLl.setVisibility(View.GONE);
                 mWaitRemarkingTv.setVisibility(View.VISIBLE);
@@ -1055,7 +1055,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     * */
     private void dealTeacherRemarkAudioState() {
         // 判断已听还是未听,再点击事件中处理
-        if (mQuestionBean.getComment_status().equals(UNLISTEN)) {
+        if (mQuestionBean.getComment_status() == UNLISTEN ) {
             mModel.mRequest.updateCommentStatusToListen(mQuestionBean.getId(), "hear"); // 发送:已听
         }
         dealTeacherRemarkAudioPlayState();
