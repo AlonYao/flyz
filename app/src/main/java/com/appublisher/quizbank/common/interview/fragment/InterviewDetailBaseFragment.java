@@ -83,7 +83,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public static final String TEACHERREMARK = "teacherRemark";      // 名师点评
     private static final int NOTAPPLYFORREMARK = 3;   // 没有申请名师点评
     private static final int COMMENT = 2;          // 等待点评中
-    public static final int HADREMARKED = 4;     // 已经点评
+    private static final int HADREMARKED = 4;     // 已经点评
     private static final int UNLISTEN = 0;            // 没有收听
     public static final String QUESTIONITEM = "questionItem";
     public static final String ANALYSISITEM = "analysisItem";
@@ -648,6 +648,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     isCanTouch = true;
                     setIsCanTouch();
                     mActivity.setCanBack(2);                // 返回键设置不可返回,点击有弹窗
+                    mOffset = 0;
+                    mUserNotSubmitAnswerProgressBar.setProgress(100);
+                    mTvtimeNotSubm.setText("听语音");
                     isStop = false;
                     // 此时录音文件已经存在,判断确认文件是否存在,时长是否为零
                     changeFileName();
@@ -736,8 +739,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 // 跳转到帮助页面
                 skipToRemarkHelpActivity();
             } else if (id == R.id.purchased_remark_tv) {      // 购买链接
-                // 提示购买弹窗
-                popupReminderPurchasedAlert();
+                // 直接跳转到购买页面
+                Intent intent = new Intent(getActivity(), InterviewBuyTeacherCommentActivity.class);
+                startActivityForResult(intent, PAY_SUCCESS);
             } else if (id == R.id.teacher_remark_open_iv) {
                 // 动画:从左向右
                 Animation translateAnimation = new TranslateAnimation(0, 500, 0, 0);

@@ -37,6 +37,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private static final int UNRECORD = 0;
     private static final int RECORDING = 1;
     private static final int RECORDEDUNSBMIT = 2;
+    private static final int HADREMARKED = 4;     // 已经点评
     private static final String SUBMIT = "submit";              //可提交
     private static final String HADSUBMIT = "hadSubmit";      // 已提交
     private static final String TEACHERREMARK = "teacherRemark";      // 名师点评
@@ -99,7 +100,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             int note_id = getIntent().getIntExtra("note_id", 0);
             mRequest.getRecordInterviewCollectPaperDetail(note_id);
         }else if("record_comment".equals(dataFrom)){             // 来自名师点评页
-            //todo 获取recordId
             int record_id = getIntent().getIntExtra("record_id", 0);
             mRequest.getRecordInterviewTeacherRemark(record_id);
         }else{
@@ -351,7 +351,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         }
         if(fragment.mRemarkState < 0) return;
-        if( !fragment.isTeacherAnswerPause && fragment.mRemarkState ==fragment.HADREMARKED ){
+        if( !fragment.isTeacherAnswerPause && fragment.mRemarkState == HADREMARKED ){
             fragment.mTeacherRemarkAudioOffset = 0;
             fragment.mTeacherRemarkProgressBar.setProgress(100);
             fragment.mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getTeacher_audio_duration()));
