@@ -280,14 +280,14 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         } else if ("comment_list".equals(apiName)) {
             InterviewCommentListResp commentListResp = GsonManager.getModel(response, InterviewCommentListResp.class);
             if (commentListResp.getResponse_code() == 1) {
-                if (commentListResp.getList().size() >= 0) {
+                if (commentListResp.getList().size() > 0) {
                     mInterviewRedPoint.setVisibility(View.VISIBLE);
                     mCommentRedPoint.setVisibility(View.VISIBLE);
 
                     int height = ((MainActivity) getActivity()).recordRadioButton.getHeight();
                     int marginRight = (int) (Utils.getWindowWidth(getActivity()) / 5 * 1.22);
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                            30, 30);
+                            20, 20);
                     lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     lp.bottomMargin = (int) (height * 0.7);
@@ -299,6 +299,10 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     mCommentRedPoint.setVisibility(View.INVISIBLE);
                     ((MainActivity) getActivity()).recordTip.setVisibility(View.INVISIBLE);
                 }
+            } else {
+                mInterviewRedPoint.setVisibility(View.INVISIBLE);
+                mCommentRedPoint.setVisibility(View.INVISIBLE);
+                ((MainActivity) getActivity()).recordTip.setVisibility(View.INVISIBLE);
             }
         }
         setLoadFinish();
@@ -317,7 +321,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     @Override
     public void onRefresh() {
-        Logger.i("refresh==data");
+
         if (mWriteButton.isChecked()) {
             mOffset = 0;
             mWrittenList = new ArrayList<>();
