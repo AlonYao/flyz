@@ -42,8 +42,8 @@
 
         <View
             android:id="@+id/interview_red_point"
-            android:layout_width="30px"
-            android:layout_height="30px"
+            android:layout_width="20px"
+            android:layout_height="20px"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="23dp"
@@ -182,8 +182,8 @@
 
             <View
                 android:id="@+id/comment_red_point"
-                android:layout_width="30px"
-                android:layout_height="30px"
+                android:layout_width="20px"
+                android:layout_height="20px"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@+id/comment_iv"
                 android:background="@drawable/red_point_shape"

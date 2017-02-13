@@ -287,7 +287,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             int height = ((MainActivity) getActivity()).recordRadioButton.getHeight();
             int marginRight = (int) (Utils.getWindowWidth(getActivity()) / 5 * 1.22);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                    30, 30);
+                    20, 20);
             lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lp.bottomMargin = (int) (height * 0.7);

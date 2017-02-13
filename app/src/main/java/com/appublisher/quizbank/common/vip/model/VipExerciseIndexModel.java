@@ -142,6 +142,7 @@ public class VipExerciseIndexModel {
         if (statusPop == null)
             initStatusPop(activity);
 
+        if (statusPop == null) return;
         statusPop.showAsDropDown(activity.statusView, 0, 2);
         activity.statusArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
@@ -217,6 +218,7 @@ public class VipExerciseIndexModel {
         if (categoryPop == null)
             initCategoryPop(activity);
 
+        if (categoryPop == null) return;
         categoryPop.showAsDropDown(activity.categoryView, 0, 2);
         activity.categoryArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
@@ -288,6 +290,7 @@ public class VipExerciseIndexModel {
         if (typePop == null)
             initTypePop(activity);
 
+        if (typePop == null) return;
         typePop.showAsDropDown(activity.typeView, 0, 2);
         activity.typeArrow.setImageResource(R.drawable.wholepage_arrowup);
     }
