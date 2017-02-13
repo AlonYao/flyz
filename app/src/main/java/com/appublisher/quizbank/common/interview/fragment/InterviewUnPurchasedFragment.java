@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
@@ -95,6 +96,11 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         mAnalysisSwitchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {     // 解析行的逻辑处理:
+                if (!isCanTouch) {
+                    ToastManager.showToast(mActivity, "请专心录音哦");
+                    return;
+                }
+
                 if (isDone() || isBuyAll() || isBuySingle()) {               // 已经答题
                     if (mAnalysisView.getVisibility() == View.VISIBLE) {
                         mAnalysisView.setVisibility(View.GONE);
