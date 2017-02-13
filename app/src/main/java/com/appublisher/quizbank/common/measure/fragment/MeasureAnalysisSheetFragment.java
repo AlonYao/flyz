@@ -19,6 +19,7 @@ import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
 import com.appublisher.quizbank.common.measure.adapter.MeasureAnalysisSheetAdapter;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
+import com.appublisher.quizbank.common.measure.model.MeasureAnalysisModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,8 +78,11 @@ public class MeasureAnalysisSheetFragment extends DialogFragment {
 
     private void initData() {
         if (!(getActivity() instanceof MeasureAnalysisActivity)) return;
-        mQuestions = ((MeasureAnalysisActivity) getActivity()).mAdapter.getQuestions();
-        mAnswers = ((MeasureAnalysisActivity) getActivity()).mAdapter.getAnswers();
+        MeasureAnalysisModel model = ((MeasureAnalysisActivity) getActivity()).mModel;
+        if (model == null) return;
+
+        mQuestions = model.getAdapterQuestions();
+        mAnswers = model.getAdapterAnswers();
     }
 
     private void showContent() {

@@ -360,6 +360,26 @@ public class MeasureAnalysisModel extends MeasureModel{
         return AUTO.equals(mPaperType) || NOTE.equals(mPaperType);
     }
 
+    /**
+     * 获取加载在Adapter里面的Questions数据
+     * @return List<MeasureQuestionBean>
+     */
+    public List<MeasureQuestionBean> getAdapterQuestions() {
+        if (!(mContext instanceof MeasureAnalysisActivity)) return null;
+        if (((MeasureAnalysisActivity) mContext).mAdapter == null) return null;
+        return ((MeasureAnalysisActivity) mContext).mAdapter.getQuestions();
+    }
+
+    /**
+     * 获取加载在Adapter里面的Answers数据
+     * @return List<MeasureAnswerBean>
+     */
+    public List<MeasureAnswerBean> getAdapterAnswers() {
+        if (!(mContext instanceof MeasureAnalysisActivity)) return null;
+        if (((MeasureAnalysisActivity) mContext).mAdapter == null) return null;
+        return ((MeasureAnalysisActivity) mContext).mAdapter.getAnswers();
+    }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         if (COLLECT_ERROR_QUESTIONS.equals(apiName)) {
