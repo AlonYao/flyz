@@ -373,7 +373,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void changPlayingViewToDeafault(){
         if (mAdaper.mFragmentList.size() <= 0) return;
         InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mPlayingChildViewId);  // mPlayingChildViewId为存在播放状态的播放器的页面的id
-        fragment.mStatus = fragment.RECORDABLE;
         switch(playingViewState){
             case QUESTIONITEM:
                 fragment.mQuestionAudioProgressbar.setProgress(100);
