@@ -1083,13 +1083,13 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public void dealQuestionAudioPlayState() {
         if (isQuestionAudioPause) {         // 暂停-->播放
             isQuestionAudioPause = false;
-            mQuestionAudioIv.setImageResource(R.drawable.interview_listen_pause);
+//            mQuestionAudioIv.setImageResource(R.drawable.interview_listen_pause);
             mQuestionAudioTv.setText("继续听");
             pausePlay();
         } else {
             isQuestionAudioPause = true;
             mStatus = QUESTIONITEM;
-            mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
+//            mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
             mQuestionAudioTv.setText("听语音");
             dealDownLoadAudio(mQuestionFileFolder, mQuestionBean.getQuestion_audio());        // url容易出现问题
         }
@@ -1101,13 +1101,13 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public void dealAnalysisAudioPlayState() {
         if (isAnalysisAudioPause) {         // 暂停-->播放
             isAnalysisAudioPause = false;
-            mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_pause);
+//            mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_pause);
             mAnalysisAudioTv.setText("继续听");
             pausePlay();
         } else {
             isAnalysisAudioPause = true;
             mStatus = ANALYSISITEM;
-            mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
+//            mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
             mAnalysisAudioTv.setText("听语音");
             dealDownLoadAudio(mAnalysisFileFolder, mQuestionBean.getAnalysis_audio());       // url容易出现问题
         }
@@ -1216,12 +1216,14 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mQuestionAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getQuestion_audio_duration()));   // 题目行的进度条
                 // 中间图片的动画集合
                 mediaPlayingAnimation(true);
+
                 break;
             case ANALYSISITEM:              // 解析行语音
                 isPlaying = ANALYSISITEM;
                 mAnalysisAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));   // 解析行的进度条
                 // 中间图片的动画集合
                 mediaPlayingAnimation(true);
+
                 break;
             default:
                 break;
@@ -1249,12 +1251,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mQuestionAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
                 AnimationDrawable questionAudioIv = (AnimationDrawable) mQuestionAudioIv.getDrawable();
                 questionAudioIv.stop();
-                mQuestionAudioIv.setImageResource(R.drawable.interview_listen_pause);
+
             } else if (mStatus.equals(ANALYSISITEM)) {
                 mAnalysisAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
                 AnimationDrawable analysisAudioIv = (AnimationDrawable) mAnalysisAudioIv.getDrawable();
                 analysisAudioIv.stop();
-                mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_pause);
+
             }
         }
     }
@@ -1279,10 +1281,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     case QUESTIONITEM:
                         mQuestionAudioOffset = offset;
                         mediaPlayingAnimation(false);
+                        mQuestionAudioIv.setImageResource(R.drawable.interview_listen_pause);
                         break;
                     case ANALYSISITEM:
                         mAnalysisAudioOffset = offset;
                         mediaPlayingAnimation(false);
+                        mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_pause);
                         break;
                     case TEACHERREMARK:
                         mTeacherRemarkAudioOffset = offset;
