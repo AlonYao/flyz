@@ -608,6 +608,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                         stopPlay();
                     }
                     mActivity.changPlayingViewToDeafault();
+                    mActivity.setIsExitsPlayingMedia(false);
                 }
                 isCanTouch = false;
                 setIsCanTouch();
