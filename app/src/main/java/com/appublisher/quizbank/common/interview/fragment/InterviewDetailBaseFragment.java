@@ -1083,13 +1083,11 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public void dealQuestionAudioPlayState() {
         if (isQuestionAudioPause) {         // 暂停-->播放
             isQuestionAudioPause = false;
-//            mQuestionAudioIv.setImageResource(R.drawable.interview_listen_pause);
             mQuestionAudioTv.setText("继续听");
             pausePlay();
         } else {
             isQuestionAudioPause = true;
             mStatus = QUESTIONITEM;
-//            mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
             mQuestionAudioTv.setText("听语音");
             dealDownLoadAudio(mQuestionFileFolder, mQuestionBean.getQuestion_audio());        // url容易出现问题
         }
@@ -1101,13 +1099,11 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public void dealAnalysisAudioPlayState() {
         if (isAnalysisAudioPause) {         // 暂停-->播放
             isAnalysisAudioPause = false;
-//            mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_pause);
             mAnalysisAudioTv.setText("继续听");
             pausePlay();
         } else {
             isAnalysisAudioPause = true;
             mStatus = ANALYSISITEM;
-//            mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
             mAnalysisAudioTv.setText("听语音");
             dealDownLoadAudio(mAnalysisFileFolder, mQuestionBean.getAnalysis_audio());       // url容易出现问题
         }
@@ -1251,12 +1247,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mQuestionAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
                 AnimationDrawable questionAudioIv = (AnimationDrawable) mQuestionAudioIv.getDrawable();
                 questionAudioIv.stop();
-
             } else if (mStatus.equals(ANALYSISITEM)) {
                 mAnalysisAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
                 AnimationDrawable analysisAudioIv = (AnimationDrawable) mAnalysisAudioIv.getDrawable();
                 analysisAudioIv.stop();
-
             }
         }
     }

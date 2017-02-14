@@ -114,7 +114,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void getData() {
         if("studyRecordInterview".equals(mDataFrom)){
             mRequest.getStudyRecordInterviewPaperDetail(mItemType, mTime);
-        }else{
+        } else if("recordCollect".equals(mDataFrom)){
+            int note_id = getIntent().getIntExtra("note_id", 0);
+            mRequest.getRecordInterviewCollectPaperDetail(note_id);
+        } else{
             mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId);
         }
     }
