@@ -61,4 +61,8 @@
     <color name="popupwindow_recordsound">#E4E4E5</color>
 
     <color name="red_point">#FF342E</color>
+
+    <color name="comment_status_taken">#3AAD7F</color>
+    <color name="comment_status_un_taken">#FF3737</color>
+    <color name="comment_status_ing">#FF6722</color>
 </resources>

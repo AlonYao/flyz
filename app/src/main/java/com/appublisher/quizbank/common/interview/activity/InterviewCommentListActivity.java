@@ -62,6 +62,13 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
 
         initViews();
         setValue();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        page = 1;
         getData();
     }
 
