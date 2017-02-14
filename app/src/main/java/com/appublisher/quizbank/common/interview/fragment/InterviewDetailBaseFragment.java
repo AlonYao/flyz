@@ -1249,10 +1249,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mQuestionAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
                 AnimationDrawable questionAudioIv = (AnimationDrawable) mQuestionAudioIv.getDrawable();
                 questionAudioIv.stop();
+                mQuestionAudioIv.setImageResource(R.drawable.interview_listen_pause);
             } else if (mStatus.equals(ANALYSISITEM)) {
                 mAnalysisAudioIv.setImageResource(R.drawable.interview_audio_playing_animation);
                 AnimationDrawable analysisAudioIv = (AnimationDrawable) mAnalysisAudioIv.getDrawable();
                 analysisAudioIv.stop();
+                mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_pause);
             }
         }
     }

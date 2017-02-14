@@ -384,11 +384,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 fragment.mQuestionAudioProgressbar.setProgress(100);
                 fragment.mQuestionAudioOffset = 0;
                 fragment.mediaPlayingAnimation(false);
+                fragment.mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
             case ANALYSISITEM:
                 fragment.mAnalysisAudioProgressbar.setProgress(100);
                 fragment.mAnalysisAudioOffset = 0;
                 fragment.mediaPlayingAnimation(false);
+                fragment.mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
             case SUBMIT:
                 fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
