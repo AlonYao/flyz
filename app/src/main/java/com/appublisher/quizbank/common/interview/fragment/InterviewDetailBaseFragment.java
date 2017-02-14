@@ -88,6 +88,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public static final String QUESTIONITEM = "questionItem";
     public static final String ANALYSISITEM = "analysisItem";
     public static final String NONE = "none";
+    private static final int UPPERLIMITRECORDTIME = 60;
+    private static final int LOWERLIMITRECORDTIME = 10;
+    private static final int SHOWREMINDERRECORDTIME = 30;
     public View mUnRecordView;
     public View mRecordingView;
     public InterviewPaperDetailActivity mActivity;
@@ -229,13 +232,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             changeRecordView(5);
             checkTeacherRemarkState();      // 检查点评的状态
             checkIsFirstSubmit();           // 检查是否第一次提交题
-            if (mQuestionBean.getUser_audio_duration() >= 360) {
-                mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
+            if (mQuestionBean.getUser_audio_duration() >= UPPERLIMITRECORDTIME) {
+                mTvtimeHadSumbPlay.setText(mModel.formatDateTime(UPPERLIMITRECORDTIME));
             } else {
                 mTvtimeHadSumbPlay.setText(mModel.formatDateTime(mQuestionBean.getUser_audio_duration() + 1));
             }
             mStatus = HADSUBMIT;
-
         } else {
             mStatus = RECORDABLE;
             mUnRecordView.setVisibility(View.VISIBLE);
@@ -659,7 +661,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     changeRecordView(3);
                     showRecordedDuration();             // 显示录音的时长
                 } else {
-                    ToastManager.showToast(mActivity, "录音时间要超过60秒");
+                    ToastManager.showToast(mActivity, "答题至少要一分钟哦");
                 }
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
@@ -667,10 +669,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 UmengManager.onEvent(mActivity, "InterviewRecord", map);
             } else if (id == R.id.interview_recordsounding_ll) {             // 点击录音整体
                 if (isCanTouch)
-                    ToastManager.showToast(getActivity(), "正在录音,录音时间要超过60秒");
+                    ToastManager.showToast(getActivity(), "正在录音,答题至少要一分钟哦");
             } else if (id == R.id.interview_recordsound_rl_rerecording) {      //点击重录
                 if (mActivity.mMediaRecorderManagerUtil != null) {
-                    stopPlay();         // 停止播放语音
+//                    stopPlay();         // 停止播放语音
                     changePlayingMediaToPauseState();
                     mStatus = RECORDABLE;
                     String zero = "0\"";
@@ -710,7 +712,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 map.put("Action", "Playaudio");
                 UmengManager.onEvent(mActivity, "InterviewRecord", map);
             } else if (id == R.id.interview_recordsounding_rl_submit) {      // 点击提交按钮
-                stopPlay();
+//                stopPlay();
+                changePlayingMediaToPauseState();
                 mModel.showSubmitAnswerProgressBar(mUserAnswerFilePath, mQuestionBean, FileManager.getVideoDuration(mUserAnswerFilePath), mQuestionType);
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
@@ -885,8 +888,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     }
 
     private void changeTime() {
-        if (mQuestionBean.getUser_audio_duration() >= 360) {
-            mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
+        if (mQuestionBean.getUser_audio_duration() >= UPPERLIMITRECORDTIME) {
+            mTvtimeHadSumbPlay.setText(mModel.formatDateTime(UPPERLIMITRECORDTIME));
         } else {
             mTvtimeHadSumbPlay.setText(mModel.formatDateTime(mQuestionBean.getUser_audio_duration() + 1));
         }
@@ -978,25 +981,20 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     *   显示正在录音的时长
     * */
     private void showRecordingDuration(int duration) {
-        if (duration >= 0 && duration <= 20) {
-            if (duration >= 5) {
+        if (duration >= 0 && duration <= UPPERLIMITRECORDTIME) {
+            if (duration >= LOWERLIMITRECORDTIME) {
                 isCanSubmit = true;
                 mIvRecordSound.setImageResource(R.drawable.interview_confrim_blue);
-                if (duration == 15) {
+                if (duration == SHOWREMINDERRECORDTIME) {
                     showReminderToast();
-                }
-                if (duration > 20) {
-                    mActivity.mMediaRecorderManagerUtil.stopReocrd();
                 }
             } else {
                 mIvRecordSound.setImageResource(R.drawable.interview_confirm_gray);
             }
-            if(duration > 20){
-                mTvtimeRecording.setText(mModel.formatDateTime(20));
-            }else{
-                mTvtimeRecording.setText(mModel.formatDateTime(duration));
-            }
-
+            mTvtimeRecording.setText(mModel.formatDateTime(duration));
+        } else{
+            stopRecord();
+            mTvtimeRecording.setText(mModel.formatDateTime(UPPERLIMITRECORDTIME));
         }
     }
 
@@ -1005,8 +1003,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     * */
     private void showRecordedDuration() {
         String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
-        if (Integer.parseInt(duration) >= 20) {
-            mTvtimeNotSubmPlay.setText(mModel.formatDateTime(20));
+        if (Integer.parseInt(duration) >= UPPERLIMITRECORDTIME) {
+            mTvtimeNotSubmPlay.setText(mModel.formatDateTime(UPPERLIMITRECORDTIME));
         } else {
             mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration) + 1));
         }

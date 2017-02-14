@@ -11,20 +11,21 @@
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="80dp"
         >
-        <ImageView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/interview_skip_help_remark"
-            />
+            android:layout_height="match_parent"
+            android:background="@drawable/interview_teacher_remark_help_scrollview_bg"
+            >
+        </LinearLayout>
     </ScrollView>
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/interview_teacher_remark_bottom"
+        android:layout_height="80dp"
+        android:background="@drawable/interview_teacher_remark_help_bottom_bg"
         android:layout_alignParentBottom="true"
-        />
+        >
+    </LinearLayout>
+
 </RelativeLayout>
