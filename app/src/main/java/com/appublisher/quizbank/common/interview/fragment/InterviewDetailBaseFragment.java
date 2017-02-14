@@ -1320,12 +1320,14 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mQuestionAudioProgressbar.setProgress(100);
                 mQuestionAudioOffset = 0;
                 mediaPlayingAnimation(false);
+                mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
             case ANALYSISITEM:
                 isAnalysisAudioPause = false;
                 mAnalysisAudioProgressbar.setProgress(100);
                 mAnalysisAudioOffset = 0;
                 mediaPlayingAnimation(false);
+                mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
             case TEACHERREMARK:
                 mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(mQuestionBean.getTeacher_audio_duration()));
