@@ -73,13 +73,6 @@ public class InterviewRequest extends Request implements InterviewApi {
     /*
     *   记录页面中的面试页面的数据
     * */
-//    public void getStudyRecordInterviewPaperDetail(int user_id, String type, String time){
-//        asyncRequest(getFinalUrl(studyRecordInterviewPaperDetail)
-//                + "&user_id=" + user_id
-//                + "&type=" + type
-//                + "&time=" + time, "history_interview_detail", "object"
-//        );
-//    }
     public void getStudyRecordInterviewPaperDetail(String type, String time) {
         asyncRequest(getFinalUrl(studyRecordInterviewPaperDetail)
                 + "&type=" + type
