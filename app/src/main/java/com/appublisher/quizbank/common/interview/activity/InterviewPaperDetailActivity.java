@@ -58,7 +58,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public MediaRecorderManager mMediaRecorderManager;
     public MediaRecordManagerUtil mMediaRecorderManagerUtil;        // 新的播放器类
     public String playingViewState;
-    private int mPlayingChildViewId;
+    public int mPlayingChildViewId;
     private boolean isExitsPlayingMedia;
     private String mDataFrom;
     private String mItemType;
