@@ -60,12 +60,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public String playingViewState;
     private int mPlayingChildViewId;
     private boolean isExitsPlayingMedia;
+    private String mDataFrom;
+    private String mItemType;
+    private String mTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interview_paper_detail);
-
         setToolBar(this);
         setTitle("");
         mFrom = getIntent().getStringExtra("from");          // 来源:问题的类型
@@ -73,8 +75,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mPaperType = getIntent().getStringExtra("paper_type");
         mNoteId = getIntent().getIntExtra("note_id", 0);
 
-        String type = getIntent().getStringExtra("itemType");      // item类型
-        String time = getIntent().getStringExtra("time");          // 时间
         playingViewState = NONE;
         isExitsPlayingMedia = false;
         // 所有fragment中用同一个录音器
@@ -89,14 +89,16 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mModel = new InterviewDetailModel(this, this);
         mRequest = new InterviewRequest(this, this);
 
-        String dataFrom = getIntent().getStringExtra("dataFrom");
+        mDataFrom = getIntent().getStringExtra("dataFrom");
+        mItemType = getIntent().getStringExtra("itemType"); // item类型
+        mTime = getIntent().getStringExtra("time"); // 时间
 
-        if("studyRecordInterview".equals(dataFrom)){       // 数据来源自记录页面的面试页面
-            mRequest.getStudyRecordInterviewPaperDetail(type, time);
-        }else if("recordCollect".equals(dataFrom)){        // 来源: 记录页面的收藏页面
+        if("studyRecordInterview".equals(mDataFrom)){       // 数据来源自记录页面的面试页面
+            mRequest.getStudyRecordInterviewPaperDetail(mItemType, mTime);
+        }else if("recordCollect".equals(mDataFrom)){        // 来源: 记录页面的收藏页面
             int note_id = getIntent().getIntExtra("note_id", 0);
             mRequest.getRecordInterviewCollectPaperDetail(note_id);
-        }else if("record_comment".equals(dataFrom)){             // 来自名师点评页
+        }else if("record_comment".equals(mDataFrom)){             // 来自名师点评页
             int record_id = getIntent().getIntExtra("record_id", 0);
             mRequest.getRecordInterviewTeacherRemark(record_id);
         }else{
@@ -110,7 +112,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     public void getData() {
-        mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId);
+        if("studyRecordInterview".equals(mDataFrom)){
+            mRequest.getStudyRecordInterviewPaperDetail(mItemType, mTime);
+        }else{
+            mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId);
+        }
     }
 
     @Override
@@ -127,7 +133,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
         // 购买状态
-        if (!mIsBuyAll) {
+        if (!mIsBuyAll && !"record_comment".equals(mDataFrom)) {
             MenuItemCompat.setShowAsAction(
                     menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
