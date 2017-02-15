@@ -151,6 +151,16 @@ public class InterviewPaperDetailResp {
         private int teacher_audio_duration;     // 点评时长
 
         private String question_type;       // 数据来源类型
+
+        private String reviewed_at;         // 时间戳
+        public String getReviewed_at() {
+            return reviewed_at;
+        }
+
+        public void setReviewed_at(String reviewed_at) {
+            this.reviewed_at = reviewed_at;
+        }
+
         public String getQuestion_type() {
             return question_type;
         }

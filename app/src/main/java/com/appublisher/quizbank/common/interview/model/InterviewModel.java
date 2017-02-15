@@ -15,13 +15,15 @@ import java.io.File;
 
 public class InterviewModel {
 
+    private String mTimeStamp;
+
     /**
      * 下载&解压&播放
      *
      * @param url     下载链接
      * @param localFile    文件名
      */
-    public static void downloadVoiceVideo(final Context context, String url, final String fileFolder, final String localFile, final int questionId , final ICommonCallback ICommonCallback) {
+    public void downloadVoiceVideo(final Context context, String url, final String fileFolder, final String localFile, final int questionId , final ICommonCallback ICommonCallback) {
         ProgressDialogManager.showProgressDialog(context);
         DownloadAsyncTask mDownloadAsyncTask = new DownloadAsyncTask(
                 url,
@@ -40,9 +42,10 @@ public class InterviewModel {
                                     // 重命名文件名
                                     File fileDir = new File(fileFolder);
                                     File[] files = fileDir.listFiles();
+                                    if(files == null || files.length <=0) return;
                                     for(File downloadFile:files) {
                                         if(downloadFile.exists() && downloadFile.isFile()){
-                                            String renameFilePath = fileFolder + questionId + ".amr";
+                                            String renameFilePath = fileFolder +"/" + mTimeStamp + ".amr";
                                             if (!downloadFile.getAbsolutePath().equals(renameFilePath)){
                                                 FileManager.renameFile(downloadFile.getAbsolutePath(), renameFilePath);
                                             }
@@ -88,4 +91,23 @@ public class InterviewModel {
         SharedPreferences sp = activity.getSharedPreferences("interview", Context.MODE_PRIVATE);
         return sp;
     }
+
+    /*
+    *   将时间戳变成一个数字
+    * */
+    public String changTimeStampToText(String timeStamp){
+        StringBuilder stringBuilder = new StringBuilder();
+        return stringBuilder.append(timeStamp.substring(0,4))
+                .append(timeStamp.substring(5,7)).append(timeStamp.substring(8,10))
+                .append(timeStamp.substring(11,13)).append(timeStamp.substring(14,16))
+                .append(timeStamp.substring(17,19)).toString();
+    }
+    /*
+    *  传入时间戳
+    * */
+    public void setTimeStamp(String timeStamp){
+        if(timeStamp == null || timeStamp.length() <= 0) return;
+        mTimeStamp = timeStamp;
+    }
+
 }
