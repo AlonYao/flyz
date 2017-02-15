@@ -172,6 +172,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     private ImageView mTeacherRemarkOpenIv;
     private ImageView mTeacherRemarkColseIv;
     private static final int PAY_SUCCESS = 200;
+    private String mTeacherRemarkAudioTimeStamp;
+    private File[] mTeacherRemarkAudioFiles;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -212,6 +214,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         }else{
             mQuestionType = initChildQuestionType();
         }
+        mTeacherRemarkAudioTimeStamp = mModel.changTimeStampToText(mQuestionBean.getReviewed_at());     // 转换名师点评老师提交录音的时间戳
 
         mRemarkState = mQuestionBean.getComment_status();
         mOffset = 0;
@@ -416,7 +419,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     private void initRecordFile() {
         String userId = LoginModel.getUserId();
         mRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/user_answer/";            // 自己录音的路径
-        mTeacherRemarkRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/teacher_audio/";     // 名师点评录音的路径
+        mTeacherRemarkRecordFolder = FileManager.getRootFilePath(mActivity) + "/interview/" + userId + "/teacher_audio/" + mQuestionBean.getId();     // 名师点评录音的路径
         FileManager.mkDir(mRecordFolder);
         FileManager.mkDir(mTeacherRemarkRecordFolder);
 
@@ -1084,7 +1087,14 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             isTeacherAnswerPause = true;
             mStatus = TEACHERREMARK;
             mTeacherRemarkPlayState.setText("收听点评");
-            dealDownLoadAudio(mTeacherRemarkRecordFolder, mQuestionBean.getTeacher_audio());        // url容易出现问题
+            // 判断名师点评目录中是否存在文件
+            if( !checkIsExistTeacherRemarkAudio()){       // 如果不存在去下载语音
+                mModel.setTimeStamp(mTeacherRemarkAudioTimeStamp);
+                dealDownLoadAudio(mTeacherRemarkRecordFolder, mQuestionBean.getTeacher_audio());
+            } else{
+                // 判断时间戳是否一致
+                isEqualsExistTeacherRemarkAudioTimeStamp();
+            }
         }
     }
 
@@ -1100,7 +1110,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             isQuestionAudioPause = true;
             mStatus = QUESTIONITEM;
             mQuestionAudioTv.setText("听语音");
-            dealDownLoadAudio(mQuestionFileFolder, mQuestionBean.getQuestion_audio());        // url容易出现问题
+            dealDownLoadAudio(mQuestionFileFolder, mQuestionBean.getQuestion_audio());
         }
     }
 
@@ -1116,7 +1126,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             isAnalysisAudioPause = true;
             mStatus = ANALYSISITEM;
             mAnalysisAudioTv.setText("听语音");
-            dealDownLoadAudio(mAnalysisFileFolder, mQuestionBean.getAnalysis_audio());       // url容易出现问题
+            dealDownLoadAudio(mAnalysisFileFolder, mQuestionBean.getAnalysis_audio());
         }
     }
 
@@ -1348,9 +1358,15 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     *  下载语音
     * */
     public void dealDownLoadAudio(String mFileFolder, String vedioUrl) {   //点击事件中传递参数
-        final String filePath = mFileFolder + mQuestionBean.getId() + ".amr";
-        String zipFilePath = mFileFolder + mQuestionBean.getId() + ".zip";
-
+        String filePath;
+        String zipFilePath;
+        if(mStatus.equals(TEACHERREMARK)){
+            filePath = mFileFolder + "/" + mTeacherRemarkAudioTimeStamp + ".amr";
+            zipFilePath = mFileFolder + "/" + mTeacherRemarkAudioTimeStamp + ".zip";
+        } else{
+            filePath = mFileFolder + mQuestionBean.getId() + ".amr";
+            zipFilePath = mFileFolder + mQuestionBean.getId() + ".zip";
+        }
         File file = new File(filePath);
         File zipFile = new File(zipFilePath);
         if (file.exists()) {                                   // 如果文件存在直接播放
@@ -1382,7 +1398,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         } else {
             localFilePath = filePath;
         }
-        InterviewModel.downloadVoiceVideo(mActivity, vedioUrl, mFileFolder, localFilePath, mQuestionBean.getId(), new ICommonCallback() {        // mFileFolder时解压后存文件的目录
+        mModel.downloadVoiceVideo(mActivity, vedioUrl, mFileFolder, localFilePath, mQuestionBean.getId(), new ICommonCallback() {        // mFileFolder时解压后存文件的目录
             @Override
             public void callback(boolean success) {
                 if (success) {
@@ -1391,6 +1407,44 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 }
             }
         });
+    }
+    /*
+    *   判断名师点评目录中是否存在文件
+    * */
+    private boolean checkIsExistTeacherRemarkAudio(){
+        String teacherRemarkRecordFolderfilePath = mTeacherRemarkRecordFolder ;
+        File fileDir = new File(teacherRemarkRecordFolderfilePath);
+        mTeacherRemarkAudioFiles = fileDir.listFiles();
+        if(mTeacherRemarkAudioFiles == null || mTeacherRemarkAudioFiles.length <= 0) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+    /*
+    *   判断已经存在的名师点评的语音时间戳是否一致
+    * */
+    private void isEqualsExistTeacherRemarkAudioTimeStamp(){
+        if(mTeacherRemarkAudioFiles == null || mTeacherRemarkAudioFiles.length <= 0) return ;
+
+        for(File downloadFile: mTeacherRemarkAudioFiles) {
+            if(downloadFile.exists() && downloadFile.isFile()){
+                String absolutePath = downloadFile.getAbsolutePath();
+                String substringTimeStamp = absolutePath.substring(absolutePath.length() - 18, absolutePath.length() - 4);
+                // 进行判断
+                if(mTeacherRemarkAudioTimeStamp.equals(substringTimeStamp)){
+                    // 直接播放
+                    String filePath = mTeacherRemarkRecordFolder + "/" + mTeacherRemarkAudioTimeStamp + ".amr";
+                    play(filePath);
+                } else{
+                    // 将原来的删除掉,再重新下载
+                    FileManager.deleteFiles(downloadFile.getAbsolutePath());
+                    // 重新下载
+                    mModel.setTimeStamp(mTeacherRemarkAudioTimeStamp);
+                    dealDownLoadAudio(mTeacherRemarkRecordFolder, mQuestionBean.getTeacher_audio());
+                }
+            }
+        }
     }
 
     /*
@@ -1635,7 +1689,6 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             }
         }
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -1644,14 +1697,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         mActivity.stopService(new Intent(mActivity, MediaPlayingService.class));          // 取消注册服务
 
         String filePath = mRecordFolder + mQuestionBean.getId() + ".amr";
-        String teacherRemarkPath = mTeacherRemarkRecordFolder + mQuestionBean.getId() + ".amr";
         File file = new File(filePath);
-        File teacherRemarkPathFile = new File(teacherRemarkPath);
         if (file.exists()) {
             FileManager.deleteFiles(filePath);
-        }
-        if (teacherRemarkPathFile.exists()) {
-            FileManager.deleteFiles(teacherRemarkPath);
         }
     }
 }
