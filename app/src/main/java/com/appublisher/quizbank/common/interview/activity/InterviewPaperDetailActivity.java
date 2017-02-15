@@ -169,7 +169,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         } else if("收藏".equals(item.getTitle())){
             if (mModel.getIsCollected(mCurrentPagerId)) {   // 判断当前viewpager的小题是否收藏
-                mModel.setCollected(mCurrentPagerId, false);
+                mModel.setCollected(mCurrentPagerId, false, mFrom);
                 ToastManager.showToast(this, "取消收藏");
 
                 // Umeng
@@ -177,9 +177,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 map.put("Action", "Cancel");
                 UmengManager.onEvent(this, "InterviewAnalysis", map);
             } else {
-                mModel.setCollected(mCurrentPagerId, true);
+                mModel.setCollected(mCurrentPagerId, true, mFrom);
                 ToastManager.showToast(this, "收藏成功");
-
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Collect");
@@ -187,6 +186,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
       }
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+    *   设置数据来源
+    * */
+    public void setQuestionType(String question_type){
+        mFrom = question_type;
     }
 
     /*
@@ -431,5 +437,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     @Override
     public void popupAppliedForRemarkReminderAlert() { }
+
+    @Override
+    public void checkIsFirstSubmit() {}
 
 }

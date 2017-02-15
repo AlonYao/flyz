@@ -2,11 +2,13 @@ package com.appublisher.quizbank.common.interview.model;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.appublisher.lib_basic.DownloadAsyncTask;
 import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ProgressDialogManager;
 import com.appublisher.lib_basic.ToastManager;
+import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.network.ICommonCallback;
 
 import java.io.File;
@@ -77,5 +79,13 @@ public class InterviewModel {
             DateTimes = seconds + "\"";
         }
         return DateTimes;
+    }
+
+    /*
+    *   获取面试页面中的本地文件
+    * */
+    public static SharedPreferences getInterviewSharedPreferences(InterviewPaperDetailActivity activity){
+        SharedPreferences sp = activity.getSharedPreferences("interview", Context.MODE_PRIVATE);
+        return sp;
     }
 }

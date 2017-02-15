@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
@@ -71,7 +70,6 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         if (QApiConstants.baseUrl.contains("dev")) {
             savePath = "/dev/yaoguo_interview/" + userId + "/" + String.valueOf(mQuestionbean.getId()) +".amr" ;
         }
-
         if (mProgressDialog == null) {
             mProgressDialog = YaoguoUploadManager.getProgressDialog(mActivity);
         }
@@ -161,7 +159,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 mActivity.finish();
                 if(checkBox.isChecked()){
                     // 记录状态
-                    SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+                    SharedPreferences shp = getInterviewSharedPreferences(mActivity);
                     SharedPreferences.Editor edit = shp.edit();
                     edit.putBoolean("isFirstCheckBox", false);
                     edit.apply();
@@ -174,7 +172,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 mAalertDialog.dismiss();
                 if(checkBox.isChecked()){
                     // 记录状态
-                    SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+                    SharedPreferences shp = getInterviewSharedPreferences(mActivity);
                     SharedPreferences.Editor edit = shp.edit();
                     edit.putBoolean("isFirstCheckBox", false);
                     edit.apply();
@@ -195,7 +193,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     /*
     *   设置menu的状态 :由fragment传入数据,由activity来判断
     * */
-    public void setCollected(int position, boolean isCollected) {
+    public void setCollected(int position, boolean isCollected, String question_type) {         // question_type 数据源来源
         if (mActivity == null) return;
         List<InterviewPaperDetailResp.QuestionsBean> list =  mActivity.mList;
         if(list == null || list.size()<= 0 || position > list.size() || position < 0) return;
@@ -211,7 +209,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         }
         mActivity.mList.set(position, mBean);        // 刷新list
         // 提交数据
-        mRequest.collectQuestion(InterviewParamBuilder.submitCollectStated(type,mBean.getId()));     // 向服务器提交收藏状态
+        mRequest.collectQuestion(InterviewParamBuilder.submitCollectStated(type,mBean.getId(),question_type));     // 向服务器提交收藏状态
 
         // 刷新menu
         if (mActivity instanceof InterviewPaperDetailActivity) {
@@ -490,11 +488,13 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     public void requestCompleted(JSONObject response, String apiName) {
         if (response == null || apiName == null) return;
 
-        if ("submit_record".equals(apiName)) {
+        if ("submit_record".equals(apiName)) {          // 提交录音
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp != null && resp.getResponse_code() == 1) {
                 mActivity.setCanBack(0);
                 mActivity.getData();
+                // 检验是否为第一次提交录音
+                mInterfaceViewCallBak.checkIsFirstSubmit();
             } else {
                 ToastManager.showToast(mActivity,"刷新失败");
             }

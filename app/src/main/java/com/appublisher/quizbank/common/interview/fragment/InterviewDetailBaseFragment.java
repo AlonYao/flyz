@@ -38,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
@@ -205,7 +206,13 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         mActivity.setCanBack(0);            // 默认设置返回键可以点击
         mFragmentView = inflater.inflate(setLayoutResouceId(), container, false); // 生成布局
         mQuestionBean = initChildData();
-        mQuestionType = initChildQuestionType();
+        if(mQuestionBean.getQuestion_type() != null){
+            mQuestionType = mQuestionBean.getQuestion_type();
+            mActivity.setQuestionType(mQuestionType);
+        }else{
+            mQuestionType = initChildQuestionType();
+        }
+
         mRemarkState = mQuestionBean.getComment_status();
         mOffset = 0;
         mQuestionAudioOffset = 0;
@@ -231,7 +238,6 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             getTeacherRemarkRemainder();          // 获取名师点评剩余的次数
             changeRecordView(5);
             checkTeacherRemarkState();      // 检查点评的状态
-            checkIsFirstSubmit();           // 检查是否第一次提交题
             if (mQuestionBean.getUser_audio_duration() >= UPPERLIMITRECORDTIME) {
                 mTvtimeHadSumbPlay.setText(mModel.formatDateTime(UPPERLIMITRECORDTIME));
             } else {
@@ -291,15 +297,16 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     /*
     *   检查是否第一次提交题
     * */
-    private void checkIsFirstSubmit() {
-        SharedPreferences sp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
-        boolean isFirstSubmit = sp.getBoolean("isFirstSubmit", true);
+    @Override
+    public void checkIsFirstSubmit() {
+        SharedPreferences sp = InterviewModel.getInterviewSharedPreferences(mActivity);
+        boolean isFirstSubmit = sp.getBoolean("isFirstSubmitAudio", true);
         if (isFirstSubmit) {
             // 弹出引导浮层
             popupGuideFloating();
-            SharedPreferences shp = mActivity.getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+            SharedPreferences shp = InterviewModel.getInterviewSharedPreferences(mActivity);
             SharedPreferences.Editor edit = shp.edit();
-            edit.putBoolean("isFirstSubmit", false);
+            edit.putBoolean("isFirstSubmitAudio", false);
             edit.apply();
         }
     }
@@ -670,7 +677,6 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     ToastManager.showToast(getActivity(), "正在录音,答题至少要一分钟哦");
             } else if (id == R.id.interview_recordsound_rl_rerecording) {      //点击重录
                 if (mActivity.mMediaRecorderManagerUtil != null) {
-//                    stopPlay();         // 停止播放语音
                     changePlayingMediaToPauseState();
                     String zero = "0\"";
                     mTvtimeRecording.setText(zero);
@@ -700,7 +706,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     mTvtimeNotSubm.setText("继续听");
                 } else {
                     isStop = true;
-                    mStatus = SUBMIT;               // 变成可提交状态
+                    mStatus = SUBMIT;
                     mTvtimeNotSubm.setText("听语音");
                     play(mUserAnswerFilePath);
                 }
@@ -709,8 +715,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 map.put("Action", "Playaudio");
                 UmengManager.onEvent(mActivity, "InterviewRecord", map);
             } else if (id == R.id.interview_recordsounding_rl_submit) {      // 点击提交按钮
-//                stopPlay();
                 changePlayingMediaToPauseState();
+                if(mUserAnswerFilePath == null || mUserAnswerFilePath.length() <=0
+                        || mQuestionBean == null || mQuestionType == null || mQuestionType.length() <= 0) {
+                    ToastManager.showToast(mActivity, " 提交失败,请稍后再试");
+                    return;
+                }
                 mModel.showSubmitAnswerProgressBar(mUserAnswerFilePath, mQuestionBean, FileManager.getVideoDuration(mUserAnswerFilePath), mQuestionType);
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
@@ -1213,14 +1223,12 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mQuestionAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getQuestion_audio_duration()));   // 题目行的进度条
                 // 中间图片的动画集合
                 mediaPlayingAnimation(true);
-
                 break;
             case ANALYSISITEM:              // 解析行语音
                 isPlaying = ANALYSISITEM;
                 mAnalysisAudioProgressbar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));   // 解析行的进度条
                 // 中间图片的动画集合
                 mediaPlayingAnimation(true);
-
                 break;
             default:
                 break;

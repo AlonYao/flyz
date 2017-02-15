@@ -150,6 +150,15 @@ public class InterviewPaperDetailResp {
         private String teacher_audio;       // 点评语音
         private int teacher_audio_duration;     // 点评时长
 
+        private String question_type;       // 数据来源类型
+        public String getQuestion_type() {
+            return question_type;
+        }
+
+        public void setQuestion_type(String question_type) {
+            this.question_type = question_type;
+        }
+
         public String getTeacher_name() {   return teacher_name; }
         public void setTeacher_name(String teacher_name) {
             this.teacher_name = teacher_name;

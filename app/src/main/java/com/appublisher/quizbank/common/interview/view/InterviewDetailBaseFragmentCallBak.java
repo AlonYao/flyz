@@ -9,4 +9,6 @@ public interface InterviewDetailBaseFragmentCallBak {
     // 申请点评后,进行弹窗
     void popupAppliedForRemarkReminderAlert();
 
+    // 检验是否第一次提交录音
+    void checkIsFirstSubmit();
 }

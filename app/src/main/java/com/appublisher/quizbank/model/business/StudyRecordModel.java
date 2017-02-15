@@ -217,6 +217,7 @@ public class StudyRecordModel {
             intent.putExtra("dataFrom", "studyRecordInterview");
             intent.putExtra("itemType", itemType);
             intent.putExtra("time", time);
+            intent.putExtra("from", mInterviewhistoryPaper.getType());
             mContext.startActivity(intent);
         }
     };
