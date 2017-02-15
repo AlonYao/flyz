@@ -84,42 +84,19 @@ public class MeasureSearchAdapter extends BaseAdapter {
                 if (text == null || text.length() == 0) continue;
 
                 formatText(text, viewHolder.mTvContent, true);
+                showSource(viewHolder, item.getSource());
+                return;
             }
         } else {
             formatText(getStringContainsKeywords(itemBean), viewHolder.mTvContent, false);
+            showSource(viewHolder, itemBean.getSource());
         }
     }
 
-//    private boolean show(MeasureSearchResp.SearchItemBean itemBean, ViewHolder viewHolder) {
-//        if (itemBean == null || viewHolder == null) return false;
-//
-//        boolean isContainsKeywords = true;
-//
-//        // 显示内容
-//        if (isContainsKeywords(itemBean.getQuestion())) {
-//            formatText(itemBean.getQuestion(), viewHolder.mTvContent);
-//        } else if (isContainsKeywords(itemBean.getOption_a())) {
-//            formatText(itemBean.getOption_a(), viewHolder.mTvContent);
-//        } else if (isContainsKeywords(itemBean.getOption_b())) {
-//            formatText(itemBean.getOption_b(), viewHolder.mTvContent);
-//        } else if (isContainsKeywords(itemBean.getOption_c())) {
-//            formatText(itemBean.getOption_c(), viewHolder.mTvContent);
-//        } else if (isContainsKeywords(itemBean.getOption_d())) {
-//            formatText(itemBean.getOption_d(), viewHolder.mTvContent);
-//        } else if (isContainsKeywords(itemBean.getMaterial())) {
-//            formatText(itemBean.getMaterial(), viewHolder.mTvContent);
-//        } else {
-//            isContainsKeywords = false;
-//        }
-//
-//        if (isContainsKeywords) {
-//            // 显示来源
-//            String source = "来源：" + itemBean.getSource();
-//            viewHolder.mTvSource.setText(source);
-//        }
-//
-//        return isContainsKeywords;
-//    }
+    private void showSource(ViewHolder viewHolder, String source) {
+        source = "来源：" + source;
+        viewHolder.mTvSource.setText(source);
+    }
 
     private String getStringContainsKeywords(MeasureSearchResp.SearchItemBean itemBean) {
         if (itemBean == null) return "";

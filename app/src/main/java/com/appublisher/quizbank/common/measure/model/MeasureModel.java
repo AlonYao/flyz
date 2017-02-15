@@ -8,7 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -812,7 +817,23 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setTextColor(context.getResources().getColor(R.color.common_text));
                 textView.setLineSpacing(0, 1.4f);
-                textView.setText(segment.text);
+
+                // 题号颜色处理
+                if (segment.text.toString().contains(YG_SEPARATOR)) {
+                    int index = segment.text.toString().indexOf(YG_SEPARATOR);
+                    String finalText = segment.text.toString().replaceFirst(YG_SEPARATOR, "");
+                    Spannable spannable = new SpannableString(finalText);
+                    spannable.setSpan(
+                            new ForegroundColorSpan(
+                                    ContextCompat.getColor(context, R.color.themecolor)),
+                            0,
+                            index,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    textView.setText(spannable, TextView.BufferType.SPANNABLE);
+                } else {
+                    textView.setText(segment.text);
+                }
+
                 flowLayout.addView(textView);
 
                 // text长按复制

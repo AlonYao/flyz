@@ -113,7 +113,7 @@ public class MeasureItemFragment extends MeasureBaseFragment implements
         // 处理题号
         String stem =
                 String.valueOf(mQuestion.getQuestion_order())
-                + "/" + String.valueOf(mQuestion.getQuestion_amount()) + "  ";
+                + "/" + String.valueOf(mQuestion.getQuestion_amount()) + YG_SEPARATOR + "  ";
         stem = stem + mQuestion.getQuestion();
         MeasureModel.addRichTextToContainer(getContext(), mStemContainer, stem, true);
         // 选项
