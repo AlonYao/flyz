@@ -79,4 +79,9 @@ public interface MeasureConstants {
     String OPTION_C = "C";
     String OPTION_D = "D";
 
+    /**
+     * 其他
+     */
+    String YG_SEPARATOR = "yg!@#";
+
 }

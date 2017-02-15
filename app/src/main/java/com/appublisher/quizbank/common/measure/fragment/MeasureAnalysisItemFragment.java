@@ -41,7 +41,6 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
     private TextView mTvOptionB;
     private TextView mTvOptionC;
     private TextView mTvOptionD;
-    private int mPosition;
 
     public static MeasureAnalysisItemFragment newInstance(String question,
                                                           String answer,
@@ -62,7 +61,6 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
                 getArguments().getString(ARGS_QUESTION), MeasureQuestionBean.class);
         mAnswer = GsonManager.getModel(
                 getArguments().getString(ARGS_ANSWER), MeasureAnswerBean.class);
-        mPosition = getArguments().getInt(ARGS_POSITION);
     }
 
     @Nullable
@@ -81,7 +79,8 @@ public class MeasureAnalysisItemFragment extends MeasureBaseFragment {
         // 处理题号
         String stem =
                 String.valueOf(mQuestion.getQuestion_order())
-                        + "/" + String.valueOf(mQuestion.getQuestion_amount()) + "  ";
+                        + "/" + String.valueOf(mQuestion.getQuestion_amount())
+                        + YG_SEPARATOR + "  ";
         stem = stem + mQuestion.getQuestion();
         MeasureModel.addRichTextToContainer(getContext(), mStemContainer, stem, true);
         // 选项
