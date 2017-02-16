@@ -72,8 +72,8 @@
 
                     <ImageView
                         android:id="@+id/interview_lookquestion_im"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:src="@drawable/interview_answer_lookover" />
 
                     <TextView
@@ -96,8 +96,8 @@
                     android:layout_centerVertical="true"
                     android:orientation="vertical">
                     <RelativeLayout
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         >
                         <com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber
                             android:id="@+id/question_audio_progressbar"
@@ -111,7 +111,7 @@
                             android:id="@+id/question_audio_listen_audio_iv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/interview_audio_playing_animation"
+                            android:src="@drawable/interview_listen_audio"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -171,8 +171,8 @@
 
                     <ImageView
                         android:id="@+id/analysis_im"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:src="@drawable/interview_answer_lookover" />
 
                     <TextView
@@ -195,8 +195,8 @@
                     android:layout_centerVertical="true"
                     android:orientation="vertical">
                     <RelativeLayout
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         >
                         <com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber
                             android:id="@+id/analysis_audio_progressbar"

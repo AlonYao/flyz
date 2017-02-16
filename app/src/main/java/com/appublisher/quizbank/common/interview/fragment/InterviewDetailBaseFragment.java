@@ -90,9 +90,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public static final String QUESTIONITEM = "questionItem";
     public static final String ANALYSISITEM = "analysisItem";
     public static final String NONE = "none";
-    private static final int UPPERLIMITRECORDTIME = 60;
-    private static final int LOWERLIMITRECORDTIME = 10;
-    private static final int SHOWREMINDERRECORDTIME = 30;
+    private static final int UPPERLIMITRECORDTIME = 360;
+    private static final int LOWERLIMITRECORDTIME = 60;
+    private static final int SHOWREMINDERRECORDTIME = 330;
     public View mUnRecordView;
     public View mRecordingView;
     public InterviewPaperDetailActivity mActivity;
@@ -1415,11 +1415,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         String teacherRemarkRecordFolderfilePath = mTeacherRemarkRecordFolder ;
         File fileDir = new File(teacherRemarkRecordFolderfilePath);
         mTeacherRemarkAudioFiles = fileDir.listFiles();
-        if(mTeacherRemarkAudioFiles == null || mTeacherRemarkAudioFiles.length <= 0) {
-            return false;
-        }else{
-            return true;
-        }
+        return mTeacherRemarkAudioFiles != null && mTeacherRemarkAudioFiles.length > 0;
     }
     /*
     *   判断已经存在的名师点评的语音时间戳是否一致
@@ -1500,7 +1496,6 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 skipToRemarkHelpActivity(); // 跳转到帮助页面
             }
         });
-
     }
 
     /*
@@ -1696,10 +1691,5 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         mActivity.unregisterReceiver(mAudioStreamFocusReceiver);  // 取消注册广播
         mActivity.stopService(new Intent(mActivity, MediaPlayingService.class));          // 取消注册服务
 
-        String filePath = mRecordFolder + mQuestionBean.getId() + ".amr";
-        File file = new File(filePath);
-        if (file.exists()) {
-            FileManager.deleteFiles(filePath);
-        }
     }
 }

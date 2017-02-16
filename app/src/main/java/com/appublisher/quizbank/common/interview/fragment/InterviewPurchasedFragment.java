@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -14,7 +13,6 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 
-import java.io.File;
 import java.util.HashMap;
 
 
@@ -253,18 +251,4 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         return mQuestionBean != null && mQuestionBean.getUser_audio().length() > 0;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        String filePath = mQuestionFileFolder + mQuestionBean.getId() + ".amr";
-        String analysisFilePath = mAnalysisFileFolder + mQuestionBean.getId() + ".amr";
-        File file = new File(filePath);
-        File analysisfile = new File(analysisFilePath);
-        if (file.exists() ) {                                   // 如果文件存在直接播放
-            FileManager.deleteFiles(filePath);
-        }
-        if (analysisfile.exists() ) {                                   // 如果文件存在直接播放
-            FileManager.deleteFiles(analysisFilePath);
-        }
-    }
 }
