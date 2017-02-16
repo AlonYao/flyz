@@ -44,10 +44,16 @@ public class QuizBankApp extends Application {
         // 初始化本地缓存
         Globals.sharedPreferences = getSharedPreferences("quizbank_store", 0);
 
-        // 初始化基本库配置文件
+        // 初始化基本库配置类
         LibBasicConfig.channel = ChannelManager.getChannel(this);
         LibBasicConfig.umAppKey = getString(R.string.umeng_appkey);
         LibBasicConfig.tdAppId = getString(R.string.talkingdata_appid);
+        LibBasicConfig.weixinAppId = getString(R.string.weixin_appid);
+        LibBasicConfig.weixinAppSecret = getString(R.string.weixin_secret);
+        LibBasicConfig.weiboAppId = getString(R.string.wb_appid);
+        LibBasicConfig.weiboAppSecret = getString(R.string.wb_appsecret);
+        LibBasicConfig.qqzoneAppId = getString(R.string.qq_appid);
+        LibBasicConfig.qqzoneAppKey = getString(R.string.qq_appkey);
 
         // 初始化基本库
         LibBasicManager.init(this);

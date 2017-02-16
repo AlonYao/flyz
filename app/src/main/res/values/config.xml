@@ -6,6 +6,10 @@
     <string name="weixin_appid">wx72dbf6cc832ae55c</string>
     <string name="weixin_secret">3718f0b50b3a35da1b88bd9c76aeb2d0</string>
 
+    <!-- 微博 -->
+    <string name="wb_appid">2857429377</string>
+    <string name="wb_appsecret">59e5488db91310fc76ffd0b27b6fadc3</string>
+
     <!-- 友盟 -->
     <string name="umeng_appkey">551bd7ddfd98c50c5500044f</string>
 
