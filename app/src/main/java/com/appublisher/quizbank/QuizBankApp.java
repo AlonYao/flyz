@@ -10,12 +10,10 @@ import android.support.multidex.MultiDex;
 import com.appublisher.lib_basic.ActiveAndroidManager;
 import com.appublisher.lib_basic.ChannelManager;
 import com.appublisher.lib_basic.LibBasicManager;
-import com.appublisher.lib_basic.Logger;
-import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.bean.LibBasicConfig;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
-import com.tendcloud.tenddata.TCAgent;
 
 /**
  * QuizBankApp
@@ -46,6 +44,11 @@ public class QuizBankApp extends Application {
         // 初始化本地缓存
         Globals.sharedPreferences = getSharedPreferences("quizbank_store", 0);
 
+        // 初始化基本库配置文件
+        LibBasicConfig.channel = ChannelManager.getChannel(this);
+        LibBasicConfig.umAppKey = getString(R.string.umeng_appkey);
+        LibBasicConfig.tdAppId = getString(R.string.talkingdata_appid);
+
         // 初始化基本库
         LibBasicManager.init(this);
 
@@ -54,7 +57,7 @@ public class QuizBankApp extends Application {
 
         // 已登录状态下进行数据库切换
         if (LoginModel.isLogin()) {
-            ActiveAndroidManager.setDatabase(com.appublisher.lib_login.model.business.LoginModel.getUserId(), this);
+            ActiveAndroidManager.setDatabase(LoginModel.getUserId(), this);
         } else {
             ActiveAndroidManager.setDatabase("guest", this);
         }
@@ -63,12 +66,6 @@ public class QuizBankApp extends Application {
         FileDownloader.init(this);
         FileDownloadUtils.setDefaultSaveRootPath(
                 Environment.getExternalStorageDirectory().toString());
-
-        // 获取channel
-        String channel = ChannelManager.getChannel(this);
-        Logger.e(channel);
-        UmengManager.setChannel(this, getString(R.string.umeng_appkey), channel);
-        TCAgent.init(this, getString(R.string.talkingdata_appid), channel);
 
         mInstance = this;
     }
