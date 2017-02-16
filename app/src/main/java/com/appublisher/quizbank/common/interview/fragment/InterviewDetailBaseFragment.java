@@ -760,9 +760,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 startActivityForResult(intent, PAY_SUCCESS);
             } else if (id == R.id.teacher_remark_open_iv) {
                 // 动画:从左向右
-                Animation translateAnimation = new TranslateAnimation(0, 500, 0, 0);
+                Animation translateAnimation = new TranslateAnimation(0, 360, 0, 0);
                 translateAnimation.setDuration(500);
                 mTeacherRemarkOpenIv.startAnimation(translateAnimation);
+//                translateAnimation.setFillAfter(true);
                 translateAnimation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -776,16 +777,13 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     public void onAnimationRepeat(Animation animation) {
                     }
                 });
-            } else if (id == R.id.teacher_remark_close_iv) {
+            }else if (id == R.id.teacher_remark_close_iv) {
                 // 动画:从右向左展开
                 mTeacherRemarkColseIv.setVisibility(View.GONE);
-                Animation translateAnimation =
-                        new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1.0f,
-                                Animation.RELATIVE_TO_SELF, 0.0f,
-                                Animation.RELATIVE_TO_SELF, 0.0f,
-                                Animation.RELATIVE_TO_SELF, 0.0f);
+                Animation translateAnimation = new TranslateAnimation(360, 0, 0, 0);
                 translateAnimation.setDuration(500);
                 mTeacherRemarkOpenIv.startAnimation(translateAnimation);
+                translateAnimation.setFillAfter(true);
                 translateAnimation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {

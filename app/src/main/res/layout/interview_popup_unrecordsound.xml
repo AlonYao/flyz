@@ -39,21 +39,19 @@
 
     <ImageView
         android:id="@+id/teacher_remark_open_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
-        android:paddingLeft="5dp"
-        android:paddingTop="20dp"
+        android:layout_marginTop="20dp"
         android:visibility="gone"
         android:src="@drawable/teacher_remark_open"
         />
     <ImageView
         android:id="@+id/teacher_remark_close_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="19dp"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
-        android:paddingLeft="5dp"
-        android:paddingTop="20dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/teacher_remark_close"
         />
 </RelativeLayout>
