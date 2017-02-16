@@ -332,7 +332,7 @@
         <service android:name=".common.interview.service.MediaPlayingService"/>
 
         <activity
-            android:name=".common.interview.activity.InterviewBuyTeacherCommentActivity"
+            android:name=".common.interview.activity.InterviewCommentProductActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_buy_teacher_comment" />
         <activity

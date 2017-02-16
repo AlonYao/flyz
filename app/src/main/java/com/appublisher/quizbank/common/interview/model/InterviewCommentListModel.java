@@ -53,10 +53,6 @@ public class InterviewCommentListModel {
     public void initStatusPop(final InterviewCommentListActivity activity) {
         View statusView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView gridView = (GridView) statusView.findViewById(R.id.gridview);
-        CommentFilterResp.StatusBean statusBean = new CommentFilterResp.StatusBean();
-        statusBean.setStatus_id(-1);
-        statusBean.setComment_status("全部");
-        mCommentFilterResp.getStatus().add(0, statusBean);
         InterviewCommentFilterStatusAdapter adapter = new InterviewCommentFilterStatusAdapter(activity, mCommentFilterResp.getStatus());
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,10 +108,6 @@ public class InterviewCommentListModel {
     public void initNotePop(final InterviewCommentListActivity activity) {
         View statusView = LayoutInflater.from(activity).inflate(R.layout.pop_filter, null);
         GridView gridView = (GridView) statusView.findViewById(R.id.gridview);
-        CommentFilterResp.NotesBean notesBean = new CommentFilterResp.NotesBean();
-        notesBean.setNote_id(-1);
-        notesBean.setNote_name("全部");
-        mCommentFilterResp.getNotes().add(0, notesBean);
         InterviewCommentFilterNoteAdapter adapter = new InterviewCommentFilterNoteAdapter(activity, mCommentFilterResp.getNotes());
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -177,6 +169,14 @@ public class InterviewCommentListModel {
         CommentFilterResp commentFilterResp = GsonManager.getModel(jsonObject, CommentFilterResp.class);
         if (commentFilterResp.getResponse_code() == 1) {
             mCommentFilterResp = commentFilterResp;
+            CommentFilterResp.NotesBean notesBean = new CommentFilterResp.NotesBean();
+            notesBean.setNote_id(-1);
+            notesBean.setNote_name("全部");
+            mCommentFilterResp.getNotes().add(0, notesBean);
+            CommentFilterResp.StatusBean statusBean = new CommentFilterResp.StatusBean();
+            statusBean.setStatus_id(-1);
+            statusBean.setComment_status("全部");
+            mCommentFilterResp.getStatus().add(0, statusBean);
         }
     }
 

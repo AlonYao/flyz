@@ -64,14 +64,16 @@ public class CommentProductsAdapter extends BaseAdapter {
             if (position == 0) {
                 viewHolder.firstBuyTv.setVisibility(View.INVISIBLE);
                 viewHolder.discountTv.setVisibility(View.INVISIBLE);
-                if (commentProductsResp.isFirst_buy())
+                if (commentProductsResp.isFirst_buy()) {
+                    viewHolder.firstBuyTv.setText("首次尝鲜价，原价" + commentProductM.getOrigin_price() + "元");
                     viewHolder.firstBuyTv.setVisibility(View.VISIBLE);
-            } else if (position == 1) {
-                viewHolder.discountTv.setText("9折");
-            } else if (position == 2) {
-                viewHolder.discountTv.setText("8折");
+                }
             }
 
+            viewHolder.discountTv.setText(commentProductM.getDiscount() + "折");
+            if ("10".equals(commentProductM.getDiscount())) {
+                viewHolder.discountTv.setVisibility(View.INVISIBLE);
+            }
             viewHolder.commentTimesTv.setText(commentProductM.getProduct_name());
             viewHolder.priceTv.setText(commentProductM.getPrice() + "元");
         }

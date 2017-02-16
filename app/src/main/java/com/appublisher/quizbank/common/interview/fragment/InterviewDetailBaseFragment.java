@@ -50,7 +50,7 @@ import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.interview.activity.InterviewBuyTeacherCommentActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewCommentProductActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewCommentGuideActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
@@ -755,7 +755,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 skipToRemarkHelpActivity();
             } else if (id == R.id.purchased_remark_tv) {      // 购买链接
                 // 直接跳转到购买页面
-                Intent intent = new Intent(getActivity(), InterviewBuyTeacherCommentActivity.class);
+                Intent intent = new Intent(getActivity(), InterviewCommentProductActivity.class);
                 startActivityForResult(intent, PAY_SUCCESS);
             } else if (id == R.id.teacher_remark_open_iv) {
                 // 动画:从左向右
@@ -1632,7 +1632,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             public void onClick(View view) {
                 mAalertDialog.dismiss();
                 // 购买
-                final Intent intent = new Intent(getActivity(), InterviewBuyTeacherCommentActivity.class);
+                final Intent intent = new Intent(getActivity(), InterviewCommentProductActivity.class);
                 startActivityForResult(intent, PAY_SUCCESS);
 
             }

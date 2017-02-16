@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class InterviewBuyTeacherCommentActivity extends BaseActivity implements RequestCallback {
+public class InterviewCommentProductActivity extends BaseActivity implements RequestCallback {
 
     private TextView mCommentCountTv;
     private ListView mListView;

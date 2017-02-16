@@ -84,7 +84,7 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if ("购买".equals(item.getTitle())) {
-            final Intent intent = new Intent(this, InterviewBuyTeacherCommentActivity.class);
+            final Intent intent = new Intent(this, InterviewCommentProductActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
