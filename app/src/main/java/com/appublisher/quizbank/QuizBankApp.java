@@ -8,10 +8,14 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 
 import com.appublisher.lib_basic.ActiveAndroidManager;
+import com.appublisher.lib_basic.ChannelManager;
 import com.appublisher.lib_basic.LibBasicManager;
+import com.appublisher.lib_basic.Logger;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
+import com.tendcloud.tenddata.TCAgent;
 
 /**
  * QuizBankApp
@@ -60,6 +64,11 @@ public class QuizBankApp extends Application {
         FileDownloadUtils.setDefaultSaveRootPath(
                 Environment.getExternalStorageDirectory().toString());
 
+        // 获取channel
+        String channel = ChannelManager.getChannel(this);
+        Logger.e(channel);
+        UmengManager.setChannel(this, getString(R.string.umeng_appkey), channel);
+        TCAgent.init(this, getString(R.string.talkingdata_appid), channel);
 
         mInstance = this;
     }

@@ -29,8 +29,6 @@ task clean(type: Delete) {
 }
 
 ext {
-    TD_APP_ID = '81FEB0A34608D63C43DED2D2C79412C4'
-    UMENG_APPKEY = '551bd7ddfd98c50c5500044f'
     GT_APPID = 'ochSakabi27Qk0igiEO7m5'
     GT_APPKEY = 'BuLLg37oQM7KVj9O0dFEJ8'
     GT_APPSECRET = 'tmhnUpHbgm9E0C3XEgbs45'
