@@ -39,7 +39,6 @@ import com.appublisher.quizbank.network.QRequest;
 import com.appublisher.quizbank.utils.AlertManager;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
@@ -339,7 +338,7 @@ public class LegacyMeasureAnalysisActivity extends BaseActivity implements Reque
         super.onActivityResult(requestCode, resultCode, data);
 
         /**使用SSO授权必须添加如下代码 */
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        UmengManager.onActivityResult(this, requestCode, resultCode, data);
         // 答题卡回调
         if (resultCode == ActivitySkipConstants.ANSWER_SHEET_SKIP && data != null) {
             int position = data.getIntExtra("position", 0);

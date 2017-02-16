@@ -19,7 +19,6 @@ import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.business.EvaluationModel;
 import com.appublisher.quizbank.network.QRequest;
 import com.db.chart.view.LineChartView;
-import com.umeng.socialize.UMShareAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -90,9 +89,8 @@ public class EvaluationActivity extends BaseActivity implements RequestCallback 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         //友盟分享回调(必写)
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        UmengManager.onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

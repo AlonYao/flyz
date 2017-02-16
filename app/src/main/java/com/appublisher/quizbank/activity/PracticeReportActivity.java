@@ -30,7 +30,6 @@ import com.appublisher.quizbank.model.netdata.measure.AnswerM;
 import com.appublisher.quizbank.model.netdata.measure.NoteM;
 import com.appublisher.quizbank.model.netdata.measure.QuestionM;
 import com.appublisher.quizbank.network.QRequest;
-import com.umeng.socialize.UMShareAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -293,7 +292,7 @@ public class PracticeReportActivity extends BaseActivity implements RequestCallb
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         /**使用SSO授权必须添加如下代码 */
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        UmengManager.onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override
