@@ -91,7 +91,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public static final String ANALYSISITEM = "analysisItem";
     public static final String NONE = "none";
     private static final int UPPERLIMITRECORDTIME = 360;
-    private static final int LOWERLIMITRECORDTIME = 60;
+    private static final int LOWERLIMITRECORDTIME = 15;
     private static final int SHOWREMINDERRECORDTIME = 330;
     public View mUnRecordView;
     public View mRecordingView;

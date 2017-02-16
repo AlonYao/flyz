@@ -330,7 +330,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             fragment.mOffset = 0;
             fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
             String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
-            fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+            if(Integer.parseInt(duration)>= 360){
+                fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
+            }else{
+                fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+            }
             fragment.mTvtimeNotSubm.setText("听语音");
         }
         if( !fragment.isUserHadSubmitAnswerPause){
@@ -405,7 +409,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
                 fragment.mOffset = 0;
                 String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
-                fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+                if(Integer.parseInt(duration)>= 360){
+                    fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
+                }else{
+                    fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+                }
                 break;
             case HADSUBMIT:
                 fragment.mUserAnswerProgressBar.setProgress(100);
