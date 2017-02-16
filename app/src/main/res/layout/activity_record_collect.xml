@@ -19,6 +19,12 @@
         android:paddingBottom="15dp"
         android:paddingLeft="30dp"
         android:scrollbars="none">
-
     </ListView>
+
+    <include
+        layout="@layout/quizbank_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        />
 </LinearLayout>

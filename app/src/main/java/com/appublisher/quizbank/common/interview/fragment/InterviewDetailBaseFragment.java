@@ -339,6 +339,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         mUnrecordsound_ll = (LinearLayout) mFragmentView.findViewById(R.id.interview_unrecordsound_ll);
         mTeacherRemarkOpenIv = (ImageView) mFragmentView.findViewById(R.id.teacher_remark_open_iv);
         mTeacherRemarkColseIv = (ImageView) mFragmentView.findViewById(R.id.teacher_remark_close_iv);
+
         mRecordsounding_cancle = (RelativeLayout) mFragmentView.findViewById(R.id.interview_recordsounding_cancle);
         mRecordsounding_confirm = (RelativeLayout) mFragmentView.findViewById(R.id.interview_recordsounding_rl_confirm);
         mRecordsoundingll = (LinearLayout) mFragmentView.findViewById(R.id.interview_recordsounding_ll);
@@ -1054,7 +1055,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 }
                 break;
             case COMMENT:
-                ToastManager.showToast(mActivity, "点评中");
+                ToastManager.showToastCenter(mActivity, "老师正在点评中，请耐心等待哦！");
                 break;
             case HADREMARKED:
                 dealTeacherRemarkAudioState();   // 已经点评:播放名师点评
