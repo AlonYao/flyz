@@ -142,8 +142,6 @@ public class MeasureSearchAdapter extends BaseAdapter {
     private void formatText(String text, TextView textView, boolean isMaterial) {
         if (text == null) return;
 
-        if (isMaterial) text = "(材料) " + text;
-
         // 去掉图片
         int start = text.indexOf("<img=");
         int end;
@@ -163,9 +161,11 @@ public class MeasureSearchAdapter extends BaseAdapter {
         start = text.indexOf(keywords, 0);
         if (start > 20) {
             int dex = start - 20;
-            String sub = text.substring(0, dex);
-            text = text.replaceFirst(sub, "...");
+            text = text.substring(dex, text.length());
+            text = "..." + text;
         }
+
+        if (isMaterial) text = "(材料) " + text;
 
         SpannableString ss = new SpannableString(text);
         start = text.indexOf(keywords, 0);
@@ -188,7 +188,7 @@ public class MeasureSearchAdapter extends BaseAdapter {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        textView.setText(ss);
+        textView.setText(ss, TextView.BufferType.SPANNABLE);
     }
 
     private static class ViewHolder {
