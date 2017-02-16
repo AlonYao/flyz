@@ -467,12 +467,12 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     }
 
     public void showXListview() {
-        mIvNull.setVisibility(View.INVISIBLE);
+        mIvNull.setVisibility(View.GONE);
         mRecordDataView.setVisibility(View.VISIBLE);
     }
 
     public void showIvNull() {
         mIvNull.setVisibility(View.VISIBLE);
-        mRecordDataView.setVisibility(View.INVISIBLE);
+        mRecordDataView.setVisibility(View.GONE);
     }
 }

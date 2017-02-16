@@ -9,6 +9,24 @@ public class CommentProductM {
     private String product_name;
     private double price;
     private String product_type;
+    private double origin_price;
+    private String discount;
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public double getOrigin_price() {
+        return origin_price;
+    }
+
+    public void setOrigin_price(double origin_price) {
+        this.origin_price = origin_price;
+    }
 
     public String getProduct_id() {
         return product_id;

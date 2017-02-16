@@ -26,7 +26,10 @@
             android:text="首次尝鲜价，原价9元"
             android:textColor="@color/login_red"
             android:textSize="15sp"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:gravity="center"
+            android:layout_alignBottom="@+id/comment_times"
+            android:layout_alignTop="@+id/comment_times" />
 
         <TextView
             android:id="@+id/discount"
@@ -40,6 +43,7 @@
             android:paddingRight="10dp"
             android:paddingTop="3dp"
             android:text="9折"
+            android:visibility="visible"
             android:textColor="@color/white"
             android:textSize="13sp" />
 
