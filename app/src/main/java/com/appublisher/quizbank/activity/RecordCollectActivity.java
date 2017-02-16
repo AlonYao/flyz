@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
-import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -31,6 +30,7 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
     private List<InterviewCollectResp.InterviewM> mList;
     private InterviewCollectAdapter mAdapter;
     private Context context;
+    private ImageView mNullView;
 
 
     @Override
@@ -54,6 +54,7 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
 
     private void initView() {
         mListview = (ListView) findViewById(R.id.record_collect_lv);
+        mNullView = (ImageView) findViewById(R.id.quizbank_null);
     }
     private void initListener() {
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,7 +63,6 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
                 if(mList == null || mList.size() == 0) return;
                 InterviewCollectResp.InterviewM interviewM = mList.get(position);
                 if(interviewM == null){
-                    Logger.e("interviewM==== null");
                     return;
                 }else{
                     int note_id = interviewM.getNote_id();
@@ -74,13 +74,13 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
             }
         });
     }
+
     @Override
     public void requestCompleted(JSONObject response, String apiName) {
         hideLoading();
         if (response == null || apiName == null) return;
 
         if ("get_note_list".equals(apiName)) {
-            //Logger.e(response.toString());
             InterviewCollectResp interviewCollectResp = GsonManager.getModel(response, InterviewCollectResp.class); // 将数据封装成bean对象
             if (interviewCollectResp != null && interviewCollectResp.getResponse_code() == 1) {
 
@@ -88,13 +88,17 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
                 mList = interviewCollectResp.getQuestions();
 
                 if (mList == null || mList.size() == 0) {
-                    ToastManager.showToast(this, "没有面试题目");
+                    mNullView.setVisibility(View.VISIBLE);
+                    mListview.setVisibility(View.GONE);
                 } else {
+                    mNullView.setVisibility(View.GONE);
+                    mListview.setVisibility(View.VISIBLE);
                     mAdapter = new InterviewCollectAdapter(this, mList);
-                     mListview.setAdapter(mAdapter);
+                    mListview.setAdapter(mAdapter);
                 }
             } else if (interviewCollectResp != null && interviewCollectResp.getResponse_code() == 1001) {
-                ToastManager.showToast(this, "没有面试题目");
+                mNullView.setVisibility(View.VISIBLE);
+                mListview.setVisibility(View.GONE);
             }
         }
     }

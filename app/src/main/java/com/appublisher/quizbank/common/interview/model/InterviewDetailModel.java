@@ -119,6 +119,10 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+                                // 判断此时是否有播放的题目
+                                if(mActivity.mMediaRecorderManagerUtil != null){
+                                    mActivity.mMediaRecorderManagerUtil.stopPlay();
+                                }
                                 // 返回上一级
                                 mActivity.finish();
                             }
@@ -496,14 +500,9 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 // 检验是否为第一次提交录音
                 mInterfaceViewCallBak.checkIsFirstSubmit();
             } else {
-                ToastManager.showToast(mActivity,"刷新失败");
+                ToastManager.showToast(mActivity,"提交失败");
             }
             mActivity.hideLoading();
-        } else if("update_collected_status".equals(apiName)){    //  收藏后的回调
-            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
-            if (resp == null || resp.getResponse_code() != 1) {
-                ToastManager.showToast(mActivity,"刷新失败");
-            }
         } else if("get_user_service_status".equals(apiName)){       // 获取名师点评的次数
             InterviewTeacherRemarkNumResp resp = GsonManager.getModel(response, InterviewTeacherRemarkNumResp.class);
             if (resp != null && resp.getResponse_code() == 1) {
@@ -514,21 +513,16 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 }
             } else {
                 mInterfaceViewCallBak.refreshTeacherRemarkRemainder("0");
-                ToastManager.showToast(mActivity,"刷新失败");
+                ToastManager.showToast(mActivity,"获取失败");
             }
         } else if("update_comment_status".equals(apiName)){     // 申请名师点评
             CommonResp resp = GsonManager.getModel(response, CommonResp.class);
             if (resp == null || resp.getResponse_code() != 1) {
-                ToastManager.showToast(mActivity,"刷新失败");
+                ToastManager.showToast(mActivity,"申请失败");
             }else {
                 // 刷新申请的次数
                 mActivity.getData();
                 mInterfaceViewCallBak.popupAppliedForRemarkReminderAlert();
-            }
-        } else if("updateCommentStatusToListen".equals(apiName)){     // 修改已经听过名师点评
-            CommonResp resp = GsonManager.getModel(response, CommonResp.class);
-            if (resp == null || resp.getResponse_code() != 1) {
-                ToastManager.showToast(mActivity,"刷新失败");
             }
         }
     }

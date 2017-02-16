@@ -248,14 +248,14 @@ public class SplashActivity extends Activity implements RequestCallback {
                     public void onClick(View v) {
                         String targetType = imageBean.getTarget_type();
                         String target = imageBean.getTarget();
-                        if (target == null) target = "";
+                        if (target == null || target.length() == 0) return;
 
                         if ("url".equals(targetType)) {
                             // 外部链接
                             toMainActivity();
                             Intent intent = new Intent(SplashActivity.this, CourseWebViewActivity.class);
-                            intent.putExtra("url", LoginParamBuilder.finalUrl(imageBean.getTarget()));
-                            if (imageBean.getTarget() != null && imageBean.getTarget().contains("course_id"))
+                            intent.putExtra("url", LoginParamBuilder.finalUrl(target));
+                            if (target.contains("course_id"))
                                 intent.putExtra("from", "course");
                             startActivity(intent);
 
