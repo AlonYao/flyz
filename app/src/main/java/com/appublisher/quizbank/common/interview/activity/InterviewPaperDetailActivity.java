@@ -7,6 +7,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.FileManager;
 import com.appublisher.lib_basic.ToastManager;
@@ -24,8 +25,10 @@ import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmen
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
 import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
 import com.appublisher.quizbank.common.utils.MediaRecorderManager;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,6 +66,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private String mDataFrom;
     private String mItemType;
     private String mTime;
+    private int mUnSubmitRecordAudioNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         playingViewState = NONE;
         isExitsPlayingMedia = false;
+        mUnSubmitRecordAudioNum = 0;
+
         // 所有fragment中用同一个录音器
         mMediaRecorderManager = new MediaRecorderManager(getApplicationContext());
         mMediaRecorderManagerUtil = new MediaRecordManagerUtil();
@@ -152,7 +158,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (mWhatView == RECORDING) {
                 ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if (mWhatView == RECORDEDUNSBMIT) {
+            } else if (mWhatView == RECORDEDUNSBMIT || mUnSubmitRecordAudioNum > 0 ) {
                 InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
                 return true;
             }
@@ -205,7 +211,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mWhatView == RECORDING) {
             ToastManager.showToast(this, "请专心录音哦");
             return;
-        } else if (mWhatView == RECORDEDUNSBMIT) {
+        } else if (mWhatView == RECORDEDUNSBMIT || mUnSubmitRecordAudioNum >0) {
             InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
             return;
         }
@@ -381,7 +387,16 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mViewPager.setScroll(true);
         mViewPager.setCurrentItem(mCurrentPagerId);
     }
-
+    /*
+    *   已经录过音但没有提交
+    * */
+    public void setIsHadUnSubmitRecordedAudio(boolean isHadUnSubmitRecordedAudio){
+        if(isHadUnSubmitRecordedAudio){
+            mUnSubmitRecordAudioNum = mUnSubmitRecordAudioNum + 1;
+        }else {
+            mUnSubmitRecordAudioNum = mUnSubmitRecordAudioNum - 1;
+        }
+    }
     /*
     *   由fragment传入正在播放的播放器
     * */

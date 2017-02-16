@@ -884,7 +884,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         // 先检查确认文件是否已经存在
         if (checkIsRecordFileExist()) {
             FileManager.deleteFiles(mUserAnswerFilePath); // 删除掉
+            mActivity.setIsHadUnSubmitRecordedAudio(false); // 文件已经存在,数量减一
         }
+        // 通知activity已经录过音,且文件被保留
+        mActivity.setIsHadUnSubmitRecordedAudio(true);  // 文件数量加一
         // 修改名字:将临时文件的名字变成可提交的文件名字
         FileManager.renameFile(mTemporaryFilePath, mUserAnswerFilePath);
     }
