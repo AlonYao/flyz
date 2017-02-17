@@ -68,6 +68,7 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
                     int note_id = interviewM.getNote_id();
                     Intent intent = new Intent(context, InterviewPaperDetailActivity.class);
                     intent.putExtra("dataFrom","recordCollect");
+                    intent.putExtra("from","collect");
                     intent.putExtra("note_id",note_id);
                     startActivity(intent);
                 }

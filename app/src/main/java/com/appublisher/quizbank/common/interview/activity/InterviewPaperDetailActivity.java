@@ -181,7 +181,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         } else if("收藏".equals(item.getTitle())){
             if (mModel.getIsCollected(mCurrentPagerId)) {   // 判断当前viewpager的小题是否收藏
                 if (mFrom==null) return true;
-                mModel.setCollected(mCurrentPagerId, false, mFrom);
+                mModel.setCollected(mCurrentPagerId, false);
                 ToastManager.showToast(this, "取消收藏");
 
                 // Umeng
@@ -190,7 +190,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 UmengManager.onEvent(this, "InterviewAnalysis", map);
             } else {
                 if (mFrom==null) return true;
-                mModel.setCollected(mCurrentPagerId, true, mFrom);
+                mModel.setCollected(mCurrentPagerId, true);
                 ToastManager.showToast(this, "收藏成功");
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
@@ -199,13 +199,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
       }
         return super.onOptionsItemSelected(item);
-    }
-
-    /*
-    *   设置数据来源
-    * */
-    public void setQuestionType(String question_type){
-        mFrom = question_type;
     }
 
     /*

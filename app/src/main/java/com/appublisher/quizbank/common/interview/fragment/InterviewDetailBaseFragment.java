@@ -208,12 +208,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         mActivity.setCanBack(0);            // 默认设置返回键可以点击
         mFragmentView = inflater.inflate(setLayoutResouceId(), container, false); // 生成布局
         mQuestionBean = initChildData();
-        if(mQuestionBean.getQuestion_type() != null){
-            mQuestionType = mQuestionBean.getQuestion_type();
-            mActivity.setQuestionType(mQuestionType);
-        }else{
-            mQuestionType = initChildQuestionType();
-        }
+
+        mQuestionType = initChildQuestionType();
         mTeacherRemarkAudioTimeStamp = mModel.changTimeStampToText(mQuestionBean.getReviewed_at());     // 转换名师点评老师提交录音的时间戳
 
         mRemarkState = mQuestionBean.getComment_status();
@@ -872,7 +868,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     * */
     private void skipToRemarkHelpActivity() {
         Intent intent = new Intent(mActivity, InterviewCommentGuideActivity.class);
-        startActivity(intent);
+        mActivity.startActivity(intent);
     }
 
     /*
@@ -1475,9 +1471,9 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         int teacherRemarkProgressBarHeight = mTeacherRemarkProgressBar.getMeasuredHeight();     // 测量的是它的父控件的大小
 
         lp.x = (int) (metrics.widthPixels * 0.04);
-        lp.y = teacherRemarkProgressBarHeight + 10;           // y轴偏移量
-        lp.width = (int) (metrics.widthPixels * 0.75);
-        lp.height = (int) (metrics.heightPixels * 0.2);
+        lp.y = teacherRemarkProgressBarHeight + 15;           // y轴偏移量
+        lp.width = (int) (metrics.widthPixels * 0.6);
+        lp.height = (int) (metrics.heightPixels * 0.16);
         lp.alpha = 0.8f;
 
         mWindow.setAttributes(lp);
