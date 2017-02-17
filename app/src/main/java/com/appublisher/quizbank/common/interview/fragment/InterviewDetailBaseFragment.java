@@ -50,8 +50,8 @@ import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
 import com.appublisher.lib_basic.volley.Request;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.common.interview.activity.InterviewCommentProductActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewCommentGuideActivity;
+import com.appublisher.quizbank.common.interview.activity.InterviewCommentProductActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewMaterialDetailActivity;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
@@ -91,7 +91,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public static final String ANALYSISITEM = "analysisItem";
     public static final String NONE = "none";
     private static final int UPPERLIMITRECORDTIME = 360;
-    private static final int LOWERLIMITRECORDTIME = 15;
+    private static final int LOWERLIMITRECORDTIME = 5;
     private static final int SHOWREMINDERRECORDTIME = 330;
     public View mUnRecordView;
     public View mRecordingView;
@@ -1693,5 +1693,11 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         mActivity.unregisterReceiver(mAudioStreamFocusReceiver);  // 取消注册广播
         mActivity.stopService(new Intent(mActivity, MediaPlayingService.class));          // 取消注册服务
 
+        if(mQuestionBean.getUser_audio() == null || mQuestionBean.getUser_audio_duration() <= 0){           //如果是未提交题的页面,将缓存文件删除掉
+            if(checkIsRecordFileExist()){
+                if(mUserAnswerFilePath == null || mUserAnswerFilePath.length() <=0) return;
+                FileManager.deleteFiles(mUserAnswerFilePath); // 删除掉
+            }
+        }
     }
 }

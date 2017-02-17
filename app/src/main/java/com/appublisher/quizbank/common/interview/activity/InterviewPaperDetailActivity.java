@@ -37,6 +37,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private static final int UNRECORD = 0;
     private static final int RECORDING = 1;
     private static final int RECORDEDUNSBMIT = 2;
+    private static final int RECORDEDHADSBMIT = 3;
     private static final int HADREMARKED = 4;     // 已经点评
     private static final String SUBMIT = "submit";              //可提交
     private static final String HADSUBMIT = "hadSubmit";      // 已提交
@@ -118,6 +119,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     public void getData() {
+        mUnSubmitRecordAudioNum = 0;
+        mWhatView = RECORDEDHADSBMIT;
+
         if("studyRecordInterview".equals(mDataFrom)){
             mRequest.getStudyRecordInterviewPaperDetail(mItemType, mTime);
         } else if("recordCollect".equals(mDataFrom)){
@@ -168,9 +172,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 return true;
             }
         } else if ("开启完整版".equals(item.getTitle())) {
-            if (mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT) {
+            if (mWhatView == RECORDING ) {
+                ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if (mWhatView == UNRECORD) {
+            } else if ( mWhatView == RECORDEDUNSBMIT || mWhatView == UNRECORD) {
                 mModel.showOpenFullDialog();
             }
         } else if("收藏".equals(item.getTitle())){
