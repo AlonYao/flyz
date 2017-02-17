@@ -52,18 +52,6 @@
         <!-- 友盟 -->
         <activity android:name="com.umeng.fb.ConversationActivity" />
 
-        <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="${APP_CHANNEL}" />-->
-        <!--<meta-data-->
-            <!--android:name="TD_CHANNEL_ID"-->
-            <!--android:value="${APP_CHANNEL}" />-->
-
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="551bd7ddfd98c50c5500044f" >
-        </meta-data>
-
         <!-- 数据库 -->
         <meta-data
             android:name="AA_MODELS"
