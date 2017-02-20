@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
+import com.appublisher.lib_basic.customui.MultiListView;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MockListAdapter;
@@ -22,7 +22,7 @@ import java.util.List;
 public class MockListActivity extends BaseActivity {
 
     private MockListAdapter adapter;
-    private ListView listView;
+    private MultiListView listView;
     private TextView explainTv;
     private MockPreResp mockPreResp;
 
@@ -39,7 +39,7 @@ public class MockListActivity extends BaseActivity {
 
         adapter = new MockListAdapter(this, mockPreResp.getMock_list());
         explainTv = (TextView) findViewById(R.id.explain_text);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (MultiListView) findViewById(R.id.listView);
 
         setValue();
     }

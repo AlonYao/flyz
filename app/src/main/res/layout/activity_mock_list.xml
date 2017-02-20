@@ -10,29 +10,36 @@
 
     <include layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/explain_text"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10px"
-        android:background="@color/white"
-        android:paddingBottom="20dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="20dp"
-        android:textColor="@color/mock_list_text"
-        android:textSize="18sp" />
-
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10px"
-        android:background="@color/white"
-        android:divider="@color/common_bg"
-        android:dividerHeight="10px"
-        android:headerDividersEnabled="true">
-
-    </ListView>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/explain_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:background="@color/white"
+                android:paddingBottom="20dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="20dp"
+                android:textColor="@color/mock_list_text"
+                android:textSize="18sp" />
+            <com.appublisher.lib_basic.customui.MultiListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:background="@color/white"
+                android:divider="@color/common_bg"
+                android:dividerHeight="10px"
+                android:headerDividersEnabled="true">
+            </com.appublisher.lib_basic.customui.MultiListView>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
