@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.quizbank.R;
@@ -26,6 +27,7 @@ import com.appublisher.quizbank.common.measure.model.MeasureSearchModel;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
 import com.appublisher.quizbank.common.measure.view.IMeasureSearchView;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MeasureSearchActivity extends BaseActivity implements
@@ -188,6 +190,11 @@ public class MeasureSearchActivity extends BaseActivity implements
                         INTENT_SEARCH_MATERIAL_QUESTION_INDEX,
                         mAdapter.getMaterialQuestionIndex());
                 startActivity(intent);
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Question");
+                UmengManager.onEvent(MeasureSearchActivity.this, "Searchlist", map);
             }
         });
     }

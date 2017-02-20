@@ -3,7 +3,6 @@ package com.appublisher.quizbank.common.measure.model;
 import android.content.Context;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
@@ -73,9 +72,6 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
             }
             mList = resp.getList();
             mView.showContent(mList);
-
-            // Umeng
-            UmengManager.onEvent(mContext, "Searchlist");
         } else {
             if (resp.getList() == null || resp.getList().size() == 0) {
                 mView.showNoMoreToast();
