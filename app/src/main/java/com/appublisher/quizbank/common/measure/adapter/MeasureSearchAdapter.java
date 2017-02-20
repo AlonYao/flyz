@@ -26,6 +26,7 @@ public class MeasureSearchAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<MeasureSearchResp.SearchItemBean> mList;
+    private int mMaterialQuestionIndex;
 
     public MeasureSearchAdapter(Context context, List<MeasureSearchResp.SearchItemBean> list) {
         mContext = context;
@@ -78,13 +79,17 @@ public class MeasureSearchAdapter extends BaseAdapter {
             List<MeasureSearchResp.SearchItemBean> items = itemBean.getQuestions();
             if (items == null) return;
 
-            for (MeasureSearchResp.SearchItemBean item : items) {
+            int size = items.size();
+            for (int i = 0; i < size; i++) {
+                MeasureSearchResp.SearchItemBean item = items.get(i);
                 if (item == null) continue;
                 String text = getStringContainsKeywords(item);
                 if (text == null || text.length() == 0) continue;
 
                 formatText(text, viewHolder.mTvContent, true);
                 showSource(viewHolder, item.getSource());
+
+                setMaterialQuestionIndex(i);
                 return;
             }
         } else {
@@ -210,4 +215,11 @@ public class MeasureSearchAdapter extends BaseAdapter {
         TextView mTvSource;
     }
 
+    public int getMaterialQuestionIndex() {
+        return mMaterialQuestionIndex;
+    }
+
+    private void setMaterialQuestionIndex(int materialQuestionIndex) {
+        this.mMaterialQuestionIndex = materialQuestionIndex;
+    }
 }
