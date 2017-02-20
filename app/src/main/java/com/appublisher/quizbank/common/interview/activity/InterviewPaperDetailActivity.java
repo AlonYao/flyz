@@ -185,9 +185,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "Cancel");
+                map.put("Action", "CancelCollect");
                 if (isDone()){
                     UmengManager.onEvent(this, "InterviewAnalysis", map);
+                }else{
+                    UmengManager.onEvent(this, "InterviewQuestion", map);
+                }
+                // 录音状态:
+                if(mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT){
+                    UmengManager.onEvent(this, "InterviewRecord", map);
                 }
             } else {
                 mModel.setCollected(mCurrentPagerId, true);
