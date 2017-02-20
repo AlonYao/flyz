@@ -187,7 +187,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Cancel");
-                UmengManager.onEvent(this, "InterviewAnalysis", map);
+                if (isDone()){
+                    UmengManager.onEvent(this, "InterviewAnalysis", map);
+                }
             } else {
                 if (mFrom==null) return true;
                 mModel.setCollected(mCurrentPagerId, true);
@@ -195,7 +197,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Collect");
-                UmengManager.onEvent(this, "InterviewAnalysis", map);
+                if (isDone()){
+                    UmengManager.onEvent(this, "InterviewAnalysis", map);
+                }else{
+                    UmengManager.onEvent(this, "InterviewQuestion", map);
+                }
+                // 录音状态:
+                if(mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT){
+                    UmengManager.onEvent(this, "InterviewRecord", map);
+                }
             }
       }
         return super.onOptionsItemSelected(item);
@@ -454,6 +464,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     public void setPlayingChildViewId(int playingChildViewId){
         mPlayingChildViewId = playingChildViewId;
+    }
+
+    private boolean isDone(){
+        if (mAdaper.mFragmentList.size() <= 0) return false;
+        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mCurrentPagerId);
+        return fragment.mQuestionBean != null && fragment.mQuestionBean.getUser_audio() != null
+                    && fragment.mQuestionBean.getUser_audio().length() >0;
     }
     @Override
     public void refreshTeacherRemarkRemainder(String num) {}
