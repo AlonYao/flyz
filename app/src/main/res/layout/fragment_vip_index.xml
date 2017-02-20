@@ -64,13 +64,16 @@
                 <TextView
                     android:id="@+id/nickname"
                     style="@style/CommonShadowText"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_below="@+id/ev_txt"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:singleLine="true"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginRight="60dp"
+                    android:gravity="center_horizontal"
+                    android:maxLines="1"
                     android:ellipsize="end"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/exam_txt"
