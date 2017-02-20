@@ -2,6 +2,7 @@ package com.appublisher.quizbank.common.measure.model;
 
 import android.content.Context;
 
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.common.measure.activity.MeasureAnalysisActivity;
@@ -369,6 +370,11 @@ public class MeasureAnalysisModel extends MeasureModel{
         mAnalysisBean.setQuestions(resp.getQuestions());
         mAnalysisBean.setAnswers(resp.getAnswers());
         showContent();
+
+        // 更新Menu
+        if (mContext instanceof MeasureAnalysisActivity) {
+            Utils.updateMenu((MeasureAnalysisActivity) mContext);
+        }
     }
 
     public int getCurQuestionId(int position) {
