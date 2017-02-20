@@ -318,15 +318,43 @@ public class MeasureAnalysisModel extends MeasureModel{
     }
 
     public void setCollected(int position, boolean isCollected) {
-        if (mAnswers == null || position >= mAnswers.size()) return;
+        if (position < 0) return;
+
+        // answers处理
+        if (mAnswers == null) {
+            // 重新构造
+            if (mQuestions == null) return;
+            mAnswers = new ArrayList<>();
+            int size = mQuestions.size();
+            for (int i = 0; i < size; i++) {
+                MeasureAnswerBean answerBean = new MeasureAnswerBean();
+                mAnswers.add(answerBean);
+            }
+        }
+
+        if (position >= mAnswers.size()) return;
         MeasureAnswerBean answerBean = mAnswers.get(position);
         if (answerBean == null) return;
-        answerBean.setIs_collected(isCollected);
-        mAnswers.set(position, answerBean);
+
+        // id处理
+        int id = answerBean.getId();
+        if (id == 0) {
+            // 从Questions中获取
+            if (mQuestions == null || position >= mQuestions.size()) return;
+            MeasureQuestionBean questionBean = mQuestions.get(position);
+            if (questionBean == null) return;
+            id = questionBean.getId();
+            if (id == 0) return;
+            // 更新Answers
+            answerBean.setId(id);
+            mAnswers.set(position, answerBean);
+        }
 
         // 提交数据
         mRequest.collectQuestion(
-                MeasureParamBuilder.collectQuestion(answerBean.getId(), isCollected));
+                MeasureParamBuilder.collectQuestion(id, isCollected));
+        answerBean.setIs_collected(isCollected);
+        mAnswers.set(position, answerBean);
 
         // 刷新
         if (mContext instanceof MeasureAnalysisActivity) {
