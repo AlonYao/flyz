@@ -68,6 +68,8 @@ public class InterviewCommentListModel {
                     activity.page = 1;
                 }
                 statusSelectedText = textView;
+
+                activity.isState = true;
             }
         });
         mStatusPop = new PopupWindow(statusView,
@@ -123,6 +125,8 @@ public class InterviewCommentListModel {
                     activity.page = 1;
                 }
                 noteSelectedText = textView;
+
+                activity.isNote = true;
             }
         });
         mNotePop = new PopupWindow(statusView,

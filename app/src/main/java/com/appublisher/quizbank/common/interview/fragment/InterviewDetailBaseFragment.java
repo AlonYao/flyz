@@ -639,7 +639,11 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     mTvtimeNotSubm.setText("听语音");
                     // 修改录音文字
                     String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
-                    mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration) + 1));
+                    if(Integer.parseInt(duration) >=360){
+                        mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
+                    }else{
+                        mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration) + 1));
+                    }
                     changeRecordView(6);
                 } else {
                     mActivity.setCanBack(0);                    // 不可以按返回键
@@ -1329,7 +1333,11 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         switch (mStatus) {
             case SUBMIT:
                 String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
-                mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration) + 1));
+                if(Integer.parseInt(duration) >= 360){
+                    mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
+                }else{
+                    mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration) + 1));
+                }
                 isStop = false;
                 mTvtimeNotSubm.setText("听语音");
                 mUserNotSubmitAnswerProgressBar.setProgress(100);

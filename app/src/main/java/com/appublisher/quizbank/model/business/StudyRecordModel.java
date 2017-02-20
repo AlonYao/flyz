@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * StudyRecordFragment Model
@@ -36,6 +37,9 @@ public class StudyRecordModel {
     private final Context mContext;
     private final StudyRecordFragment mFragment;
     public InterviewHistoryPapersListAdapter mInterviewAdapter;
+
+    private static final String UM_EVENT_NAME = "Record";
+    private final Map<String, String> umMap = new HashMap<>();
 
     public StudyRecordModel(Context context, StudyRecordFragment fragment) {
         mContext = context;
@@ -66,10 +70,11 @@ public class StudyRecordModel {
 
         final ArrayList<HistoryPaperM> historyPapers = historyPapersResp.getList();
         if (historyPapers == null || historyPapers.size() == 0) {
-            if(fragment.mWrittenList == null || fragment.mWrittenList.size() == 0){
+            if (fragment.mWrittenList == null || fragment.mWrittenList.size() == 0) {
                 fragment.showIvNull();
-            }else{
-                fragment.showXListview();;
+            } else {
+                fragment.showXListview();
+                ;
             }
             return;
         }
@@ -174,10 +179,11 @@ public class StudyRecordModel {
         final ArrayList<InterviewRecordListItemBean> mhistoryPapers = historyPapersResp.getList();
         if (mhistoryPapers == null || mhistoryPapers.size() == 0) {
             // 判断上一次加载时的集合是否为空
-            if(fragment.mInterviewList == null || fragment.mInterviewList.size() == 0){
+            if (fragment.mInterviewList == null || fragment.mInterviewList.size() == 0) {
                 fragment.showIvNull();
-            }else{
-                fragment.showXListview();;
+            } else {
+                fragment.showXListview();
+                ;
             }
             fragment.setmPage();
             return;
@@ -219,6 +225,11 @@ public class StudyRecordModel {
             intent.putExtra("time", time);
             intent.putExtra("from", mInterviewhistoryPaper.getType());
             mContext.startActivity(intent);
+
+            //um
+            umMap.clear();
+            umMap.put("Action", "InterviewList");
+            UmengManager.onEvent(mContext, UM_EVENT_NAME, umMap);
         }
     };
 
@@ -230,7 +241,7 @@ public class StudyRecordModel {
     public static void showNullImg(StudyRecordFragment fragment) {
 
         fragment.mIvNull.setVisibility(View.VISIBLE);
-       fragment.mXListView.setVisibility(View.GONE);
+        fragment.mXListView.setVisibility(View.GONE);
     }
 
     /*
