@@ -91,7 +91,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     public static final String ANALYSISITEM = "analysisItem";
     public static final String NONE = "none";
     private static final int UPPERLIMITRECORDTIME = 360;
-    private static final int LOWERLIMITRECORDTIME = 5;
+    private static final int LOWERLIMITRECORDTIME = 60;
     private static final int SHOWREMINDERRECORDTIME = 330;
     public View mUnRecordView;
     public View mRecordingView;
@@ -750,10 +750,18 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             } else if (id == R.id.question_help_iv) {         // 问号
                 // 跳转到帮助页面
                 skipToRemarkHelpActivity();
+                //Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Intro");
+                UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
             } else if (id == R.id.purchased_remark_tv) {      // 购买链接
                 // 直接跳转到购买页面
                 Intent intent = new Intent(getActivity(), InterviewCommentProductActivity.class);
                 startActivityForResult(intent, PAY_SUCCESS);
+                //Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Purchase");
+                UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
             } else if (id == R.id.teacher_remark_open_iv) {
                 // 动画:从左向右
                 Animation translateAnimation = new TranslateAnimation(0, 360, 0, 0);
@@ -1056,6 +1064,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 break;
             case HADREMARKED:
                 dealTeacherRemarkAudioState();   // 已经点评:播放名师点评
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Comment");
+                UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
                 break;
             default:
                 break;
@@ -1492,6 +1504,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             public void onClick(View view) {
                 mAalertDialog.dismiss();
                 skipToRemarkHelpActivity(); // 跳转到帮助页面
+                //Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Intro");
+                UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
             }
         });
     }
@@ -1537,6 +1553,10 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 // 发送请求:请求点评, 需要回调
                 mModel.mRequest.applyForTeacherRemark(mQuestionBean.getId(), "buy");
                 mAalertDialog.dismiss();
+                //Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Action", "Apply");
+                UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
             }
         });
     }
