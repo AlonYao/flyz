@@ -62,11 +62,10 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
             return;
         }
 
-        setKeywordsList(resp.getKeywords());
-
         if (mOffset == 0) {
             if (resp.getList() == null || resp.getList().size() == 0) {
                 mView.showNone();
+                return;
             } else {
                 mView.showNotice(mCurKeywords, resp.getTotal());
             }
@@ -76,12 +75,14 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
             if (resp.getList() == null || resp.getList().size() == 0) {
                 mView.showNoMoreToast();
                 resetOffset();
+                return;
             } else {
                 mList.addAll(resp.getList());
                 mView.showLoadMore(mList);
             }
         }
 
+        setKeywordsList(resp.getKeywords());
     }
 
     @Override
