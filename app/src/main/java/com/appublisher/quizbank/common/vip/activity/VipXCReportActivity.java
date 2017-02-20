@@ -24,8 +24,6 @@ public class VipXCReportActivity extends VipBaseActivity implements View.OnClick
     private TextView mTvCourseName;
     private TextView mTvExerciseName;
     private TextView mTvPosition;
-    private TextView mTvAll;
-    private TextView mTvError;
     private LinearLayout mLlTreeContainer;
     private VipXCReportModel mModel;
 
@@ -53,12 +51,17 @@ public class VipXCReportActivity extends VipBaseActivity implements View.OnClick
         mTvCourseName = (TextView) findViewById(R.id.vip_xc_report_course_name);
         mTvExerciseName = (TextView) findViewById(R.id.vip_xc_report_exercise_name);
         mTvPosition = (TextView) findViewById(R.id.vip_xc_report_position);
-        mTvAll = (TextView) findViewById(R.id.vip_xc_report_all);
-        mTvError = (TextView) findViewById(R.id.vip_xc_report_error);
         mLlTreeContainer = (LinearLayout) findViewById(R.id.vip_xc_report_note_container);
+        TextView tvAll = (TextView) findViewById(R.id.vip_xc_report_all);
+        TextView tvError = (TextView) findViewById(R.id.vip_xc_report_error);
 
-        mTvAll.setOnClickListener(this);
-        mTvError.setOnClickListener(this);
+        if (tvAll != null) {
+            tvAll.setOnClickListener(this);
+        }
+
+        if (tvError != null) {
+            tvError.setOnClickListener(this);
+        }
     }
 
     public void showCourseName(String name) {

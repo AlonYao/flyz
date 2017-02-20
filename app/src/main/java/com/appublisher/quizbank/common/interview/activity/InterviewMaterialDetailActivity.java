@@ -95,6 +95,7 @@ public class InterviewMaterialDetailActivity extends BaseActivity {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setTextColor(activity.getResources().getColor(R.color.common_text));
                 textView.setText(segment.text);
+                textView.setLineSpacing(0, 1.4f);
                 flowLayout.addView(textView);
 
                 // text长按复制

@@ -19,6 +19,7 @@ public interface MeasureConstants {
     String INTENT_MOCK_TIME = "mock_time";
     String INTENT_VIP_XC_DATA = "vip_xc_data";
     String INTENT_IS_FROM_SEARCH = "is_from_search";
+    String INTENT_SEARCH_MATERIAL_QUESTION_INDEX = "search_material_question_index";
 
     /**
      * 试卷类型

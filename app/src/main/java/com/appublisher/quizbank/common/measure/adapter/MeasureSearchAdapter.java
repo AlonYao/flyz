@@ -26,6 +26,7 @@ public class MeasureSearchAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<MeasureSearchResp.SearchItemBean> mList;
+    private int mMaterialQuestionIndex;
 
     public MeasureSearchAdapter(Context context, List<MeasureSearchResp.SearchItemBean> list) {
         mContext = context;
@@ -78,13 +79,17 @@ public class MeasureSearchAdapter extends BaseAdapter {
             List<MeasureSearchResp.SearchItemBean> items = itemBean.getQuestions();
             if (items == null) return;
 
-            for (MeasureSearchResp.SearchItemBean item : items) {
+            int size = items.size();
+            for (int i = 0; i < size; i++) {
+                MeasureSearchResp.SearchItemBean item = items.get(i);
                 if (item == null) continue;
                 String text = getStringContainsKeywords(item);
                 if (text == null || text.length() == 0) continue;
 
                 formatText(text, viewHolder.mTvContent, true);
                 showSource(viewHolder, item.getSource());
+
+                setMaterialQuestionIndex(i);
                 return;
             }
         } else {
@@ -119,17 +124,24 @@ public class MeasureSearchAdapter extends BaseAdapter {
     }
 
     private boolean isContainsKeywords(String text) {
-        String keywords = getKeywords();
-        return !(keywords == null || text == null) && text.contains(keywords);
+        List<String> list = getKeywordsList();
+        if (list == null || text == null) return false;
+
+        for (String s : list) {
+            if (s == null) continue;
+            if (text.contains(s)) return true;
+        }
+
+        return false;
     }
 
     /**
      * 获取关键词
      * @return String
      */
-    private String getKeywords() {
+    private List<String> getKeywordsList() {
         if (mContext instanceof MeasureSearchActivity) {
-            return ((MeasureSearchActivity) mContext).mModel.getCurKeywords();
+            return ((MeasureSearchActivity) mContext).mModel.getKeywordsList();
         }
         return null;
     }
@@ -154,29 +166,36 @@ public class MeasureSearchAdapter extends BaseAdapter {
             start = text.indexOf("<img=");
         }
 
-        String keywords = getKeywords();
-        if (keywords == null) return;
+        List<String> keywordsList = getKeywordsList();
+        if (keywordsList == null) return;
 
         // 首个关键字前最多保留20个字符
-        start = text.indexOf(keywords, 0);
-        if (start > 20) {
-            int dex = start - 20;
-            text = text.substring(dex, text.length());
-            text = "..." + text;
+        for (String keyword : keywordsList) {
+            if (keyword == null) continue;
+            start = text.indexOf(keyword, 0);
+            if (start > 20) {
+                int dex = start - 20;
+                text = text.substring(dex, text.length());
+                text = "..." + text;
+                break;
+            }
         }
 
         if (isMaterial) text = "(材料) " + text;
 
         SpannableString ss = new SpannableString(text);
-        start = text.indexOf(keywords, 0);
-        while (start != -1) {
-            ss.setSpan(
-                    new ForegroundColorSpan(Color.RED),
-                    start,
-                    start + keywords.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            start = start + keywords.length();
-            start = text.indexOf(keywords, start);
+
+        for (String keyword : keywordsList) {
+            start = text.indexOf(keyword, 0);
+            while (start != -1) {
+                ss.setSpan(
+                        new ForegroundColorSpan(Color.RED),
+                        start,
+                        start + keyword.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                start = start + keyword.length();
+                start = text.indexOf(keyword, start);
+            }
         }
 
         // 预留字段特殊处理：材料：
@@ -196,4 +215,11 @@ public class MeasureSearchAdapter extends BaseAdapter {
         TextView mTvSource;
     }
 
+    public int getMaterialQuestionIndex() {
+        return mMaterialQuestionIndex;
+    }
+
+    private void setMaterialQuestionIndex(int materialQuestionIndex) {
+        this.mMaterialQuestionIndex = materialQuestionIndex;
+    }
 }

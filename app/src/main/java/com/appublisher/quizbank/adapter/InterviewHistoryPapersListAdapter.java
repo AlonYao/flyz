@@ -86,7 +86,10 @@ public class InterviewHistoryPapersListAdapter extends BaseAdapter {
             ivLogo.setImageResource(R.drawable.studyrecord_interview_teacher);
         }else if("history".equals(paperType)){
             ivLogo.setImageResource(R.drawable.record_entire);
+        }else {
+            ivLogo.setImageResource(R.drawable.record_collect);    // 收藏
         }
+
     }
     /*
     *   给控件的名称赋值
@@ -100,6 +103,8 @@ public class InterviewHistoryPapersListAdapter extends BaseAdapter {
             textView.setText("名师解析");
         }else if("history".equals(paperType)){
             textView.setText("历年真题");
+        }else{
+            textView.setText("面试收藏");
         }
     }
 

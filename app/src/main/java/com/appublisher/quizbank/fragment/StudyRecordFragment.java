@@ -140,7 +140,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     }
 
     public void setValue() {
-
         mWriteCollectRl.setOnClickListener(new View.OnClickListener() {    // 笔试页面:收藏
             @Override
             public void onClick(View v) {
@@ -261,7 +260,9 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
     @Override
     public void onResume() {
         super.onResume();
-        refreshData();
+        if (!isHidden()) {
+            refreshData();
+        }
         // Umeng
         MobclickAgent.onPageStart("StudyRecordFragment");
 
@@ -339,14 +340,15 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     @Override
     public void onRefresh() {
-
         if (mWriteButton.isChecked()) {
             mOffset = 0;
             mWrittenList = new ArrayList<>();
+            Logger.e("onRefresh().mWriteButton.isChecked()");
             mQRequest.getHistoryPapers(mOffset, mCount);
         } else {
             mPage = 1;
             mInterviewList = new ArrayList<>();
+            Logger.e("onRefresh().mInterviewButton.isChecked()");
             mQRequest.getStudyRecordInterviewHistoryPapersNew(mPage);
         }
         mIsRefresh = true;
@@ -357,11 +359,14 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     @Override
     public void onLoadMore() {
+
         if (mWriteButton.isChecked()) {
             mOffset = mOffset + mCount;
+            Logger.e("onLoadMore().mWriteButton.isChecked()");
             mQRequest.getHistoryPapers(mOffset, mCount);
         } else {
             mPage = mPage + mAddpage;
+            Logger.e("onLoadMore().mInterviewButton.isChecked()");
             mQRequest.getStudyRecordInterviewHistoryPapersNew(mPage);
 
         }
@@ -401,4 +406,5 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mIvNull.setVisibility(View.VISIBLE);
         mRecordDataView.setVisibility(View.GONE);
     }
+
 }

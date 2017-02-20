@@ -39,12 +39,11 @@ public class InterviewParamBuilder {
      * @return 参数
      */
     public static Map<String, String> submitCollectStated(String type,
-                                                          int question_id, String question_type
+                                                          int question_id
     ) {
         Map<String, String> params = new HashMap<>();
         params.put("type", type);
         params.put("question_id", String.valueOf(question_id));
-        params.put("question_type", question_type);
         return params;
     }
 

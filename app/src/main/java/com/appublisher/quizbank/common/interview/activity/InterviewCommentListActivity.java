@@ -97,6 +97,11 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
         if ("购买".equals(item.getTitle())) {
             final Intent intent = new Intent(this, InterviewCommentProductActivity.class);
             startActivity(intent);
+
+            //um
+            umMap.clear();
+            umMap.put("Action", "Purchase");
+            UmengManager.onEvent(this, UM_EVENT_NAME, umMap);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -165,6 +170,7 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
                 } else {
                     umMap.put("Action", "Note");
                 }
+                umMap.put("Action", "Comment");
                 UmengManager.onEvent(InterviewCommentListActivity.this, UM_EVENT_NAME, umMap);
             }
         });
@@ -174,6 +180,11 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
             public void onClick(View v) {
                 final Intent intent = new Intent(InterviewCommentListActivity.this, InterviewCommentGuideActivity.class);
                 startActivity(intent);
+
+                //um
+                umMap.clear();
+                umMap.put("Action", "Intro");
+                UmengManager.onEvent(InterviewCommentListActivity.this, UM_EVENT_NAME, umMap);
             }
         });
     }

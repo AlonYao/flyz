@@ -340,7 +340,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         } else if (!LoginModel.hasExamInfo()) {
             // 没有考试项目
             Intent intent = new Intent(this, ExamChangeActivity.class);
-            intent.putExtra("from", "splash");
+            intent.putExtra("from", "register");
             startActivity(intent);
             return false;
         }

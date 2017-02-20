@@ -49,6 +49,7 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
     private long mPopupDismissTime;
     private int mCurPosition;
     private int mEnterLastPageCount;
+    private int mSearchMaterialQuestionIndex;
     private AlertDialog mLastPageAlert;
 
     public int mCurQuestionId;
@@ -235,6 +236,8 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
         mModel.mHierarchyId = getIntent().getIntExtra(INTENT_HIERARCHY_ID, 0);
         mModel.mPaperType = getIntent().getStringExtra(INTENT_PAPER_TYPE);
         mModel.mIsFromSearch = getIntent().getBooleanExtra(INTENT_IS_FROM_SEARCH, false);
+        mSearchMaterialQuestionIndex = getIntent().getIntExtra(
+                INTENT_SEARCH_MATERIAL_QUESTION_INDEX, 0);
         mModel.getData();
         setModel(mModel);
     }
@@ -276,6 +279,11 @@ public class MeasureAnalysisActivity extends MeasureBaseActivity implements
 
         // 初始化Id
         mCurQuestionId = mModel.getCurQuestionId(0);
+
+        // 用于搜题模块跳转
+        if (mSearchMaterialQuestionIndex != 0) {
+            mViewPager.setCurrentItem(mSearchMaterialQuestionIndex);
+        }
     }
 
     /**

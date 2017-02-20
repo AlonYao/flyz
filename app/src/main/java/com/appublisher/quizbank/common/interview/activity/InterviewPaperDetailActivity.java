@@ -1,6 +1,5 @@
 package com.appublisher.quizbank.common.interview.activity;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -55,7 +54,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private int mCurrentPagerId;   // 当前的viewPager的索引
     private String mFrom;
     public List<InterviewPaperDetailResp.QuestionsBean> mList;
-    private boolean mIsBuyAll = false;
+    private boolean mIsShowBuyAllMenu = false;
     private InterviewPaperDetailResp.AllAudioBean mAllAudioBean;
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     public InterviewDetailModel mModel;
@@ -133,7 +132,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
         if (mList == null || mCurrentPagerId < 0 ) {
             mCurrentPagerId = 0;
@@ -146,11 +145,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
         // 购买状态
-        if (!mIsBuyAll && !"record_comment".equals(mDataFrom)) {
+        if (mIsShowBuyAllMenu && !"record_comment".equals(mDataFrom)) {
             MenuItemCompat.setShowAsAction(
                     menu.add("开启完整版"), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
         }
-        return super.onPrepareOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -180,32 +180,33 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             }
         } else if("收藏".equals(item.getTitle())){
             if (mModel.getIsCollected(mCurrentPagerId)) {   // 判断当前viewpager的小题是否收藏
-                if (mFrom==null) return true;
-                mModel.setCollected(mCurrentPagerId, false, mFrom);
+                mModel.setCollected(mCurrentPagerId, false);
                 ToastManager.showToast(this, "取消收藏");
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Cancel");
-                UmengManager.onEvent(this, "InterviewAnalysis", map);
+                if (isDone()){
+                    UmengManager.onEvent(this, "InterviewAnalysis", map);
+                }
             } else {
-                if (mFrom==null) return true;
-                mModel.setCollected(mCurrentPagerId, true, mFrom);
+                mModel.setCollected(mCurrentPagerId, true);
                 ToastManager.showToast(this, "收藏成功");
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Collect");
-                UmengManager.onEvent(this, "InterviewAnalysis", map);
+                if (isDone()){
+                    UmengManager.onEvent(this, "InterviewAnalysis", map);
+                }else{
+                    UmengManager.onEvent(this, "InterviewQuestion", map);
+                }
+                // 录音状态:
+                if(mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT){
+                    UmengManager.onEvent(this, "InterviewRecord", map);
+                }
             }
       }
         return super.onOptionsItemSelected(item);
-    }
-
-    /*
-    *   设置数据来源
-    * */
-    public void setQuestionType(String question_type){
-        mFrom = question_type;
     }
 
     /*
@@ -238,7 +239,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     public void changePlayingMediaToStop(){
         // 弹窗提示
-        SharedPreferences sp = getSharedPreferences("interview_submit", Context.MODE_PRIVATE);
+        SharedPreferences sp = InterviewDetailModel.getInterviewSharedPreferences(this);
         boolean isFirstCheckBox = sp.getBoolean("isFirstCheckBox", true);
         if (isFirstCheckBox){
             InterviewDetailModel.showStopMediaPlayingDailog(this);
@@ -295,7 +296,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 // 购买信息
                 mAllAudioBean = resp.getAll_audio();
                 if (mAllAudioBean != null) {
-                    mIsBuyAll = mAllAudioBean.is_purchased();
+                    boolean isBuyAll = mAllAudioBean.is_purchased();
+                    if (!isBuyAll) mIsShowBuyAllMenu = true;
                 }
 
                 mSingleAudioBean = resp.getSingle_audio();
@@ -461,6 +463,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     public void setPlayingChildViewId(int playingChildViewId){
         mPlayingChildViewId = playingChildViewId;
+    }
+
+    private boolean isDone(){
+        if (mAdaper.mFragmentList.size() <= 0) return false;
+        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mCurrentPagerId);
+        return fragment.mQuestionBean != null && fragment.mQuestionBean.getUser_audio() != null
+                    && fragment.mQuestionBean.getUser_audio().length() >0;
     }
     @Override
     public void refreshTeacherRemarkRemainder(String num) {}

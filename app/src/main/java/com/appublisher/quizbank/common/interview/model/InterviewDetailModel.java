@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
@@ -59,7 +60,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     }
 
     /*
-   *   提交的弹窗
+   *   提交录音
    * */
     public void showSubmitAnswerProgressBar(String fileDir, InterviewPaperDetailResp.QuestionsBean mQuestionbean, final String durationTime,final String questiontype){
         String userId = LoginModel.getUserId();
@@ -197,7 +198,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     /*
     *   设置menu的状态 :由fragment传入数据,由activity来判断
     * */
-    public void setCollected(int position, boolean isCollected, String question_type) {         // question_type 数据源来源
+    public void setCollected(int position, boolean isCollected) {         // question_type 数据源来源
         if (mActivity == null) return;
         List<InterviewPaperDetailResp.QuestionsBean> list =  mActivity.mList;
         if(list == null || list.size()<= 0 || position > list.size() || position < 0) return;
@@ -213,7 +214,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         }
         mActivity.mList.set(position, mBean);        // 刷新list
         // 提交数据
-        mRequest.collectQuestion(InterviewParamBuilder.submitCollectStated(type,mBean.getId(),question_type));     // 向服务器提交收藏状态
+        mRequest.collectQuestion(InterviewParamBuilder.submitCollectStated(type,mBean.getId()));     // 向服务器提交收藏状态
 
         // 刷新menu
         if (mActivity instanceof InterviewPaperDetailActivity) {
