@@ -9,8 +9,8 @@
     <RelativeLayout
         android:layout_width="166dp"
         android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
         android:layout_gravity="center"
+        android:paddingBottom="15dp"
         android:paddingTop="15dp">
 
         <RadioGroup
@@ -25,9 +25,12 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/record_switch_left_selector"
                 android:button="@null"
+                android:checked="true"
                 android:gravity="center"
                 android:text="笔试"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <RadioButton
@@ -35,6 +38,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/record_switch_right_selector"
                 android:button="@null"
                 android:gravity="center"
                 android:text="面试"
@@ -124,7 +128,7 @@
         android:layout_height="80dp"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/interview_collect_rl"

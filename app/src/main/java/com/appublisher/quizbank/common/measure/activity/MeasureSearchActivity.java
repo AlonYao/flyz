@@ -184,6 +184,9 @@ public class MeasureSearchActivity extends BaseActivity implements
                 intent.putExtra(
                         INTENT_ANALYSIS_BEAN,
                         mModel.getAnalysisBeanByPosition(position - 1));
+                intent.putExtra(
+                        INTENT_SEARCH_MATERIAL_QUESTION_INDEX,
+                        mAdapter.getMaterialQuestionIndex());
                 startActivity(intent);
             }
         });

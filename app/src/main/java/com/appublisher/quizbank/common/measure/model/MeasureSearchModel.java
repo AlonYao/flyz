@@ -30,6 +30,7 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     private Context mContext;
     private MeasureRequest mRequest;
     private String mCurKeywords;
+    private List<String> mKeywordsList;
     private int mOffset;
     private List<MeasureSearchResp.SearchItemBean> mList;
     private IMeasureSearchView mView;
@@ -61,6 +62,8 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
             resetOffset();
             return;
         }
+
+        setKeywordsList(resp.getKeywords());
 
         if (mOffset == 0) {
             if (resp.getList() == null || resp.getList().size() == 0) {
@@ -105,10 +108,6 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
     public void loadMore() {
         mOffset = mOffset + COUNT;
         mRequest.searchQuestion(mCurKeywords, mOffset, COUNT);
-    }
-
-    public String getCurKeywords() {
-        return mCurKeywords;
     }
 
     private void resetOffset() {
@@ -181,5 +180,13 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
         question.setMaterial_id(searchItem.getMaterial_id());
 
         return question;
+    }
+
+    public List<String> getKeywordsList() {
+        return mKeywordsList;
+    }
+
+    public void setKeywordsList(List<String> mKeywordsList) {
+        this.mKeywordsList = mKeywordsList;
     }
 }

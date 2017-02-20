@@ -126,7 +126,13 @@ public class VipXCReportModel extends VipBaseModel{
     private String timeFormat(int duration) {
         int min = duration / 60;
         int sec = duration % 60;
-        return String.valueOf(min) + ":" + String.valueOf(sec);
+        String secText = String.valueOf(sec);
+        if ("0".equals(secText)) {
+            secText = "00";
+        } else if (secText.length() == 1) {
+            secText = "0" + secText;
+        }
+        return String.valueOf(min) + ":" + secText;
     }
 
     public ArrayList<QuestionM> getAllQuestions() {
