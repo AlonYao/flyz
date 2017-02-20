@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 学习记录
@@ -82,6 +83,10 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
 
     private View mInterviewRedPoint;
     private View mCommentRedPoint;
+
+    //un
+    private static final String UM_EVENT_NAME = "Record";
+    private final Map<String, String> umMap = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -166,15 +171,26 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mInterviewcollectRl.setOnClickListener(new View.OnClickListener() {    // 面试页面:收藏
             @Override
             public void onClick(View v) {
+                //um
+                umMap.clear();
+                umMap.put("Action", "InterviewCollect");
+                UmengManager.onEvent(getActivity(), UM_EVENT_NAME, umMap);
+
+
                 final Intent intent = new Intent(getActivity(), RecordCollectActivity.class); // 进入面试中的收藏页面
                 startActivity(intent);
-
             }
         });
 
         mInterviewCommentRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //um
+                umMap.clear();
+                umMap.put("Action", "Comment");
+                UmengManager.onEvent(getActivity(), UM_EVENT_NAME, umMap);
+
+
                 final Intent intent = new Intent(getActivity(), InterviewCommentListActivity.class);
                 startActivity(intent);
             }
@@ -186,8 +202,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 笔试button处理
                 if (isChecked) {
-                    setRadioButtonLeftChecked(mWriteButton);
-                    setRadioButtonRightUnChecked(mInterviewButton);
+                    mWriteButton.setTextColor(getActivity().getResources().getColor(R.color.white));
 
                     if (mWrittenList == null || mWrittenList.size() == 0) {
                         mQRequest.getHistoryPapers(0, mCount);     // 点击了笔试button,去获取数据:初始获取数据在LoadMore()方法中
@@ -202,7 +217,7 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     mInterviewHeadView.setVisibility(View.GONE);
 
                 } else {
-                    setRadioButtonLeftUnChecked(mWriteButton);
+                    mWriteButton.setTextColor(getActivity().getResources().getColor(R.color.common_text));
 
                     mWriteHeadView.setVisibility(View.GONE);
                     mInterviewHeadView.setVisibility(View.VISIBLE);
@@ -211,11 +226,11 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         });
         mInterviewButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {    // 面试的button
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {  // 记录页面:面试按钮
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 记录页面:面试按钮
                 // 面试button处理
                 if (isChecked) {
-                    setRadioButtonRightChecked(mInterviewButton);
-                    setRadioButtonLeftUnChecked(mWriteButton);
+                    mInterviewButton.setTextColor(getActivity().getResources().getColor(R.color.white));
 
                     if (mInterviewList == null || mInterviewList.size() == 0) {
                         mPage = 1;
@@ -227,13 +242,16 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
                     }
                     mXListView.setOnItemClickListener(mModel.interviewListener);
                 } else {
-                    setRadioButtonRightUnChecked(mInterviewButton);
+                    mInterviewButton.setTextColor(getActivity().getResources().getColor(R.color.common_text));
                 }
+
+                //um
+                umMap.clear();
+                umMap.put("Action", "switch");
+                UmengManager.onEvent(getActivity(), UM_EVENT_NAME, umMap);
             }
         });
 
-        setRadioGroupBg(radioGroup);
-        mWriteButton.setChecked(true);
     }
 
     public void setmPage() {      // 如果加载失败,页数需要将加过的减去
@@ -372,98 +390,6 @@ public class StudyRecordFragment extends Fragment implements RequestCallback,
         mXListView.setRefreshTime(
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
-    }
-
-    public void setRadioGroupBg(RadioGroup radioGroup) {
-        // prepare
-        int strokeWidth = 3; // 3px not dp
-        int roundRadius = 20; // 8px not dp
-        int strokeColor = mModel.getThemeColor();
-        int fillColor = getResources().getColor(com.appublisher.lib_course.R.color.common_bg);
-
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(fillColor);
-        gd.setCornerRadius(roundRadius);
-        gd.setStroke(strokeWidth, strokeColor);
-        radioGroup.setBackgroundDrawable(gd);
-    }
-
-    /**
-     * 设置选中背景左
-     *
-     * @param radioButton
-     */
-    public void setRadioButtonLeftChecked(RadioButton radioButton) {
-        radioButton.setTextColor(getResources().getColor(com.appublisher.lib_course.R.color.login_white));
-        // prepare
-        int fillColor = mModel.getThemeColor();
-
-        float[] floats = new float[]{20, 20, 0, 0, 0, 0, 20, 20};
-
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(fillColor);
-        gd.setCornerRadii(floats);
-        radioButton.setBackgroundDrawable(gd);
-    }
-
-    /**
-     * 设置选中背景右
-     *
-     * @param radioButton
-     */
-    public void setRadioButtonRightChecked(RadioButton radioButton) {
-        radioButton.setTextColor(getResources().getColor(com.appublisher.lib_course.R.color.login_white));
-        // prepare
-        int fillColor = mModel.getThemeColor();
-
-        float[] floats = new float[]{0, 0, 20, 20, 20, 20, 0, 0};
-
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(fillColor);
-        gd.setCornerRadii(floats);
-        radioButton.setBackgroundDrawable(gd);
-    }
-
-    /**
-     * 设置未选中背景
-     *
-     * @param radioButton
-     */
-    public void setRadioButtonLeftUnChecked(RadioButton radioButton) {
-        radioButton.setTextColor(mModel.getThemeColor());
-        // prepare
-        int strokeWidth = 3; // 3px not dp
-        int strokeColor = mModel.getThemeColor();
-        int fillColor = getResources().getColor(com.appublisher.lib_course.R.color.common_bg);
-
-        float[] floats = new float[]{20, 20, 0, 0, 0, 0, 20, 20};
-
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(fillColor);
-        gd.setCornerRadii(floats);
-        gd.setStroke(strokeWidth, strokeColor);
-        radioButton.setBackgroundDrawable(gd);
-    }
-
-    /**
-     * 设置未选中背景
-     *
-     * @param radioButton
-     */
-    public void setRadioButtonRightUnChecked(RadioButton radioButton) {
-        radioButton.setTextColor(mModel.getThemeColor());
-        // prepare
-        int strokeWidth = 3; // 3px not dp
-        int strokeColor = mModel.getThemeColor();
-        int fillColor = getResources().getColor(com.appublisher.lib_course.R.color.common_bg);
-
-        float[] floats = new float[]{0, 0, 20, 20, 20, 20, 0, 0};
-
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(fillColor);
-        gd.setCornerRadii(floats);
-        gd.setStroke(strokeWidth, strokeColor);
-        radioButton.setBackgroundDrawable(gd);
     }
 
     public void showXListview() {

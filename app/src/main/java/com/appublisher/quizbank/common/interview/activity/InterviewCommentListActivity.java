@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.XListView;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -24,7 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InterviewCommentListActivity extends BaseActivity implements RequestCallback {
 
@@ -47,6 +50,14 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
     public int status_id = -1;
     public int note_id = -1;
     public int page = 1;
+
+
+    //um
+    public boolean isState = false;
+    public boolean isNote = false;
+    private static final String UM_EVENT_NAME = "CommentRecord";
+    private final Map<String, String> umMap = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +153,19 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
                 intent.putExtra("dataFrom", "record_comment");
                 intent.putExtra("record_id", mList.get(position - 1).getRecord_id());
                 startActivity(intent);
+
+                //um
+                umMap.clear();
+                if (!isState && !isNote) {
+                    umMap.put("Action", "None");
+                } else if (isState && isNote) {
+                    umMap.put("Action", "All");
+                } else if (isState && !isNote) {
+                    umMap.put("Action", "State");
+                } else {
+                    umMap.put("Action", "Note");
+                }
+                UmengManager.onEvent(InterviewCommentListActivity.this, UM_EVENT_NAME, umMap);
             }
         });
 
@@ -186,4 +210,5 @@ public class InterviewCommentListActivity extends BaseActivity implements Reques
     public void requestEndedWithError(VolleyError error, String apiName) {
         hideLoading();
     }
+
 }

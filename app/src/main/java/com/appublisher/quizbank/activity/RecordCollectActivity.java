@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -21,7 +22,9 @@ import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecordCollectActivity extends BaseActivity implements RequestCallback {
 
@@ -31,6 +34,11 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
     private InterviewCollectAdapter mAdapter;
     private Context context;
     private ImageView mNullView;
+
+
+    //um
+    private static final String UM_EVENT_NAME = "InterviewCollect";
+    private final Map<String, String> umMap = new HashMap<>();
 
 
     @Override
@@ -56,19 +64,25 @@ public class RecordCollectActivity extends BaseActivity implements RequestCallba
         mListview = (ListView) findViewById(R.id.record_collect_lv);
         mNullView = (ImageView) findViewById(R.id.quizbank_null);
     }
+
     private void initListener() {
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mList == null || mList.size() == 0) return;
+                if (mList == null || mList.size() == 0) return;
+                //um
+                umMap.clear();
+                umMap.put("Action", "Review");
+                UmengManager.onEvent(RecordCollectActivity.this, UM_EVENT_NAME, umMap);
+
                 InterviewCollectResp.InterviewM interviewM = mList.get(position);
-                if(interviewM == null){
+                if (interviewM == null) {
                     return;
-                }else{
+                } else {
                     int note_id = interviewM.getNote_id();
                     Intent intent = new Intent(context, InterviewPaperDetailActivity.class);
-                    intent.putExtra("dataFrom","recordCollect");
-                    intent.putExtra("note_id",note_id);
+                    intent.putExtra("dataFrom", "recordCollect");
+                    intent.putExtra("note_id", note_id);
                     startActivity(intent);
                 }
             }

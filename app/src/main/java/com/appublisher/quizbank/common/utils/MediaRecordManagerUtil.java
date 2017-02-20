@@ -6,6 +6,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
+import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.Logger;
+import com.appublisher.quizbank.QuizBankApp;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -44,12 +48,13 @@ public class MediaRecordManagerUtil implements TimerUtil.OnTimerCallback {
     }
 
     public void checkRecordStatus(final ICheckRecordStatusListener iCheckRecordStatusListener) {
-        String filePath = Environment.getExternalStorageDirectory().getAbsoluteFile().getAbsolutePath() + "/test";
+        String filePath = FileManager.getRootFilePath(QuizBankApp.getInstance().getApplicationContext()) + "/test";
         File file = new File(filePath);
         if (!file.exists() && !file.isDirectory()) {
             Log.i("file", "==" + file.mkdirs());
         }
         filePath = filePath + "/test.amr";
+        Logger.i("filePath===" + filePath);
         setRecordFilePath(filePath);
         try {
             startRecord();
