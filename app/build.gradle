@@ -9,8 +9,8 @@ android {
         applicationId "com.appublisher.quizbank"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 58
-        versionName "2.2.0"
+        versionCode 59
+        versionName "2.3.0"
         multiDexEnabled true
 
         //参数
@@ -33,6 +33,16 @@ android {
             minSdkVersion 21
             manifestPlaceholders = [APP_NAME   : "腰果公考",
                                     APP_CHANNEL: "dev"]
+        }
+
+        huawei {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "huawei"]
+        }
+
+        other {
+            manifestPlaceholders = [APP_NAME   : "腰果公考",
+                                    APP_CHANNEL: "other"]
         }
 
         /**
@@ -59,10 +69,7 @@ android {
 //                                    APP_CHANNEL: "xiaomi"]
 //        }
 //
-//        huawei {
-//            manifestPlaceholders = [APP_NAME   : "腰果公考",
-//                                    APP_CHANNEL: "huawei"]
-//        }
+
 //
 //        meizu {
 //            manifestPlaceholders = [APP_NAME   : "腰果公考",
@@ -99,10 +106,7 @@ android {
 //                                    APP_CHANNEL: "appchina"]
 //        }
 //
-        other {
-            manifestPlaceholders = [APP_NAME   : "腰果公考",
-                                    APP_CHANNEL: "other"]
-        }
+
 
 //        samsung {
 //            manifestPlaceholders = [APP_NAME   : "腰果公考",
