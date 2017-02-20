@@ -35,6 +35,15 @@ public class MeasureQuestionBean {
     private int question_amount;
     private int question_index;
     private boolean is_allright;
+    private boolean is_collected;
+
+    public boolean is_collected() {
+        return is_collected;
+    }
+
+    public void setIs_collected(boolean is_collected) {
+        this.is_collected = is_collected;
+    }
 
     public boolean is_allright() {
         return is_allright;

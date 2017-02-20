@@ -7,6 +7,7 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.bean.MeasureAnalysisBean;
+import com.appublisher.quizbank.common.measure.bean.MeasureAnswerBean;
 import com.appublisher.quizbank.common.measure.bean.MeasureQuestionBean;
 import com.appublisher.quizbank.common.measure.netdata.MeasureSearchResp;
 import com.appublisher.quizbank.common.measure.network.MeasureRequest;
@@ -143,6 +144,18 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
 
         analysisBean.setQuestions(questionBeanList);
 
+        // 构造Answers字段
+        List<MeasureAnswerBean> answers = new ArrayList<>();
+        for (MeasureQuestionBean questionBean : questionBeanList) {
+            if (questionBean == null) continue;
+            MeasureAnswerBean answerBean = new MeasureAnswerBean();
+            answerBean.setId(questionBean.getId());
+            answerBean.setIs_collected(questionBean.is_collected());
+            answers.add(answerBean);
+        }
+
+        analysisBean.setAnswers(answers);
+
         return GsonManager.modelToString(analysisBean);
     }
 
@@ -175,6 +188,7 @@ public class MeasureSearchModel implements RequestCallback, MeasureConstants{
         question.setSummary_count(searchItem.getSummary_count());
         question.setSummary_fallible(searchItem.getSummary_fallible());
         question.setMaterial_id(searchItem.getMaterial_id());
+        question.setIs_collected(searchItem.isIs_collected());
 
         return question;
     }
