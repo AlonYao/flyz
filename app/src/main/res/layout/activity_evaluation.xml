@@ -122,7 +122,7 @@
 
                     <TextView
                         android:id="@+id/evaluation_learningdays_tv"
-                        style="@style/EvaluationListCountTvBig" />
+                        style="@style/EvaluationListCountTvBig"/>
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
@@ -155,15 +155,11 @@
 
                     <TextView
                         android:id="@+id/evaluation_totaltime_tv"
-                        style="@style/EvaluationListCountTvBig" />
+                        style="@style/EvaluationListCountTvBig"/>
 
                     <TextView
                         style="@style/EvaluationListUnitTvBig"
                         android:layout_alignBottom="@+id/evaluation_totaltime_tv"
-                        android:layout_alignLeft="@+id/evaluation_totaltime_tv"
-                        android:layout_alignStart="@+id/evaluation_totaltime_tv"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginStart="19dp"
                         android:text="@string/evaluation_min" />
                 </RelativeLayout>
 
