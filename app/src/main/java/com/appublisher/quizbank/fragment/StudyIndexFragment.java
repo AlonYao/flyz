@@ -23,7 +23,6 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_login.activity.UserInfoActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
-import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.activity.CommonFragmentActivity;
 import com.appublisher.quizbank.activity.EvaluationActivity;
@@ -215,11 +214,7 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     @Override
     public void onResume() {
         super.onResume();
-        final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-        if (userInfoModel != null) {
-            LoginModel.setAvatar(getActivity(), avatarIv);
-        }
-
+        LoginModel.setAvatar(avatarIv);
         getData();
     }
 
