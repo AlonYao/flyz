@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'newlens'
 
+Properties props = new Properties()
+props.load(new FileInputStream(file(rootProject.file("signature.properties"))))
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -17,6 +20,16 @@ android {
         manifestPlaceholders = [
                 GT_APPID: rootProject.ext.GT_APPID,
         ]
+
+        signingConfigs {
+            release {
+                keyAlias props['signature.alias']
+                keyPassword props['signature.password']
+                storeFile file(rootProject.file("quizbank.jks"))
+                storePassword props['signature.password']
+                v2SigningEnabled false
+            }
+        }
     }
 
     sourceSets {
@@ -722,6 +735,8 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
