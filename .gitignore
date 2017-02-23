@@ -17,3 +17,5 @@ captures/
 /gradlew
 /quizbank.jks
 /signature.properties
+/app/quizbank.jks
+/app/signature.properties
