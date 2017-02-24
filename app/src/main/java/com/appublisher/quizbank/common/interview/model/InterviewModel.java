@@ -88,16 +88,14 @@ public class InterviewModel {
     *   获取面试页面中的本地文件
     * */
     public static SharedPreferences getInterviewSharedPreferences(InterviewPaperDetailActivity activity){
-        SharedPreferences sp = activity.getSharedPreferences("interview", Context.MODE_PRIVATE);
-        return sp;
+        return activity.getSharedPreferences("interview", Context.MODE_PRIVATE);
     }
 
     /*
     *   将时间戳变成一个数字
     * */
     public String changeTimeStampToText(String timeStamp){
-        StringBuilder stringBuilder = new StringBuilder();
-        return stringBuilder.append(timeStamp.substring(0,4))
+        return new StringBuilder().append(timeStamp.substring(0,4))
                 .append(timeStamp.substring(5,7)).append(timeStamp.substring(8,10))
                 .append(timeStamp.substring(11,13)).append(timeStamp.substring(14,16))
                 .append(timeStamp.substring(17,19)).toString();

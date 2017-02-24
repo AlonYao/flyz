@@ -99,7 +99,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         if (mViewPager == null) return;
         mViewPager.setScroll(true);
-//        initListener(mViewPager);
+        initListener(mViewPager);
 
         mModel = new InterviewDetailModel(this, this);
         mRequest = new InterviewRequest(this, this);
@@ -478,21 +478,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     fragment.mTimeHadSubmitPlayTv.setText(mModel.formatDateTime(360));
                 }else{
                     fragment.mTimeHadSubmitPlayTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getUser_audio_duration() + 1));
-//=======
-//                if (Integer.parseInt(duration) >= 360) {
-//                    fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
-//                } else {
-//                    fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration) + 1));
-//                }
-//                break;
-//            case HADSUBMIT:
-//                fragment.mUserAnswerProgressBar.setProgress(100);
-//                fragment.mOffset = 0;
-//                if (fragment.mQuestionBean.getUser_audio_duration() >= 360) {
-//                    fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
-//                } else {
-//                    fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(fragment.mQuestionBean.getUser_audio_duration() + 1));
-//>>>>>>> 87bbd428172ec5a4180edaab566f5c46cc43042a
                 }
                 break;
             case TEACHER_REMARK:
