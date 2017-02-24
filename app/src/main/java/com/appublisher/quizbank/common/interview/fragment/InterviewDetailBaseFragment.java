@@ -42,6 +42,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.MediaRecorderManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -61,12 +62,13 @@ import com.appublisher.quizbank.common.interview.network.ICommonCallback;
 import com.appublisher.quizbank.common.interview.service.MediaPlayingService;
 import com.appublisher.quizbank.common.interview.view.IIterviewDetailBaseFragmentView;
 import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
-import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
+
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
+
 
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -611,7 +613,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
             if (id == R.id.interview_unrecordsound_ll) {    //如果点击了录音功能
                 changePlayingMediaToPauseState();
                 if(mActivity.mPlayingChildViewId != getChildViewPosition()){    //判断其他页面是否存在播放状态的播放器
-                    if (mActivity.mMediaRecorderManagerUtil != null) {
+                    if (mActivity.mMediaRecorderManager != null) {
                         stopPlay();
                     }
                     mActivity.changPlayingViewToDeafault();
@@ -680,7 +682,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 if (isCanTouch)
                     ToastManager.showToast(getActivity(), "正在录音,答题至少要一分钟哦");
             } else if (id == R.id.interview_recordsound_rl_rerecording) {      //点击重录
-                if (mActivity.mMediaRecorderManagerUtil != null) {
+                if (mActivity.mMediaRecorderManager != null) {
                     changePlayingMediaToPauseState();
                     String zero = "0\"";
                     mTvtimeRecording.setText(zero);
@@ -960,7 +962,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
      * 准备录音
      */
     public void prepareRecord() {
-        mActivity.mMediaRecorderManagerUtil.checkRecordStatus(new MediaRecordManagerUtil.ICheckRecordStatusListener() {
+        mActivity.mMediaRecorderManager.checkRecordStatus(new MediaRecorderManager.ICheckRecordStatusListener() {
             @Override
             public void onCheckRecordStatusFinished(boolean enableRecord) {
                 if (enableRecord) {
@@ -982,11 +984,11 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
      * 开始录音:将录音的文件先存入缓存文件中
      **/
     public void startRecord() {
-        mActivity.mMediaRecorderManagerUtil.setRecordFilePath(mTemporaryFilePath);
+        mActivity.mMediaRecorderManager.setRecordFilePath(mTemporaryFilePath);
         if (FileManager.isFile(mTemporaryFilePath)) {
             FileManager.deleteFiles(mTemporaryFilePath);
         }
-        mActivity.mMediaRecorderManagerUtil.startRecord(new MediaRecordManagerUtil.IRecordDurationCallback() {
+        mActivity.mMediaRecorderManager.startRecord(new MediaRecorderManager.IRecordDurationCallback() {
             @Override
             public void onRecordDuration(int duration) {
                 // 处理录音的时长
@@ -1148,14 +1150,14 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
      * 停止录音
      */
     public void stopRecord() {
-        mActivity.mMediaRecorderManagerUtil.stopReocrd();
+        mActivity.mMediaRecorderManager.stopReocrd();
     }
 
     /*
     *   停止播放语音
     * */
     public void stopPlay() {
-        mActivity.mMediaRecorderManagerUtil.stopPlay();
+        mActivity.mMediaRecorderManager.stopPlay();
     }
 
     /*
@@ -1165,20 +1167,20 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         // 检验是否存在其他应用正在播放音乐: 获取音频焦点
         getAudioStreamFocus();
         // 检验是否存在别的页面正在播放的播放器
-        if (mActivity.mMediaRecorderManagerUtil != null) {
-            mActivity.mMediaRecorderManagerUtil.stopPlay();
+        if (mActivity.mMediaRecorderManager != null) {
+            mActivity.mMediaRecorderManager.stopPlay();
             mActivity.changPlayingViewToDeafault();
         }
         if (filePath.equals("")) return;
-        mActivity.mMediaRecorderManagerUtil.setPlayFilePath(filePath);
+        mActivity.mMediaRecorderManager.setPlayFilePath(filePath);
         //播放的断点
-        mActivity.mMediaRecorderManagerUtil.startPlay(getOffset(), new MediaRecordManagerUtil.IPlayCompleteCallback() {
+        mActivity.mMediaRecorderManager.startPlay(getOffset(), new MediaRecorderManager.IPlayCompleteCallback() {
             @Override
             public void onPlayComplete() {
                 ToastManager.showToast(mActivity, "播放完成");
                 dealPlayedCompletedViewState();                 // 播放完成处理
             }
-        }, new MediaRecordManagerUtil.IPlayFileCountdownCallback() {
+        }, new MediaRecorderManager.IPlayFileCountdownCallback() {
             @Override
             public void onPlayCountdown(int unPlayDur) {
                 dealPlayingViewState(unPlayDur);                // 播放时的处理
@@ -1192,7 +1194,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     *   获取音频流焦点
     * */
     private void getAudioStreamFocus() {
-        mActivity.startService(new Intent(mActivity, MediaPlayingService.class)); // 开启服务
+//        mActivity.startService(new Intent(mActivity, MediaPlayingService.class)); // 开启服务
     }
 
     /*
@@ -1295,7 +1297,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         isPlaying = NONE;
         mActivity.setPlayingViewState(isPlaying);
         mActivity.setIsExitsPlayingMedia(false);
-        mActivity.mMediaRecorderManagerUtil.playOnPause(new MediaRecordManagerUtil.IPlayFileOffsetCallback() {
+        mActivity.mMediaRecorderManager.playOnPause(new MediaRecorderManager.IPlayFileOffsetCallback() {
             @Override
             public void onPlayOffset(int offset) {
                 switch (mStatus) {
