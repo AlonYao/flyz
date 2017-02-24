@@ -121,8 +121,8 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 // 判断此时是否有播放的题目
-                                if(mActivity.mMediaRecorderManagerUtil != null){
-                                    mActivity.mMediaRecorderManagerUtil.stopPlay();
+                                if(mActivity.mMediaRecorderManager != null){
+                                    mActivity.mMediaRecorderManager.stopPlay();
                                 }
                                 // 返回上一级
                                 mActivity.finish();
@@ -158,7 +158,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         stopPlaying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActivity.mMediaRecorderManagerUtil.stopPlay();
+                mActivity.mMediaRecorderManager.stopPlay();
                 mAalertDialog.dismiss();
                 // 返回上一级
                 mActivity.finish();
