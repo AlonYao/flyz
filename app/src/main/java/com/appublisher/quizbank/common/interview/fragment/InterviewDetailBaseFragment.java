@@ -42,6 +42,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.MediaRecorderManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -61,12 +62,13 @@ import com.appublisher.quizbank.common.interview.network.ICommonCallback;
 import com.appublisher.quizbank.common.interview.service.MediaPlayingService;
 import com.appublisher.quizbank.common.interview.view.IIterviewDetailBaseFragmentView;
 import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
-import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
+
 import com.appublisher.quizbank.model.business.CommonModel;
 import com.appublisher.quizbank.model.richtext.IParser;
 import com.appublisher.quizbank.model.richtext.ImageParser;
 import com.appublisher.quizbank.model.richtext.MatchInfo;
 import com.appublisher.quizbank.model.richtext.ParseManager;
+
 
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -986,7 +988,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
      * 准备录音
      */
     public void prepareRecord() {
-        mActivity.mMediaRecorderManager.checkRecordStatus(new MediaRecordManagerUtil.ICheckRecordStatusListener() {
+        mActivity.mMediaRecorderManager.checkRecordStatus(new MediaRecorderManager.ICheckRecordStatusListener() {
             @Override
             public void onCheckRecordStatusFinished(boolean enableRecord) {
                 if (enableRecord) {
@@ -1012,7 +1014,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         if (FileManager.isFile(mTemporaryFilePath)) {
             FileManager.deleteFiles(mTemporaryFilePath);
         }
-        mActivity.mMediaRecorderManager.startRecord(new MediaRecordManagerUtil.IRecordDurationCallback() {
+        mActivity.mMediaRecorderManager.startRecord(new MediaRecorderManager.IRecordDurationCallback() {
             @Override
             public void onRecordDuration(int duration) {
                 // 处理录音的时长
@@ -1202,13 +1204,13 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         if (filePath.equals("")) return;
         mActivity.mMediaRecorderManager.setPlayFilePath(filePath);
         //播放的断点
-        mActivity.mMediaRecorderManager.startPlay(getOffset(), new MediaRecordManagerUtil.IPlayCompleteCallback() {
+        mActivity.mMediaRecorderManager.startPlay(getOffset(), new MediaRecorderManager.IPlayCompleteCallback() {
             @Override
             public void onPlayComplete() {
                 ToastManager.showToast(mActivity, "播放完成");
                 dealPlayCompletedViewState();                 // 播放完成处理
             }
-        }, new MediaRecordManagerUtil.IPlayFileCountdownCallback() {
+        }, new MediaRecorderManager.IPlayFileCountdownCallback() {
             @Override
             public void onPlayCountdown(int unPlayDur) {
                 dealPlayingViewState(unPlayDur);                // 播放时的处理
@@ -1222,7 +1224,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     *   获取音频流焦点
     * */
     private void getAudioStreamFocus() {
-        mActivity.startService(new Intent(mActivity, MediaPlayingService.class)); // 开启服务
+//        mActivity.startService(new Intent(mActivity, MediaPlayingService.class)); // 开启服务
     }
 
     /*
@@ -1323,7 +1325,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
         mActivity.setPlayingViewState(mPlayingMedia);
         mActivity.setExitsPlayingMedia(false);
-        mActivity.mMediaRecorderManager.playOnPause(new MediaRecordManagerUtil.IPlayFileOffsetCallback() {
+        mActivity.mMediaRecorderManager.playOnPause(new MediaRecorderManager.IPlayFileOffsetCallback() {
             @Override
             public void onPlayOffset(int offset) {
                 switch (mStatus) {
