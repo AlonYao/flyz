@@ -23,7 +23,6 @@ import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
 import com.appublisher.quizbank.common.utils.MediaRecordManagerUtil;
-import com.appublisher.quizbank.common.utils.MediaRecorderManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,40 +32,39 @@ import java.util.List;
 
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback, InterviewDetailBaseFragmentCallBak {
 
-    private static final int UNRECORD = 0;
+    private static final int UN_RECORD = 0;
     private static final int RECORDING = 1;
-    private static final int RECORDEDUNSBMIT = 2;
-    private static final int RECORDEDHADSBMIT = 3;
-    private static final int HADREMARKED = 4;     // 已经点评
+    private static final int RECORDED_UN_SUBMIT = 2;
+    private static final int RECORDED_HAD_SUBMIT = 3;
+    private static final int HAD_REMARKED = 4;     // 已经点评
     private static final String SUBMIT = "submit";              //可提交
-    private static final String HADSUBMIT = "hadSubmit";      // 已提交
-    private static final String TEACHERREMARK = "teacherRemark";      // 名师点评
-    private static final String QUESTIONITEM = "questionItem";
-    private static final String ANALYSISITEM = "analysisItem";
-    private static final String NONE = "none";
-    private int mPaperId;
+    private static final String HAD_SUBMIT = "hadSubmit";      // 已提交
+    private static final String TEACHER_REMARK = "teacherRemark";      // 名师点评
+    private static final String QUESTION_ITEM = "questionItem";
+    private static final String ANALYSIS_ITEM = "analysisItem";
+    public static final String NOT_EXIST_PLAYING_MEDIA = "notExistPlayingMedia";
     public InterviewRequest mRequest;
     public ScrollExtendViewPager mViewPager;
-    public InterviewDetailAdapter mAdaper;
+    public InterviewDetailAdapter mAdapter;
+    private int mPaperId;
     private int mWhatView;
-    private String mPaperType;
     private int mNoteId;
     private int mCurrentPagerId;   // 当前的viewPager的索引
-    private String mFrom;
-    public List<InterviewPaperDetailResp.QuestionsBean> mList;
-    private boolean mIsShowBuyAllMenu = false;
+    public int mPlayingChildViewId;
+    private int mUnSubmitRecordAudioNum;
+    private String mPaperType;
+    private String mQuestionFrom;
+    public String mPlayingViewState;
+    private String mDataFrom;
+    private String mItemType;
+    private String mQuestionTime;
+    public List<InterviewPaperDetailResp.QuestionsBean> mQuestionsBeanList;
     private InterviewPaperDetailResp.AllAudioBean mAllAudioBean;
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     public InterviewDetailModel mModel;
-    public MediaRecorderManager mMediaRecorderManager;
-    public MediaRecordManagerUtil mMediaRecorderManagerUtil;        // 新的播放器类
-    public String playingViewState;
-    public int mPlayingChildViewId;
-    private boolean isExitsPlayingMedia;
-    private String mDataFrom;
-    private String mItemType;
-    private String mTime;
-    private int mUnSubmitRecordAudioNum;
+    public MediaRecordManagerUtil mMediaRecorderManager;        // 新的播放器类
+    private boolean mIsShowBuyAllMenu = false;
+    private boolean mExitsPlayingMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +72,17 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         setContentView(R.layout.activity_interview_paper_detail);
         setToolBar(this);
         setTitle("");
-        mFrom = getIntent().getStringExtra("from");          // 来源:问题的类型
+        mQuestionFrom = getIntent().getStringExtra("from");          // 来源:问题的类型
         mPaperId = getIntent().getIntExtra("paper_id", 0);
         mPaperType = getIntent().getStringExtra("paper_type");
         mNoteId = getIntent().getIntExtra("note_id", 0);
 
-        playingViewState = NONE;
-        isExitsPlayingMedia = false;
+        mPlayingViewState = NOT_EXIST_PLAYING_MEDIA;
+        mExitsPlayingMedia = false;
         mUnSubmitRecordAudioNum = 0;
 
         // 所有fragment中用同一个录音器
-        mMediaRecorderManager = new MediaRecorderManager(getApplicationContext());
-        mMediaRecorderManagerUtil = new MediaRecordManagerUtil();
+        mMediaRecorderManager = new MediaRecordManagerUtil();
         mViewPager = (ScrollExtendViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
 
         if(mViewPager == null ) return;
@@ -97,10 +94,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         mDataFrom = getIntent().getStringExtra("dataFrom");
         mItemType = getIntent().getStringExtra("itemType"); // item类型
-        mTime = getIntent().getStringExtra("time"); // 时间
+        mQuestionTime = getIntent().getStringExtra("time"); // 时间
 
         if("studyRecordInterview".equals(mDataFrom)){       // 数据来源自记录页面的面试页面
-            mRequest.getStudyRecordInterviewPaperDetail(mItemType, mTime);
+            mRequest.getStudyRecordInterviewPaperDetail(mItemType, mQuestionTime);
         }else if("recordCollect".equals(mDataFrom)){        // 来源: 记录页面的收藏页面
             int note_id = getIntent().getIntExtra("note_id", 0);
             mRequest.getRecordInterviewCollectPaperDetail(note_id);
@@ -119,14 +116,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     public void getData() {
         mUnSubmitRecordAudioNum = 0;
-        mWhatView = RECORDEDHADSBMIT;
+        mWhatView = RECORDED_HAD_SUBMIT;
 
-        if("studyRecordInterview".equals(mDataFrom)){
-            mRequest.getStudyRecordInterviewPaperDetail(mItemType, mTime);
-        } else if("recordCollect".equals(mDataFrom)){
+        if ("studyRecordInterview".equals(mDataFrom)){
+            mRequest.getStudyRecordInterviewPaperDetail(mItemType, mQuestionTime);
+        } else if ("recordCollect".equals(mDataFrom)){
             int note_id = getIntent().getIntExtra("note_id", 0);
             mRequest.getRecordInterviewCollectPaperDetail(note_id);
-        } else{
+        } else {
             mRequest.getPaperDetail(mPaperId, mPaperType, mNoteId);
         }
     }
@@ -134,13 +131,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-        if (mList == null || mCurrentPagerId < 0 ) {
+        if (mQuestionsBeanList == null || mCurrentPagerId < 0 ) {
             mCurrentPagerId = 0;
         }
-        if(mModel.getIsCollected( mCurrentPagerId)){
+        if (mModel.getIsCollected( mCurrentPagerId)){
             MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_collected),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        }else{
+        } else {
             MenuItemCompat.setShowAsAction(menu.add("收藏").setIcon(R.drawable.measure_analysis_uncollect),
                     MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         }
@@ -162,11 +159,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (mWhatView == RECORDING) {
                 ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if (mWhatView == RECORDEDUNSBMIT || mUnSubmitRecordAudioNum > 0 ) {
-                InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
+            } else if (mWhatView == RECORDED_UN_SUBMIT || mUnSubmitRecordAudioNum > 0 ) {
+                InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dailog
                 return true;
             }
-            if (isExitsPlayingMedia){
+            if (mExitsPlayingMedia){
                 // 将播放状态的播放器变成停止状态
                 changePlayingMediaToStop();
                 return true;
@@ -175,7 +172,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (mWhatView == RECORDING ) {
                 ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if ( mWhatView == RECORDEDUNSBMIT || mWhatView == UNRECORD) {
+            } else if ( mWhatView == RECORDED_UN_SUBMIT || mWhatView == UN_RECORD) {
                 mModel.showOpenFullDialog();
             }
         } else if("收藏".equals(item.getTitle())){
@@ -188,11 +185,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 map.put("Action", "CancelCollect");
                 if (isDone()){
                     UmengManager.onEvent(this, "InterviewAnalysis", map);
-                }else{
+                } else {
                     UmengManager.onEvent(this, "InterviewQuestion", map);
                 }
                 // 录音状态:
-                if(mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT){
+                if (mWhatView == RECORDING || mWhatView == RECORDED_UN_SUBMIT){
                     UmengManager.onEvent(this, "InterviewRecord", map);
                 }
             } else {
@@ -203,11 +200,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 map.put("Action", "Collect");
                 if (isDone()){
                     UmengManager.onEvent(this, "InterviewAnalysis", map);
-                }else{
+                } else {
                     UmengManager.onEvent(this, "InterviewQuestion", map);
                 }
                 // 录音状态:
-                if(mWhatView == RECORDING || mWhatView == RECORDEDUNSBMIT){
+                if (mWhatView == RECORDING || mWhatView == RECORDED_UN_SUBMIT){
                     UmengManager.onEvent(this, "InterviewRecord", map);
                 }
             }
@@ -223,11 +220,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mWhatView == RECORDING) {
             ToastManager.showToast(this, "请专心录音哦");
             return;
-        } else if (mWhatView == RECORDEDUNSBMIT || mUnSubmitRecordAudioNum >0) {
-            InterviewDetailModel.showBackPressedDailog(this);   // 显示退出dailog
+        } else if (mWhatView == RECORDED_UN_SUBMIT || mUnSubmitRecordAudioNum >0) {
+            InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dailog
             return;
         }
-        if (isExitsPlayingMedia){
+        if (mExitsPlayingMedia){
             // 将播放状态的播放器变成停止状态
             changePlayingMediaToStop();
             return;
@@ -237,8 +234,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     /*
     *   设置页面中是否存在播放的播放器
     * */
-    public void setIsExitsPlayingMedia(boolean isExitsPlayingMedia){
-        this.isExitsPlayingMedia = isExitsPlayingMedia;
+    public void setExitsPlayingMedia(boolean isExitsPlayingMedia){
+        this.mExitsPlayingMedia = isExitsPlayingMedia;
     }
     /*
     *
@@ -248,9 +245,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         SharedPreferences sp = InterviewDetailModel.getInterviewSharedPreferences(this);
         boolean isFirstCheckBox = sp.getBoolean("isFirstCheckBox", true);
         if (isFirstCheckBox){
-            InterviewDetailModel.showStopMediaPlayingDailog(this);
-        }else{
-            mMediaRecorderManagerUtil.stopPlay();
+            InterviewDetailModel.showStopMediaPlayingAlert(this);
+        } else {
+            mMediaRecorderManager.stopPlay();
             finish();
         }
     }
@@ -264,8 +261,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     public int getCurQuestionId() {
-        if (mList == null || mCurrentPagerId < 0 || mCurrentPagerId >= mList.size()) return 0;
-        InterviewPaperDetailResp.QuestionsBean bean = mList.get(mCurrentPagerId);
+        if (mQuestionsBeanList == null || mCurrentPagerId < 0 || mCurrentPagerId >= mQuestionsBeanList.size())  return 0;
+        InterviewPaperDetailResp.QuestionsBean bean = mQuestionsBeanList.get(mCurrentPagerId);
         if (bean == null) return 0;
         return bean.getId();
     }
@@ -281,18 +278,18 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     GsonManager.getModel(response, InterviewPaperDetailResp.class); // 将数据封装成bean对象
             if (resp != null && resp.getResponse_code() == 1) {
                 // 获取问题的数据集合
-                mList = resp.getQuestions();
-                if (mList == null || mList.size() == 0) {
+                mQuestionsBeanList = resp.getQuestions();
+                if (mQuestionsBeanList == null || mQuestionsBeanList.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 } else {
-                    mAdaper = new InterviewDetailAdapter(               // 将数据传给adapter
+                    mAdapter = new InterviewDetailAdapter(               // 将数据传给adapter
                             getSupportFragmentManager(),
-                            mList,
+                            mQuestionsBeanList,
                             this,
-                            mFrom);
+                            mQuestionFrom);
                     // 给model数据
-                    mViewPager.setAdapter(mAdaper);
-                    // 设置viewPager缓存也个数
+                    mViewPager.setAdapter(mAdapter);
+//                  设置viewPager缓存也个数
                     int childCount = mViewPager.getAdapter().getCount();         // viewPager的总共的页数
                     mViewPager.setOffscreenPageLimit(childCount -1);
                     // 选中当前viewpager
@@ -345,49 +342,49 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     *   需要将暂停的状态的播放器恢复默认状态
     * */
     private void changeFragmentPauseToDefault() {
-        if (mAdaper.mFragmentList.size() <= 0) return;
-        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mCurrentPagerId);
-        if(fragment.mUserAnswerFilePath != null && fragment.checkIsRecordFileExist() && !fragment.isStop ){
-            fragment.mOffset = 0;
-            fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
+        if (mAdapter.mFragmentList.size() <= 0)  return;
+        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdapter.mFragmentList.get(mCurrentPagerId);
+        if (fragment.mUserAnswerFilePath != null && fragment.checkIsRecordFileExist() && !fragment.mIsUserNotSubmitAudioPause ){
+            fragment.mUserNotSubmitAudioOffset = 0;
+            fragment.mUserNotSubmitAudioProgressBar.setProgress(100);
             String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
-            if(Integer.parseInt(duration)>= 360){
-                fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
-            }else{
-                fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+            if (Integer.parseInt(duration)>= 360){
+                fragment.mTimeNotSubmitPlayTv.setText(mModel.formatDateTime(360));
+            } else {
+                fragment.mTimeNotSubmitPlayTv.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
             }
-            fragment.mTvtimeNotSubm.setText("听语音");
+            fragment.mNotSubmitStateTv.setText("听语音");
         }
-        if( !fragment.isUserHadSubmitAnswerPause){
-            fragment.mOffset = 0;
-            fragment.mUserAnswerProgressBar.setProgress(100);
+        if ( !fragment.mIsUserHadSubmitAudioPause){
+            fragment.mUserHadSubmitAudioOffset = 0;
+            fragment.mUserHadSubmitAudioProgressBar.setProgress(100);
             if (fragment.mQuestionBean.getUser_audio_duration() >= 360){
-                fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
-            }else{
-                fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(fragment.mQuestionBean.getUser_audio_duration() + 1));
+                fragment.mTimeHadSubmitPlayTv.setText(mModel.formatDateTime(360));
+            } else {
+                fragment.mTimeHadSubmitPlayTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getUser_audio_duration() + 1));
             }
-            fragment.mUserAnswerPlayState.setText("听语音");
+            fragment.mUserAnswerPlayStateTv.setText("听语音");
         }
-        if (fragment.isUnPurchasedOrPurchasedView.equals("PurchasedView")){
-            if( !fragment.isQuestionAudioPause){
+        if (fragment.mIsUnPurchasedOrPurchasedView.equals("PurchasedView")){
+            if ( !fragment.mIsQuestionAudioPause){
                 fragment.mQuestionAudioOffset = 0;
-                fragment.mQuestionAudioProgressbar.setProgress(100);
+                fragment.mQuestionAudioProgressBar.setProgress(100);
                 fragment.mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 fragment.mQuestionAudioTv.setText("听语音");
             }
-            if( !fragment.isAnalysisAudioPause){
+            if ( !fragment.mIsAnalysisAudioPause){
                 fragment.mAnalysisAudioOffset = 0;
-                fragment.mAnalysisAudioProgressbar.setProgress(100);
+                fragment.mAnalysisAudioProgressBar.setProgress(100);
                 fragment.mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 fragment.mAnalysisAudioTv.setText("听语音");
             }
         }
-        if(fragment.mRemarkState < 0) return;
-        if( !fragment.isTeacherAnswerPause && fragment.mRemarkState == HADREMARKED ){
+        if (fragment.mRemarkState < 0) return;
+        if ( !fragment.mIsTeacherAudioPause && fragment.mRemarkState == HAD_REMARKED ){
             fragment.mTeacherRemarkAudioOffset = 0;
             fragment.mTeacherRemarkProgressBar.setProgress(100);
             fragment.mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getTeacher_audio_duration()));
-            fragment.mTeacherRemarkPlayState.setText("收听点评");
+            fragment.mTeacherRemarkPlayStateTv.setText("收听点评");
         }
     }
 
@@ -396,7 +393,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     public void setViewPagerItem(){
         invalidateOptionsMenu();
-        if(mViewPager == null) return;
+        if (mViewPager == null) return;
         mViewPager.setScroll(true);
         mViewPager.setCurrentItem(mCurrentPagerId);
     }
@@ -404,9 +401,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     *   已经录过音但没有提交
     * */
     public void setIsHadUnSubmitRecordedAudio(boolean isHadUnSubmitRecordedAudio){
-        if(isHadUnSubmitRecordedAudio){
+        if (isHadUnSubmitRecordedAudio){
             mUnSubmitRecordAudioNum = mUnSubmitRecordAudioNum + 1;
-        }else {
+        } else {
             mUnSubmitRecordAudioNum = mUnSubmitRecordAudioNum - 1;
         }
     }
@@ -414,55 +411,53 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     *   由fragment传入正在播放的播放器
     * */
     public void setPlayingViewState(String playingViewState){
-        this.playingViewState = playingViewState;
+        this.mPlayingViewState = playingViewState;
     }
     /*
     *  让activity将正在播放的播放器恢复默认状态
     * */
-    public void changPlayingViewToDeafault(){
-        if (mAdaper.mFragmentList.size() <= 0) return;
-        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mPlayingChildViewId);  // mPlayingChildViewId为存在播放状态的播放器的页面的id
-        switch(playingViewState){
-            case QUESTIONITEM:
-                fragment.mQuestionAudioProgressbar.setProgress(100);
+    public void changePlayingViewToDefault(){
+        if (mAdapter.mFragmentList.size() <= 0)  return;
+        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdapter.mFragmentList.get(mPlayingChildViewId);  // mPlayingChildViewId为存在播放状态的播放器的页面的id
+        switch(mPlayingViewState){
+            case QUESTION_ITEM:
+                fragment.mQuestionAudioProgressBar.setProgress(100);
                 fragment.mQuestionAudioOffset = 0;
                 fragment.mediaPlayingAnimation(false);
                 fragment.mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
-            case ANALYSISITEM:
-                fragment.mAnalysisAudioProgressbar.setProgress(100);
+            case ANALYSIS_ITEM:
+                fragment.mAnalysisAudioProgressBar.setProgress(100);
                 fragment.mAnalysisAudioOffset = 0;
                 fragment.mediaPlayingAnimation(false);
                 fragment.mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
             case SUBMIT:
-                fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
-                fragment.mOffset = 0;
+                fragment.mUserNotSubmitAudioProgressBar.setProgress(100);
+                fragment.mUserNotSubmitAudioOffset = 0;
                 String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
-                if(Integer.parseInt(duration)>= 360){
-                    fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
-                }else{
-                    fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
+                if (Integer.parseInt(duration)>= 360){
+                    fragment.mTimeNotSubmitPlayTv.setText(mModel.formatDateTime(360));
+                } else {
+                    fragment.mTimeNotSubmitPlayTv.setText(mModel.formatDateTime(Integer.parseInt(duration)+1));
                 }
                 break;
-            case HADSUBMIT:
-                fragment.mUserAnswerProgressBar.setProgress(100);
-                fragment.mOffset = 0;
+            case HAD_SUBMIT:
+                fragment.mUserHadSubmitAudioProgressBar.setProgress(100);
+                fragment.mUserHadSubmitAudioOffset = 0;
                 if (fragment.mQuestionBean.getUser_audio_duration() >= 360){
-                    fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(360));
+                    fragment.mTimeHadSubmitPlayTv.setText(mModel.formatDateTime(360));
                 }else{
-                    fragment.mTvtimeHadSumbPlay.setText(mModel.formatDateTime(fragment.mQuestionBean.getUser_audio_duration() + 1));
+                    fragment.mTimeHadSubmitPlayTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getUser_audio_duration() + 1));
                 }
                 break;
-            case TEACHERREMARK:
+            case TEACHER_REMARK:
                 fragment.mTeacherRemarkProgressBar.setProgress(100);
                 fragment.mTeacherRemarkAudioOffset = 0;
                 fragment.mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getTeacher_audio_duration()));
                 break;
-            case NONE:
-                break;
         }
-        fragment.isPlaying = NONE;
+        fragment.mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
     }
     /*
     *   获取存在播放状态的播放器的view的id
@@ -472,8 +467,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     private boolean isDone(){
-        if (mAdaper.mFragmentList.size() <= 0) return false;
-        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdaper.mFragmentList.get(mCurrentPagerId);
+        if (mAdapter.mFragmentList.size() <= 0)  return false;
+        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdapter.mFragmentList.get(mCurrentPagerId);
         return fragment.mQuestionBean != null && fragment.mQuestionBean.getUser_audio() != null
                     && fragment.mQuestionBean.getUser_audio().length() >0;
     }

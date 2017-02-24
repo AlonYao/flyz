@@ -6,7 +6,7 @@ import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailRes
 
 public interface IIterviewDetailBaseFragmentView {
 
-    int setLayoutResouceId();
+    int setLayoutResourceId();
     void initChildView();
     InterviewPaperDetailResp.QuestionsBean initChildData();
     String initChildQuestionType();

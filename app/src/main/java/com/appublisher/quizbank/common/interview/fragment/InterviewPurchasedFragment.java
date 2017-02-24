@@ -18,10 +18,10 @@ import java.util.HashMap;
 
 public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
-    private static final String ARGS_QUESTIONBEAN = "questionBean";
+    private static final String ARGS_QUESTION_BEAN = "questionBean";
     private static final String ARGS_POSITION = "position";
-    private static final String ARGS_LISTLENGTH = "listLength";
-    private static final String QUESTIONTYPE = "questionType";
+    private static final String ARGS_LIST_LENGTH = "listLength";
+    private static final String QUESTION_TYPE = "questionType";
     private InterviewPaperDetailResp.QuestionsBean mQuestionBean;
     private int mPosition;
     private InterviewPaperDetailActivity mActivity;
@@ -36,10 +36,10 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
     public static InterviewPurchasedFragment newInstance(String questionBean, int position,int listLength,String questionType) {
         Bundle args = new Bundle();
-        args.putString(ARGS_QUESTIONBEAN, questionBean);
+        args.putString(ARGS_QUESTION_BEAN, questionBean);
         args.putInt(ARGS_POSITION, position);
-        args.putInt(ARGS_LISTLENGTH, listLength);
-        args.putString(QUESTIONTYPE, questionType);    // 问题的类型
+        args.putInt(ARGS_LIST_LENGTH, listLength);
+        args.putString(QUESTION_TYPE, questionType);    // 问题的类型
         InterviewPurchasedFragment fragment = new InterviewPurchasedFragment();
         fragment.setArguments(args);
         return fragment;
@@ -51,11 +51,11 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mActivity = (InterviewPaperDetailActivity) getActivity();
 
         mQuestionBean = GsonManager.getModel(
-                getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
+                getArguments().getString(ARGS_QUESTION_BEAN), InterviewPaperDetailResp.QuestionsBean.class);
         // 问题的类型
-        mQuestionType = getArguments().getString(QUESTIONTYPE);
+        mQuestionType = getArguments().getString(QUESTION_TYPE);
         mPosition = getArguments().getInt(ARGS_POSITION);
-        mListLength = getArguments().getInt(ARGS_LISTLENGTH);
+        mListLength = getArguments().getInt(ARGS_LIST_LENGTH);
 
     }
 
@@ -80,12 +80,12 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         if (mQuestionBean.getQuestion_audio() == null || mQuestionBean.getQuestion_audio_duration() == 0){
             mQuestionListenLl.setVisibility(View.GONE);
-        }else{
+        } else {
             mQuestionListenLl.setVisibility(View.VISIBLE);
         }
         if (mQuestionBean.getAnalysis_audio() == null || mQuestionBean.getAnalysis_audio_duration() == 0){
             mAnalysisListenLl.setVisibility(View.GONE);
-        }else{
+        } else {
             mAnalysisListenLl.setVisibility(View.VISIBLE);
         }
         showQuestionId();
@@ -97,7 +97,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     }
 
     @Override
-    public int setLayoutResouceId() {
+    public int setLayoutResourceId() {
         return R.layout.interview_question_item_recordsound_hadpayfor;
     }
 
@@ -115,25 +115,25 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
     public void initChildListener() {
         if (mQuestionBean == null || mPosition >= mListLength || mPosition < 0) return;
 
-        mQuestionContent.setVisibility(View.GONE);  // 题目的展示容器默认不显示
+        mQuestionContentLl.setVisibility(View.GONE);  // 题目的展示容器默认不显示
 
         /**
          *  题目行的逻辑处理
          * **/
-        mQuestionSwitchView.setOnClickListener(new View.OnClickListener() {
+        mQuestionSwitchViewRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( !isCanTouch){
+                if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-                if (mQuestionContent.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
-                    mQuestionContent.setVisibility(View.GONE);
+                if (mQuestionContentLl.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
+                    mQuestionContentLl.setVisibility(View.GONE);
                     mQuestionIm.setImageResource(R.drawable.interview_answer_lookover);
                     mQuestionTv.setText("看文字");
 
                 } else {
-                    mQuestionContent.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                    mQuestionContentLl.setVisibility(View.VISIBLE);           // 折叠-->展开状态
                     mQuestionIm.setImageResource(R.drawable.interview_fold_up);
                     mQuestionTv.setText("不看文字");
                 }
@@ -153,20 +153,20 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         /**
          *  本类为已付费页面的类,不用再和服务器交互: 解析行的逻辑处理: 逻辑:点击事件:展开与折叠;听语音播放但不可暂停
          * **/
-        mAnalysisSwitchView.setOnClickListener(new View.OnClickListener() {
+        mAnalysisSwitchViewRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( !isCanTouch){
+                if( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-                if (mAnalysisView.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
-                    mAnalysisView.setVisibility(View.GONE);
-                    mAnalysisIm.setImageResource(R.drawable.interview_answer_lookover);
+                if (mAnalysisViewLl.getVisibility() == View.VISIBLE) {    // 打开-->折叠状态
+                    mAnalysisViewLl.setVisibility(View.GONE);
+                    mAnalysisIv.setImageResource(R.drawable.interview_answer_lookover);
                     mReminderTv.setText("看文字");
                 } else {
-                    mAnalysisView.setVisibility(View.VISIBLE);           // 折叠-->展开状态
-                    mAnalysisIm.setImageResource(R.drawable.interview_fold_up);
+                    mAnalysisViewLl.setVisibility(View.VISIBLE);           // 折叠-->展开状态
+                    mAnalysisIv.setImageResource(R.drawable.interview_fold_up);
                     mReminderTv.setText("不看文字");
                 }
 
@@ -188,13 +188,13 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if( !isCanTouch){
+                if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-                if (isPlaying.equals(QUESTIONITEM)){
-                    isQuestionAudioPause = true;
-                }else{
+                if (mPlayingMedia.equals(QUESTION_ITEM)){
+                    mIsQuestionAudioPause = true;
+                } else {
                     // 判断是否存在其他的正在播放的语音
                     changePlayingMediaToPauseState();
                 }
@@ -208,22 +208,22 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 } else {
                     UmengManager.onEvent(mActivity, "InterviewQuestion", map);
                 }
-
             }
         });
+
         /*
         *  解析行语音
         * */
         mAnalysisListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if( !isCanTouch){
+                if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-                if(isPlaying.equals(ANALYSISITEM)){
-                    isAnalysisAudioPause = true;
-                }else{
+                if (mPlayingMedia.equals(ANALYSIS_ITEM)){
+                    mIsAnalysisAudioPause = true;
+                } else {
                     // 判断是否存在其他的正在播放的语音
                     changePlayingMediaToPauseState();
                 }

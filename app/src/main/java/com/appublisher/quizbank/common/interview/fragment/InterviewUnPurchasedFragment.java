@@ -13,16 +13,13 @@ import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailRes
 
 import java.util.HashMap;
 
-/**
- * Created by huaxiao on 2016/12/16.
- * 用来展示未付费页面的Fragment,本类中只处理控件view,数据展示和控件点击交给InterviewUnPurchasdModel
- */
+
 public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
-    private static final String ARGS_QUESTIONBEAN = "questionBean";
+    private static final String ARGS_QUESTION_BEAN = "questionBean";
     private static final String ARGS_POSITION = "position";
-    private static final String ARGS_LISTLENGTH = "listLength";
-    private static final String QUESTIONTYPE = "questionType";
+    private static final String ARGS_LIST_LENGTH = "listLength";
+    private static final String QUESTION_TYPE = "questionType";
     public ViewPager mViewPager;
     private InterviewPaperDetailResp.QuestionsBean mQuestionBean;
     private int mPosition;
@@ -32,10 +29,10 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
 
     public static InterviewUnPurchasedFragment newInstance(String questionBean, int position, int listLength, String questionType) {
         Bundle args = new Bundle();
-        args.putString(ARGS_QUESTIONBEAN, questionBean);
+        args.putString(ARGS_QUESTION_BEAN, questionBean);
         args.putInt(ARGS_POSITION, position);
-        args.putInt(ARGS_LISTLENGTH, listLength);
-        args.putString(QUESTIONTYPE, questionType);    // 问题的类型
+        args.putInt(ARGS_LIST_LENGTH, listLength);
+        args.putString(QUESTION_TYPE, questionType);    // 问题的类型
 
         InterviewUnPurchasedFragment fragment = new InterviewUnPurchasedFragment();
         fragment.setArguments(args);
@@ -47,9 +44,9 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         super.onCreate(savedInstanceState);
         mActivity = (InterviewPaperDetailActivity) getActivity();
         mQuestionBean = GsonManager.getModel(
-                getArguments().getString(ARGS_QUESTIONBEAN), InterviewPaperDetailResp.QuestionsBean.class);
-        mQuestionType = getArguments().getString(QUESTIONTYPE);  // 问题的类型
-        mListLength = getArguments().getInt(ARGS_LISTLENGTH);
+                getArguments().getString(ARGS_QUESTION_BEAN), InterviewPaperDetailResp.QuestionsBean.class);
+        mQuestionType = getArguments().getString(QUESTION_TYPE);  // 问题的类型
+        mListLength = getArguments().getInt(ARGS_LIST_LENGTH);
         mPosition = getArguments().getInt(ARGS_POSITION);          // 问题的索引
     }
 
@@ -69,7 +66,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     }
 
     @Override
-    public int setLayoutResouceId() {               // 传给basefragment布局id
+    public int setLayoutResourceId() {               // 传给basefragment布局id
         return R.layout.interview_question_item_recordsound_notpayfor;
     }
 
@@ -93,23 +90,22 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         /**
          *  展开解析时需要监听是否已经答题: 用一个常量字符记录(在基类中处理录音页面的逻辑时)
          * **/
-        mAnalysisSwitchView.setOnClickListener(new View.OnClickListener() {
+        mAnalysisSwitchViewRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {     // 解析行的逻辑处理:
-                if (!isCanTouch) {
+                if (!mIsCanTouch) {
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-
                 if (isDone() || isBuyAll() || isBuySingle()) {               // 已经答题
-                    if (mAnalysisView.getVisibility() == View.VISIBLE) {
-                        mAnalysisView.setVisibility(View.GONE);
-                        mAnalysisIm.setImageResource(R.drawable.interview_answer_lookover);
+                    if (mAnalysisViewLl.getVisibility() == View.VISIBLE) {
+                        mAnalysisViewLl.setVisibility(View.GONE);
+                        mAnalysisIv.setImageResource(R.drawable.interview_answer_lookover);
                         mReminderTv.setText("查看");
                     } else {
                         // 如果答完题状态
-                        mAnalysisView.setVisibility(View.VISIBLE);
-                        mAnalysisIm.setImageResource(R.drawable.interview_fold_up);
+                        mAnalysisViewLl.setVisibility(View.VISIBLE);
+                        mAnalysisIv.setImageResource(R.drawable.interview_fold_up);
                         mReminderTv.setText("不看文字");
                     }
                     // Umeng

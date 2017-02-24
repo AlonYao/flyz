@@ -62,14 +62,14 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     /*
    *   提交录音
    * */
-    public void showSubmitAnswerProgressBar(String fileDir, InterviewPaperDetailResp.QuestionsBean mQuestionbean, final String durationTime,final String questiontype){
+    public void popupSubmitAnswerProgressBar(String fileDir, InterviewPaperDetailResp.QuestionsBean questionBean, final String durationTime,final String questionType){
         String userId = LoginModel.getUserId();
-        final int question_Id = mQuestionbean.getId();
+        final int question_Id = questionBean.getId();
         final int duration = Integer.parseInt(durationTime);
 
-        String savePath = "/yaoguo_interview/" + userId + "/" + String.valueOf(mQuestionbean.getId()) +".amr" ;
+        String savePath = "/yaoguo_interview/" + userId + "/" + String.valueOf(questionBean.getId()) +".amr" ;
         if (QApiConstants.baseUrl.contains("dev")) {
-            savePath = "/dev/yaoguo_interview/" + userId + "/" + String.valueOf(mQuestionbean.getId()) +".amr" ;
+            savePath = "/dev/yaoguo_interview/" + userId + "/" + String.valueOf(questionBean.getId()) +".amr" ;
         }
         if (mProgressDialog == null) {
             mProgressDialog = YaoguoUploadManager.getProgressDialog(mActivity);
@@ -83,7 +83,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                     mActivity.showLoading();
                     mProgressDialog.cancel();
                     ToastManager.showToast(mActivity,"上传成功 ");
-                    mRequest.submitRecord(InterviewParamBuilder.submitPaper(question_Id,url,duration,questiontype));    //提交录音数据
+                    mRequest.submitRecord(InterviewParamBuilder.submitPaper(question_Id,url,duration,questionType));    //提交录音数据
 
                 }else{
                     mProgressDialog.cancel();
@@ -101,11 +101,11 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     }
 
     /*
-   *  创建重录页面dialog
+   *  创建重录页面弹窗
    * */
-    public static void showBackPressedDailog(final InterviewPaperDetailActivity mActivity){
-        if (mActivity.isFinishing()) return;
-        new AlertDialog.Builder(mActivity)
+    public static void showBackPressedAlert(final InterviewPaperDetailActivity activity){
+        if (activity.isFinishing()) return;
+        new AlertDialog.Builder(activity)
                 .setMessage("放弃本次作答")
                 .setTitle("提示")
                 .setPositiveButton("再想想",
@@ -121,11 +121,11 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 // 判断此时是否有播放的题目
-                                if(mActivity.mMediaRecorderManagerUtil != null){
-                                    mActivity.mMediaRecorderManagerUtil.stopPlay();
+                                if(activity.mMediaRecorderManager != null){
+                                    activity.mMediaRecorderManager.stopPlay();
                                 }
                                 // 返回上一级
-                                mActivity.finish();
+                                activity.finish();
                             }
                         })
                 .create().show();
@@ -134,20 +134,20 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     /*
     *   创建停止播放语音的弹窗提示
     * */
-    public static void showStopMediaPlayingDailog(final InterviewPaperDetailActivity mActivity){
+    public static void showStopMediaPlayingAlert(final InterviewPaperDetailActivity activity){
         //  弹窗提示
-        if (mActivity.isFinishing()) return;
-        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
-        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
-        mAalertDialog.show();
-        Window mWindow = mAalertDialog.getWindow();
+        if (activity.isFinishing()) return;
+        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        alertDialog.show();
+        Window mWindow = alertDialog.getWindow();
         if (mWindow == null) return;
         mWindow.setContentView(R.layout.interview_popupwindow_reminder_stopplaying_media);
         mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
         mWindow.setGravity(Gravity.CENTER);
         WindowManager.LayoutParams lp = mWindow.getAttributes();
         DisplayMetrics metrics = new DisplayMetrics();
-        mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         lp.width = (int)(metrics.widthPixels * 0.8);
         lp.height = (int)(metrics.heightPixels * 0.35);
         mWindow.setAttributes(lp);
@@ -158,13 +158,13 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         stopPlaying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActivity.mMediaRecorderManagerUtil.stopPlay();
-                mAalertDialog.dismiss();
+                activity.mMediaRecorderManager.stopPlay();
+                alertDialog.dismiss();
                 // 返回上一级
-                mActivity.finish();
+                activity.finish();
                 if(checkBox.isChecked()){
                     // 记录状态
-                    SharedPreferences shp = getInterviewSharedPreferences(mActivity);
+                    SharedPreferences shp = getInterviewSharedPreferences(activity);
                     SharedPreferences.Editor edit = shp.edit();
                     edit.putBoolean("isFirstCheckBox", false);
                     edit.apply();
@@ -174,10 +174,10 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
         continuePlaying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAalertDialog.dismiss();
+                alertDialog.dismiss();
                 if(checkBox.isChecked()){
                     // 记录状态
-                    SharedPreferences shp = getInterviewSharedPreferences(mActivity);
+                    SharedPreferences shp = getInterviewSharedPreferences(activity);
                     SharedPreferences.Editor edit = shp.edit();
                     edit.putBoolean("isFirstCheckBox", false);
                     edit.apply();
@@ -190,7 +190,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
    *   检查menu是否为收藏状态:需要获取数据:由fragment传进来
    * */
     public boolean getIsCollected(int position) {
-        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.mList;
+        List<InterviewPaperDetailResp.QuestionsBean> list = mActivity.mQuestionsBeanList;
         if(list == null || list.size()<= 0 || position > list.size() || position < 0) return false;
         InterviewPaperDetailResp.QuestionsBean mBean = list.get(position);
         return mBean != null && mBean.getIs_collected();
@@ -200,7 +200,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
     * */
     public void setCollected(int position, boolean isCollected) {         // question_type 数据源来源
         if (mActivity == null) return;
-        List<InterviewPaperDetailResp.QuestionsBean> list =  mActivity.mList;
+        List<InterviewPaperDetailResp.QuestionsBean> list =  mActivity.mQuestionsBeanList;
         if(list == null || list.size()<= 0 || position > list.size() || position < 0) return;
         InterviewPaperDetailResp.QuestionsBean mBean = list.get(position);
         if(mBean == null ) return;
@@ -212,7 +212,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
             mBean.setIs_collected(false);
             type = "cancel_collect";
         }
-        mActivity.mList.set(position, mBean);        // 刷新list
+        mActivity.mQuestionsBeanList.set(position, mBean);        // 刷新list
         // 提交数据
         mRequest.collectQuestion(InterviewParamBuilder.submitCollectStated(type,mBean.getId()));     // 向服务器提交收藏状态
 
@@ -338,17 +338,17 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
 
         if (mActivity == null) return;
 
-        final AlertDialog mAalertDialog = new AlertDialog.Builder(mActivity).create();
-        mAalertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
-        mAalertDialog.show();
+        final AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
+        alertDialog.setCancelable(false);                         // 背景页面不可点,返回键也不可点击
+        alertDialog.show();
 
-        Window mWindow = mAalertDialog.getWindow();
+        Window mWindow = alertDialog.getWindow();
         if (mWindow == null) return;
         mWindow.setContentView(R.layout.interview_popupwindow_openfull);
         setWindowBackground(mWindow);
 
         TextView payNine = (TextView) mWindow.findViewById(R.id.pay_nine);
-        TextView cancle = (TextView) mWindow.findViewById(R.id.cancle);
+        TextView cancel = (TextView) mWindow.findViewById(R.id.cancel);
 
         String allPayText = "付 ¥ 9, 解锁本题库全部解析";
         final InterviewPaperDetailResp.AllAudioBean bean = mActivity.getAllAudioBean();
@@ -371,7 +371,7 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 entity.setExtra(String.valueOf(mActivity.getCurQuestionId()));
                 showChoicePay(entity);
 
-                mAalertDialog.dismiss();
+                alertDialog.dismiss();
                 mActivity.setCanBack(0);              // 可以按返回键
 
                 // Umeng
@@ -380,23 +380,23 @@ public class InterviewDetailModel extends InterviewModel implements RequestCallb
                 UmengManager.onEvent(mActivity, "InterviewVip", map);
             }
         });
-        cancle.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAalertDialog.dismiss();
+                alertDialog.dismiss();
                 mActivity.setCanBack(0);              // 可以按返回键
             }
         });
     }
 
-    private void setWindowBackground(Window mWindow){
-        mWindow.setBackgroundDrawableResource(R.color.transparency);   //背景色
-        mWindow.setGravity(Gravity.BOTTOM);                         // 除底部弹出
-        mWindow.getDecorView().setPadding(0, 0, 0, 0);                 // 消除边距
-        WindowManager.LayoutParams layoutParams = mWindow.getAttributes();
+    private void setWindowBackground(Window window){
+        window.setBackgroundDrawableResource(R.color.transparency);   //背景色
+        window.setGravity(Gravity.BOTTOM);                         // 除底部弹出
+        window.getDecorView().setPadding(0, 0, 0, 0);                 // 消除边距
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;        // 背景宽度设置成和屏幕宽度一致
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        mWindow.setAttributes(layoutParams);
+        window.setAttributes(layoutParams);
 
     }
 

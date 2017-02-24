@@ -23,7 +23,7 @@ public class InterviewModel {
      * @param url     下载链接
      * @param localFile    文件名
      */
-    public void downloadVoiceVideo(final Context context, String url, final String fileFolder, final String localFile, final int questionId , final ICommonCallback ICommonCallback) {
+    public void downloadAudio(final Context context, String url, final String fileFolder, final String localFile,  final ICommonCallback ICommonCallback) {
         ProgressDialogManager.showProgressDialog(context);
         DownloadAsyncTask mDownloadAsyncTask = new DownloadAsyncTask(
                 url,
@@ -95,7 +95,7 @@ public class InterviewModel {
     /*
     *   将时间戳变成一个数字
     * */
-    public String changTimeStampToText(String timeStamp){
+    public String changeTimeStampToText(String timeStamp){
         StringBuilder stringBuilder = new StringBuilder();
         return stringBuilder.append(timeStamp.substring(0,4))
                 .append(timeStamp.substring(5,7)).append(timeStamp.substring(8,10))
