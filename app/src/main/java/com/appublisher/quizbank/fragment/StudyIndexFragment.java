@@ -287,10 +287,13 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
             lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lp.bottomMargin = (int) (height * 0.7);
             lp.rightMargin = marginRight;
-            ((MainActivity) getActivity()).recordTip.setLayoutParams(lp);
-            ((MainActivity) getActivity()).recordTip.setVisibility(View.VISIBLE);
+            if (getActivity() != null && ((MainActivity) getActivity()).recordTip != null) {
+                ((MainActivity) getActivity()).recordTip.setLayoutParams(lp);
+                ((MainActivity) getActivity()).recordTip.setVisibility(View.VISIBLE);
+            }
         } else {
-            ((MainActivity) getActivity()).recordTip.setVisibility(View.INVISIBLE);
+            if (getActivity() != null && ((MainActivity) getActivity()).recordTip != null)
+                ((MainActivity) getActivity()).recordTip.setVisibility(View.INVISIBLE);
         }
     }
 
