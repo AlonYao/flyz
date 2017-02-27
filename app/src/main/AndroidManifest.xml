@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="androd.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <!-- 个推SDK权限 START -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -23,13 +24,20 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="getui.permission.GetuiService.com.appublisher.quizbank" />
-
     <permission
         android:name="getui.permission.GetuiService.com.appublisher.quizbank"
         android:protectionLevel="normal" />
-    -
-
     <!-- 个推SDK权限 END -->
+
+    <!-- 账号检测相关权限 -->
+    <uses-permission
+        android:name="com.appublisher.dailyplan.permission.LOGIN_PROVIDER"/>
+    <uses-permission
+        android:name="com.appublisher.dailylearn.permission.LOGIN_PROVIDER"/>
+    <permission
+        android:name="com.appublisher.quizbank.permission.LOGIN_PROVIDER"
+        android:protectionLevel="normal" />
+
     <application
         android:name=".QuizBankApp"
         android:allowBackup="true"
@@ -71,6 +79,13 @@
         </receiver>
         <!-- 个推SDK配置结束 -->
 
+        <!-- LoginProvider 权限 -->
+        <provider
+            android:name=".provider.LoginProvider"
+            android:authorities="com.appublisher.quizbank.login.provider"
+            android:exported="true"
+            android:permission="com.appublisher.quizbank.permission.LOGIN_PROVIDER"
+            tools:ignore="ExportedContentProvider" />
 
         <!-- 新浪回调Activity -->
         <activity
