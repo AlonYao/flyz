@@ -56,7 +56,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionType = getArguments().getString(QUESTION_TYPE);
         mPosition = getArguments().getInt(ARGS_POSITION);
         mListLength = getArguments().getInt(ARGS_LIST_LENGTH);
-
     }
 
     @Override

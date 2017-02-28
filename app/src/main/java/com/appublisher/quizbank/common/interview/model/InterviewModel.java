@@ -67,18 +67,16 @@ public class InterviewModel {
     *   修改时间格式
     * */
     public String formatDateTime(int mss) {
-
         String DateTimes ;
         int minutes = ( mss % ( 60 * 60) ) / 60;
         int seconds = mss % 60;
-
-        if(minutes>0){
-            if(seconds < 10){
+        if (minutes>0){
+            if (seconds < 10){
                 DateTimes = minutes + "\'" + "0" + seconds + "\"";
                 return DateTimes;
             }
             DateTimes = minutes + "\'" + seconds + "\"";
-        }else{
+        } else {
             DateTimes = seconds + "\"";
         }
         return DateTimes;
@@ -95,10 +93,10 @@ public class InterviewModel {
     *   将时间戳变成一个数字
     * */
     public String changeTimeStampToText(String timeStamp){
-        return new StringBuilder().append(timeStamp.substring(0,4))
-                .append(timeStamp.substring(5,7)).append(timeStamp.substring(8,10))
-                .append(timeStamp.substring(11,13)).append(timeStamp.substring(14,16))
-                .append(timeStamp.substring(17,19)).toString();
+        return (timeStamp.substring(0,4))
+                + (timeStamp.substring(5,7)) + (timeStamp.substring(8,10))
+                + (timeStamp.substring(11,13)) + (timeStamp.substring(14,16))
+                +(timeStamp.substring(17,19));
     }
     /*
     *  传入时间戳

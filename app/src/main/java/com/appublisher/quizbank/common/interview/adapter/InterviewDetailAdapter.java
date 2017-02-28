@@ -42,14 +42,18 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
         if (hasPurchasedAction(bean)) {
             InterviewPurchasedFragment interviewPurchasedFragment = InterviewPurchasedFragment.newInstance(
                     questionbean, position, listLength, questionType);
-            if(mFragmentList != null){
+            if (mFragmentList != null && position < mFragmentList.size() ){
+                mFragmentList.set(position,interviewPurchasedFragment);
+            } else {
                 mFragmentList.add(interviewPurchasedFragment);
             }
             return interviewPurchasedFragment;       // 已付费页面
         } else {
             InterviewUnPurchasedFragment interviewUnPurchasedFragment = InterviewUnPurchasedFragment.newInstance(
                     questionbean, position, listLength, questionType);
-            if(mFragmentList != null){
+            if (mFragmentList != null && position < mFragmentList.size() ){
+                mFragmentList.set(position,interviewUnPurchasedFragment);
+            } else {
                 mFragmentList.add(interviewUnPurchasedFragment);
             }
             return interviewUnPurchasedFragment;    // 未付费页面
