@@ -230,6 +230,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Logger.e("onCreateView page =="+ getChildViewPosition());
+
         mIsUserNotSubmitAudioPause = false;
         mIsUserHadSubmitAudioPause = false;
         mIsHadValidRecordFile = false;
@@ -268,10 +270,15 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         showQuestion();
         showAnswer();
 
-        // 刷新
-        refresh();
-
         return mFragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 刷新
+//        refresh();
+        refreshViewState();
     }
 
     private void refresh(){
@@ -279,13 +286,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mActivity.mViewStateList.get(getChildViewPosition());
         int analysisItemState = interviewViewStateBean.getAnalysisItemState();
         if (analysisItemState == 0){
-            Logger.e("set progress 1 == " + String.valueOf(mAnalysisAudioProgressBar.getProgress()));
             mAnalysisAudioProgressBar.setProgress(100);
-            Logger.e("set progress 1.1 == " + String.valueOf(mAnalysisAudioProgressBar.getProgress()));
-            mAnalysisAudioTv.setText("1111111");
         }
-        Logger.e("refresh page == " + String.valueOf(getChildViewPosition()));
-        Logger.e("cur analysisItemState == " + String.valueOf(analysisItemState));
     }
 
     private void checkIsAnswer() {
@@ -1088,6 +1090,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     * */
     private void showRecordedDuration() {
         String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+        if (duration.equals("")) return;
         if (Integer.parseInt(duration) >= UPPER_LIMIT_RECORD_TIME) {
             mTimeNotSubmitPlayTv.setText(mModel.formatDateTime(UPPER_LIMIT_RECORD_TIME));
         } else {
@@ -1303,6 +1306,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 mPlayingMedia = SUBMIT;
                 mTimeNotSubmitPlayTv.setText(mModel.formatDateTime(unPlayDur));
                 String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+                if (duration.equals("")) return;
                 mUserNotSubmitAudioProgressBar.setProgress(getPercent(unPlayDur, Integer.parseInt(duration) + 1));
                 mActivity.mViewStateList.get(getChildViewPosition()).setUserNotSubmitState(1);
                 break;
@@ -1327,7 +1331,6 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 break;
             case ANALYSIS_ITEM:              // 解析行语音
                 mPlayingMedia = ANALYSIS_ITEM;
-                Logger.e("set progress 2 == " + String.valueOf(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration())));
                 mAnalysisAudioProgressBar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));   // 解析行的进度条
                 // 中间图片的动画集合
                 mediaPlayingAnimation(true);
@@ -1739,6 +1742,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     private void refreshQuestionItemState(){
         switch (mQuestionItemState){
             case 0:         // 默认&停止
+                mStatus = QUESTION_ITEM;
+                changeFragmentPauseToDefault();
                 break;
             case 1:         // 播放
                 mStatus = QUESTION_ITEM;
@@ -1761,39 +1766,40 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 break;
         }
     }
+
     private void refreshAnalysisItemState(){
-
-//        Logger.e("refreshAnalysisItemState page == " + String.valueOf(getChildViewPosition()));
-
-//        switch (mAnalysisItemState){
-//            case 0:         // 默认&停止
-//                mStatus = ANALYSIS_ITEM;
-//                changeFragmentPauseToDefault();
-//                break;
-//            case 1:         // 播放
-//                mStatus = ANALYSIS_ITEM;
-//                mActivity.mMediaRecorderManager.regainPlay(new MediaRecorderManager.IPlayFileCountdownCallback() {
-//                    @Override
-//                    public void onPlayCountdown(int unPlayDur) {
-//                        if( unPlayDur > 0 ){
-//                            mAnalysisAudioProgressBar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));
-//                            mediaPlayingAnimation(true);
-//                            mPlayingMedia = ANALYSIS_ITEM;
-//                        }else{
-//                            changeFragmentPauseToDefault();
-//                        }
-//                    }
-//                });
-//                break;
-//            case 2:         // 暂停
-//                mStatus = ANALYSIS_ITEM;
-//                changeFragmentPauseToDefault();
-//                break;
-//        }
+        switch (mAnalysisItemState){
+            case 0:         // 默认&停止
+                mStatus = ANALYSIS_ITEM;
+                changeFragmentPauseToDefault();
+                break;
+            case 1:         // 播放
+                Logger.e("refreshAnalysisItemState.11111");
+                mStatus = ANALYSIS_ITEM;
+                mActivity.mMediaRecorderManager.regainPlay(new MediaRecorderManager.IPlayFileCountdownCallback() {
+                    @Override
+                    public void onPlayCountdown(int unPlayDur) {
+                        if( unPlayDur > 0 ){
+                            mAnalysisAudioProgressBar.setProgress(getPercent(unPlayDur, mQuestionBean.getAnalysis_audio_duration()));
+                            mediaPlayingAnimation(true);
+                            mPlayingMedia = ANALYSIS_ITEM;
+                        }else{
+                            changeFragmentPauseToDefault();
+                        }
+                    }
+                });
+                break;
+            case 2:         // 暂停
+                mStatus = ANALYSIS_ITEM;
+                changeFragmentPauseToDefault();
+                break;
+        }
     }
     private void refreshUserNotSubmitState(){
         switch (mUserNotSubmitState){
             case 0:         // 默认&停止
+                mStatus = SUBMIT;
+                changeFragmentPauseToDefault();
                 break;
             case 1:         // 播放
                 mStatus = SUBMIT;
@@ -1819,6 +1825,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     private void refreshUserHadSubmitState(){
         switch (mUserHadSubmitState){
             case 0:         // 默认&停止
+                mStatus = HAD_SUBMIT;
+                changeFragmentPauseToDefault();
                 break;
             case 1:         // 播放
                 mStatus = HAD_SUBMIT;
@@ -1843,6 +1851,8 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     private void refreshTeacherRemarkItemState(){
         switch (mTeacherRemarkItemState){
             case 0:         // 默认&停止
+                mStatus = TEACHER_REMARK;
+                changeFragmentPauseToDefault();
                 break;
             case 1:         // 播放
                 mStatus = TEACHER_REMARK;
@@ -1873,6 +1883,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         switch (mStatus) {
             case SUBMIT:
                 String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+                if (duration.equals("")) return;
                 if(Integer.parseInt(duration) >= 360){
                     mTimeNotSubmitPlayTv.setText(mModel.formatDateTime(360));
                 } else{
@@ -1904,7 +1915,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 break;
             case ANALYSIS_ITEM:
                 mIsAnalysisAudioPause = false;
-                Logger.e("set progress 3");
+//                Logger.e("set progress 3");
                 mAnalysisAudioProgressBar.setProgress(100);
                 mAnalysisAudioOffset = 0;
                 mediaPlayingAnimation(false);

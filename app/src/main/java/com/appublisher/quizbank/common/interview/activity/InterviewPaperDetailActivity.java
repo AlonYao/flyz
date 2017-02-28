@@ -392,23 +392,25 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mAdapter.mFragmentList.size() <= 0 )  return;
         InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdapter.mFragmentList.get(mPlayingChildViewId);  // mPlayingChildViewId为存在播放状态的播放器的页面的id
         String status = mViewStateList.get(mPlayingChildViewId).getStatus();
-
+        Logger.e("status==="+status);
         switch(status){
             case QUESTION_ITEM:
+                fragment.mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                 fragment.mQuestionAudioProgressBar.setProgress(100);
                 fragment.mQuestionAudioOffset = 0;
                 fragment.mediaPlayingAnimation(false);
                 fragment.mQuestionAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
             case ANALYSIS_ITEM:
-                fragment.mIsAnalysisAudioPause = false;
                 Logger.e("set progress 4");
+                fragment.mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                 fragment.mAnalysisAudioProgressBar.setProgress(100);
                 fragment.mAnalysisAudioOffset = 0;
                 fragment.mediaPlayingAnimation(false);
                 fragment.mAnalysisAudioIv.setImageResource(R.drawable.interview_listen_audio);
                 break;
             case SUBMIT:
+                fragment.mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                 fragment.mUserNotSubmitAudioProgressBar.setProgress(100);
                 fragment.mUserNotSubmitAudioOffset = 0;
                 String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
@@ -419,6 +421,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 }
                 break;
             case HAD_SUBMIT:
+                fragment.mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                 fragment.mUserHadSubmitAudioProgressBar.setProgress(100);
                 fragment.mUserHadSubmitAudioOffset = 0;
                 if (fragment.mQuestionBean.getUser_audio_duration() >= 360){
@@ -428,6 +431,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 }
                 break;
             case TEACHER_REMARK:
+                fragment.mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                 fragment.mTeacherRemarkProgressBar.setProgress(100);
                 fragment.mTeacherRemarkAudioOffset = 0;
                 fragment.mTeacherRemarkPlayTimeTv.setText(mModel.formatDateTime(fragment.mQuestionBean.getTeacher_audio_duration()));
@@ -435,7 +439,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         }
 
         mViewStateList.set(mPlayingChildViewId, new InterviewViewStateBean());
-        controlFragmentPlayState();
+//        controlFragmentPlayState();
     }
     /*
     *   继续保持控件的播放状态
