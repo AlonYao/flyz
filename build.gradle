@@ -45,7 +45,7 @@ task pullLibBasic {
         //noinspection GroovyAssignabilityCheck
         def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_basic'
         def libFile = file(path)
-        def branch = 'release_1.4.0'
+        def branch = 'release_1.5.0'
 
         if (libFile.exists()) {
             //noinspection GroovyAssignabilityCheck
@@ -73,7 +73,7 @@ task pullLibLogin {
         //noinspection GroovyAssignabilityCheck
         def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_login'
         def libFile = file(path)
-        def branch = 'release_1.4.0'
+        def branch = 'release_1.5.0'
 
         if (libFile.exists()) {
             //noinspection GroovyAssignabilityCheck
@@ -101,7 +101,7 @@ task pullLibCourse {
         //noinspection GroovyAssignabilityCheck
         def path = projectDir.getParentFile().getAbsolutePath() + '/YaoguoLibs/lib_course'
         def libFile = file(path)
-        def branch = 'release_1.4.0'
+        def branch = 'release_1.5.0'
 
         if (libFile.exists()) {
             //noinspection GroovyAssignabilityCheck
