@@ -150,7 +150,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         });
 
         /**
-         *  本类为已付费页面的类,不用再和服务器交互: 解析行的逻辑处理: 逻辑:点击事件:展开与折叠;听语音播放但不可暂停
+         *  解析行的逻辑处理
          * **/
         mAnalysisSwitchViewRl.setOnClickListener(new View.OnClickListener() {
             @Override

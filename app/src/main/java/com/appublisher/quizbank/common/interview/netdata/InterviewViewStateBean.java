@@ -17,7 +17,9 @@ public class InterviewViewStateBean {
     // 播放时的时间
     private int playingDuration;
     // 具体是哪一个播放器在播放
-    private String status;
+    private String status = "notExistPlayingMedia";
+
+
     public String getStatus() {
         return status;
     }
