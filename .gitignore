@@ -14,7 +14,6 @@
 /*/build
 /gradle.properties
 captures/
-/gradlew
 /quizbank.jks
 /signature.properties
 /app/quizbank.jks
