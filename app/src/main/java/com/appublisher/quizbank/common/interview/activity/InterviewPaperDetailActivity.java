@@ -33,6 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback, InterviewDetailBaseFragmentCallBak {
 
@@ -63,8 +64,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private boolean mIsShowBuyAllMenu = false;
     private boolean mExitsPlayingMedia;
     public ArrayList<InterviewViewStateBean> mFragmentControlsStateList;
-    public ArrayList<String> mRecordPathList;
-    private int mUnSubmitRecordFileNumber;
+    public HashMap<String, String> mRecordPathMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         mPlayingViewState = NOT_EXIST_PLAYING_MEDIA;
         mExitsPlayingMedia = false;
-        mUnSubmitRecordFileNumber = 0;
 
         // 所有fragment中用同一个录音器
         mMediaRecorderManager = new MediaRecorderManager(this);
@@ -89,17 +88,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mViewPager.setScroll(true);
         if (mFragmentControlsStateList == null || mFragmentControlsStateList.size()<= 0)
             mFragmentControlsStateList = new ArrayList<>();     // 保存view属性的集合
-        if (mRecordPathList == null || mRecordPathList.size()<= 0)
-            mRecordPathList = new ArrayList<>();        // 保存录音缓存文件路径的集合
-        initListener(mViewPager);
 
+        mRecordPathMap = new HashMap<>();   // 保存录音缓存文件路径的集合
+        initListener(mViewPager);
         mModel = new InterviewDetailModel(this, this);
         mRequest = new InterviewRequest(this, this);
 
         mDataFrom = getIntent().getStringExtra("dataFrom");
         mItemType = getIntent().getStringExtra("itemType"); // item类型
         mQuestionTime = getIntent().getStringExtra("time"); // 时间
-
 
         if("studyRecordInterview".equals(mDataFrom)){       // 数据来源自记录页面的面试页面
             mRequest.getStudyRecordInterviewPaperDetail(mItemType, mQuestionTime);
@@ -122,8 +119,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void getData() {
         mWhatView = RECORDED_HAD_SUBMIT;
         // 将缓存路径集合清空
-        if (mRecordPathList != null && mRecordPathList.size() >0 ) mRecordPathList.clear();
-        mUnSubmitRecordFileNumber = 0;
+        if (mRecordPathMap != null && mRecordPathMap.size() >0 ) mRecordPathMap.clear();
 
         if ("studyRecordInterview".equals(mDataFrom)){
             mRequest.getStudyRecordInterviewPaperDetail(mItemType, mQuestionTime);
@@ -166,7 +162,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (mWhatView == RECORDING) {
                 ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if (mWhatView == RECORDED_UN_SUBMIT || checkIsHadUnSubmitFile() > 0) {
+            } else if (mWhatView == RECORDED_UN_SUBMIT || checkRecordPathMap() ) {
                 InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dailog
                 return true;
             }
@@ -227,8 +223,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mWhatView == RECORDING) {
             ToastManager.showToast(this, "请专心录音哦");
             return;
-        } else if (mWhatView == RECORDED_UN_SUBMIT || checkIsHadUnSubmitFile() > 0) {
-            InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dailog
+        } else if (mWhatView == RECORDED_UN_SUBMIT || checkRecordPathMap()) {
+            InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dialog
             return;
         }
         if (mExitsPlayingMedia){
@@ -298,12 +294,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             mFragmentControlsStateList.add(new InterviewViewStateBean());
                         }
                     }
-                    if( mRecordPathList == null || mRecordPathList.size() <= 0 ){
-                        if(count <= 0) return;
-                        for(int i = 0; i < count; i++){
-                            mRecordPathList.add("");
-                        }
-                    }
                     mAdapter = new InterviewDetailAdapter(               // 将数据传给adapter
                             getSupportFragmentManager(),
                             mQuestionsBeanList,
@@ -367,17 +357,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mViewPager.setCurrentItem(mCurrentPagerId);
     }
 
-    private int checkIsHadUnSubmitFile(){
-
-//        return mRecordPathList != null && mRecordPathList.size() >0 ;
-        if (mRecordPathList == null || mRecordPathList.size() <=0) return 0;
-        for (String path: mRecordPathList){
-            File file = new File(path);
-            if (file.exists() && file.isFile()){
-                mUnSubmitRecordFileNumber = mUnSubmitRecordFileNumber + 1;
-            }
-        }
-        return mUnSubmitRecordFileNumber;
+    private boolean checkRecordPathMap(){
+        return mRecordPathMap != null && mRecordPathMap.size() >0 ;
     }
 
     /*
@@ -386,14 +367,16 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mRecordPathList == null || mRecordPathList.size() <= 0) return;
-        for (String path: mRecordPathList){
-            File file = new File(path);
+        if (mRecordPathMap == null || mRecordPathMap.size() <= 0) return;
+        for (Map.Entry<String, String> entry : mRecordPathMap.entrySet()) {
+            File file = new File(entry.getValue());
             if (file.exists() && file.isFile()){
                 Logger.e("Activity.onDestroy");
-                FileManager.deleteFiles(path);
+                Logger.e("entry.getValue() == " + entry.getValue());
+                FileManager.deleteFiles(entry.getValue());
             }
         }
+
     }
 
     /*
@@ -411,7 +394,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     private void updateFragmentPlayState() {
 
-        if(mAdapter.mFragmentList.size() <= 0 || mPlayingChildViewId >mAdapter.mFragmentList.size()) return;
+        if(mAdapter.mFragmentList.size() <= 0 || mPlayingChildViewId >= mAdapter.mFragmentList.size()) return;
         InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdapter.mFragmentList.get(mPlayingChildViewId);
 
         fragment.updateFragmentViewState();
