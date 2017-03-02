@@ -155,7 +155,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mAnalysisSwitchViewRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( !mIsCanTouch){
+                if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
