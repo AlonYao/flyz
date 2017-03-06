@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.FileManager;
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.MediaRecorderManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
@@ -17,8 +18,8 @@ import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
-import com.appublisher.quizbank.common.interview.fragment.InterviewDetailBaseFragment;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
+import com.appublisher.quizbank.common.interview.netdata.InterviewControlsStateBean;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.netdata.InterviewViewStateBean;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
@@ -40,6 +41,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private static final int RECORDING = 1;
     private static final int RECORDED_UN_SUBMIT = 2;
     private static final int RECORDED_HAD_SUBMIT = 3;
+    public static final String ANALYSIS_ITEM = "analysisItem";
     public static final String NOT_EXIST_PLAYING_MEDIA = "notExistPlayingMedia";
     public InterviewRequest mRequest;
     public ScrollExtendViewPager mViewPager;
@@ -65,6 +67,11 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private boolean mExitsPlayingMedia;
     public ArrayList<InterviewViewStateBean> mFragmentControlsStateList;
     public HashMap<String, String> mRecordPathMap;
+    public boolean mHadDoneQuestion;
+//    public HashMap<Integer, ArrayList> mFragmentControlsMap;
+//    public ArrayList<InterviewControlsStateBean> mFragmentControlsBeanList;
+    public HashMap<Integer, HashMap> mFragmentControlsMap;
+    public HashMap<String, InterviewControlsStateBean> mFragmentControlsBeanMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +86,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         mPlayingViewState = NOT_EXIST_PLAYING_MEDIA;
         mExitsPlayingMedia = false;
-
+        mHadDoneQuestion = false;
         // 所有fragment中用同一个录音器
         mMediaRecorderManager = new MediaRecorderManager(this);
         mViewPager = (ScrollExtendViewPager) findViewById(R.id.viewpager);   //自定义的viewpager
@@ -90,6 +97,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             mFragmentControlsStateList = new ArrayList<>();     // 保存view属性的集合
 
         mRecordPathMap = new HashMap<>();   // 保存录音缓存文件路径的集合
+        if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0)
+            mFragmentControlsMap = new HashMap<>();
+//
+        mFragmentControlsBeanMap = new HashMap<>();
+
+//        mFragmentControlsBeanList = new ArrayList<>();
+
         initListener(mViewPager);
         mModel = new InterviewDetailModel(this, this);
         mRequest = new InterviewRequest(this, this);
@@ -185,7 +199,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "CancelCollect");
-                if (isDone()) {
+                if (mHadDoneQuestion) {
                     UmengManager.onEvent(this, "InterviewAnalysis", map);
                 } else {
                     UmengManager.onEvent(this, "InterviewQuestion", map);
@@ -200,7 +214,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "Collect");
-                if (isDone()) {
+                if (mHadDoneQuestion) {
                     UmengManager.onEvent(this, "InterviewAnalysis", map);
                 } else {
                     UmengManager.onEvent(this, "InterviewQuestion", map);
@@ -293,6 +307,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             mFragmentControlsStateList.add(new InterviewViewStateBean());
                         }
                     }
+                    // 新集合
+//                    if ( mFragmentControlsStateList2 == null || mFragmentControlsStateList2.size() <= 0 ){
+//                        if (count <= 0) return;
+//                        for (int i = 0; i < count; i++){
+//                            mFragmentControlsStateList2.add(new InterviewControlsStateBean());
+//                        }
+//                    }
                     mAdapter = new InterviewDetailAdapter(               // 将数据传给adapter
                             getSupportFragmentManager(),
                             mQuestionsBeanList,
@@ -378,21 +399,54 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     *  让activity将正在播放的播放器恢复默认状态
     * */
     public void changePlayingViewToDefault(){
+        Logger.e(" activity.changePlayingViewToDefault() ");
         // 判断是否为当前页面
         if (mPlayingChildViewId == mCurrentPagerId) return;
-        mFragmentControlsStateList.set(mPlayingChildViewId, new InterviewViewStateBean());      // 将前面存在播放状态的控件的bean再初始化
+
+        // 将存有控件状态的集合清空
+        Logger.e(" activity.mPlayingChildViewId == " + mPlayingChildViewId);
+        HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
+        if (hashMap == null || hashMap.size() <= 0) return;
+        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
+        controlsStateBean.setState("pause");
+        controlsStateBean.setMediaName(ANALYSIS_ITEM);
+        mFragmentControlsBeanMap.put(ANALYSIS_ITEM, controlsStateBean);
+        mFragmentControlsMap.put(mPlayingChildViewId, mFragmentControlsBeanMap);
+        Logger.e(" aaa");
         updateFragmentPlayState();
+
     }
     /*
     *   刷新控件的播放状态
     * */
     private void updateFragmentPlayState() {
+        Logger.e(" activity.updateFragmentPlayState()");
+        // 不能放到fragment中处理
+        HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
+        if (hashMap == null || hashMap.size() <= 0) return;
+        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
+        String state = controlsStateBean.getState();
+        if (("").equals(state) || state == null) return;
 
-        if (mAdapter.mFragmentList.size() <= 0 || mPlayingChildViewId >= mAdapter.mFragmentList.size()) return;
-        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdapter.mFragmentList.get(mPlayingChildViewId);
+        Logger.e(" state activity == " + state);
+        if (state.equals("pause")) {
+            controlsStateBean.setOffset(0);
+            Logger.e(" controlsStateBean.getMediaName() 111 == " + controlsStateBean.getMediaName());
+            controlsStateBean.setMediaName(NOT_EXIST_PLAYING_MEDIA);
+            Logger.e(" controlsStateBean.getMediaName() 222 == " + controlsStateBean.getMediaName());
+            InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
+            if (controlsViewBean == null || controlsViewBean.getProgressBarStateTv() == null
+                    || controlsViewBean.getProgressBarTimeIv() == null ) return;
+            controlsViewBean.getProgressBar().setProgress(100);
+            controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
+            controlsViewBean.getProgressBarStateTv().setText("ddd");
 
-        fragment.updateFragmentViewState();
+            //
+            mFragmentControlsMap.remove(mPlayingChildViewId);
+        }
+
     }
+
     /*
     *   获取存在播放状态的播放器的view的id
     * */
@@ -400,11 +454,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mPlayingChildViewId = playingChildViewId;
     }
 
-    private boolean isDone(){
-        if (mAdapter.mFragmentList.size() <= 0)  return false;
-        InterviewDetailBaseFragment fragment = (InterviewDetailBaseFragment) mAdapter.mFragmentList.get(mCurrentPagerId);
-        return fragment.mQuestionBean != null && fragment.mQuestionBean.getUser_audio() != null
-                && fragment.mQuestionBean.getUser_audio().length() > 0;
+    public void setIsDone(boolean isDone){
+        mHadDoneQuestion = isDone;
     }
 
     @Override

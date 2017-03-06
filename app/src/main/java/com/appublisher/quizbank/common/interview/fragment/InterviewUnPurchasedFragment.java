@@ -97,7 +97,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-                if (isDone() || isBuyAll() || isBuySingle()) {               // 已经答题
+                if (mActivity.mHadDoneQuestion || isBuyAll() || isBuySingle()) {               // 已经答题
                     if (mAnalysisViewLl.getVisibility() == View.VISIBLE) {
                         mAnalysisViewLl.setVisibility(View.GONE);
                         mAnalysisIv.setImageResource(R.drawable.interview_answer_lookover);
@@ -111,7 +111,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
                     // Umeng
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Action", "ReadA");
-                    if (isDone()) {
+                    if (mActivity.mHadDoneQuestion) {
                         UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
                     } else {
                         UmengManager.onEvent(mActivity, "InterviewQuestion", map);
@@ -128,9 +128,9 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
         });
     }
 
-    private boolean isDone() {
-        return mQuestionBean != null && mQuestionBean.getUser_audio().length() > 0;
-    }
+//    private boolean isDone() {
+//        return mQuestionBean != null && mQuestionBean.getUser_audio().length() > 0;
+//    }
 
     private boolean isBuySingle() {
         return mQuestionBean != null && mQuestionBean.isPurchased_audio();

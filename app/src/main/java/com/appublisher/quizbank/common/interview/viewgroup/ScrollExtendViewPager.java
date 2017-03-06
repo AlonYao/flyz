@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 
 public class ScrollExtendViewPager extends ViewPager {
 
-    private boolean isScoll;
+    private boolean isScroll;
 
     public ScrollExtendViewPager(Context context) {
         super(context);
@@ -19,18 +19,18 @@ public class ScrollExtendViewPager extends ViewPager {
     }
 
     public boolean setScroll(boolean isScroll){
-        this.isScoll = isScroll;
-        return isScoll;
+        this.isScroll = isScroll;
+        return isScroll;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return this.isScoll && super.onTouchEvent(event);
+        return this.isScroll && super.onTouchEvent(event);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        return this.isScoll && super.onInterceptTouchEvent(event);
+        return this.isScroll && super.onInterceptTouchEvent(event);
     }
 
 

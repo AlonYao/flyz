@@ -10,7 +10,6 @@ import com.appublisher.quizbank.common.interview.fragment.InterviewPurchasedFrag
 import com.appublisher.quizbank.common.interview.fragment.InterviewUnPurchasedFragment;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,40 +21,27 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
     private List<InterviewPaperDetailResp.QuestionsBean> mList;
     private final InterviewPaperDetailActivity mActivity;
     private final String questionType;
-    public final ArrayList<Fragment> mFragmentList;
 
     public InterviewDetailAdapter(FragmentManager fm, List<InterviewPaperDetailResp.QuestionsBean> list, InterviewPaperDetailActivity activity,String questionFrom) {
         super(fm);
         mList = list;
         mActivity = activity;
         questionType = questionFrom;      // 问题的类型
-        mFragmentList = new ArrayList<>();
     }
 
     @Override
     public Fragment getItem(int position) {
-
         InterviewPaperDetailResp.QuestionsBean bean = mList.get(position);    // 具体的哪一道题
-        String questionbean = GsonManager.modelToString(mList.get(position));
+        String questionBean = GsonManager.modelToString(mList.get(position));
 
         int listLength = mList.size();
         if (hasPurchasedAction(bean)) {
             InterviewPurchasedFragment interviewPurchasedFragment = InterviewPurchasedFragment.newInstance(
-                    questionbean, position, listLength, questionType);
-            if (mFragmentList != null && position < mFragmentList.size() ){
-                mFragmentList.set(position,interviewPurchasedFragment);
-            } else {
-                mFragmentList.add(interviewPurchasedFragment);
-            }
+                    questionBean, position, listLength, questionType);
             return interviewPurchasedFragment;       // 已付费页面
         } else {
             InterviewUnPurchasedFragment interviewUnPurchasedFragment = InterviewUnPurchasedFragment.newInstance(
-                    questionbean, position, listLength, questionType);
-            if (mFragmentList != null && position < mFragmentList.size() ){
-                mFragmentList.set(position,interviewUnPurchasedFragment);
-            } else {
-                mFragmentList.add(interviewUnPurchasedFragment);
-            }
+                    questionBean, position, listLength, questionType);
             return interviewUnPurchasedFragment;    // 未付费页面
         }
     }
@@ -73,7 +59,6 @@ public class InterviewDetailAdapter extends FragmentStatePagerAdapter {
                 return true;
             }
         }
-
         // 判断是否有单次购买
         return bean != null && bean.isPurchased_audio();
     }

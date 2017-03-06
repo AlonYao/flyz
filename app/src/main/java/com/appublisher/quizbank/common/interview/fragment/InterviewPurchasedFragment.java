@@ -6,11 +6,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
+import com.appublisher.quizbank.common.interview.netdata.InterviewControlsStateBean;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 
 import java.util.HashMap;
@@ -140,7 +142,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "ReadQ");
-                if (isDone()) {
+                if (mActivity.mHadDoneQuestion) {
                     UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
                 } else {
                     UmengManager.onEvent(mActivity, "InterviewQuestion", map);
@@ -172,7 +174,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "ReadA");
-                if (isDone()) {
+                if (mActivity.mHadDoneQuestion) {
                     UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
                 } else {
                     UmengManager.onEvent(mActivity, "InterviewQuestion", map);
@@ -191,7 +193,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-                if (mPlayingMedia.equals(QUESTION_ITEM)){
+                 if (mPlayingMedia.equals(QUESTION_ITEM)){
                     mIsQuestionAudioPause = true;
                 } else {
                     // 判断是否存在其他的正在播放的语音
@@ -202,7 +204,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "ListenQ");
-                if (isDone()) {
+                if (mActivity.mHadDoneQuestion) {
                     UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
                 } else {
                     UmengManager.onEvent(mActivity, "InterviewQuestion", map);
@@ -216,22 +218,46 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mAnalysisListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Logger.e( "点击了解析行");
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
+                if (mActivity.mFragmentControlsMap == null || mActivity.mFragmentControlsMap.size() <= 0){
+                    mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                } else {
+                    HashMap hashMap = mActivity.mFragmentControlsMap.get(mPosition);
+                    Logger.e( " mPosition ==" + mPosition);
+                    if (hashMap == null || hashMap.size() <= 0) {
+                        mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                    } else {
+                        Logger.e(" ddd");
+                        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
+                        String mediaName = controlsStateBean.getMediaName();
+                        Logger.e(" mediaName ccc ==" + mediaName);
+                        if (("").equals(mediaName) || mediaName == null) return;
+                        mPlayingMedia = mediaName;
+                    }
+                }
+                Logger.e(" mPlayingMedia == " + mPlayingMedia);
                 if (mPlayingMedia.equals(ANALYSIS_ITEM)){
                     mIsAnalysisAudioPause = true;
                 } else {
                     // 判断是否存在其他的正在播放的语音
                     changePlayingMediaToPauseState();
                 }
+//                if (mPlayingMedia.equals(ANALYSIS_ITEM)){
+//                    mIsAnalysisAudioPause = true;
+//                } else {
+//                    // 判断是否存在其他的正在播放的语音
+//                    changePlayingMediaToPauseState();
+//                }
                 dealAnalysisAudioPlayState();
 
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "ListenA");
-                if (isDone()) {
+                if (mActivity.mHadDoneQuestion) {
                     UmengManager.onEvent(mActivity, "InterviewAnalysis", map);
                 } else {
                     UmengManager.onEvent(mActivity, "InterviewQuestion", map);
@@ -246,8 +272,8 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         // 题目行中文字的处理
         return (mPosition + 1) + "/" + mListLength + "  " + mQuestionBean.getQuestion();
     }
-    private boolean isDone() {
-        return mQuestionBean != null && mQuestionBean.getUser_audio().length() > 0;
-    }
+//    private boolean isDone() {
+//        return mQuestionBean != null && mQuestionBean.getUser_audio().length() > 0;
+//    }
 
 }
