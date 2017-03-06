@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private static final int RECORDED_UN_SUBMIT = 2;
     private static final int RECORDED_HAD_SUBMIT = 3;
     public static final String ANALYSIS_ITEM = "analysisItem";
+    public static final String QUESTION_ITEM = "questionItem";
     public static final String NOT_EXIST_PLAYING_MEDIA = "notExistPlayingMedia";
     public InterviewRequest mRequest;
     public ScrollExtendViewPager mViewPager;
@@ -398,7 +400,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     /*
     *  让activity将正在播放的播放器恢复默认状态
     * */
-    public void changePlayingViewToDefault(){
+    public void changePlayingViewToDefault(String status){
         Logger.e(" activity.changePlayingViewToDefault() ");
         // 判断是否为当前页面
         if (mPlayingChildViewId == mCurrentPagerId) return;
@@ -407,12 +409,17 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         Logger.e(" activity.mPlayingChildViewId == " + mPlayingChildViewId);
         HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
         if (hashMap == null || hashMap.size() <= 0) return;
-        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
+
+//        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
+//        controlsStateBean.setState("pause");
+//        controlsStateBean.setMediaName(ANALYSIS_ITEM);
+//        mFragmentControlsBeanMap.put(ANALYSIS_ITEM, controlsStateBean);
+//        mFragmentControlsMap.put(mPlayingChildViewId, mFragmentControlsBeanMap);
+        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(status);
         controlsStateBean.setState("pause");
-        controlsStateBean.setMediaName(ANALYSIS_ITEM);
-        mFragmentControlsBeanMap.put(ANALYSIS_ITEM, controlsStateBean);
+        controlsStateBean.setMediaName(status);
+        mFragmentControlsBeanMap.put(status, controlsStateBean);
         mFragmentControlsMap.put(mPlayingChildViewId, mFragmentControlsBeanMap);
-        Logger.e(" aaa");
         updateFragmentPlayState();
 
     }
@@ -422,28 +429,68 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private void updateFragmentPlayState() {
         Logger.e(" activity.updateFragmentPlayState()");
         // 不能放到fragment中处理
+        Logger.e(" activity.mPlayingChildViewId == " + mPlayingChildViewId);
         HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
         if (hashMap == null || hashMap.size() <= 0) return;
-        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
-        String state = controlsStateBean.getState();
-        if (("").equals(state) || state == null) return;
+        Logger.e("111");
+        Iterator iterator = hashMap.entrySet().iterator();
+        while (iterator.hasNext()){
+            Logger.e("222");
+            Map.Entry entry  = (Map.Entry) iterator.next();
+            InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) entry.getValue();
+            String state = controlsStateBean.getState();
+            Logger.e(" state == " + state);
+            if (("").equals(state) || state == null ) return;
+            if (state.equals("pause")) {
+//                String mediaName = controlsStateBean.getMediaName();
+                String mediaName = (String) entry.getKey();
+                Logger.e(" mediaName == " + mediaName);
+                if (("").equals(mediaName) || mediaName == null ) return;
 
-        Logger.e(" state activity == " + state);
-        if (state.equals("pause")) {
-            controlsStateBean.setOffset(0);
-            Logger.e(" controlsStateBean.getMediaName() 111 == " + controlsStateBean.getMediaName());
-            controlsStateBean.setMediaName(NOT_EXIST_PLAYING_MEDIA);
-            Logger.e(" controlsStateBean.getMediaName() 222 == " + controlsStateBean.getMediaName());
-            InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
-            if (controlsViewBean == null || controlsViewBean.getProgressBarStateTv() == null
-                    || controlsViewBean.getProgressBarTimeIv() == null ) return;
-            controlsViewBean.getProgressBar().setProgress(100);
-            controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
-            controlsViewBean.getProgressBarStateTv().setText("ddd");
+                controlsStateBean.setOffset(0);
+                controlsStateBean.setMediaName(NOT_EXIST_PLAYING_MEDIA);
+                InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
+                controlsViewBean.getProgressBar().setProgress(100);
 
-            //
-            mFragmentControlsMap.remove(mPlayingChildViewId);
+                switch (mediaName){
+                    case ANALYSIS_ITEM:
+                        if (controlsViewBean == null || controlsViewBean.getProgressBarStateTv() == null
+                            || controlsViewBean.getProgressBarTimeIv() == null ) return;
+                        controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
+                        controlsViewBean.getProgressBarStateTv().setText("ddd");
+                        break;
+                    case QUESTION_ITEM:
+                        if (controlsViewBean == null || controlsViewBean.getProgressBarStateTv() == null
+                                || controlsViewBean.getProgressBarTimeIv() == null ) return;
+                        controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
+                        controlsViewBean.getProgressBarStateTv().setText("ddd");
+                        break;
+                }
+                mFragmentControlsMap.remove(mPlayingChildViewId);
+            }
         }
+
+
+//        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
+//        String state = controlsStateBean.getState();
+//        if (("").equals(state) || state == null) return;
+//
+//        Logger.e(" state activity == " + state);
+//        if (state.equals("pause")) {
+//            controlsStateBean.setOffset(0);
+//            Logger.e(" controlsStateBean.getMediaName() 111 == " + controlsStateBean.getMediaName());
+//            controlsStateBean.setMediaName(NOT_EXIST_PLAYING_MEDIA);
+//            Logger.e(" controlsStateBean.getMediaName() 222 == " + controlsStateBean.getMediaName());
+//            InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
+//            if (controlsViewBean == null || controlsViewBean.getProgressBarStateTv() == null
+//                    || controlsViewBean.getProgressBarTimeIv() == null ) return;
+//            controlsViewBean.getProgressBar().setProgress(100);
+//            controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
+//            controlsViewBean.getProgressBarStateTv().setText("ddd");
+//
+//            mFragmentControlsMap.remove(mPlayingChildViewId);
+//        }
+
 
     }
 

@@ -189,11 +189,35 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Logger.e(" 点击了题目行");
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-                 if (mPlayingMedia.equals(QUESTION_ITEM)){
+//                if (mPlayingMedia.equals(QUESTION_ITEM)){
+//                    mIsQuestionAudioPause = true;
+//                } else {
+//                    // 判断是否存在其他的正在播放的语音
+//                    changePlayingMediaToPauseState();
+//                }
+                if (mActivity.mFragmentControlsMap == null || mActivity.mFragmentControlsMap.size() <= 0){
+                    Logger.e(" aaa ");
+                    mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                } else {
+                    HashMap hashMap = mActivity.mFragmentControlsMap.get(mPosition);
+                    if (hashMap == null || hashMap.size() <= 0) {
+                        Logger.e(" bbb ");
+                        mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                    } else {
+                        Logger.e(" ccc ");
+                        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(QUESTION_ITEM);
+                        if ( controlsStateBean == null ||  ("").equals(controlsStateBean.getMediaName())
+                                || controlsStateBean.getMediaName() == null) return;
+                        mPlayingMedia = controlsStateBean.getMediaName();
+                    }
+                }
+                Logger.e(" mPlayingMedia == " + mPlayingMedia);
+                if (mPlayingMedia.equals(QUESTION_ITEM)){
                     mIsQuestionAudioPause = true;
                 } else {
                     // 判断是否存在其他的正在播放的语音
@@ -218,7 +242,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mAnalysisListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.e( "点击了解析行");
+                Logger.e(" 点击了解析行");
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
@@ -227,19 +251,15 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                 } else {
                     HashMap hashMap = mActivity.mFragmentControlsMap.get(mPosition);
-                    Logger.e( " mPosition ==" + mPosition);
                     if (hashMap == null || hashMap.size() <= 0) {
                         mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                     } else {
-                        Logger.e(" ddd");
                         InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
-                        String mediaName = controlsStateBean.getMediaName();
-                        Logger.e(" mediaName ccc ==" + mediaName);
-                        if (("").equals(mediaName) || mediaName == null) return;
-                        mPlayingMedia = mediaName;
+                        if ( controlsStateBean == null ||  ("").equals(controlsStateBean.getMediaName())
+                                || controlsStateBean.getMediaName() == null) return;
+                        mPlayingMedia = controlsStateBean.getMediaName();
                     }
                 }
-                Logger.e(" mPlayingMedia == " + mPlayingMedia);
                 if (mPlayingMedia.equals(ANALYSIS_ITEM)){
                     mIsAnalysisAudioPause = true;
                 } else {
