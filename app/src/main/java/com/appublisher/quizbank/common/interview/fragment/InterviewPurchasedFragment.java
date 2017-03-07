@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -189,34 +188,26 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.e(" 点击了题目行");
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
-//                if (mPlayingMedia.equals(QUESTION_ITEM)){
-//                    mIsQuestionAudioPause = true;
-//                } else {
-//                    // 判断是否存在其他的正在播放的语音
-//                    changePlayingMediaToPauseState();
-//                }
                 if (mActivity.mFragmentControlsMap == null || mActivity.mFragmentControlsMap.size() <= 0){
-                    Logger.e(" aaa ");
                     mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                 } else {
                     HashMap hashMap = mActivity.mFragmentControlsMap.get(mPosition);
                     if (hashMap == null || hashMap.size() <= 0) {
-                        Logger.e(" bbb ");
                         mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
                     } else {
-                        Logger.e(" ccc ");
                         InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(QUESTION_ITEM);
                         if ( controlsStateBean == null ||  ("").equals(controlsStateBean.getMediaName())
-                                || controlsStateBean.getMediaName() == null) return;
-                        mPlayingMedia = controlsStateBean.getMediaName();
+                                || controlsStateBean.getMediaName() == null) {
+                            mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                        } else {
+                            mPlayingMedia = controlsStateBean.getMediaName();
+                        }
                     }
                 }
-                Logger.e(" mPlayingMedia == " + mPlayingMedia);
                 if (mPlayingMedia.equals(QUESTION_ITEM)){
                     mIsQuestionAudioPause = true;
                 } else {
@@ -242,7 +233,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mAnalysisListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.e(" 点击了解析行");
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
@@ -256,8 +246,11 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     } else {
                         InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
                         if ( controlsStateBean == null ||  ("").equals(controlsStateBean.getMediaName())
-                                || controlsStateBean.getMediaName() == null) return;
-                        mPlayingMedia = controlsStateBean.getMediaName();
+                                || controlsStateBean.getMediaName() == null) {
+                            mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                        } else {
+                            mPlayingMedia = controlsStateBean.getMediaName();
+                        }
                     }
                 }
                 if (mPlayingMedia.equals(ANALYSIS_ITEM)){
@@ -266,12 +259,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     // 判断是否存在其他的正在播放的语音
                     changePlayingMediaToPauseState();
                 }
-//                if (mPlayingMedia.equals(ANALYSIS_ITEM)){
-//                    mIsAnalysisAudioPause = true;
-//                } else {
-//                    // 判断是否存在其他的正在播放的语音
-//                    changePlayingMediaToPauseState();
-//                }
                 dealAnalysisAudioPlayState();
 
                 // Umeng
@@ -292,8 +279,5 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         // 题目行中文字的处理
         return (mPosition + 1) + "/" + mListLength + "  " + mQuestionBean.getQuestion();
     }
-//    private boolean isDone() {
-//        return mQuestionBean != null && mQuestionBean.getUser_audio().length() > 0;
-//    }
 
 }

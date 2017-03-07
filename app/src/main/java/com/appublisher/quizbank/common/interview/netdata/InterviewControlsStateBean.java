@@ -48,7 +48,6 @@ public class InterviewControlsStateBean {
         private TextView progressBarTimeTv;
         private TextView progressBarStateTv;
 
-
         public RoundProgressBarWidthNumber getProgressBar() {
             return progressBar;
         }
