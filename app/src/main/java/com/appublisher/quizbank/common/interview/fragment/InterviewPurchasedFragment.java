@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.gson.GsonManager;
@@ -188,6 +189,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Logger.e(" 点击了题目行 " + mPosition);
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
@@ -208,6 +210,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                         }
                     }
                 }
+                Logger.e(" mPlayingMedia == " + mPlayingMedia);
                 if (mPlayingMedia.equals(QUESTION_ITEM)){
                     mIsQuestionAudioPause = true;
                 } else {
@@ -233,6 +236,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mAnalysisListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Logger.e(" 点击了解析行 ");
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
@@ -253,6 +257,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                         }
                     }
                 }
+                Logger.e(" mPlayingMedia == " + mPlayingMedia);
                 if (mPlayingMedia.equals(ANALYSIS_ITEM)){
                     mIsAnalysisAudioPause = true;
                 } else {

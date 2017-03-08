@@ -13,6 +13,15 @@ public class InterviewControlsStateBean {
     private ControlsViewBean controlsViewBean = new ControlsViewBean();
     private int offset;
     private String mediaName;
+    private int totalDuration;
+
+    public int getTotalDuration() {
+        return totalDuration;
+    }
+
+    public void setTotalDuration(int totalDuration) {
+        this.totalDuration = totalDuration;
+    }
 
     public int getOffset() {
         return offset;
@@ -42,11 +51,19 @@ public class InterviewControlsStateBean {
     }
 
     public class ControlsViewBean{
-
+        private boolean isFirstCreate = true;
         private RoundProgressBarWidthNumber progressBar;
         private ImageView progressBarTimeIv;
         private TextView progressBarTimeTv;
         private TextView progressBarStateTv;
+
+        public boolean isFirstCreate() {
+            return isFirstCreate;
+        }
+
+        public void setFirstCreate(boolean firstCreate) {
+            isFirstCreate = firstCreate;
+        }
 
         public RoundProgressBarWidthNumber getProgressBar() {
             return progressBar;
