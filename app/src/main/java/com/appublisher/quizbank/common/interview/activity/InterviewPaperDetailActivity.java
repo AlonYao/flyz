@@ -311,13 +311,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                             mFragmentControlsStateList.add(new InterviewViewStateBean());
                         }
                     }
-                    // 新集合
-//                    if ( mFragmentControlsStateList2 == null || mFragmentControlsStateList2.size() <= 0 ){
-//                        if (count <= 0) return;
-//                        for (int i = 0; i < count; i++){
-//                            mFragmentControlsStateList2.add(new InterviewControlsStateBean());
-//                        }
-//                    }
                     mAdapter = new InterviewDetailAdapter(               // 将数据传给adapter
                             getSupportFragmentManager(),
                             mQuestionsBeanList,
@@ -407,12 +400,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     *  处理不同页面点击播放器时恢复默认状态
     * */
     public void changePlayingViewToDefault(){
-        Logger.e(" activity.changePlayingViewToDefault() ");
         // 判断是否为当前页面
         if (mPlayingChildViewId == mCurrentPagerId) return;
 
-//        // 将存有控件状态的集合清空
-        Logger.e(" activity.mPlayingChildViewId == " + mPlayingChildViewId);
         // 需要遍历集合将播放的控件恢复默认状态
         if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0) return;
         HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
@@ -430,17 +420,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 String mediaName = (String) entry.getKey();
                 if (("").equals(mediaName) || mediaName == null ) return;
                 InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
-//                if (controlsViewBean == null || controlsViewBean.getProgressBar() == null ) return;      
                 if (controlsViewBean == null ) return;
-                if ( controlsViewBean.isFirstCreate() == true){
+                if ( controlsViewBean.isFirstCreate()){
                     mFragmentControlsMap.remove(mPlayingChildViewId);
-//                    // 检验
-//                    HashMap hashMap1 = mFragmentControlsMap.get(mPlayingChildViewId);
-//                    if (hashMap1 != null){
-//                        Logger.e(" hashMap1 != null ");
-//                    } else {
-//                        Logger.e(" hashMap1 == null ");
-//                    }
                     return;
                 }
 
@@ -489,22 +471,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
                 }
-//                mFragmentControlsBeanMap.put(mediaName, controlsStateBean);
-//                mFragmentControlsMap.put(mPlayingChildViewId, mFragmentControlsBeanMap);
                 mFragmentControlsMap.remove(mPlayingChildViewId);
             }
         }
-
-//        updateFragmentPlayState();
 
     }
     /*
     *   刷新控件的播放状态:处理相邻页面暂停状态恢复默认状态
     * */
     private void updateFragmentPlayState() {
-        Logger.e(" activity.updateFragmentPlayState()");
-        Logger.e(" activity.mPlayingChildViewId == " + mPlayingChildViewId);
-
         if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0) return;
         HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
         if (hashMap == null || hashMap.size() <= 0) return;
@@ -534,7 +509,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
                     case QUESTION_ITEM:
-                        Logger.e(" ddd");
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeIv() == null ) return;
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
@@ -565,7 +539,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
                 }
-//                mFragmentControlsMap.remove(mPlayingChildViewId);
                 mFragmentControlsBeanMap.put(mediaName, controlsStateBean);
                 mFragmentControlsMap.put(mPlayingChildViewId, mFragmentControlsBeanMap);
 

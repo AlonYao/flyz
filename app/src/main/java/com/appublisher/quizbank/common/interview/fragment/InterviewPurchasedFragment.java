@@ -14,6 +14,7 @@ import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.interview.activity.InterviewPaperDetailActivity;
 import com.appublisher.quizbank.common.interview.netdata.InterviewControlsStateBean;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
+import com.appublisher.quizbank.common.interview.view.InterviewConstants;
 
 import java.util.HashMap;
 
@@ -189,29 +190,28 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
         mQuestionListenLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.e(" 点击了题目行 " + mPosition);
                 if ( !mIsCanTouch){
                     ToastManager.showToast(mActivity, "请专心录音哦");
                     return;
                 }
                 if (mActivity.mFragmentControlsMap == null || mActivity.mFragmentControlsMap.size() <= 0){
-                    mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                    mPlayingMedia = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
                 } else {
                     HashMap hashMap = mActivity.mFragmentControlsMap.get(mPosition);
                     if (hashMap == null || hashMap.size() <= 0) {
-                        mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                        mPlayingMedia = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
                     } else {
-                        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(QUESTION_ITEM);
+                        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(InterviewConstants.QUESTION_ITEM);
                         if ( controlsStateBean == null ||  ("").equals(controlsStateBean.getMediaName())
                                 || controlsStateBean.getMediaName() == null) {
-                            mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                            mPlayingMedia = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
                         } else {
                             mPlayingMedia = controlsStateBean.getMediaName();
                         }
                     }
                 }
                 Logger.e(" mPlayingMedia == " + mPlayingMedia);
-                if (mPlayingMedia.equals(QUESTION_ITEM)){
+                if (mPlayingMedia.equals(InterviewConstants.QUESTION_ITEM)){
                     mIsQuestionAudioPause = true;
                 } else {
                     // 判断是否存在其他的正在播放的语音
@@ -242,23 +242,23 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                     return;
                 }
                 if (mActivity.mFragmentControlsMap == null || mActivity.mFragmentControlsMap.size() <= 0){
-                    mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                    mPlayingMedia = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
                 } else {
                     HashMap hashMap = mActivity.mFragmentControlsMap.get(mPosition);
                     if (hashMap == null || hashMap.size() <= 0) {
-                        mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                        mPlayingMedia = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
                     } else {
-                        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(ANALYSIS_ITEM);
+                        InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) hashMap.get(InterviewConstants.ANALYSIS_ITEM);
                         if ( controlsStateBean == null ||  ("").equals(controlsStateBean.getMediaName())
                                 || controlsStateBean.getMediaName() == null) {
-                            mPlayingMedia = NOT_EXIST_PLAYING_MEDIA;
+                            mPlayingMedia = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
                         } else {
                             mPlayingMedia = controlsStateBean.getMediaName();
                         }
                     }
                 }
                 Logger.e(" mPlayingMedia == " + mPlayingMedia);
-                if (mPlayingMedia.equals(ANALYSIS_ITEM)){
+                if (mPlayingMedia.equals(InterviewConstants.ANALYSIS_ITEM)){
                     mIsAnalysisAudioPause = true;
                 } else {
                     // 判断是否存在其他的正在播放的语音
