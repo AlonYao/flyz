@@ -10,10 +10,10 @@ import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
  */
 public class InterviewControlsStateBean {
     private String state;
-    private ControlsViewBean controlsViewBean = new ControlsViewBean();
     private int offset;
     private String mediaName;
     private int totalDuration;
+    private ControlsViewBean controlsViewBean = new ControlsViewBean();
 
     public int getTotalDuration() {
         return totalDuration;

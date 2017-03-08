@@ -23,6 +23,7 @@ import com.appublisher.quizbank.common.interview.netdata.InterviewControlsStateB
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
 import com.appublisher.quizbank.common.interview.netdata.InterviewViewStateBean;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
+import com.appublisher.quizbank.common.interview.view.InterviewConstants;
 import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
 import com.appublisher.quizbank.common.interview.viewgroup.ScrollExtendViewPager;
 
@@ -38,17 +39,6 @@ import java.util.Map;
 
 public class InterviewPaperDetailActivity extends BaseActivity implements RequestCallback, InterviewDetailBaseFragmentCallBak {
 
-    private static final int UN_RECORD = 0;
-    private static final int RECORDING = 1;
-    private static final int RECORDED_UN_SUBMIT = 2;
-    private static final int RECORDED_HAD_SUBMIT = 3;
-    public static final String SUBMIT = "submit";              //可提交
-    public static final String HAD_SUBMIT = "hadSubmit";      // 已提交
-    public static final String TEACHER_REMARK = "teacherRemark";      // 名师点评
-    public static final String ANALYSIS_ITEM = "analysisItem";
-    public static final String QUESTION_ITEM = "questionItem";
-    public static final String NOT_EXIST_PLAYING_MEDIA = "notExistPlayingMedia";
-    private static final String OVER = "over";
     public InterviewRequest mRequest;
     public ScrollExtendViewPager mViewPager;
     public InterviewDetailAdapter mAdapter;
@@ -65,17 +55,17 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private String mDataFrom;
     private String mItemType;
     private String mQuestionTime;
-    public List<InterviewPaperDetailResp.QuestionsBean> mQuestionsBeanList;
+
     private InterviewPaperDetailResp.AllAudioBean mAllAudioBean;
     private InterviewPaperDetailResp.SingleAudioBean mSingleAudioBean;
     public InterviewDetailModel mModel;
     private boolean mIsShowBuyAllMenu = false;
     private boolean mExitsPlayingMedia;
+    public boolean mHadDoneQuestion;
+
+    public List<InterviewPaperDetailResp.QuestionsBean> mQuestionsBeanList;
     public ArrayList<InterviewViewStateBean> mFragmentControlsStateList;
     public HashMap<String, String> mRecordPathMap;
-    public boolean mHadDoneQuestion;
-//    public HashMap<Integer, ArrayList> mFragmentControlsMap;
-//    public ArrayList<InterviewControlsStateBean> mFragmentControlsBeanList;
     public HashMap<Integer, HashMap> mFragmentControlsMap;
     public HashMap<String, InterviewControlsStateBean> mFragmentControlsBeanMap;
 
@@ -90,7 +80,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mPaperType = getIntent().getStringExtra("paper_type");
         mNoteId = getIntent().getIntExtra("note_id", 0);
 
-        mPlayingViewState = NOT_EXIST_PLAYING_MEDIA;
+        mPlayingViewState = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
         mExitsPlayingMedia = false;
         mHadDoneQuestion = false;
         // 所有fragment中用同一个录音器
@@ -135,7 +125,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     public void getData() {
-        mWhatView = RECORDED_HAD_SUBMIT;
+        mWhatView = InterviewConstants.RECORDED_HAD_SUBMIT;
         // 将缓存路径集合清空
         if (mRecordPathMap != null && mRecordPathMap.size() >0 ) mRecordPathMap.clear();
 
@@ -176,10 +166,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (mWhatView == RECORDING) {
+            if (mWhatView == InterviewConstants.RECORDING) {
                 ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if (mWhatView == RECORDED_UN_SUBMIT || checkRecordPathMap() ) {
+            } else if (mWhatView == InterviewConstants.RECORDED_UN_SUBMIT || checkRecordPathMap() ) {
                 InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dialog
                 return true;
             }
@@ -189,10 +179,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 return true;
             }
         } else if ("开启完整版".equals(item.getTitle())) {
-            if (mWhatView == RECORDING) {
+            if (mWhatView == InterviewConstants.RECORDING) {
                 ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if ( mWhatView == RECORDED_UN_SUBMIT || mWhatView == UN_RECORD) {
+            } else if ( mWhatView == InterviewConstants.RECORDED_UN_SUBMIT || mWhatView == InterviewConstants.UN_RECORD) {
                 mModel.showOpenFullDialog();
             }
         } else if ("收藏".equals(item.getTitle())) {
@@ -209,7 +199,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     UmengManager.onEvent(this, "InterviewQuestion", map);
                 }
                 // 录音状态:
-                if (mWhatView == RECORDING || mWhatView == RECORDED_UN_SUBMIT){
+                if (mWhatView == InterviewConstants.RECORDING || mWhatView == InterviewConstants.RECORDED_UN_SUBMIT){
                     UmengManager.onEvent(this, "InterviewRecord", map);
                 }
             } else {
@@ -224,7 +214,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                     UmengManager.onEvent(this, "InterviewQuestion", map);
                 }
                 // 录音状态:
-                if (mWhatView == RECORDING || mWhatView == RECORDED_UN_SUBMIT){
+                if (mWhatView == InterviewConstants.RECORDING || mWhatView == InterviewConstants.RECORDED_UN_SUBMIT){
                     UmengManager.onEvent(this, "InterviewRecord", map);
                 }
             }
@@ -237,10 +227,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     * */
     @Override
     public void onBackPressed() {
-        if (mWhatView == RECORDING) {
+        if (mWhatView == InterviewConstants.RECORDING) {
             ToastManager.showToast(this, "请专心录音哦");
             return;
-        } else if (mWhatView == RECORDED_UN_SUBMIT || checkRecordPathMap()) {
+        } else if (mWhatView == InterviewConstants.RECORDED_UN_SUBMIT || checkRecordPathMap()) {
             InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dialog
             return;
         }
@@ -428,25 +418,25 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
                 if (controlsViewBean.getProgressBar() == null ) return;
                 controlsViewBean.getProgressBar().setProgress(100);
-                controlsStateBean.setState(OVER);
+                controlsStateBean.setState(InterviewConstants.OVER);
                 controlsStateBean.setOffset(0);
-                controlsStateBean.setMediaName(NOT_EXIST_PLAYING_MEDIA);
+                controlsStateBean.setMediaName(InterviewConstants.NOT_EXIST_PLAYING_MEDIA);
                 int totalDuration ;
                 switch (mediaName){
-                    case ANALYSIS_ITEM:
+                    case InterviewConstants.ANALYSIS_ITEM:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeIv() == null ) return;
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
-                    case QUESTION_ITEM:
+                    case InterviewConstants.QUESTION_ITEM:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeIv() == null ) return;
                         Logger.e(" QUESTION_ITEM 111");
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
-                    case SUBMIT:
+                    case InterviewConstants.SUBMIT:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeTv() == null ) return;
                         totalDuration = controlsStateBean.getTotalDuration();
@@ -454,7 +444,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
-                    case HAD_SUBMIT:
+                    case InterviewConstants.HAD_SUBMIT:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeTv() == null ) return;
                         totalDuration = controlsStateBean.getTotalDuration();
@@ -462,7 +452,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
-                    case TEACHER_REMARK:
+                    case InterviewConstants.TEACHER_REMARK:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeTv() == null ) return;
                         totalDuration = controlsStateBean.getTotalDuration();
@@ -497,24 +487,24 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
                 if (controlsViewBean == null || controlsViewBean.getProgressBar() == null ) return;
                 controlsStateBean.setOffset(0);
-                controlsStateBean.setMediaName(NOT_EXIST_PLAYING_MEDIA);
+                controlsStateBean.setMediaName(InterviewConstants.NOT_EXIST_PLAYING_MEDIA);
                 controlsViewBean.getProgressBar().setProgress(100);
-                controlsStateBean.setState(OVER);
+                controlsStateBean.setState(InterviewConstants.OVER);
                 int totalDuration ;
                 switch (mediaName){
-                    case ANALYSIS_ITEM:
+                    case InterviewConstants.ANALYSIS_ITEM:
                         if (controlsViewBean.getProgressBarStateTv() == null
                             || controlsViewBean.getProgressBarTimeIv() == null ) return;
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
-                    case QUESTION_ITEM:
+                    case InterviewConstants.QUESTION_ITEM:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeIv() == null ) return;
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
-                    case SUBMIT:
+                    case InterviewConstants.SUBMIT:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeTv() == null ) return;
                         totalDuration = controlsStateBean.getTotalDuration();
@@ -522,7 +512,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
-                    case HAD_SUBMIT:
+                    case InterviewConstants.HAD_SUBMIT:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeTv() == null ) return;
                         totalDuration = controlsStateBean.getTotalDuration();
@@ -530,7 +520,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
-                    case TEACHER_REMARK:
+                    case InterviewConstants.TEACHER_REMARK:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeTv() == null ) return;
                         totalDuration = controlsStateBean.getTotalDuration();

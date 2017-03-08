@@ -31,7 +31,7 @@ public interface InterviewConstants {
     *  录音时长限制和提醒
     * */
     int UPPER_LIMIT_RECORD_TIME = 360;
-    int LOWER_LIMIT_RECORD_TIME = 5;
+    int LOWER_LIMIT_RECORD_TIME = 60;
     int SHOW_TOAST_RECORD_TIME = 330;
 
     /*
@@ -46,4 +46,12 @@ public interface InterviewConstants {
     *  返回值成功
     * */
     int PAY_SUCCESS = 200;
+
+    /*
+    *  录音状态
+    * */
+    int UN_RECORD = 0;
+    int RECORDING = 1;
+    int RECORDED_UN_SUBMIT = 2;
+    int RECORDED_HAD_SUBMIT = 3;
 }
