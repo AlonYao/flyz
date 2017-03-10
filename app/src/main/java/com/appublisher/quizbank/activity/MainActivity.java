@@ -32,12 +32,10 @@ import com.appublisher.lib_course.opencourse.fragment.OpenCourseFragment;
 import com.appublisher.lib_course.opencourse.model.OpenCourseModel;
 import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
-import com.appublisher.lib_login.activity.BindingMobileActivity;
 import com.appublisher.lib_login.activity.ExamChangeActivity;
 import com.appublisher.lib_login.activity.LoginActivity;
 import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.model.netdata.IsUserMergedResp;
-import com.appublisher.lib_login.model.netdata.UserInfoModel;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.QuizBankApp;
 import com.appublisher.quizbank.R;
@@ -63,6 +61,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class MainActivity extends BaseActivity implements RequestCallback {
+
+    private static final String OPENCOURSE = "Opencourse";
+    private static final String COURSE = "Course";
+    private static final String RECORD = "Record";
+    private static final String VIP = "Vip";
+    private static final String STUDY = "Study";
+    private static final String INTERVIEW = "Interview";
+
     /**
      * Fragment
      **/
@@ -75,24 +81,20 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private InterviewIndexFragment mInterviewIndexFragment;
     private OpenCourseFragment mOpenCourseFragment;
     private Fragment mCurFragment;
+
     private boolean mDoubleBackToExit;
-    private QRequest mQRequest;
-    private static final String OPENCOURSE = "Opencourse";
-    private static final String COURSE = "Course";
-    private static final String RECORD = "Record";
-    private static final String VIP = "Vip";
-    private static final String STUDY = "Study";
-    private static final String INTERVIEW = "Interview";
+    private LoginModel mLoginModel;
+    private MeasureModel mMeasureModel;
+    private GradeManager mGradeManager;
 
-    private TextView rateCourseCountTv;
-    private RelativeLayout mSearchView;
-
-    private RadioButton studyRadioButton;
     public RadioButton courseRadioButton;
     public RadioButton recordRadioButton;
+    public View recordTip;
+    private TextView rateCourseCountTv;
+    private RelativeLayout mSearchView;
+    private RadioButton studyRadioButton;
     private RadioButton opencourseRadioButton;
     private RadioButton vipRadioButton;
-    public View recordTip;
 
     private String indexString = "study";//study or interview
 
@@ -103,7 +105,6 @@ public class MainActivity extends BaseActivity implements RequestCallback {
     private String mPromoteData;
     private PromoteQuizBankModel mPromoteQuizBankModel;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,16 +114,19 @@ public class MainActivity extends BaseActivity implements RequestCallback {
 
         // 成员变量初始化
         mFragmentManager = getSupportFragmentManager();
-        mQRequest = new QRequest(this, this);
+        QRequest qRequest = new QRequest(this, this);
         mPromoteData = getIntent().getStringExtra(INTENT_PROMOTE);
         mPromoteQuizBankModel = new PromoteQuizBankModel(this);
+        mLoginModel = new LoginModel(this);
+        mMeasureModel = new MeasureModel(this);
+        mGradeManager = new GradeManager(this);
 
         initView();
 
         // 记录用户评价行为
         if (GradeDAO.isShowGradeAlert(Globals.appVersion)) {
             // 提前获取评价课程数据
-            mQRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
+            qRequest.getRateCourse(ParamBuilder.getRateCourse("getCourse", ""));
         }
 
         setValue();
@@ -136,52 +140,45 @@ public class MainActivity extends BaseActivity implements RequestCallback {
         super.onResume();
         //隐藏评分个数
         rateCourseCountTv.setVisibility(View.GONE);
-        // 检查登录&考试项目状态
-        if (checkLoginStatus()) {
-            // 国考推广Alert
-            if (mPromoteData == null) {
-                mPromoteQuizBankModel.getPromoteData(new PromoteModel.PromoteDataListener() {
-                    @Override
-                    public void onComplete(boolean success, PromoteResp resp) {
-                        if (success) {
-                            mPromoteQuizBankModel.showPromoteAlert(GsonManager.modelToString(resp));
-                        }
-                    }
-                });
-            } else {
-                mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
-            }
 
-            // 检测账号是否被合并
-            new LoginModel(this).commonCheck(new LoginModel.ObtainUserInfoListener() {
-                @Override
-                public void isSuccess(boolean isSuccess) {
-                    if (isSuccess) {
-                        // 更新考试项目
-                        updateExamInfo();
-
-                        // 绑定手机号
-                        final UserInfoModel userInfoModel = LoginModel.getUserInfoM();
-                        if (userInfoModel == null) return;
-                        if (userInfoModel.getMobile_num() == null || "".equals(userInfoModel.getMobile_num())) {
-                            final Intent intent = new Intent(MainActivity.this, BindingMobileActivity.class);
-                            startActivity(intent);
-                        }
+        // 账号检测
+        mLoginModel.commonCheck(this, new LoginModel.ObtainUserInfoListener() {
+            @Override
+            public void isSuccess(boolean isSuccess) {
+                if (isSuccess) {
+                    // 国考推广Alert
+                    if (mPromoteData == null) {
+                        mPromoteQuizBankModel.getPromoteData(
+                                new PromoteModel.PromoteDataListener() {
+                            @Override
+                            public void onComplete(boolean success, PromoteResp resp) {
+                                if (success) {
+                                    mPromoteQuizBankModel.showPromoteAlert(
+                                            GsonManager.modelToString(resp));
+                                }
+                            }
+                        });
+                    } else {
+                        mPromoteQuizBankModel.showPromoteAlert(mPromoteData);
                     }
+
+                    // 更新考试项目
+                    updateExamInfo();
+
+                    // 做题缓存提交
+                    mMeasureModel.checkCache();
                 }
-            });
-            // 做题缓存提交
-            new MeasureModel(this).checkCache();
-        }
+            }
+        });
 
+        // 网络监测
         if (!Utils.isConnectingToInternet(QuizBankApp.getInstance().getApplicationContext())) {
             ToastManager.showToast(this, "当前无可用网络");
             courseRadioButton.setChecked(true);
         }
 
         // 邀请评价
-        GradeManager gradeManager = new GradeManager(this);
-        gradeManager.dealGrade();
+        mGradeManager.dealGrade();
     }
 
     private void initView() {
