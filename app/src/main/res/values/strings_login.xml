@@ -86,4 +86,8 @@
     <string name="title_activity_mobile_reset_pwd">找回密码</string>
     <string name="title_activity_binding_sms_code">短信验证码</string>
 
+    <string name="register_notice_item1">1.智能题库</string>
+    <string name="register_notice_item2">2.面试点评</string>
+    <string name="register_notice_item3">3.免费公开课</string>
+
 </resources>
