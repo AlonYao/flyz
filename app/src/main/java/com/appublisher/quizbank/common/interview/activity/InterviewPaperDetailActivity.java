@@ -69,6 +69,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public HashMap<Integer, HashMap> mFragmentControlsMap;
     public HashMap<String, InterviewControlsStateBean> mFragmentControlsBeanMap;
 
+    public HashMap<String, InterviewControlsStateBean> mHoldFragmentControlsMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +99,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             mFragmentControlsMap = new HashMap<>();
 
         mFragmentControlsBeanMap = new HashMap<>();
+
+        // 新建map存储控件
+        mHoldFragmentControlsMap = new HashMap<>();
 
         initListener(mViewPager);
         mModel = new InterviewDetailModel(this, this);
@@ -384,6 +389,9 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             mFragmentControlsMap.clear();
         if (mFragmentControlsBeanMap == null || mFragmentControlsBeanMap.size() <= 0) return;
             mFragmentControlsBeanMap.clear();
+
+        if (mHoldFragmentControlsMap == null || mHoldFragmentControlsMap.size() <= 0) return;
+            mHoldFragmentControlsMap.clear();
     }
 
     /*
@@ -397,42 +405,35 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0) return;
         HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
         if (hashMap == null || hashMap.size() <= 0) return;
-        Iterator iterator = hashMap.entrySet().iterator();
+        Iterator<Map.Entry<String,InterviewControlsStateBean>> iterator = hashMap.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) entry.getValue();
+            Map.Entry<String,InterviewControlsStateBean> entry = iterator.next();
+            final InterviewControlsStateBean controlsStateBean = entry.getValue();
             if (controlsStateBean == null ) return;
             String state = controlsStateBean.getState();
-
             if (("").equals(state) || state == null) return;
-
+            String mediaName = entry.getKey();
             if (state.equals("play")) {
-                String mediaName = (String) entry.getKey();
                 if (("").equals(mediaName) || mediaName == null ) return;
                 InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
                 if (controlsViewBean == null ) return;
-                if ( controlsViewBean.isFirstCreate()){
-                    mFragmentControlsMap.remove(mPlayingChildViewId);
-                    return;
-                }
-
                 if (controlsViewBean.getProgressBar() == null ) return;
                 controlsViewBean.getProgressBar().setProgress(100);
                 controlsStateBean.setState(InterviewConstants.OVER);
                 controlsStateBean.setOffset(0);
-                controlsStateBean.setMediaName(InterviewConstants.NOT_EXIST_PLAYING_MEDIA);
                 int totalDuration ;
                 switch (mediaName){
                     case InterviewConstants.ANALYSIS_ITEM:
+                        Logger.e(" ddd");
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeIv() == null ) return;
+                        Logger.e(" eee");
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
                     case InterviewConstants.QUESTION_ITEM:
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeIv() == null ) return;
-                        Logger.e(" QUESTION_ITEM 111");
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
@@ -464,77 +465,58 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 mFragmentControlsMap.remove(mPlayingChildViewId);
             }
         }
-
     }
+
     /*
     *   刷新控件的播放状态:处理相邻页面暂停状态恢复默认状态
     * */
     private void updateFragmentPlayState() {
-        if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0) return;
-        HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
-        if (hashMap == null || hashMap.size() <= 0) return;
-        Iterator iterator = hashMap.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry entry  = (Map.Entry) iterator.next();
-            InterviewControlsStateBean controlsStateBean = (InterviewControlsStateBean) entry.getValue();
-            if (controlsStateBean == null ) return;
-            String state = controlsStateBean.getState();
-            if (("").equals(state) || state == null ) return;
+        // 将暂停状态恢复成默认状态
+        if (mHoldFragmentControlsMap == null || mHoldFragmentControlsMap.size() <= 0) return;
+        // 遍历集合将暂停的bean修改成默认
+        Iterator<Map.Entry<String, InterviewControlsStateBean>> iterator = mHoldFragmentControlsMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, InterviewControlsStateBean> interviewControlsStateBeanEntry = iterator.next();
+            InterviewControlsStateBean interviewControlsStateBean = interviewControlsStateBeanEntry.getValue();
+            if (interviewControlsStateBean == null || interviewControlsStateBean.getControlsViewBean() == null) continue;     // 翻到第三页内部bean为null
 
-            if (state.equals("pause")) {                    // 相邻页面暂停状态恢复默认状态
-                String mediaName = (String) entry.getKey();
-                if (("").equals(mediaName) || mediaName == null ) return;
-                InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
-                if (controlsViewBean == null || controlsViewBean.getProgressBar() == null ) return;
-                controlsStateBean.setOffset(0);
-                controlsStateBean.setMediaName(InterviewConstants.NOT_EXIST_PLAYING_MEDIA);
-                controlsViewBean.getProgressBar().setProgress(100);
-                controlsStateBean.setState(InterviewConstants.OVER);
-                int totalDuration ;
-                switch (mediaName){
-                    case InterviewConstants.ANALYSIS_ITEM:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                            || controlsViewBean.getProgressBarTimeIv() == null ) return;
-                        controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        break;
-                    case InterviewConstants.QUESTION_ITEM:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeIv() == null ) return;
-                        controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        break;
+            String key = interviewControlsStateBeanEntry.getKey();
+            String state = interviewControlsStateBean.getState();
+            String itemType = interviewControlsStateBean.getItemType();
+            int totalDuration = interviewControlsStateBean.getTotalDuration();
+            if (("").equals(key) || key == null
+                    || ("").equals(state) || state == null
+                        || ("").equals(itemType) || itemType == null) continue;
+
+            if (state.equals(InterviewConstants.PAUSE) || state.equals(InterviewConstants.OVER)) {
+                interviewControlsStateBean.getControlsViewBean().getProgressBar().setProgress(100);
+                interviewControlsStateBean.setOffset(0);
+                interviewControlsStateBean.setState(InterviewConstants.OVER);
+                switch (itemType) {
                     case InterviewConstants.SUBMIT:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeTv() == null ) return;
-                        totalDuration = controlsStateBean.getTotalDuration();
-                        if (totalDuration <= 0) return;
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarStateTv().setText("听语音");
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
                     case InterviewConstants.HAD_SUBMIT:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeTv() == null ) return;
-                        totalDuration = controlsStateBean.getTotalDuration();
-                        if (totalDuration <= 0) return;
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarStateTv().setText("听语音");
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
+                        break;
+                    case InterviewConstants.QUESTION_ITEM:
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarStateTv().setText("听语音");
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
+                        break;
+                    case InterviewConstants.ANALYSIS_ITEM:
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarStateTv().setText("听语音");
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         break;
                     case InterviewConstants.TEACHER_REMARK:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeTv() == null ) return;
-                        totalDuration = controlsStateBean.getTotalDuration();
-                        if (totalDuration <= 0) return;
-                        controlsViewBean.getProgressBarStateTv().setText("收听点评");
-                        controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarStateTv().setText("收听点评");
+                        interviewControlsStateBean.getControlsViewBean().getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
                         break;
                 }
-                mFragmentControlsBeanMap.put(mediaName, controlsStateBean);
-                mFragmentControlsMap.put(mPlayingChildViewId, mFragmentControlsBeanMap);
-
+                mHoldFragmentControlsMap.put(key, interviewControlsStateBean);
             }
         }
-
     }
 
     /*

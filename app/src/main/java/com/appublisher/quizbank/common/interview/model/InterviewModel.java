@@ -106,4 +106,21 @@ public class InterviewModel {
         mTimeStamp = timeStamp;
     }
 
+    /*
+    *   获取item的标识
+    * */
+    public String getControlsIdentification(int pagerPosition, int itemId){
+        return String.valueOf(pagerPosition) + String.valueOf(itemId);
+    }
+
+    /*
+    *   截取item标识,并判断结合中的控件是否是同一个页面
+    * */
+    public boolean isSamePager(int pagerPosition, String key){
+        int length = key.length();
+        String substring = key.substring(0, length - 1);
+        return !("").equals(key) && length >1
+                    && !("").equals(substring) && substring.equals(String.valueOf(pagerPosition));
+    }
+
 }

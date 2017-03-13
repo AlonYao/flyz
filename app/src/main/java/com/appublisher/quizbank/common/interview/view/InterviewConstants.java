@@ -6,10 +6,10 @@ public interface InterviewConstants {
     *  播放器状态
     * */
     String SUBMIT = "submit";              //可提交
-    String HAD_SUBMIT = "hadSubmit";      // 已提交
-    String TEACHER_REMARK = "teacherRemark";      // 名师点评
-    String QUESTION_ITEM = "questionItem";
-    String ANALYSIS_ITEM = "analysisItem";
+    String HAD_SUBMIT = "had_submit";      // 已提交
+    String TEACHER_REMARK = "teacher_remark";      // 名师点评
+    String QUESTION_ITEM = "question_item";
+    String ANALYSIS_ITEM = "analysis_item";
 
     /*
     *  名师点评的状态
@@ -22,7 +22,7 @@ public interface InterviewConstants {
     /*
     *  播放的状态
     * */
-    String NOT_EXIST_PLAYING_MEDIA = "notExistPlayingMedia";
+    String NOT_EXIST_PLAYING_MEDIA = "not_exist_playing_media";
     String PLAY = "play";
     String PAUSE = "pause";
     String OVER = "over";
@@ -31,7 +31,7 @@ public interface InterviewConstants {
     *  录音时长限制和提醒
     * */
     int UPPER_LIMIT_RECORD_TIME = 360;
-    int LOWER_LIMIT_RECORD_TIME = 60;
+    int LOWER_LIMIT_RECORD_TIME = 5;
     int SHOW_TOAST_RECORD_TIME = 330;
 
     /*

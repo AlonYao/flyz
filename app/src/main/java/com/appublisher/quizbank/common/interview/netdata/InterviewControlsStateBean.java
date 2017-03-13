@@ -9,10 +9,19 @@ import com.appublisher.lib_basic.customui.RoundProgressBarWidthNumber;
  * 面试页面控件bean
  */
 public class InterviewControlsStateBean {
-    private String state;
+    private String state = "over";
     private int offset;
-    private String mediaName;
     private int totalDuration;
+    private String itemType;
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
     private ControlsViewBean controlsViewBean = new ControlsViewBean();
 
     public int getTotalDuration() {
@@ -29,13 +38,6 @@ public class InterviewControlsStateBean {
     public void setOffset(int offset) {
         this.offset = offset;
     }
-    public String getMediaName() {
-        return mediaName;
-    }
-
-    public void setMediaName(String mediaName) {
-        this.mediaName = mediaName;
-    }
 
     public ControlsViewBean getControlsViewBean() {
         return controlsViewBean;
@@ -51,19 +53,10 @@ public class InterviewControlsStateBean {
     }
 
     public class ControlsViewBean{
-        private boolean isFirstCreate = true;
         private RoundProgressBarWidthNumber progressBar;
         private ImageView progressBarTimeIv;
         private TextView progressBarTimeTv;
         private TextView progressBarStateTv;
-
-        public boolean isFirstCreate() {
-            return isFirstCreate;
-        }
-
-        public void setFirstCreate(boolean firstCreate) {
-            isFirstCreate = firstCreate;
-        }
 
         public RoundProgressBarWidthNumber getProgressBar() {
             return progressBar;
