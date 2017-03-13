@@ -9,7 +9,6 @@ import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.FileManager;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.MediaRecorderManager;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
@@ -424,10 +423,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 int totalDuration ;
                 switch (mediaName){
                     case InterviewConstants.ANALYSIS_ITEM:
-                        Logger.e(" ddd");
                         if (controlsViewBean.getProgressBarStateTv() == null
                                 || controlsViewBean.getProgressBarTimeIv() == null ) return;
-                        Logger.e(" eee");
                         controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
                         controlsViewBean.getProgressBarStateTv().setText("听语音");
                         break;
