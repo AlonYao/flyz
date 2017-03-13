@@ -22,6 +22,7 @@ import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.vip.VipConstants;
 import com.appublisher.quizbank.common.vip.activity.VipBDGXActivity;
 import com.appublisher.quizbank.common.vip.activity.VipDTTPActivity;
 import com.appublisher.quizbank.common.vip.activity.VipExerciseDescriptionActivity;
@@ -49,7 +50,7 @@ import java.util.Map;
 /**
  * Created by jinbao on 2016/9/2.
  */
-public class VipExerciseIndexModel {
+public class VipExerciseIndexModel implements VipConstants{
 
     public PopupWindow statusPop;
     public PopupWindow categoryPop;
@@ -401,6 +402,7 @@ public class VipExerciseIndexModel {
         final int exerciseId = activity.list.get(position).getExercise_id();
         int status = activity.list.get(position).getStatus();
         Class<?> cls = null;
+
         switch (exerciseTypeId) {
             case 1:
                 // 名师精批
@@ -486,6 +488,11 @@ public class VipExerciseIndexModel {
                 UmengManager.onEvent(activity, "HomeWork", map);
 
                 break;
+
+            case TYPE_PANDUAN_ZHINENG:
+            case TYPE_SHULIANG_ZHINENG:
+            case TYPE_YANYU_ZHINENG:
+            case TYPE_ZILIAO_ZHINENG:
             case 8:
                 // 行测_智能组卷
                 if (status == 0 || status == 4 || status == 6) {
