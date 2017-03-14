@@ -64,10 +64,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
     public List<InterviewPaperDetailResp.QuestionsBean> mQuestionsBeanList;
     public ArrayList<InterviewViewStateBean> mFragmentControlsStateList;
-    public HashMap<String, String> mRecordPathMap;
-    public HashMap<Integer, HashMap> mFragmentControlsMap;
-    public HashMap<String, InterviewControlsStateBean> mFragmentControlsBeanMap;
-
+    public HashMap<Integer, String> mRecordPathMap;
     public HashMap<String, InterviewControlsStateBean> mHoldFragmentControlsMap;
 
     @Override
@@ -94,10 +91,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             mFragmentControlsStateList = new ArrayList<>();     // 保存view属性的集合
         if (mRecordPathMap == null || mRecordPathMap.size() <= 0)
             mRecordPathMap = new HashMap<>();   // 保存录音缓存文件路径的集合
-        if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0)
-            mFragmentControlsMap = new HashMap<>();
-
-        mFragmentControlsBeanMap = new HashMap<>();
 
         // 新建map存储控件
         mHoldFragmentControlsMap = new HashMap<>();
@@ -378,90 +371,15 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     protected void onDestroy() {
         super.onDestroy();
         if (mRecordPathMap == null || mRecordPathMap.size() <= 0) return;
-        for (Map.Entry<String, String> entry : mRecordPathMap.entrySet()) {
+        for (Map.Entry<Integer, String> entry : mRecordPathMap.entrySet()) {
             File file = new File(entry.getValue());
             if (file.exists() && file.isFile()){
                 FileManager.deleteFiles(entry.getValue());
             }
         }
-        if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0) return;
-            mFragmentControlsMap.clear();
-        if (mFragmentControlsBeanMap == null || mFragmentControlsBeanMap.size() <= 0) return;
-            mFragmentControlsBeanMap.clear();
 
         if (mHoldFragmentControlsMap == null || mHoldFragmentControlsMap.size() <= 0) return;
             mHoldFragmentControlsMap.clear();
-    }
-
-    /*
-    *  处理不同页面点击播放器时恢复默认状态
-    * */
-    public void changePlayingViewToDefault(){
-        // 判断是否为当前页面
-        if (mPlayingChildViewId == mCurrentPagerId) return;
-
-        // 需要遍历集合将播放的控件恢复默认状态
-        if (mFragmentControlsMap == null || mFragmentControlsMap.size() <= 0) return;
-        HashMap hashMap = mFragmentControlsMap.get(mPlayingChildViewId);
-        if (hashMap == null || hashMap.size() <= 0) return;
-        Iterator<Map.Entry<String,InterviewControlsStateBean>> iterator = hashMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String,InterviewControlsStateBean> entry = iterator.next();
-            final InterviewControlsStateBean controlsStateBean = entry.getValue();
-            if (controlsStateBean == null ) return;
-            String state = controlsStateBean.getState();
-            if (("").equals(state) || state == null) return;
-            String mediaName = entry.getKey();
-            if (state.equals("play")) {
-                if (("").equals(mediaName) || mediaName == null ) return;
-                InterviewControlsStateBean.ControlsViewBean controlsViewBean = controlsStateBean.getControlsViewBean();
-                if (controlsViewBean == null ) return;
-                if (controlsViewBean.getProgressBar() == null ) return;
-                controlsViewBean.getProgressBar().setProgress(100);
-                controlsStateBean.setState(InterviewConstants.OVER);
-                controlsStateBean.setOffset(0);
-                int totalDuration ;
-                switch (mediaName){
-                    case InterviewConstants.ANALYSIS_ITEM:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeIv() == null ) return;
-                        controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        break;
-                    case InterviewConstants.QUESTION_ITEM:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeIv() == null ) return;
-                        controlsViewBean.getProgressBarTimeIv().setImageResource(R.drawable.interview_listen_audio);
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        break;
-                    case InterviewConstants.SUBMIT:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeTv() == null ) return;
-                        totalDuration = controlsStateBean.getTotalDuration();
-                        if (totalDuration <= 0) return;
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
-                        break;
-                    case InterviewConstants.HAD_SUBMIT:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeTv() == null ) return;
-                        totalDuration = controlsStateBean.getTotalDuration();
-                        if (totalDuration <= 0) return;
-                        controlsViewBean.getProgressBarStateTv().setText("听语音");
-                        controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
-                        break;
-                    case InterviewConstants.TEACHER_REMARK:
-                        if (controlsViewBean.getProgressBarStateTv() == null
-                                || controlsViewBean.getProgressBarTimeTv() == null ) return;
-                        totalDuration = controlsStateBean.getTotalDuration();
-                        if (totalDuration <= 0) return;
-                        controlsViewBean.getProgressBarStateTv().setText("收听点评");
-                        controlsViewBean.getProgressBarTimeTv().setText(mModel.formatDateTime(totalDuration));
-                        break;
-                }
-                mFragmentControlsMap.remove(mPlayingChildViewId);
-            }
-        }
     }
 
     /*
