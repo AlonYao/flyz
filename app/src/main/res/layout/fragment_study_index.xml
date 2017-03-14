@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -31,7 +32,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="15dp"
                 android:layout_marginRight="30dp"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal"
+                tools:ignore="RtlHardcoded" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -42,7 +44,8 @@
             android:background="@drawable/study_index_userinfo_shape">
 
             <!-- 头像 -->
-            <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.makeramen.roundedimageview.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/avatar"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
@@ -53,7 +56,8 @@
                 android:src="@drawable/login_avatar"
                 app:riv_border_color="#979AA4"
                 app:riv_border_width="1dp"
-                app:riv_oval="true" />
+                app:riv_oval="true"
+                tools:ignore="RtlHardcoded" />
 
             <LinearLayout
                 android:id="@+id/gufen_view"
@@ -63,12 +67,13 @@
                 android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@+id/avatar"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="RtlHardcoded">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="预估分"
+                    android:text="@string/homepage_yugufen"
                     android:textColor="@color/common_grey_text"
                     android:textSize="12sp" />
 
@@ -89,12 +94,13 @@
                 android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@+id/gufen_view"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="RtlHardcoded">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="排在前"
+                    android:text="@string/homepage_paiming"
                     android:textColor="@color/common_grey_text"
                     android:textSize="12sp" />
 
@@ -107,7 +113,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-
             <TextView
                 android:id="@+id/exam_name"
                 android:layout_width="wrap_content"
@@ -117,13 +122,14 @@
                 android:layout_marginRight="20dp"
                 android:gravity="center_horizontal"
                 android:textColor="@color/common_text"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="RelativeOverlap,RtlHardcoded" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/mock_view"
             android:layout_width="338dp"
-            android:layout_height="53dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/avatar_bg_shadow"
             android:orientation="vertical"
@@ -133,35 +139,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/study_index_mock" />
+                android:src="@drawable/study_index_mock"
+                tools:ignore="ContentDescription" />
 
-            <TextView
-                android:id="@+id/mock_tv"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_centerVertical="true"
                 android:paddingLeft="80dp"
-                android:text="模考"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/mock_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mock_tv"
-                android:layout_marginTop="2dp"
-                android:paddingLeft="80dp"
-                android:text="模考名称名称名称"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
+                android:paddingRight="30dp"
+                android:orientation="vertical"
+                tools:ignore="RtlHardcoded,RtlSymmetry">
+                <TextView
+                    android:id="@+id/mock_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/homepage_btn_title_mock"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"/>
+                <!-- 模考描述文字 -->
+                <TextView
+                    android:id="@+id/mock_desc_line1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/mock_desc_line2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"/>
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/assess_view"
             android:layout_width="338dp"
-            android:layout_height="53dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/avatar_bg_shadow"
             android:orientation="vertical"
@@ -171,29 +191,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/study_index_assessment" />
+                android:src="@drawable/study_index_assessment"
+                tools:ignore="ContentDescription" />
 
-            <TextView
-                android:id="@+id/assess_tv"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_centerVertical="true"
                 android:paddingLeft="80dp"
-                android:text="估分"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/assess_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/assess_tv"
-                android:layout_marginTop="2dp"
-                android:paddingLeft="80dp"
-                android:text="估分名称估分名称"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
+                android:paddingRight="30dp"
+                android:orientation="vertical"
+                tools:ignore="RtlHardcoded,RtlSymmetry">
+                <TextView
+                    android:id="@+id/assess_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/homepage_btn_title_gufen"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/assess_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout
@@ -215,7 +238,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/study_index_mini" />
+                    android:src="@drawable/study_index_mini"
+                    tools:ignore="ContentDescription" />
 
                 <LinearLayout
                     android:id="@+id/history_mini_view"
@@ -225,18 +249,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignTop="@+id/mini_iv"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/study_index_history_mini" />
+                        android:src="@drawable/study_index_history_mini"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
-                        android:text="mini历史"
+                        android:text="@string/homepage_mini_history"
                         android:textColor="@color/common_grey_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -248,7 +274,8 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="2dp"
                     android:layout_toRightOf="@+id/mini_iv"
-                    android:text="mini模考" />
+                    android:text="@string/homepage_today_exam"
+                    tools:ignore="RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/mini_count"
@@ -257,7 +284,8 @@
                     android:layout_alignStart="@+id/mini_tv"
                     android:layout_below="@+id/mini_tv"
                     android:textColor="@color/common_grey_text"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:ignore="RtlHardcoded" />
             </RelativeLayout>
 
             <View
@@ -275,7 +303,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/study_index_notes" />
+                    android:src="@drawable/study_index_notes"
+                    tools:ignore="ContentDescription" />
 
                 <LinearLayout
                     android:id="@+id/notes_view"
@@ -285,18 +314,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignTop="@+id/note_iv"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/study_index_note" />
+                        android:src="@drawable/study_index_note"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
-                        android:text="知识点"
+                        android:text="@string/homepage_note"
                         android:textColor="@color/common_grey_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -308,7 +339,8 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="2dp"
                     android:layout_toRightOf="@+id/note_iv"
-                    android:text="知识点专项练习" />
+                    android:text="@string/homepage_special"
+                    tools:ignore="RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/note_name"
@@ -317,7 +349,8 @@
                     android:layout_alignStart="@+id/note_tv"
                     android:layout_below="@+id/note_tv"
                     android:textColor="@color/common_grey_text"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:ignore="RtlHardcoded" />
             </RelativeLayout>
 
             <View
@@ -335,7 +368,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/study_index_quick_test" />
+                    android:src="@drawable/study_index_quick_test"
+                    tools:ignore="ContentDescription" />
 
 
                 <TextView
@@ -344,7 +378,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/quick_test_iv"
-                    android:text="快速智能练习" />
+                    android:text="@string/homepage_autotest"
+                    tools:ignore="RtlHardcoded" />
             </RelativeLayout>
 
             <View
@@ -362,7 +397,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/study_index_whole_page" />
+                    android:src="@drawable/study_index_whole_page"
+                    tools:ignore="ContentDescription" />
 
 
                 <TextView
@@ -371,7 +407,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/wholepage_iv"
-                    android:text="真题演练" />
+                    android:text="@string/homepage_zhenti"
+                    tools:ignore="RtlHardcoded" />
             </RelativeLayout>
 
             <View

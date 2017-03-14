@@ -60,7 +60,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by jinbao on 2016/10/31.
+ * 首页
  */
 
 public class StudyIndexFragment extends Fragment implements RequestCallback, View.OnClickListener {
@@ -84,7 +84,8 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
     private TextView assessScoreTv;
     private TextView rankTv;
     public TextView examNameTv;
-    public TextView mockNameTv;
+    public TextView mTvMockDescLine1;
+    public TextView mTvMockDescLine2;
     public TextView assessNameTv;
     private TextView miniCuntTv;
     private TextView noteNameTv;
@@ -148,7 +149,8 @@ public class StudyIndexFragment extends Fragment implements RequestCallback, Vie
         assessScoreTv = (TextView) view.findViewById(R.id.score);
         rankTv = (TextView) view.findViewById(R.id.rank);
         examNameTv = (TextView) view.findViewById(R.id.exam_name);
-        mockNameTv = (TextView) view.findViewById(R.id.mock_name);
+        mTvMockDescLine1 = (TextView) view.findViewById(R.id.mock_desc_line1);
+        mTvMockDescLine2 = (TextView) view.findViewById(R.id.mock_desc_line2);
         assessNameTv = (TextView) view.findViewById(R.id.assess_name);
         miniCuntTv = (TextView) view.findViewById(R.id.mini_count);
         noteNameTv = (TextView) view.findViewById(R.id.note_name);

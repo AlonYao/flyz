@@ -97,21 +97,42 @@ public class StudyIndexModel {
      * @param fragment
      */
     public static void dealMockGufenResp(JSONObject response, StudyIndexFragment fragment) {
-        final MockGufenResp mockGufenResp = GsonManager.getModel(response, MockGufenResp.class);
+        MockGufenResp mockGufenResp = GsonManager.getModel(response, MockGufenResp.class);
+        if (mockGufenResp == null || mockGufenResp.getResponse_code() != 1) return;
 
-        if (mockGufenResp != null && mockGufenResp.getResponse_code() == 1) {
+        fragment.mockGufenResp = mockGufenResp;
 
-            fragment.mockGufenResp = mockGufenResp;
+        if (mockGufenResp.getMock() != null) {
+            MockGufenResp.MockBean mockBean = mockGufenResp.getMock();
+            if (mockBean != null) {
+                String mockName = mockBean.getName();
 
-            if (mockGufenResp.getMock() != null) {
-                MockGufenResp.MockBean mockBean = mockGufenResp.getMock();
-                fragment.mockNameTv.setText(mockBean.getName());
+                // 显示模考描述文字
+                if (mockName != null && mockName.contains("#")) {
+                    // 显示两行
+                    fragment.mTvMockDescLine1.setVisibility(View.VISIBLE);
+                    fragment.mTvMockDescLine2.setVisibility(View.VISIBLE);
+                    // 拆分字符串
+                    int index = mockName.indexOf("#");
+                    String line1Text = mockName.substring(0, index);
+                    String line2Text = mockName.substring(index + 1, mockName.length());
+                    fragment.mTvMockDescLine1.setText(line1Text);
+                    fragment.mTvMockDescLine2.setText(line2Text);
+                } else {
+                    // 显示一行
+                    fragment.mTvMockDescLine1.setVisibility(View.VISIBLE);
+                    fragment.mTvMockDescLine2.setVisibility(View.GONE);
+                    fragment.mTvMockDescLine1.setText(mockName);
+                }
+
                 fragment.mockView.setVisibility(View.VISIBLE);
                 fragment.mock_id = mockBean.getId();
             }
+        }
 
-            if (mockGufenResp.getGufen() != null) {
-                GufenM gufenBean = mockGufenResp.getGufen();
+        if (mockGufenResp.getGufen() != null) {
+            GufenM gufenBean = mockGufenResp.getGufen();
+            if (gufenBean != null) {
                 fragment.assessNameTv.setText(gufenBean.getName());
                 fragment.assessView.setVisibility(View.VISIBLE);
             }

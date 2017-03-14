@@ -26,15 +26,15 @@
     <string name="setting_index">设置</string>
 
     <!-- 首页 -->
-    <string name="homepage_gufen">预测分</string>
+    <string name="homepage_yugufen">预估分</string>
     <string name="homepage_gufen_value">0</string>
     <string name="homepage_paiming">排在前</string>
     <string name="homepage_paiming_value">0</string>
     <string name="homepage_percent">%</string>
     <string name="homepage_autotest">快速智能练习</string>
-    <string name="homepage_special">知识点专项训练</string>
+    <string name="homepage_special">知识点专项练习</string>
     <string name="homepage_special_value">暂无</string>
-    <string name="homepage_today_exam">今日mini模考</string>
+    <string name="homepage_today_exam">mini模考</string>
     <string name="homepage_today_exam_value">已有0人参加</string>
 
 
@@ -236,4 +236,10 @@
     <string name="title_activity_buy_teacher_comment">购买名师点评</string>
     <string name="title_activity_order_status">订单详情</string>
     <string name="title_activity_teacher_comment_list">名师点评</string>
+
+    <string name="homepage_btn_title_mock">模考</string>
+    <string name="homepage_btn_title_gufen">估分</string>
+    <string name="homepage_mini_history">mini历史</string>
+    <string name="homepage_note">知识点</string>
+    <string name="homepage_zhenti">真题演练</string>
 </resources>
