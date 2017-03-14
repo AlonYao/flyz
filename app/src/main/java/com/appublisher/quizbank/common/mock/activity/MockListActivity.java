@@ -1,21 +1,32 @@
 package com.appublisher.quizbank.common.mock.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.customui.MultiListView;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.adapter.MockListAdapter;
+import com.appublisher.quizbank.common.measure.MeasureConstants;
+import com.appublisher.quizbank.common.measure.activity.MeasureActivity;
+import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 
-public class MockListActivity extends BaseActivity {
+import java.util.HashMap;
+import java.util.List;
+
+public class MockListActivity extends BaseActivity implements MeasureConstants{
 
     private MockListAdapter adapter;
     private MultiListView listView;
     private TextView explainTv;
-    private MockPreResp mockPreResp;
+//    private MockPreResp mockPreResp;
+    private MockPreResp.MockListBean mMock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +35,11 @@ public class MockListActivity extends BaseActivity {
 
         setToolBar(this);
 
-        String data = getIntent().getStringExtra("mock_list");
-        mockPreResp = GsonManager.getModel(data, MockPreResp.class);
-        if (mockPreResp == null) return;
+        String data = getIntent().getStringExtra("data");
+        mMock = GsonManager.getModel(data, MockPreResp.MockListBean.class);
+        if (mMock == null) return;
 
-        adapter = new MockListAdapter(this, mockPreResp.getMock_list());
+        adapter = new MockListAdapter(this, mMock.getPapers());
         explainTv = (TextView) findViewById(R.id.explain_text);
         listView = (MultiListView) findViewById(R.id.listView);
 
@@ -36,30 +47,32 @@ public class MockListActivity extends BaseActivity {
     }
 
     public void setValue() {
-//        explainTv.setText(mockPreResp.getList_intro());
-//        listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                List<MockPreResp.MockListBean> list = mockPreResp.getMock_list();
-//                if (list == null || position >= list.size()) return;
-//
-//                MockPreResp.MockListBean mockListBean = list.get(position);
-//                if (mockListBean == null) return;
-//
-//                final Intent intent = new Intent(MockListActivity.this, MeasureActivity.class);
-//                intent.putExtra(MeasureConstants.INTENT_PAPER_ID, mockListBean.getPaper_id());
-//                intent.putExtra(MeasureConstants.INTENT_PAPER_TYPE, MeasureConstants.MOCK);
-//                intent.putExtra(MeasureConstants.INTENT_MOCK_TIME, mockPreResp.getMock_time());
-//                startActivity(intent);
-//                finish();
-//
-//                // Umeng
-//                HashMap<String, String> map = new HashMap<>();
-//                map.put("Mocklist", String.valueOf(mockListBean.getPaper_id()));
-//                UmengManager.onEvent(MockListActivity.this, "Mock", map);
-//            }
-//        });
+        explainTv.setText(mMock.getDescription());
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                List<MockPreResp.MockListBean.PapersBean> papers = mMock.getPapers();
+                if (papers == null || position >= papers.size()) return;
+                MockPreResp.MockListBean.PapersBean paper = papers.get(position);
+                if (paper == null) return;
+
+                final Intent intent = new Intent(MockListActivity.this, MeasureActivity.class);
+                intent.putExtra(INTENT_PAPER_ID, paper.getPaper_id());
+                intent.putExtra(INTENT_PAPER_TYPE, MeasureConstants.MOCK);
+                intent.putExtra(INTENT_MOCK_TIME, mMock.getStart_time());
+                startActivity(intent);
+
+                MeasureModel.saveCacheMockId(MockListActivity.this, mMock.getMock_id());
+
+                finish();
+
+                // Umeng
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Mocklist", String.valueOf(paper.getPaper_id()));
+                UmengManager.onEvent(MockListActivity.this, "Mock", map);
+            }
+        });
     }
 }

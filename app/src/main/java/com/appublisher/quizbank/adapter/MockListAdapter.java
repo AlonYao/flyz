@@ -19,9 +19,9 @@ import java.util.List;
 public class MockListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<MockPreResp.MockListBean> list;
+    private List<MockPreResp.MockListBean.PapersBean> list;
 
-    public MockListAdapter(Context context, List<MockPreResp.MockListBean> list) {
+    public MockListAdapter(Context context, List<MockPreResp.MockListBean.PapersBean> list) {
         this.context = context;
         this.list = list;
     }
@@ -53,9 +53,9 @@ public class MockListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        MockPreResp.MockListBean mockListBean = list.get(position);
-        if (mockListBean == null) return convertView;
-//        viewHolder.textView.setText(mockListBean.getPaper_name());
+        MockPreResp.MockListBean.PapersBean paper = list.get(position);
+        if (paper == null) return convertView;
+        viewHolder.textView.setText(paper.getPaper_name());
         return convertView;
     }
 
