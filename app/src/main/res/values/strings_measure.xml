@@ -62,4 +62,7 @@
     <string name="measure_search_none">还没有收录这个题，看看其他题目吧~</string>
     <string name="measure_search_hint">搜题</string>
 
+    <string name="mockinfo_examinfo">考试说明：</string>
+    <string name="mockinfo_awardinfo">排名及奖励说明：</string>
+
 </resources>

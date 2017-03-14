@@ -135,7 +135,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     }
 
     public void initViews() {
-
         examdeailContainer = (LinearLayout) findViewById(R.id.examdetailcontainer);
         rankingContainer = (LinearLayout) findViewById(R.id.rankingcontainer);
         bottom_right = (TextView) findViewById(R.id.mockpre_bottom_right);
@@ -228,39 +227,38 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         hideLoading();
     }
 
-    //动态添加模考说明
-    public void addExamChildViews(String tipString, String detailString, boolean isLast) {
+    /**
+     * 动态添加考试说明
+     * @param detail 详情文字
+     * @param isLast 是否是最后一段
+     */
+    public void addExamChildViews(String detail, boolean isLast) {
         float destity = getResources().getDisplayMetrics().density;
         LinearLayout exam = new LinearLayout(this);
-        LinearLayout.LayoutParams lpex = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lpex.setMargins(0, (int) destity * 15, 0, 0);
+        LinearLayout.LayoutParams lpex = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpex.setMargins(0, 0, 0, (int) destity * 15);
         exam.setLayoutParams(lpex);
         exam.setOrientation(LinearLayout.HORIZONTAL);
         exam.setGravity(Gravity.TOP);
-        TextView textView = new TextView(this);
-        textView.setHeight((int) destity * 20);
-        textView.setWidth((int) destity * 20);
-        textView.setBackgroundResource(R.drawable.mockpre_tips);
-        textView.setTextColor(getResources().getColor(R.color.white));
-        textView.setGravity(Gravity.CENTER);
-        textView.setText(tipString);
-        exam.addView(textView);
-        TextView detail = new TextView(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins((int) destity * 15, 0, 0, 0);
-        detail.setLayoutParams(lp);
-        detail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-        detail.setTextSize(17);
-        detail.setTextColor(getResources().getColor(R.color.common_text));
+        // 详情文字处理
+        TextView tvDetail = new TextView(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        lp.setMargins((int) destity * 15, 0, 0, 0);
+        tvDetail.setLayoutParams(lp);
+        tvDetail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+        tvDetail.setTextSize(17);
+        tvDetail.setTextColor(getResources().getColor(R.color.common_text));
         if (isLast) {
-            int start = detailString.length() + 2;
+            int start = detail.length() + 2;
             int end = start + 4;
-            SpannableStringBuilder style = new SpannableStringBuilder(detailString + "  查看详情");
+            SpannableStringBuilder style = new SpannableStringBuilder(detail + "  查看详情");
             style.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             style.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            detail.setText(style);
-            exam.addView(detail);
-            detail.setOnClickListener(new View.OnClickListener() {
+            tvDetail.setText(style);
+            exam.addView(tvDetail);
+            tvDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     skipCourseDetailPage();
@@ -268,39 +266,36 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
             });
             examdeailContainer.addView(exam);
         } else {
-            detail.setText(Html.fromHtml(detailString));
-            exam.addView(detail);
+            tvDetail.setText(Html.fromHtml(detail));
+            exam.addView(tvDetail);
             examdeailContainer.addView(exam);
         }
-
     }
 
-    //动态添加排名信息
-    public void addRankChildViews(String tipString, String detailString) {
+    /**
+     * 动态添加排名信息
+     * @param detail 详情文字
+     */
+    public void addRankChildViews(String detail) {
         float destity = getResources().getDisplayMetrics().density;
         LinearLayout exam = new LinearLayout(this);
-        LinearLayout.LayoutParams lpex = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lpex = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lpex.setMargins(0, (int) destity * 15, 0, 0);
         exam.setLayoutParams(lpex);
         exam.setOrientation(LinearLayout.HORIZONTAL);
         exam.setGravity(Gravity.TOP);
-        TextView textView = new TextView(this);
-        textView.setHeight((int) destity * 20);
-        textView.setWidth((int) destity * 20);
-        textView.setBackgroundResource(R.drawable.mockpre_tips);
-        textView.setTextColor(getResources().getColor(R.color.white));
-        textView.setGravity(Gravity.CENTER);
-        textView.setText(tipString);
-        exam.addView(textView);
-        TextView detail = new TextView(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        // 详情文字处理
+        TextView tvDetail = new TextView(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins((int) destity * 15, 0, 0, 0);
-        detail.setLayoutParams(lp);
-        detail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-        detail.setTextSize(17);
-        detail.setTextColor(getResources().getColor(R.color.common_text));
-        detail.setText(detailString);
-        exam.addView(detail);
+        tvDetail.setLayoutParams(lp);
+        tvDetail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+        tvDetail.setTextSize(17);
+        tvDetail.setTextColor(getResources().getColor(R.color.common_text));
+        tvDetail.setText(detail);
+        exam.addView(tvDetail);
         rankingContainer.addView(exam);
     }
 
@@ -362,24 +357,25 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         }
         //排名
         List<String> award_info = mockPreResp.getAward_info();
-        for (int i = 0; i < award_info.size(); i++) {
-            addRankChildViews((i + 1) + "", award_info.get(i));
+        int size = award_info == null ? 0 : award_info.size();
+        for (int i = 0; i < size; i++) {
+            addRankChildViews(award_info.get(i));
         }
 
         //模考信息
         List<MockPreResp.DateInfoEntity> dataInfoEntity = mockPreResp.getDate_info();
         //查看详情链接
-        int size = dataInfoEntity == null ? 0 : dataInfoEntity.size();
+        size = dataInfoEntity == null ? 0 : dataInfoEntity.size();
         for (int i = 0; i < size; i++) {
             MockPreResp.DateInfoEntity entity = dataInfoEntity.get(i);
             if (entity == null) continue;
 
             String link = entity.getLink();
             if (link == null || link.length() == 0) {
-                addExamChildViews((i + 1) + "", entity.getText(), false);
+                addExamChildViews(entity.getText(), false);
             } else {
                 courseDetailLink = link;
-                addExamChildViews((i + 1) + "", entity.getText(), true);
+                addExamChildViews(entity.getText(), true);
             }
         }
     }

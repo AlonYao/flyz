@@ -25,55 +25,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/white"
             android:paddingTop="20dp"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            >
-
+            android:paddingRight="12dp">
+            <!-- 考试说明 -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="考试时间"
-                android:textColor="@color/common_text"
-                android:textSize="18sp" />
-
+                android:textColor="@color/themecolor"
+                android:text="@string/mockinfo_examinfo"/>
             <LinearLayout
                 android:id="@+id/examdetailcontainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:orientation="vertical"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="19dp"
-                android:background="@color/homepage_line" />
-
+            <!-- 排名及奖励说明 -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@color/white"
-                android:gravity="center"
-                android:text="排名及奖励说明"
-                android:textColor="@color/common_text"
-                android:textSize="18sp" />
-
+                android:textColor="@color/themecolor"
+                android:text="@string/mockinfo_awardinfo"/>
             <LinearLayout
                 android:id="@+id/rankingcontainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:background="@color/white"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
+                android:orientation="vertical"/>
             <include layout="@layout/app_logo"/>
-
         </LinearLayout>
     </ScrollView>
 
