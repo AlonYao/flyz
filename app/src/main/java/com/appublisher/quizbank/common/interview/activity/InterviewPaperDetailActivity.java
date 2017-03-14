@@ -351,6 +351,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             fragment.mOffset = 0;
             fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
             String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
+            if (("").equals(duration) || duration == null) return;
             if(Integer.parseInt(duration)>= 360){
                 fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
             }else{
@@ -439,6 +440,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 fragment.mUserNotSubmitAnswerProgressBar.setProgress(100);
                 fragment.mOffset = 0;
                 String duration = FileManager.getVideoDuration(fragment.mUserAnswerFilePath);
+                if (("").equals(duration) || duration == null) return;
                 if(Integer.parseInt(duration)>= 360){
                     fragment.mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
                 }else{

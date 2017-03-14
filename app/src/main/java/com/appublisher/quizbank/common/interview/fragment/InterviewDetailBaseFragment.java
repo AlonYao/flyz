@@ -639,6 +639,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                     mTvtimeNotSubm.setText("听语音");
                     // 修改录音文字
                     String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+                    if (("").equals(duration) || duration == null) return;
                     if(Integer.parseInt(duration) >=360){
                         mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
                     }else{
@@ -1023,6 +1024,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
     * */
     private void showRecordedDuration() {
         String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+        if (("").equals(duration) || duration == null) return;
         if (Integer.parseInt(duration) >= UPPERLIMITRECORDTIME) {
             mTvtimeNotSubmPlay.setText(mModel.formatDateTime(UPPERLIMITRECORDTIME));
         } else {
@@ -1230,6 +1232,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
                 isPlaying = SUBMIT;
                 mTvtimeNotSubmPlay.setText(mModel.formatDateTime(unPlayDur));
                 String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+                if (("").equals(duration) || duration == null) return;
                 mUserNotSubmitAnswerProgressBar.setProgress(getPercent(unPlayDur, Integer.parseInt(duration) + 1));
                 break;
             case HADSUBMIT:                 // 已提交时: 存在时差,文字快于进度条
@@ -1333,6 +1336,7 @@ public abstract class InterviewDetailBaseFragment extends Fragment implements II
         switch (mStatus) {
             case SUBMIT:
                 String duration = FileManager.getVideoDuration(mUserAnswerFilePath);
+                if (("").equals(duration) || duration == null) return;
                 if(Integer.parseInt(duration) >= 360){
                     mTvtimeNotSubmPlay.setText(mModel.formatDateTime(360));
                 }else{
