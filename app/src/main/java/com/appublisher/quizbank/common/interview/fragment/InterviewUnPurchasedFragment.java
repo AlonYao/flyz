@@ -87,7 +87,7 @@ public class InterviewUnPurchasedFragment extends InterviewDetailBaseFragment {
     @Override
     public void initChildListener() {
         if (mQuestionBean == null || mPosition >= mListLength || mPosition < 0) return;
-        /**
+        /*
          *  展开解析时需要监听是否已经答题: 用一个常量字符记录(在基类中处理录音页面的逻辑时)
          * **/
         mAnalysisSwitchViewRl.setOnClickListener(new View.OnClickListener() {

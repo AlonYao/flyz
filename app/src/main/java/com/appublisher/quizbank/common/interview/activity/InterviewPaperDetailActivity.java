@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,7 +21,6 @@ import com.appublisher.quizbank.common.interview.adapter.InterviewDetailAdapter;
 import com.appublisher.quizbank.common.interview.model.InterviewDetailModel;
 import com.appublisher.quizbank.common.interview.netdata.InterviewControlsStateBean;
 import com.appublisher.quizbank.common.interview.netdata.InterviewPaperDetailResp;
-import com.appublisher.quizbank.common.interview.netdata.InterviewViewStateBean;
 import com.appublisher.quizbank.common.interview.network.InterviewRequest;
 import com.appublisher.quizbank.common.interview.view.InterviewConstants;
 import com.appublisher.quizbank.common.interview.view.InterviewDetailBaseFragmentCallBak;
@@ -30,9 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -63,9 +61,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public boolean mHadDoneQuestion;
 
     public List<InterviewPaperDetailResp.QuestionsBean> mQuestionsBeanList;
-    public ArrayList<InterviewViewStateBean> mFragmentControlsStateList;
-    public HashMap<Integer, String> mRecordPathMap;
     public HashMap<String, InterviewControlsStateBean> mHoldFragmentControlsMap;
+    public SparseArray<String> mRecordPathArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +84,13 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
 
         if (mViewPager == null) return;
         mViewPager.setScroll(true);
-        if (mFragmentControlsStateList == null || mFragmentControlsStateList.size()<= 0)
-            mFragmentControlsStateList = new ArrayList<>();     // 保存view属性的集合
-        if (mRecordPathMap == null || mRecordPathMap.size() <= 0)
-            mRecordPathMap = new HashMap<>();   // 保存录音缓存文件路径的集合
+
+        if (mRecordPathArray == null || mRecordPathArray.size() <= 0)
+            mRecordPathArray = new SparseArray<>();         // 保存录音缓存文件路径的集合
 
         // 新建map存储控件
-        mHoldFragmentControlsMap = new HashMap<>();
+        if (mHoldFragmentControlsMap == null || mHoldFragmentControlsMap.size() <= 0)
+            mHoldFragmentControlsMap = new HashMap<>();
 
         initListener(mViewPager);
         mModel = new InterviewDetailModel(this, this);
@@ -124,7 +121,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     public void getData() {
         mWhatView = InterviewConstants.RECORDED_HAD_SUBMIT;
         // 将缓存路径集合清空
-        if (mRecordPathMap != null && mRecordPathMap.size() >0 ) mRecordPathMap.clear();
+        if (mRecordPathArray != null && mRecordPathArray.size() > 0 ) mRecordPathArray.clear();
 
         if ("studyRecordInterview".equals(mDataFrom)){
             mRequest.getStudyRecordInterviewPaperDetail(mItemType, mQuestionTime);
@@ -291,13 +288,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 if (mQuestionsBeanList == null || mQuestionsBeanList.size() == 0) {
                     ToastManager.showToast(this, "没有面试题目");
                 } else {
-                    int count = mQuestionsBeanList.size();
-                    if ( mFragmentControlsStateList == null || mFragmentControlsStateList.size() <= 0 ){
-                        if (count <= 0) return;
-                        for (int i = 0; i < count; i++){
-                            mFragmentControlsStateList.add(new InterviewViewStateBean());
-                        }
-                    }
                     mAdapter = new InterviewDetailAdapter(               // 将数据传给adapter
                             getSupportFragmentManager(),
                             mQuestionsBeanList,
@@ -361,7 +351,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     }
 
     private boolean checkRecordPathMap(){
-        return mRecordPathMap != null && mRecordPathMap.size() >0 ;
+        return mRecordPathArray != null && mRecordPathArray.size() > 0 ;
     }
 
     /*
@@ -370,11 +360,12 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mRecordPathMap == null || mRecordPathMap.size() <= 0) return;
-        for (Map.Entry<Integer, String> entry : mRecordPathMap.entrySet()) {
-            File file = new File(entry.getValue());
+        for (int i = 0; i < mRecordPathArray.size(); i++) {
+            String recordPath = mRecordPathArray.valueAt(i);
+            if (("").equals(recordPath) || recordPath == null) continue;
+            File file = new File(recordPath);
             if (file.exists() && file.isFile()){
-                FileManager.deleteFiles(entry.getValue());
+                FileManager.deleteFiles(recordPath);
             }
         }
 
@@ -388,14 +379,14 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private void updateFragmentPlayState() {
         // 将暂停状态恢复成默认状态
         if (mHoldFragmentControlsMap == null || mHoldFragmentControlsMap.size() <= 0) return;
+
         // 遍历集合将暂停的bean修改成默认
-        Iterator<Map.Entry<String, InterviewControlsStateBean>> iterator = mHoldFragmentControlsMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, InterviewControlsStateBean> interviewControlsStateBeanEntry = iterator.next();
-            InterviewControlsStateBean interviewControlsStateBean = interviewControlsStateBeanEntry.getValue();
+        for (Map.Entry<String, InterviewControlsStateBean> controlsStateBeanEntry:
+                mHoldFragmentControlsMap.entrySet()) {
+            InterviewControlsStateBean interviewControlsStateBean = controlsStateBeanEntry.getValue();
             if (interviewControlsStateBean == null || interviewControlsStateBean.getControlsViewBean() == null) continue;     // 翻到第三页内部bean为null
 
-            String key = interviewControlsStateBeanEntry.getKey();
+            String key = controlsStateBeanEntry.getKey();
             String state = interviewControlsStateBean.getState();
             String itemType = interviewControlsStateBean.getItemType();
             int totalDuration = interviewControlsStateBean.getTotalDuration();

@@ -117,7 +117,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
 
         mQuestionContentLl.setVisibility(View.GONE);  // 题目的展示容器默认不显示
 
-        /**
+        /*
          *  题目行的逻辑处理
          * **/
         mQuestionSwitchViewRl.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +150,7 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
             }
         });
 
-        /**
+        /*
          *  解析行的逻辑处理
          * **/
         mAnalysisSwitchViewRl.setOnClickListener(new View.OnClickListener() {

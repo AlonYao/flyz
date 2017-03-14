@@ -153,7 +153,7 @@ public class MainActivity extends BaseActivity implements RequestCallback {
             }
 
             // 检测账号是否被合并
-            new LoginModel(this).commonCheck(new LoginModel.ObtainUserInfoListener() {
+            new LoginModel(this).commonCheck(this, new LoginModel.ObtainUserInfoListener() {
                 @Override
                 public void isSuccess(boolean isSuccess) {
                     if (isSuccess) {
