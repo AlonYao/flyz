@@ -1,7 +1,5 @@
 package com.appublisher.quizbank.model.netdata.mock;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import java.util.List;
 
 /**
@@ -10,118 +8,32 @@ import java.util.List;
 public class MockPreResp {
 
     private int response_code;
-    private String mock_time;
-    private String mock_status;
-    private int course_id;
-    private boolean is_purchased;
-    private List<DateInfoEntity> date_info;
-    private List<String> award_info;
-
-    private int exercise_id;
-    private String list_intro;
-    private boolean is_booked;
-    private String download_link;
+    private List<String> description;
+    private List<String> pride_info;
     private List<MockListBean> mock_list;
 
-    protected MockPreResp(Parcel in) {
-        response_code = in.readInt();
-        mock_time = in.readString();
-        mock_status = in.readString();
-        course_id = in.readInt();
-        is_purchased = in.readByte() != 0;
-        award_info = in.createStringArrayList();
-        exercise_id = in.readInt();
-        list_intro = in.readString();
-        is_booked = in.readByte() != 0;
-        download_link = in.readString();
+    public int getResponse_code() {
+        return response_code;
     }
 
     public void setResponse_code(int response_code) {
         this.response_code = response_code;
     }
 
-    public void setMock_time(String mock_time) {
-        this.mock_time = mock_time;
+    public List<String> getDescription() {
+        return description;
     }
 
-    public void setMock_status(String mock_status) {
-        this.mock_status = mock_status;
+    public void setDescription(List<String> description) {
+        this.description = description;
     }
 
-    public void setCourse_id(int course_id) {
-        this.course_id = course_id;
+    public List<String> getPride_info() {
+        return pride_info;
     }
 
-    public void setIs_purchased(boolean is_purchased) {
-        this.is_purchased = is_purchased;
-    }
-
-    public void setDate_info(List<DateInfoEntity> date_info) {
-        this.date_info = date_info;
-    }
-
-    public void setAward_info(List<String> award_info) {
-        this.award_info = award_info;
-    }
-
-    public int getResponse_code() {
-        return response_code;
-    }
-
-    public String getMock_time() {
-        return mock_time;
-    }
-
-    public String getMock_status() {
-        return mock_status == null ? "" : mock_status;
-    }
-
-    public int getCourse_id() {
-        return course_id;
-    }
-
-    public boolean getIs_purchased() {
-        return is_purchased;
-    }
-
-    public List<DateInfoEntity> getDate_info() {
-        return date_info;
-    }
-
-    public List<String> getAward_info() {
-        return award_info;
-    }
-
-    public void setExercise_id(int exercise_id) {
-        this.exercise_id = exercise_id;
-    }
-
-    public int getExercise_id() {
-        return exercise_id;
-    }
-
-    public String getList_intro() {
-        return list_intro;
-    }
-
-    public void setList_intro(String list_intro) {
-        this.list_intro = list_intro;
-    }
-
-    public boolean isIs_booked() {
-        return is_booked;
-    }
-
-    public void setIs_booked(boolean is_booked) {
-        this.is_booked = is_booked;
-    }
-
-    public String getDownload_link() {
-        return download_link;
-    }
-
-    public void setDownload_link(String download_link) {
-        this.download_link = download_link;
+    public void setPride_info(List<String> pride_info) {
+        this.pride_info = pride_info;
     }
 
     public List<MockListBean> getMock_list() {
@@ -132,55 +44,128 @@ public class MockPreResp {
         this.mock_list = mock_list;
     }
 
-    public static class DateInfoEntity {
-
-        private String text;
-        private String link;
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public void setLink(String link) {
-            this.link = link;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public String getLink() {
-            return link;
-        }
-    }
-
     public static class MockListBean {
-        private int paper_id;
-        private String paper_name;
-        private int question_num;
 
-        public int getPaper_id() {
-            return paper_id;
+        private int mock_id;
+        private String name;
+        private int course_id;
+        private String description;
+        private String start_time;
+        private int duration;
+        private boolean is_purchased;
+        private int exercise_id;
+        private boolean is_booked;
+        private String status;
+        private List<PapersBean> papers;
+
+        public int getMock_id() {
+            return mock_id;
         }
 
-        public void setPaper_id(int paper_id) {
-            this.paper_id = paper_id;
+        public void setMock_id(int mock_id) {
+            this.mock_id = mock_id;
         }
 
-        public String getPaper_name() {
-            return paper_name;
+        public String getName() {
+            return name;
         }
 
-        public void setPaper_name(String paper_name) {
-            this.paper_name = paper_name;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public int getQuestion_num() {
-            return question_num;
+        public int getCourse_id() {
+            return course_id;
         }
 
-        public void setQuestion_num(int question_num) {
-            this.question_num = question_num;
+        public void setCourse_id(int course_id) {
+            this.course_id = course_id;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getStart_time() {
+            return start_time;
+        }
+
+        public void setStart_time(String start_time) {
+            this.start_time = start_time;
+        }
+
+        public int getDuration() {
+            return duration;
+        }
+
+        public void setDuration(int duration) {
+            this.duration = duration;
+        }
+
+        public boolean isIs_purchased() {
+            return is_purchased;
+        }
+
+        public void setIs_purchased(boolean is_purchased) {
+            this.is_purchased = is_purchased;
+        }
+
+        public int getExercise_id() {
+            return exercise_id;
+        }
+
+        public void setExercise_id(int exercise_id) {
+            this.exercise_id = exercise_id;
+        }
+
+        public boolean isIs_booked() {
+            return is_booked;
+        }
+
+        public void setIs_booked(boolean is_booked) {
+            this.is_booked = is_booked;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public List<PapersBean> getPapers() {
+            return papers;
+        }
+
+        public void setPapers(List<PapersBean> papers) {
+            this.papers = papers;
+        }
+
+        public static class PapersBean {
+
+            private int paper_id;
+            private String paper_name;
+
+            public int getPaper_id() {
+                return paper_id;
+            }
+
+            public void setPaper_id(int paper_id) {
+                this.paper_id = paper_id;
+            }
+
+            public String getPaper_name() {
+                return paper_name;
+            }
+
+            public void setPaper_name(String paper_name) {
+                this.paper_name = paper_name;
+            }
         }
     }
 }

@@ -245,7 +245,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         TextView tvDetail = new TextView(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        lp.setMargins((int) destity * 15, 0, 0, 0);
         tvDetail.setLayoutParams(lp);
         tvDetail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         tvDetail.setTextSize(17);
@@ -285,7 +284,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         LinearLayout exam = new LinearLayout(this);
         LinearLayout.LayoutParams lpex = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lpex.setMargins(0, (int) destity * 15, 0, 0);
+        lpex.setMargins(0, 0, 0, (int) destity * 15);
         exam.setLayoutParams(lpex);
         exam.setOrientation(LinearLayout.HORIZONTAL);
         exam.setGravity(Gravity.TOP);
@@ -293,7 +292,6 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         TextView tvDetail = new TextView(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins((int) destity * 15, 0, 0, 0);
         tvDetail.setLayoutParams(lp);
         tvDetail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         tvDetail.setTextSize(17);
@@ -311,75 +309,81 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     public void dealMockPreInfo(JSONObject response) {
         MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
         mMockPreResp = mockPreResp;
-        if (mockPreResp == null || mockPreResp.getResponse_code() != 1) {
-            return;
+        if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
+
+        //模
+//        mock_time = mockPreResp.getMock_time();
+
+//        // 缓存模考时间
+//        LegacyMeasureModel legacyMeasureModel = new LegacyMeasureModel(this);
+//        legacyMeasureModel.updateMockTime(mock_time);
+//        legacyMeasureModel.updatePaperName(paper_name);
+
+//        mDuration = getSecondsByDateMinusServerTime(mock_time);
+//        int date = MockDAO.getIsDateById(mock_id);
+//        String mock_status = mockPreResp.getMock_status();
+//        if (mockPreResp.getExercise_id() > 0) {
+//            bottom_left.setText("练习报告");
+//            exercise_id = mockPreResp.getExercise_id();
+//        } else {
+//            switch (mock_status) {
+//                case "unstart": //未开始
+//                    if (date == 0) {//未预约过
+//                        bottom_left.setText("预约考试");
+//                        startTimeBackground();
+//                    } else {//倒计时
+//                        startTimer();
+//                    }
+//                    break;
+//
+//                case "on_going": //开考30分钟内
+//                    bottom_left.setText("点击进入");
+//                    break;
+//
+//                case "end": // 模考彻底结束
+//                case "finish": //开考30分钟后
+//                    bottom_left.setText("来晚啦");
+//                    bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
+//                    break;
+//            }
+//        }
+//        //是否已报名
+//        if (mockPreResp.getIs_purchased()) {
+//            bottom_right.setText("查看详情");
+//        }
+
+        showMocks(mockPreResp.getMock_list());
+        showDescAndPride(mockPreResp);
+    }
+
+    private void showMocks(List<MockPreResp.MockListBean> mocks) {
+        if (mocks == null) return;
+        for (MockPreResp.MockListBean mock : mocks) {
+            if (mock == null) continue;
+            // 添加模考item
         }
+    }
+
+    private void showDescAndPride(MockPreResp mockPreResp) {
+        if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
 
         // 初始化Container
         examdeailContainer.removeAllViews();
         rankingContainer.removeAllViews();
 
-        //模
-        mock_time = mockPreResp.getMock_time();
-
-        // 缓存模考时间
-        LegacyMeasureModel legacyMeasureModel = new LegacyMeasureModel(this);
-        legacyMeasureModel.updateMockTime(mock_time);
-        legacyMeasureModel.updatePaperName(paper_name);
-
-        mDuration = getSecondsByDateMinusServerTime(mock_time);
-        int date = MockDAO.getIsDateById(mock_id);
-        String mock_status = mockPreResp.getMock_status();
-        if (mockPreResp.getExercise_id() > 0) {
-            bottom_left.setText("练习报告");
-            exercise_id = mockPreResp.getExercise_id();
-        } else {
-            switch (mock_status) {
-                case "unstart": //未开始
-                    if (date == 0) {//未预约过
-                        bottom_left.setText("预约考试");
-                        startTimeBackground();
-                    } else {//倒计时
-                        startTimer();
-                    }
-                    break;
-
-                case "on_going": //开考30分钟内
-                    bottom_left.setText("点击进入");
-                    break;
-
-                case "end": // 模考彻底结束
-                case "finish": //开考30分钟后
-                    bottom_left.setText("来晚啦");
-                    bottom_left.setBackgroundColor(getResources().getColor(R.color.evaluation_text_gray));
-                    break;
+        // 排名及奖励信息
+        List<String> prides = mockPreResp.getPride_info();
+        if (prides != null) {
+            for (String pride : prides) {
+                addRankChildViews(pride);
             }
         }
-        //是否已报名
-        if (mockPreResp.getIs_purchased()) {
-            bottom_right.setText("查看详情");
-        }
-        //排名
-        List<String> award_info = mockPreResp.getAward_info();
-        int size = award_info == null ? 0 : award_info.size();
-        for (int i = 0; i < size; i++) {
-            addRankChildViews(award_info.get(i));
-        }
 
-        //模考信息
-        List<MockPreResp.DateInfoEntity> dataInfoEntity = mockPreResp.getDate_info();
-        //查看详情链接
-        size = dataInfoEntity == null ? 0 : dataInfoEntity.size();
-        for (int i = 0; i < size; i++) {
-            MockPreResp.DateInfoEntity entity = dataInfoEntity.get(i);
-            if (entity == null) continue;
-
-            String link = entity.getLink();
-            if (link == null || link.length() == 0) {
-                addExamChildViews(entity.getText(), false);
-            } else {
-                courseDetailLink = link;
-                addExamChildViews(entity.getText(), true);
+        // 考试信息
+        List<String> descs = mockPreResp.getDescription();
+        if (descs != null) {
+            for (String desc : descs) {
+                addExamChildViews(desc, false);
             }
         }
     }

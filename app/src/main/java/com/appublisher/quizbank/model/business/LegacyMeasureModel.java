@@ -1210,14 +1210,14 @@ public class LegacyMeasureModel implements RequestCallback{
 //            if (resp == null || resp.getResponse_code() != 1) return;
 //            showCacheSubmitAlert();
         } else if ("mockpre_exam_info".equals(apiName)) {
-            MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
-            if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
-            String status = mockPreResp.getMock_status();
-            if ("finish".equals(status)) {
-                showMockCacheSubmitTimeOutAlert();
-            } else {
-                showMockCacheSubmitAlert();
-            }
+//            MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
+//            if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
+//            String status = mockPreResp.getMock_status();
+//            if ("finish".equals(status)) {
+//                showMockCacheSubmitTimeOutAlert();
+//            } else {
+//                showMockCacheSubmitAlert();
+//            }
         }
     }
 

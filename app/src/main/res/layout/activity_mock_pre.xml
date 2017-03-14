@@ -13,15 +13,63 @@
         android:layout_above="@+id/mockpre_bottom"
         android:layout_below="@+id/toolbar"
         android:clipToPadding="false"
-        android:paddingTop="20dp"
-        android:paddingLeft="36dp"
-        android:paddingRight="36dp"
-        android:paddingBottom="20dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:paddingBottom="15dp"
         android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <!-- 模考详情 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="18dp"
+                    android:paddingRight="18dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/mockinfo_mockitem_bg">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/common_text"
+                        android:text="模考名字"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/common_text"
+                        android:text="模考时间"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/common_line"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="进入模考"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="课程报名"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
             <!-- 考试说明 -->
             <TextView
                 android:layout_width="wrap_content"
@@ -46,7 +94,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:background="@color/white"
                 android:orientation="vertical"/>
             <include layout="@layout/app_logo"/>
         </LinearLayout>
