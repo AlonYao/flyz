@@ -254,7 +254,11 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
             int start = detail.length() + 2;
             int end = start + 4;
             SpannableStringBuilder style = new SpannableStringBuilder(detail + "  查看详情");
-            style.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(
+                    getResources().getColor(R.color.apptheme)),
+                    start,
+                    end, 
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             style.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             tvDetail.setText(style);
             exam.addView(tvDetail);

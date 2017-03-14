@@ -5,10 +5,8 @@
     android:background="@color/mock_card_round"
     tools:context="com.appublisher.quizbank.activity.MockPreActivity">
 
-    <include layout="@layout/toolbar" />
-    <!--
-        模考报名获奖等说明
-    -->
+    <include layout="@layout/toolbar" android:id="@+id/toolbar"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,18 +18,15 @@
         android:paddingRight="36dp"
         android:paddingBottom="20dp"
         android:scrollbars="none">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+            android:orientation="vertical">
             <!-- 考试说明 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:textColor="@color/themecolor"
                 android:text="@string/mockinfo_examinfo"/>
             <LinearLayout
@@ -43,6 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:textColor="@color/themecolor"
                 android:text="@string/mockinfo_awardinfo"/>
             <LinearLayout
@@ -62,13 +58,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/mockpre_bottom_left"
             style="@style/PracticeReportTv"
             android:background="@color/practice_report_all"
             android:text="@string/mockpre_order_exam" />
-
         <TextView
             android:id="@+id/mockpre_bottom_right"
             style="@style/PracticeReportTv"
