@@ -188,7 +188,7 @@
             android:label="@string/title_activity_gufen_list"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MockPreActivity"
+            android:name=".common.mock.activity.MockPreActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_mock_pre"
             android:screenOrientation="portrait" />
@@ -267,7 +267,7 @@
             android:label="@string/title_activity_vip_xc_report"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MockListActivity"
+            android:name=".common.mock.activity.MockListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_mock_list"
             android:screenOrientation="portrait" />

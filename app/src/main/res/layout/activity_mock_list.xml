@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/common_bg"
     android:orientation="vertical"
-    tools:context="com.appublisher.quizbank.activity.MockListActivity">
+    tools:context="com.appublisher.quizbank.common.mock.activity.MockListActivity">
 
     <include layout="@layout/toolbar" />
 

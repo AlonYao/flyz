@@ -17,7 +17,7 @@ import com.appublisher.lib_course.promote.PromoteModel;
 import com.appublisher.lib_course.promote.PromoteResp;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.R;
-import com.appublisher.quizbank.activity.MockPreActivity;
+import com.appublisher.quizbank.common.mock.activity.MockPreActivity;
 import com.appublisher.quizbank.dao.MockDAO;
 
 import java.util.HashMap;

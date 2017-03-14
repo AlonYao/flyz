@@ -62,7 +62,12 @@
     <string name="measure_search_none">还没有收录这个题，看看其他题目吧~</string>
     <string name="measure_search_hint">搜题</string>
 
-    <string name="mockinfo_examinfo">考试说明：</string>
-    <string name="mockinfo_awardinfo">排名及奖励说明：</string>
+    <string name="mock_info_examinfo">考试说明：</string>
+    <string name="mock_info_awardinfo">排名及奖励说明：</string>
+    <string name="mock_info_item_book_course">课程报名</string>
+    <string name="mock_info_item_course_detail">查看详情</string>
+    <string name="mock_info_item_status_enter">进入模考</string>
+    <string name="mock_info_item_status_late">来晚了</string>
+    <string name="mock_info_item_status_book">预约模考</string>
 
 </resources>

@@ -1327,7 +1327,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
         } else if ("mockpre_exam_info".equals(apiName)) {
             MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
             if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
-            String status = mockPreResp.getMock_status();
+            List<MockPreResp.MockListBean> mocks = mockPreResp.getMock_list();
+            if (mocks == null || mocks.size() == 0) return;
+            MockPreResp.MockListBean mock = mocks.get(0);
+            if (mock == null) return;
+
+            String status = mock.getStatus();
             if ("finish".equals(status)) {
                 showMockCacheSubmitTimeOutAlert();
             } else {

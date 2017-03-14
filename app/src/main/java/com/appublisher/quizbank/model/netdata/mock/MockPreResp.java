@@ -122,7 +122,7 @@ public class MockPreResp {
             this.exercise_id = exercise_id;
         }
 
-        public boolean isIs_booked() {
+        public boolean isBooked() {
             return is_booked;
         }
 

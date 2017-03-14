@@ -1,7 +1,6 @@
-package com.appublisher.quizbank.activity;
+package com.appublisher.quizbank.common.mock.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,8 +12,10 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,10 +34,9 @@ import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
-import com.appublisher.quizbank.common.measure.model.MeasureModel;
 import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
+import com.appublisher.quizbank.common.mock.bean.MockInfoItemCacheBean;
 import com.appublisher.quizbank.dao.MockDAO;
-import com.appublisher.quizbank.model.business.LegacyMeasureModel;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -48,13 +48,15 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MockPreActivity extends BaseActivity implements RequestCallback, View.OnClickListener {
+public class MockPreActivity extends BaseActivity implements
+        RequestCallback, View.OnClickListener, MeasureConstants {
     private LinearLayout examdeailContainer;
     private LinearLayout rankingContainer;
     private QRequest mQRequest;
@@ -67,6 +69,9 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     private Handler mHandler;
     private int exercise_id = -1;
     private MockPreResp mMockPreResp;
+    private LinearLayout mLlMockItemContainer;
+    public List<MockInfoItemCacheBean> mItemCacheBeans;
+
     //预约后倒计时＋考试时间倒计时
     public Timer mTimer;
     public static long mDuration;
@@ -75,6 +80,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     public static long mSec; //秒数
     public static final int BEGINMOCK_N = 1;
     public static final int BEGINMOCK_Y = 0;
+    public static final int IN_PROGRESS = 2;
     //非预约时默认倒计时
     public Timer mBeginMockTimer;
 
@@ -82,38 +88,82 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     private String mServerCurrentTime;
 
     private static class MsgHandler extends Handler {
-        private WeakReference<Activity> mActivity;
+        private WeakReference<MockPreActivity> mActivity;
 
-        public MsgHandler(Activity activity) {
+        public MsgHandler(MockPreActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @SuppressLint("CommitPrefEdits")
         @Override
         public void handleMessage(Message msg) {
-            final MockPreActivity activity = (MockPreActivity) mActivity.get();
-            if (activity != null) {
-                switch (msg.what) {
-                    case BEGINMOCK_N:
-                        String mins = String.valueOf(mMins);
-                        String sec = String.valueOf(mSec);
-                        String hour = String.valueOf(mHours);
-                        if (hour.length() == 1) hour = "0" + hour;
-                        if (mins.length() == 1) mins = "0" + mins;
-                        if (sec.length() == 1) sec = "0" + sec;
-                        String time = hour + ":" + mins + ":" + sec;
-                        String text = time + " 开考";
-                        activity.bottom_left.setText(text);
-                        break;
+            final MockPreActivity activity = mActivity.get();
+            if (activity == null) return;
 
-                    case BEGINMOCK_Y:
-                        //考试时间到
-                        activity.bottom_left.setText("点击进入");
-                        break;
+            switch (msg.what) {
+                case BEGINMOCK_N:
+//                    String mins = String.valueOf(mMins);
+//                    String sec = String.valueOf(mSec);
+//                    String hour = String.valueOf(mHours);
+//                    if (hour.length() == 1) hour = "0" + hour;
+//                    if (mins.length() == 1) mins = "0" + mins;
+//                    if (sec.length() == 1) sec = "0" + sec;
+//                    String time = hour + ":" + mins + ":" + sec;
+//                    String text = time + " 开考";
+//                    activity.bottom_left.setText(text);
+                    break;
 
-                    default:
-                        break;
-                }
+                case BEGINMOCK_Y:
+                    //考试时间到
+                    activity.bottom_left.setText("点击进入");
+                    break;
+
+                case IN_PROGRESS:
+                    if (activity.mItemCacheBeans == null) return;
+                    for (MockInfoItemCacheBean bean : activity.mItemCacheBeans) {
+                        if (bean == null) continue;
+                        int hour = bean.getHour();
+                        int min = bean.getMin();
+                        int sec = bean.getSec();
+
+                        if (hour <= 0 && min <= 0 && sec <= 0) {
+                            // 进入模考
+                            bean.getBtnStatus().setVisibility(View.VISIBLE);
+                            bean.getTvTimer().setVisibility(View.GONE);
+                            bean.getBtnStatus().setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    activity.skipToMeasure();
+                                }
+                            });
+
+                            activity.mItemCacheBeans.remove(bean);
+                            if (activity.mItemCacheBeans.size() == 0) activity.stopTimer();
+
+                        } else {
+                            // 显示倒计时
+                            hour = hour - 1;
+                            min = min - 1;
+                            sec = sec - 1;
+
+                            String hourText = String.valueOf(hour);
+                            String minText = String.valueOf(min);
+                            String secText = String.valueOf(sec);
+                            if (hourText.length() == 1) hourText = "0" + hourText;
+                            if (minText.length() == 1) minText = "0" + minText;
+                            if (secText.length() == 1) secText = "0" + secText;
+                            String text = "倒计时 " + hourText + ":" + minText + ":" + secText;
+                            bean.getTvTimer().setText(text);
+
+                            bean.setHour(hour);
+                            bean.setMin(min);
+                            bean.setSec(sec);
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
     }
@@ -139,6 +189,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         rankingContainer = (LinearLayout) findViewById(R.id.rankingcontainer);
         bottom_right = (TextView) findViewById(R.id.mockpre_bottom_right);
         bottom_left = (TextView) findViewById(R.id.mockpre_bottom_left);
+        mLlMockItemContainer = (LinearLayout) findViewById(R.id.mock_info_item_container);
 
         bottom_right.setOnClickListener(this);
         bottom_left.setOnClickListener(this);
@@ -195,7 +246,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                     mQRequest.getMockGufen();
                 } else {
                     mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
-                    MeasureModel.saveCacheMockId(this, mock_id);
+//                    MeasureModel.saveCacheMockId(this, mock_id);
                 }
 
                 ServerCurrentTimeResp resp = GsonManager.getModel(
@@ -212,7 +263,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
                 if (mockBean == null) return;
                 mock_id = mockBean.getId();
                 mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
-                MeasureModel.saveCacheMockId(this, mock_id);
+//                MeasureModel.saveCacheMockId(this, mock_id);
                 break;
         }
     }
@@ -357,11 +408,81 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     }
 
     private void showMocks(List<MockPreResp.MockListBean> mocks) {
-        if (mocks == null) return;
+        if (mocks == null || mLlMockItemContainer == null) return;
+        mLlMockItemContainer.removeAllViews();
         for (MockPreResp.MockListBean mock : mocks) {
             if (mock == null) continue;
             // 添加模考item
+            @SuppressLint("InflateParams")
+            View child = LayoutInflater.from(this).inflate(R.layout.mock_info_mock_item, null);
+            TextView tvName = (TextView) child.findViewById(R.id.mock_item_name);
+            TextView tvDate = (TextView) child.findViewById(R.id.mock_item_date);
+            TextView tvTimer = (TextView) child.findViewById(R.id.mock_item_timer);
+            Button btnCourse = (Button) child.findViewById(R.id.mock_item_course);
+            Button btnStatus = (Button) child.findViewById(R.id.mock_item_status);
+
+            tvName.setText(mock.getName());
+            tvDate.setText(mock.getStart_time());
+
+            String status = mock.getStatus();
+            if ("end".equals(status) || "finish".equals(status)) {
+                // 来晚了
+                btnStatus.setText(R.string.mock_info_item_status_late);
+            } else if ("on_going".equals(status)) {
+                // 进入模考
+                btnStatus.setText(R.string.mock_info_item_status_enter);
+                btnStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        skipToMeasure();
+                    }
+                });
+            } else if ("unstart".equals(status)) {
+                if (mock.isBooked()) {
+                    // 倒计时
+                    btnStatus.setVisibility(View.GONE);
+                    tvTimer.setVisibility(View.VISIBLE);
+
+                    MockInfoItemCacheBean bean = new MockInfoItemCacheBean();
+                    bean.setBtnStatus(btnStatus);
+                    bean.setTvTimer(tvTimer);
+                    bean = generateHourMinSec(bean, mock.getStart_time());
+                    if (mItemCacheBeans == null) mItemCacheBeans = new ArrayList<>();
+                    mItemCacheBeans.add(bean);
+
+                    startTimer();
+                } else {
+                    // 预约模考
+                    btnStatus.setText(R.string.mock_info_item_status_book);
+                }
+            } else {
+                btnStatus.setVisibility(View.GONE);
+            }
+
+            if (mock.isBooked()) {
+                btnCourse.setText(R.string.mock_info_item_course_detail);
+            } else {
+                btnCourse.setText(R.string.mock_info_item_book_course);
+            }
+
+            mLlMockItemContainer.addView(child);
         }
+    }
+
+    private MockInfoItemCacheBean generateHourMinSec(MockInfoItemCacheBean bean,
+                                                     String startTime) {
+        if (bean == null) return null;
+        long duration = getSecondsByDateMinusServerTime(startTime);
+        if (duration <= 0) {
+            bean.setHour(0);
+            bean.setMin(0);
+            bean.setSec(0);
+        } else {
+            bean.setHour((int) (duration / (60 * 60)));
+            bean.setMin((int) ((duration / 60) % 60));
+            bean.setSec((int) (duration % 60));
+        }
+        return bean;
     }
 
     private void showDescAndPride(MockPreResp mockPreResp) {
@@ -388,6 +509,24 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
         }
     }
 
+    private void skipToMeasure() {
+        final Intent intent = new Intent(this, MockListActivity.class);
+        intent.putExtra("mock_list", GsonManager.modelToString(mMockPreResp));
+//        intent.putExtra("from", "mockpre");
+        intent.putExtra(INTENT_PAPER_ID, mock_id);
+        intent.putExtra(INTENT_PAPER_TYPE, "mock");
+        intent.putExtra(INTENT_MOCK_TIME, mock_time);
+//        intent.putExtra("paper_name", paper_name);
+        intent.putExtra(INTENT_REDO, false);
+        startActivity(intent);
+        finish();
+
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", "Exam");
+        UmengManager.onEvent(this, "Mock", map);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -401,21 +540,7 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
 
             case R.id.mockpre_bottom_left://进入考试
                 if ("点击进入".equals(bottom_left.getText().toString().trim())) {
-                    final Intent intent = new Intent(this, MockListActivity.class);
-                    intent.putExtra("mock_list", GsonManager.modelToString(mMockPreResp));
-                    intent.putExtra("from", "mockpre");
-                    intent.putExtra("paper_id", mock_id);
-                    intent.putExtra("paper_type", "mock");
-                    intent.putExtra("mock_time", mock_time);
-                    intent.putExtra("paper_name", paper_name);
-                    intent.putExtra("redo", false);
-                    startActivity(intent);
-                    finish();
-
-                    // Umeng
-                    map = new HashMap<>();
-                    map.put("Action", "Exam");
-                    UmengManager.onEvent(this, "Mock", map);
+                    skipToMeasure();
 
                 } else if ("预约考试".equals(bottom_left.getText().toString().trim())) {
                     // 判断用户是否有手机号
@@ -475,42 +600,52 @@ public class MockPreActivity extends BaseActivity implements RequestCallback, Vi
     public void startTimer() {
         if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) return;
 
-        mHours = mDuration / (60 * 60);
-        mMins = (mDuration / 60) % 60;
-        mSec = mDuration % 60;
+//        mHours = mDuration / (60 * 60);
+//        mMins = (mDuration / 60) % 60;
+//        mSec = mDuration % 60;
 
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//        }
 
-        if (mBeginMockTimer != null) {
-            mBeginMockTimer.cancel();
-        }
+//        if (mBeginMockTimer != null) {
+//            mBeginMockTimer.cancel();
+//        }
+
+        if (mTimer != null) return;
 
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
 
             @Override
             public void run() {
-                mSec--;
-                if (mSec < 0) {
-                    mMins--;
-                    mSec = 59;
-
-                    if (mMins < 0) {
-                        mHours--;
-                        mMins = 59;
-                    }
-
-                    mHandler.sendEmptyMessage(BEGINMOCK_N);
-                } else if (mHours == 0 && mMins == 0 && mSec == 0) {
-                    mTimer.cancel();
-                    mHandler.sendEmptyMessage(BEGINMOCK_Y);
-                } else {
-                    mHandler.sendEmptyMessage(BEGINMOCK_N);
-                }
+                mHandler.sendEmptyMessage(IN_PROGRESS);
+//                mSec--;
+//                if (mSec < 0) {
+//                    mMins--;
+//                    mSec = 59;
+//
+//                    if (mMins < 0) {
+//                        mHours--;
+//                        mMins = 59;
+//                    }
+//
+//                    mHandler.sendEmptyMessage(BEGINMOCK_N);
+//                } else if (mHours == 0 && mMins == 0 && mSec == 0) {
+//                    mTimer.cancel();
+//                    mHandler.sendEmptyMessage(BEGINMOCK_Y);
+//                } else {
+//                    mHandler.sendEmptyMessage(BEGINMOCK_N);
+//                }
             }
         }, 0, 1000);
+    }
+
+    private void stopTimer() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
     }
 
     /**
