@@ -18,9 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
 import com.appublisher.lib_basic.Utils;
@@ -37,7 +37,8 @@ import com.appublisher.quizbank.common.measure.MeasureConstants;
 import com.appublisher.quizbank.common.measure.activity.MeasureMockReportActivity;
 import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.common.mock.bean.MockInfoItemCacheBean;
-import com.appublisher.quizbank.dao.MockDAO;
+import com.appublisher.quizbank.common.mock.dao.MockDAO;
+import com.appublisher.quizbank.common.mock.model.MockPreModel;
 import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.network.ParamBuilder;
@@ -69,6 +70,7 @@ public class MockPreActivity extends BaseActivity implements
     private MockPreResp mMockPreResp;
     private LinearLayout mLlMockItemContainer;
     public List<MockInfoItemCacheBean> mItemCacheBeans;
+    private MockPreModel mMockPreModel;
 
     //预约后倒计时＋考试时间倒计时
     public Timer mTimer;
@@ -180,6 +182,7 @@ public class MockPreActivity extends BaseActivity implements
 
         mHandler = new MsgHandler(this);
         mQRequest = new QRequest(this, this);
+        mMockPreModel = new MockPreModel(this);
     }
 
     public void initViews() {
@@ -415,9 +418,9 @@ public class MockPreActivity extends BaseActivity implements
             View child = LayoutInflater.from(this).inflate(R.layout.mock_info_mock_item, null);
             TextView tvName = (TextView) child.findViewById(R.id.mock_item_name);
             TextView tvDate = (TextView) child.findViewById(R.id.mock_item_date);
-            TextView tvTimer = (TextView) child.findViewById(R.id.mock_item_timer);
+            final TextView tvTimer = (TextView) child.findViewById(R.id.mock_item_timer);
             Button btnCourse = (Button) child.findViewById(R.id.mock_item_course);
-            Button btnStatus = (Button) child.findViewById(R.id.mock_item_status);
+            final Button btnStatus = (Button) child.findViewById(R.id.mock_item_status);
 
             tvName.setText(mock.getName());
             tvDate.setText(mock.getStart_time());
@@ -426,6 +429,8 @@ public class MockPreActivity extends BaseActivity implements
             if ("end".equals(status) || "finish".equals(status)) {
                 // 来晚了
                 btnStatus.setText(R.string.mock_info_item_status_late);
+                btnStatus.setBackground(
+                        getResources().getDrawable(R.drawable.mock_info_mockitem_btn_late, null));
             } else if ("on_going".equals(status)) {
                 // 进入模考
                 btnStatus.setText(R.string.mock_info_item_status_enter);
@@ -438,31 +443,38 @@ public class MockPreActivity extends BaseActivity implements
             } else if ("unstart".equals(status)) {
                 if (mock.isBooked()) {
                     // 倒计时
-                    btnStatus.setVisibility(View.GONE);
-                    tvTimer.setVisibility(View.VISIBLE);
-
-                    MockInfoItemCacheBean bean = new MockInfoItemCacheBean();
-                    bean.setBtnStatus(btnStatus);
-                    bean.setTvTimer(tvTimer);
-                    bean.setMockListBean(mock);
-                    bean = generateHourMinSec(bean, mock.getStart_time());
-                    if (mItemCacheBeans == null) mItemCacheBeans = new ArrayList<>();
-                    mItemCacheBeans.add(bean);
-
-                    startTimer();
+                    showTimer(btnStatus, tvTimer, mock);
                 } else {
                     // 预约模考
                     btnStatus.setText(R.string.mock_info_item_status_book);
+                    btnStatus.setBackground(
+                            getResources().getDrawable(
+                                    R.drawable.mock_info_mockitem_btn_book, null));
+                    btnStatus.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showTimer(btnStatus, tvTimer, mock);
+                            bookMock(mock.getMock_id());
+                        }
+                    });
                 }
             } else {
                 btnStatus.setVisibility(View.GONE);
             }
 
-            if (mock.isBooked()) {
+            // 课程按钮
+            if (mock.isPurchased()) {
                 btnCourse.setText(R.string.mock_info_item_course_detail);
             } else {
                 btnCourse.setText(R.string.mock_info_item_book_course);
             }
+
+            btnCourse.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    skipToCourseDetailPage(mock.getCourseUrl());
+                }
+            });
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -471,6 +483,23 @@ public class MockPreActivity extends BaseActivity implements
 
             mLlMockItemContainer.addView(child);
         }
+    }
+
+    private void showTimer(Button btnStatus, TextView tvTimer, MockPreResp.MockListBean mock) {
+        if (btnStatus == null || tvTimer == null || mock == null) return;
+
+        btnStatus.setVisibility(View.GONE);
+        tvTimer.setVisibility(View.VISIBLE);
+
+        MockInfoItemCacheBean bean = new MockInfoItemCacheBean();
+        bean.setBtnStatus(btnStatus);
+        bean.setTvTimer(tvTimer);
+        bean.setMockListBean(mock);
+        bean = generateHourMinSec(bean, mock.getStart_time());
+        if (mItemCacheBeans == null) mItemCacheBeans = new ArrayList<>();
+        mItemCacheBeans.add(bean);
+
+        startTimer();
     }
 
     private MockInfoItemCacheBean generateHourMinSec(MockInfoItemCacheBean bean,
@@ -584,10 +613,16 @@ public class MockPreActivity extends BaseActivity implements
         }
     }
 
+    private void bookMock(int mockId) {
+        mQRequest.bookMock(ParamBuilder.getBookMock(String.valueOf(mockId)));
+        mMockPreModel.saveMockIdToLocal(mockId);
+        Toast.makeText(this, "考试前会收到短信提示哦", Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * 跳转课程详情页
      */
-    public void skipCourseDetailPage(String url) {
+    public void skipToCourseDetailPage(String url) {
         Intent intent = new Intent(this, CourseWebViewActivity.class);
         intent.putExtra("url", LoginParamBuilder.finalUrl(url));
         intent.putExtra("bar_title", "");

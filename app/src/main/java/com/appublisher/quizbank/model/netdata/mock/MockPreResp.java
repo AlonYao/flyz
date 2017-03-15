@@ -57,6 +57,15 @@ public class MockPreResp {
         private boolean is_booked;
         private String status;
         private List<PapersBean> papers;
+        private String course_url;
+
+        public String getCourseUrl() {
+            return course_url;
+        }
+
+        public void setCourse_url(String course_url) {
+            this.course_url = course_url;
+        }
 
         public int getMock_id() {
             return mock_id;
@@ -106,7 +115,7 @@ public class MockPreResp {
             this.duration = duration;
         }
 
-        public boolean isIs_purchased() {
+        public boolean isPurchased() {
             return is_purchased;
         }
 

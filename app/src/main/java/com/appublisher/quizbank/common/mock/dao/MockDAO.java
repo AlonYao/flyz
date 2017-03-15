@@ -1,4 +1,4 @@
-package com.appublisher.quizbank.dao;
+package com.appublisher.quizbank.common.mock.dao;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;

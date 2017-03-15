@@ -26,9 +26,9 @@ import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.Globals;
 import com.appublisher.quizbank.R;
 import com.appublisher.quizbank.common.mock.activity.MockPreActivity;
+import com.appublisher.quizbank.common.mock.model.MockPreModel;
 import com.appublisher.quizbank.common.update.AppUpdate;
 import com.appublisher.quizbank.dao.GlobalSettingDAO;
-import com.appublisher.quizbank.dao.MockDAO;
 import com.appublisher.quizbank.model.netdata.globalsettings.GlobalSettingsResp;
 import com.appublisher.quizbank.network.QRequest;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -172,8 +172,8 @@ public class SplashActivity extends Activity implements RequestCallback {
                             skipToMainActivity();
                         } else {
                             String target = imageBean.getTarget();
-                            int isBook = MockDAO.getIsDateById(target);
-                            if (isBook == 1) {
+                            boolean isBook = MockPreModel.isBookedInLocalCache(target);
+                            if (isBook) {
                                 // 已预约
                                 skipToMainActivity();
                             } else {
