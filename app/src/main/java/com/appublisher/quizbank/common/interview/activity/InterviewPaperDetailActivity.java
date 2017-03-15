@@ -43,12 +43,10 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     private int mWhatView;
     private int mNoteId;
     public int mCurrentPagerId;   // 当前的viewPager的索引
-    public int mPlayingChildViewId;
 
     public MediaRecorderManager mMediaRecorderManager;        // 新的播放器类
     private String mPaperType;
     private String mQuestionFrom;
-    public String mPlayingViewState;
     private String mDataFrom;
     private String mItemType;
     private String mQuestionTime;
@@ -75,7 +73,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mPaperType = getIntent().getStringExtra("paper_type");
         mNoteId = getIntent().getIntExtra("note_id", 0);
 
-        mPlayingViewState = InterviewConstants.NOT_EXIST_PLAYING_MEDIA;
         mExitsPlayingMedia = false;
         mHadDoneQuestion = false;
         // 所有fragment中用同一个录音器
@@ -421,13 +418,6 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
                 mHoldFragmentControlsMap.put(key, interviewControlsStateBean);
             }
         }
-    }
-
-    /*
-    *   获取存在播放状态的播放器的view的id
-    * */
-    public void setPlayingChildViewId(int playingChildViewId) {
-        mPlayingChildViewId = playingChildViewId;
     }
 
     public void setIsDone(boolean isDone){
