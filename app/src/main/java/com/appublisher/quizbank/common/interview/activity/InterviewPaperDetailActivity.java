@@ -163,7 +163,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             if (mWhatView == InterviewConstants.RECORDING) {
                 ToastManager.showToast(this, "请专心录音哦");
                 return true;
-            } else if (mWhatView == InterviewConstants.RECORDED_UN_SUBMIT || checkRecordPathMap() ) {
+            } else if (mWhatView == InterviewConstants.RECORDED_UN_SUBMIT || isHadRecordPath() ) {
                 InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dialog
                 return true;
             }
@@ -224,7 +224,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         if (mWhatView == InterviewConstants.RECORDING) {
             ToastManager.showToast(this, "请专心录音哦");
             return;
-        } else if (mWhatView == InterviewConstants.RECORDED_UN_SUBMIT || checkRecordPathMap()) {
+        } else if (mWhatView == InterviewConstants.RECORDED_UN_SUBMIT || isHadRecordPath()) {
             InterviewDetailModel.showBackPressedAlert(this);   // 显示退出dialog
             return;
         }
@@ -243,9 +243,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         this.mExitsPlayingMedia = isExitsPlayingMedia;
     }
 
-    /*
-    *
-    * */
+
     public void changePlayingMediaToStop() {
         // 弹窗提示
         SharedPreferences sp = InterviewDetailModel.getInterviewSharedPreferences(this);
@@ -332,8 +330,8 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
             public void onPageSelected(int position) {       //  当前viewpager
                 mCurrentPagerId = position;
                 invalidateOptionsMenu();
-//              控件的播放状态
-                updateFragmentPlayState();
+//              刷新控件的状态
+                updateFragmentControlsState();
             }
             @Override
             public void onPageScrollStateChanged(int state) {}
@@ -350,7 +348,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
         mViewPager.setCurrentItem(mCurrentPagerId);
     }
 
-    private boolean checkRecordPathMap(){
+    private boolean isHadRecordPath(){
         return mRecordPathArray != null && mRecordPathArray.size() > 0 ;
     }
 
@@ -376,7 +374,7 @@ public class InterviewPaperDetailActivity extends BaseActivity implements Reques
     /*
     *   刷新控件的播放状态:处理相邻页面暂停状态恢复默认状态
     * */
-    private void updateFragmentPlayState() {
+    private void updateFragmentControlsState() {
         // 将暂停状态恢复成默认状态
         if (mHoldFragmentControlsMap == null || mHoldFragmentControlsMap.size() <= 0) return;
 

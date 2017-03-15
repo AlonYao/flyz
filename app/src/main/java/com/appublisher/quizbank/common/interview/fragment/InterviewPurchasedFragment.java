@@ -199,7 +199,6 @@ public class InterviewPurchasedFragment extends InterviewDetailBaseFragment {
                 // 播放 & 暂停语音
                 setControlsToPlayOrPause(controlsIdentification);
 
-
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "ListenQ");
