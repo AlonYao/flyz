@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.appublisher.lib_basic.Logger;
 import com.appublisher.lib_basic.ToastManager;
 import com.appublisher.lib_basic.UmengManager;
+import com.appublisher.lib_basic.Utils;
 import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
@@ -61,9 +62,6 @@ public class MockPreActivity extends BaseActivity implements
     private LinearLayout rankingContainer;
     private QRequest mQRequest;
     private int mock_id;//模考id
-    private String paper_name;
-    private String mock_time;
-    private String courseDetailLink;
     private TextView bottom_right;
     public TextView bottom_left;
     private Handler mHandler;
@@ -120,7 +118,7 @@ public class MockPreActivity extends BaseActivity implements
 
                 case IN_PROGRESS:
                     if (activity.mItemCacheBeans == null) return;
-                    for (MockInfoItemCacheBean bean : activity.mItemCacheBeans) {
+                    for (final MockInfoItemCacheBean bean : activity.mItemCacheBeans) {
                         if (bean == null) continue;
                         int hour = bean.getHour();
                         int min = bean.getMin();
@@ -133,7 +131,7 @@ public class MockPreActivity extends BaseActivity implements
                             bean.getBtnStatus().setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    activity.skipToMeasure();
+                                    activity.skipToMeasure(bean.getMockListBean());
                                 }
                             });
 
@@ -175,7 +173,7 @@ public class MockPreActivity extends BaseActivity implements
 
         setToolBar(this);
 
-        paper_name = getIntent().getStringExtra("paper_name");
+//        paper_name = getIntent().getStringExtra("paper_name");
         mock_id = getIntent().getIntExtra("mock_id", -1);
 
         initViews();
@@ -315,7 +313,7 @@ public class MockPreActivity extends BaseActivity implements
             tvDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    skipCourseDetailPage();
+//                    skipCourseDetailPage();
                 }
             });
             examdeailContainer.addView(exam);
@@ -410,7 +408,7 @@ public class MockPreActivity extends BaseActivity implements
     private void showMocks(List<MockPreResp.MockListBean> mocks) {
         if (mocks == null || mLlMockItemContainer == null) return;
         mLlMockItemContainer.removeAllViews();
-        for (MockPreResp.MockListBean mock : mocks) {
+        for (final MockPreResp.MockListBean mock : mocks) {
             if (mock == null) continue;
             // 添加模考item
             @SuppressLint("InflateParams")
@@ -434,7 +432,7 @@ public class MockPreActivity extends BaseActivity implements
                 btnStatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        skipToMeasure();
+                        skipToMeasure(mock);
                     }
                 });
             } else if ("unstart".equals(status)) {
@@ -446,6 +444,7 @@ public class MockPreActivity extends BaseActivity implements
                     MockInfoItemCacheBean bean = new MockInfoItemCacheBean();
                     bean.setBtnStatus(btnStatus);
                     bean.setTvTimer(tvTimer);
+                    bean.setMockListBean(mock);
                     bean = generateHourMinSec(bean, mock.getStart_time());
                     if (mItemCacheBeans == null) mItemCacheBeans = new ArrayList<>();
                     mItemCacheBeans.add(bean);
@@ -464,6 +463,11 @@ public class MockPreActivity extends BaseActivity implements
             } else {
                 btnCourse.setText(R.string.mock_info_item_book_course);
             }
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, Utils.dip2px(this, 15));
+            child.setLayoutParams(params);
 
             mLlMockItemContainer.addView(child);
         }
@@ -509,15 +513,15 @@ public class MockPreActivity extends BaseActivity implements
         }
     }
 
-    private void skipToMeasure() {
+    private void skipToMeasure(MockPreResp.MockListBean mock) {
         final Intent intent = new Intent(this, MockListActivity.class);
-        intent.putExtra("mock_list", GsonManager.modelToString(mMockPreResp));
+        intent.putExtra("data", GsonManager.modelToString(mock));
 //        intent.putExtra("from", "mockpre");
-        intent.putExtra(INTENT_PAPER_ID, mock_id);
-        intent.putExtra(INTENT_PAPER_TYPE, "mock");
-        intent.putExtra(INTENT_MOCK_TIME, mock_time);
+//        intent.putExtra(INTENT_PAPER_ID, mock_id);
+//        intent.putExtra(INTENT_PAPER_TYPE, MOCK);
+//        intent.putExtra(INTENT_MOCK_TIME, mock_time);
 //        intent.putExtra("paper_name", paper_name);
-        intent.putExtra(INTENT_REDO, false);
+//        intent.putExtra(INTENT_REDO, false);
         startActivity(intent);
         finish();
 
@@ -531,7 +535,7 @@ public class MockPreActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mockpre_bottom_right://课程报名
-                skipCourseDetailPage();
+//                skipCourseDetailPage();
                 // Umeng
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Action", "OrderCourse");
@@ -540,7 +544,7 @@ public class MockPreActivity extends BaseActivity implements
 
             case R.id.mockpre_bottom_left://进入考试
                 if ("点击进入".equals(bottom_left.getText().toString().trim())) {
-                    skipToMeasure();
+//                    skipToMeasure(mock);
 
                 } else if ("预约考试".equals(bottom_left.getText().toString().trim())) {
                     // 判断用户是否有手机号
@@ -583,12 +587,9 @@ public class MockPreActivity extends BaseActivity implements
     /**
      * 跳转课程详情页
      */
-    public void skipCourseDetailPage() {
-        String url = LoginParamBuilder.finalUrl(courseDetailLink);
-
-        Logger.i("url===" + url);
+    public void skipCourseDetailPage(String url) {
         Intent intent = new Intent(this, CourseWebViewActivity.class);
-        intent.putExtra("url", url);
+        intent.putExtra("url", LoginParamBuilder.finalUrl(url));
         intent.putExtra("bar_title", "");
         intent.putExtra("from", "course");
         startActivity(intent);
@@ -706,7 +707,7 @@ public class MockPreActivity extends BaseActivity implements
         //绑定成功后操作
         MockDAO.save(mock_id, 1);
         ToastManager.showToast(this, "考试前会收到短信提示哦");
-        mDuration = getSecondsByDateMinusServerTime(mock_time);
+//        mDuration = getSecondsByDateMinusServerTime(mock_time);
         startTimer();
     }
 

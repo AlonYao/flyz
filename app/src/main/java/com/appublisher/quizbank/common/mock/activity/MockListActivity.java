@@ -25,7 +25,6 @@ public class MockListActivity extends BaseActivity implements MeasureConstants{
     private MockListAdapter adapter;
     private MultiListView listView;
     private TextView explainTv;
-//    private MockPreResp mockPreResp;
     private MockPreResp.MockListBean mMock;
 
     @Override

@@ -3,6 +3,8 @@ package com.appublisher.quizbank.common.mock.bean;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
+
 /**
  * 用于缓存模考信息页面模考item中的相关内容
  */
@@ -14,6 +16,15 @@ public class MockInfoItemCacheBean {
     private int hour;
     private int min;
     private int sec;
+    private MockPreResp.MockListBean mockListBean;
+
+    public MockPreResp.MockListBean getMockListBean() {
+        return mockListBean;
+    }
+
+    public void setMockListBean(MockPreResp.MockListBean mockListBean) {
+        this.mockListBean = mockListBean;
+    }
 
     public Button getBtnStatus() {
         return btnStatus;

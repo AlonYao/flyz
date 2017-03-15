@@ -1,44 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="15dp"
     android:paddingTop="15dp"
     android:paddingBottom="15dp"
     android:paddingLeft="18dp"
     android:paddingRight="18dp"
-    android:background="@drawable/mockinfo_mockitem_bg">
+    android:background="@drawable/mock_info_mockitem_bg">
     <TextView
         android:id="@+id/mock_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
         android:textColor="@color/common_text"/>
     <TextView
         android:id="@+id/mock_item_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
         android:textColor="@color/common_text"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:background="@color/common_line"/>
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
             android:id="@+id/mock_item_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="94dp"
+            android:layout_height="29dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/mock_info_mockitem_btn_enter"/>
         <TextView
             android:id="@+id/mock_item_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/common_text"
+            android:textSize="15sp"
             android:visibility="gone"/>
         <Button
             android:id="@+id/mock_item_course"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="94dp"
+            android:layout_height="29dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/mock_info_mockitem_btn_course"
+            tools:ignore="RtlHardcoded" />
     </LinearLayout>
 </LinearLayout>

@@ -140,7 +140,7 @@ public interface QApiConstants extends ApiConstants {
     String getCarousel = baseUrl + "quizbank/get_carousel";
 
     // 获取模考信息
-    String getMockPreExamInfo = baseUrl + "quizbank/get_mock_tutorial";
+    String getMockPreExamInfo = baseUrl + "quizbank/multi_mock_tutorial";
 
     // 获取快讯详情
     String getPromoteLiveCourse = baseUrl + "quizbank/promote_live_course";

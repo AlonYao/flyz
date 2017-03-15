@@ -33,6 +33,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
                 android:textSize="17sp"
                 android:textColor="@color/themecolor"
                 android:text="@string/mock_info_examinfo"/>
@@ -40,11 +42,15 @@
                 android:id="@+id/examdetailcontainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
                 android:orientation="vertical"/>
             <!-- 排名及奖励说明 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
                 android:textSize="17sp"
                 android:textColor="@color/themecolor"
                 android:text="@string/mock_info_awardinfo"/>
@@ -53,6 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
                 android:orientation="vertical"/>
             <include layout="@layout/app_logo"/>
         </LinearLayout>
