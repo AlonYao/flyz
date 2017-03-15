@@ -28,8 +28,6 @@ import com.appublisher.lib_basic.activity.BaseActivity;
 import com.appublisher.lib_basic.gson.GsonManager;
 import com.appublisher.lib_basic.volley.RequestCallback;
 import com.appublisher.lib_course.CourseWebViewActivity;
-import com.appublisher.lib_login.activity.BindingMobileActivity;
-import com.appublisher.lib_login.model.business.LoginModel;
 import com.appublisher.lib_login.volley.LoginParamBuilder;
 import com.appublisher.quizbank.ActivitySkipConstants;
 import com.appublisher.quizbank.R;
@@ -39,7 +37,6 @@ import com.appublisher.quizbank.common.measure.netdata.ServerCurrentTimeResp;
 import com.appublisher.quizbank.common.mock.bean.MockInfoItemCacheBean;
 import com.appublisher.quizbank.common.mock.dao.MockDAO;
 import com.appublisher.quizbank.common.mock.model.MockPreModel;
-import com.appublisher.quizbank.model.netdata.mock.MockGufenResp;
 import com.appublisher.quizbank.model.netdata.mock.MockPreResp;
 import com.appublisher.quizbank.network.ParamBuilder;
 import com.appublisher.quizbank.network.QRequest;
@@ -57,17 +54,16 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MockPreActivity extends BaseActivity implements
-        RequestCallback, View.OnClickListener, MeasureConstants {
+public class MockPreActivity extends BaseActivity implements RequestCallback, MeasureConstants {
     private LinearLayout examdeailContainer;
     private LinearLayout rankingContainer;
     private QRequest mQRequest;
     private int mock_id;//模考id
-    private TextView bottom_right;
-    public TextView bottom_left;
+//    private TextView bottom_right;
+//    public TextView bottom_left;
     private Handler mHandler;
     private int exercise_id = -1;
-    private MockPreResp mMockPreResp;
+    private boolean mHasMockResp;
     private LinearLayout mLlMockItemContainer;
     public List<MockInfoItemCacheBean> mItemCacheBeans;
     private MockPreModel mMockPreModel;
@@ -115,7 +111,7 @@ public class MockPreActivity extends BaseActivity implements
 
                 case BEGINMOCK_Y:
                     //考试时间到
-                    activity.bottom_left.setText("点击进入");
+//                    activity.bottom_left.setText("点击进入");
                     break;
 
                 case IN_PROGRESS:
@@ -128,8 +124,12 @@ public class MockPreActivity extends BaseActivity implements
 
                         if (hour <= 0 && min <= 0 && sec <= 0) {
                             // 进入模考
-                            bean.getBtnStatus().setVisibility(View.VISIBLE);
                             bean.getTvTimer().setVisibility(View.GONE);
+                            bean.getBtnStatus().setText(R.string.mock_info_item_status_enter);
+                            bean.getBtnStatus().setBackground(
+                                    activity.getResources().getDrawable(
+                                            R.drawable.mock_info_mockitem_btn_enter, null));
+                            bean.getBtnStatus().setVisibility(View.VISIBLE);
                             bean.getBtnStatus().setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -188,12 +188,7 @@ public class MockPreActivity extends BaseActivity implements
     public void initViews() {
         examdeailContainer = (LinearLayout) findViewById(R.id.examdetailcontainer);
         rankingContainer = (LinearLayout) findViewById(R.id.rankingcontainer);
-        bottom_right = (TextView) findViewById(R.id.mockpre_bottom_right);
-        bottom_left = (TextView) findViewById(R.id.mockpre_bottom_left);
         mLlMockItemContainer = (LinearLayout) findViewById(R.id.mock_info_item_container);
-
-        bottom_right.setOnClickListener(this);
-        bottom_left.setOnClickListener(this);
     }
 
     @Override
@@ -243,28 +238,31 @@ public class MockPreActivity extends BaseActivity implements
                 break;
 
             case "server_current_time":
-                if (mock_id == -1) {
-                    mQRequest.getMockGufen();
-                } else {
-                    mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
-//                    MeasureModel.saveCacheMockId(this, mock_id);
-                }
+//                if (mock_id == -1) {
+//                    mQRequest.getMockGufen();
+//                } else {
+//                    mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
+////                    MeasureModel.saveCacheMockId(this, mock_id);
+//                }
 
                 ServerCurrentTimeResp resp = GsonManager.getModel(
                         response.toString(), ServerCurrentTimeResp.class);
                 if (resp != null && resp.getResponse_code() == 1) {
                     mServerCurrentTime = resp.getCurrent_time();
                 }
+
+                if (!mHasMockResp) mQRequest.getMockPreExamInfo();
+
                 break;
 
             case "mock_gufen":
-                MockGufenResp mockGufenResp = GsonManager.getModel(response, MockGufenResp.class);
-                if (mockGufenResp == null || mockGufenResp.getResponse_code() != 1) return;
-                MockGufenResp.MockBean mockBean = mockGufenResp.getMock();
-                if (mockBean == null) return;
-                mock_id = mockBean.getId();
-                mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
-//                MeasureModel.saveCacheMockId(this, mock_id);
+//                MockGufenResp mockGufenResp = GsonManager.getModel(response, MockGufenResp.class);
+//                if (mockGufenResp == null || mockGufenResp.getResponse_code() != 1) return;
+//                MockGufenResp.MockBean mockBean = mockGufenResp.getMock();
+//                if (mockBean == null) return;
+//                mock_id = mockBean.getId();
+//                mQRequest.getMockPreExamInfo(String.valueOf(mock_id));
+////                MeasureModel.saveCacheMockId(this, mock_id);
                 break;
         }
     }
@@ -360,8 +358,9 @@ public class MockPreActivity extends BaseActivity implements
      */
     public void dealMockPreInfo(JSONObject response) {
         MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
-        mMockPreResp = mockPreResp;
         if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
+
+        mHasMockResp = true;
 
         //模
 //        mock_time = mockPreResp.getMock_time();
@@ -426,7 +425,16 @@ public class MockPreActivity extends BaseActivity implements
             tvDate.setText(mock.getStart_time());
 
             String status = mock.getStatus();
-            if ("end".equals(status) || "finish".equals(status)) {
+            if (mock.getExercise_id() > 0) {
+                // 练习报告
+                btnStatus.setText(R.string.mock_info_item_status_report);
+                btnStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        skipToReport(mock.getExercise_id());
+                    }
+                });
+            } else if ("end".equals(status) || "finish".equals(status)) {
                 // 来晚了
                 btnStatus.setText(R.string.mock_info_item_status_late);
                 btnStatus.setBackground(
@@ -560,58 +568,58 @@ public class MockPreActivity extends BaseActivity implements
         UmengManager.onEvent(this, "Mock", map);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.mockpre_bottom_right://课程报名
-//                skipCourseDetailPage();
-                // Umeng
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Action", "OrderCourse");
-                UmengManager.onEvent(this, "Mock", map);
-                break;
-
-            case R.id.mockpre_bottom_left://进入考试
-                if ("点击进入".equals(bottom_left.getText().toString().trim())) {
-//                    skipToMeasure(mock);
-
-                } else if ("预约考试".equals(bottom_left.getText().toString().trim())) {
-                    // 判断用户是否有手机号
-                    String mobileNum = LoginModel.getUserMobile();
-                    if (mobileNum == null || mobileNum.length() == 0) {
-                        Intent intent = new Intent(this, BindingMobileActivity.class);
-                        intent.putExtra("from", "mock_openopencourse");
-                        intent.putExtra("mock_id", mock_id);
-                        startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
-                    } else {
-                        mQRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
-                    }
-
-                    // Umeng
-                    map = new HashMap<>();
-                    map.put("Action", "OrderExam");
-                    UmengManager.onEvent(this, "Mock", map);
-
-                } else if (exercise_id != -1) {//进入练习报告页
-                    Intent intent = new Intent(this, MeasureMockReportActivity.class);
-                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, exercise_id);
-                    startActivity(intent);
-
-                    // Umeng
-                    map = new HashMap<>();
-                    map.put("Action", "Report");
-                    UmengManager.onEvent(this, "Mock", map);
-                }
-
-                if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) {
-                    mQRequest.getServerCurrentTime();
-                }
-
-                break;
-            default:
-                break;
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.mockpre_bottom_right://课程报名
+////                skipCourseDetailPage();
+//                // Umeng
+//                HashMap<String, String> map = new HashMap<>();
+//                map.put("Action", "OrderCourse");
+//                UmengManager.onEvent(this, "Mock", map);
+//                break;
+//
+//            case R.id.mockpre_bottom_left://进入考试
+////                if ("点击进入".equals(bottom_left.getText().toString().trim())) {
+//////                    skipToMeasure(mock);
+////
+////                } else if ("预约考试".equals(bottom_left.getText().toString().trim())) {
+////                    // 判断用户是否有手机号
+////                    String mobileNum = LoginModel.getUserMobile();
+////                    if (mobileNum == null || mobileNum.length() == 0) {
+////                        Intent intent = new Intent(this, BindingMobileActivity.class);
+////                        intent.putExtra("from", "mock_openopencourse");
+////                        intent.putExtra("mock_id", mock_id);
+////                        startActivityForResult(intent, ActivitySkipConstants.ANSWER_SHEET_SKIP);
+////                    } else {
+////                        mQRequest.bookMock(ParamBuilder.getBookMock(mock_id + ""));
+////                    }
+////
+////                    // Umeng
+////                    map = new HashMap<>();
+////                    map.put("Action", "OrderExam");
+////                    UmengManager.onEvent(this, "Mock", map);
+////
+////                } else if (exercise_id != -1) {//进入练习报告页
+////                    Intent intent = new Intent(this, MeasureMockReportActivity.class);
+////                    intent.putExtra(MeasureConstants.INTENT_PAPER_ID, exercise_id);
+////                    startActivity(intent);
+////
+////                    // Umeng
+////                    map = new HashMap<>();
+////                    map.put("Action", "Report");
+////                    UmengManager.onEvent(this, "Mock", map);
+////                }
+////
+////                if (mServerCurrentTime == null || mServerCurrentTime.length() == 0) {
+////                    mQRequest.getServerCurrentTime();
+////                }
+//
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     private void bookMock(int mockId) {
         mQRequest.bookMock(ParamBuilder.getBookMock(String.valueOf(mockId)));
@@ -628,6 +636,17 @@ public class MockPreActivity extends BaseActivity implements
         intent.putExtra("bar_title", "");
         intent.putExtra("from", "course");
         startActivity(intent);
+    }
+
+    private void skipToReport(int exerciseId) {
+        Intent intent = new Intent(this, MeasureMockReportActivity.class);
+        intent.putExtra(MeasureConstants.INTENT_PAPER_ID, exerciseId);
+        startActivity(intent);
+
+        // Umeng
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Action", "Report");
+        UmengManager.onEvent(this, "Mock", map);
     }
 
     /**

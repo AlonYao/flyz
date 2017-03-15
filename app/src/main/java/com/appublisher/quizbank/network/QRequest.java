@@ -216,6 +216,16 @@ public class QRequest extends Request implements QApiConstants {
     }
 
     /**
+     * 获取模考总动员
+     */
+    public void getMockPreExamInfo() {
+        asyncRequest(
+                getFinalUrl(getMockPreExamInfo),
+                "mockpre_exam_info",
+                "object");
+    }
+
+    /**
      * 获取通知
      *
      * @param offset 起点

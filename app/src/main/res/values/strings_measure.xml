@@ -69,5 +69,6 @@
     <string name="mock_info_item_status_enter">进入模考</string>
     <string name="mock_info_item_status_late">来晚了</string>
     <string name="mock_info_item_status_book">预约模考</string>
+    <string name="mock_info_item_status_report">练习报告</string>
 
 </resources>
