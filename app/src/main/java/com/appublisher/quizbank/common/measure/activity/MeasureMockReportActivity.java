@@ -181,7 +181,7 @@ public class MeasureMockReportActivity extends MeasureReportBaseActivity impleme
         }
 
         if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setColorSchemeResources(R.color.ali_feedback_red);
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.themecolor);
             mSwipeRefreshLayout.setOnRefreshListener(this);
         }
     }
