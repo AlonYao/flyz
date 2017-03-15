@@ -1154,6 +1154,12 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             ((MeasureActivity) mContext).startTimer();
     }
 
+    public int getCacheMockId() {
+        SharedPreferences cache = getMeasureCache(mContext);
+        if (cache == null) return 0;
+        return cache.getInt(CACHE_MOCK_ID, 0);
+    }
+
     public void checkCache() {
         SharedPreferences cache = getMeasureCache(mContext);
         int paperId = cache.getInt(CACHE_PAPER_ID, 0);
@@ -1328,15 +1334,20 @@ public class MeasureModel implements RequestCallback, MeasureConstants {
             MockPreResp mockPreResp = GsonManager.getModel(response.toString(), MockPreResp.class);
             if (mockPreResp == null || mockPreResp.getResponse_code() != 1) return;
             List<MockPreResp.MockListBean> mocks = mockPreResp.getMock_list();
-            if (mocks == null || mocks.size() == 0) return;
-            MockPreResp.MockListBean mock = mocks.get(0);
-            if (mock == null) return;
+            if (mocks == null) return;
 
-            String status = mock.getStatus();
-            if ("finish".equals(status)) {
-                showMockCacheSubmitTimeOutAlert();
-            } else {
-                showMockCacheSubmitAlert();
+            for (MockPreResp.MockListBean mock : mocks) {
+                if (mock == null) continue;
+                int cacheMockId = getCacheMockId();
+                if (cacheMockId == 0) return;
+                if (cacheMockId == mock.getMock_id()) {
+                    String status = mock.getStatus();
+                    if ("finish".equals(status)) {
+                        showMockCacheSubmitTimeOutAlert();
+                    } else {
+                        showMockCacheSubmitAlert();
+                    }
+                }
             }
         }
 

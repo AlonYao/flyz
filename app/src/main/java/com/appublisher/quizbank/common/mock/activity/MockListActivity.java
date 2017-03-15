@@ -64,6 +64,7 @@ public class MockListActivity extends BaseActivity implements MeasureConstants{
                 intent.putExtra(INTENT_MOCK_TIME, mMock.getStart_time());
                 startActivity(intent);
 
+                // 缓存MockId
                 MeasureModel.saveCacheMockId(MockListActivity.this, mMock.getMock_id());
 
                 finish();
